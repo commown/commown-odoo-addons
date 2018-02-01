@@ -10,6 +10,7 @@
     'depends': ['payment_slimpay', 'l10n_fr_certification'],
     'external_dependencies': {},
     'data': [
+        'views/address_template.xml',
     ],
     'installable': True,
     'application': True,
