@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="signup_field" inherit_id="auth_signup.fields">
+    <xpath expr="//div//input[@name='name']/ancestor::div[1]" position="replace">
+      <div class="form-group field-firstname">
+        <label for="firstname" class="control-label">First name</label>
+        <input type="text" name="firstname" t-att-value="firstname" id="firstname"
+               class="form-control" required="required"
+               t-att-readonly="'readonly' if only_passwords else None"
+               t-att-autofocus="'autofocus' if login and not only_passwords else None" />
+      </div>
+      <div class="form-group field-lastname">
+        <label for="lastname" class="control-label">Last name</label>
+        <input type="text" name="lastname" t-att-value="lastname" id="lastname"
+               class="form-control" required="required"
+               t-att-readonly="'readonly' if only_passwords else None" />
+      </div>
+    </xpath>
+  </template>
+</odoo>
