@@ -16,6 +16,7 @@
     'data': [
         'views/address_template.xml',
         'views/auth_signup.xml',
+        'views/cart.xml',
     ],
     'installable': True,
     'application': True,

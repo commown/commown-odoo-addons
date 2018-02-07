@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="suggestion_cart" inherit_id="website_sale_require_login.suggestion_cart">
+    <xpath expr="//a[@href='/web/login?redirect=/shop/checkout']" position="replace">
+      <a t-if="not user_authenticated"
+         class="btn btn-primary pull-right mb32"
+         href="/web/login?redirect=/shop/checkout">
+          <span>Se connecter et payer</span>
+          <span class="fa fa-long-arrow-right"/>
+      </a>
+      <div class="pull-right"> </div>
+    </xpath>
+    <xpath expr="//a[@href='/web/signup?redirect=/shop/checkout']" position="replace">
+      <a class="btn btn-primary pull-right mb32"
+         href="/web/signup?redirect=/shop/checkout">
+          <span>Créer un compte et payer</span>
+          <span class="fa fa-long-arrow-right"/>
+      </a>
+    </xpath>
+  </template>
+</odoo>
