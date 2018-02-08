@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+    <record model="ir.ui.view" id="product_template_form_view">
+        <field name="name">product.template.product.website.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale.product_template_form_view"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='sale_ok']/ancestor::div[1]" position="before">
+            <div>
+              <field name="is_rental"/>
+              <label for="is_rental"/>
+            </div>
+          </xpath>
+          <xpath expr="//group[@name='group_standard_price']" position="after">
+            <group name="rental" attrs="{'invisible':[('is_rental','=',False)]}" >
+              <field name="rental_price"/>
+              <field name="rental_frequency"/>
+            </group>
+          </xpath>
+        </field>
+    </record>
+  </data>
+
+  <template id="product_price" inherit_id="website_sale.product_price">
+    <xpath expr="div" position="before">
+      <div t-if="product.is_rental" class="product_price mt16">
+        <h3>
+          <b style="white-space: nowrap;" t-esc="product.rental_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+          <b t-field="product.rental_frequency"/>
+        </h3>
+      </div>
+    </xpath>
+    <xpath expr="//h4//span[1]" position="before">
+      <b t-if="product.is_rental" class="deposit_price">Initial deposit:</b>
+    </xpath>
+  </template>
+
+</odoo>
