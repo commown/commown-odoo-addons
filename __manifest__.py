@@ -10,7 +10,7 @@
     'depends': [
         'payment_slimpay', 'l10n_fr_certification', 'base_action_rule',
         'website_sale_default_country', 'auth_signup',
-        'website_sale_require_login',
+        'website_sale_require_login', 'product_rental',
     ],
     'external_dependencies': {},
     'data': [
