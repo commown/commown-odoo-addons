@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
   <template id="suggestion_cart" inherit_id="website_sale_require_login.suggestion_cart">
     <xpath expr="//a[@href='/web/login?redirect=/shop/checkout']" position="replace">
       <a t-if="not user_authenticated"
@@ -18,4 +19,13 @@
       </a>
     </xpath>
   </template>
+
+  <template id="cart_lines" inherit_id="website_sale.cart_lines">
+    <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div/a/strong" position="after">
+      <t t-if="line.product_id.product_tmpl_id.is_rental">
+        <strong> - Dépôt de garantie</strong>
+      </t>
+    </xpath>
+  </template>
+
 </odoo>
