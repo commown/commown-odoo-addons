@@ -48,3 +48,15 @@ class SCICSaleOrder(models.Model):
                  'new_qty': result['quantity']})
             line.update({'product_uom_qty': result['quantity']})
         return result
+
+    @api.multi
+    def has_crowd_equity(self):
+        self.ensure_one()
+        return any(line.product_id.product_tmpl_id.is_crowd_equity()
+                   for line in self.order_line)
+
+    @api.multi
+    def has_investment(self):
+        self.ensure_one()
+        return any(line.product_id.product_tmpl_id.is_investment()
+                   for line in self.order_line)

@@ -17,3 +17,7 @@ class EquityProductTemplate(models.Model):
     @api.multi
     def is_crowd_equity(self):
         return all(p.is_equity and p.equity_type == 'crowd' for p in self)
+
+    @api.multi
+    def is_investment(self):
+        return all(p.is_equity and p.equity_type == 'invest' for p in self)
