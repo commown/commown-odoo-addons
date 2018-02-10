@@ -11,7 +11,8 @@
         'payment_slimpay', 'l10n_fr_certification', 'base_action_rule',
         'website_sale_default_country', 'auth_signup',
         'website_sale_require_login', 'product_rental', 'scic',
-        'crm', 'mass_mailing', 'project_issue',
+        'crm', 'mass_mailing', 'project_issue', 'website_sale_hide_price',
+        'mass_mailing_partner',
     ],
     'external_dependencies': {},
     'data': [
