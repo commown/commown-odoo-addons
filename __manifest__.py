@@ -19,6 +19,7 @@
         'views/address_template.xml',
         'views/auth_signup.xml',
         'views/cart.xml',
+        'views/favicon.xml',
     ],
     'installable': True,
     'application': True,
