@@ -20,6 +20,7 @@
         'views/auth_signup.xml',
         'views/cart.xml',
         'views/favicon.xml',
+        'views/sale_order.xml',
     ],
     'installable': True,
     'application': True,

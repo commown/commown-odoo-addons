@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="action_add_to_support_groups" model="ir.actions.server">
+    <field name="name">Add buyer to product support groups</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="state">code</field>
+    <field name="code">
+for so_line in record.order_line:
+    for group in so_line.product_id.product_tmpl_id.support_group_ids:
+        group.add_users(record.partner_id.user_ids)
+    </field>
+  </record>
+
+</odoo>
