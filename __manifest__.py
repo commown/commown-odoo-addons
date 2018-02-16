@@ -14,7 +14,9 @@
         'crm', 'mass_mailing', 'project_issue', 'website_sale_hide_price',
         'mass_mailing_partner',
     ],
-    'external_dependencies': {},
+    'external_dependencies': {
+        'python': ['magic']
+    },
     'data': [
         'views/address_template.xml',
         'views/auth_signup.xml',
@@ -22,6 +24,8 @@
         'views/favicon.xml',
         'views/sale_order.xml',
         'views/product_template.xml',
+        'views/website_portal_templates.xml',
+        'views/res_partner.xml',
     ],
     'installable': True,
     'application': True,
