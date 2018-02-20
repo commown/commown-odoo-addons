@@ -1,0 +1,129 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-20 13:04+0000\n"
+"PO-Revision-Date: 2018-02-20 13:04+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_layout
+msgid "<br/>     <span>Proof of address</span>"
+msgstr "<br/>     <span>Justificatif de domicile</span>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_layout
+msgid "<i class=\"fa fa-copy\"/> <span>ID card</span>"
+msgstr "<i class=\"fa fa-copy\"/> <span>Carte d'identité</span>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.suggestion_cart
+msgid "<span>Create an account and pay</span>\n"
+"          <span class=\"fa fa-long-arrow-right\"/>"
+msgstr "<span>Créer un compte et payer</span>\n"
+"          <span class=\"fa fa-long-arrow-right\"/>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.suggestion_cart
+msgid "<span>Authenticate and pay</span>\n"
+"          <span class=\"fa fa-long-arrow-right\"/>"
+msgstr "<span>Se connecter et payer</span>\n"
+"          <span class=\"fa fa-long-arrow-right\"/>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.cart_lines
+msgid "<strong> - Deposit</strong>"
+msgstr "<strong> - Dépôt de garantie</strong>"
+
+#. module: commown
+#: model:ir.model,name:commown.model_res_groups
+msgid "Access Groups"
+msgstr "Groupes d'accès"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_add_to_support_groups
+msgid "Add buyer to product support groups"
+msgstr "Ajouter l'acheteur aux groupes de support du produit"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.view_partner_form
+msgid "Documents"
+msgstr "Documents"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_partner_details
+#: model:ir.ui.view,arch_db:commown.signup_field
+msgid "First name"
+msgstr "Prénom"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_res_partner_id_card1
+#: model:ir.model.fields,field_description:commown.field_res_users_id_card1
+msgid "ID card"
+msgstr "Carte d'identité"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_res_partner_id_card2
+#: model:ir.model.fields,field_description:commown.field_res_users_id_card2
+msgid "ID card (2)"
+msgstr "Carte d'identité (2)"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_partner_details
+#: model:ir.ui.view,arch_db:commown.signup_field
+msgid "Last name"
+msgstr "Nom"
+
+#. module: commown
+#: model:ir.model,name:commown.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: commown
+#: model:ir.model,name:commown.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_res_partner_proof_of_address
+#: model:ir.model.fields,field_description:commown.field_res_users_proof_of_address
+msgid "Proof of address"
+msgstr "Justificatif de domicile"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_product_product_support_group_ids
+#: model:ir.model.fields,field_description:commown.field_product_template_support_group_ids
+msgid "Support groups"
+msgstr "Groupes de support"
+
+#. module: commown
+#: model:ir.model.fields,help:commown.field_res_partner_proof_of_address
+#: model:ir.model.fields,help:commown.field_res_users_proof_of_address
+msgid "This field holds a file to store a proof of address. Images are resized to 1240x1754 and, all files are limited to 5Mo."
+msgstr "Ce champ contient un fichier de stockage du justificatif de domicile. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+
+#. module: commown
+#: model:ir.model.fields,help:commown.field_res_partner_id_card2
+#: model:ir.model.fields,help:commown.field_res_users_id_card2
+msgid "This field holds a file to store the ID card (2). Images are resized to 1240x1754 and, all files are limited to 5Mo."
+msgstr "Ce champ contient un fichier de stockage complémentaire pour la carte d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+
+#. module: commown
+#: model:ir.model.fields,help:commown.field_res_partner_id_card1
+#: model:ir.model.fields,help:commown.field_res_users_id_card1
+msgid "This field holds a file to store the ID card. Images are resized to 1240x1754 and, all files are limited to 5Mo."
+msgstr "Ce champ contient un fichier de stockage pour la carte d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.address
+msgid "Zip Code"
+msgstr "Code postal"

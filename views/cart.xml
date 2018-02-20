@@ -6,7 +6,7 @@
       <a t-if="not user_authenticated"
          class="btn btn-primary pull-right mb32"
          href="/web/login?redirect=/shop/checkout">
-          <span>Se connecter et payer</span>
+          <span>Authenticate and pay</span>
           <span class="fa fa-long-arrow-right"/>
       </a>
       <div class="pull-right"> </div>
@@ -14,7 +14,7 @@
     <xpath expr="//a[@href='/web/signup?redirect=/shop/checkout']" position="replace">
       <a class="btn btn-primary pull-right mb32"
          href="/web/signup?redirect=/shop/checkout">
-          <span>Créer un compte et payer</span>
+          <span>Create an account and pay</span>
           <span class="fa fa-long-arrow-right"/>
       </a>
     </xpath>
@@ -23,7 +23,7 @@
   <template id="cart_lines" inherit_id="website_sale.cart_lines">
     <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div/a/strong" position="after">
       <t t-if="line.product_id.product_tmpl_id.is_rental">
-        <strong> - Dépôt de garantie</strong>
+        <strong> - Deposit</strong>
       </t>
     </xpath>
   </template>

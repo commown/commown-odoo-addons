@@ -22,18 +22,19 @@ class CommownPartner(models.Model):
 
     id_card1 = fields.Binary(
         "ID card", attachment=True, store=True,
-        help=("This field holds an image or PDF file to store the ID card. "
+        help=("This field holds a file to store the ID card. "
               + _binary_field_policy))
 
     id_card2 = fields.Binary(
         "ID card (2)", attachment=True, store=True,
-        help=("This field holds an image or PDF file to store the ID card (2)."
+        help=("This field holds a file to store the ID card (2). "
               + _binary_field_policy))
 
     proof_of_address = fields.Binary(
         "Proof of address", attachment=True, store=True,
-        help=("This field holds a file to store a proof of address,"
-              + _binary_field_policy))
+        help=(
+            "This field holds a file to store a proof of address. "
+            + _binary_field_policy))
 
     def _apply_bin_field_size_policy(self, vals):
         """ Apply the binary field limit policy: resize images, raise if the
