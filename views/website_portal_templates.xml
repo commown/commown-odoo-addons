@@ -46,7 +46,9 @@
     </xpath>
 
     <!-- Add ID card and proof of address before address -->
-    <xpath expr="//form//input[@name='phone']/ancestor::div[1]" position="after">
+    <xpath expr="//form//select[@name='country_id']/ancestor::div[1]" position="after">
+
+      <h1 class="col-lg-12">Documents</h1>
 
       <t t-foreach="['id_card1', 'id_card2', 'proof_of_address']" t-as="field">
         <t t-set="label" t-value="partner._fields[field].get_description(env)['string']" />
