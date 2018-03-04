@@ -3,7 +3,7 @@ from base64 import b64decode
 
 import magic
 
-from odoo import models, fields, tools
+from odoo import models, fields, tools, api
 
 _logger = logging.getLogger(__name__)
 
@@ -62,3 +62,20 @@ class CommownPartner(models.Model):
         "Apply binary docs limit policy before updating the entity"
         self._apply_bin_field_size_policy(vals)
         return super(CommownPartner, self).write(vals, **kwargs)
+
+    @api.model
+    def signup_retrieve_info(self, token):
+        """Override auth_signup method for compat with partner_firstname:
+        retrieve first- and last- name for the reset password form.
+        """
+        partner = self._signup_retrieve_partner(token, raise_exception=True)
+        res = {'db': self.env.cr.dbname}
+        if partner.signup_valid:
+            res['token'] = token
+            res['firstname'] = partner.firstname
+            res['lastname'] = partner.lastname
+        if partner.user_ids:
+            res['login'] = partner.user_ids[0].login
+        else:
+            res['email'] = res['login'] = partner.email or ''
+        return res
