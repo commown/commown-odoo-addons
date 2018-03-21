@@ -26,6 +26,7 @@
         'views/product_template.xml',
         'views/website_portal_templates.xml',
         'views/res_partner.xml',
+        'views/website_sale_templates.xml',
     ],
     'installable': True,
     'application': True,
