@@ -53,10 +53,12 @@ class CommownPartner(models.Model):
                     'Too big file for %s (%s > %dMo)'
                     % (field, len(value), self.max_doc_size_Mo))
 
-    def create(self, vals, **kwargs):
+    @api.model
+    @api.returns('self', lambda value: value.id)
+    def create(self, vals):
         "Apply binary docs limit policy before creating the entity"
         self._apply_bin_field_size_policy(vals)
-        return super(CommownPartner, self).create(vals, **kwargs)
+        return super(CommownPartner, self).create(vals)
 
     def write(self, vals, **kwargs):
         "Apply binary docs limit policy before updating the entity"
