@@ -53,8 +53,12 @@ if len(project) != 1:
 description = []
 for line in record.order_line:
     if line.product_id.product_tmpl_id.id in product_tmpl_ids:
-        description.append("".join(HTML_ESCAPE_TABLE.get(c, c)
-                                   for c in line.product_id.display_name))
+        description.append(u'<p><b>N° de commande : </b>%s</p>' % ''.join(
+            HTML_ESCAPE_TABLE.get(c, c) for c in record.name))
+        description.append(u'<p><b>Date de la commande : </b>%s</p>' % ''.join(
+            HTML_ESCAPE_TABLE.get(c, c) for c in record.date_order))
+        description.append(u'<p><b>Produit choisi : </b>%s</p>' % ''.join(
+            HTML_ESCAPE_TABLE.get(c, c) for c in line.product_id.display_name))
 
 if description:
     env['project.task'].create({
