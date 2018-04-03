@@ -27,6 +27,8 @@
         'views/website_portal_templates.xml',
         'views/res_partner.xml',
         'views/website_sale_templates.xml',
+        'views/crm_lead.xml',
+        'views/crm_team.xml',
     ],
     'installable': True,
     'application': True,
