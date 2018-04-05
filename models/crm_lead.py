@@ -94,12 +94,14 @@ class CommownCrmLead(models.Model):
         return vals
 
     def _compute_orders_descr(self, partner_id=None):
+        # XXX Use a qweb template
         if partner_id is None:
             partner_id = self.partner_id
         if not partner_id:
             return ''
         orders = self.env['sale.order'].search([
-            ('partner_id', '=', self.partner_id.id)
+            ('partner_id', '=', self.partner_id.id),
+            ('state', '=', 'sent'),
         ])
         descr = []
         for order in orders:
