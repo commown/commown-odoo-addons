@@ -100,7 +100,7 @@ class CommownCrmLead(models.Model):
         if not partner_id:
             return ''
         orders = self.env['sale.order'].search([
-            ('partner_id', '=', self.partner_id.id),
+            ('partner_id', '=', partner_id),
             ('state', '=', 'sent'),
         ])
         descr = []
