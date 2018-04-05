@@ -126,8 +126,12 @@ class CommownCrmLead(models.Model):
             'crm.crm_case_form_view_salesteams_opportunity').read()[0]
         action['context'] = safe_eval(action['context'], self.env.context)
         # XXX improve me with a custom_lead_form_view field on crm_team
-        if ctx.get('active_model') == 'crm.team' and ctx.get('active_id') == 2:
-            custom_view = self.env.ref('commown.crm_case_form_view_oppor')
-            action['views'] = [[id if type != 'form' else custom_view.id, type]
-                               for id, type in action['views']]
+        custom_team_id = 'sales_team.salesteam_website_sales'
+        if ctx.get('active_model') == 'crm.team' and 'active_id' in ctx:
+            crm_team = self.env['crm.team'].browse(ctx['active_id'])
+            if crm_team.get_xml_id()[ctx['active_id']] == custom_team_id:
+                custom_view = self.env.ref('commown.crm_case_form_view_oppor')
+                action['views'] = [
+                    [id if type != 'form' else custom_view.id, type]
+                    for id, type in action['views']]
         return action
