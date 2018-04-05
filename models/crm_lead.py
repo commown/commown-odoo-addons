@@ -116,9 +116,11 @@ class CommownCrmLead(models.Model):
     @api.model
     @api.returns('self', lambda value: value.id)
     def create(self, vals):
+        partner_id = vals.get('partner_id', False)
         if 'orders_description' not in vals:
-            vals['orders_description'] = self._compute_orders_descr(
-                vals.get('partner_id', False))
+            vals['orders_description'] = self._compute_orders_descr(partner_id)
+        # CRM module does not seem to update partner values for now
+        vals.update(self._onchange_partner_id_values(partner_id))
         return super(CommownCrmLead, self).create(vals)
 
     @api.model
