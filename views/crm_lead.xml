@@ -3,6 +3,7 @@
 
   <data>
 
+    <!-- XXX used anyhow ? -->
     <record model="ir.ui.view" id="res_partner_risk_form">
       <field name="name">commown.lead.res.partner</field>
       <field name="model">res.partner</field>
