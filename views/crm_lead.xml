@@ -32,9 +32,11 @@
           <xpath expr="//field[@name='priority']/ancestor::group[1]" position="attributes">
             <attribute name="invisible">1</attribute>
           </xpath>
-          <xpath expr="//field[@name='email_from']" position="replace">
+          <xpath expr="//field[@name='email_from']" position="attributes">
+            <attribute name="invisible">1</attribute>
           </xpath>
-          <xpath expr="//field[@name='phone']" position="replace">
+          <xpath expr="//field[@name='phone']" position="attributes">
+            <attribute name="invisible">1</attribute>
           </xpath>
           <xpath expr="//notebook/page[1]" position="before">
             <page name="before_call_risk_eval" string="Before call" autofocus="autofocus">
