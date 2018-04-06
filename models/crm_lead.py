@@ -1,7 +1,8 @@
 import cgi
 import logging
+from urllib import urlencode
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.tools.safe_eval import safe_eval
 
 
@@ -9,6 +10,7 @@ _logger = logging.getLogger(__name__)
 
 
 EMAIL_RATINGS = [
+    ('-1', 'No data'),
     ('0', 'No mail received'),
     ('1', 'Cold'),
     ('2', 'Neutral'),
@@ -17,19 +19,21 @@ EMAIL_RATINGS = [
 ]
 
 WEBID_RATINGS = [
-    ('0', 'Unknown'),
-    ('1', 'Known strange'),
-    ('2', 'Known neutral'),
-    ('3', 'Known Coherent'),
+    ('-1', 'No data'),
+    ('0', 'Known strange'),
+    ('1', 'Known neutral'),
+    ('2', 'Known Coherent'),
 ]
 
 TECHNICAL_SKILLS = [
+    ('-1', 'No data'),
     ('0', 'neophyte'),
     ('1', 'intermediary'),
     ('2', 'confirmed'),
 ]
 
 GLOBAL_FEELING = [
+    ('-1', 'No data'),
     ('0', 'No go'),
     ('1', 'Suspicious'),
     ('2', 'Medium'),
@@ -44,6 +48,10 @@ class CommownCrmLead(models.Model):
     email_rating = fields.Selection(
         EMAIL_RATINGS, string='Email Rating',
         default=EMAIL_RATINGS[0][0])
+    web_searchurl = fields.Html(
+        'Search on the web', compute='_compute_web_searchurl')
+    webid_unknown = fields.Boolean(
+        'Unknown on the web', default=False)
     webid_rating = fields.Selection(
         WEBID_RATINGS, string='Web identity Rating',
         default=WEBID_RATINGS[0][0])
@@ -66,6 +74,7 @@ class CommownCrmLead(models.Model):
 
     orders_description = fields.Html(
         'Orders', sanitize_attributes=False)
+    initial_data_notes = fields.Text('Notes')
     identity_validated = fields.Boolean(
         'Identity validated', default=False)
     mobile_validated = fields.Boolean(
@@ -86,6 +95,10 @@ class CommownCrmLead(models.Model):
         GLOBAL_FEELING, string='Global feeling',
         default=GLOBAL_FEELING[0][0])
     comments = fields.Text('Comments')
+
+    expedition_ref = fields.Text("Expedition reference", size=64)
+    expedition_date = fields.Date("Expedition Date")
+    delivery_date = fields.Date("Delivery Date")
 
     def _onchange_partner_id_values(self, partner_id):
         vals = super(CommownCrmLead, self)._onchange_partner_id_values(
@@ -139,3 +152,15 @@ class CommownCrmLead(models.Model):
                     [id if type != 'form' else custom_view.id, type]
                     for id, type in action['views']]
         return action
+
+    @api.multi
+    def _compute_web_searchurl(self):
+        for lead in self:
+            # XXX template me!
+            query = u' '.join((lead.contact_name or u'',
+                               lead.city or u'')).strip().encode('utf-8')
+            url = u'http://www.google.fr/search?%s' % urlencode({'q': query})
+            lead.web_searchurl = (
+                u"<a target='_blank' href='%s'>%s</a>"
+                % (cgi.escape(url, quote=True),
+                   cgi.escape(_('Web search link'), quote=True)))
