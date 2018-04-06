@@ -72,6 +72,22 @@ if description:
     </field>
   </record>
 
+  <record id="action_add_followup_lead" model="ir.actions.server">
+    <field name="name">[commown] Add followup lead</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">20</field>
+    <field name="state">code</field>
+    <field name="code">
+if object.product_id.is_rental:
+    env['crm.lead'].create({
+        'name': u'Suivi de commande',
+        'partner_id': object.partner_id.id,
+        'type': 'opportunity',
+        'team_id': env.ref('sales_team.salesteam_website_sales').id,
+        })
+    </field>
+  </record>
+
   <record id="website_order_mail_sent" model="base.action.rule">
     <field name="name">[commown] Order mail sent</field>
     <field name="model_id" ref="sale.model_sale_order"/>
@@ -79,7 +95,7 @@ if description:
     <field name="kind">on_write</field>
     <field name="filter_pre_domain">[('state', '=', 'draft')]</field>
     <field name="filter_domain">[('state', '=', 'sent')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task')])]"/>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('action_add_followup_lead')])]"/>
   </record>
 
 </odoo>
