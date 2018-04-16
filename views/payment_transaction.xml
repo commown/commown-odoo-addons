@@ -43,7 +43,7 @@ if (invoice
     <field name="kind">on_write</field>
     <field name="filter_pre_domain">[('state', '!=', 'done')]</field>
     <field name="filter_domain">[('state', '=', 'done')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups')])]"/>
+    <field name="server_action_ids" eval="[(6,0,[ref('product_rental.action_contract_auto_account_payment')])]"/>
   </record>
 
 </odoo>
