@@ -17,6 +17,7 @@
             <group name="rental" attrs="{'invisible':[('is_rental','=',False)]}" >
               <field name="rental_price"/>
               <field name="rental_frequency"/>
+              <field name="rental_contract_tmpl_id"/>
             </group>
           </xpath>
         </field>

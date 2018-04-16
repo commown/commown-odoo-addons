@@ -17,3 +17,5 @@ class RentalProductTemplate(models.Model):
          ('yearly', 'Yearly')], 'Rental payment frequency',
         default='monthly', help='Frequency of the rental price payment',
         required=True)
+    rental_contract_tmpl_id = fields.Many2one(
+        'account.analytic.contract', string='Location contract template')
