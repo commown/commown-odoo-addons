@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="action_contract_auto_account_payment" model="ir.actions.server">
+    <field name="name">[commown] Automatic account payment on contract driven transaction</field>
+    <field name="model_id" ref="payment.model_payment_transaction"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">
+<![CDATA[
+
+invoice = env['account.invoice'].search([('number', '=', object.reference)])
+
+if (invoice
+        and invoice.contract_id
+        and invoice.contract_id.payment_mode_id):
+
+    contract = invoice.contract_id
+
+    payment = Payment.create({
+        'company_id': 1,  # ourselves!
+        'partner_id': contract.partner_id.id,
+        'partner_type': 'customer',
+        'state': 'draft',
+        'payment_type': 'inbound',
+        'journal_id': contract.payment_mode_id.fixed_journal_id.id,
+        'payment_method_id': contract.payment_mode_id.payment_method_id.id,
+        'amount': object.amount,
+        'payment_transaction_id': object.id,
+        'invoices_ids': [(6, 0, [invoice.id])],
+    })
+
+    payment.post()
+
+]]>
+    </field>
+  </record>
+
+  <record id="payment_transaction_done" model="base.action.rule">
+    <field name="name">[commown] Payment transaction done</field>
+    <field name="model_id" ref="payment.model_payment_transaction"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_write</field>
+    <field name="filter_pre_domain">[('state', '!=', 'done')]</field>
+    <field name="filter_domain">[('state', '=', done')]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups')])]"/>
+  </record>
+
+</odoo>

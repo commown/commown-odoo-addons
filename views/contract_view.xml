@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="account_analytic_contract_view_form" model="ir.ui.view">
+    <field name="name">Account Analytic Contract Form View</field>
+    <field name="model">account.analytic.contract</field>
+    <field name="inherit_id" ref="contract.account_analytic_contract_view_form" />
+    <field name="arch" type="xml">
+      <xpath expr="//group[@name='group_main_left']" position="inside">
+        <field name="payment_mode_id" />
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
