@@ -17,7 +17,7 @@ if (invoice
 
     contract = invoice.contract_id
 
-    payment = Payment.create({
+    payment = env['account.payment'].create({
         'company_id': 1,  # ourselves!
         'partner_id': contract.partner_id.id,
         'partner_type': 'customer',
