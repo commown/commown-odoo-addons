@@ -11,6 +11,7 @@
     'external_dependencies': {},
     'data': [
         'views/product_template.xml',
+        'views/website_portal_sale_templates.xml',
     ],
     'installable': True,
 }
