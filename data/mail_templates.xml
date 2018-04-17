@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <record id="email_send_invoice_from_contract" model="mail.template">
+      <field name="name">[commown] Envoi d'une facture générée par un contrat</field>
+      <field name="email_from">contact@commown.fr</field>
+      <field name="reply_to">contact@commown.fr</field>
+      <field name="subject">[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})</field>
+      <field name="partner_to">${object.partner_id.id}</field>
+      <field name="model_id" ref="account.model_account_invoice"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="report_template" ref="account.account_invoices"/>
+        <field name="report_name">Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>
+      <field name="lang">${object.partner_id.lang}</field>
+      <field name="body_html"><![CDATA[
+<p>Bonjour ${object.partner_id.firstname},</p>
+<br/>
+<p>Votre facture <strong>${object.number}</strong>
+% if object.origin:
+(référence : ${object.origin} )
+% endif
+d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre espace Commown.</p>
+
+<br><br>
+<div>
+  <center>
+    <a href="https://shop.commown.fr/my/invoices" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" title="">Accéder à mes factures</a>
+  </center>
+</div>
+
+<br><br>
+
+% if object.state=='paid':
+    <p>Cette facture est déjà payée.</p>
+% else:
+    <p>Veuillez effectuer le paiement dès que possible.</p>
+% endif
+
+<p>Merci,</p>
+
+<p>--</p>
+
+<div>
+  <div>L'équipe Commown<br></div>
+</div>
+]]></field>
+    </record>
+
+  </data>
+
+</odoo>

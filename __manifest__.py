@@ -29,6 +29,7 @@
         'views/website_sale_templates.xml',
         'views/crm_lead.xml',
         'views/crm_team.xml',
+        'data/mail_templates.xml',
     ],
     'installable': True,
     'application': True,
