@@ -12,7 +12,11 @@
         'website_sale_default_country', 'auth_signup',
         'website_sale_require_login', 'product_rental', 'scic',
         'crm', 'mass_mailing', 'project_issue', 'website_sale_hide_price',
-        'mass_mailing_partner',
+        'mass_mailing_partner', 'report_py3o',
+        # odt template dependencies:
+        'base_company_extension',  # required for legal_type
+        'sale_usability',  # required for sale.layout_category
+        'account_usability',  # required for account_invoice.has_discount
     ],
     'external_dependencies': {
         'python': ['magic']
@@ -30,6 +34,7 @@
         'views/crm_lead.xml',
         'views/crm_team.xml',
         'data/mail_templates.xml',
+        'data/account_invoice_report.xml',
     ],
     'installable': True,
     'application': True,
