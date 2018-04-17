@@ -17,11 +17,12 @@
       </div>
       <t t-set="no_slimpay_mandate" t-value="not env['payment.token'].search([('partner_id', '=', user.partner_id.id), ('acquirer_id.provider', '=', 'slimpay')])" />
       <t t-set="sepa_product" t-value="env['product.template'].search([('name', 'ilike', '% SEPA%')])" />
-      <t t-if="no_slimpay_mandate and sepa_product">
-        <div>
-           <i class="fa fa-euro"/>  <a t-attf-href="#{sepa_product.website_url}">SEPA mandate</a> <i class="fa fa-exclamation-triangle" style="color:red"/>
-        </div>
-      </t>
+      <div t-if="no_slimpay_mandate and sepa_product">
+         <i class="fa fa-euro"/>  <a t-attf-href="#{sepa_product.website_url}">SEPA mandate</a> <i class="fa fa-exclamation-triangle" style="color:red"/>
+      </div>
+      <div t-else="">
+         <i class="fa fa-euro"/>  <span>SEPA mandate</span> <i class="fa fa-check"/>
+      </div>
     </xpath>
   </template>
 
