@@ -88,6 +88,67 @@ if object.product_id.is_rental:
     </field>
   </record>
 
+  <record id="action_add_receivable_account" model="ir.actions.server">
+    <field name="name">[commown] Add receivable account</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">30</field>
+    <field name="state">code</field>
+    <field name="code">
+# If partner's receivable account does not exist or is a standard one,
+# create an account dedicated to the partner
+
+partner = record.partner_id
+
+account = partner.property_account_receivable_id
+if not account or account.get_xml_id().get(account.id):
+    account = env['account.account'].create({
+        'code': 'C-%s' % partner.id,
+        'name': partner.name,
+        'tag_ids': [(6, 0, [env.ref('account.account_tag_operating').id])],
+        'user_type_id': env.ref('account.data_account_type_receivable').id,
+        'tax_ids': [(6, 0, [env.ref('l10n_fr.1_tva_normale').id])],
+        'reconcile': True,
+    })
+
+    partner.update({'property_account_receivable_id': account.id})
+    </field>
+  </record>
+
+  <record id="action_add_rental_contract" model="ir.actions.server">
+    <field name="name">[commown] Add rental contract</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">40</field>
+    <field name="state">code</field>
+    <field name="code">
+EMPTY_DATE = '2030-01-01'
+
+count = 0
+
+for so_line in record.order_line:
+    product = so_line.product_id.product_tmpl_id
+    if product.is_rental and product.rental_contract_tmpl_id:
+        for num in range(int(so_line.product_uom_qty)):
+            count += 1
+            contract_tmpl = product.rental_contract_tmpl_id
+            partner = record.partner_id
+            values = {
+                'name': '%s-%02d' % (record.name, count),
+                'partner_id': partner.id,
+                'recurring_invoices': True,
+                'contract_template_id': contract_tmpl.id,
+                'date_start': EMPTY_DATE,
+                'recurring_next_date': EMPTY_DATE,
+            }
+            for token in partner.payment_token_ids:
+                if token.acquirer_id.provider == 'slimpay':
+                    values['payment_token_id'] = token.id
+                    break
+            contract = env['account.analytic.account'].create(values)
+            contract._onchange_contract_template_id()
+            contract.update({'is_auto_pay': False})
+    </field>
+  </record>
+
   <record id="website_order_mail_sent" model="base.action.rule">
     <field name="name">[commown] Order mail sent</field>
     <field name="model_id" ref="sale.model_sale_order"/>
@@ -95,7 +156,7 @@ if object.product_id.is_rental:
     <field name="kind">on_write</field>
     <field name="filter_pre_domain">[('state', '=', 'draft')]</field>
     <field name="filter_domain">[('state', '=', 'sent')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('action_add_followup_lead')])]"/>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('action_add_followup_lead')], ref('action_add_rental_contract'))]"/>
   </record>
 
 </odoo>
