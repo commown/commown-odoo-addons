@@ -24,6 +24,23 @@
          <i class="fa fa-euro"/>  <span>SEPA mandate</span> <i class="fa fa-check"/>
       </div>
     </xpath>
+
+    <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
+      <div>
+        <h3 class="page-header">Contact us</h3>
+        <div class="list-group">
+          <t t-set="action_id" t-value="env.ref('mail.mail_channel_action_client_chat').id"/>
+          <t t-foreach="user.partner_id.channel_ids" t-as="channel" t-attr-href="">
+            <t t-if="channel.channel_type == 'channel'">
+              <a class="list-group-item" t-attf-href="/web#action=#{action_id}&amp;active_id=#{channel.id}">
+                Channel <t t-esc="channel.name"/>
+              </a>
+            </t>
+          </t>
+        </div>
+      </div>
+    </xpath>
+
   </template>
 
   <template id="portal_partner_details" inherit_id="website_portal.details">
