@@ -6,14 +6,81 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-06 14:39+0000\n"
-"PO-Revision-Date: 2018-04-06 14:39+0000\n"
+"POT-Creation-Date: 2018-04-24 06:58+0000\n"
+"PO-Revision-Date: 2018-04-24 06:58+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: commown
+#: model:mail.template,body_html:commown.email_send_invoice_from_contract
+msgid "\n"
+"<p>Bonjour ${object.partner_id.firstname},</p>\n"
+"<br/>\n"
+"<p>Votre facture <strong>${object.number}</strong>\n"
+"% if object.origin:\n"
+"(référence : ${object.origin} )\n"
+"% endif\n"
+"d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre espace Commown.</p>\n"
+"\n"
+"<br><br>\n"
+"<div>\n"
+"  <center>\n"
+"    <a href=\"https://shop.commown.fr/my/invoices\" style=\"background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;\" title=\"\">Accéder à mes factures</a>\n"
+"  </center>\n"
+"</div>\n"
+"\n"
+"<br><br>\n"
+"\n"
+"% if object.state=='paid':\n"
+"    <p>Cette facture est déjà payée.</p>\n"
+"% else:\n"
+"    <p>Veuillez effectuer le paiement dès que possible.</p>\n"
+"% endif\n"
+"\n"
+"<p>Merci,</p>\n"
+"\n"
+"<p>--</p>\n"
+"\n"
+"<div>\n"
+"  <div>L'équipe Commown<br></div>\n"
+"</div>\n"
+""
+msgstr "\n"
+"<p>Bonjour ${object.partner_id.firstname},</p>\n"
+"<br/>\n"
+"<p>Votre facture <strong>${object.number}</strong>\n"
+"% if object.origin:\n"
+"(référence : ${object.origin} )\n"
+"% endif\n"
+"d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre espace Commown.</p>\n"
+"\n"
+"<br><br>\n"
+"<div>\n"
+"  <center>\n"
+"    <a href=\"https://shop.commown.fr/my/invoices\" style=\"background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;\" title=\"\">Accéder à mes factures</a>\n"
+"  </center>\n"
+"</div>\n"
+"\n"
+"<br><br>\n"
+"\n"
+"% if object.state=='paid':\n"
+"    <p>Cette facture est déjà payée.</p>\n"
+"% else:\n"
+"    <p>Veuillez effectuer le paiement dès que possible.</p>\n"
+"% endif\n"
+"\n"
+"<p>Merci,</p>\n"
+"\n"
+"<p>--</p>\n"
+"\n"
+"<div>\n"
+"  <div>L'équipe Commown<br></div>\n"
+"</div>\n"
+""
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_first_phone_call
@@ -39,6 +106,11 @@ msgstr "<br/>     <span>Justificatif de domicile</span>"
 #: model:ir.ui.view,arch_db:commown.portal_layout
 msgid "<i class=\"fa fa-copy\"/> <span>ID card</span>"
 msgstr "<i class=\"fa fa-copy\"/> <span>Carte d'identité</span>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_layout
+msgid "<i class=\"fa fa-euro\"/>  <span>SEPA mandate</span> <i class=\"fa fa-check\"/>"
+msgstr "<i class=\"fa fa-euro\"/>  <span>Mandat SEPA</span> <i class=\"fa fa-check\"/>"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.suggestion_cart
@@ -90,6 +162,11 @@ msgid "Comments"
 msgstr "Commentaires"
 
 #. module: commown
+#: model:mail.template,report_name:commown.email_send_invoice_from_contract
+msgid "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
+msgstr "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
 msgid "Communication process"
 msgstr "Suivi des appels"
@@ -98,6 +175,11 @@ msgstr "Suivi des appels"
 #: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
 msgid "Conflicting contacts"
 msgstr "Ultimes tentatives"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_layout
+msgid "Contactez-nous"
+msgstr "Contactez-nous"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_questions
@@ -149,6 +231,11 @@ msgstr "Ultimatum mail"
 #: model:ir.model.fields,field_description:commown.field_crm_lead_email_validated
 msgid "Email validated"
 msgstr "Mail validé"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_layout
+msgid "Espace"
+msgstr "Espace"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_date
@@ -411,14 +498,34 @@ msgid "Zip Code"
 msgstr "Code postal"
 
 #. module: commown
+#: model:mail.template,subject:commown.email_send_invoice_from_contract
+msgid "[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})"
+msgstr "[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})"
+
+#. module: commown
 #: model:ir.actions.server,name:commown.action_add_to_support_groups
 msgid "[commown] Add buyer to product's support groups"
 msgstr "[commown] Ajout de l'acheteur aux groupes de support de l'article"
 
 #. module: commown
+#: model:ir.actions.server,name:commown.action_add_followup_lead
+msgid "[commown] Add followup lead"
+msgstr "[commown] Ajouter la piste de suivi de commande"
+
+#. module: commown
 #: model:ir.actions.server,name:commown.action_add_investor_management_task
 msgid "[commown] Add investor management task"
 msgstr "[commown] Ajout de la tâche de gestion des investisseurs"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_add_receivable_account
+msgid "[commown] Add receivable account"
+msgstr "[commown] Ajouter le compte client"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_add_rental_contract
+msgid "[commown] Add rental contract"
+msgstr "[commown] Ajouter le contrat de location"
 
 #. module: commown
 #: selection:crm.lead,technical_skills:0
