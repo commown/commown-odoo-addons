@@ -21,7 +21,6 @@ for so_line in record.order_line:
     <field name="code">
 PROJECT_NAME = u'Suivi des Investisseurs'
 MANAGER_LOGIN = u'fred@commown.fr'
-EQUITY_TYPE = 'invest'  # 'crowd'
 
 HTML_ESCAPE_TABLE = {
     "&amp;": "&amp;amp;",
