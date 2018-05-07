@@ -7,6 +7,8 @@ class SaleOrderTC(TransactionCase):
 
     def setUp(self):
         super(SaleOrderTC, self).setUp()
+        self.invest_manager = self.env['res.users'].create({
+            'name': 'F W', 'login': 'fred@commown.fr', 'email': 'fc@test'})
         self.user = self.env['res.users'].create({
             'name': 'Flo C', 'login': 'fc', 'email': 'fc@test'})
         partner_portal = self.env['res.partner'].create({
