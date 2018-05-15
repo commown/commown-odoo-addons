@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-24 06:58+0000\n"
-"PO-Revision-Date: 2018-04-24 06:58+0000\n"
+"POT-Creation-Date: 2018-05-15 04:04+0000\n"
+"PO-Revision-Date: 2018-05-15 04:04+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -152,6 +152,11 @@ msgid "Billing address validated"
 msgstr "Adresse de facturation validée"
 
 #. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_layout
+msgid "Channel"
+msgstr "Espace"
+
+#. module: commown
 #: selection:crm.lead,email_rating:0
 msgid "Cold"
 msgstr "Froid"
@@ -178,7 +183,7 @@ msgstr "Ultimes tentatives"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_layout
-msgid "Contactez-nous"
+msgid "Contact us"
 msgstr "Contactez-nous"
 
 #. module: commown
@@ -231,11 +236,6 @@ msgstr "Ultimatum mail"
 #: model:ir.model.fields,field_description:commown.field_crm_lead_email_validated
 msgid "Email validated"
 msgstr "Mail validé"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.portal_layout
-msgid "Espace"
-msgstr "Espace"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_date
