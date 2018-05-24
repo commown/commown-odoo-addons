@@ -74,10 +74,10 @@ if len(project) == 1 and len(manager) == 1:
     <field name="sequence">20</field>
     <field name="state">code</field>
     <field name="code">
-if object.product_id.is_rental:
+if record.product_id.is_rental:
     env['crm.lead'].create({
         'name': u'Suivi de commande',
-        'partner_id': object.partner_id.id,
+        'partner_id': record.partner_id.id,
         'type': 'opportunity',
         'team_id': env.ref('sales_team.salesteam_website_sales').id,
         })
