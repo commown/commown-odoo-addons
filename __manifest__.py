@@ -22,6 +22,8 @@
         'python': ['magic']
     },
     'data': [
+        'views/account_analytic_account.xml',
+        'views/account_analytic_contract.xml',
         'views/address_template.xml',
         'views/auth_signup.xml',
         'views/cart.xml',
