@@ -30,9 +30,24 @@ class ContractPaymentTC(TestContractBase):
         client_patcher.start()
         self.addCleanup(client_patcher.stop)
 
-    def test_payin_label(self):
+    def test_default_payin_label(self):
         with patch('odoo.addons.payment_slimpay.models.'
                    'slimpay_utils.SlimpayClient.create_payin') as create_payin:
             invoice = self.contract.recurring_create_invoice()
             label = create_payin.call_args[0][-1]
             self.assertEqual(label, invoice.number)
+
+    def test_custom_payin_label(self):
+        self.contract.write({
+            'transaction_label': 'Invoice #START# - #END# (#INV#)',
+            'recurring_invoicing_type': 'pre-paid',
+            'recurring_next_date': '2018-02-15',
+            'recurring_rule_type': 'monthly',
+        })
+        with patch('odoo.addons.payment_slimpay.models.'
+                   'slimpay_utils.SlimpayClient.create_payin') as create_payin:
+            invoice = self.contract.recurring_create_invoice()
+            label = create_payin.call_args[0][-1]
+            expected_label = ('Invoice 02/15/2018 - 03/14/2018 (%s)'
+                              % invoice.number)
+            self.assertEqual(label, expected_label)
