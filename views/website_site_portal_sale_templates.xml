@@ -3,9 +3,20 @@
 
   <template id="portal_my_home_sale" inherit_id="website_portal_sale.portal_my_home_sale">
 
-    <!-- Do not write the block if user has no quote -->
     <xpath expr="//a[@href='/my/quotes']/ancestor::h3[1]" position="replace">
-      <t t-if="quotation_count">$0</t>
+      <!-- Do not write the block if user has no quote -->
+      <t t-if="quotation_count">
+        <h3 class="page-header">
+          <a href="/my/quotes">
+            <!-- Adapt the title of the section to B2C/ B2B partner status -->
+            <span t-if="request.env.user.partner_id.parent_id">Your security deposits</span>
+            <span t-else="">Your subscription demands</span>
+            <small class="ml8">
+              <span class='badge'><t t-esc="quotation_count"/></span>
+            </small>
+          </a>
+        </h3>
+      </t>
     </xpath>
 
     <!-- Do not write the block if user has no order -->

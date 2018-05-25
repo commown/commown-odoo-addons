@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-15 04:04+0000\n"
-"PO-Revision-Date: 2018-05-15 04:04+0000\n"
+"POT-Creation-Date: 2018-05-25 10:38+0000\n"
+"PO-Revision-Date: 2018-05-25 10:38+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -491,6 +491,16 @@ msgstr "Évaluation identité Web"
 #, python-format
 msgid "Web search link"
 msgstr "Lien de recherche sur le web"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_my_home_sale
+msgid "Your security deposits"
+msgstr "Vos dépôts de garantie"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.portal_my_home_sale
+msgid "Your subscription demands"
+msgstr "Vos demandes de souscription"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.address
