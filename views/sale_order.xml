@@ -74,7 +74,7 @@ if len(project) == 1 and len(manager) == 1:
     <field name="sequence">20</field>
     <field name="state">code</field>
     <field name="code">
-if record.product_id.is_rental:
+if any(l.product_id.is_rental for l in record.order_line):
     env['crm.lead'].create({
         'name': u'Suivi de commande',
         'partner_id': record.partner_id.id,
