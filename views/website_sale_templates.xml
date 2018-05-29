@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
   <template id="payment" inherit_id="website_sale.payment">
     <!-- Remove saved payment methods -->
     <xpath expr="//div[@id='payment_method']//li[@t-if='tokens']" position="replace">
     </xpath>
   </template>
+
+  <template id="orders_followup_products_links"
+            inherit_id="website_sale.orders_followup_products_links">
+    <!-- Change link text to the product name instead of the order
+         line name which contains the whole product description, and
+         and move the latter to a fly-over icon -->
+    <xpath expr="//div[@id='product_name']/*" position="replace">
+      <a t-if="ol.product_id.website_published" t-att-href="ol.product_id.website_url">
+        <span t-esc="ol.product_id.name"/>
+        <i class="fa fa-info-circle" t-att-title="ol.name"/>
+      </a>
+      <t t-if="not ol.product_id.website_published">
+        <span t-esc="ol.product_id.name"/>
+        <i class="fa fa-info-circle" t-att-title="ol.name"/>
+      </t>
+    </xpath>
+  </template>
+
+
 </odoo>
