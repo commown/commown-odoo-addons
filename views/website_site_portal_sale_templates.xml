@@ -7,10 +7,7 @@
       <!-- Do not write the block if user has no quote -->
       <t t-if="quotation_count">
         <h3 class="page-header">
-          <a href="/my/quotes">
-            <!-- Adapt the title of the section to B2C/ B2B partner status -->
-            <span t-if="request.env.user.partner_id.parent_id">Your security deposits</span>
-            <span t-else="">Your subscription demands</span>
+          <a href="/my/quotes">Your security deposits / Equities
             <small class="ml8">
               <span class='badge'><t t-esc="quotation_count"/></span>
             </small>

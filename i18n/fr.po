@@ -494,13 +494,8 @@ msgstr "Lien de recherche sur le web"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_my_home_sale
-msgid "Your security deposits"
-msgstr "Vos dépôts de garantie"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.portal_my_home_sale
-msgid "Your subscription demands"
-msgstr "Vos demandes de souscription"
+msgid "Your security deposits / Equities"
+msgstr "Vos dépôts de garantie / Parts sociales"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.address
