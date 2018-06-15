@@ -15,7 +15,7 @@
           </xpath>
           <xpath expr="//group[@name='group_standard_price']" position="after">
             <group name="rental" attrs="{'invisible':[('is_rental','=',False)]}" >
-              <field name="rental_price"/>
+              <field name="deposit_price_to_lease_amount_ratio"/>
               <field name="rental_frequency"/>
               <field name="rental_contract_tmpl_id"/>
             </group>
@@ -23,19 +23,5 @@
         </field>
     </record>
   </data>
-
-  <template id="product_price" inherit_id="website_sale.product_price">
-    <xpath expr="div" position="before">
-      <div t-if="product.is_rental" class="product_price mt16">
-        <h3>
-          <b style="white-space: nowrap;" t-esc="product.rental_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
-          <b t-field="product.rental_frequency"/>
-        </h3>
-      </div>
-    </xpath>
-    <xpath expr="//h4//span[1]" position="before">
-      <b t-if="product.is_rental" class="deposit_price">Initial deposit:</b>
-    </xpath>
-  </template>
 
 </odoo>

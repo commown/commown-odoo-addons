@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="product_price" inherit_id="website_sale.product_price">
+
+    <xpath expr="div" position="before">
+      <div t-if="product.is_rental" class="product_price mt16">
+        <h3>
+          <span class="oe_price oe_rental_price" t-att-data-rental-ratio="product.deposit_price_to_lease_amount_ratio" style="white-space: nowrap;" t-esc="product.website_price/(product.deposit_price_to_lease_amount_ratio or 1)" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <b t-field="product.rental_frequency"/>
+        </h3>
+        <p>
+          <b t-if="product.deposit_price_to_lease_amount_ratio>0"
+             class="deposit_price">Initial deposit: <span t-esc="'%g' % product.deposit_price_to_lease_amount_ratio"/> <span>lease payments</span></b>
+        </p>
+      </div>
+      <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"></script>
+    </xpath>
+
+    <xpath expr="//h4//span[1]" position="before">
+      <b t-if="product.is_rental" class="deposit_price">Initial deposit:</b>
+    </xpath>
+
+  </template>
+
+  <template id="variants" inherit_id="website_sale.variants">
+
+    <!-- Hide spans containing the extra prices in both select and radio inputs -->
+    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace">
+    </xpath>
+    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace">
+    </xpath>
+
+ </template>
+
+</odoo>

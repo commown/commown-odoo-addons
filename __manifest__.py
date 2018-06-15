@@ -12,6 +12,7 @@
     'external_dependencies': {},
     'data': [
         'views/product_template.xml',
+        'views/website_sale_templates.xml',
         'views/website_portal_sale_templates.xml',
         'views/contract_view.xml',
         'views/payment_transaction.xml',
