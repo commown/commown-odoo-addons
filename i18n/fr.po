@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 09:30+0000\n"
-"PO-Revision-Date: 2018-02-08 09:30+0000\n"
+"POT-Creation-Date: 2018-06-16 04:14+0000\n"
+"PO-Revision-Date: 2018-06-16 04:14+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,20 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_rental
+#: model:ir.ui.view,arch_db:product_rental.product_price
+msgid "<span>lease payments</span>"
+msgstr "<span>loyers</span>"
+
+#. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Daily"
 msgstr "par jour"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product_deposit_price_to_lease_amount_ratio
+#: model:ir.model.fields,field_description:product_rental.field_product_template_deposit_price_to_lease_amount_ratio
+msgid "Deposit price to lease amount ratio"
+msgstr "Dépôt de garantie / loyer"
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_product_product_rental_frequency
@@ -43,9 +54,20 @@ msgid "Monthly"
 msgstr "par mois"
 
 #. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_account_analytic_contract_payment_mode_id
+msgid "Payment Mode"
+msgstr "Mode de paiement"
+
+#. module: product_rental
 #: model:ir.model,name:product_rental.model_product_template
 msgid "Product Template"
 msgstr "Modèle d'article"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product_rental_contract_tmpl_id
+#: model:ir.model.fields,field_description:product_rental.field_product_template_rental_contract_tmpl_id
+msgid "Rental contract template"
+msgstr "Rental contract template"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product_rental_frequency
@@ -54,10 +76,14 @@ msgid "Rental payment frequency"
 msgstr "Fréquence de paiement"
 
 #. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product_rental_price
-#: model:ir.model.fields,field_description:product_rental.field_product_template_rental_price
-msgid "Rental price"
-msgstr "Tarif de la location"
+#: model:ir.model,name:product_rental.model_report
+msgid "Report"
+msgstr "Rapport"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_sale_order
+msgid "Sales Order"
+msgstr "Bon de commande"
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
@@ -68,3 +94,13 @@ msgstr "par semaine"
 #: selection:product.template,rental_frequency:0
 msgid "Yearly"
 msgstr "par an"
+
+#. module: product_rental
+#: model:ir.actions.server,name:product_rental.action_contract_auto_account_payment
+msgid "[commown] Automatic account payment on contract driven transaction"
+msgstr "[commown] Paiement automatique des transactions induites par un contrat"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_account_analytic_contract
+msgid "account.analytic.contract"
+msgstr "contrat"
