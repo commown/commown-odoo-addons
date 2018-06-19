@@ -155,7 +155,7 @@ for so_line in record.order_line:
     <field name="kind">on_write</field>
     <field name="filter_pre_domain">[('state', '=', 'draft')]</field>
     <field name="filter_domain">[('state', '=', 'sent')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('commown.action_add_followup_lead')], ref('commown.action_add_receivable_account'), ref('commown.action_add_rental_contract'))]"/>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('commown.action_add_followup_lead'), ref('commown.action_add_receivable_account'), ref('commown.action_add_rental_contract')])]"/>
   </record>
 
 </odoo>
