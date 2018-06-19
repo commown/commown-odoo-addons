@@ -21,7 +21,7 @@
   </template>
 
   <template id="cart_lines" inherit_id="website_sale.cart_lines">
-    <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div/a/strong" position="after">
+    <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div/a/strong/ancestor::div[1]" position="inside">
       <t t-if="line.product_id.product_tmpl_id.is_rental">
         <strong> - Deposit</strong>
       </t>
