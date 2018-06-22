@@ -74,16 +74,24 @@ if len(project) == 1 and len(manager) == 1:
     <field name="sequence">20</field>
     <field name="state">code</field>
     <field name="code">
-count = 0
-for l in record.order_line:
-    if l.product_id.is_rental:
-        count += 1
-        env['crm.lead'].create({
-            'name': u'[%s-%02d] %s' % (record.name, count, l.product_id.display_name),
-            'partner_id': record.partner_id.id,
-            'type': 'opportunity',
-            'team_id': env.ref('sales_team.salesteam_website_sales').id,
-            })
+rental_lines = [l for l in record.order_line if l.product_id.is_rental]
+rental_lines.sort(reverse=True,
+                  key=lambda l: (bool(l.product_id.rental_contract_tmpl_id),
+                                 l.price_total))
+if rental_lines:
+    title = u'[%s] ' % record.name
+    if len(rental_lines) == 1:
+        title += rental_lines[0].product_id.display_name
+    else:
+        title += u'(%s products) - %s' % (
+            len(record.order_line),
+            rental_lines[0].product_id.display_name)
+    env['crm.lead'].create({
+        'name': title,
+        'partner_id': record.partner_id.id,
+        'type': 'opportunity',
+        'team_id': env.ref('sales_team.salesteam_website_sales').id,
+        })
     </field>
   </record>
 
