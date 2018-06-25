@@ -86,7 +86,7 @@ if rental_lines:
         title += u'(%s products) - %s' % (
             len(record.order_line),
             rental_lines[0].product_id.display_name)
-    env['crm.lead'].create({
+    env['crm.lead'].with_context({'lang': 'fr_FR'}).create({
         'name': title,
         'partner_id': record.partner_id.id,
         'type': 'opportunity',
