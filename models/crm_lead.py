@@ -1,10 +1,17 @@
 import cgi
+import json
+import re
 import logging
 from urllib import urlencode
+from datetime import datetime
+from base64 import b64encode
 
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import safe_eval
 
+from colissimo_utils import ship
+
+LEAD_NAME_RE = re.compile(r'\[(?P<order_num>SO[0-9]+)\].*')
 
 _logger = logging.getLogger(__name__)
 
@@ -164,3 +171,33 @@ class CommownCrmLead(models.Model):
                 u"<a target='_blank' href='%s'>%s</a>"
                 % (cgi.escape(url, quote=True),
                    cgi.escape(_('Web search link'), quote=True)))
+
+    @api.multi
+    def create_fairphone_label(self):
+        self.ensure_one()
+        login = self.env.context['colissimo_login']
+        password = self.env.context['colissimo_password']
+        sender_email = self.env.context['colissimo_sender_email']
+        commercial_name = self.env.context['colissimo_commercial_name']
+        sender = self.env['res.partner'].search([('email', '=', sender_email)])
+        match = LEAD_NAME_RE.match(self.name)
+        order_number = match.groupdict()['order_num'] if match else ''
+        recipient = self.partner_id
+        meta_data, label_data = ship(
+            login, password, sender, recipient, order_number,
+            commercial_name)
+        if meta_data and not label_data:
+            raise ValueError(json.dumps(meta_data))
+        assert meta_data and label_data
+        self.expedition_ref = meta_data['labelResponse']['parcelNumber']
+        self.expedition_date = datetime.today()
+        return self.env['ir.attachment'].create({
+            'res_model': 'crm.lead',
+            'res_id': self.id,
+            'mimetype': u'application/pdf',
+            'datas': b64encode(label_data),
+            'datas_fname': self.expedition_ref + '.pdf',
+            'name': 'colissimo.pdf',
+            'public': False,
+            'type': 'binary',
+        })
