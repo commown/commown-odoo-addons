@@ -9,6 +9,7 @@ from base64 import b64decode
 import requests
 import mock
 
+from odoo.exceptions import MissingError
 from odoo.tests.common import TransactionCase, at_install, post_install
 
 
@@ -64,25 +65,22 @@ class CrmLeadTC(TransactionCase):
             'type': 'opportunity',
             'team_id': self.env.ref('sales_team.salesteam_website_sales').id,
         })
-
-    def test_create_fairphone_label(self):
-        fake_colissimo_data = {
+        with open(osp.join(HERE, 'fake_label.pdf')) as fobj:
+            self.fake_label_data = fobj.read()
+        self.fake_colissimo_data = {
             'colissimo_login': 'ColissimoLogin',
             'colissimo_password': 'ColissimoPassword',
             'colissimo_sender_email': 'test@test.com',
             'colissimo_commercial_name': 'CommercialName',
         }
-        lead = self.lead.with_context(fake_colissimo_data)
 
-        fake_meta_data = {
-            'labelResponse': {'parcelNumber': '6X0000000000'}
-            }
-        with open(osp.join(HERE, 'fake_label.pdf')) as fobj:
-            fake_label_data = fobj.read()
-        fake_resp = FakeResponse(fake_meta_data, fake_label_data)
+    def test_create_colissimo_fairphone_label(self):
+        fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}
+        self.fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
 
-        with mock.patch.object(requests, 'post', return_value=fake_resp):
-            lead.create_fairphone_label()
+        lead = self.lead.with_context(self.fake_colissimo_data)
+        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
+            lead._create_colissimo_fairphone_label()
 
         self.assertEqual(lead.expedition_ref, '6X0000000000')
         self.assertEqual(lead.expedition_date,
@@ -94,5 +92,43 @@ class CrmLeadTC(TransactionCase):
         att = attachments[0]
         self.assertEqual(att.datas_fname, '6X0000000000.pdf')
         self.assertEqual(att.name, 'colissimo.pdf')
-        if b64decode(att.datas) != fake_label_data:
+        if b64decode(att.datas) != self.fake_label_data:
             self.fail('incorrect pdf label')
+
+    def test_colissimo_fairphone_label_and_update(self):
+        fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}
+        self.fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
+
+        lead = self.lead.with_context(self.fake_colissimo_data)
+        assert lead.expedition_ref is False
+        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
+            att1 = lead.colissimo_fairphone_label()
+            self.assertEqual(att1.datas_fname, '6X0000000000.pdf')
+            self.assertEqual(lead.expedition_ref, '6X0000000000')
+
+            att2 = lead.colissimo_fairphone_label()
+            self.assertEqual(att1, att2)
+
+            lead.update({'expedition_ref': ''})
+            with self.assertRaises(MissingError):
+                att1.name
+
+    def test_colissimo_fairphone_labels(self):
+        leads = self.env['crm.lead']
+        for num in range(5):
+            ctx = {'num': num}
+            lead = self.lead.copy(
+                {'name': '[SO%(num)05d] Lead num %(num)d' % ctx}
+            ).with_context(self.fake_colissimo_data)
+
+            fake_meta_data = {'labelResponse': {
+                'parcelNumber': '6X%(num)010d' % ctx}}
+            fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
+
+            with mock.patch.object(requests, 'post', return_value=fake_resp):
+                lead._create_colissimo_fairphone_label()
+
+            leads += lead
+
+        all_labels = leads.colissimo_fairphone_labels()
+        self.assertEqual(all_labels.name, 'colissimo.pdf')

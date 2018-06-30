@@ -1,10 +1,13 @@
 import cgi
 import json
-import re
 import logging
-from urllib import urlencode
-from datetime import datetime
+import os
+import re
 from base64 import b64encode
+from datetime import datetime
+from subprocess import check_call, CalledProcessError
+from tempfile import gettempdir, mktemp
+from urllib import urlencode
 
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import safe_eval
@@ -173,7 +176,7 @@ class CommownCrmLead(models.Model):
                    cgi.escape(_('Web search link'), quote=True)))
 
     @api.multi
-    def create_fairphone_label(self):
+    def _create_colissimo_fairphone_label(self):
         self.ensure_one()
         login = self.env.context['colissimo_login']
         password = self.env.context['colissimo_password']
@@ -201,3 +204,82 @@ class CommownCrmLead(models.Model):
             'public': False,
             'type': 'binary',
         })
+
+    @api.multi
+    def update(self, values):
+        "Remove the colissimo label attachment when expedition_ref is emptied."
+        if 'expedition_ref' in values and not values['expedition_ref']:
+            domain = [
+                ('res_model', '=', 'crm.lead'),
+                ('res_id', '=', self.id),
+                ('name', '=', 'colissimo.pdf'),
+            ]
+            for att in self.env['ir.attachment'].search(domain):
+                att.unlink()
+        return super(CommownCrmLead, self).update(values)
+
+    @api.multi
+    def colissimo_fairphone_label(self):
+        " Return current label if expedition_ref is set, or create a new one "
+        self.ensure_one()
+        domain = [
+            ('res_model', '=', 'crm.lead'),
+            ('res_id', '=', self.id),
+            ('name', '=', 'colissimo.pdf'),
+            ]
+        current = self.env['ir.attachment'].search(domain)
+        if not current:
+            current = self._create_colissimo_fairphone_label()
+        return current[0]
+
+    @api.multi
+    def colissimo_fairphone_labels(self):
+        paths = []
+
+        for lead in self:
+            label = lead.colissimo_fairphone_label()
+            paths.append(label._full_path(label.store_fname))
+
+        fpath = os.path.join(gettempdir(), mktemp(suffix=".pdf"))
+        result_path = None
+        try:
+            check_call(['pdftk'] + paths + ['cat', 'output', fpath])
+            check_call([
+                'pdfjam', '--nup', '2x2', '--offset', '0.1cm 2.4cm',
+                '--trim', '1.95cm 5.8cm 17.4cm 2.5cm', '--clip', 'true',
+                '--frame', 'false', '--scale', '0.98',
+                '--outfile', gettempdir(), fpath])
+            result_path = fpath[:-4] + '-pdfjam' + fpath[-4:]
+
+        except CalledProcessError:
+            fpath = None
+            raise ValueError('PDF concatenation or assembly failed')
+
+        else:
+            with open(result_path) as fobj:
+                data = b64encode(fobj.read())
+            sales = self.env.ref('sales_team.salesteam_website_sales')
+            attrs = {'res_model': 'crm.team',
+                     'res_id': sales.id,
+                     'name': 'colissimo.pdf',
+                     }
+            domain = [(k, '=', v) for k, v in attrs.items()]
+            for att in self.env['ir.attachment'].search(domain):
+                att.unlink()
+            attrs.update({
+                'mimetype': u'application/pdf',
+                'datas': data,
+                'datas_fname': 'colissimo.pdf',
+                'public': False,
+                'type': 'binary',
+                })
+            return self.env['ir.attachment'].create(attrs)
+
+        finally:
+            for p in (fpath, result_path):
+                if p is None:
+                    continue
+                try:
+                    os.unlink(p)
+                except:
+                    _logger.error('Could not remove tmp label file %r', p)
