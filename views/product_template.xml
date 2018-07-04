@@ -12,6 +12,11 @@
               <field name="support_group_ids"/>
             </group>
           </xpath>
+          <xpath expr="//page[@name='sales']" position="inside">
+            <group name="followup">
+              <field name="followup_sales_team_id"/>
+            </group>
+          </xpath>
         </field>
     </record>
   </data>
