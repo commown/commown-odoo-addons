@@ -16,25 +16,48 @@ class SaleOrderTC(TransactionCase):
             'user_ids': [(6, 0, [self.user.id])]})
         self.g1 = self.env['res.groups'].create({'name': 'standard'})
         self.g2 = self.env['res.groups'].create({'name': 'premium'})
-        contract_template = self.env['account.analytic.contract'].create({
+        self.g3 = self.env['res.groups'].create({'name': 'computer'})
+        contract_tmpl1 = self.env['account.analytic.contract'].create({
             'recurring_rule_type': 'monthly',
             'recurring_interval': 1,
-            'name': 'Test Contract Template',
+            'name': 'Test Contract Template 1',
             })
-        product = self.env['product.product'].create({
+        sales_team1 = self.env['crm.team'].create({
+            'name': 'Test team1', 'use_leads': True,
+        })
+        product1 = self.env['product.product'].create({
             'name': 'fairphone rental', 'type': 'service',
-            'is_rental': True, 'rental_contract_tmpl_id': contract_template.id,
+            'is_rental': True, 'rental_contract_tmpl_id': contract_tmpl1.id,
+            'followup_sales_team_id': sales_team1.id,
             })
-        product.product_tmpl_id.support_group_ids |= self.g1 + self.g2
-        oline = (0, 0, {
-            'name': product.name, 'product_id': product.id,
-            'product_uom_qty': 1, 'product_uom': product.uom_id.id,
-            'price_unit': product.list_price})
+        product1.product_tmpl_id.support_group_ids |= self.g1 + self.g2
+        oline1 = (0, 0, {
+            'name': product1.name, 'product_id': product1.id,
+            'product_uom_qty': 1, 'product_uom': product1.uom_id.id,
+            'price_unit': product1.list_price})
+        contract_tmpl2 = self.env['account.analytic.contract'].create({
+            'recurring_rule_type': 'monthly',
+            'recurring_interval': 1,
+            'name': 'Test Contract Template 2',
+            })
+        sales_team2 = self.env['crm.team'].create({
+            'name': 'Test team2', 'use_leads': True,
+        })
+        product2 = self.env['product.product'].create({
+            'name': 'computer rental', 'type': 'service',
+            'is_rental': True, 'rental_contract_tmpl_id': contract_tmpl2.id,
+            'followup_sales_team_id': sales_team2.id,
+            })
+        product2.product_tmpl_id.support_group_ids |= self.g3
+        oline2 = (0, 0, {
+            'name': product2.name, 'product_id': product2.id,
+            'product_uom_qty': 1, 'product_uom': product2.uom_id.id,
+            'price_unit': product2.list_price})
         self.so = self.env['sale.order'].create({
             'partner_id': partner_portal.id,
             'partner_invoice_id': partner_portal.id,
             'partner_shipping_id': partner_portal.id,
-            'order_line': [oline],
+            'order_line': [oline1, oline2],
         })
 
     def test_add_to_support_groups_action(self):
@@ -59,32 +82,38 @@ class SaleOrderTC(TransactionCase):
         - add a rental contract
         """
         # Check test prerequisites
-        self.assertFalse(self.user.groups_id & (self.g1 | self.g2))
+        self.assertFalse(self.user.groups_id & (self.g1 | self.g2 | self.g3))
         # Trigger the automatic action
         self.so.write({'state': 'sent'})
         #
         # Check effects:
-        #
+
         # - support groups
         self.assertIn(self.g1, self.user.groups_id)
         self.assertIn(self.g2, self.user.groups_id)
+        self.assertIn(self.g3, self.user.groups_id)
+
         # - followup card
-        sales_team_id = self.env.ref('sales_team.salesteam_website_sales').id
         partner = self.so.partner_id
-        leads = self.env['crm.lead'].search([
-            ('team_id', '=', sales_team_id),
-            ('partner_id', '=', partner.id),
-            ('name', 'ilike', '%' + self.so.name + '%'),
-        ])
-        self.assertEqual(len(leads), 1)
+        products = [l.product_id for l in self.so.order_line]
+        for product in products:
+            leads = self.env['crm.lead'].search([
+                ('team_id', '=', product.followup_sales_team_id.id),
+                ('partner_id', '=', partner.id),
+                ('name', 'ilike', '%' + self.so.name + '%'),
+            ])
+            self.assertEqual(len(leads), 1)
+
         # - receivable account
         self.assertEqual(partner.property_account_receivable_id.name,
                          partner.name)
-        # - rental contract
-        product = self.so.product_id
-        contracts = self.env['account.analytic.account'].search([
-            ('partner_id', '=', partner.id),
-            ('name', 'ilike', '%' + self.so.name + '%'),
-            ('contract_template_id', '=', product.rental_contract_tmpl_id.id),
-        ])
-        self.assertEqual(len(contracts), 1)
+
+        # - rental contracts
+        for product in products:
+            contract_tmpl_id = product.rental_contract_tmpl_id.id
+            contracts = self.env['account.analytic.account'].search([
+                ('partner_id', '=', partner.id),
+                ('name', 'ilike', '%' + self.so.name + '%'),
+                ('contract_template_id', '=', contract_tmpl_id),
+            ])
+            self.assertEqual(len(contracts), 1)

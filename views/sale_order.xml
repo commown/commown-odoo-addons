@@ -86,12 +86,19 @@ if rental_lines:
         title += u'(%s products) - %s' % (
             len(record.order_line),
             rental_lines[0].product_id.display_name)
-    env['crm.lead'].with_context({'lang': 'fr_FR'}).create({
-        'name': title,
-        'partner_id': record.partner_id.id,
-        'type': 'opportunity',
-        'team_id': env.ref('sales_team.salesteam_website_sales').id,
-        })
+    # create one opportunity per concerned sale team:
+    default_team = env.ref('sales_team.salesteam_website_sales')
+    seen_team_ids = set()
+    for oline in rental_lines:
+        team = oline.product_id.followup_sales_team_id or default_team
+        if team.id not in seen_team_ids:
+            seen_team_ids.add(team.id)
+            env['crm.lead'].with_context({'lang': 'fr_FR'}).create({
+                'name': title,
+                'partner_id': record.partner_id.id,
+                'type': 'opportunity',
+                'team_id': team.id,
+                })
     </field>
   </record>
 
