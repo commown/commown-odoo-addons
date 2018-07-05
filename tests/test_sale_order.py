@@ -53,11 +53,18 @@ class SaleOrderTC(TransactionCase):
             'name': product2.name, 'product_id': product2.id,
             'product_uom_qty': 1, 'product_uom': product2.uom_id.id,
             'price_unit': product2.list_price})
+        product3 = self.env['product.product'].create({
+            'name': 'keyboard rental', 'type': 'service', 'is_rental': True,
+            })
+        oline3 = (0, 0, {
+            'name': product3.name, 'product_id': product3.id,
+            'product_uom_qty': 1, 'product_uom': product3.uom_id.id,
+            'price_unit': product3.list_price})
         self.so = self.env['sale.order'].create({
             'partner_id': partner_portal.id,
             'partner_invoice_id': partner_portal.id,
             'partner_shipping_id': partner_portal.id,
-            'order_line': [oline1, oline2],
+            'order_line': [oline1, oline2, oline3],
         })
 
     def test_add_to_support_groups_action(self):
@@ -96,24 +103,25 @@ class SaleOrderTC(TransactionCase):
         # - followup card
         partner = self.so.partner_id
         products = [l.product_id for l in self.so.order_line]
-        for product in products:
-            leads = self.env['crm.lead'].search([
-                ('team_id', '=', product.followup_sales_team_id.id),
-                ('partner_id', '=', partner.id),
-                ('name', 'ilike', '%' + self.so.name + '%'),
-            ])
-            self.assertEqual(len(leads), 1)
+        leads = self.env['crm.lead'].search([
+            ('partner_id', '=', partner.id),
+            ('name', 'ilike', '%' + self.so.name + '%'),
+        ])
+        self.assertEqual(len(leads), 2)
+        self.assertItemsEqual([l.team_id for l in leads],
+                              [p.followup_sales_team_id
+                               for p in products if p.followup_sales_team_id])
 
         # - receivable account
         self.assertEqual(partner.property_account_receivable_id.name,
                          partner.name)
 
         # - rental contracts
-        for product in products:
-            contract_tmpl_id = product.rental_contract_tmpl_id.id
-            contracts = self.env['account.analytic.account'].search([
-                ('partner_id', '=', partner.id),
-                ('name', 'ilike', '%' + self.so.name + '%'),
-                ('contract_template_id', '=', contract_tmpl_id),
+        contracts = self.env['account.analytic.account'].search([
+            ('partner_id', '=', partner.id),
+            ('name', 'ilike', '%' + self.so.name + '%'),
             ])
-            self.assertEqual(len(contracts), 1)
+        self.assertEqual(len(contracts), 2)
+        self.assertItemsEqual([c.contract_template_id for c in contracts],
+                              [p.rental_contract_tmpl_id
+                               for p in products if p.rental_contract_tmpl_id])
