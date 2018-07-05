@@ -90,8 +90,8 @@ if rental_lines:
     default_team = env.ref('sales_team.salesteam_website_sales')
     seen_team_ids = set()
     for oline in rental_lines:
-        team = oline.product_id.followup_sales_team_id or default_team
-        if team.id not in seen_team_ids:
+        team = oline.product_id.followup_sales_team_id
+        if team and team.id not in seen_team_ids:
             seen_team_ids.add(team.id)
             env['crm.lead'].with_context({'lang': 'fr_FR'}).create({
                 'name': title,
