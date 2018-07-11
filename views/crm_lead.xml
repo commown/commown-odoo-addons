@@ -96,6 +96,11 @@
                   <field name="initial_data_notes" colspan="2"/>
                 </group>
               </group>
+              <group string="Marketing">
+                <field name="campaign_id" />
+                <field name="medium_id" />
+                <field name="source_id" />
+              </group>
               <group name="phonecall_validation" string="Phone call validation">
                 <group>
                   <field name="identity_validated"/>
