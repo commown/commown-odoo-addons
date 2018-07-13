@@ -16,6 +16,7 @@
     },
     'data': [
         'security/ir.model.access.csv',
+        'views/backoffice.xml',
     ],
     'installable': True,
 }
