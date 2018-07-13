@@ -1,0 +1,71 @@
+import string
+import random
+
+from odoo import models, fields, api
+
+
+class Campaign(models.Model):
+    _name = 'coupon.campaign'
+
+    _sql_constraints = [
+        ('name_uniq', 'unique (name)', "Campaign already exists!"),
+    ]
+
+    name = fields.Char('Name', required=True)
+    description = fields.Text('Description')
+    date_start = fields.Date(
+        'Validity start date', help='Leave empty to start now')
+    date_end = fields.Date(
+        'Validity end date', help='Leave empty for no end')
+    seller_id = fields.Many2one(
+        'res.partner', string='Partner who sales the coupons', required=True)
+    target_product_tmpl_ids = fields.Many2many(
+        'product.template', string='Target products', help='(all if empty)')
+    coupon_ids = fields.One2many(
+        'coupon.coupon', 'campaign_id', string='Coupons of the campaign',
+        index=True)
+    emitted_coupons = fields.Integer(
+        'Emitted coupons',
+        compute='_compute_emitted_coupons', store=True, compute_sudo=True)
+    used_coupons = fields.Integer(
+        'Used coupons',
+        compute='_compute_used_coupons', store=False, compute_sudo=True)
+
+    @api.constrains('date_start', 'date_end')
+    def _check_dates(self):
+        if (self.date_start and self.date_end
+                and self.date_start > self.date_end):
+            raise models.ValidationError('Start date must be before end date')
+
+    @api.depends('coupon_ids')
+    def _compute_emitted_coupons(self):
+        for record in self:
+            record.emitted_coupons = len(record.coupon_ids)
+
+    def _compute_used_coupons(self):
+        for record in self:
+            record.used_coupons = len(
+                record.coupon_ids.filtered('used_for_sale_id'))
+
+
+class Coupon(models.Model):
+    _name = 'coupon.coupon'
+
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', "This coupon code is already used!"),
+    ]
+
+    _coupon_code_size = 10
+    _coupon_allowed_chars = string.ascii_uppercase + string.digits
+
+    def _compute_default_code(self):
+        return ''.join(random.choice(self._coupon_allowed_chars)
+                       for _char in range(self._coupon_code_size))
+
+    campaign_id = fields.Many2one(
+        'coupon.campaign', string='Campaign of the coupon', required=True,
+        ondelete='cascade')
+    code = fields.Char(
+        string="Code", size=_coupon_code_size, index=True,
+        default=_compute_default_code)
+    used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
