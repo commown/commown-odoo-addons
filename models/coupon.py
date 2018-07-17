@@ -115,6 +115,9 @@ class Coupon(models.Model):
     def reserved_coupons(self, sale_order):
         return self.search([('reserved_for_sale_id', '=', sale_order.id)])
 
+    def used_coupons(self, sale_order):
+        return self.search([('used_for_sale_id', '=', sale_order.id)])
+
     @api.multi
     def confirm_coupons(self):
         """ Confirm the coupons that were reserved (i.e. input by the user)
