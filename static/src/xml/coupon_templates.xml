@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+
+  <t t-name="coupon.used">
+    <dt><code><t t-esc="code"/></code></dt>
+    <dd t-esc="descr"/>
+  </t>
+
+  <t t-name="coupon.wrong">
+    <div class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+            <h4 class="modal-title">Wrong coupon</h4>
+          </div>
+          <div class="modal-body">
+            This coupon code is not valid. Please check your input and try again.
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-link btn-xs" data-dismiss="modal">Close</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </t>
+
+</templates>

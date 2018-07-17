@@ -70,7 +70,7 @@ class Campaign(models.Model):
                 for pt in self.target_product_tmpl_ids)
             sold_product_tmpl_ids = set(
                 l.product_id.product_tmpl_id.id
-                for l in sale_order.order_line)
+                for l in sale_order.order_line if l.product_uom_qty > 0)
             if not target_product_tmpl_ids.intersection(sold_product_tmpl_ids):
                 return False
 
@@ -98,11 +98,35 @@ class Coupon(models.Model):
         string="Code", size=_coupon_code_size, index=True,
         default=_compute_default_code)
     used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
+    reserved_for_sale_id = fields.Many2one(
+        'sale.order', string='Reserved for sale (should never be seen)')
 
-    def use_coupon(self, code, sale_order):
+    def reserve_coupon(self, code, sale_order):
+        """ Return a coupon from given code and sale_order if there is one
+        with that code, that is also unused and valid for given sale order.
+        """
         coupon = self.search([('code', '=', code)])
-        if (coupon and not coupon.used_for_sale_id
+        if (coupon
+                and not coupon.used_for_sale_id
                 and coupon.campaign_id.is_valid(sale_order)):
-            coupon.used_for_sale_id = sale_order.id
-            return True
-        return False
+            coupon.reserved_for_sale_id = sale_order.id
+            return coupon
+
+    def reserved_coupons(self, sale_order):
+        return self.search([('reserved_for_sale_id', '=', sale_order.id)])
+
+    @api.multi
+    def confirm_coupons(self):
+        """ Confirm the coupons that were reserved (i.e. input by the user)
+        for a sale order. The coupons' validity is checked again to avoid
+        user tricks like adding another product then removing the one which
+        gives the access to the coupon.
+        """
+        for coupon in self:
+            order = coupon.reserved_for_sale_id
+            if order and not coupon.used_for_sale_id:
+                if coupon.campaign_id.is_valid(order):
+                    coupon.update({'used_for_sale_id': order.id,
+                                   'reserved_for_sale_id': False})
+                else:
+                    coupon.update({'reserved_for_sale_id': False})

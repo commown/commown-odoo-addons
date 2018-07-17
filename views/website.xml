@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <!-- Cart page: insert a placeholder for the used coupons and
+       an input form to add a new one -->
+  <template id="cart" inherit_id="website_sale.cart"
+            customize_show="True" active="False" name="Coupon input">
+
+    <xpath expr="//t[@t-call='website_sale.cart_lines']" position="after">
+      <div id="coupons-placeholder">
+        <strong>Coupons</strong>
+      </div>
+    </xpath>
+
+    <xpath expr="//div[@id='right_column']" position="inside">
+      <h4>Coupon</h4>
+      <p>Have a code? Enter it and submit:</p>
+      <form id="coupon_input" action="#" method="post" class="mb32">
+        <input type="hidden" name="csrf_token"
+               t-att-value="request.csrf_token()" />
+        <div class="input-group">
+          <input name="coupon_code" class="form-control"
+                 type="text" placeholder="Your code..." />
+          <div class="input-group-btn">
+            <button type="submit" disabled="disabled" class="btn btn-default">
+              <span class="text-muted" style="margin:0 1em">Submit</span>
+              <i style="display:none;position:absolute;top:9px;right:6px"
+                 class="fa fa-spinner fa-spin"/>
+            </button>
+          </div>
+        </div>
+      </form>
+      <script type="text/javascript"
+              src="/website_sale_coupon/static/src/js/coupon.js"></script>
+    </xpath>
+
+  </template>
+
+  <!-- Insert a placeholder for the coupons in the payment page -->
+  <template id="payment" inherit_id="website_sale.payment">
+    <xpath expr="//div[@id='payment_method']" position="before">
+      <div id="coupons-placeholder">
+        <strong>Coupons</strong>
+      </div>
+      <script type="text/javascript"
+              src="/website_sale_coupon/static/src/js/coupon.js"></script>
+    </xpath>
+  </template>
+
+</odoo>

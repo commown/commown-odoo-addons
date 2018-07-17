@@ -75,7 +75,7 @@ class CouponSchemaTC(TransactionCase):
         future = datetime.now().date() + timedelta(days=30)
         self.campaign.date_end = future.strftime(fields.DATE_FORMAT)
 
-    def test_validity_product(self):
+    def test_validity_product_and_qty(self):
         # Check valid when all products are eligible
         so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
         assert not self.campaign.target_product_tmpl_ids
@@ -88,21 +88,65 @@ class CouponSchemaTC(TransactionCase):
                 self.campaign.target_product_tmpl_ids |= tmpl
                 break
         else:
-            self.fail('cannot find another product template')
+            assert False, 'cannot find another product template'
         self.assertFalse(self.campaign.is_valid(so))
 
         # Check valid when sale product is eligible
         self.campaign.target_product_tmpl_ids |= so_product_tmpl
         self.assertTrue(self.campaign.is_valid(so))
 
-    def test_use_coupon(self):
+        # ... unless the quantity is zero
+        so.order_line[0].product_uom_qty = 0
+        self.assertFalse(self.campaign.is_valid(so))
+
+    def test_reserve_and_confirm_coupon(self):
         so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
         Coupon = self.env['coupon.coupon']
 
-        self.assertFalse(Coupon.use_coupon(u'DUMMYCODE', so))
+        self.assertIsNone(Coupon.reserve_coupon(u'DUMMYCODE', so))
 
         coupon = self._create_coupon(code=u'TEST_USE')
-        self.assertTrue(Coupon.use_coupon(u'TEST_USE', so))
+        self.assertEqual(Coupon.reserve_coupon(u'TEST_USE', so), coupon)
+        self.assertIn(coupon, Coupon.reserved_coupons(so))
 
-        coupon.used_for_sale_id = so.id
-        self.assertFalse(Coupon.use_coupon(u'TEST_USE', so))
+        coupon.confirm_coupons()
+        self.assertNotIn(coupon, Coupon.reserved_coupons(so))
+        self.assertEqual(coupon.used_for_sale_id, so)
+
+    def other_product_template(self, product):
+        for tmpl in self.env['product.template'].search([]):
+            if tmpl.id != product.id:
+                return tmpl
+        else:
+            assert False, 'cannot find another product template'
+
+    def sale_order(self):
+        return self.env['sale.order'].search([])[0]  # chosen SO does not matter
+
+    def test_user_cannot_trick_confirm_coupon(self):
+        """ Check users cannot confirm a coupon with a non eligible product
+        (scenario where the user first added the coupon, then removed the
+        eligible product before finalizing the sale) """
+
+        assert not self.campaign.target_product_tmpl_ids
+        Coupon = self.env['coupon.coupon']
+
+        so = self.sale_order()
+        so_line = so.order_line[0]
+        so_product = so_line.product_id.product_tmpl_id
+        self.campaign.target_product_tmpl_ids |= so_product
+
+        coupon = self._create_coupon(code=u'TEST_USE')
+
+        # Check cannot confirm if coupon is no more valid
+        self.assertEqual(Coupon.reserve_coupon(u'TEST_USE', so), coupon)
+        so_line.product_uom_qty = 0
+        coupon.confirm_coupons()
+        self.assertFalse(coupon.used_for_sale_id)
+        self.assertFalse(coupon.reserved_for_sale_id)
+
+        # ... although confirmation works when coupon is valid
+        so_line.product_uom_qty = 1
+        self.assertEqual(Coupon.reserve_coupon(u'TEST_USE', so), coupon)
+        coupon.confirm_coupons()
+        self.assertEqual(coupon.used_for_sale_id.id, so.id)
