@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+
+from odoo import fields
 from odoo.exceptions import ValidationError, AccessError
 from odoo.tests.common import TransactionCase, at_install, post_install
 
@@ -63,3 +66,43 @@ class CouponSchemaTC(TransactionCase):
         with self.assertRaises(AccessError):
             Campaign = self.env['coupon.campaign'].sudo(someone)
             self.assertFalse(Campaign.search([]))
+
+    def test_validity_date(self):
+        self.campaign.update({'date_start': '2018-01-01',
+                              'date_end': '2018-02-01'})
+        so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        self.assertFalse(self.campaign.is_valid(so))
+        future = datetime.now().date() + timedelta(days=30)
+        self.campaign.date_end = future.strftime(fields.DATE_FORMAT)
+
+    def test_validity_product(self):
+        # Check valid when all products are eligible
+        so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        assert not self.campaign.target_product_tmpl_ids
+        self.assertTrue(self.campaign.is_valid(so))
+
+        # Check invalid when sale product not eligible
+        so_product_tmpl = so.order_line[0].product_id.product_tmpl_id
+        for tmpl in self.env['product.template'].search([]):
+            if tmpl.id != so_product_tmpl.id:
+                self.campaign.target_product_tmpl_ids |= tmpl
+                break
+        else:
+            self.fail('cannot find another product template')
+        self.assertFalse(self.campaign.is_valid(so))
+
+        # Check valid when sale product is eligible
+        self.campaign.target_product_tmpl_ids |= so_product_tmpl
+        self.assertTrue(self.campaign.is_valid(so))
+
+    def test_use_coupon(self):
+        so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        Coupon = self.env['coupon.coupon']
+
+        self.assertFalse(Coupon.use_coupon(u'DUMMYCODE', so))
+
+        coupon = self._create_coupon(code=u'TEST_USE')
+        self.assertTrue(Coupon.use_coupon(u'TEST_USE', so))
+
+        coupon.used_for_sale_id = so.id
+        self.assertFalse(Coupon.use_coupon(u'TEST_USE', so))

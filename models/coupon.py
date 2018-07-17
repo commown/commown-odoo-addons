@@ -1,5 +1,6 @@
 import string
 import random
+from datetime import datetime
 
 from odoo import models, fields, api
 
@@ -47,6 +48,34 @@ class Campaign(models.Model):
             record.used_coupons = len(
                 record.coupon_ids.filtered('used_for_sale_id'))
 
+    @api.multi
+    def is_valid(self, sale_order):
+        """ Return True if current campaign is valid today (according to its
+        start and end dates) for the given sale order (comparing its eligible
+        to the sold products).
+        """
+        self.ensure_one()
+
+        # Check dates
+        today = datetime.now().date().strftime(fields.DATE_FORMAT)
+        if self.date_start and self.date_start > today:
+            return False
+        if self.date_end and self.date_end < today:
+            return False
+
+        # Check products
+        if self.target_product_tmpl_ids:
+            target_product_tmpl_ids = set(
+                pt.id
+                for pt in self.target_product_tmpl_ids)
+            sold_product_tmpl_ids = set(
+                l.product_id.product_tmpl_id.id
+                for l in sale_order.order_line)
+            if not target_product_tmpl_ids.intersection(sold_product_tmpl_ids):
+                return False
+
+        return True
+
 
 class Coupon(models.Model):
     _name = 'coupon.coupon'
@@ -69,3 +98,11 @@ class Coupon(models.Model):
         string="Code", size=_coupon_code_size, index=True,
         default=_compute_default_code)
     used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
+
+    def use_coupon(self, code, sale_order):
+        coupon = self.search([('code', '=', code)])
+        if (coupon and not coupon.used_for_sale_id
+                and coupon.campaign_id.is_valid(sale_order)):
+            coupon.used_for_sale_id = sale_order.id
+            return True
+        return False
