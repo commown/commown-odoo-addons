@@ -7,6 +7,8 @@
             customize_show="True" active="False" name="Coupon input">
 
     <xpath expr="//t[@t-call='website_sale.cart_lines']" position="after">
+      <link rel="stylesheet"
+            href="/website_sale_coupon/static/src/css/coupon.css" />
       <div id="coupons-placeholder">
         <strong>Coupons</strong>
       </div>
@@ -23,9 +25,8 @@
                  type="text" placeholder="Your code..." />
           <div class="input-group-btn">
             <button type="submit" disabled="disabled" class="btn btn-default">
-              <span class="text-muted" style="margin:0 1em">Submit</span>
-              <i style="display:none;position:absolute;top:9px;right:6px"
-                 class="fa fa-spinner fa-spin"/>
+              <span>Submit</span>
+              <i class="fa fa-spinner fa-spin"/>
             </button>
           </div>
         </div>
@@ -39,6 +40,8 @@
   <!-- Insert a placeholder for the coupons in the payment page -->
   <template id="payment" inherit_id="website_sale.payment">
     <xpath expr="//div[@id='payment_method']" position="before">
+      <link rel="stylesheet"
+            href="/website_sale_coupon/static/src/css/coupon.css" />
       <div id="coupons-placeholder">
         <strong>Coupons</strong>
       </div>
