@@ -1,0 +1,243 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* website_sale_coupon
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-07-18 13:23+0000\n"
+"PO-Revision-Date: 2018-07-18 13:23+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: website_sale_coupon
+#. openerp-web
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:15
+#, python-format
+msgid "&times;"
+msgstr "&times;"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,help:website_sale_coupon.field_coupon_campaign_target_product_tmpl_ids
+msgid "(all if empty)"
+msgstr "(tous si vide)"
+
+#. module: website_sale_coupon
+#: model:ir.ui.view,arch_db:website_sale_coupon.cart
+msgid "<span>Submit</span>\n"
+"              <i class=\"fa fa-spinner fa-spin\"/>"
+msgstr "<span>Valider</span>\n"
+"              <i class=\"fa fa-spinner fa-spin\"/>"
+
+#. module: website_sale_coupon
+#: model:ir.ui.view,arch_db:website_sale_coupon.cart
+#: model:ir.ui.view,arch_db:website_sale_coupon.confirmation
+#: model:ir.ui.view,arch_db:website_sale_coupon.orders_followup
+#: model:ir.ui.view,arch_db:website_sale_coupon.payment
+msgid "<strong>Coupons</strong>"
+msgstr "<strong>Coupons</strong>"
+
+#. module: website_sale_coupon
+#: sql_constraint:coupon.campaign:0
+msgid "Campaign already exists!"
+msgstr "Cette campagne existe déjà !"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_campaign_id
+msgid "Campaign of the coupon"
+msgstr "Campagne du coupon"
+
+#. module: website_sale_coupon
+#: model:ir.ui.menu,name:website_sale_coupon.coupon_campaign
+msgid "Campaigns"
+msgstr "Campagnes"
+
+#. module: website_sale_coupon
+#. openerp-web
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:22
+#, python-format
+msgid "Close"
+msgstr "Fermer"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_code
+msgid "Code"
+msgstr "Code"
+
+#. module: website_sale_coupon
+#: model:ir.ui.view,arch_db:website_sale_coupon.cart
+msgid "Coupon"
+msgstr "Coupon"
+
+#. module: website_sale_coupon
+#: model:ir.actions.act_window,name:website_sale_coupon.action_coupon_campaign
+msgid "Coupon campaigns"
+msgstr "Campagnes de coupons"
+
+#. module: website_sale_coupon
+#: model:ir.ui.menu,name:website_sale_coupon.coupon_coupon
+#: model:ir.ui.menu,name:website_sale_coupon.coupon_main
+msgid "Coupons"
+msgstr "Coupons"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_coupon_ids
+msgid "Coupons of the campaign"
+msgstr "Coupons de la campagne"
+
+#. module: website_sale_coupon
+#: model:ir.actions.act_window,name:website_sale_coupon.action_coupon_coupon
+msgid "Create Coupon"
+msgstr "Créer un coupon"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_create_uid
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_create_date
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_description
+msgid "Description"
+msgstr "Description"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_display_name
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_emitted_coupons
+msgid "Emitted coupons"
+msgstr "Coupons émis"
+
+#. module: website_sale_coupon
+#: model:ir.ui.view,arch_db:website_sale_coupon.cart
+msgid "Have a code? Enter it and submit:"
+msgstr "Vous avez un coupon ? Saisissez son code ci-dessous :"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_id
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_id
+msgid "ID"
+msgstr "ID"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign___last_update
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_write_uid
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_write_date
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,help:website_sale_coupon.field_coupon_campaign_date_end
+msgid "Leave empty for no end"
+msgstr "Vide signifie sans fin"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,help:website_sale_coupon.field_coupon_campaign_date_start
+msgid "Leave empty to start now"
+msgstr "Vide signifie dès maintenant"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_name
+#: model:ir.ui.view,arch_db:website_sale_coupon.coupon_campaign_form
+msgid "Name"
+msgstr "Nom"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_seller_id
+msgid "Partner who sales the coupons"
+msgstr "Partenaire qui vend les coupons"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_reserved_for_sale_id
+msgid "Reserved for sale (should never be seen)"
+msgstr "Réservé pour une vente en cours (ne devrait jamais apparaître)"
+
+#. module: website_sale_coupon
+#: model:ir.model,name:website_sale_coupon.model_sale_order
+msgid "Sales Order"
+msgstr "Bon de commande"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_target_product_tmpl_ids
+msgid "Target products"
+msgstr "Produits concernés"
+
+#. module: website_sale_coupon
+#: sql_constraint:coupon.coupon:0
+msgid "This coupon code is already used!"
+msgstr "Ce code de coupon est déjà utilisé !"
+
+#. module: website_sale_coupon
+#. openerp-web
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:18
+#, python-format
+msgid "This coupon code is not valid. Please check your input and try again."
+msgstr "Ce code de coupon n'est pas valide. Veuillez vérifier votre frappe."
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_used_coupons
+msgid "Used coupons"
+msgstr "Coupons utilisés"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_used_for_sale_id
+msgid "Used for sale"
+msgstr "Utilisé pour la vente"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_date_end
+msgid "Validity end date"
+msgstr "Date de fin de validité"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_date_start
+msgid "Validity start date"
+msgstr "Date de début de validité"
+
+#. module: website_sale_coupon
+#. openerp-web
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:16
+#, python-format
+msgid "Wrong coupon"
+msgstr "Mauvais coupon"
+
+#. module: website_sale_coupon
+#: model:ir.ui.view,arch_db:website_sale_coupon.cart
+msgid "Your code..."
+msgstr "Votre code..."
+
+#. module: website_sale_coupon
+#: model:ir.model,name:website_sale_coupon.model_coupon_campaign
+msgid "coupon.campaign"
+msgstr "coupon.campaign"
+
+#. module: website_sale_coupon
+#: model:ir.model,name:website_sale_coupon.model_coupon_coupon
+msgid "coupon.coupon"
+msgstr "coupon.coupon"
