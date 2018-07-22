@@ -132,12 +132,12 @@
                   <field name="delivery_date"/>
                 </group>
                 <group>
-                  <field name="expedition_status"/>
-                  <field name="expedition_status_fetch_date"/>
+                  <field readonly="1" name="expedition_status"/>
+                  <field readonly="1" name="expedition_status_fetch_date"/>
                 </group>
               </group>
               <group>
-                <field name="expedition_urgency_mail_sent"/>
+                <field readonly="1" name="expedition_urgency_mail_sent"/>
               </group>
             </page>
           </xpath>
