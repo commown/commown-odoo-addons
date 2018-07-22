@@ -126,9 +126,18 @@
             </page>
             <page name="delivery" string="Delivery followup">
               <group>
+                <group>
                   <field name="expedition_ref"/>
                   <field name="expedition_date"/>
                   <field name="delivery_date"/>
+                </group>
+                <group>
+                  <field name="expedition_status"/>
+                  <field name="expedition_status_fetch_date"/>
+                </group>
+              </group>
+              <group>
+                <field name="expedition_urgency_mail_sent"/>
               </group>
             </page>
           </xpath>
