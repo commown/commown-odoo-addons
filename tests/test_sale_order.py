@@ -7,65 +7,120 @@ class SaleOrderTC(TransactionCase):
 
     def setUp(self):
         super(SaleOrderTC, self).setUp()
-        self.invest_manager = self.env['res.users'].create({
+
+        User = self.env['res.users']
+        Group = self.env['res.groups']
+        Partner = self.env['res.partner']
+
+        self.invest_manager = User.create({
             'name': 'F W', 'login': 'fred@commown.fr', 'email': 'fc@test'})
-        self.user = self.env['res.users'].create({
+        self.user = User.create({
             'name': 'Flo C', 'login': 'fc', 'email': 'fc@test'})
-        partner_portal = self.env['res.partner'].create({
+        partner_portal = Partner.create({
             'name': 'Flo C', 'email': 'fc@test',
             'user_ids': [(6, 0, [self.user.id])]})
-        self.g1 = self.env['res.groups'].create({'name': 'standard'})
-        self.g2 = self.env['res.groups'].create({'name': 'premium'})
-        self.g3 = self.env['res.groups'].create({'name': 'computer'})
-        contract_tmpl1 = self.env['account.analytic.contract'].create({
-            'recurring_rule_type': 'monthly',
-            'recurring_interval': 1,
-            'name': 'Test Contract Template 1',
-            })
-        sales_team1 = self.env['crm.team'].create({
-            'name': 'Test team1', 'use_leads': True,
-        })
-        product1 = self.env['product.product'].create({
-            'name': 'fairphone rental', 'type': 'service',
-            'is_rental': True, 'rental_contract_tmpl_id': contract_tmpl1.id,
-            'followup_sales_team_id': sales_team1.id,
-            })
-        product1.product_tmpl_id.support_group_ids |= self.g1 + self.g2
-        oline1 = (0, 0, {
-            'name': product1.name, 'product_id': product1.id,
-            'product_uom_qty': 1, 'product_uom': product1.uom_id.id,
-            'price_unit': product1.list_price})
-        contract_tmpl2 = self.env['account.analytic.contract'].create({
-            'recurring_rule_type': 'monthly',
-            'recurring_interval': 1,
-            'name': 'Test Contract Template 2',
-            })
-        sales_team2 = self.env['crm.team'].create({
-            'name': 'Test team2', 'use_leads': True,
-        })
-        product2 = self.env['product.product'].create({
-            'name': 'computer rental', 'type': 'service',
-            'is_rental': True, 'rental_contract_tmpl_id': contract_tmpl2.id,
-            'followup_sales_team_id': sales_team2.id,
-            })
-        product2.product_tmpl_id.support_group_ids |= self.g3
-        oline2 = (0, 0, {
-            'name': product2.name, 'product_id': product2.id,
-            'product_uom_qty': 1, 'product_uom': product2.uom_id.id,
-            'price_unit': product2.list_price})
-        product3 = self.env['product.product'].create({
-            'name': 'keyboard rental', 'type': 'service', 'is_rental': True,
-            })
-        oline3 = (0, 0, {
-            'name': product3.name, 'product_id': product3.id,
-            'product_uom_qty': 1, 'product_uom': product3.uom_id.id,
-            'price_unit': product3.list_price})
+
+        self.g1 = Group.create({'name': 'standard'})
+        self.g2 = Group.create({'name': 'premium'})
+        self.g3 = Group.create({'name': 'computer'})
+
+        # Main rental products (with a rental contract template)
+        contract_tmpl1 = self._create_rental_contract_tmpl(
+            1, recurring_invoice_line_ids=[
+                self._invoice_line(
+                    1, name='1 month Fairphone premium', specific_price=30.),
+                self._invoice_line(2, name='1 month ##ACCESSORY##'),
+                ])
+        product1 = self._create_rental_product(
+            1, name='Fairphone Premium', sgroups=self.g1+self.g2,
+            list_price=60., rental_contract_tmpl_id=contract_tmpl1.id)
+        oline1 = self._oline(product1)
+
+        contract_tmpl2 = self._create_rental_contract_tmpl(
+            2, recurring_invoice_line_ids=[
+                self._invoice_line(
+                    2, '1 month of ##PRODUCT##', specific_price=0.0),
+                self._invoice_line(3, '1 month of ##ACCESSORY##'),
+                ])
+        product2 = self._create_rental_product(
+            2, self.g3, name="PC", list_price=120.,
+            rental_contract_tmpl_id=contract_tmpl2.id)
+        oline2 = self._oline(product2, product_uom_qty=2)
+
+        # Accessory products
+        product3 = self._create_rental_product(
+            3, name='headset', list_price=3.,
+            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+        oline3 = self._oline(product3)
+
+        product4 = self._create_rental_product(
+            4, name='screen', list_price=30.,
+            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+        oline4 = self._oline(product4, product_uom_qty=2)
+
+        product5 = self._create_rental_product(
+            5, name='keyboard', list_price=12.,
+            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+        oline5 = self._oline(product5)
+
+        product6 = self._create_rental_product(
+            6, name='keyboard deluxe', list_price=15.,
+            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+        oline6 = self._oline(product6)
+
+        product1.accessory_product_ids |= product3
+        product2.accessory_product_ids |= product4 + product5 + product6
+
         self.so = self.env['sale.order'].create({
             'partner_id': partner_portal.id,
             'partner_invoice_id': partner_portal.id,
             'partner_shipping_id': partner_portal.id,
-            'order_line': [oline1, oline2, oline3],
+            'order_line': [oline1, oline2, oline3, oline4, oline5, oline6],
         })
+
+    def _create_rental_product(self, num, sgroups=None, **kwargs):
+        kwargs.setdefault('name', 'product %d' % num)
+        kwargs.setdefault('is_rental', True)
+        kwargs.setdefault('type', 'service')
+        if 'followup_sales_team_id' not in kwargs:
+            kwargs['followup_sales_team_id'] = self._create_sales_team(num).id
+        if 'rental_contract_tmpl_id' not in kwargs:
+            kwargs['rental_contract_tmpl_id'] = \
+                self._create_rental_contract_tmpl(num).id
+        product = self.env['product.product'].create(kwargs)
+        if sgroups is not None:
+            product.product_tmpl_id.support_group_ids |= sgroups
+        return product
+
+    def _create_rental_contract_tmpl(self, num, **kwargs):
+        kwargs.setdefault('recurring_rule_type', 'monthly')
+        kwargs.setdefault('recurring_interval', 1)
+        kwargs.setdefault('name', 'Test Contract Template %d' % num)
+        return self.env['account.analytic.contract'].create(kwargs)
+
+    def _create_sales_team(self, num, **kwargs):
+        kwargs.setdefault('name', 'Test team%d' % num)
+        kwargs.setdefault('use_leads', True)
+        return self.env['crm.team'].create(kwargs)
+
+    def _oline(self, product, **kwargs):
+        kwargs['product_id'] = product.id
+        kwargs['product_uom'] = product.uom_id.id
+        kwargs.setdefault('name', product.name)
+        kwargs.setdefault('product_uom_qty', 1)
+        kwargs.setdefault('price_unit', product.list_price)
+        return (0, 0, kwargs)
+
+    def _invoice_line(self, num, name, **kwargs):
+        if 'product_id' not in kwargs:
+            product = self.env['product.product'].create({
+                'name': 'Line product %d' % num, 'type': 'service'})
+            kwargs['product_id'] = product.id
+            kwargs['uom_id'] = product.uom_id.id
+        kwargs['name'] = name
+        kwargs.setdefault('specific_price', 0.)
+        kwargs.setdefault('quantity', 1)
+        return (0, 0, kwargs)
 
     def test_add_to_support_groups_action(self):
         """ Add to support group action on a sale order must add the buyer to
@@ -121,7 +176,35 @@ class SaleOrderTC(TransactionCase):
             ('partner_id', '=', partner.id),
             ('name', 'ilike', '%' + self.so.name + '%'),
             ])
-        self.assertEqual(len(contracts), 2)
-        self.assertItemsEqual([c.contract_template_id for c in contracts],
-                              [p.rental_contract_tmpl_id
-                               for p in products if p.rental_contract_tmpl_id])
+        self.assertEqual(len(contracts), 3)  # 1 FP, 2 computers
+
+    def test_rental_contract_creation(self):
+        self.so.write({'state': 'sent'})
+        contracts = self.env['account.analytic.account'].search([
+            ('name', 'ilike', '%' + self.so.name + '%'),
+            ])
+        self.assertEqual(len(contracts), 3)
+        c1, c2, c3 = contracts
+
+        ilines1 = c1.recurring_invoice_line_ids
+        self.assertEqual(ilines1.mapped('name'),
+                         ['1 month Fairphone premium', '1 month headset'])
+        self.assertEqual(ilines1.mapped('price_unit'), [30., 1.25])
+
+        ilines2 = c2.recurring_invoice_line_ids
+        self.assertEqual(ilines2.mapped('name'), [
+            '1 month of PC',
+            '1 month of screen',
+            '1 month of screen',
+            '1 month of keyboard',
+            '1 month of keyboard deluxe',
+        ])
+        self.assertEqual(ilines2.mapped('price_unit'),
+                         [50.0, 12.5, 12.5, 5.0, 6.25])
+
+        ilines3 = c3.recurring_invoice_line_ids
+        self.assertEqual(ilines3.mapped('name'), ['1 month of PC'])
+        # Global value will be 0 so that the sale_completion_check.py script
+        # generates an error: we cannot associate accessories with the right
+        # main rental product -> generate a wrong contract (with 0 amount).
+        self.assertEqual(ilines3.mapped('price_unit'), [50.])
