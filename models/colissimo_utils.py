@@ -3,6 +3,7 @@ from email.parser import Parser
 from cgi import parse_header
 import json
 from base64 import b64decode
+import re
 
 import requests
 import phonenumbers
@@ -62,12 +63,20 @@ def delivery_data(partner):
     if delivery_id == partner.id:
         result_data = partner_data
     else:
-        result_data = delivery_data(
-            partner.env['res.partner'].browse(delivery_id))
-        # Add fallback contact values if not set in delivery contact:
-        for attr in 'phoneNumber', 'mobileNumber', 'email':
-            if not result_data[attr]:
-                result_data[attr] = partner_data[attr]
+        result_data = None
+        comment = partner.browse(delivery_id).comment
+        if comment:
+            match = re.match('^\[BP\] (?P<bp>[0-9]+)$', comment)
+            if match:
+                result_data = partner_data
+                result_data['BP'] = match.groupdict()['bp']
+        if result_data is None:
+            result_data = delivery_data(
+                partner.env['res.partner'].browse(delivery_id))
+            # Add fallback contact values if not set in delivery contact:
+            for attr in 'phoneNumber', 'mobileNumber', 'email':
+                if not result_data[attr]:
+                    result_data[attr] = partner_data[attr]
 
     for attr in ('line2', 'line3'):
         if len(result_data[attr] or '') > 35:
@@ -96,6 +105,23 @@ def shipping_data(sender, recipient, order_number, commercial_name,
 
     if deposit_date is None:
         deposit_date = datetime.today()
+
+    service = {
+        'orderNumber': order_number,  # for coliview
+        'productCode': 'DOS',
+        'depositDate': deposit_date.strftime('%Y-%m-%d'),
+        'commercialName': commercial_name,
+    }
+
+    parcel = parcel_data()
+
+    # Handle post office destination: must figure in delivery's partner
+    # "comment" field: "[BP] <bp_id>" (where bp_id is a 6-digit number)
+    destination = delivery_data(recipient)
+    if 'BP' in destination:
+        service['productCode'] = 'BPR'
+        parcel['pickupLocationId'] = destination.pop('BP')
+
     return {
         'outputFormat': {
             'x': 0,
@@ -104,20 +130,15 @@ def shipping_data(sender, recipient, order_number, commercial_name,
             # 'outputPrintingType': 'PDF_10x15_300dpi',  # cf. doc p27
         },
         'letter': {
-            'service': {
-                'orderNumber': order_number,  # for coliview
-                'productCode': 'DOS',
-                'depositDate': deposit_date.strftime('%Y-%m-%d'),
-                'commercialName': commercial_name,
-            },
-            'parcel': parcel_data(),
+            'service': service,
+            'parcel': parcel,
             'sender': {
                 'senderParcelRef': order_number,     # visible on the label
                 'address': delivery_data(sender),
             },
             'addressee': {
                 'addresseeParcelRef': order_number,  # visible on the label
-                'address': delivery_data(recipient)
+                'address': destination,
             }
         }
     }
