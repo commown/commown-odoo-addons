@@ -148,12 +148,16 @@
 
   </data>
 
-  <record id="action_print_fairphone_label" model="ir.actions.server">
-    <field name="name">[commown] Print Fairphone parcel label(s)</field>
-    <field name="model_id" ref="commown.model_crm_lead"/>
-    <field name="sequence">5</field>
-    <field name="state">code</field>
-    <field name="code">
+  <data noupdate="1">
+
+    <!-- Set noupdate because the data is to be changed and the code is mainly
+         in the model (thus not designed to be modified)-->
+    <record id="action_print_fairphone_label" model="ir.actions.server">
+      <field name="name">[commown] Print Fairphone parcel label(s)</field>
+      <field name="model_id" ref="commown.model_crm_lead"/>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code">
 colissimo_data = {
             'colissimo_login': 'ColissimoLogin',
             'colissimo_password': 'ColissimoPassword',
@@ -168,7 +172,9 @@ action = {
     "url": attachment.website_url,
     "target": "new",
     }
-    </field>
-  </record>
+      </field>
+    </record>
+
+</data>
 
 </odoo>

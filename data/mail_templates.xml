@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data>
+  <data noupdate="1">
 
     <record id="email_send_invoice_from_contract" model="mail.template">
       <field name="name">[commown] Envoi d'une facture générée par un contrat</field>
