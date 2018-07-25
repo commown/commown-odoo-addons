@@ -10,7 +10,7 @@ def rental_product_price(product, partner):
     tax = partner.property_account_receivable_id.tax_ids
     to_excl = 1. / (1. + tax.amount / 100.)
     ratio = product.deposit_price_to_lease_amount_ratio
-    return (product.list_price * to_excl / ratio)
+    return (product.website_public_price * to_excl / ratio)
 
 
 def generate_invoice_rental_line(contract, marker, product, qtty=1):
@@ -70,7 +70,7 @@ class SaleOrder(models.Model):
 
             # Create rental contract for each ordered main rental product
             for so_line in record.order_line:
-                product = so_line.product_id.product_tmpl_id
+                product = so_line.product_id
                 if not product.is_rental:
                     continue  # equity, fairphone open install, etc.
                 elif not product.rental_contract_tmpl_id:
