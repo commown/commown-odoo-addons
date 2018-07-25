@@ -148,7 +148,9 @@
 
   </data>
 
-  <record id="action_print_fairphone_label" model="ir.actions.server">
+  <!-- Set noupdate because the data is to be changed and the code is mainly
+       in the model (thus not designed to be modified)-->
+  <record id="action_print_fairphone_label" model="ir.actions.server" noupdate="1">
     <field name="name">[commown] Print Fairphone parcel label(s)</field>
     <field name="model_id" ref="commown.model_crm_lead"/>
     <field name="sequence">5</field>
