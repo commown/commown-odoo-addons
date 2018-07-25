@@ -133,7 +133,7 @@ if not account or account.get_xml_id().get(account.id):
     <field name="sequence">40</field>
     <field name="state">code</field>
     <field name="code">
-      record.generate_rental_contracts()
+record.generate_rental_contracts()
     </field>
   </record>
 
