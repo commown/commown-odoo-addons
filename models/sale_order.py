@@ -9,8 +9,7 @@ class CouponSaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.multi
-    def action_confirm(self):
-        res = super(CouponSaleOrder, self).action_confirm()
+    def confirm_coupons(self):
         Coupon = self.env['coupon.coupon'].sudo()
         for order in self:
             coupons = Coupon.reserved_coupons(order)
@@ -18,4 +17,9 @@ class CouponSaleOrder(models.Model):
                 _logger.info('Confirming coupons ids %s for sale %s',
                              coupons.mapped('id'), order.name)
                 coupons.confirm_coupons()
+
+    @api.multi
+    def action_confirm(self):
+        res = super(CouponSaleOrder, self).action_confirm()
+        self.confirm_coupons()
         return res
