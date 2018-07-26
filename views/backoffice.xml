@@ -50,6 +50,10 @@
             <group>
               <field name="campaign_id" />
               <field name="code" />
+              <!-- Maybe next field should not even be displayed
+                   It is for now as the module is not mature yet
+                   and this could help debugging -->
+              <field name="reserved_for_sale_id" readonly="1"/>
               <field name="used_for_sale_id" readonly="1"/>
             </group>
           </sheet>

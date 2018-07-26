@@ -99,7 +99,7 @@ class Coupon(models.Model):
         default=_compute_default_code)
     used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
     reserved_for_sale_id = fields.Many2one(
-        'sale.order', string='Reserved for sale (should never be seen)')
+        'sale.order', string='Reserved for sale (admin info only)')
 
     def reserve_coupon(self, code, sale_order):
         """ Return a coupon from given code and sale_order if there is one
