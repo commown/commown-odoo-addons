@@ -213,18 +213,18 @@ class CommownCrmLead(models.Model):
             'type': 'binary',
         })
 
-    @api.multi
-    def update(self, values):
+    def write(self, vals, **kwargs):
         "Remove the colissimo label attachment when expedition_ref is emptied."
-        if 'expedition_ref' in values and not values['expedition_ref']:
+        if 'expedition_ref' in vals and not vals['expedition_ref']:
             domain = [
                 ('res_model', '=', 'crm.lead'),
                 ('res_id', '=', self.id),
                 ('name', '=', 'colissimo.pdf'),
             ]
             for att in self.env['ir.attachment'].search(domain):
+                _logger.error('REMOVE att %s of lead %s', att.id, self.id)
                 att.unlink()
-        return super(CommownCrmLead, self).update(values)
+        return super(CommownCrmLead, self).write(vals, **kwargs)
 
     @api.multi
     def colissimo_fairphone_label(self):

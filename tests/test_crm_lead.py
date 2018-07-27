@@ -109,7 +109,7 @@ class CrmLeadTC(TransactionCase):
             att2 = lead.colissimo_fairphone_label()
             self.assertEqual(att1, att2)
 
-            lead.update({'expedition_ref': ''})
+            lead.write({'expedition_ref': ''})
             with self.assertRaises(MissingError):
                 att1.name
 
