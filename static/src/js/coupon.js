@@ -7,20 +7,21 @@ odoo.define('website_sale_coupon.coupon', function(require) {
     ajax.loadXML('/website_sale_coupon/static/src/xml/coupon_templates.xml',
                  qweb);
 
-    function displayCoupon(coupon) {
-        var $coupon = $(qweb.render(
-            'coupon.used', {'code': coupon.code, 'descr': coupon.descr}));
-        var $placeholder = $('#coupons-placeholder');
-        if ($placeholder.find('dl').length == 0) {
-            $('<dl class="dl-horizontal"/>').appendTo($placeholder);
-        }
-        $coupon.appendTo($placeholder.find('dl'));
+    function displayCoupons(coupons) {
+        var $dl = $('<dl class="dl-horizontal"/>').appendTo(
+            $('#coupons-placeholder').empty()
+        );
+        coupons.forEach(function(coupon) {
+            $(qweb.render('coupon.used',
+                          {'code': coupon.code, 'descr': coupon.descr}))
+                .appendTo($dl);
+        });
     }
 
     ajax.jsonRpc('/website_sale_coupon/reserved_coupons', 'call')
         .done(function(result) {
             console.log('used_coupons success! result=%o', result);
-            result.forEach(function(coupon) {displayCoupon(coupon);});
+            displayCoupons(result);
         });
 
     $(function() {  // wait for the form to be inserted in the DOM
@@ -50,8 +51,8 @@ odoo.define('website_sale_coupon.coupon', function(require) {
                     $spinner.hide();
                     console.log('use_coupon success! result=%o', result);
                     if(result.success) {
-                        displayCoupon(result.descr);
                         $input.val('');
+                        displayCoupons(result.coupons);
                     } else {
                         $(qweb.render('coupon.wrong', {'code': code}))
                             .appendTo($('body')).modal();
