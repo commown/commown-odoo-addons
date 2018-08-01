@@ -101,16 +101,15 @@ class CouponSchemaTC(TransactionCase):
 
     def test_reserve_and_confirm_coupon(self):
         so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
-        Coupon = self.env['coupon.coupon']
 
-        self.assertIsNone(Coupon.reserve_coupon(u'DUMMYCODE', so))
+        self.assertIsNone(so.reserve_coupon(u'DUMMYCODE'))
 
         coupon = self._create_coupon(code=u'TEST_USE')
-        self.assertEqual(Coupon.reserve_coupon(u'TEST_USE', so), coupon)
-        self.assertIn(coupon, Coupon.reserved_coupons(so))
+        self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
+        self.assertIn(coupon, so.reserved_coupons())
 
-        coupon.confirm_coupons()
-        self.assertNotIn(coupon, Coupon.reserved_coupons(so))
+        so.confirm_coupons()
+        self.assertNotIn(coupon, so.reserved_coupons())
         self.assertEqual(coupon.used_for_sale_id, so)
 
     def other_product_template(self, product):
@@ -121,7 +120,7 @@ class CouponSchemaTC(TransactionCase):
             assert False, 'cannot find another product template'
 
     def sale_order(self):
-        return self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        return self.env['sale.order'].search([])[0]  # chosen SO doesn't matter
 
     def test_user_cannot_trick_confirm_coupon(self):
         """ Check users cannot confirm a coupon with a non eligible product
@@ -129,7 +128,6 @@ class CouponSchemaTC(TransactionCase):
         eligible product before finalizing the sale) """
 
         assert not self.campaign.target_product_tmpl_ids
-        Coupon = self.env['coupon.coupon']
 
         so = self.sale_order()
         so_line = so.order_line[0]
@@ -139,14 +137,14 @@ class CouponSchemaTC(TransactionCase):
         coupon = self._create_coupon(code=u'TEST_USE')
 
         # Check cannot confirm if coupon is no more valid
-        self.assertEqual(Coupon.reserve_coupon(u'TEST_USE', so), coupon)
+        self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
         so_line.product_uom_qty = 0
-        coupon.confirm_coupons()
+        so.confirm_coupons()
         self.assertFalse(coupon.used_for_sale_id)
         self.assertFalse(coupon.reserved_for_sale_id)
 
         # ... although confirmation works when coupon is valid
         so_line.product_uom_qty = 1
-        self.assertEqual(Coupon.reserve_coupon(u'TEST_USE', so), coupon)
-        coupon.confirm_coupons()
+        self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
+        so.confirm_coupons()
         self.assertEqual(coupon.used_for_sale_id.id, so.id)

@@ -100,36 +100,3 @@ class Coupon(models.Model):
     used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
     reserved_for_sale_id = fields.Many2one(
         'sale.order', string='Reserved for sale (admin info only)')
-
-    def reserve_coupon(self, code, sale_order):
-        """ Return a coupon from given code and sale_order if there is one
-        with that code, that is also unused and valid for given sale order.
-        """
-        coupon = self.search([('code', '=', code)])
-        if (coupon
-                and not coupon.used_for_sale_id
-                and coupon.campaign_id.is_valid(sale_order)):
-            coupon.reserved_for_sale_id = sale_order.id
-            return coupon
-
-    def reserved_coupons(self, sale_order):
-        return self.search([('reserved_for_sale_id', '=', sale_order.id)])
-
-    def used_coupons(self, sale_order):
-        return self.search([('used_for_sale_id', '=', sale_order.id)])
-
-    @api.multi
-    def confirm_coupons(self):
-        """ Confirm the coupons that were reserved (i.e. input by the user)
-        for a sale order. The coupons' validity is checked again to avoid
-        user tricks like adding another product then removing the one which
-        gives the access to the coupon.
-        """
-        for coupon in self:
-            order = coupon.reserved_for_sale_id
-            if order and not coupon.used_for_sale_id:
-                if coupon.campaign_id.is_valid(order):
-                    coupon.update({'used_for_sale_id': order.id,
-                                   'reserved_for_sale_id': False})
-                else:
-                    coupon.update({'reserved_for_sale_id': False})
