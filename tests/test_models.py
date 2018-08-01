@@ -23,6 +23,9 @@ class CouponSchemaTC(TransactionCase):
         kwargs.setdefault('campaign_id', self.campaign.id)
         return self.env['coupon.coupon'].create(kwargs)
 
+    def sale_order(self):
+        return self.env['sale.order'].search([])[0]  # chosen SO doesn't matter
+
     def test_campaign_unique_name(self):
         with self.assertRaises(Exception) as err:
             self._create_campaign(name=u'test')
@@ -54,7 +57,7 @@ class CouponSchemaTC(TransactionCase):
         coupons = [self._create_coupon(campaign_id=self.campaign.id)
                    for _i in range(5)]
         self.assertEqual(self.campaign.emitted_coupons, len(coupons))
-        so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        so = self.sale_order()
         for coupon in coupons[:3]:
             coupon.used_for_sale_id = so.id
         self.assertEqual(self.campaign.used_coupons, 3)
@@ -70,14 +73,14 @@ class CouponSchemaTC(TransactionCase):
     def test_validity_date(self):
         self.campaign.update({'date_start': '2018-01-01',
                               'date_end': '2018-02-01'})
-        so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        so = self.sale_order()
         self.assertFalse(self.campaign.is_valid(so))
         future = datetime.now().date() + timedelta(days=30)
         self.campaign.date_end = future.strftime(fields.DATE_FORMAT)
 
     def test_validity_product_and_qty(self):
         # Check valid when all products are eligible
-        so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        so = self.sale_order()
         assert not self.campaign.target_product_tmpl_ids
         self.assertTrue(self.campaign.is_valid(so))
 
@@ -100,7 +103,7 @@ class CouponSchemaTC(TransactionCase):
         self.assertFalse(self.campaign.is_valid(so))
 
     def test_reserve_and_confirm_coupon(self):
-        so = self.env['sale.order'].search([])[0]  # chosen SO does not matter
+        so = self.sale_order()
 
         self.assertIsNone(so.reserve_coupon(u'DUMMYCODE'))
 
@@ -118,9 +121,6 @@ class CouponSchemaTC(TransactionCase):
                 return tmpl
         else:
             assert False, 'cannot find another product template'
-
-    def sale_order(self):
-        return self.env['sale.order'].search([])[0]  # chosen SO doesn't matter
 
     def test_user_cannot_trick_confirm_coupon(self):
         """ Check users cannot confirm a coupon with a non eligible product
