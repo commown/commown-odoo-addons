@@ -31,6 +31,7 @@ class Campaign(models.Model):
     used_coupons = fields.Integer(
         'Used coupons',
         compute='_compute_used_coupons', store=False, compute_sudo=True)
+    coupons_are_exclusive = fields.Boolean(required=True, default=True)
 
     @api.constrains('date_start', 'date_end')
     def _check_dates(self):

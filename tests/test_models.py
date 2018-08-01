@@ -148,3 +148,31 @@ class CouponSchemaTC(TransactionCase):
         self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
         so.confirm_coupons()
         self.assertEqual(coupon.used_for_sale_id.id, so.id)
+
+    def test_exclusive_coupons(self):
+        so = self.sale_order()
+        assert self.campaign.coupons_are_exclusive, 'wrong pre-requisite'
+
+        coupon1 = self._create_coupon(code=u'TEST1')
+        self.assertEqual(so.reserve_coupon(u'TEST1'), coupon1)
+
+        coupon2 = self._create_coupon(code=u'TEST2')
+        self.assertIsNone(so.reserve_coupon(u'TEST2'))
+
+        self.campaign.coupons_are_exclusive = False
+        self.assertEqual(so.reserve_coupon(u'TEST2'), coupon2)
+
+        campaign2 = self._create_campaign('campaign2',
+                                          coupons_are_exclusive=True)
+        coupon3 = self._create_coupon(code=u'TEST3', campaign_id=campaign2.id)
+        self.assertIsNone(so.reserve_coupon(u'TEST3'))
+
+        campaign2.coupons_are_exclusive = False
+        self.assertEqual(so.reserve_coupon(u'TEST3'), coupon3)
+
+        campaign2.coupons_are_exclusive = True
+        so.confirm_coupons()
+        self.assertEqual([c.used_for_sale_id.id
+                          for c in (coupon1, coupon2, coupon3)
+                          if c.used_for_sale_id],
+                         [so.id])
