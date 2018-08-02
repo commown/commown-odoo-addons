@@ -18,6 +18,7 @@
         'sale_usability',  # required for sale.layout_category
         'account_usability',  # required for account_invoice.has_discount
         'account_payment_sale',
+        'website_sale_coupon',
     ],
     'external_dependencies': {
         'python': ['magic']
