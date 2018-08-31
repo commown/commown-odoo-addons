@@ -36,6 +36,11 @@ class CommownPartner(models.Model):
             "This field holds a file to store a proof of address. "
             + _binary_field_policy))
 
+    def _default_country(self):
+        return self.env['res.company']._company_default_get().country_id
+
+    country_id = fields.Many2one(default=_default_country)
+
     def _apply_bin_field_size_policy(self, vals):
         """ Apply the binary field limit policy: resize images, raise if the
         final value is still too big.
