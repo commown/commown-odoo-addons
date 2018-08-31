@@ -67,7 +67,7 @@ msgstr "Modèle d'article"
 #: model:ir.model.fields,field_description:product_rental.field_product_product_rental_contract_tmpl_id
 #: model:ir.model.fields,field_description:product_rental.field_product_template_rental_contract_tmpl_id
 msgid "Rental contract template"
-msgstr "Rental contract template"
+msgstr "Modèle de contrat de location"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product_rental_frequency
