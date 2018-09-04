@@ -57,8 +57,7 @@
     <xpath expr="//strong[text()='Contact']/ancestor::div[@class='row'][1]"
            position="after">
       <hr/>
-      <t t-set="coupons"
-         t-value="env['coupon.coupon'].sudo().used_coupons(order)"/>
+      <t t-set="coupons" t-value="order.used_coupons()"/>
       <div t-if="coupons" class="row">
         <div class="col-md-12">
           <p><strong>Coupons</strong></p>
@@ -79,8 +78,7 @@
             inherit_id="website_sale.confirmation">
     <xpath expr="//div[@class='oe_cart']//div[@class='oe_structure']"
            position="after">
-      <t t-set="coupons"
-         t-value="env['coupon.coupon'].sudo().used_coupons(order)"/>
+      <t t-set="coupons" t-value="order.used_coupons()"/>
       <div t-if="coupons">
         <h3><strong>Coupons</strong></h3>
         <dl class="dl-horizontal">

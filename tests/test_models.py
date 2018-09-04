@@ -61,6 +61,7 @@ class CouponSchemaTC(TransactionCase):
         for coupon in coupons[:3]:
             coupon.used_for_sale_id = so.id
         self.assertEqual(self.campaign.used_coupons, 3)
+        self.assertEqual(len(so.used_coupons()), 3)
         self.assertEqual(self.campaign.emitted_coupons, len(coupons))
 
     def test_security_read(self):
