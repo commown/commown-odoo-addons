@@ -35,6 +35,7 @@
             <table class="table table-hover table-bordered">
               <thead>
                 <th>Month</th>
+                <th>Product</th>
                 <th>Initiated sales</th>
                 <th>Validated sales</th>
                 <th>Gain (<t t-esc="affiliate.sales_currency()"/>)</th>
@@ -44,9 +45,10 @@
                 <t t-foreach="month_value" t-as="product">
                   <tr>
                     <t t-if="product_index==0">
-                      <th t-att-rowspan="len(product)"><t t-esc="month"/></th>
+                      <th t-att-rowspan="len(month_value)"><t t-esc="month"/></th>
                     </t>
-                    <td><t t-esc="product_value['initiated]"/></td>
+                    <td><t t-esc="product"/></td>
+                    <td><t t-esc="product_value['initiated']"/></td>
                     <td><t t-esc="product_value['validated']"/></td>
                     <td><t t-esc="product_value['gain']"/></td>
                   </tr>
