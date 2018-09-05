@@ -18,7 +18,7 @@ msgstr ""
 #. module: website_sale_affiliate_portal
 #: model:ir.ui.view,arch_db:website_sale_affiliate_portal.portal_my_affiliations
 msgid "<span>Campaign:</span>"
-msgstr "<span>Campaign:</span>"
+msgstr "<span>Campagne :</span>"
 
 #. module: website_sale_affiliate_portal
 #: model:ir.model.fields,field_description:website_sale_affiliate_portal.field_sale_affiliate_partner_description
