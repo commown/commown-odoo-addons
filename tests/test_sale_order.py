@@ -28,8 +28,15 @@ class SaleOrderTC(TransactionCase):
             'user_agent': 'firefox',
             'accept_language': 'fr',
             })
+        request_patcher = patch('odoo.addons.website_sale_affiliate'
+                                '.models.sale_affiliate_request.request')
+        request_mock = request_patcher.start()
+        request_mock.configure_mock(session={
+            'affiliate_request': self.affiliate_request.id,
+            })
+        self.addCleanup(request_patcher.stop)
 
-    def create_sale_order(self):
+    def sale_product1(self):
         env = self.env
         partner = env.ref('base.res_partner_1')
         product = env.ref('product.product_product_1')
@@ -45,35 +52,20 @@ class SaleOrderTC(TransactionCase):
             'pricelist_id': env.ref('product.list0').id,
             })
 
-    @patch('odoo.addons.website_sale_affiliate'
-           '.models.sale_affiliate_request.request')
-    def test_sale_order_no_restriction(self, request_mock):
-        request_mock.configure_mock(session={
-            'affiliate_request': self.affiliate_request.id,
-            })
-        so = self.create_sale_order()
+    def test_sale_order_no_restriction(self):
+        so = self.sale_product1()
         self.assertEqual(so.affiliate_request_id.id, self.affiliate_request.id)
 
-    @patch('odoo.addons.website_sale_affiliate'
-           '.models.sale_affiliate_request.request')
-    def test_sale_order_restriction_and_invalid_product(self, request_mock):
+    def test_sale_order_restriction_and_invalid_product(self):
         p2 = self.env.ref('product.product_product_2').product_tmpl_id
         p3 = self.env.ref('product.product_product_3').product_tmpl_id
         self.affiliate.restriction_product_tmpl_ids |= (p2 | p3)
-        request_mock.configure_mock(session={
-            'affiliate_request': self.affiliate_request.id,
-            })
-        so = self.create_sale_order()
+        so = self.sale_product1()
         self.assertFalse(so.affiliate_request_id.id)
 
-    @patch('odoo.addons.website_sale_affiliate'
-           '.models.sale_affiliate_request.request')
-    def test_sale_order_restriction_and_valid_product(self, request_mock):
+    def test_sale_order_restriction_and_valid_product(self):
         p1 = self.env.ref('product.product_product_1').product_tmpl_id
         p2 = self.env.ref('product.product_product_2').product_tmpl_id
         self.affiliate.restriction_product_tmpl_ids |= (p1 | p2)
-        request_mock.configure_mock(session={
-            'affiliate_request': self.affiliate_request.id,
-            })
-        so = self.create_sale_order()
+        so = self.sale_product1()
         self.assertEqual(so.affiliate_request_id.id, self.affiliate_request.id)
