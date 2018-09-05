@@ -172,5 +172,5 @@ class SaleAffiliateTC(TransactionCase):
 
         expected_gain2 = 5 * 10./100 * prod2.list_price
         self.assertAlmostEqual(
-            data.get('2018-01', {}).get('Support Services', {})['gain'],
+            data.get('2018-01', {}).get('Support Services', {}).get('gain'),
             expected_gain2)
