@@ -78,7 +78,7 @@ class SaleAffiliate(models.Model):
                         prod_data['initiated'] += qty
                         if so.state in self.valid_sale_states:
                             prod_data['validated'] += qty
-                            prod_data['gain'] = qty * gain_func(ol.price_unit)
+                            prod_data['gain'] += qty * gain_func(ol.price_unit)
 
         return OrderedDict([
             (month, OrderedDict([

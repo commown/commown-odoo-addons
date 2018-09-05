@@ -77,13 +77,14 @@ class SaleAffiliateTC(TransactionCase):
         self.create_sale('2018-01-05 12:00:00', [(prod1, 1)],
                          state='draft')
         self.create_sale('2018-01-13 12:00:00', [(prod1, 3), (prod2, 2)])
-        self.create_sale('2018-02-20 12:00:00', [(prod2, 7), (prod3, 3)])
+        self.create_sale('2018-02-20 12:00:00', [(prod2, 3), (prod3, 3)])
+        self.create_sale('2018-02-21 12:00:00', [(prod2, 4)])
         self.create_sale('2018-03-20 12:00:00', [(prod2, 2), (prod1, 1)],
                          state='draft')
         self.create_sale('2018-03-23 12:00:00', [(prod3, 8), (prod2, 1)])
         self.create_sale('2018-04-20 12:00:00', [(prod3, 4), (prod1, 7)])
 
-    def _test_report_no_product_restriction(self):
+    def test_report_no_product_restriction(self):
         self.create_sales()
         self.assertEqual(OrderedDict([
             ('2018-01', OrderedDict([
@@ -114,7 +115,7 @@ class SaleAffiliateTC(TransactionCase):
                  ])),
             ]), self.affiliate.report_data())
 
-    def _test_report_with_product_restriction(self):
+    def test_report_with_product_restriction(self):
 
         self.affiliate.restriction_product_tmpl_ids |= (
             self.env.ref('product.product_product_1').product_tmpl_id |
