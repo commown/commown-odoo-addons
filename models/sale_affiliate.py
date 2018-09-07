@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class SaleAffiliate(models.Model):
@@ -10,23 +10,47 @@ class SaleAffiliate(models.Model):
               ' products considered part of the affiliation.'),
         )
 
-    def _is_sale_order_qualified(self, sale_order):
-        """ Return a boolean telling if given sale order qualifies for
-        the affiliation program, given the affiliate product restrictions,
-        if any (otherwise, it will always qualify).
-        When product restrictions apply, the method returns True if any of
-        the order lines qualifies.
+    def _qualified_order_lines(self):
+        """ Return the order lines that:
+        - are related to the affiliate
+        - which order is in a non-draft state
+        - which product is listed in the affiliate product restriction, if any
         """
         self.ensure_one()
-        return not self.restriction_product_tmpl_ids or any(
-            self._is_sale_order_line_qualified(ol)
-            for ol in sale_order.order_line)
+        domain = [('order_id.affiliate_request_id.affiliate_id', '=', self.id),
+                  ('order_id.state', '!=', 'draft'),
+                  ]
+        if self.restriction_product_tmpl_ids:
+            ids = [pt.id for pt in self.restriction_product_tmpl_ids]
+            domain.append(('product_id.product_tmpl_id', 'in', ids))
+        return self.env['sale.order.line'].search(domain)
 
-    def _is_sale_order_line_qualified(self, sale_order_line):
-        """ Return a boolean telling if the give sale order line qualifies for
-        the affiliation program, given the affiliate product restrictions,
-        if any (otherwise, it will always qualify).
+    @api.depends('request_ids', 'request_ids.sale_ids')
+    def _compute_sales_per_request(self):
+        """Return a number of sales per request ratio, considering the
+        restriction on sold products, if any.
         """
-        return not self.restriction_product_tmpl_ids or (
-            sale_order_line.product_id.product_tmpl_id.id in [
-                pt.id for pt in self.restriction_product_tmpl_ids])
+        for record in self:
+            requests = record.request_ids
+            sales_count = len(set(ol.order_id
+                                  for ol in self._qualified_order_lines()))
+            try:
+                record.sales_per_request = (
+                    float(sales_count) / float(len(requests)))
+            except ZeroDivisionError:
+                pass
+
+    @api.depends('request_ids', 'request_ids.sale_ids')
+    def _compute_conversion_rate(self):
+        """ Return the proportion of requests that end-up with at least
+        one validated sale (taking product restrictions into account).
+        """
+        for record in self:
+            requests = record.request_ids
+            conversions = set(ol.order_id.affiliate_request_id
+                              for ol in record._qualified_order_lines())
+            try:
+                record.conversion_rate = (
+                    float(len(conversions)) / float(len(requests)))
+            except ZeroDivisionError:
+                pass

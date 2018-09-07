@@ -1,1 +1,1 @@
-import test_sale_order
+import test_sale_affiliate
