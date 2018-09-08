@@ -19,6 +19,9 @@ class WebsiteAccount(website_account):
 
     @route('/my/affiliations', type='http', auth="user", website=True)
     def affiliations(self):
+        """ Render a page to describe and display statistics about current
+        partner's affiliations.
+        """
         Affiliate = request.env['sale.affiliate'].sudo()
         affiliates = Affiliate.search([
             ('partner_id', '=', request.env.user.partner_id.id),
