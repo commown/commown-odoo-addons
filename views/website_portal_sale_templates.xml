@@ -32,29 +32,36 @@
             <t t-raw="affiliate.partner_description"/>
           </div>
           <div class="affiliate-requests">
-            <table class="table table-hover table-bordered">
-              <thead>
-                <th>Month</th>
-                <th>Product</th>
-                <th>Initiated sales</th>
-                <th>Validated sales</th>
-                <th>Gain (<t t-esc="affiliate.sales_currency()"/>)</th>
-              </thead>
-              <t t-foreach="affiliate.report_data(history_month_number)"
-                 t-as="month">
-                <t t-foreach="month_value" t-as="product">
-                  <tr>
-                    <t t-if="product_index==0">
-                      <th t-att-rowspan="len(month_value)"><t t-esc="month"/></th>
-                    </t>
-                    <td><t t-esc="product"/></td>
-                    <td><t t-esc="product_value['initiated']"/></td>
-                    <td><t t-esc="product_value['validated']"/></td>
-                    <td><t t-esc="product_value['gain']"/></td>
-                  </tr>
+            <t t-set="data"
+               t-value="affiliate.report_data(history_month_number)"/>
+            <t t-if="data">
+              <table class="table table-hover table-bordered">
+                <thead>
+                  <th>Month</th>
+                  <th>Visits</th>
+                  <th>Product</th>
+                  <th>Validated sales</th>
+                  <th>Gain (<t t-esc="affiliate.sales_currency()"/>)</th>
+                </thead>
+                <t t-foreach="data" t-as="month">
+                  <t t-foreach="month_value['by-product']" t-as="product">
+                    <tr>
+                      <t t-if="product_index==0">
+                        <t t-set="prod_nb" t-value="len(month_value['by-product'])"/>
+                        <th t-att-rowspan="prod_nb"><t t-esc="month"/></th>
+                        <th t-att-rowspan="prod_nb"><t t-esc="month_value['visits']"/></th>
+                      </t>
+                      <td><t t-esc="product"/></td>
+                      <td><t t-esc="product_value['validated']"/></td>
+                      <td><t t-esc="product_value['gain']"/></td>
+                    </tr>
+                  </t>
                 </t>
-              </t>
-            </table>
+              </table>
+            </t>
+            <t t-else="">
+              <p class="info">No visit for this affiliation campaign yet.</p>
+            </t>
           </div>
         </t>
       </t>

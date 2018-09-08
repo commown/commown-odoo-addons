@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from datetime import date
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from copy import deepcopy
 
 from odoo import models, fields, api
@@ -40,50 +40,63 @@ class SaleAffiliate(models.Model):
         keys are the (alphabetically ordered) products (where all
         restricted products, if any, have an entry) and values are:
 
-        - the initiated sale number
         - the validated sale number
         - the financial gain of the affiliate partner
 
         """
         self.ensure_one()
 
-        domain = [('affiliate_id', '=', self.id)]
+        oldest = None
         if month_num is not None:
             oldest = (date.today().replace(day=1)
-                      - relativedelta(months=month_num))
-            domain.append(
-                ('create_date', '>=', oldest.strftime(fields.DATETIME_FORMAT)),
-            )
-        requests = self.env['sale.affiliate.request'].search(domain)
+                      - relativedelta(months=month_num)
+                      ).strftime(fields.DATETIME_FORMAT)
 
         data = {}
-        prod_item = {'initiated': 0, 'validated': 0, 'gain': 0.}
+        prod_item = {'validated': 0, 'gain': 0.}
 
         month_item = {p.name: prod_item.copy()
                       for p in self.restriction_product_tmpl_ids}
 
         gain_func = getattr(self, '_gain_' + self.gain_type)
 
-        for req in requests:
-            for so in req.sale_ids:
-                for ol in so.order_line:
-                    if self._is_sale_order_line_qualified(ol):
-                        month_data = data.setdefault(
-                            so.create_date[:7],  # XXX month repr
-                            deepcopy(month_item))
-                        prod_name = ol.product_id.product_tmpl_id.name
-                        prod_data = month_data.setdefault(prod_name,
-                                                          prod_item.copy())
-                        qty = int(ol.product_uom_qty)
-                        prod_data['initiated'] += qty
-                        if so.state in self.valid_sale_states:
-                            prod_data['validated'] += qty
-                            prod_data['gain'] += qty * gain_func(ol.price_unit)
+        for ol in self._qualified_order_lines():
+            so = ol.order_id
+            if oldest is not None and so.create_date < oldest:
+                continue
+            month = so.create_date[:7]  # XXX month repr
+
+            if month not in data:
+                data[month] = deepcopy(month_item)
+            month_data = data[month]
+
+            prod_name = ol.product_id.product_tmpl_id.name
+            if prod_name not in month_data:
+                month_data[prod_name] = prod_item.copy()
+            prod_data = month_data[prod_name]
+
+            qty = int(ol.product_uom_qty)
+            prod_data['validated'] += qty
+            prod_data['gain'] += qty * gain_func(ol.price_unit)
+
+        requests = defaultdict(int)
+        for req in self.request_ids:
+            if oldest is not None and req.create_date < oldest:
+                continue
+            month = req.create_date[:7]
+            requests[month] += 1
+            if month not in data:
+                month_data = deepcopy(month_item)
+                if not month_data:
+                    month_data['-'] = prod_item.copy()
+                data[month] = month_data
 
         return OrderedDict([
             (month, OrderedDict([
-                (product, data[month][product])
-                for product in sorted(data[month])]))
+                ('by-product', OrderedDict([
+                    (product, data[month][product])
+                    for product in sorted(data[month])])),
+                ('visits', requests.get(month, 0))]))
             for month in sorted(data)])
 
     @api.multi
