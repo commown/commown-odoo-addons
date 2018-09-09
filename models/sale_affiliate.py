@@ -21,7 +21,7 @@ class SaleAffiliate(models.Model):
                   ('order_id.state', '!=', 'draft'),
                   ]
         if self.restriction_product_tmpl_ids:
-            ids = [pt.id for pt in self.restriction_product_tmpl_ids]
+            ids = self.restriction_product_tmpl_ids.ids
             domain.append(('product_id.product_tmpl_id', 'in', ids))
         return self.env['sale.order.line'].search(domain)
 
