@@ -108,9 +108,14 @@ if rental_lines:
     <field name="state">code</field>
     <field name="code">
 # If partner's receivable account does not exist or is a standard one,
-# create an account dedicated to the partner
+# create an account dedicated to the partner.
+# For employees of a company, go up the parent_id hierarchy and create
+# the account there.
 
 partner = record.partner_id
+
+while partner.parent_id:
+    partner = partner.parent_id
 
 account = partner.property_account_receivable_id
 if not account or account.get_xml_id().get(account.id):
