@@ -1,0 +1,26 @@
+import logging
+
+from odoo import models, api, fields, _
+
+
+_logger = logging.getLogger(__name__)
+
+
+class ProjectTask(models.Model):
+    _inherit = 'project.task'
+
+    contract_id = fields.Many2one(
+        'account.analytic.account', string='Contract')
+    contractual_issue_type = fields.Selection(
+        [('loss', 'Loss'), ('breakage', 'Breakage'), ('theft', 'Theft')],
+        string='Issue type',
+    )
+    contractual_issue_date = fields.Date(
+        'Issue date',
+        help='Date when the contractual issue occurred')
+    penalty_exemption = fields.Boolean(
+        'Penalty exemption', help='E.g.: customer paid, commercial initiative',
+        default=False)
+    contractual_issues_tracking = fields.Boolean(
+        'Used for contractual issue tracking',
+        related='project_id.contractual_issues_tracking')
