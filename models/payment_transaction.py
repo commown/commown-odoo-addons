@@ -1,8 +1,5 @@
-import logging
-from odoo import _, api, fields, models
+from odoo import models
 from odoo.tools import float_compare
-
-_logger = logging.getLogger(__name__)
 
 
 class PaymentTransaction(models.Model):
