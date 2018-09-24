@@ -21,7 +21,8 @@
         'website_sale_coupon',
     ],
     'external_dependencies': {
-        'python': ['magic']
+        'python': ['magic'],
+        'bin': ['rsvg-convert'],
     },
     'data': [
         'views/account_analytic_account.xml',
