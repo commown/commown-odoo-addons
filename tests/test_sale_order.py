@@ -136,26 +136,27 @@ class SaleOrderTC(TransactionCase):
         self.assertIn(self.g1, self.user.groups_id)
         self.assertIn(self.g2, self.user.groups_id)
 
-    def test_buyer_automatic_actions(self):
-        """ Buying a product must trigger automatic actions, check some:
-        - add buyer to product's support groups
-        - add a rental followup card
-        - add a specific receivable account for the buyer
-        - add a rental contract
-        """
+    def test_add_to_product_support_group(self):
+        """ Buying a product must add buyer to product's support groups """
+
         # Check test prerequisites
         self.assertFalse(self.user.groups_id & (self.g1 | self.g2 | self.g3))
+
         # Trigger the automatic action
         self.so.write({'state': 'sent'})
-        #
-        # Check effects:
 
-        # - support groups
+        # Check effects
         self.assertIn(self.g1, self.user.groups_id)
         self.assertIn(self.g2, self.user.groups_id)
         self.assertIn(self.g3, self.user.groups_id)
 
-        # - followup card
+    def test_add_followup_card(self):
+        """ Buying a rental product must add a rental followup card """
+
+        # Trigger the automatic action
+        self.so.write({'state': 'sent'})
+
+        # Check effects
         partner = self.so.partner_id
         products = [l.product_id for l in self.so.order_line]
         leads = self.env['crm.lead'].search([
@@ -167,18 +168,33 @@ class SaleOrderTC(TransactionCase):
                               [p.followup_sales_team_id
                                for p in products if p.followup_sales_team_id])
 
-        # - receivable account
+    def test_add_receivable_account(self):
+        " Buying a product must add the buyer a dedicated receivable account "
+
+        # Trigger the automatic action
+        self.so.write({'state': 'sent'})
+
+        # Check effects
+        partner = self.so.partner_id
         self.assertEqual(partner.property_account_receivable_id.name,
                          partner.name)
 
-        # - rental contracts
+    def test_add_rental_contract(self):
+        """ Buying a rental product must add a rental contract """
+
+        # Trigger the automatic action
+        self.so.write({'state': 'sent'})
+
+        # Check effects
         contracts = self.env['account.analytic.account'].search([
-            ('partner_id', '=', partner.id),
+            ('partner_id', '=', self.so.partner_id.id),
             ('name', 'ilike', '%' + self.so.name + '%'),
             ])
         self.assertEqual(len(contracts), 3)  # 1 FP, 2 computers
 
     def test_rental_contract_creation(self):
+        """ Created rental contract has precise characteristics """
+
         self.so.write({'state': 'sent'})
         contracts = self.env['account.analytic.account'].search([
             ('name', 'ilike', '%' + self.so.name + '%'),
