@@ -94,12 +94,13 @@ if rental_lines:
         team = oline.product_id.followup_sales_team_id
         if team and team.id not in seen_team_ids:
             seen_team_ids.add(team.id)
-            env['crm.lead'].with_context({'lang': 'fr_FR'}).create({
+            lead = env['crm.lead'].with_context({'lang': 'fr_FR'}).create({
                 'name': title,
                 'partner_id': record.partner_id.id,
                 'type': 'opportunity',
-                'team_id': team.id,
                 })
+            # Override post-create behaviour that auto-assigns team_id
+            lead.update({'team_id': team.id})
     </field>
   </record>
 
