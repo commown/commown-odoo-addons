@@ -86,6 +86,8 @@ if rental_lines:
         title += u'(%s products) - %s' % (
             len(record.order_line),
             rental_lines[0].product_id.display_name)
+    if record.used_coupons():
+        title += u' - AVEC COUPON'
     # create one opportunity per concerned sale team:
     seen_team_ids = set()
     for oline in rental_lines:
