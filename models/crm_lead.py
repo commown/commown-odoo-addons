@@ -222,7 +222,7 @@ class CommownCrmLead(models.Model):
                 ('name', '=', 'colissimo.pdf'),
             ]
             for att in self.env['ir.attachment'].search(domain):
-                _logger.error('REMOVE att %s of lead %s', att.id, self.id)
+                _logger.warning('REMOVE att %s of lead %s', att.id, self.id)
                 att.unlink()
         return super(CommownCrmLead, self).write(vals, **kwargs)
 
