@@ -10,21 +10,22 @@
   <template id="orders_followup_products_links"
             inherit_id="website_sale.orders_followup_products_links">
 
-  <!-- Change link text to the product display name instead of the order
-       line name which contains the whole product description, and
-       move the product details into a modal triggered by a button -->
-  <xpath expr="//div[@id='product_name']" position="replace">
+    <!-- Change link text to the product display name instead of the order
+         line name which contains the whole product description, and
+         move the latter to a fly-over icon -->
+    <xpath expr="//div[@id='product_name']" position="replace">
 
-    <div id="product_name" class="col-md-5">
+      <div id="product_name" class="col-md-5">
 
-      <a t-if="ol.product_id.website_published"
-         t-att-href="ol.product_id.website_url">
-        <span t-esc="ol.product_id.display_name"/>
-        <i class="fa fa-info-circle" t-att-title="ol.name"/>
-      </a>
-
-      <t t-if="not ol.product_id.website_published">
-        <span t-esc="ol.product_id.display_name"/> 
+        <t t-if="not ol.product_id.website_published">
+          <span t-esc="ol.product_id.display_name"/>
+        </t>
+        <t t-else="">
+          <a t-if="ol.product_id.website_published"
+             t-att-href="ol.product_id.website_url">
+            <span t-esc="ol.product_id.display_name"/>
+          </a>
+        </t>
         <div>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                   t-attf-data-target="#myModal{{ol.id}}">
@@ -58,11 +59,10 @@
             </div>
           </div>
         </div>
-      </t>
 
-    </div>
+      </div>
 
-  </xpath>
+    </xpath>
 
   </template>
 
