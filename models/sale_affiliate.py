@@ -33,7 +33,7 @@ class SaleAffiliate(models.Model):
         for record in self:
             requests = record.request_ids
             sales_count = len(set(ol.order_id
-                                  for ol in self._qualified_order_lines()))
+                                  for ol in record._qualified_order_lines()))
             try:
                 record.sales_per_request = (
                     float(sales_count) / float(len(requests)))
