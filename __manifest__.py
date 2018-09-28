@@ -19,6 +19,7 @@
         'account_usability',  # required for account_invoice.has_discount
         'account_payment_sale',
         'website_sale_coupon',
+        'website_sale_affiliate_portal',
     ],
     'external_dependencies': {
         'python': ['magic'],
