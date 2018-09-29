@@ -159,7 +159,7 @@ class SaleOrderTC(TransactionCase):
         self.assertIn(self.g2, self.user.groups_id)
         self.assertIn(self.g3, self.user.groups_id)
 
-    def test_add_followup_card(self):
+    def test_add_followup_card_without_coupon(self):
         """ Buying a rental product must add a rental followup card """
 
         # Trigger the automatic action
@@ -176,6 +176,8 @@ class SaleOrderTC(TransactionCase):
         self.assertItemsEqual([l.team_id for l in leads],
                               [p.followup_sales_team_id
                                for p in products if p.followup_sales_team_id])
+        self.assertTrue(all('coupon' not in name.lower()
+                            for name in leads.mapped('name')))
 
     def test_add_followup_card_name_with_coupon(self):
         """ Followup card name must indicate sale coupons were used if any """
@@ -199,8 +201,8 @@ class SaleOrderTC(TransactionCase):
             ('partner_id', '=', partner.id),
             ('name', 'ilike', '%' + self.so.name + '%'),
         ])
-        self.assertFalse(any('coupon' not in name.lower()
-                             for name in leads.mapped('name')))
+        self.assertTrue(all('coupon' in name.lower()
+                            for name in leads.mapped('name')))
 
     def test_add_receivable_account(self):
         " Buying a product must add the buyer a dedicated receivable account "
