@@ -1,3 +1,5 @@
+from mock import patch
+
 from odoo.tests.common import TransactionCase, at_install, post_install
 
 
@@ -7,6 +9,13 @@ class SaleOrderTC(TransactionCase):
 
     def setUp(self):
         super(SaleOrderTC, self).setUp()
+
+        request_patcher = patch('odoo.addons.website_sale_affiliate'
+                                '.models.sale_affiliate_request.request')
+        request_mock = request_patcher.start()
+        request_mock.configure_mock(session={})
+        self.fake_session = request_mock.session
+        self.addCleanup(request_patcher.stop)
 
         User = self.env['res.users']
         Group = self.env['res.groups']
