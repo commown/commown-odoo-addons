@@ -66,5 +66,25 @@
 
   </template>
 
+  <template id="product_price" inherit_id="product_rental.product_price">
+
+    <xpath expr="div[@t-if='product.is_rental']" position="after">
+      <script type="text/javascript"
+              src="/commown/static/src/js/website_sale.js"></script>
+      <!-- Example usage
+        <p class="bg-danger js-attribute-dependant js-attribute-1-6-93 js-attribute-1-6-94 attribute-show" style="padding: 15px">
+            <b>Important :</b> Avant de valider, veuillez lire les spécificités de l’offre en bas de cette page.
+        </p>
+        -->
+    </xpath>
+  </template>
+
+  <template id="assets_frontend"
+            inherit_id="website.assets_frontend">
+    <xpath expr="." position="inside">
+      <link href="/commown/static/src/css/website_sale.css"
+            rel="stylesheet" type="text/css"/>
+    </xpath>
+  </template>
 
 </odoo>
