@@ -5,10 +5,14 @@ $(function() {
         // the page that match the js-attribute-dependant and the
         // js-attribute-[product_id]-[attribute_id] selectors corresponding
         // to the attribute selected in passed widget argument.
-        var matchCssName = 'js-' + widget.name + '-' + widget.value;
-        $('.js-attribute-dependant').each(function() {
-            $(this).toggleClass('attribute-value-match',
-                                $(this).hasClass(matchCssName));
+        // Sample HTML usage:
+        // <p class="js-attribute-1-6 js-attribute-1-6-94 attribute-show">
+        //   Content only visible when value of attribute 6 of product 1 is 94
+        // </p>
+        var matchValue = 'js-' + widget.name + '-' + widget.value;
+        $('.js-' + widget.name).each(function(index, el) {
+            var $el = $(el);
+            $el.toggleClass('attribute-value-match', $el.hasClass(matchValue));
         });
     }
 
