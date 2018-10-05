@@ -20,8 +20,8 @@ $(function() {
 
         var widgetSelector = 'input.js_variant_change,select.js_variant_change';
 
-        $(widgetSelector, oe_website_sale).each(function(index, $el) {
-            toggleValueMatchClass($el[0]);
+        $(widgetSelector, oe_website_sale).each(function(index, el) {
+            toggleValueMatchClass(el);
         });
         $(oe_website_sale).on('change', widgetSelector, function (ev) {
             toggleValueMatchClass(ev.target);
