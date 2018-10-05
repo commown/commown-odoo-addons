@@ -12,8 +12,8 @@
           <b t-if="product.deposit_price_to_lease_amount_ratio>0"
              class="deposit_price">Initial deposit: <span t-esc="'%g' % product.deposit_price_to_lease_amount_ratio"/> <span>lease payments</span></b>
         </p>
+        <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"></script>
       </div>
-      <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"></script>
     </xpath>
 
     <xpath expr="//h4//span[1]" position="before">
