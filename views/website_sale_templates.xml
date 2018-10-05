@@ -68,7 +68,7 @@
 
   <template id="product_price" inherit_id="product_rental.product_price">
 
-    <xpath expr="div[@t-if='product.is_rental']" position="after">
+    <xpath expr="div[@t-if='product.is_rental']" position="inside">
       <script type="text/javascript"
               src="/commown/static/src/js/website_sale.js"></script>
       <!-- Example usage
