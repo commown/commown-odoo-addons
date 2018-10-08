@@ -129,7 +129,7 @@ class CommownCrmLead(models.Model):
             return ''
         orders = self.env['sale.order'].search([
             ('partner_id', '=', partner_id),
-            ('state', '=', 'sent'),
+            ('state', '=', 'sale'),
         ])
         descr = []
         for order in orders:
