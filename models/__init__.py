@@ -2,7 +2,6 @@ import account_analytic_account
 import account_analytic_contract
 import crm_lead
 import crm_team
-import payment_transaction
 import product_template
 import res_groups
 import res_partner
