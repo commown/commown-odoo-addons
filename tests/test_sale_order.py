@@ -110,7 +110,12 @@ class SaleOrderTC(TransactionCase):
     def _create_sales_team(self, num, **kwargs):
         kwargs.setdefault('name', 'Test team%d' % num)
         kwargs.setdefault('use_leads', True)
-        return self.env['crm.team'].create(kwargs)
+        team = self.env['crm.team'].create(kwargs)
+        for n in range(4):
+            self.env['crm.stage'].create({
+                'team_id': team.id,
+                'name': u'test %d' % n if n != 1 else u'test [stage: start]'})
+        return team
 
     def _oline(self, product, **kwargs):
         kwargs['product_id'] = product.id
@@ -172,10 +177,13 @@ class SaleOrderTC(TransactionCase):
             ('partner_id', '=', partner.id),
             ('name', 'ilike', '%' + self.so.name + '%'),
         ])
-        self.assertEqual(len(leads), 2)
-        self.assertItemsEqual([l.team_id for l in leads],
-                              [p.followup_sales_team_id
-                               for p in products if p.followup_sales_team_id])
+        self.assertEqual(len(leads), 3)
+        self.assertEqual(
+            sorted(l.name.split(' ', 1)[0] for l in leads),
+            ["[%s-%02d]" % (self.so.name, i) for i in range(1, 4)])
+        self.assertEqual(set([l.team_id for l in leads]),
+                         set([p.followup_sales_team_id
+                              for p in products if p.followup_sales_team_id]))
         self.assertTrue(all('coupon' not in name.lower()
                             for name in leads.mapped('name')))
 

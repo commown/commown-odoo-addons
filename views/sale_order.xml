@@ -74,33 +74,44 @@ if len(project) == 1 and len(manager) == 1:
     <field name="sequence">20</field>
     <field name="state">code</field>
     <field name="code">
-rental_lines = [l for l in record.order_line if l.product_id.is_rental]
-rental_lines.sort(reverse=True,
-                  key=lambda l: (bool(l.product_id.rental_contract_tmpl_id),
-                                 l.price_total))
-if rental_lines:
-    title = u'[%s] ' % record.name
-    if len(rental_lines) == 1:
-        title += rental_lines[0].product_id.display_name
-    else:
-        title += u'(%s products) - %s' % (
-            len(record.order_line),
-            rental_lines[0].product_id.display_name)
-    if record.used_coupons():
-        title += u' - AVEC COUPON'
-    # create one opportunity per concerned sale team:
-    seen_team_ids = set()
-    for oline in rental_lines:
-        team = oline.product_id.followup_sales_team_id
-        if team and team.id not in seen_team_ids:
-            seen_team_ids.add(team.id)
-            lead = env['crm.lead'].with_context({'lang': 'fr_FR'}).create({
-                'name': title,
-                'partner_id': record.partner_id.id,
-                'type': 'opportunity',
-                })
-            # Override post-create behaviour that auto-assigns team_id
-            lead.update({'team_id': team.id})
+title_template = u'[%(sale)s-%(count)02d] %(descr)s'
+
+if record.used_coupons():
+    title_template += u' - COUPON'
+ctx = {'sale': record.name, 'count': 0}
+
+for so_line in record.order_line:
+    product = so_line.product_id
+
+    if not product.is_rental or not product.rental_contract_tmpl_id:
+        continue
+
+    team = product.followup_sales_team_id
+    if not team:
+        continue
+
+    stages = env['crm.stage'].search([('team_id', '=', team.id)],
+                                     order='sequence')
+    stage_id = stages[0].id if stages else False
+    for stage in stages:
+        if '[stage: start]' in stage.name:
+            stage_id = stage.id
+            break
+
+    ctx['descr'] = product.display_name
+
+    for _num in range(int(so_line.product_uom_qty)):
+        ctx['count'] += 1
+        data = {
+            'name': title_template % ctx,
+            'partner_id': record.partner_id.id,
+            'type': 'opportunity',
+            'stage_id': stage_id,
+            }
+        log("crm_lead creation data: %s" % data)
+        lead = env['crm.lead'].create(data)
+        # Override post-create behaviour that auto-assigns team_id
+        lead.update({'team_id': team.id})
     </field>
   </record>
 
