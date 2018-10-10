@@ -152,7 +152,7 @@ class SaleOrderTC(TransactionCase):
         self.assertFalse(self.user.groups_id & (self.g1 | self.g2 | self.g3))
 
         # Trigger the automatic action
-        self.so.write({'state': 'sent'})
+        self.so.write({'state': 'sale'})
 
         # Check effects
         self.assertIn(self.g1, self.user.groups_id)
@@ -163,7 +163,7 @@ class SaleOrderTC(TransactionCase):
         """ Buying a rental product must add a rental followup card """
 
         # Trigger the automatic action
-        self.so.write({'state': 'sent'})
+        self.so.write({'state': 'sale'})
 
         # Check effects
         partner = self.so.partner_id
@@ -193,7 +193,7 @@ class SaleOrderTC(TransactionCase):
         })
 
         # Trigger the automatic action
-        self.so.write({'state': 'sent'})
+        self.so.write({'state': 'sale'})
 
         # Check effects
         partner = self.so.partner_id
@@ -208,7 +208,7 @@ class SaleOrderTC(TransactionCase):
         " Buying a product must add the buyer a dedicated receivable account "
 
         # Trigger the automatic action
-        self.so.write({'state': 'sent'})
+        self.so.write({'state': 'sale'})
 
         # Check effects
         partner = self.so.partner_id
@@ -219,7 +219,7 @@ class SaleOrderTC(TransactionCase):
         """ Buying a rental product must add a rental contract """
 
         # Trigger the automatic action
-        self.so.write({'state': 'sent'})
+        self.so.write({'state': 'sale'})
 
         # Check effects
         contracts = self.env['account.analytic.account'].search([
@@ -231,7 +231,7 @@ class SaleOrderTC(TransactionCase):
     def test_rental_contract_creation(self):
         """ Created rental contract has precise characteristics """
 
-        self.so.write({'state': 'sent'})
+        self.so.write({'state': 'sale'})
         contracts = self.env['account.analytic.account'].search([
             ('name', 'ilike', '%' + self.so.name + '%'),
             ])
