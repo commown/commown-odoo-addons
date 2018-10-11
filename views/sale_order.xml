@@ -102,14 +102,12 @@ for so_line in record.order_line:
 
     for _num in range(int(so_line.product_uom_qty)):
         ctx['count'] += 1
-        data = {
+        lead = env['crm.lead'].create({
             'name': title_template % ctx,
             'partner_id': record.partner_id.id,
             'type': 'opportunity',
             'stage_id': stage_id,
-            }
-        log("crm_lead creation data: %s" % data)
-        lead = env['crm.lead'].create(data)
+            })
         # Override post-create behaviour that auto-assigns team_id
         lead.update({'team_id': team.id})
     </field>
