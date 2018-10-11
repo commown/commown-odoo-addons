@@ -28,4 +28,11 @@
 
   </template>
 
+  <template id="orders_followup"
+            inherit_id="website_portal_sale.orders_followup">
+    <xpath expr="//t[@t-set='report_url']" position="attributes">
+      <attribute name="t-value">'/my/invoices/pdf/%s' % i.id</attribute>
+    </xpath>
+  </template>
+
 </odoo>
