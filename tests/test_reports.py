@@ -1,11 +1,12 @@
 import lxml.html
 
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import at_install, post_install
+from . import common
 
 
 @at_install(False)
 @post_install(True)
-class InvoiceReportTC(TransactionCase):
+class InvoiceReportTC(common.MockedEmptySessionTC):
 
     def setUp(self):
         super(InvoiceReportTC, self).setUp()
