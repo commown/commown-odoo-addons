@@ -26,12 +26,18 @@
             <span t-esc="ol.product_id.display_name"/>
           </a>
         </t>
-        <div>
+        <div t-if="ol.product_id.is_rental" class="rent">
+          (loyer :
+          <span t-esc="ol.product_id.website_price/(ol.product_id.deposit_price_to_lease_amount_ratio or 1)"
+                t-options="{'widget': 'monetary', 'display_currency': ol.order_id.pricelist_id.currency_id}"/>
+          <span t-field="ol.product_id.rental_frequency"/>)
+        </div>
+        <p>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                   t-attf-data-target="#myModal{{ol.id}}">
             Voir les détails
           </button>
-        </div>
+        </p>
 
         <!-- Modal -->
         <div class="modal fade" t-attf-id="myModal{{ol.id}}"
