@@ -67,51 +67,74 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
         inv.action_invoice_open()
         return inv
 
-    def html_invoice(self, partner, products, is_refund=False,
-                     debug_fpath=None):
-        inv = self.open_invoice(self.sale(partner, products), is_refund)
+    def html_invoice(self, inv, debug_fpath=None):
         html = self.env['py3o.report'].get_pdf(inv.mapped('id'),
                                                'account.report_invoice')
         if debug_fpath:
             with open(debug_fpath, 'wb') as fobj:
                 fobj.write(html)
-        return inv, lxml.html.fromstring(html)
+        return lxml.html.fromstring(html)
 
     def test_b2c_deposit(self):
-        inv, doc = self.html_invoice(self.b2c_partner, [self.deposit_product])
+        inv = self.open_invoice(
+            self.sale(self.b2c_partner, [self.deposit_product]))
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Certificate %s' % inv.display_name.strip()])
 
     def test_b2c_equity(self):
-        inv, doc = self.html_invoice(self.b2c_partner, [self.equity_product])
+        inv = self.open_invoice(
+            self.sale(self.b2c_partner, [self.equity_product]))
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Certificate %s' % inv.display_name.strip()])
 
     def test_b2c_std_product(self):
-        inv, doc = self.html_invoice(self.b2c_partner, [self.std_product])
+        inv = self.open_invoice(
+            self.sale(self.b2c_partner, [self.std_product]))
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Invoice %s' % inv.display_name.strip()])
 
+    def test_b2c_from_contract(self):
+        contract = self.env['account.analytic.account'].create({
+            'name': 'Test Contract',
+            'partner_id': self.b2c_partner.id,
+            'pricelist_id': self.b2c_partner.property_product_pricelist.id,
+            'recurring_invoices': False,
+        })
+        so = self.sale(self.b2c_partner, [self.std_product])
+        inv = self.open_invoice(
+            so.with_context({'default_contract_id': contract.id}))
+        doc = self.html_invoice(inv)
+        self.assertEqual(doc.xpath('//h1/text()'), [
+            'Invoice %s - Contract %s' % (inv.display_name.strip(),
+                                          contract.name)])
+
     def test_b2c_refund(self):
-        inv, doc = self.html_invoice(
-            self.b2c_partner, [self.std_product], is_refund=True,
-            debug_fpath='/tmp/invoice.html')
+        inv = self.open_invoice(
+            self.sale(self.b2c_partner, [self.std_product], is_refund=True))
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Refund %s' % inv.display_name.strip()])
 
     def test_b2b_refund(self):
-        inv, doc = self.html_invoice(
-            self.b2c_partner, [self.std_product], is_refund=True,
-            debug_fpath='/tmp/invoice.html')
+        inv = self.open_invoice(
+            self.sale(self.b2b_partner, [self.std_product], is_refund=True))
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Refund %s' % inv.display_name.strip()])
 
     def test_b2b_deposit(self):
-        inv, doc = self.html_invoice(self.b2b_partner, [self.deposit_product])
+        inv = self.open_invoice(
+            self.sale(self.b2b_partner, [self.deposit_product]))
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Invoice %s' % inv.display_name.strip()])
 
     def test_b2b_std_product(self):
-        inv, doc = self.html_invoice(self.b2b_partner, [self.std_product])
+        inv = self.open_invoice(
+            self.sale(self.b2b_partner, [self.std_product]))
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Invoice %s' % inv.display_name.strip()])
