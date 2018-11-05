@@ -30,9 +30,41 @@
 
   <template id="orders_followup"
             inherit_id="website_portal_sale.orders_followup">
+
+    <!-- Fix invoice link -->
     <xpath expr="//t[@t-set='report_url']" position="attributes">
       <attribute name="t-value">'/my/invoices/pdf/%s' % i.id</attribute>
     </xpath>
+
+    <!-- Add a CGS section -->
+    <xpath expr="//strong[text()='Contact']/ancestor::div[@class='row'][1]"
+           position="after">
+
+      <t t-set="docs" t-value="[a for m in order.message_ids for a in m.attachment_ids]"/>
+      <div t-if="docs" class="row">
+        <hr/>
+        <div class="col-md-12">
+          <p>
+            <strong>Documents :</strong>
+            <ul>
+              <t t-foreach="docs" t-as="doc">
+                <t t-set="image_fname"
+                   t-value="'/web/static/src/img/mimetypes/' + (doc.mimetype=='application/pdf' and 'pdf.png' or 'document.png')"/>
+                <li>
+                  <a t-attf-href='/web/content/#{doc.id}?download=true'
+                     target="_blank">
+                    <img t-att-src="image_fname"/>
+                    <span><t t-esc="doc.name"/></span>
+                  </a>
+                </li>
+              </t>
+            </ul>
+          </p>
+        </div>
+      </div>
+
+    </xpath>
+
   </template>
 
 </odoo>
