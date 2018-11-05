@@ -59,6 +59,9 @@ def delivery_data(partner):
         'mobileNumber': normalize_phone(mobile, partner.country_id.code) or '',
         'email': partner.email or '',
     }
+    if partner.parent_id and partner.parent_id.is_company:
+        partner_data['companyName'] = partner.parent_id.name
+
     delivery_id = partner.address_get(['delivery'])['delivery']
     if delivery_id == partner.id:
         result_data = partner_data
@@ -74,8 +77,8 @@ def delivery_data(partner):
             result_data = delivery_data(
                 partner.env['res.partner'].browse(delivery_id))
             # Add fallback contact values if not set in delivery contact:
-            for attr in 'phoneNumber', 'mobileNumber', 'email':
-                if not result_data[attr]:
+            for attr in 'phoneNumber', 'mobileNumber', 'email', 'companyName':
+                if not result_data.get(attr) and attr in partner_data:
                     result_data[attr] = partner_data[attr]
 
     for attr in ('line2', 'line3'):

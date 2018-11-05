@@ -14,7 +14,7 @@ from odoo.tools.safe_eval import safe_eval
 
 from colissimo_utils import ship
 
-LEAD_NAME_RE = re.compile(r'\[(?P<order_num>SO[0-9]+)\].*')
+LEAD_NAME_RE = re.compile(r'\[(?P<order_num>SO[0-9]+).*')
 
 _logger = logging.getLogger(__name__)
 
