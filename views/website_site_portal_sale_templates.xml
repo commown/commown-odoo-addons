@@ -45,7 +45,7 @@
         <hr/>
         <div class="col-md-12">
           <p>
-            <strong>Documents :</strong>
+            <strong>Documents transmis par mail :</strong>
             <ul>
               <t t-foreach="docs" t-as="doc">
                 <t t-set="image_fname"
