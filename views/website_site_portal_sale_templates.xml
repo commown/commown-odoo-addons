@@ -40,7 +40,7 @@
     <xpath expr="//strong[text()='Contact']/ancestor::div[@class='row'][1]"
            position="after">
 
-      <t t-set="docs" t-value="[a for m in order.message_ids for a in m.attachment_ids]"/>
+      <t t-set="docs" t-value="[a for m in order.message_ids if m.subtype_id.get_xml_id().values() != ['mail.mt_note'] for a in m.attachment_ids]"/>
       <div t-if="docs" class="row">
         <hr/>
         <div class="col-md-12">
