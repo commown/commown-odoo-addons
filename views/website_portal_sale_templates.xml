@@ -41,7 +41,7 @@
                   <th>Visits</th>
                   <th>Product</th>
                   <th>Validated sales</th>
-                  <th>Gain (<t t-esc="affiliate.sales_currency()"/>)</th>
+                  <th>Gain</th>
                 </thead>
                 <t t-foreach="data" t-as="month">
                   <t t-foreach="month_value['by-product']" t-as="product">
@@ -53,7 +53,8 @@
                       </t>
                       <td><t t-esc="product"/></td>
                       <td><t t-esc="product_value['validated']"/></td>
-                      <td><t t-esc="product_value['gain']"/></td>
+                      <td><t t-esc="product_value['gain']"
+                             t-options="{'widget': 'monetary', 'display_currency': env.ref('base.main_company').currency_id}"/></td>
                     </tr>
                   </t>
                 </t>

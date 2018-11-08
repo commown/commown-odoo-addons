@@ -98,7 +98,3 @@ class SaleAffiliate(models.Model):
                     for product in sorted(data[month])])),
                 ('visits', requests.get(month, 0))]))
             for month in sorted(data)])
-
-    @api.multi
-    def sales_currency(self):
-        return self.env.ref('base.main_company').currency_id.symbol
