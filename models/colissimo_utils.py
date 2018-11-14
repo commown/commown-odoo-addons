@@ -1,3 +1,5 @@
+import logging
+
 from datetime import datetime
 from email.parser import Parser
 from cgi import parse_header
@@ -8,6 +10,8 @@ import re
 import requests
 import phonenumbers
 
+
+_logger = logging.getLogger(__name__)
 
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 
@@ -177,6 +181,7 @@ def ship(login, password, sender, recipient, order_number,
     url = BASE_URL + ('/checkGenerateLabel' if debug else '/generateLabel')
     data = shipping_data(sender, recipient, order_number, commercial_name)
     data.update({'contractNumber': login, 'password': password})
+    _logger.debug('Shipping data: %s', data)
     resp = requests.post(url, json=data)
     resp.raise_for_status()
 
