@@ -114,6 +114,12 @@ class CommownCrmLead(models.Model):
     expedition_urgency_mail_sent = fields.Boolean(
         "Expedition urgency mail send", default=False)
     delivery_date = fields.Date("Delivery Date")
+    start_contract_on_delivery = fields.Boolean(
+        default=True, string='Automatic contract start on delivery')
+    send_email_on_delivery = fields.Boolean(
+        default=True, string='Automatic email on delivery')
+    on_delivery_email_template_id = fields.Many2one(
+        'mail.template', string='Custom email model for this lead')
 
     def _onchange_partner_id_values(self, partner_id):
         vals = super(CommownCrmLead, self)._onchange_partner_id_values(

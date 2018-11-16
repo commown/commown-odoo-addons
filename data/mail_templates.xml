@@ -48,6 +48,17 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
 ]]></field>
     </record>
 
+    <record id="mail_template_lead_start_error" model="mail.template">
+      <field name="name">[commown] Lead start email error</field>
+      <field name="email_from">webmaster@commown.fr</field>
+      <field name="subject">[Commown] ERROR starting crm.lead id ${object.id}</field>
+      <field name="email_to">contact@commown.fr</field>
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="body_html"><![CDATA[
+<p>Error is: ${object.env.context.get('error', 'Unknown!')}</p>
+]]></field>
+    </record>
+
   </data>
 
 </odoo>

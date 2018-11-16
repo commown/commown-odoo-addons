@@ -131,10 +131,14 @@
                 <group>
                   <field readonly="1" name="expedition_status"/>
                   <field readonly="1" name="expedition_status_fetch_date"/>
+                  <field readonly="1" name="expedition_urgency_mail_sent"/>
                 </group>
               </group>
-              <group>
-                <field readonly="1" name="expedition_urgency_mail_sent"/>
+              <group name="delivery_actions">
+                <field name="start_contract_on_delivery"/>
+                <field name="send_email_on_delivery"/>
+                <field name="on_delivery_email_template_id"
+                       attrs="{'invisible': [('send_email_on_delivery', '=', False)]}"/>
               </group>
             </page>
           </xpath>
@@ -142,6 +146,74 @@
           </xpath>
         </field>
     </record>
+
+    <record id="action_start_contract" model="ir.actions.server">
+      <field name="name">[commown] Start contract</field>
+      <field name="model_id" ref="commown.model_crm_lead"/>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code">
+# "uid" is in env: action launched from GUI
+if 'uid' in env or object.start_contract_on_delivery:
+    if object.name.startswith('[SO') and ']' in object.name:
+        so_name = object.name[1:object.name.index(']')]
+        if '-' not in so_name:
+            so_name += '-01'  # XXX backward compat
+
+        contract = object.env['account.analytic.account'].search([
+            ('name', 'like', so_name),
+        ]).ensure_one()
+
+        contract.update({'date_start': object.delivery_date, 'is_auto_pay': True})
+        contract.update({'recurring_next_date': object.delivery_date})
+      </field>
+    </record>
+
+    <record id="action_send_delivery_email" model="ir.actions.server">
+      <field name="name">[commown] Send delivery email</field>
+      <field name="model_id" ref="commown.model_crm_lead"/>
+      <field name="sequence">10</field>
+      <field name="state">code</field>
+      <field name="code">
+# "uid" is in env: action launched from GUI
+if 'uid' in env or object.send_email_on_delivery:
+    TEMPLATE_IDS = env.context.get('UNITTEST_TEMPLATE_IDS', {  # XXX hardcoded ids
+        'LIVCFM': 33,
+        'LIVGAR': 34,
+        'MLVARS': 35,
+        'LIVVOI': 36,
+    })
+
+    if object.on_delivery_email_template_id:
+        object.message_post_with_template(object.on_delivery_email_template_id.id)
+    else:
+        for code, template_id in TEMPLATE_IDS.items():
+            if (object.expedition_status
+                    and object.expedition_status.startswith('[%s]' % code)):
+                object.message_post_with_template(template_id)
+                break
+        else:
+            template = env.ref('commown.mail_template_lead_start_error')
+            template = template.with_context({
+                'error': (
+                    'Expedition status does not contain a code associated with'
+                    ' a contract start email template.'),
+                })
+            # Recipients are not the followers: use template.send_mail instead
+            # of message_post_with_template
+            template.send_mail(object.id)
+      </field>
+    </record>
+
+  <record id="lead product delivered" model="base.action.rule">
+    <field name="name">[commown] Lead product delivered</field>
+    <field name="model_id" ref="model_crm_lead"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_write</field>
+    <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
+    <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_start_contract'), ref('commown.action_send_delivery_email')])]"/>
+  </record>
 
   </data>
 
