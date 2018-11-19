@@ -34,6 +34,5 @@ class CommownAuthSignup(AuthSignupHome):
             if request.lang == lang['code']:
                 values['lang'] = request.lang
                 break
-        _logger.debug('signup values: %s', values)
         self._signup_with_values(qcontext.get('token'), values)
         request.env.cr.commit()
