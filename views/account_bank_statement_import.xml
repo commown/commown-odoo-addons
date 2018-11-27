@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+
+  <record id="account_bank_statement_import_view" model="ir.ui.view">
+    <field name="name">credit_coop.csv.account.bank.statement.import.form</field>
+    <field name="model">account.bank.statement.import</field>
+    <field name="inherit_id" ref="account_bank_statement_import.account_bank_statement_import_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//ul[@id='statement_format']" position="inside">
+        <li>Crédit Coopératif statement import (CSV format)</li>
+      </xpath>
+    </field>
+  </record>
+
+
+</odoo>
