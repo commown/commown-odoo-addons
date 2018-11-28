@@ -1,10 +1,12 @@
 import account_analytic_account
 import account_analytic_contract
+import coupon
 import crm_lead
 import crm_team
+import mass_reconcile
 import product_template
 import res_groups
 import res_partner
 import res_user
 import sale_order
-import coupon
+import simple_reconciliation

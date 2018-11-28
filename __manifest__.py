@@ -20,6 +20,7 @@
         'account_payment_sale',
         'website_sale_coupon',
         'website_sale_affiliate_portal',
+        'account_mass_reconcile', 'account_move_stripe_import',
     ],
     'external_dependencies': {
         'python': ['magic'],
