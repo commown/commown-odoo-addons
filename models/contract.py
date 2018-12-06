@@ -10,3 +10,7 @@ class AccountAnalyticContract(models.Model):
         'account.payment.mode', string='Payment Mode',
         domain=[('payment_type', '=', 'inbound')],
     )
+
+    min_contract_duration = fields.Integer(
+        string='Min contract duration',
+        help='Minimum contract duration in recurring interval unit')
