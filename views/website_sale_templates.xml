@@ -12,6 +12,10 @@
           <b t-if="product.deposit_price_to_lease_amount_ratio&gt;0"
              class="deposit_price">Initial deposit: <span t-esc="'%g' % product.deposit_price_to_lease_amount_ratio"/> <span>lease payments</span></b>
         </p>
+        <t t-set="contract_tmpl" t-value="product.rental_contract_tmpl_id"/>
+        <p t-if="contract_tmpl.min_contract_duration">
+          <b class="min_contract_duration">Commitment duration: <span t-esc="contract_tmpl.min_contract_duration"/> <span t-esc="dict(contract_tmpl.fields_get()['recurring_rule_type']['selection'])[contract_tmpl.recurring_rule_type].lower()"/></b>
+        </p>
         <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"/>
       </div>
     </xpath>
