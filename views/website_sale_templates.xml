@@ -27,10 +27,16 @@
           </a>
         </t>
         <div t-if="ol.product_id.is_rental" class="rent">
+          <t t-set="contracts" t-value="env['account.analytic.account'].search([('name', 'like', ol.order_id.name + '-'), ('contract_template_id', '=', ol.product_id.rental_contract_tmpl_id.id), ('recurring_invoices', '=', True), ('date_start', '&lt;', '2030-01-01')])"/>
           (loyer unitaire :
           <span t-esc="ol.price_unit/(ol.product_id.deposit_price_to_lease_amount_ratio or 1)"
                 t-options="{'widget': 'monetary', 'display_currency': ol.order_id.pricelist_id.currency_id}"/>
-          <span t-field="ol.product_id.rental_frequency"/>)
+          <span t-field="ol.product_id.rental_frequency"/>
+          <span t-if="len(contracts)==1">; fin de la période d'engagement :</span>
+          <span t-elif="len(contracts)&gt;1">- fin des périodes d'engagement :</span>
+          <t t-foreach="contracts" t-as="contract">
+            <t t-if="contract_index&gt;0">-</t>
+            <span class="min-contract-end-date" t-field="contract.min_contract_end_date" t-options="{'widget': 'date'}"/></t>)
         </div>
         <p>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
