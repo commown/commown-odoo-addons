@@ -113,14 +113,14 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
 
     def test_b2c_refund(self):
         inv = self.open_invoice(
-            self.sale(self.b2c_partner, [self.std_product], is_refund=True))
+            self.sale(self.b2c_partner, [self.std_product]), is_refund=True)
         doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Refund %s' % inv.display_name.strip()])
 
     def test_b2b_refund(self):
         inv = self.open_invoice(
-            self.sale(self.b2b_partner, [self.std_product], is_refund=True))
+            self.sale(self.b2b_partner, [self.std_product]), is_refund=True)
         doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Refund %s' % inv.display_name.strip()])
