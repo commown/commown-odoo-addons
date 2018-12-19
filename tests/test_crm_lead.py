@@ -12,6 +12,8 @@ import mock
 from odoo.exceptions import MissingError
 from odoo.tests.common import TransactionCase, at_install, post_install
 
+from odoo.addons.commown.models.colissimo_utils import shipping_data
+
 
 HERE = osp.dirname(__file__)
 
@@ -60,6 +62,7 @@ class CrmLeadTC(TransactionCase):
             'firstname': u'Flo', 'lastname': u'C',
             'email': 'fc@test', 'phone': '+336999999999',
             'street': '2 rue de Rome', 'zip': '67000', 'city': 'Strasbourg',
+            'country_id': self._country('FR').id,
             'user_ids': [(6, 0, [portal_user.id])]})
         self.lead = self.env['crm.lead'].create({
             'name': '[SO00000] Fake order',
@@ -75,6 +78,19 @@ class CrmLeadTC(TransactionCase):
             'colissimo_sender_email': 'test@test.com',
             'colissimo_commercial_name': 'CommercialName',
         }
+
+    def _country(self, code):
+        return self.env['res.country'].search([('code', '=', code)])
+
+    def test_shipping_data_product_code(self):
+        data = shipping_data(self.env['res.partner'], self.lead.partner_id,
+                            'SO00000', 'Commown')
+        self.assertEqual(data['letter']['service']['productCode'], 'DOS')
+
+        self.lead.partner_id.country_id = self._country('BE')
+        data = shipping_data(self.env['res.partner'], self.lead.partner_id,
+                            'SO00000', 'Commown')
+        self.assertEqual(data['letter']['service']['productCode'], 'COLI')
 
     def test_create_colissimo_fairphone_label(self):
         fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}

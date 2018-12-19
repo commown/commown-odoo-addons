@@ -128,6 +128,8 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     if 'BP' in destination:
         service['productCode'] = 'BPR'
         parcel['pickupLocationId'] = destination.pop('BP')
+    if destination.get('countryCode', 'FR') != 'FR':
+        service['productCode'] = 'COLI'  # Colissimo Expert International
 
     return {
         'outputFormat': {
