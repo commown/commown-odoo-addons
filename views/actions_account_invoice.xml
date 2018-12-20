@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="fix_invoice_investment_line_price" model="ir.actions.server">
+    <field name="name">[commown] Multiply by 10 investments' line amount</field>
+    <field name="model_id" ref="account.model_account_invoice"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">
+PRODUCT_IDS = env['product.template'].search([
+    ('is_equity', '=', True), ('equity_type', '=', 'invest'),
+    '|', ('active', '=', False), ('active', '=', True)]).ids
+
+PAYMENT_TERM_ID = 12
+
+for invoice in records or [record]:
+    has_invests = any(l for l in invoice.invoice_line_ids
+                      if l.product_id.product_tmpl_id.id in PRODUCT_IDS)
+
+    if invoice.residual != 0 or not has_invests:
+        continue
+
+    credit_amls = invoice.payment_move_line_ids
+    invoice.payment_move_line_ids.remove_move_reconcile()
+    env.invalidate_all()
+
+    invoice.action_invoice_cancel()
+    env.invalidate_all()
+
+    invoice.action_invoice_draft()
+    invoice.write({'payment_term_id': PAYMENT_TERM_ID})
+    env.invalidate_all()
+
+    for line in invoice.invoice_line_ids:
+        if line.product_id.product_tmpl_id.id in PRODUCT_IDS:
+            line.update({'price_unit': line.price_unit * 10})
+
+    invoice.action_invoice_open()
+    env.invalidate_all()
+
+    for credit_aml in credit_amls:
+        invoice.assign_outstanding_credit(credit_aml.id)
+    </field>
+  </record>
+
+</odoo>
