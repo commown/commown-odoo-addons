@@ -48,32 +48,35 @@ class AccountBankStatementImport(models.TransientModel):
             if count > self.STATEMENT_START_MAX_LINE:
                 raise ValueError('Header not found')
             if line.startswith(self.STATEMENT_START_MARKER):
-                start_amount = self._parse_amount(line.split(';')[-1])
+                end_amount = self._parse_amount(line.split(';')[-1])
                 break
         reader = unicodecsv.DictReader(fobj, delimiter=';',
                                        encoding=self.ENCODING)
         assert set(reader.fieldnames).issuperset(self._COLS.values())
-        return start_amount, reader
+        return end_amount, reader
 
     @api.model
     def _parse_file(self, data_file):
         """ Import Crédit Coopération statement """
         try:
-            start_amount, reader = self._get_credit_coop_importer(data_file)
+            end_amount, reader = self._get_credit_coop_importer(data_file)
         except:
+            _logger.debug(
+                'Could not interpret file as Credit Coop statement. Exception'
+                ' raised. Traceback is :\n%s', traceback.format_exc())
             return super(AccountBankStatementImport, self)._parse_file(
                 data_file)
 
         statement = {
             'name': _('Crédit Coopération statement'),
             'transactions': [],
-            'balance_start': start_amount,
+            'balance_end_real': end_amount,
         }
 
         for line in reader:
             num = reader.line_num
             if line[self._COLS['DATE']] == self.STATEMENT_END_MARKER:
-                statement['balance_end_real'] = self._get_line_amount(line)
+                statement['balance_start'] = self._get_line_amount(line)
                 continue
 
             try:
