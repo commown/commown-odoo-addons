@@ -43,16 +43,20 @@ class AccountBankStatementImport(models.TransientModel):
 
     def _get_credit_coop_importer(self, data):
         fobj = StringIO(data)
+        start_line, end_amount = None, None
         for count, line in enumerate(fobj):
             line = line.decode(self.ENCODING)
             if count > self.STATEMENT_START_MAX_LINE:
                 raise ValueError('Header not found')
             if line.startswith(self.STATEMENT_START_MARKER):
-                end_amount = self._parse_amount(line.split(';')[-1])
+                start_line = line
                 break
         reader = unicodecsv.DictReader(fobj, delimiter=';',
                                        encoding=self.ENCODING)
         assert set(reader.fieldnames).issuperset(self._COLS.values())
+        if start_line is not None:
+            index = reader.fieldnames.index(self._COLS['CREDIT'])
+            end_amount = self._parse_amount(start_line.split(';')[index])
         return end_amount, reader
 
     @api.model
