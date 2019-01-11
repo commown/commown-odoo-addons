@@ -118,7 +118,7 @@ class TestLoan(TransactionCase):
         self.assertEqual(len(loan.line_ids), periods)
         line = loan.line_ids.filtered(lambda r: r.sequence == 1)
         self.assertAlmostEqual(
-            - numpy.pmt(1 / 100 / 12, 24, 10000), line.payment_amount, 2)
+            - numpy.pmt(1. / 100 / 12, 24, 10000), line.payment_amount, 2)
         self.assertEqual(line.long_term_principal_amount, 0)
         loan.long_term_loan_account_id = self.lt_loan_account
         loan.compute_lines()
@@ -182,7 +182,7 @@ class TestLoan(TransactionCase):
         self.assertEqual(len(loan.line_ids), periods)
         line = loan.line_ids.filtered(lambda r: r.sequence == 1)
         self.assertAlmostEqual(
-            - numpy.pmt(1 / 100 / 12, 24, 10000), line.payment_amount, 2)
+            - numpy.pmt(1. / 100 / 12, 24, 10000), line.payment_amount, 2)
         self.assertEqual(line.long_term_principal_amount, 0)
         loan.long_term_loan_account_id = self.lt_loan_account
         loan.compute_lines()
@@ -205,10 +205,10 @@ class TestLoan(TransactionCase):
         loan.compute_lines()
         line = loan.line_ids.filtered(lambda r: r.sequence == 1)
         self.assertAlmostEqual(
-            - numpy.pmt(1 / 100 / 12, periods, amount), line.payment_amount, 2)
+            - numpy.pmt(1. / 100 / 12, periods, amount), line.payment_amount, 2)
         line = loan.line_ids.filtered(lambda r: r.sequence == 2)
         self.assertAlmostEqual(
-            - numpy.pmt(2 / 100 / 12, periods - 1,
+            - numpy.pmt(2. / 100 / 12, periods - 1,
                         line.pending_principal_amount),
             line.payment_amount, 2
         )
