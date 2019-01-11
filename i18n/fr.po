@@ -240,7 +240,7 @@ msgstr "Capital fixe"
 #. module: account_loan
 #: model:ir.ui.menu,name:account_loan.account_loan_generate_wizard_menu
 msgid "Generate Loan Entries"
-msgstr "Générer les échéances"
+msgstr "Générer les échéances des prêts"
 
 #. module: account_loan
 #: model:ir.actions.act_window,name:account_loan.account_loan_generate_wizard_action
@@ -505,7 +505,7 @@ msgstr "Montant du paiement"
 #. module: account_loan
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_payment_on_first_period
 msgid "Payment On First Period"
-msgstr "Paiement sur la 1ère période"
+msgstr "Paiement dès la 1ère période"
 
 #. module: account_loan
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_line_pending_principal_amount
@@ -569,59 +569,59 @@ msgstr "Capital"
 #. module: account_loan
 #: model:ir.ui.view,arch_db:account_loan.account_loan_line_tree
 msgid "Process"
-msgstr ""
+msgstr "Traiter"
 
 #. module: account_loan
 #: model:ir.model.fields,help:account_loan.field_account_loan_interests_product_id
 msgid ""
 "Product where the amount of interests will be assigned when the invoice is "
 "created"
-msgstr ""
+msgstr "Produit auquel les intérêts seront assignés quand la facture sera créée"
 
 #. module: account_loan
 #: model:ir.model.fields,help:account_loan.field_account_loan_product_id
 msgid ""
 "Product where the amount of the loan will be assigned when the invoice is "
 "created"
-msgstr ""
+msgstr "Produit auquel le montant du prêt sera assigné quand la facture sera créée"
 
 #. module: account_loan
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_line_rate
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_rate
 msgid "Rate"
-msgstr ""
+msgstr "Taux"
 
 #. module: account_loan
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_rate_period
 msgid "Rate Period"
-msgstr ""
+msgstr "Taux de la période"
 
 #. module: account_loan
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_rate_type
 msgid "Rate Type"
-msgstr ""
+msgstr "Type de taux"
 
 #. module: account_loan
 #: selection:account.loan,rate_type:0
 msgid "Real rate"
-msgstr ""
+msgstr "Taux réel"
 
 #. module: account_loan
 #: model:ir.model.fields,help:account_loan.field_account_loan_rate_period
 msgid "Real rate that will be applied on each period"
-msgstr ""
+msgstr "Le taux réel sera appliqué sur chaque période"
 
 #. module: account_loan
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_residual_amount
 msgid "Residual Amount"
-msgstr ""
+msgstr "Montant résiduel"
 
 #. module: account_loan
 #: model:ir.model.fields,help:account_loan.field_account_loan_residual_amount
 msgid ""
 "Residual amount of the lease that must be payed on the end in order to "
 "acquire the asset"
-msgstr ""
+msgstr "Montant résiduel du crédit-bail qui doit être payé à la fin pour acquérir le bien"
 
 #. module: account_loan
 #: model:ir.model.fields,field_description:account_loan.field_account_loan_round_on_end
@@ -742,7 +742,7 @@ msgstr "Valeurs"
 msgid ""
 "When checked, the differences will be applied on the last period, if it is "
 "unchecked, the annuity will be recalculated on each period."
-msgstr ""
+msgstr "Lorsque coché, la différence sera appliquée à la dernière période, sinon l'annuité sera recalculée à chaque période"
 
 #. module: account_loan
 #: model:ir.model.fields,help:account_loan.field_account_loan_payment_on_first_period
@@ -752,17 +752,17 @@ msgstr "Si coché, le 1er paiement a lieu à la date de début"
 #. module: account_loan
 #: model:ir.model,name:account_loan.model_account_loan_generate_wizard
 msgid "account.loan.generate.wizard"
-msgstr ""
+msgstr "account.loan.generate.wizardaccount.loan.generate.wizard"
 
 #. module: account_loan
 #: model:ir.model,name:account_loan.model_account_loan_pay_amount
 msgid "account.loan.pay.amount"
-msgstr ""
+msgstr "account.loan.pay.amount"
 
 #. module: account_loan
 #: model:ir.model,name:account_loan.model_account_loan_post
 msgid "account.loan.post"
-msgstr ""
+msgstr "account.loan.post"
 
 #. module: account_loan
 #: model:ir.ui.view,arch_db:account_loan.account_loan_generate_wizard_form
