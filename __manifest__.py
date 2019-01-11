@@ -48,6 +48,9 @@
         'data/mail_templates.xml',
         'data/account_invoice_report.xml',
     ],
+    'qweb': [
+        'static/src/xml/account_reconciliation.xml',
+    ],
     'installable': True,
     'application': True,
 }
