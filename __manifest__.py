@@ -21,6 +21,9 @@
         'website_sale_coupon',
         'website_sale_affiliate_portal',
         'account_mass_reconcile', 'account_move_stripe_import',
+        'account_move_slimpay_import',
+        'account_bank_statement_import_credit_coop',
+        'account_bank_statement_import_lanef',
     ],
     'external_dependencies': {
         'python': ['magic'],
