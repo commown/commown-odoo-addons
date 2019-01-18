@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="web_layout" inherit_id="web.layout">
+    <xpath expr="//link[@rel='shortcut icon']" position="after">
+      <style>
+        body.o_web_client #tarteaucitronAlertSmall {
+          display: None !important;
+        }
+      </style>
+
+      <script type="text/javascript" src="https://commown.fr/commown_static/tarteaucitron/tarteaucitron.js"></script>
+
+      <script type="text/javascript">
+          tarteaucitron.init({
+              "privacyUrl": "https://commown.fr/mentions-legales", /* Privacy policy url */
+
+              "hashtag": "#tarteaucitron", /* Open the panel with this hashtag */
+              "cookieName": "tartaucitron", /* Cookie name */
+
+              "orientation": "top", /* Banner position (top - bottom) */
+              "showAlertSmall": true, /* Show the small banner on bottom right */
+              "cookieslist": true, /* Show the cookie list */
+
+              "adblocker": false, /* Show a Warning if an adblocker is detected */
+              "AcceptAllCta" : true, /* Show the accept all button when highPrivacy on */
+              "highPrivacy": false, /* Disable auto consent */
+              "handleBrowserDNTRequest": false, /* If Do Not Track == 1, accept all */
+
+              "removeCredit": false, /* Remove credit link */
+              "moreInfoLink": true, /* Show more info link */
+
+              "cookieDomain": ".commown.fr" /* Shared cookie for subdomain */
+          });
+      </script>
+    </xpath>
+
+    <xpath expr="//body" position="inside">
+        <script type="text/javascript">
+            tarteaucitron.user.analyticsUa = 'UA-96836730-1';
+            tarteaucitron.user.analyticsMore = function() {};
+            (tarteaucitron.job = tarteaucitron.job || []).push('analytics');
+        </script>
+    </xpath>
+
+  </template>
+
+</odoo>

@@ -35,7 +35,6 @@
         'views/address_template.xml',
         'views/auth_signup.xml',
         'views/cart.xml',
-        'views/favicon.xml',
         'views/actions_sale_order.xml',
         'views/actions_account_invoice.xml',
         'views/product_template.xml',
