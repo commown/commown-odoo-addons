@@ -38,6 +38,7 @@
         'views/actions_sale_order.xml',
         'views/actions_account_invoice.xml',
         'views/product_template.xml',
+        'views/project_issue.xml',
         'views/website_portal_templates.xml',
         'views/website_sale_templates.xml',
         'views/website_site_portal_sale_templates.xml',

@@ -10,3 +10,4 @@ import res_partner
 import res_user
 import sale_order
 import simple_reconciliation
+import project_task_type

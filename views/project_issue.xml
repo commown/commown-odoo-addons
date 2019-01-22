@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Edit issue type form -->
+  <record model="ir.ui.view" id="task_type_edit">
+    <field name="name">project.task.type.form</field>
+    <field name="model">project.task.type</field>
+    <field name="inherit_id" ref="project.task_type_edit"/>
+    <field name="arch" type="xml">
+      <!-- Insert displayed status below name -->
+      <xpath expr="//field[@name='name']" position="after">
+        <field name="portal_displayed_name"/>
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Edit issue list on portal -->
+  <template id="my_issues" inherit_id="website_project_issue.my_issues">
+    <xpath expr="//span[@t-esc='issue.stage_id.name']" position="attributes">
+      <!-- Prefer portal stage name over administrative stage name -->
+      <attribute name="t-esc">issue.stage_id.portal_displayed_name or issue.stage_id.name</attribute>
+    </xpath>
+  </template>
+
+  <!-- Edit issue page on portal -->
+  <template id="my_issues_issue" inherit_id="website_project_issue.my_issues_issue">
+    <xpath expr="//span[@t-field='issue.stage_id.name']" position="attributes">
+      <!-- Prefer portal stage name over administrative stage name -->
+      <attribute name="t-field"></attribute>
+      <attribute name="t-esc">issue.stage_id.portal_displayed_name or issue.stage_id.name</attribute>
+    </xpath>
+  </template>
+
+</odoo>
