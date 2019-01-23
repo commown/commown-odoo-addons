@@ -59,6 +59,41 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
 ]]></field>
     </record>
 
+    <record id="mail_template_issue_reminder" model="mail.template">
+      <field name="name">[commown] SAV : relance</field>
+      <field name="subject">Commown : votre demande d'assistance se languit de vous !</field>
+      <field name="model_id" ref="project_issue.model_project_issue"/>
+      <field name="body_html"><![CDATA[
+<div>
+  <p>Bonjour ${object.partner_id.firstname},</p>
+  <br>
+  <p>Pas de nouvelles, bonnes nouvelles&nbsp;?&nbsp;&nbsp;;-)</p>
+  <p>
+    En effet, nous faisons suite à nos précédents échanges
+    d’assistance et conseil, pour lesquels nous n’avons pas reçu
+    d’autres retours de votre part à ce jour.
+  </p>
+  <p>
+    C’est peut-être tout à fait normal, et nous supposons que
+    l’incident est bien résolu&nbsp;! Nous nous permettrons donc de
+    vous envoyer un questionnaire de satisfaction dans les prochains
+    jours.
+  </p>
+  <br>
+  <p>
+    Belle journée&nbsp;!
+  </p>
+  <br>
+  <p>L'équipe Commown qui reste à votre écoute.</p>
+  <br>
+  <p>
+    NB&nbsp;: Bien entendu, si ce n’est pas le cas, contactez-nous au plus
+    vite en répondant directement à ce message…
+  </p>
+</div>
+]]></field>
+    </record>
+
   </data>
 
 </odoo>

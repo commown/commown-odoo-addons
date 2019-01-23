@@ -31,4 +31,30 @@
     </xpath>
   </template>
 
+  <!-- Server action that sends the reminder email
+       to the followers of given issue -->
+  <record id="action_send_issue_reminder_email" model="ir.actions.server">
+    <field name="name">[commown] Send a reminder email concerning an issue</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+email_template = env.ref('commown.mail_template_issue_reminder').id
+record.message_post_with_template(email_template)
+]]>
+    </field>
+  </record>
+
+  <!-- Automatic action to execute reminder email send action
+       when an issue is put in the dedicated stage -->
+  <record id="issue_put_in_reminder_email_stage" model="base.action.rule">
+    <field name="name">[commown] Issue was put in the reminder email stage</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_write</field>
+    <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[after-sale: reminder-email]')]</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: reminder-email]')]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_send_issue_reminder_email')])]"/>
+  </record>
+
 </odoo>
