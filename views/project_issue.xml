@@ -57,4 +57,34 @@ record.message_post_with_template(email_template)
     <field name="server_action_ids" eval="[(6,0,[ref('commown.action_send_issue_reminder_email')])]"/>
   </record>
 
+  <!-- Server action that moves an issue to the "end-ok" stage -->
+  <record id="action_move_issue_to_end_ok_stage" model="ir.actions.server">
+    <field name="name">[commown] Move issue to the "end-ok" stage</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+stage = env['project.task.type'].search([
+    ('project_ids', '=', record.project_id.id),
+    ('name', 'like', '[after-sale: end-ok]'),
+    ])
+record.update({'stage_id': stage.id})
+]]>
+    </field>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       delay after the reminder email was sent is large enough -->
+  <record id="issue_reminder_delay_expired" model="base.action.rule">
+    <field name="name">[commown] Delay after issue reminder email expired</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_time</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: reminder-email]')]</field>
+    <field name="trg_date_id" search="[('model', '=', 'project.issue'), ('name', '=', 'date_last_stage_update')]"/>
+    <field name="trg_date_range">10</field>
+    <field name="trg_date_range_type">day</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_move_issue_to_end_ok_stage')])]"/>
+  </record>
+
 </odoo>

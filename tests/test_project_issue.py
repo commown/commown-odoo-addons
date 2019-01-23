@@ -10,14 +10,26 @@ class ProjectIssueTC(TransactionCase):
 
         self.project = self.env.ref('project.project_project_1')
 
+        # Adapt defined stages to our needs: use expected name
+        # conventions and remove email model as they are buggy for
+        # issues (their template model is task instead, which leads to
+        # crashes)
         self.stage_pending = self.project.type_ids[0]
-        self.stage_pending.name = u'Working on it [after-sale: pending]'
+        self.stage_pending.update({
+            'name': u'Working on it [after-sale: pending]',
+            'mail_template_id': False})
         self.stage_wait = self.project.type_ids[1]
-        self.stage_wait.name = u'Wait [after-sale: waiting-customer]'
+        self.stage_wait.update({
+            'name': u'Wait [after-sale: waiting-customer]',
+            'mail_template_id': False})
         self.stage_reminder = self.project.type_ids[2]
-        self.stage_reminder.name = u'Remind email [after-sale: reminder-email]'
-        self.stage_pending = self.project.type_ids[3]
-        self.stage_pending.name = u'Solved [after-sale: end-ok]'
+        self.stage_reminder.update({
+            'name': u'Remind email [after-sale: reminder-email]',
+            'mail_template_id': False})
+        self.stage_end_ok = self.project.type_ids[3]
+        self.stage_end_ok.update({
+            'name': u'Solved [after-sale: end-ok]',
+            'mail_template_id': False})
 
         self.partner = self.env.ref('base.res_partner_1')
         self.partner.update({'firstname': 'Flo', 'lastname': 'Cay'})
@@ -32,6 +44,7 @@ class ProjectIssueTC(TransactionCase):
     def test_send_reminder_email(self):
         """ A reminder message to followers must be created when issue is put
         in the dedicated column. """
+
         message_num = len(self.issue.message_ids)
         self.issue.update({'stage_id': self.stage_reminder.id})
 
@@ -42,3 +55,14 @@ class ProjectIssueTC(TransactionCase):
                          [u'mail.mt_comment'])
         self.assertIn('Bonjour Flo', message.body)
         self.assertIn('Pas de nouvelles', message.body)
+
+    def test_move_issue_after_expiry(self):
+        """ After 10 days spent in the reminder stage, crontab should
+        automatically move the issue into the 'end-ok' stage. """
+
+        self.issue.update({'stage_id': self.stage_reminder.id})
+        self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
+
+        self.env['base.action.rule']._check()  # method called by crontab
+
+        self.assertEqual(self.issue.stage_id, self.stage_end_ok)
