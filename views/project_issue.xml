@@ -87,4 +87,37 @@ record.update({'stage_id': stage.id})
     <field name="server_action_ids" eval="[(6,0,[ref('commown.action_move_issue_to_end_ok_stage')])]"/>
   </record>
 
+  <!-- Server action that moves a sleeping issue to
+       the "pending" stage when a customer message arrives -->
+  <record id="action_awaken_issue_on_partner_message_arrival" model="ir.actions.server">
+    <field name="name">[commown] Move customer waiting issue into pending when on message arrival</field>
+    <field name="model_id" ref="calendar.model_mail_message"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+if record.model == 'project.issue':
+    issue = env[record.model].browse(record.res_id)
+    if issue.partner_id == record.author_id and (
+            '[after-sale: waiting-customer]' in issue.stage_id.name
+            or '[after-sale: reminder-email]' in issue.stage_id.name):
+        stage = env['project.task.type'].search([
+            ('project_ids', '=', issue.project_id.id),
+            ('name', 'like', '[after-sale: pending]'),
+            ])
+        issue.sudo().update({'stage_id': stage.id})
+]]>
+    </field>
+  </record>
+
+  <!-- Automatic action that run on mail.message
+       creation when concerning a project.issue -->
+  <record id="mail_message_arrival_concerning_issue" model="base.action.rule">
+    <field name="name">[commown] A email concerning an issue just arrived</field>
+    <field name="model_id" ref="calendar.model_mail_message"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_create</field>
+    <field name="filter_domain">[(u'model', u'=', u'project.issue')]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_awaken_issue_on_partner_message_arrival')])]"/>
+  </record>
+
 </odoo>

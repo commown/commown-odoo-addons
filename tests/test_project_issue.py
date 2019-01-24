@@ -66,3 +66,35 @@ class ProjectIssueTC(TransactionCase):
         self.env['base.action.rule']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_end_ok)
+
+    def _send_partner_email(self):
+        self.env['mail.message'].create({
+            'author_id': self.issue.partner_id.id,
+            'subject': u'Test subject',
+            'body': u"<p>Test body</p>",
+            'message_type': u'comment',
+            'model': u'project.issue',
+            'res_id': self.issue.id,
+            'subtype_id': self.env.ref('mail.mt_comment').id,
+        })
+
+    def test_move_issue_in_reminder_when_partner_message_arrives(self):
+        """ When an issue is in the reminder stage and it's partner sends a
+        message concerning it, the issue moves automatically to the
+        pending stage. """
+
+        self.issue.update({'stage_id': self.stage_reminder.id})
+
+        self._send_partner_email()
+
+        self.assertEqual(self.issue.stage_id, self.stage_pending)
+
+    def test_move_customer_waiting_issue_when_message_arrives(self):
+        """ When a customer message arrives which concerns a waiting
+        issue, the issue is moved to the pending stage. """
+
+        self.issue.update({'stage_id': self.stage_wait.id})
+
+        self._send_partner_email()
+
+        self.assertEqual(self.issue.stage_id, self.stage_pending)
