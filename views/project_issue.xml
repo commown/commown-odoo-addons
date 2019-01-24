@@ -87,6 +87,36 @@ record.update({'stage_id': stage.id})
     <field name="server_action_ids" eval="[(6,0,[ref('commown.action_move_issue_to_end_ok_stage')])]"/>
   </record>
 
+  <!-- Server action that moves an issue to the "reminder-email" stage -->
+  <record id="action_move_issue_to_reminder_stage" model="ir.actions.server">
+    <field name="name">[commown] Move issue to the reminder-email stage</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+stage = env['project.task.type'].search([
+    ('project_ids', '=', record.project_id.id),
+    ('name', 'like', '[after-sale: reminder-email]'),
+    ])
+record.update({'stage_id': stage.id})
+]]>
+    </field>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       time spent in the "waiting-customer" stage was too long -->
+  <record id="issue_waiting_customer_for_too_long" model="base.action.rule">
+    <field name="name">[commown] Time spent waiting for the customer was too long</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_time</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: waiting-customer]')]</field>
+    <field name="trg_date_id" search="[('model', '=', 'project.issue'), ('name', '=', 'date_last_stage_update')]"/>
+    <field name="trg_date_range">10</field>
+    <field name="trg_date_range_type">day</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_move_issue_to_reminder_stage')])]"/>
+  </record>
+
   <!-- Server action that moves a sleeping issue to
        the "pending" stage when a customer message arrives -->
   <record id="action_awaken_issue_on_partner_message_arrival" model="ir.actions.server">

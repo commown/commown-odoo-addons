@@ -98,3 +98,12 @@ class ProjectIssueTC(TransactionCase):
         self._send_partner_email()
 
         self.assertEqual(self.issue.stage_id, self.stage_pending)
+
+    def test_move_customer_long_waiting_issue_to_reminder(self):
+
+        self.issue.update({'stage_id': self.stage_wait.id})
+        self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
+
+        self.env['base.action.rule']._check()  # method called by crontab
+
+        self.assertEqual(self.issue.stage_id, self.stage_reminder)
