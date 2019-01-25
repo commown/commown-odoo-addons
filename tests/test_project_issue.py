@@ -39,6 +39,7 @@ class ProjectIssueTC(TransactionCase):
             'project_id': self.project.id,
             'stage_id': self.stage_pending.id,
             'partner_id': self.partner.id,
+            'user_id': self.env.ref(u'base.user_demo').id,
         })
 
     def test_send_reminder_email(self):
@@ -55,6 +56,8 @@ class ProjectIssueTC(TransactionCase):
                          [u'mail.mt_comment'])
         self.assertIn('Bonjour Flo', message.body)
         self.assertIn('Pas de nouvelles', message.body)
+        expected_sender = self.env.ref(u'base.user_demo').partner_id
+        self.assertEqual(message.author_id, expected_sender)
 
     def test_move_issue_after_expiry(self):
         """ After 10 days spent in the reminder stage, crontab should

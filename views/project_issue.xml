@@ -39,6 +39,8 @@
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code"><![CDATA[
+if record.user_id:
+    record = record.sudo(record.user_id)
 email_template = env.ref('commown.mail_template_issue_reminder').id
 record.message_post_with_template(email_template)
 ]]>
