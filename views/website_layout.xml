@@ -24,7 +24,7 @@
 
               "adblocker": false, /* Show a Warning if an adblocker is detected */
               "AcceptAllCta" : true, /* Show the accept all button when highPrivacy on */
-              "highPrivacy": false, /* Disable auto consent */
+              "highPrivacy": true, /* Disable auto consent */
               "handleBrowserDNTRequest": false, /* If Do Not Track == 1, accept all */
 
               "removeCredit": false, /* Remove credit link */
