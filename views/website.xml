@@ -56,9 +56,9 @@
             inherit_id="website_portal_sale.orders_followup">
     <xpath expr="//strong[text()='Contact']/ancestor::div[@class='row'][1]"
            position="after">
-      <hr/>
       <t t-set="coupons" t-value="order.used_coupons()"/>
       <div t-if="coupons" class="row">
+        <hr/>
         <div class="col-md-12">
           <p><strong>Coupons</strong></p>
           <dl class="dl-horizontal">
