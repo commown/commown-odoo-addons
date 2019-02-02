@@ -73,13 +73,11 @@ next_stage_marker = {
     'manual': 'pending',
 }
 for orig, dest in next_stage_marker.items():
-    log('Orig: %r, Dest: %r, test: %r' % (orig, dest, '[after-sale: %s]' % orig in (record.stage_id.name or '')))
     if '[after-sale: %s]' % orig in (record.stage_id.name or ''):
         stage = env['project.task.type'].search([
             ('project_ids', '=', record.project_id.id),
             ('name', 'like', '[after-sale: %s]' % dest),
             ])
-        log('dest stage: %s' % stage)
         if len(stage) == 1:
             record.update({'stage_id': stage.id})
             break
