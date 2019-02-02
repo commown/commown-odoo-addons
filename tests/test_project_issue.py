@@ -30,6 +30,9 @@ class ProjectIssueTC(TransactionCase):
         self.stage_end_ok.update({
             'name': u'Solved [after-sale: end-ok]',
             'mail_template_id': False})
+        self.stage_manual = self.stage_pending.copy({
+            'name': u'Solved [after-sale: manual]',
+            'mail_template_id': False})[0]
 
         self.partner = self.env.ref('base.res_partner_1')
         self.partner.update({'firstname': 'Flo', 'lastname': 'Cay'})
@@ -110,3 +113,22 @@ class ProjectIssueTC(TransactionCase):
         self.env['base.action.rule']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_reminder)
+
+    def test_move_long_waiting_manual_followup_to_pending(self):
+
+        self.issue.update({'stage_id': self.stage_manual.id})
+        self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
+
+        self.env['base.action.rule']._check()  # method called by crontab
+
+        self.assertEqual(self.issue.stage_id, self.stage_pending)
+
+    def test_move_manual_long_waiting_issue_when_message_arrives(self):
+        """ When a customer message arrives which concerns a manually
+        handled issue, the issue is moved to the pending stage. """
+
+        self.issue.update({'stage_id': self.stage_manual.id})
+
+        self._send_partner_email()
+
+        self.assertEqual(self.issue.stage_id, self.stage_pending)
