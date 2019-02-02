@@ -87,8 +87,8 @@ def delivery_data(partner):
                 if not result_data.get(attr) and attr in partner_data:
                     result_data[attr] = partner_data[attr]
 
-    for attr in ('line1', 'line2'):
-        if len(result_data.get(attr, '')) > 35:
+    for attr in ('line1', 'line2', 'line3'):
+        if len(result_data.get(attr) or '') > 35:  # handle False and None
             raise ValueError('Address too long for %r' % partner.name)
 
     return result_data
