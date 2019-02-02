@@ -55,7 +55,6 @@ def delivery_data(partner):
         'lastName': partner.lastname,
         'firstName': partner.firstname,
         'line2': partner.street,
-        'line3': partner.street2 or '',
         'countryCode': partner.country_id.code or 'FR',
         'city': partner.city,
         'zipCode': partner.zip,
@@ -63,6 +62,9 @@ def delivery_data(partner):
         'mobileNumber': normalize_phone(mobile, partner.country_id.code) or '',
         'email': partner.email or '',
     }
+    if partner.street2:
+        partner_data['line1'] = partner.street
+        partner_data['line2'] = partner.street2
     if partner.parent_id and partner.parent_id.is_company:
         partner_data['companyName'] = partner.parent_id.name
 
@@ -85,8 +87,8 @@ def delivery_data(partner):
                 if not result_data.get(attr) and attr in partner_data:
                     result_data[attr] = partner_data[attr]
 
-    for attr in ('line2', 'line3'):
-        if len(result_data[attr] or '') > 35:
+    for attr in ('line1', 'line2'):
+        if len(result_data.get(attr, '')) > 35:
             raise ValueError('Address too long for %r' % partner.name)
 
     return result_data
