@@ -44,6 +44,7 @@ class SlimpayParser(FileParser):
         'Creditvaleur': float_or_zero,
         'Debitvaleur': float_or_zero,
         'ReferenceClient': _int_or_none,
+        'TransactionID': text_type,
     }
 
     @classmethod
@@ -59,8 +60,8 @@ class SlimpayParser(FileParser):
         return '%(TransactionID)s/%(CodeOP)s/%(Dateexecution)s' % row
 
     def _skip(self, row):
-        return not row['CodeOP'] or bool(self.env['account.move'].search([
-            ('ref', '=', self._unique_transaction_id(row)),
+        return not row['CodeOP'] or bool(self.env['account.move.line'].search([
+            ('transaction_ref', '=', self._unique_transaction_id(row)),
         ]))
 
     def _post(self, *args, **kwargs):
@@ -97,7 +98,7 @@ class SlimpayParser(FileParser):
             'date_maturity': line['Datevaleur'],
             'credit': line['Creditvaleur'],
             'debit': line['Debitvaleur'],
-            'ref': self._unique_transaction_id(line),
+            'transaction_ref': self._unique_transaction_id(line),
             'already_completed': False,
             'partner_id': self._get_partner_id(line),
             'account_id': self._get_account_id(line),
