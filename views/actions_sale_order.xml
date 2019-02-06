@@ -132,7 +132,7 @@ while partner.parent_id:
 account = partner.property_account_receivable_id
 if not account or account.get_xml_id().get(account.id):
     account = env['account.account'].create({
-        'code': 'C-%s' % partner.id,
+        'code': '411-C-%s' % partner.id,
         'name': partner.name,
         'tag_ids': [(6, 0, [env.ref('account.account_tag_operating').id])],
         'user_type_id': env.ref('account.data_account_type_receivable').id,
