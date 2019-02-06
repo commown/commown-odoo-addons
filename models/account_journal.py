@@ -1,6 +1,8 @@
 import logging
 from datetime import datetime
 
+from six import text_type
+
 from odoo import api, fields, models
 
 
@@ -36,8 +38,8 @@ def _int_or_none(value):
 class SlimpayParser(FileParser):
 
     conversion_dict = {
-        'Libelle': unicode,
-        'Nomdebiteur': unicode,
+        'Libelle': text_type,
+        'Nomdebiteur': text_type,
         'Datevaleur': _convert_date,
         'Creditvaleur': float_or_zero,
         'Debitvaleur': float_or_zero,
