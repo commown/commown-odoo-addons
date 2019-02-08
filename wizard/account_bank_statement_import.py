@@ -30,18 +30,18 @@ class AccountBankStatementImport(models.TransientModel):
         'DETAIL': u'Détail',
     }
 
-    def _get_line_amount(self, line):
-        return self._parse_amount(
+    def _ccoop_get_line_amount(self, line):
+        return self._ccoop_parse_amount(
             line[self._COLS['CREDIT']] or line[self._COLS['DEBIT']])
 
-    def _parse_amount(self, value):
+    def _ccoop_parse_amount(self, value):
         return float(value.replace(',', '.'))
 
-    def _parse_date(self, value):
+    def _ccoop_parse_date(self, value):
         day, month, year = map(int, value.split('/'))
         return date(2000+year, month, day).strftime(fields.DATE_FORMAT)
 
-    def _get_credit_coop_importer(self, data):
+    def _get_ccoop_importer(self, data):
         fobj = StringIO(data)
         start_line, end_amount = None, None
         for count, line in enumerate(fobj):
@@ -56,14 +56,14 @@ class AccountBankStatementImport(models.TransientModel):
         assert set(reader.fieldnames).issuperset(self._COLS.values())
         if start_line is not None:
             index = reader.fieldnames.index(self._COLS['CREDIT'])
-            end_amount = self._parse_amount(start_line.split(';')[index])
+            end_amount = self._ccoop_parse_amount(start_line.split(';')[index])
         return end_amount, reader
 
     @api.model
     def _parse_file(self, data_file):
         """ Import Crédit Coopération statement """
         try:
-            end_amount, reader = self._get_credit_coop_importer(data_file)
+            end_amount, reader = self._get_ccoop_importer(data_file)
         except:
             _logger.debug(
                 'Could not interpret file as Credit Coop statement. Exception'
@@ -80,16 +80,16 @@ class AccountBankStatementImport(models.TransientModel):
         for line in reader:
             num = reader.line_num
             if line[self._COLS['DATE']] == self.STATEMENT_END_MARKER:
-                statement['balance_start'] = self._get_line_amount(line)
+                statement['balance_start'] = self._ccoop_get_line_amount(line)
                 continue
 
             try:
                 statement['transactions'].append({
-                    'date': self._parse_date(line[self._COLS['DATE']]),
+                    'date': self._ccoop_parse_date(line[self._COLS['DATE']]),
                     'name': line[self._COLS['LABEL']],
                     'note': line[self._COLS['DETAIL']],
                     'unique_import_id': line[self._COLS['OP']],
-                    'amount': self._get_line_amount(line),
+                    'amount': self._ccoop_get_line_amount(line),
                 })
             except:
                 _logger.error('Error importing line %d: %s\%s', num, line,
