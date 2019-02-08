@@ -21,6 +21,10 @@ class AccountBankStatementImport(models.TransientModel):
         u'janv.': 1, u'févr.': 2, u'mars': 3, u'avr.': 4, u'mai': 5,
         u'juin': 6, u'juil.': 7, u'août': 8, u'sept.': 9, u'oct.': 10,
         u'nov.': 11, u'déc.': 12}
+    lanef_max_header_char_num = 1000
+    lanef_expected_fieldnames = frozenset((
+        u'Date Valeur', u'Référence', u'Montant', u'Solde', u'Libellé'))
+    lanef_delimiter = ','
 
     def _lanef_parse_amount(self, line, colname=u'Montant'):
         return float(line[colname].replace(u',', u'.').replace(u' ', u''))
@@ -30,13 +34,14 @@ class AccountBankStatementImport(models.TransientModel):
         return date(int(year), self.lanef_months[month_name], int(day))
 
     def _get_lanef_importer(self, data):
-        reader = unicodecsv.DictReader(
-            StringIO(data), delimiter=',', encoding=self.lanef_encoding)
-        assert set(reader.fieldnames).issuperset([
-            u'Date Valeur', u'Référence',
-            u'Montant', u'Solde', u'Libellé',
-            ])
-        return reader
+        f = StringIO(data)
+        while f.pos < self.lanef_max_header_char_num:
+            reader = unicodecsv.DictReader(
+                f, delimiter=self.lanef_delimiter, encoding=self.lanef_encoding)
+            if frozenset(reader.fieldnames).issuperset(
+                    self.lanef_expected_fieldnames):
+                return reader
+        raise ValueError('Could not find suitable csv content for La Nef.')
 
     @api.model
     def _parse_file(self, data_file):
