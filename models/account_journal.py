@@ -45,6 +45,7 @@ class SlimpayParser(FileParser):
         'Debitvaleur': float_or_zero,
         'ReferenceClient': _int_or_none,
         'TransactionID': text_type,
+        'OriginalTransactionID': text_type,
     }
 
     @classmethod
@@ -57,7 +58,10 @@ class SlimpayParser(FileParser):
             journal, ftype=ftype, extra_fields=self.conversion_dict, **kwargs)
 
     def _unique_transaction_id(self, row):
-        return '%(TransactionID)s/%(CodeOP)s/%(Dateexecution)s' % row
+        template = '%(TransactionID)s/%(CodeOP)s/%(Dateexecution)s'
+        if row['OriginalTransactionID'].strip():
+            template = '%(OriginalTransactionID)s/' + template
+        return template % row
 
     def _skip(self, row):
         return not row['CodeOP'] or bool(self.env['account.move.line'].search([
