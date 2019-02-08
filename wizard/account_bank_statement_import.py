@@ -22,10 +22,10 @@ class AccountBankStatementImport(models.TransientModel):
         u'juin': 6, u'juil.': 7, u'août': 8, u'sept.': 9, u'oct.': 10,
         u'nov.': 11, u'déc.': 12}
 
-    def _parse_amount(self, line, colname=u'Montant'):
+    def _lanef_parse_amount(self, line, colname=u'Montant'):
         return float(line[colname].replace(u',', u'.').replace(u' ', u''))
 
-    def _parse_date(self, line, colname=u'Date Valeur'):
+    def _lanef_parse_date(self, line, colname=u'Date Valeur'):
         day, month_name, year = line[colname].split()
         return date(int(year), self.lanef_months[month_name], int(day))
 
@@ -59,8 +59,8 @@ class AccountBankStatementImport(models.TransientModel):
         max_date, max_date_line = None, None
         for line in reader:
             num = reader.line_num
-            amount = self._parse_amount(line)
-            date = self._parse_date(line)
+            amount = self._lanef_parse_amount(line)
+            date = self._lanef_parse_date(line)
             try:
                 statement['transactions'].append({
                     'date': date,
@@ -78,9 +78,9 @@ class AccountBankStatementImport(models.TransientModel):
                 raise UserError('Error importing line %d: %s' % (num, line))
         if min_date_line is not None:
             statement['balance_start'] = (
-                self._parse_amount(min_date_line, u'Solde')
-                - self._parse_amount(min_date_line, u'Montant'))
+                self._lanef_parse_amount(min_date_line, u'Solde')
+                - self._lanef_parse_amount(min_date_line, u'Montant'))
         if max_date_line is not None:
-            statement['balance_end_real'] = self._parse_amount(
+            statement['balance_end_real'] = self._lanef_parse_amount(
                 max_date_line, u'Solde')
         return 'EUR', None, [statement]
