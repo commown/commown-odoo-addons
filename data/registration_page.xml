@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+    <record id="registration" model="ir.ui.view">
+      <field name="name">mine-urbaine</field>
+      <field name="type">qweb</field>
+      <field name="key">website.mine-urbaine</field>
+      <field name="website_id" ref="website.default_website"/>
+      <field name="arch" type="xml">
+        <t t-name="website-mine-urbaine">
+          <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+              <section class="container readable o_website_form_builder">
+                <form accept-charset="UTF-8" action="/website_form/" class="s_website_form col-md-12 mt32" data-model_name="res.partner" data-force_action="" data-success_page="" enctype="multipart/form-data" method="post">
+                  <div class="o_website_form_fields">
+                    <div class="o_not_editable hidden o_default_snippet_text" tc-textcontent="true" data-tc-id="w-0.16365335794997016"> This placeholder prevents its parent from disappearing when emptied </div>
+                    <div class="form-group form-field  form-field-char o_required" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="firstname" tc-textcontent="true" data-tc-id="w-0.9893848410757433">
+                        <span tc-textcontent="true" data-tc-id="w-0.649090478388414"> Prénom </span>
+                      </label>
+                      <input class="form-control o_website_form_input" type="text" name="firstname" data-cip-id="cIPJQ342845639" required="required"/>
+                    </div>
+                    <div class="form-group form-field  form-field-char o_required" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="lastname" tc-textcontent="true" data-tc-id="w-0.22798135298929556">
+                        <span tc-textcontent="true" data-tc-id="w-0.09117780859220337"> Nom </span>
+                      </label>
+                      <input class="form-control o_website_form_input" type="text" name="lastname" required="required" data-cip-id="cIPJQ342845639"/>
+                    </div>
+                    <div class="form-group form-field  form-field-char o_required" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="email" tc-textcontent="true" data-tc-id="w-0.34463013751826765">
+                        <span tc-textcontent="true" data-tc-id="w-0.28007386489184416"> Courriel </span>
+                      </label>
+                      <input class="form-control o_website_form_input" type="text" name="email" data-cip-id="cIPJQ342845640" required="required"/>
+                    </div>
+                    <div class="form-group form-field  form-field-char o_required" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="street" tc-textcontent="true" data-tc-id="w-0.17604972328260637">
+                        <span tc-textcontent="true" data-tc-id="w-0.06787430538566053"> Rue </span>
+                      </label>
+                      <input class="form-control o_website_form_input" type="text" name="street" data-cip-id="cIPJQ342845641" required="required"/>
+                    </div>
+                    <div class="form-group form-field  form-field-char" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="street2">
+                        <span> Rue 2 </span>
+                      </label>
+                      <input class="form-control o_website_form_input" type="text" name="street2" data-cip-id="cIPJQ342845642"/>
+                    </div>
+                    <div class="form-group form-field  form-field-char o_required" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="zip" tc-textcontent="true" data-tc-id="w-0.7737446902145209">
+                        <span tc-textcontent="true" data-tc-id="w-0.330911022947028"> Code postal </span>
+                      </label>
+                      <input class="form-control o_website_form_input" type="text" name="zip" data-cip-id="cIPJQ342845643" required="required"/>
+                    </div>
+                    <div class="form-group form-field  form-field-char o_required" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="city" tc-textcontent="true" data-tc-id="w-0.7230312420976078">
+                        <span tc-textcontent="true" data-tc-id="w-0.41267591462009423"> Ville </span>
+                      </label>
+                      <input class="form-control o_website_form_input" type="text" name="city" data-cip-id="cIPJQ342845644" required="required"/>
+                    </div>
+                    <div class="form-group form-field  form-field-many2one css_non_editable_mode_hidden" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="country_id" tc-textcontent="true" data-tc-id="w-0.42847656412909707">
+                        <span tc-textcontent="true" data-tc-id="w-0.7013422702474575"> Pays </span>
+                      </label>
+                      <select class="form-control o_website_form_input" name="country_id" data-cip-id="cIPJQ342845646">
+                        <option/>
+                        <option value="76" selected="selected"> France </option>
+                      </select>
+                    </div>
+                    <div class="form-group form-field  form-field-date" data-model-field="false" data-optional="true">
+                      <label class="control-label" for="Custom Date field" tc-textcontent="true" data-tc-id="w-0.6245506767700569">
+                        <span tc-textcontent="true" data-tc-id="w-0.45471029030151267"> Date approximative d'achat </span>
+                      </label>
+                      <input class="form-control o_website_form_input o_website_form_date" type="text" name="Date approximative d'achat" data-cip-id="cIPJQ342845645"/>
+                      <p class="help-block"> </p>
+                    </div>
+                    <div class="form-group form-field  form-field-text" data-model-field="false" data-optional="true">
+                      <label class="control-label" for="Custom Long text field" tc-textcontent="true" data-tc-id="w-0.07090524026344802">
+                        <span tc-textcontent="true" data-tc-id="w-0.900172575251347"> Autres informations </span>
+                      </label>
+                      <textarea class="form-control o_website_form_input" type="text" name="Autres informations" tc-textcontent="true" data-tc-id="0.03950788047261311"/>
+                      <p class="help-block"> Indiquez ici toute information utile pour notre gestion de votre appareil : pannes connues, changement de module déjà effectué, etc. </p>
+                    </div>
+                    <div class="form-group form-field  form-field-boolean css_non_editable_mode_hidden" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="supplier" tc-textcontent="true" data-tc-id="w-0.2498589537758077">
+                        <input type="checkbox" class="o_website_form_input" value="1" name="supplier" checked="checked"/>
+                        <span tc-textcontent="true" data-tc-id="w-0.7347445665916476"> Est un Fournisseur </span>
+                      </label>
+                      <p class="help-block"> Cocher cette case si ce contact est un fournisseur. Si elle n'est pas cochée, les acheteurs ne le verront pas lors de la saisie d'un ordre d'achat. </p>
+                    </div>
+                    <div class="form-group form-field  form-field-boolean css_non_editable_mode_hidden" data-model-field="true" data-optional="true">
+                      <label class="control-label" for="from_urban_mine" tc-textcontent="true" data-tc-id="w-0.3099858863745215">
+                        <input type="checkbox" class="o_website_form_input" value="1" name="from_urban_mine" checked="checked"/>
+                        <span tc-textcontent="true" data-tc-id="w-0.6877061960865573">
+                          Créé par inscription à la mine urbaine
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group o_website_form_recaptcha">
+                  </div>
+                  <div class="form-group">
+                    <button type="button" class="btn btn-lg btn-primary o_website_form_send" data-original-title="" title=""> Valider </button>
+                    <span id="o_website_form_result"/>
+                  </div>
+                </form>
+              </section>
+              <script>
+                function inIframe () {
+                  try {
+                    return window.self !== window.top;
+                  } catch (e) {
+                    return true;
+                  }
+                }
+                document.addEventListener("DOMContentLoaded", function(event) {
+                  var sheet = (function() {
+                    var style = document.createElement("style");
+                    style.appendChild(document.createTextNode(""));
+                    document.head.appendChild(style);
+                    return style.sheet;
+                  })();
+                  if (inIframe()) {
+                    sheet.insertRule("header,footer,#tarteaucitronAlertBig,#tarteaucitronAlertSmall,#oe_main_menu_navbar {display: none !important}");
+                  }
+                });
+              </script>
+            </div>
+          </t>
+        </t>
+      </field>
+    </record>
+
+  </data>
+</odoo>

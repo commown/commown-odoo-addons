@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="action_create_opportunity" model="ir.actions.server">
+    <field name="name">[commown] Urban mine: create opportunity</field>
+    <field name="model_id" ref="base.model_res_partner"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">
+<![CDATA[
+TEAM_ID = env.ref('urban_mine.urban_mine_managers').id
+STAGE_ID = env.ref('urban_mine.stage1').id
+
+lead = env['crm.lead'].create({
+        'name': record.name + ' - ' + record.city,
+        'partner_id': record.id,
+        'type': 'opportunity',
+        'stage_id': STAGE_ID,
+        })
+# Override post-create behaviour that auto-assigns team_id
+lead.update({'team_id': TEAM_ID})
+]]>
+    </field>
+  </record>
+
+  <record id="action_got_registration" model="base.action.rule">
+    <field name="name">[commown] Urban mine registration</field>
+    <field name="model_id" ref="base.model_res_partner"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_create</field>
+    <field name="filter_domain">[(u'from_urban_mine', u'=', True)]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('urban_mine.action_create_opportunity')])]"/>
+  </record>
+
+</odoo>

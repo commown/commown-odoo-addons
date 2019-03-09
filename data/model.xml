@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <function model="ir.model.fields" name="formbuilder_whitelist">
+            <value>res.partner</value>
+            <value eval="['from_urban_mine']"/>
+        </function>
+
+        <record id="base.model_res_partner" model="ir.model">
+          <field name="website_form_recaptcha">True</field>
+        </record>
+
+    </data>
+</odoo>
