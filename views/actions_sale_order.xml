@@ -130,7 +130,7 @@ while partner.parent_id:
     partner = partner.parent_id
 
 account = partner.property_account_receivable_id
-if not account or account.get_xml_id().get(account.id):
+if not account or account.get_xml_id().get(account.id) == 'l10n_fr.1_fr_pcg_recv':
     account = env['account.account'].create({
         'code': '411-C-%s' % partner.id,
         'name': partner.name,
