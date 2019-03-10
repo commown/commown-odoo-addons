@@ -196,13 +196,16 @@ class CommownCrmLead(models.Model):
         password = self.env.context['colissimo_password']
         sender_email = self.env.context['colissimo_sender_email']
         commercial_name = self.env.context['colissimo_commercial_name']
+        is_return = self.env.context.get('colissimo_is_return', False)
         sender = self.env['res.partner'].search([('email', '=', sender_email)])
         match = LEAD_NAME_RE.match(self.name)
         order_number = match.groupdict()['order_num'] if match else ''
         recipient = self.partner_id
+        if is_return:
+            sender, recipient = recipient, sender
         meta_data, label_data = ship(
             login, password, sender, recipient, order_number,
-            commercial_name)
+            commercial_name, is_return)
         if meta_data and not label_data:
             raise ValueError(json.dumps(meta_data))
         assert meta_data and label_data
@@ -248,6 +251,10 @@ class CommownCrmLead(models.Model):
 
     @api.multi
     def colissimo_fairphone_labels(self):
+        if (len(self) == 1 and
+                self.env.context.get('colissimo_force_single_label', False)):
+            return self.colissimo_fairphone_label()
+
         paths = []
 
         for lead in self:

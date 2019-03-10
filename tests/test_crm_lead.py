@@ -83,14 +83,26 @@ class CrmLeadTC(TransactionCase):
         return self.env['res.country'].search([('code', '=', code)])
 
     def test_shipping_data_product_code(self):
-        data = shipping_data(self.env['res.partner'], self.lead.partner_id,
-                            'SO00000', 'Commown')
+        base_args = [self.env['res.partner'], self.lead.partner_id,
+                     'SO00000', 'Commown']
+
+        # French label
+        data = shipping_data(*base_args)
         self.assertEqual(data['letter']['service']['productCode'], 'DOS')
 
+        # French return label
+        data = shipping_data(*(base_args + [True]))
+        self.assertEqual(data['letter']['service']['productCode'], 'CORE')
+
+        # International label
         self.lead.partner_id.country_id = self._country('BE')
-        data = shipping_data(self.env['res.partner'], self.lead.partner_id,
-                            'SO00000', 'Commown')
+        data = shipping_data(*base_args)
         self.assertEqual(data['letter']['service']['productCode'], 'COLI')
+
+        # International Return label
+        self.lead.partner_id.country_id = self._country('BE')
+        data = shipping_data(*(base_args + [True]))
+        self.assertEqual(data['letter']['service']['productCode'], 'CORI')
 
     def test_create_colissimo_fairphone_label(self):
         fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}
@@ -112,6 +124,25 @@ class CrmLeadTC(TransactionCase):
         self.assertEqual(att.name, 'colissimo.pdf')
         if b64decode(att.datas) != self.fake_label_data:
             self.fail('incorrect pdf label')
+
+    def test_create_colissimo_fairphone_return_label(self):
+        " Only check the `ship` function was called with the right arguments. "
+        fake_meta_data = {'labelResponse': {'parcelNumber': '8R0000000000'}}
+
+        colissimo_data = self.fake_colissimo_data.copy()
+        colissimo_data['colissimo_is_return'] = True
+        lead = self.lead.with_context(colissimo_data)
+        with mock.patch(
+                'odoo.addons.commown.models.crm_lead.ship',
+                return_value=(fake_meta_data, 'xxx')) as mocked_ship:
+            lead._create_colissimo_fairphone_label()
+
+        self.assertEqual(lead.expedition_ref, '8R0000000000')
+        self.assertEqual(mocked_ship.call_count, 1)
+        # Sender is lead partner
+        self.assertEqual(mocked_ship.call_args[0][2], self.lead.partner_id)
+        # is_return argument is True
+        self.assertIs(mocked_ship.call_args[0][6], True)
 
     def test_colissimo_fairphone_label_and_update(self):
         fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}

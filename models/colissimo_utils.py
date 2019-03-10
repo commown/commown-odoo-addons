@@ -95,7 +95,7 @@ def delivery_data(partner):
 
 
 def shipping_data(sender, recipient, order_number, commercial_name,
-                  deposit_date=None, format='PDF_A4_300dpi'):
+                  is_return=False, deposit_date=None, format='PDF_A4_300dpi'):
     """ Return colissimo WS shipping data for given arguments.
 
     The `sender` and `recipient` are odoo res.partner objects.
@@ -104,6 +104,9 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     sender and recipient parts).
 
     The `commercial_name` argument is used in recipient email notifications.
+
+    The `is_return` argument is used to indicate the parcel is sent back from
+    the sender to the recipient.
 
     The `deposit_date` argument is a datetime.Date object (default is today).
 
@@ -117,7 +120,7 @@ def shipping_data(sender, recipient, order_number, commercial_name,
 
     service = {
         'orderNumber': order_number,  # for coliview
-        'productCode': 'DOS',
+        'productCode': 'DOS' if not is_return else 'CORE',
         'depositDate': deposit_date.strftime('%Y-%m-%d'),
         'commercialName': commercial_name,
     }
@@ -131,7 +134,8 @@ def shipping_data(sender, recipient, order_number, commercial_name,
         service['productCode'] = 'BPR'
         parcel['pickupLocationId'] = destination.pop('BP')
     if destination.get('countryCode', 'FR') != 'FR':
-        service['productCode'] = 'COLI'  # Colissimo Expert International
+        # Colissimo Expert/ Return International
+        service['productCode'] = 'COLI' if not is_return else 'CORI'
 
     return {
         'outputFormat': {
@@ -181,9 +185,10 @@ def parse_multipart(data, boundary):
 
 
 def ship(login, password, sender, recipient, order_number,
-         commercial_name, debug=False):
+         commercial_name, is_return=False, debug=False):
     url = BASE_URL + ('/checkGenerateLabel' if debug else '/generateLabel')
-    data = shipping_data(sender, recipient, order_number, commercial_name)
+    data = shipping_data(sender, recipient, order_number, commercial_name,
+                         is_return)
     data.update({'contractNumber': login, 'password': password})
     _logger.debug('Shipping data: %s', data)
     resp = requests.post(url, json=data)
