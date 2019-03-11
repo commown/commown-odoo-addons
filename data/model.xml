@@ -4,7 +4,7 @@
 
         <function model="ir.model.fields" name="formbuilder_whitelist">
             <value>res.partner</value>
-            <value eval="['from_urban_mine']"/>
+            <value eval="['firstname', 'surname', 'email', 'street', 'street2', 'zip', 'city', 'country_id', 'from_urban_mine', 'supplier']"/>
         </function>
 
         <record id="base.model_res_partner" model="ir.model">
