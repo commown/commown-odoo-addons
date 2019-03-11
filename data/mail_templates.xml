@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="email_template_with_label" model="mail.template">
+      <field name="name">[commown] AR Offre de Reprise</field>
+      <field name="email_from">contact@commown.fr</field>
+      <field name="reply_to">contact@commown.fr</field>
+      <field name="subject">${object.company_id.name} - Accusé Réception offre de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
+      <field name="partner_to">${object.partner_id.id}</field>
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="lang">${object.partner_id.lang}</field>
+      <field name="body_html"><![CDATA[
+<div>
+  <p>Bonjour ${object.partner_id.firstname},</p>
+  <br><br>
+  <p>Votre proposition de reprise du Fairphone 2 dont vous êtes
+    actuellement propriétaire a bien été prise en compte ; nous vous
+    remercions au nom de la Coopérative pour l'intérêt que vous portez à
+    notre projet circulaire de Mine Urbaine.</p>
+  <br><br>
+  <p><b>Ce mail explique vos prochaines actions nécessaires pour
+      finaliser la vente :</b></p>
+  <br><br>
+  <p><b>1/ Expédition de l'appareil :</b></p>
+  <p>Nous vous demandons de bien vouloir emballer soigneusement
+    l'appareil en suivant les recommandations
+    expliquées <a href="https://wiki.commown.fr/Emballer-son-appareil-pour-une-expédition"
+                  target="_blank"><b>ICI</b></a>.</p>
+  <p>NB : si vous avez des accessoires et/ou des pièces détachées, quel
+    que soit leur état nous vous invitons à les joindre au colis.</p>
+  <p>Il vous suffira ensuite de simplement coller l'étiquette de retour
+    ci-jointe sur le colis et de le déposer à votre Bureau de Poste
+    préféré (!! le colis doit faire moins de 500 grammes !!), et de faire
+    signer la preuve de dépôt.</p>
+  <p>Si vous avez une boite aux lettres normalisée, nous vous
+    encourageons à utiliser le ramassage à domicile, c'est simple et
+    ça vous évite de vous déplacer :-)
+    &nbsp;(cf. <a href="https://www.laposte.fr/particulier/retourbal/formulaire"
+                  target="_blank">https://www.laposte.fr/particulier/retourbal/formulaire</a>)&nbsp;</p>
+  <br>
+  <p>La preuve de dépôt fait foi en cas de contestation, nous vous
+    recommandons de la conserver soigneusement.</p>
+  <br><br>
+  <p><b>2/ Réception et vérification de l'appareil :</b></p>
+  <p>Lorsque nous réceptionnons le colis, celui-ci est vérifié dans les
+    3 à 5 jours ouvrés. </p> <p>NB : pour que la vente soit définitivement
+    acceptée par Commown, il est indispensable que le colis contienne a
+    minima les éléments suivants (montés ou démontés), ceci quel que soit
+    leur état&nbsp;:</p>
+  <ul>
+    <li><p>1 module "core" (l'élément principal du Fairphone contenant
+        le processeur)</p></li>
+    <li><p>1 module caméra</p></li>
+    <li><p>1 écran</p></li>
+    <li><p>1 module bas</p>
+    </li><li><p>1 module haut</p></li>
+  </ul>
+  <p><i>Si le colis n'est pas complet nous nous réservons le droit de ne
+      pas donner suite à notre proposition d'achat et nous ré-expédierons le
+      colis en retour (à vos frais).</i></p>
+  <br><br>
+  <p><b>3/ Règlement du prix de l'appareil&nbsp;:</b></p>
+  <p>En nous soumettant cette proposition vous avez accepté* de
+    recevoir le règlement du prix convenu sous le forme
+    de&nbsp;<b>chèques-cadeau "Le Chéquier&nbsp;Vert"&nbsp;</b>émis
+    par notre partenaire de paiement Green Capital, et utilisables
+    sans frais dans toutes les enseignes
+    référencées&nbsp;<a href="http://www.lechequiervert.fr/produits/listepointvente"
+                        target="_blank"><b>sur le site du partenaire</b></a>.</p>
+  <p>Pour vous remercier de ce geste engagé, vous recevrez également
+    un&nbsp;<b>Coupon de Réduction</b>&nbsp;équivalent à une mensualité, à
+    valoir sur toute la gamme d'appareils proposés sur le site web de
+    Commown et pour toute nouvelle location souscrite&nbsp;(<i>valable
+      jusqu'au 31/12/19).</i></p>
+  <p>Une fois l'achat définitivement validé par Commown, vous recevrez
+    un mail de confirmation récapitulant toutes ces informations.</p>
+  <br><br>
+  <p>En vous remerciant encore pour votre engagement pour une
+    électronique plus responsable,</p>
+  <p>Coopérativement,&nbsp;</p>
+  <p>--</p>
+  <div class="moz-signature">
+    <div>L'équipe Commown
+      <br><br>
+      <a href="https://commown.fr">
+        <img src="https://shop.commown.fr/web/image/673" alt="Logo de Commown" style="-moz-border-right-colors:none;-moz-border-bottom-colors:none;-moz-border-left-colors:none;-moz-border-top-colors:none;border-image-repeat:initial;border-image-outset:initial;border-image-width:initial;border-image-slice:initial;border-image-source:initial;border-left-color:initial;border-bottom-color:initial;border-right-color:initial;border-top-color:initial;border-left-style:initial;border-bottom-style:initial;border-right-style:initial;border-top-style:initial;max-width: 400px;width: 69.8333px;height: auto" border="0"/>
+      </a>
+      <br><br><br>
+      <p>* si l'une ou plusieurs des conditions ou dispositions
+        présentées dans ce mail ne vous convenait&nbsp;pas vous êtes
+        libre de renoncer à la vente, pour cela il vous suffit de nous
+        prévenir par simple retour de mail et de ne pas nous expédier
+        l'appareil.</p>
+    </div>
+  </div>
+</div>
+]]></field>
+    </record>
+
+  </data>
+
+</odoo>

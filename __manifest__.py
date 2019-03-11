@@ -19,6 +19,7 @@
         'data/crm.xml',
         'data/registration_page.xml',
         'data/actions.xml',
+        'data/mail_templates.xml',
     ],
     'installable': True,
 }

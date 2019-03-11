@@ -17,7 +17,7 @@
     </record>
 
     <record id="stage2" model="crm.stage">
-      <field name="name">En attente de l’appareil</field>
+      <field name="name">En attente de l’appareil [urban-mine: send-label]</field>
       <field name="requirements">Un coupon, une auto-facture et une étiquette d'expédition ont été générés et envoyé par mail au partenaire : on attend désormais son appareil.</field>
       <field name="team_id" ref="urban_mine.urban_mine_managers"/>
       <field name="sequence">2</field>
