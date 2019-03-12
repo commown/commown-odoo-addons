@@ -10,6 +10,9 @@
     'depends': [
         'commown_shipping',
         'crm',
+        'l10n_fr',
+        'report_py3o',
+        'website_sale_coupon',
         'website_form_builder',
         'website_form_recaptcha',
     ],
@@ -17,7 +20,10 @@
     },
     'data': [
         'data/model.xml',
+        'data/product.xml',
         'data/crm.xml',
+        'data/coupon.xml',
+        'data/report.xml',
         'data/registration_page.xml',
         'data/actions.xml',
         'data/mail_templates.xml',

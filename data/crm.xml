@@ -24,7 +24,7 @@
     </record>
 
     <record id="stage3" model="crm.stage">
-      <field name="name">Envoi des chèques</field>
+      <field name="name">Envoi des chèques [urban-mine: payment]</field>
       <field name="team_id" ref="urban_mine.urban_mine_managers"/>
       <field name="sequence">3</field>
     </record>

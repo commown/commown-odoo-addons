@@ -42,6 +42,20 @@ lead.update({'team_id': TEAM_ID})
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code"><![CDATA[
+account = env['keychain.account'].sudo().retrieve([
+    ('namespace', '=', 'colissimo'),
+    ('login', '=', '970066'),
+    ])[0]
+
+record = record.with_context({
+            "colissimo_login": account.login,
+            "colissimo_password": account._get_password(),
+            "colissimo_sender_email": "elie@commown.fr",
+            "colissimo_commercial_name": "Commown",
+            "colissimo_is_return": True,
+            "colissimo_force_single_label": True,
+            })
+
 if record.user_id:
     record = record.sudo(record.user_id)
 
@@ -60,6 +74,82 @@ record.with_context({'default_attachment_ids': (label.id,)}).message_post_with_t
     <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[urban-mine: send-label]')]</field>
     <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: send-label]')]</field>
     <field name="server_action_ids" eval="[(6,0,[ref('urban_mine.action_send_label')])]"/>
+  </record>
+
+  <!-- Urban mine payment handling: send an invoice and a coupon by email -->
+
+  <record id="action_payment" model="ir.actions.server">
+    <field name="name">[commown] Urban mine: send auto-invoice and coupon by email</field>
+    <field name="model_id" ref="crm.model_crm_lead"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+CAMPAIGN = env['coupon.campaign'].search([
+    ('name', 'ilike', 'mine urbaine'),
+    ])[0]  # use last urban mine campaign by default
+
+PRODUCT = env['product.product'].search([
+    ('default_code', '=', 'urban-mine'),
+    ])[0]  # use last product matching the "urban-mine" default_code
+
+TAGS = env['account.analytic.tag'].search([('name', 'in', ['EXPL', 'FP2'])])
+
+DESCRIPTION = u'Vente Fairphone 2'
+
+SUPPLIER_TAXES = env['account.tax'].search([('description', '=', 'ACH-EXO-0')])
+
+REPORT_NAME = 'urban_mine.report_autoinvoice'
+
+if record.user_id:
+    record = record.sudo(record.user_id)
+
+email_template = env.ref("urban_mine.email_template_with_auto_invoice").id
+
+coupon = env['coupon.coupon'].create({'campaign_id': CAMPAIGN.id})
+
+invoice = env['account.invoice'].create({
+    'type': u'in_invoice',
+    'company_id': env.ref('base.main_company').id,
+    'currency_id': env.ref('base.EUR').id,
+    'reference': 'COMMOWN-MU-%d' % record.id,
+    'account_id': record.partner_id.property_account_payable_id.id,
+    'invoice_line_ids': [(0, 0, {
+        'product_id': PRODUCT.id,
+        'name': DESCRIPTION,
+        'account_id': PRODUCT.property_account_expense_id.id,
+        'analytic_tag_ids': [(6, 0, TAGS.ids)],
+        'price_unit': PRODUCT.standard_price,
+        'invoice_line_tax_ids': [(6, 0, SUPPLIER_TAXES.ids)],
+        })],
+    'partner_id': record.partner_id.id,
+})
+
+invoice.action_invoice_open()
+
+report = env['py3o.report']._get_report_from_name(REPORT_NAME)
+py3o_report = env['py3o.report'].create({'ir_actions_report_xml_id': report.id})
+py3o_report.with_context({'report_name': REPORT_NAME}).create_report(invoice.ids, None)
+
+ctx = {
+    "default_attachment_ids": env['ir.attachment'].search([
+        ("res_model", "=", invoice._name),
+        ("res_id", "=", invoice.id),
+        ]),
+    "coupon": coupon.code,
+    }
+record.with_context(ctx).message_post_with_template(email_template)
+]]>
+    </field>
+  </record>
+
+  <record id="action_registration_payment" model="base.action.rule">
+    <field name="name">[commown] Urban mine device payment to be done</field>
+    <field name="model_id" ref="crm.model_crm_lead"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_write</field>
+    <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[urban-mine: payment]')]</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: payment]')]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('urban_mine.action_payment')])]"/>
   </record>
 
 </odoo>

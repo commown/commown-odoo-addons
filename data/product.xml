@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="product" model="product.template">
+      <field name="name">Reprise Fairphone</field>
+      <field name="type">consu</field>
+      <field name="default_code">urban-mine</field>
+      <field name="sale_ok">False</field>
+      <field name="purchase_ok">True</field>
+      <field name="list_price">0</field>
+      <field name="standard_price">50</field>
+      <field name="invoice_policy">order</field>
+      <field name="property_account_expense_id" ref="l10n_fr.1_pcg_6068"/>
+    </record>
+
+  </data>
+
+</odoo>
