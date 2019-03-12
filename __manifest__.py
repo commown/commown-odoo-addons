@@ -8,6 +8,7 @@
     'license': "AGPL-3",
     'website': "https://commown.fr",
     'depends': [
+        'commown_shipping',
         'payment_slimpay', 'l10n_fr', 'base_action_rule',
         'website_sale_default_country', 'auth_signup',
         'website_sale_require_login', 'product_rental', 'scic',
