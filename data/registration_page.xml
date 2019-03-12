@@ -11,6 +11,16 @@
         <t t-name="website-mine-urbaine">
           <t t-call="website.layout">
             <div id="wrap" class="oe_structure oe_empty">
+              <section class="s_title">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h1 class="text-center">Revendez votre vieux Fairphone 2 à la coopérative<br/></h1>
+                      <h3 class="text-center text-muted">en remplissant le formulaire suivant&amp;nbsp;:</h3>
+                    </div>
+                  </div>
+                </div>
+              </section>
               <section class="container readable o_website_form_builder">
                 <form accept-charset="UTF-8" action="/website_form/" class="s_website_form col-md-12 mt32" data-model_name="res.partner" data-force_action="" data-success_page="" enctype="multipart/form-data" method="post">
                   <div class="o_website_form_fields">
