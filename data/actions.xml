@@ -97,8 +97,6 @@ TAGS = env['account.analytic.tag'].search([('name', 'in', ['EXPL', 'FP2'])])
 
 DESCRIPTION = u'Vente Fairphone 2'
 
-SUPPLIER_TAXES = env['account.tax'].search([('description', '=', 'ACH-EXO-0')])
-
 REPORT_NAME = 'urban_mine.report_autoinvoice'
 
 if record.user_id:
@@ -120,7 +118,7 @@ invoice = env['account.invoice'].create({
         'account_id': PRODUCT.property_account_expense_id.id,
         'analytic_tag_ids': [(6, 0, TAGS.ids)],
         'price_unit': PRODUCT.standard_price,
-        'invoice_line_tax_ids': [(6, 0, SUPPLIER_TAXES.ids)],
+        'invoice_line_tax_ids': [(6, 0, PRODUCT.supplier_taxes_id.ids)],
         })],
     'partner_id': record.partner_id.id,
 })
