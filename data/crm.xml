@@ -18,29 +18,37 @@
 
     <record id="stage2" model="crm.stage">
       <field name="name">En attente de l’appareil [urban-mine: send-label]</field>
-      <field name="requirements">Un coupon, une auto-facture et une étiquette d'expédition ont été générés et envoyé par mail au partenaire : on attend désormais son appareil.</field>
+      <field name="requirements">Une étiquette d'expédition a été générée et envoyée par mail au partenaire lors du passage dans cette colonne : on attend désormais son appareil..</field>
       <field name="team_id" ref="urban_mine.urban_mine_managers"/>
       <field name="sequence">2</field>
     </record>
 
     <record id="stage3" model="crm.stage">
-      <field name="name">Envoi des chèques [urban-mine: payment]</field>
+      <field name="name">Vérification FP à faire</field>
+      <field name="requirements">Vérifier que l'appareil est complet, pas volé, pas dans notre propre base de FP2 !</field>
       <field name="team_id" ref="urban_mine.urban_mine_managers"/>
       <field name="sequence">3</field>
     </record>
 
     <record id="stage4" model="crm.stage">
-      <field name="name">Vente OK</field>
-      <field name="requirements">Appareil complet, pas volé, pas dans notre propre base de FP2 ! </field>
+      <field name="name">Commander les chèques [urban-mine: payment]</field>
+      <field name="requirements">Un email de Bon pour accord contenant une auto-facture et un coupon a été envoyé lors du passage dans cette colonne.</field>
       <field name="team_id" ref="urban_mine.urban_mine_managers"/>
       <field name="sequence">4</field>
     </record>
 
     <record id="stage5" model="crm.stage">
-      <field name="name">Tri effectué</field>
-      <field name="requirements">Pièces analysées et stockées pour réemploi ou envoyées au recyclage.</field>
+      <field name="name">Suivre l'expédition des chèques</field>
+      <field name="requirements">Vérifier ici que les chèques sont bien parvenus au client.</field>
       <field name="team_id" ref="urban_mine.urban_mine_managers"/>
       <field name="sequence">5</field>
+    </record>
+
+    <record id="stage6" model="crm.stage">
+      <field name="name">Vers projet Panne FP</field>
+      <field name="requirements"></field>
+      <field name="team_id" ref="urban_mine.urban_mine_managers"/>
+      <field name="sequence">6</field>
     </record>
 
   </data>
