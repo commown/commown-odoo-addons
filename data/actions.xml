@@ -99,6 +99,8 @@ DESCRIPTION = u'Vente Fairphone 2'
 
 REPORT_NAME = 'urban_mine.report_autoinvoice'
 
+PAYMENT_JOURNAL = env['account.journal'].search([('code', '=', 'RFCV')])
+
 if record.user_id:
     record = record.sudo(record.user_id)
 
@@ -125,6 +127,22 @@ invoice = env['account.invoice'].create({
 })
 
 invoice.action_invoice_open()
+
+if PAYMENT_JOURNAL:
+    method = env['account.payment.method'].search([
+        ('payment_type', '=', 'outbound'),
+        ('code', '=', 'manual'),
+    ])
+    payment = env['account.payment'].create({
+        'partner_id': invoice.partner_id.id,
+        'partner_type': 'supplier',
+        'payment_type': 'outbound',
+        'invoice_ids': [(6, 0, invoice.ids)],
+        'journal_id': PAYMENT_JOURNAL.id,
+        'amount': invoice.residual,
+        'payment_method_id': method.id,
+    })
+    payment.post()
 
 report = env['py3o.report']._get_report_from_name(REPORT_NAME)
 py3o_report = env['py3o.report'].create({'ir_actions_report_xml_id': report.id})
