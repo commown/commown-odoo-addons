@@ -83,7 +83,7 @@ class TestRegistration(TransactionCase):
         report.py3o_template_fallback = 'tests/fake_report.odt'
 
         # Launch test
-        lead.update({'stage_id': self.env.ref('urban_mine.stage3')})
+        lead.update({'stage_id': self.env.ref('urban_mine.stage4')})
 
         # Check results
         invoice = self.env['account.invoice'].search([
