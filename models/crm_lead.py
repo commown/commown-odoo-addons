@@ -11,7 +11,7 @@ from odoo import models, fields, api
 
 from colissimo_utils import ship
 
-LEAD_NAME_RE = re.compile(r'\[(?P<order_num>SO[0-9]+).*')
+LEAD_NAME_RE = re.compile(r'\[(?P<order_num>[^\]]+)\].*')
 
 _logger = logging.getLogger(__name__)
 
