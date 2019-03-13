@@ -20,7 +20,8 @@ lead = env['crm.lead'].create({
         'stage_id': STAGE_ID,
         })
 # Override post-create behaviour that auto-assigns team_id
-lead.update({'team_id': TEAM_ID})
+lead.update({'team_id': TEAM_ID,
+             'name': (u'[COMMOWN-MU-%d] ' % lead.id) + lead.name})
 ]]>
     </field>
   </record>
