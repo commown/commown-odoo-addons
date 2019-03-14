@@ -109,7 +109,12 @@ for so_line in record.order_line:
             'stage_id': stage_id,
             })
         # Override post-create behaviour that auto-assigns team_id
-        lead.update({'team_id': team.id})
+        data = {'team_id': team.id}
+        if ctx['count'] == 1:
+            # shortcut from first opportunity to the sale
+            # (cannot have more than 1 opportunity related to a single sale)
+            data['order_ids'] = [(6, 0, record.ids)]
+        lead.update(data)
     </field>
   </record>
 
