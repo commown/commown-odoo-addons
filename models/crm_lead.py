@@ -49,6 +49,9 @@ class CrmLead(models.Model):
         kwargs = {k[len(prefix):]: v for k, v in self.env.context.items()
                       if k.startswith(prefix)}
 
+        if 'commercial_name' not in kwargs:
+            kwargs['commercial_name'] = self.env.ref('base.main_company').name
+
         match = LEAD_NAME_RE.match(self.name)
         kwargs.setdefault('order_number',
                           match.groupdict()['order_num'] if match else '')
