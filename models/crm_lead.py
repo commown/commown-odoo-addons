@@ -39,6 +39,8 @@ class CrmLead(models.Model):
         """ Generate a new colissimo label based on the information found in
         the context, which names are prefixed by "colissimo_":
 
+        - "colissimo_account" must be set to the login of a keychain account
+          which namespace is colissimo
         - "colissimo_sender_email" must be set to the sender partner's email
         - the other `colissimo_utils.shipping_data` argument names prefixed by
           "colissimo_" if required (see their default value in this function's
@@ -64,7 +66,13 @@ class CrmLead(models.Model):
             kwargs['sender'], kwargs['recipient'] = (
                 kwargs['recipient'], kwargs['sender']
 )
-        meta_data, label_data = ship(**kwargs)
+        account = self.env['keychain.account'].sudo().retrieve([
+            ('namespace', '=', 'colissimo'),
+            ('login', '=', kwargs.pop('account')),
+        ]).ensure_one()
+
+        meta_data, label_data = ship(account.login, account._get_password(),
+                                     **kwargs)
 
         if meta_data and not label_data:
             raise ValueError(json.dumps(meta_data))

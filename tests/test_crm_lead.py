@@ -72,36 +72,47 @@ class CrmLeadTC(TransactionCase):
         })
         with open(osp.join(HERE, 'fake_label.pdf')) as fobj:
             self.fake_label_data = fobj.read()
+        self.env['keychain.account'].create({
+            'namespace': 'colissimo',
+            'name': 'Colissimo standard',
+            'technical_name': 'colissmo-std',
+            'login': 'ColissimoLogin',
+            'clear_password': 'test',
+        })
         self.fake_colissimo_data = {
-            'colissimo_login': 'ColissimoLogin',
-            'colissimo_password': 'ColissimoPassword',
+            'colissimo_account': 'ColissimoLogin',
             'colissimo_sender_email': 'test@test.com',
-            'colissimo_commercial_name': 'CommercialName',
+            'colissimo_weight': 0.5,
         }
 
     def _country(self, code):
         return self.env['res.country'].search([('code', '=', code)])
 
     def test_shipping_data_product_code(self):
-        base_args = [self.env['res.partner'], self.lead.partner_id,
-                     'SO00000', 'Commown']
+        base_kwargs = {
+            'sender': self.env['res.partner'],
+            'recipient': self.lead.partner_id,
+            'order_number': u'SO00000',
+            'commercial_name': u'Commown',
+            'weight': 0.5,
+        }
 
         # French label
-        data = shipping_data(*base_args)
+        data = shipping_data(**base_kwargs)
         self.assertEqual(data['letter']['service']['productCode'], 'DOS')
 
         # French return label
-        data = shipping_data(*(base_args + [True]))
+        data = shipping_data(is_return=True, **base_kwargs)
         self.assertEqual(data['letter']['service']['productCode'], 'CORE')
 
         # International label
         self.lead.partner_id.country_id = self._country('BE')
-        data = shipping_data(*base_args)
+        data = shipping_data(**base_kwargs)
         self.assertEqual(data['letter']['service']['productCode'], 'COLI')
 
         # International Return label
         self.lead.partner_id.country_id = self._country('BE')
-        data = shipping_data(*(base_args + [True]))
+        data = shipping_data(is_return=True, **base_kwargs)
         self.assertEqual(data['letter']['service']['productCode'], 'CORI')
 
     def test_create_colissimo_fairphone_label(self):
@@ -140,9 +151,10 @@ class CrmLeadTC(TransactionCase):
         self.assertEqual(lead.expedition_ref, '8R0000000000')
         self.assertEqual(mocked_ship.call_count, 1)
         # Sender is lead partner
-        self.assertEqual(mocked_ship.call_args[0][2], self.lead.partner_id)
+        kwargs = mocked_ship.call_args[1]
+        self.assertEqual(kwargs['sender'], self.lead.partner_id)
         # is_return argument is True
-        self.assertIs(mocked_ship.call_args[0][6], True)
+        self.assertIs(kwargs['is_return'], True)
 
     def test_colissimo_fairphone_label_and_update(self):
         fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}
