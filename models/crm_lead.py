@@ -36,24 +36,37 @@ class CrmLead(models.Model):
 
     @api.multi
     def _create_colissimo_fairphone_label(self):
+        """ Generate a new colissimo label based on the information found in
+        the context, which names are prefixed by "colissimo_":
+
+        - "colissimo_sender_email" must be set to the sender partner's email
+        - the other `colissimo_utils.shipping_data` argument names prefixed by
+          "colissimo_" if required (see their default value in this function's
+          docstring).
+        """
         self.ensure_one()
-        login = self.env.context['colissimo_login']
-        password = self.env.context['colissimo_password']
-        sender_email = self.env.context['colissimo_sender_email']
-        commercial_name = self.env.context['colissimo_commercial_name']
-        is_return = self.env.context.get('colissimo_is_return', False)
-        sender = self.env['res.partner'].search([('email', '=', sender_email)])
+        prefix = 'colissimo_'
+        kwargs = {k[len(prefix):]: v for k, v in self.env.context.items()
+                      if k.startswith(prefix)}
+
         match = LEAD_NAME_RE.match(self.name)
-        order_number = match.groupdict()['order_num'] if match else ''
-        recipient = self.partner_id
-        if is_return:
-            sender, recipient = recipient, sender
-        meta_data, label_data = ship(
-            login, password, sender, recipient, order_number,
-            commercial_name, is_return)
+        kwargs.setdefault('order_number',
+                          match.groupdict()['order_num'] if match else '')
+
+        kwargs['sender'] = self.env['res.partner'].search([
+            ('email', '=', kwargs.pop('sender_email')),
+        ])
+        kwargs['recipient'] = self.partner_id
+        if kwargs.get('is_return', False):
+            kwargs['sender'], kwargs['recipient'] = (
+                kwargs['recipient'], kwargs['sender']
+)
+        meta_data, label_data = ship(**kwargs)
+
         if meta_data and not label_data:
             raise ValueError(json.dumps(meta_data))
         assert meta_data and label_data
+
         self.expedition_ref = meta_data['labelResponse']['parcelNumber']
         self.expedition_date = datetime.today()
         return self.env['ir.attachment'].create({

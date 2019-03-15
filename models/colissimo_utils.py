@@ -27,14 +27,6 @@ def normalize_phone(phone_number, country_code):
     return ''
 
 
-def parcel_data():
-    "Corresponds to a Faiphone parcel right now, to be generalized when needed"
-    return {
-        'weight': 0.5,              # in kg
-        'insuranceValue': 450*100,  # in euro cents
-        }
-
-
 def delivery_data(partner):
     """ Return delivery data for given partner, taking into account:
 
@@ -95,7 +87,8 @@ def delivery_data(partner):
 
 
 def shipping_data(sender, recipient, order_number, commercial_name,
-                  is_return=False, deposit_date=None, format='PDF_A4_300dpi'):
+                  weight, insurance_value=0., is_return=False,
+                  deposit_date=None, format='PDF_A4_300dpi'):
     """ Return colissimo WS shipping data for given arguments.
 
     The `sender` and `recipient` are odoo res.partner objects.
@@ -104,6 +97,11 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     sender and recipient parts).
 
     The `commercial_name` argument is used in recipient email notifications.
+
+    The `weight` argument is the parcel weight in kg.
+
+    The `insurance_value` argument is the insurance value in euro
+    (None, the default value, means no insurance).
 
     The `is_return` argument is used to indicate the parcel is sent back from
     the sender to the recipient.
@@ -125,7 +123,8 @@ def shipping_data(sender, recipient, order_number, commercial_name,
         'commercialName': commercial_name,
     }
 
-    parcel = parcel_data()
+    parcel = {'weight': weight,
+              'insuranceValue': int(insurance_value * 100)}
 
     # Handle post office destination: must figure in delivery's partner
     # "comment" field: "[BP] <bp_id>" (where bp_id is a 6-digit number)
@@ -184,11 +183,9 @@ def parse_multipart(data, boundary):
     return meta_data, label_data
 
 
-def ship(login, password, sender, recipient, order_number,
-         commercial_name, is_return=False, debug=False):
+def ship(login, password, debug=False, **kwargs):
     url = BASE_URL + ('/checkGenerateLabel' if debug else '/generateLabel')
-    data = shipping_data(sender, recipient, order_number, commercial_name,
-                         is_return)
+    data = shipping_data(**kwargs)
     data.update({'contractNumber': login, 'password': password})
     _logger.debug('Shipping data: %s', data)
     resp = requests.post(url, json=data)
