@@ -43,16 +43,10 @@ lead.update({'team_id': TEAM_ID,
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code"><![CDATA[
-account = env['keychain.account'].sudo().retrieve([
-    ('namespace', '=', 'colissimo'),
-    ('login', '=', '970066'),
-    ])[0]
-
 record = record.with_context({
-            "colissimo_login": account.login,
-            "colissimo_password": account._get_password(),
+            "colissimo_account": '970066',
             "colissimo_sender_email": "elie@commown.fr",
-            "colissimo_commercial_name": "Commown",
+            "colissimo_weight": 0.5,
             "colissimo_is_return": True,
             "colissimo_force_single_label": True,
             })

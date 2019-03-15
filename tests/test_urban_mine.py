@@ -63,7 +63,7 @@ class TestRegistration(TransactionCase):
         # - the expedition reference is set on the lead
         # - the `is_return` arg of the ship function call was `True`
         self.assertEqual(mocked_ship.call_count, 1)
-        self.assertIs(mocked_ship.call_args[0][6], True)
+        self.assertIs(mocked_ship.call_args[1]['is_return'], True)
         # A message attached to the lead was sent, with the PDF attached
         self.assertTrue(lead.message_ids)
         last_note_msg = self.get_last_note_message(lead)
