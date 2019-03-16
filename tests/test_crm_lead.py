@@ -5,9 +5,11 @@ from email.MIMEBase import MIMEBase
 from email import encoders
 from datetime import datetime
 from base64 import b64decode
+from StringIO import StringIO
 
 import requests
 import mock
+from PyPDF2 import PdfFileReader # how to declare test dependencies in odoo?
 
 from odoo.exceptions import MissingError
 from odoo.tests.common import TransactionCase, at_install, post_install
@@ -193,3 +195,12 @@ class CrmLeadTC(TransactionCase):
 
         all_labels = leads.colissimo_fairphone_labels()
         self.assertEqual(all_labels.name, 'colissimo.pdf')
+        pdf = PdfFileReader(StringIO(b64decode(all_labels.datas)))
+        self.assertEqual(pdf.getNumPages(), 2)
+
+        lead = self.lead.copy({'name': '[Test single]'}).with_context(
+            self.fake_colissimo_data, colissimo_force_single_label=True)
+        with mock.patch.object(requests, 'post', return_value=fake_resp):
+            label = lead.colissimo_fairphone_labels()
+
+        self.assertEqual((b64decode(label.datas)), self.fake_label_data)

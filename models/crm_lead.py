@@ -122,7 +122,11 @@ class CrmLead(models.Model):
     def colissimo_fairphone_labels(self):
         if (len(self) == 1 and
                 self.env.context.get('colissimo_force_single_label', False)):
-            return self.colissimo_fairphone_label()
+            # Remove colissimo_force_single_label from context as lower-level
+            # shippping functions do not expect it
+            context = dict(self.env.context)
+            context.pop('colissimo_force_single_label')
+            return self.with_context(context).colissimo_fairphone_label()
 
         paths = []
 
