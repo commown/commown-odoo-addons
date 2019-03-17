@@ -49,7 +49,7 @@ class CrmLead(models.Model):
         self.ensure_one()
         prefix = 'colissimo_'
         kwargs = {k[len(prefix):]: v for k, v in self.env.context.items()
-                      if k.startswith(prefix)}
+                  if k.startswith(prefix)}
 
         if 'commercial_name' not in kwargs:
             kwargs['commercial_name'] = self.env.ref('base.main_company').name
@@ -65,7 +65,7 @@ class CrmLead(models.Model):
         if kwargs.get('is_return', False):
             kwargs['sender'], kwargs['recipient'] = (
                 kwargs['recipient'], kwargs['sender']
-)
+            )
         account = self.env['keychain.account'].sudo().retrieve([
             ('namespace', '=', 'colissimo'),
             ('login', '=', kwargs.pop('account')),
