@@ -9,7 +9,6 @@ from tempfile import gettempdir, mktemp
 
 from odoo import models, fields, api
 
-from colissimo_utils import ship
 
 LEAD_NAME_RE = re.compile(r'\[(?P<order_num>[^\]]+)\].*')
 
@@ -35,44 +34,23 @@ class CrmLead(models.Model):
         'mail.template', string='Custom email model for this lead')
 
     @api.multi
-    def _create_colissimo_fairphone_label(self):
-        """ Generate a new colissimo label based on the information found in
-        the context, which names are prefixed by "colissimo_":
-
-        - "colissimo_account" must be set to the login of a keychain account
-          which namespace is colissimo
-        - "colissimo_sender_email" must be set to the sender partner's email
-        - the other `colissimo_utils.shipping_data` argument names prefixed by
-          "colissimo_" if required (see their default value in this function's
-          docstring).
+    def _create_parcel_label(self, parcel_name, account, sender, recipient,
+                             ref):
+        """ Generate a new label from following arguments:
+        - parcel_name: the name of a ParcelType entity
+        - account: the login of a keychain account which namespace is colissimo
+        - sender: the sender partner
+        - recipient: the recipient partner
+        - ref: a reference to be printed on the parcel
         """
         self.ensure_one()
-        prefix = 'colissimo_'
-        kwargs = {k[len(prefix):]: v for k, v in self.env.context.items()
-                  if k.startswith(prefix)}
 
-        if 'commercial_name' not in kwargs:
-            kwargs['commercial_name'] = self.env.ref('base.main_company').name
-
-        match = LEAD_NAME_RE.match(self.name)
-        kwargs.setdefault('order_number',
-                          match.groupdict()['order_num'] if match else '')
-
-        kwargs['sender'] = self.env['res.partner'].search([
-            ('email', '=', kwargs.pop('sender_email')),
+        parcel_type = self.env['commown.parcel.type'].search([
+            ('name', '=', parcel_name),
         ])
-        kwargs['recipient'] = self.partner_id
-        if kwargs.get('is_return', False):
-            kwargs['sender'], kwargs['recipient'] = (
-                kwargs['recipient'], kwargs['sender']
-            )
-        account = self.env['keychain.account'].sudo().retrieve([
-            ('namespace', '=', 'colissimo'),
-            ('login', '=', kwargs.pop('account')),
-        ]).ensure_one()
 
-        meta_data, label_data = ship(account.login, account._get_password(),
-                                     **kwargs)
+        meta_data, label_data = parcel_type.colissimo_label(
+            account, sender, recipient, ref)
 
         if meta_data and not label_data:
             raise ValueError(json.dumps(meta_data))
@@ -81,57 +59,54 @@ class CrmLead(models.Model):
         self.expedition_ref = meta_data['labelResponse']['parcelNumber']
         self.expedition_date = datetime.today()
         return self.env['ir.attachment'].create({
-            'res_model': 'crm.lead',
+            'res_model': self._name,
             'res_id': self.id,
             'mimetype': u'application/pdf',
             'datas': b64encode(label_data),
             'datas_fname': self.expedition_ref + '.pdf',
-            'name': 'colissimo.pdf',
+            'name': parcel_name + '.pdf',
             'public': False,
             'type': 'binary',
         })
 
-    def write(self, vals, **kwargs):
-        "Remove the colissimo label attachment when expedition_ref is emptied."
-        if 'expedition_ref' in vals and not vals['expedition_ref']:
-            domain = [
-                ('res_model', '=', 'crm.lead'),
-                ('res_id', '=', self.id),
-                ('name', '=', 'colissimo.pdf'),
-            ]
-            for att in self.env['ir.attachment'].search(domain):
-                _logger.warning('REMOVE att %s of lead %s', att.id, self.id)
-                att.unlink()
-        return super(CrmLead, self).write(vals, **kwargs)
-
     @api.multi
-    def colissimo_fairphone_label(self):
-        " Return current label if expedition_ref is set, or create a new one "
+    def label_attachment(self, parcel_name):
         self.ensure_one()
         domain = [
-            ('res_model', '=', 'crm.lead'),
+            ('res_model', '=', self._name),
             ('res_id', '=', self.id),
-            ('name', '=', 'colissimo.pdf'),
+            ('name', '=', parcel_name + u'.pdf'),
             ]
-        current = self.env['ir.attachment'].search(domain)
-        if not current:
-            current = self._create_colissimo_fairphone_label()
-        return current[0]
+        return self.env['ir.attachment'].search(domain)
 
     @api.multi
-    def colissimo_fairphone_labels(self):
-        if (len(self) == 1 and
-                self.env.context.get('colissimo_force_single_label', False)):
-            # Remove colissimo_force_single_label from context as lower-level
-            # shippping functions do not expect it
-            context = dict(self.env.context)
-            context.pop('colissimo_force_single_label')
-            return self.with_context(context).colissimo_fairphone_label()
+    def _get_or_create_label(self, parcel_name, *args, **kwargs):
+        " Return current label if expedition_ref is set, or create a new one "
+        self.ensure_one()
+        return (self.label_attachment(parcel_name)
+                or self._create_parcel_label(parcel_name, *args, **kwargs))
+
+    @api.multi
+    def get_label_ref(self):
+        self.ensure_one()
+        match = LEAD_NAME_RE.match(self.name)
+        return match.groupdict()['order_num'] if match else ''
+
+    @api.multi
+    def parcel_labels(self, parcel_name, account, sender, recipient,
+                      force_single=False, ref=None):
+
+        if len(self) == 1 and force_single:
+            ref = ref if ref is not None else self.get_label_ref()
+            return self._get_or_create_label(
+                parcel_name, account, sender, recipient, ref)
 
         paths = []
 
         for lead in self:
-            label = lead.colissimo_fairphone_label()
+            ref = ref if ref is not None else lead.get_label_ref()
+            label = lead._get_or_create_label(
+                parcel_name, account, sender, recipient, ref)
             paths.append(label._full_path(label.store_fname))
 
         fpath = os.path.join(gettempdir(), mktemp(suffix=".pdf"))
@@ -155,7 +130,7 @@ class CrmLead(models.Model):
             sales = self[0].team_id
             attrs = {'res_model': 'crm.team',
                      'res_id': sales.id,
-                     'name': 'colissimo.pdf',
+                     'name': parcel_name + u'.pdf',
                      }
             domain = [(k, '=', v) for k, v in attrs.items()]
             for att in self.env['ir.attachment'].search(domain):

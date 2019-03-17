@@ -9,9 +9,8 @@ from StringIO import StringIO
 
 import requests
 import mock
-from PyPDF2 import PdfFileReader # how to declare test dependencies in odoo?
+from PyPDF2 import PdfFileReader  # how to declare test dependencies in odoo?
 
-from odoo.exceptions import MissingError
 from odoo.tests.common import TransactionCase, at_install, post_install
 
 from odoo.addons.commown_shipping.models.colissimo_utils import shipping_data
@@ -74,18 +73,16 @@ class CrmLeadTC(TransactionCase):
         })
         with open(osp.join(HERE, 'fake_label.pdf')) as fobj:
             self.fake_label_data = fobj.read()
-        self.env['keychain.account'].create({
+        self.shipping_account = self.env['keychain.account'].create({
             'namespace': 'colissimo',
             'name': 'Colissimo standard',
             'technical_name': 'colissmo-std',
             'login': 'ColissimoLogin',
             'clear_password': 'test',
         })
-        self.fake_colissimo_data = {
-            'colissimo_account': 'ColissimoLogin',
-            'colissimo_sender_email': 'test@test.com',
-            'colissimo_weight': 0.5,
-        }
+        self.parcel_type = self.env['commown.parcel.type'].create({
+            'name': 'fp2-ins450', 'weight': 0.5, 'insurance_value': 450,
+        })
 
     def _country(self, code):
         return self.env['res.country'].search([('code', '=', code)])
@@ -117,13 +114,17 @@ class CrmLeadTC(TransactionCase):
         data = shipping_data(is_return=True, **base_kwargs)
         self.assertEqual(data['letter']['service']['productCode'], 'CORI')
 
-    def test_create_colissimo_fairphone_label(self):
+    def test_create_parcel_label(self):
         fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}
         self.fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
+        lead = self.lead
 
-        lead = self.lead.with_context(self.fake_colissimo_data)
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            lead._create_colissimo_fairphone_label()
+            lead._create_parcel_label(self.parcel_type.name,
+                                      self.shipping_account.login,
+                                      self.env['res.partner'],  # empty sender!
+                                      lead.partner_id,
+                                      lead.get_label_ref())
 
         self.assertEqual(lead.expedition_ref, '6X0000000000')
         self.assertEqual(lead.expedition_date,
@@ -134,73 +135,40 @@ class CrmLeadTC(TransactionCase):
         self.assertEqual(len(attachments), 1)
         att = attachments[0]
         self.assertEqual(att.datas_fname, '6X0000000000.pdf')
-        self.assertEqual(att.name, 'colissimo.pdf')
+        self.assertEqual(att.name, self.parcel_type.name + '.pdf')
         if b64decode(att.datas) != self.fake_label_data:
             self.fail('incorrect pdf label')
 
-    def test_create_colissimo_fairphone_return_label(self):
-        " Only check the `ship` function was called with the right arguments. "
-        fake_meta_data = {'labelResponse': {'parcelNumber': '8R0000000000'}}
-
-        colissimo_data = self.fake_colissimo_data.copy()
-        colissimo_data['colissimo_is_return'] = True
-        lead = self.lead.with_context(colissimo_data)
-        with mock.patch(
-                'odoo.addons.commown_shipping.models.crm_lead.ship',
-                return_value=(fake_meta_data, 'xxx')) as mocked_ship:
-            lead._create_colissimo_fairphone_label()
-
-        self.assertEqual(lead.expedition_ref, '8R0000000000')
-        self.assertEqual(mocked_ship.call_count, 1)
-        # Sender is lead partner
-        kwargs = mocked_ship.call_args[1]
-        self.assertEqual(kwargs['sender'], self.lead.partner_id)
-        # is_return argument is True
-        self.assertIs(kwargs['is_return'], True)
-
-    def test_colissimo_fairphone_label_and_update(self):
-        fake_meta_data = {'labelResponse': {'parcelNumber': '6X0000000000'}}
-        self.fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
-
-        lead = self.lead.with_context(self.fake_colissimo_data)
-        assert lead.expedition_ref is False
-        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            att1 = lead.colissimo_fairphone_label()
-            self.assertEqual(att1.datas_fname, '6X0000000000.pdf')
-            self.assertEqual(lead.expedition_ref, '6X0000000000')
-
-            att2 = lead.colissimo_fairphone_label()
-            self.assertEqual(att1, att2)
-
-            lead.write({'expedition_ref': ''})
-            with self.assertRaises(MissingError):
-                att1.name
-
-    def test_colissimo_fairphone_labels(self):
+    def test_parcel_labels(self):
         leads = self.env['crm.lead']
+        base_args = [self.parcel_type.name,
+                     self.shipping_account.login,
+                     self.env['res.partner'],  # empty sender!
+                     self.lead.partner_id,
+                     ]
+
         for num in range(5):
             ctx = {'num': num}
-            lead = self.lead.copy(
-                {'name': '[SO%(num)05d] Lead num %(num)d' % ctx}
-            ).with_context(self.fake_colissimo_data)
+            lead = self.lead.copy({'name': '[SO%(num)05d] Lead %(num)d' % ctx})
 
             fake_meta_data = {'labelResponse': {
                 'parcelNumber': '6X%(num)010d' % ctx}}
             fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
+            args = base_args + [lead.get_label_ref()]
 
             with mock.patch.object(requests, 'post', return_value=fake_resp):
-                lead._create_colissimo_fairphone_label()
+                lead._get_or_create_label(*args)
 
             leads += lead
 
-        all_labels = leads.colissimo_fairphone_labels()
-        self.assertEqual(all_labels.name, 'colissimo.pdf')
+        all_labels = leads.parcel_labels(*base_args)
+
+        self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')
         pdf = PdfFileReader(StringIO(b64decode(all_labels.datas)))
         self.assertEqual(pdf.getNumPages(), 2)
 
-        lead = self.lead.copy({'name': '[Test single]'}).with_context(
-            self.fake_colissimo_data, colissimo_force_single_label=True)
+        lead = self.lead.copy({'name': '[Test single]'})
         with mock.patch.object(requests, 'post', return_value=fake_resp):
-            label = lead.colissimo_fairphone_labels()
+            label = lead.parcel_labels(*base_args, force_single=True)
 
         self.assertEqual((b64decode(label.datas)), self.fake_label_data)
