@@ -227,20 +227,12 @@ if 'uid' in env or object.send_email_on_delivery:
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">
-colissimo_data = {
-            'colissimo_account: 'ColissimoLogin',
-            'colissimo_password': 'ColissimoPassword',
-            'colissimo_sender_email': 'test@test.com',
-            'colissimo_commercial_name': 'CommercialName',
-            'colissimo_weight': 0.5,
-            'colissimo_insurance_value': 450.,
-        }
-
-attachment = records.with_context(colissimo_data).colissimo_fairphone_labels()
+sender = env['res.partner'].search([('email', '=', 'test@test.com')]).ensure_one()
+label = record.parcel_labels('parcel-name', 'keychain-account', sender, record.partner_id)
 
 action = {
     "type": "ir.actions.act_url",
-    "url": attachment.website_url,
+    "url": label.website_url,
     "target": "new",
     }
       </field>
