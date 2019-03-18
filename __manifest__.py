@@ -9,6 +9,7 @@
     'website': "https://commown.fr",
     'depends': [
         'crm',
+        'project_issue',
         'keychain',
         'partner_firstname',
     ],
