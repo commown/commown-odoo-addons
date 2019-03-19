@@ -23,22 +23,17 @@ class CommownShippingMixin(models.AbstractModel):
     _shipping_parent_rel = None
 
     @api.multi
-    def _create_parcel_label(self, parcel_name, account, sender, recipient,
-                             ref):
+    def _create_parcel_label(self, parcel, account, sender, recipient, ref):
         """ Generate a new label from following arguments:
-        - parcel_name: the name of a ParcelType entity
-        - account: the login of a keychain account which namespace is colissimo
-        - sender: the sender partner
-        - recipient: the recipient partner
-        - ref: a reference to be printed on the parcel
+        - parcel: a commown.parcel.type entity
+        - account: a keychain.account entity which namespace is "colissimo"
+        - sender: the sender res.partner entity
+        - recipient: the recipient res.partner entity
+        - ref: a string reference to be printed on the parcel
         """
         self.ensure_one()
 
-        parcel_type = self.env['commown.parcel.type'].search([
-            ('name', '=', parcel_name),
-        ])
-
-        meta_data, label_data = parcel_type.colissimo_label(
+        meta_data, label_data = parcel.colissimo_label(
             account, sender, recipient, ref)
 
         if meta_data and not label_data:
@@ -53,27 +48,27 @@ class CommownShippingMixin(models.AbstractModel):
             'mimetype': u'application/pdf',
             'datas': b64encode(label_data),
             'datas_fname': self.expedition_ref + '.pdf',
-            'name': parcel_name + '.pdf',
+            'name': parcel.name + '.pdf',
             'public': False,
             'type': 'binary',
         })
 
     @api.multi
-    def label_attachment(self, parcel_name):
+    def label_attachment(self, parcel):
         self.ensure_one()
         domain = [
             ('res_model', '=', self._name),
             ('res_id', '=', self.id),
-            ('name', '=', parcel_name + u'.pdf'),
+            ('name', '=', parcel.name + u'.pdf'),
             ]
         return self.env['ir.attachment'].search(domain)
 
     @api.multi
-    def _get_or_create_label(self, parcel_name, *args, **kwargs):
+    def _get_or_create_label(self, parcel, *args, **kwargs):
         " Return current label if expedition_ref is set, or create a new one "
         self.ensure_one()
-        return (self.label_attachment(parcel_name)
-                or self._create_parcel_label(parcel_name, *args, **kwargs))
+        return (self.label_attachment(parcel)
+                or self._create_parcel_label(parcel, *args, **kwargs))
 
     @api.multi
     def get_label_ref(self):
@@ -82,20 +77,28 @@ class CommownShippingMixin(models.AbstractModel):
         return match.groupdict()['ref'] if match else ''
 
     @api.multi
-    def parcel_labels(self, parcel_name, account, sender, recipient,
+    def parcel_labels(self, parcel_name, account_name, sender,
                       force_single=False, ref=None):
+
+        parcel = self.env['commown.parcel.type'].search([
+            ('technical_name', '=', parcel_name),
+        ]).ensure_one()
+
+        account = self.env['keychain.account'].search([
+            ('technical_name', '=', account_name),
+        ]).ensure_one()
 
         if len(self) == 1 and force_single:
             ref = ref if ref is not None else self.get_label_ref()
             return self._get_or_create_label(
-                parcel_name, account, sender, recipient, ref)
+                parcel, account, sender, self.partner_id, ref)
 
         paths = []
 
         for lead in self:
             ref = ref if ref is not None else lead.get_label_ref()
             label = lead._get_or_create_label(
-                parcel_name, account, sender, recipient, ref)
+                parcel, account, sender, lead.partner_id, ref)
             paths.append(label._full_path(label.store_fname))
 
         fpath = os.path.join(gettempdir(), mktemp(suffix=".pdf"))
@@ -119,7 +122,7 @@ class CommownShippingMixin(models.AbstractModel):
             parent = getattr(self[0], self._shipping_parent_rel)
             attrs = {'res_model': parent._name,
                      'res_id': parent.id,
-                     'name': parcel_name + u'.pdf',
+                     'name': parcel.name + u'.pdf',
                      }
             domain = [(k, '=', v) for k, v in attrs.items()]
             for att in self.env['ir.attachment'].search(domain):

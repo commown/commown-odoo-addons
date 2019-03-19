@@ -1,0 +1,59 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="action_print_outward_fp2_label_lead" model="ir.actions.server">
+      <field name="name">[commown] Print Fairphone parcel outward label(s)</field>
+      <field name="model_id" ref="commown.model_crm_lead"/>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code">
+sender = env['res.partner'].search([('email', '=', 'elie@commown.fr')]).ensure_one()
+label = record.parcel_labels('fp2-outward-ins300', 'colissimo-970066', sender)
+
+action = {
+    "type": "ir.actions.act_url",
+    "url": label.website_url,
+    "target": "new",
+    }
+      </field>
+    </record>
+
+    <record id="action_print_outward_fp2_label_issue" model="ir.actions.server">
+      <field name="name">[commown] Print Fairphone parcel outward label(s)</field>
+      <field name="model_id" ref="commown.model_project_issue"/>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code">
+sender = env['res.partner'].search([('email', '=', 'elie@commown.fr')]).ensure_one()
+label = record.parcel_labels('fp2-outward-ins300', 'colissimo-970066', sender)
+
+action = {
+    "type": "ir.actions.act_url",
+    "url": label.website_url,
+    "target": "new",
+    }
+      </field>
+    </record>
+
+    <record id="action_print_return_fp2_label_issue" model="ir.actions.server">
+      <field name="name">[commown] Print Fairphone parcel return label</field>
+      <field name="model_id" ref="commown.model_project_issue"/>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code">
+sender = env['res.partner'].search([('email', '=', 'elie@commown.fr')]).ensure_one()
+label = record.parcel_labels('fp2-return-ins300', 'colissimo-970066', sender,
+                             force_single=True)
+
+action = {
+    "type": "ir.actions.act_url",
+    "url": label.website_url,
+    "target": "new",
+    }
+      </field>
+    </record>
+
+  </data>
+
+</odoo>

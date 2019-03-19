@@ -10,19 +10,29 @@ class ParcelType(models.Model):
     _description = 'Parcel description'
 
     name = fields.Char('Parcel name', required=True, index=True)
+    technical_name = fields.Char(
+        'Parcel technical name', required=True, index=True)
     weight = fields.Float('Weight (kg)', required=True)
     insurance_value = fields.Float(
         'Insurance value (€)', required=True, default=0.)
     is_return = fields.Boolean('Return parcel', required=True, default=False)
 
     _sql_constraints = [
-        ('uniq_name', 'UNIQUE (name)', 'Parcel names must be unique.'),
+        ('uniq_technical_name', 'UNIQUE (technical_name)',
+         'Parcel technical names must be unique.'),
         ('check_weight', 'check(weight > 0)', 'The weight must be > 0!'),
         ('check_insurance_value', 'check(insurance_value >= 0)',
          'Insurance value must be >= 0!'),
     ]
 
-    def colissimo_label(self, account, sender, recipient, reference=''):
+    def colissimo_label(self, account, sender, recipient, ref=''):
+        """ Return the meta data and the PDF data of a colissimo label from:
+
+        - account: a keychain.account entity which namespace is "colissimo"
+        - sender: the sender res.partner entity
+        - recipient: the recipient res.partner entity
+        - ref: a string reference to be printed on the parcel
+        """
         self.ensure_one()
 
         commercial_name = self.env.ref('base.main_company').name
@@ -30,16 +40,11 @@ class ParcelType(models.Model):
         if self.is_return:
             sender, recipient = recipient, sender
 
-        keychain_account = self.env['keychain.account'].sudo().retrieve([
-            ('namespace', '=', 'colissimo'),
-            ('login', '=', account),
-        ]).ensure_one()
-
-        return ship(keychain_account.login,
-                    keychain_account._get_password(),
+        return ship(account.login,
+                    account._get_password(),
                     sender=sender,
                     recipient=recipient,
-                    order_number=reference,
+                    order_number=ref,
                     commercial_name=commercial_name,
                     weight=self.weight,
                     insurance_value=self.insurance_value,
