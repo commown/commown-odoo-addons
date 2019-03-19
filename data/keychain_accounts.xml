@@ -2,7 +2,7 @@
 
   <data noupdate="1">
 
-    <record id="colissimo-std-account" model="model_keychain_account">
+    <record id="colissimo-std-account" model="keychain.account">
       <field name="namespace">colissimo</field>
       <field name="name">Colissimo standard</field>
       <field name="technical_name">colissimo-970066</field>
@@ -10,7 +10,7 @@
       <field name="clear_password">FAKE</field>
     </record>
 
-    <record id="colissimo-support-account" model="model_keychain_account">
+    <record id="colissimo-support-account" model="keychain.account">
       <field name="namespace">colissimo</field>
       <field name="name">Colissimo SAV</field>
       <field name="technical_name">colissimo-850952</field>
