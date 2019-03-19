@@ -17,20 +17,13 @@ class TestRegistration(TransactionCase):
         self.team = self.env.ref('urban_mine.urban_mine_managers')
         self.partner = self.env['res.partner'].create({
             'name': 'Elie A',
-            'email': 'contact@commown.fr',
+            'email': 'elie@commown.fr',
             'street': '2 rue de Rome',
             'zip': '67000',
             'city': 'Strasbourg',
             'country_id': self.env.ref('base.fr').id,
             'supplier': True,
             'from_urban_mine': True,
-        })
-        self.colissimo_account = self.env['keychain.account'].create({
-            'namespace': 'colissimo',
-            'name': 'Colissimo standard',
-            'technical_name': 'colissmo-std',
-            'login': '970066',
-            'clear_password': 'test',
         })
 
     def get_leads(self, partner_id):
@@ -55,7 +48,7 @@ class TestRegistration(TransactionCase):
             fake_label_data = fobj.read()
 
         with mock.patch(
-                'odoo.addons.commown_shipping.models.crm_lead.ship',
+                'odoo.addons.commown_shipping.models.parcel.ship',
                 return_value=(fake_meta_data, fake_label_data)) as mocked_ship:
             lead.update({'stage_id': self.env.ref('urban_mine.stage2')})
 
