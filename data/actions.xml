@@ -4,7 +4,7 @@
 
     <record id="action_print_outward_fp2_label_lead" model="ir.actions.server">
       <field name="name">[commown] Print Fairphone parcel outward label(s)</field>
-      <field name="model_id" ref="commown.model_crm_lead"/>
+      <field name="model_id" ref="model_crm_lead"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">
@@ -21,7 +21,7 @@ action = {
 
     <record id="action_print_outward_fp2_label_issue" model="ir.actions.server">
       <field name="name">[commown] Print Fairphone parcel outward label(s)</field>
-      <field name="model_id" ref="commown.model_project_issue"/>
+      <field name="model_id" ref="model_project_issue"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">
@@ -38,7 +38,7 @@ action = {
 
     <record id="action_print_return_fp2_label_issue" model="ir.actions.server">
       <field name="name">[commown] Print Fairphone parcel return label</field>
-      <field name="model_id" ref="commown.model_project_issue"/>
+      <field name="model_id" ref="model_project_issue"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">

@@ -65,9 +65,7 @@ class BaseShippingTC(TransactionCase):
             'login': 'ColissimoLogin',
             'clear_password': 'test',
         })
-        self.parcel_type = self.env['commown.parcel.type'].create({
-            'name': 'fp2-ins450', 'weight': 0.5, 'insurance_value': 450,
-            })
+        self.parcel_type = self.env.ref('commown_shipping.fp2-outward-ins300')
 
     def assertEqualFakeLabel(self, ir_attachment):
         self.assertEqual(b64decode(ir_attachment.datas), self.fake_label_data)

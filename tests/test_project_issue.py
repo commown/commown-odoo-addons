@@ -17,8 +17,8 @@ class ProjectIssueTC(BaseShippingTC):
 
     def test_parcel_labels(self):
         issues = self.env['project.issue']
-        base_args = [self.parcel_type.name,
-                     self.shipping_account.login,
+        base_args = [self.parcel_type,
+                     self.shipping_account,
                      self.env['res.partner'],  # empty sender!
                      self.issue.partner_id,
                      ]
@@ -36,13 +36,22 @@ class ProjectIssueTC(BaseShippingTC):
 
             issues += issue
 
-        all_labels = issues.parcel_labels(*base_args)
+        all_labels = issues.parcel_labels(
+            self.parcel_type.technical_name,
+            self.shipping_account.technical_name,
+            self.env['res.partner'],  # empty sender!
+            )
 
         self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')
         self.assertEqual(pdf_page_num(all_labels), 2)
 
         issue = orig_issue.copy({'name': '[Test single]'})
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            label = issue.parcel_labels(*base_args, force_single=True)
+            label = issue.parcel_labels(
+                self.parcel_type.technical_name,
+                self.shipping_account.technical_name,
+                self.env['res.partner'],  # empty sender!
+                force_single=True,
+                )
 
         self.assertEqualFakeLabel(label)

@@ -59,8 +59,8 @@ class CrmLeadTC(BaseShippingTC):
         lead = self.lead
 
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            lead._create_parcel_label(self.parcel_type.name,
-                                      self.shipping_account.login,
+            lead._create_parcel_label(self.parcel_type,
+                                      self.shipping_account,
                                       self.env['res.partner'],  # empty sender!
                                       lead.partner_id,
                                       lead.get_label_ref())
@@ -79,8 +79,8 @@ class CrmLeadTC(BaseShippingTC):
 
     def test_parcel_labels(self):
         leads = self.env['crm.lead']
-        base_args = [self.parcel_type.name,
-                     self.shipping_account.login,
+        base_args = [self.parcel_type,
+                     self.shipping_account,
                      self.env['res.partner'],  # empty sender!
                      self.lead.partner_id,
                      ]
@@ -94,13 +94,21 @@ class CrmLeadTC(BaseShippingTC):
                 lead._get_or_create_label(*args)
             leads += lead
 
-        all_labels = leads.parcel_labels(*base_args)
+        all_labels = leads.parcel_labels(
+            self.parcel_type.technical_name,
+            self.shipping_account.technical_name,
+            self.env['res.partner'],  # empty sender!
+            )
 
         self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')
         self.assertEqual(pdf_page_num(all_labels), 2)
 
         lead = self.lead.copy({'name': '[Test single]'})
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            label = lead.parcel_labels(*base_args, force_single=True)
+            label = lead.parcel_labels(
+                self.parcel_type.technical_name,
+                self.shipping_account.technical_name,
+                self.env['res.partner'],
+                force_single=True)
 
         self.assertEqualFakeLabel(label)
