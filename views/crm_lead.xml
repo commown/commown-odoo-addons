@@ -205,37 +205,14 @@ if 'uid' in env or object.send_email_on_delivery:
       </field>
     </record>
 
-  <record id="lead product delivered" model="base.action.rule">
-    <field name="name">[commown] Lead product delivered</field>
-    <field name="model_id" ref="model_crm_lead"/>
-    <field name="sequence">1</field>
-    <field name="kind">on_write</field>
-    <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
-    <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_start_contract'), ref('commown.action_send_delivery_email')])]"/>
-  </record>
-
-  </data>
-
-  <data noupdate="1">
-
-    <!-- Set noupdate because the data is to be changed and the code is mainly
-         in the model (thus not designed to be modified)-->
-    <record id="action_print_fairphone_label" model="ir.actions.server">
-      <field name="name">[commown] Print Fairphone parcel label(s)</field>
-      <field name="model_id" ref="commown.model_crm_lead"/>
-      <field name="sequence">5</field>
-      <field name="state">code</field>
-      <field name="code">
-sender = env['res.partner'].search([('email', '=', 'test@test.com')]).ensure_one()
-label = record.parcel_labels('parcel-name', 'keychain-account', sender, record.partner_id)
-
-action = {
-    "type": "ir.actions.act_url",
-    "url": label.website_url,
-    "target": "new",
-    }
-      </field>
+    <record id="lead product delivered" model="base.action.rule">
+      <field name="name">[commown] Lead product delivered</field>
+      <field name="model_id" ref="model_crm_lead"/>
+      <field name="sequence">1</field>
+      <field name="kind">on_write</field>
+      <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
+      <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
+      <field name="server_action_ids" eval="[(6,0,[ref('commown.action_start_contract'), ref('commown.action_send_delivery_email')])]"/>
     </record>
 
   </data>
