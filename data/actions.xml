@@ -9,7 +9,8 @@
       <field name="state">code</field>
       <field name="code">
 sender = env['res.partner'].search([('email', '=', 'elie@commown.fr')]).ensure_one()
-label = record.parcel_labels('fp2-outward-ins300', 'colissimo-970066', sender)
+label = (records or [record]).parcel_labels(
+    'fp2-outward-ins300', 'colissimo-970066', sender)
 
 action = {
     "type": "ir.actions.act_url",
@@ -26,7 +27,8 @@ action = {
       <field name="state">code</field>
       <field name="code">
 sender = env['res.partner'].search([('email', '=', 'elie@commown.fr')]).ensure_one()
-label = record.parcel_labels('fp2-outward-ins300', 'colissimo-970066', sender)
+label = (records or [record]).parcel_labels(
+    'fp2-outward-ins300', 'colissimo-970066', sender)
 
 action = {
     "type": "ir.actions.act_url",
