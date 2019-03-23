@@ -14,6 +14,7 @@
     'data': [
         'data/mail_templates.xml',
         'data/web_templates.xml',
+        'views/nps_views.xml',
     ],
     'installable': True,
 }

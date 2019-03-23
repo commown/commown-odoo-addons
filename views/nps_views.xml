@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!-- Replace image URL in the kanban view -->
+    <record model="ir.ui.view" id="view_rating_rating_kanban">
+      <field name="name">rating_project_issue_nps.rating.kanban</field>
+      <field name="model">rating.rating</field>
+      <field name="inherit_id" ref="rating.view_rating_rating_kanban"/>
+      <field name="arch" type="xml">
+        <xpath expr="//img" position="attributes">
+          <attribute name="t-attf-src">/rating_project_issue_nps/static/src/img/rate_with_icon_#{record.rating.raw_value}.png</attribute>
+        </xpath>
+      </field>
+    </record>
+
+    <!-- Replace existing filters by "Promoters", "Passives", "Detractors" -->
+    <record model="ir.ui.view" id="view_rating_rating_search">
+      <field name="name">rating_project_issue_nps.rating.search</field>
+      <field name="model">rating.rating</field>
+      <field name="inherit_id" ref="rating.view_rating_rating_search"/>
+      <field name="arch" type="xml">
+        <xpath expr='(//search//filter)[1]' position="replace">
+        </xpath>
+        <xpath expr='(//search//filter)[2]' position="replace">
+        </xpath>
+        <xpath expr='//search//filter' position="replace">
+          <filter string="Promoters" domain="[('rating', 'in', (9, 10))]"/>
+          <filter string="Passives" domain="[('rating', 'in', (8, 7))]"/>
+          <filter string="Detractors" domain="[('rating', '&lt;=', 6)]"/>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>
