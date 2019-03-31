@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="rejected_sepa_fee_product" model="product.template">
+      <field name="name">Slimpay payment Reject fees</field>
+      <field name="type">service</field>
+      <field name="list_price">4.17</field>
+      <field name="sale_ok">True</field>
+    </record>
+
+  </data>
+</odoo>
