@@ -16,9 +16,13 @@ class Project(models.Model):
     @api.one
     @api.depends('issue_ids.rating_ids.rating')
     def _compute_net_promoter_score(self):
+        issue_ids = self.env['project.issue'].search([
+            ('project_id', '=', self.id),
+        ])
         base_domain = [
-            ('res_model', '=', self.issue_ids._name),
-            ('res_id', 'in', self.issue_ids.ids),
+            ('res_model', '=', issue_ids._name),
+            ('res_id', 'in', issue_ids.ids),
+            ('consumed', '=', True),
             ('create_date', '>=', fields.Datetime.to_string(
                 fields.datetime.now() - timedelta(days=30))),
         ]
