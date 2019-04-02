@@ -49,8 +49,8 @@
       <field name="email_from">${object.partner_id.company_id.email or '' | safe}</field>
       <field name="subject">${object.project_id.company_id.name}: max payment trials reached</field>
       <field name="model_id" ref="project_issue.model_project_issue"/>
-      <field name="partner_to" >${object.partner_id.id}</field>
-      <field name="auto_delete" eval="False"/>
+      <field name="partner_to" >${object.user_id.id}</field>
+      <field name="auto_delete" eval="True"/>
       <field name="body_html"><![CDATA[
       <p>Max trial number reached for payment issue ${object.name} id ${object.id}.</p>
       ]]>
