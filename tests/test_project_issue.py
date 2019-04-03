@@ -283,37 +283,30 @@ class ProjectTC(TransactionCase):
             if xml_ids and xml_ids[0].startswith('payment_slimpay_issue'):
                 action.last_run = False
 
+    def _simulate_wait(self, issue, **timedelta_kwargs):
+        target_date = datetime.utcnow() - timedelta(**timedelta_kwargs)
+        issue.date_last_stage_update = target_date.strftime(DATETIME_FORMAT)
+        self._reset_on_time_actions_last_run()
+        with mock.patch.object(
+                SlimpayClient, 'action', side_effect=fake_action) as act:
+            # triggers actions based on time
+            self.env['base.action.rule']._check()
+        return act
+
     def test_actions(self):
         issue = self._create_odoo_issue()
 
         # Check a message is sent when entering the warn and wait stage
         issue.stage_id = self.env.ref(
-            'payment_slimpay_issue.stage_warn_partner_and_wait').id,
+            'payment_slimpay_issue.stage_warn_partner_and_wait').id
         self.assertEqual(issue.message_ids[0:1].subject,
                          'YourCompany: rejected payment')
 
-        # Check the issue moves to the payment retry stage 3 days after
-        # and a payment is issued.
-        move_date = datetime.utcnow() - timedelta(days=3, minutes=1)
-        issue.date_last_stage_update = move_date.strftime(DATETIME_FORMAT)
-        self._reset_on_time_actions_last_run()
-
-        with mock.patch.object(
-                SlimpayClient, 'action', side_effect=fake_action) as act:
-            # triggers actions based on time
-            self.env['base.action.rule']._check()
-
-        new_payins = self._action_calls(act, 'create-payins')
-        self.assertEqual(len(new_payins), 1)
-
-        self.assertEqual(issue.stage_id, self.env.ref(
-            'payment_slimpay_issue.stage_retry_payment_and_wait'))
+        # 3 days later, issue must move to pay retry stage and a payin created
+        act = self._simulate_wait(issue, days=3, minutes=1)
+        self.assertInStage(issue, 'stage_retry_payment_and_wait')
+        self.assertEqual(len(self._action_calls(act, 'create-payins')), 1)
 
         # Check the issue finally goes into fixed stage 8 days later
-        move_date = datetime.utcnow() - timedelta(days=8, minutes=1)
-        issue.date_last_stage_update = move_date.strftime(DATETIME_FORMAT)
-        self._reset_on_time_actions_last_run()
-
-        self.env['base.action.rule']._check()  # triggers actions based on time
-        self.assertEqual(issue.stage_id, self.env.ref(
-            'payment_slimpay_issue.stage_issue_fixed'))
+        self._simulate_wait(issue, days=8, minutes=1)
+        self.assertInStage(issue, 'stage_issue_fixed')
