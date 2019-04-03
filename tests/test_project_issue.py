@@ -68,6 +68,15 @@ class ProjectTC(TransactionCase):
             'reconcile': True,
         })
 
+        customer_journal = self.env['account.journal'].create({
+            'name': 'Customer journal',
+            'code': 'RC',
+            'company_id': self.env.user.company_id.id,
+            'type': 'bank',
+            'default_debit_account_id': customer_account.id,
+            'default_credit_account_id': customer_account.id,
+        })
+
         revenue_account = self.env['account.account'].create({
             'code': u'rev_acc', 'name': u'revenue account',
             'user_type_id': ref('account.data_account_type_revenue').id,
@@ -118,7 +127,24 @@ class ProjectTC(TransactionCase):
             'partner_zip': self.partner.zip,
             'partner_email': self.partner.email,
             })
-        self.transaction._confirm_so(acquirer_name='slimpay')
+
+        payment = self.env['account.payment'].create({
+            'company_id': self.env.user.company_id.id,
+            'partner_id': self.invoice.partner_id.id,
+            'partner_type': 'customer',
+            'state': 'draft',
+            'payment_type': 'inbound',
+            'journal_id': customer_journal.id,
+            'payment_method_id': ref(
+                'payment.account_payment_method_electronic_in').id,
+            'amount': self.invoice.amount_total,
+            'payment_transaction_id': self.transaction.id,
+            'invoice_ids': [(6, 0, [self.invoice.id])],
+        })
+
+        payment.post()
+
+        self.assertEqual(self.invoice.state, 'paid')
 
         prod = self.env.ref('payment_slimpay_issue.rejected_sepa_fee_product')
         prod.property_account_income_id = revenue_account.id
@@ -153,7 +179,7 @@ class ProjectTC(TransactionCase):
     def _action_calls(self, act, func_name):
         return [c for c in act.call_args_list if c[0][1] == func_name]
 
-    def _test_cron(self):
+    def test_cron(self):
 
         # First payment issue:
         # - payment issue 1 cannot be attributed to an odoo
@@ -183,6 +209,7 @@ class ProjectTC(TransactionCase):
 
         self.assertFalse(issue1.invoice_id)
         self.assertEqual(issue2.invoice_id, self.invoice)
+        self.assertEqual(self.invoice.state, 'open')
 
         self.assertStage(issue1, 'stage_orphan')
         self.assertStage(issue2, 'stage_warn_partner_and_wait')
