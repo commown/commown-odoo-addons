@@ -179,16 +179,26 @@ class ProjectTC(TransactionCase):
     def _action_calls(self, act, func_name):
         return [c for c in act.call_args_list if c[0][1] == func_name]
 
-    def test_cron(self):
+    def _create_odoo_issue(self, **kwargs):
+        data = {
+            'project_id': self.project.id,
+            'name': u'Test issue',
+            'partner_id': self.partner.id,
+            'invoice_id': self.invoice.id,
+        }
+        data.update(kwargs)
+        return self.env['project.issue'].create(data)
 
-        # First payment issue:
-        # - payment issue 1 cannot be attributed to an odoo
-        #   transaction (the payment has no TR reference), so an odoo
-        #   issue must be created in the orphan column
-        # - payment issue 2 can be linked to an odoo transaction (see
-        #   the payment reference), so an odoo issue must be created
-        #   and linked to the corresponding invoice
-        # - the issue must be put in the "warn partner and wait" stage
+    def test_cron_first_issue(self):
+        """ First payment issue:
+        - payment issue 1 cannot be attributed to an odoo
+          transaction (the payment has no TR reference), so an odoo
+          issue must be created in the orphan column
+        - payment issue 2 can be linked to an odoo transaction (see
+          the payment reference), so an odoo issue must be created
+          and linked to the corresponding invoice
+        - the issue must be put in the "warn partner and wait" stage
+        """
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i1'),
@@ -216,11 +226,40 @@ class ProjectTC(TransactionCase):
 
         self.assertIssuesAcknowledged(act, 'i1', 'i2')
 
-        # Second payment issue for the `self.invoice` invoice:
-        # - the previously created odoo issue must be found and its
-        #   unpaid invoice counter incremented
-        # - the invoice must be added a line for payment issue fees
-        # - a new payment trial must be issued
+    def test_cron_second_issue(self):
+        """ Second payment issue for the `self.invoice` invoice:
+        - the previously created odoo issue must be found and its
+          unpaid invoice counter incremented
+        - the invoice must be added a line for payment issue fees
+        - a new payment trial must be issued
+        """
+
+        issue = self._create_odoo_issue(invoice_unpaid_count=1)
+
+        act, get = self._execute_cron([
+            fake_issue_doc(id='i2',
+                           payment_ref='TR%d' % self.transaction.id,
+                           subscriber_ref=self.partner.id),
+        ])
+
+        self.assertEqual(len(self._project_issues()), 1)
+        self.assertEqual(issue.invoice_unpaid_count, 2)
+        self.assertInStage(issue, 'stage_warn_partner_and_wait')
+        self.assertEqual(issue.invoice_id.amount_total, 104.17)
+        self.assertIssuesAcknowledged(act, 'i2')
+
+    def test_cron_third_issue(self):
+        """ Third payment issue for the `self.invoice` invoice:
+        - the previously created odoo issue must be found and its
+          unpaid invoice counter incremented
+        - the invoice must be added a line for payment issue fees
+        - no new payment trial must be issued
+        - the issue must be moved to a "max trial number reach"
+          column so that the risk team contacts the partner and
+          handles the case manually
+        """
+
+        issue = self._create_odoo_issue(invoice_unpaid_count=2)
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i3',
@@ -228,48 +267,14 @@ class ProjectTC(TransactionCase):
                            subscriber_ref=self.partner.id),
         ])
 
-        issues = self._project_issues()
-        self.assertEqual(len(issues), 2)
-        issue1, issue2 = issues
-
-        self.assertEqual(issue1.invoice_unpaid_count, 0)
-        self.assertEqual(issue2.invoice_unpaid_count, 2)
-
-        self.assertInStage(issue1, 'stage_orphan')
-        self.assertInStage(issue2, 'stage_warn_partner_and_wait')
-
-        self.assertEqual(issue2.invoice_id.amount_total, 104.17)
-
+        self.assertEqual(len(self._project_issues()), 1)
+        self.assertEqual(issue.invoice_unpaid_count, 3)
+        self.assertInStage(issue, 'stage_max_trials_reached')
+        # We haven't simulated the previous invoice amount raise due
+        # to 2nd payment issue here, so the invoice amount was
+        # incremented with the fees amount only once:
+        self.assertEqual(issue.invoice_id.amount_total, 104.17)
         self.assertIssuesAcknowledged(act, 'i3')
-
-        # Third payment issue for the `self.invoice` invoice:
-        # - the previously created odoo issue must be found and its
-        #   unpaid invoice counter incremented
-        # - the invoice must be added a line for payment issue fees
-        # - no new payment trial must be issued
-        # - the issue must be moved to a "max trial number reach"
-        #   column so that the risk team contacts the partner and
-        #   handles the case manually
-
-        act, get = self._execute_cron([
-            fake_issue_doc(id='i4',
-                           payment_ref='TR%d' % self.transaction.id,
-                           subscriber_ref=self.partner.id),
-        ])
-
-        issues = self._project_issues()
-        self.assertEqual(len(issues), 2)
-        issue1, issue2 = issues
-
-        self.assertEqual(issue1.invoice_unpaid_count, 0)
-        self.assertEqual(issue2.invoice_unpaid_count, 3)
-
-        self.assertInStage(issue1, 'stage_orphan')
-        self.assertInStage(issue2, 'stage_max_trials_reached')
-
-        self.assertEqual(issue2.invoice_id.amount_total, 108.34)
-
-        self.assertIssuesAcknowledged(act, 'i4')
 
     def _reset_on_time_actions_last_run(self):
         for action in self.env['base.action.rule'].search([
@@ -279,12 +284,7 @@ class ProjectTC(TransactionCase):
                 action.last_run = False
 
     def test_actions(self):
-        issue = self.env['project.issue'].create({
-            'project_id': self.project.id,
-            'name': u'Test issue',
-            'partner_id': self.partner.id,
-            'invoice_id': self.invoice.id,
-        })
+        issue = self._create_odoo_issue()
 
         # Check a message is sent when entering the warn and wait stage
         issue.stage_id = self.env.ref(
