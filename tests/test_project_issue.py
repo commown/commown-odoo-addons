@@ -167,11 +167,11 @@ class ProjectTC(TransactionCase):
             ('project_id', '=', self.project.id)
         ], order='invoice_unpaid_count')
 
-    def assertStage(self, issue, ref_name):
+    def assertInStage(self, issue, ref_name):
         self.assertEqual(issue.stage_id.get_xml_id().values(),
                          ['payment_slimpay_issue.%s' % ref_name])
 
-    def assertIssuesAck(self, act, *expected_slimpay_ids):
+    def assertIssuesAcknowledged(self, act, *expected_slimpay_ids):
         issue_acks = self._action_calls(act, 'ack-payment-issue')
         self.assertEqual(set(kw['doc']['id'] for (args, kw) in issue_acks),
                          set(expected_slimpay_ids))
@@ -211,10 +211,10 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue2.invoice_id, self.invoice)
         self.assertEqual(self.invoice.state, 'open')
 
-        self.assertStage(issue1, 'stage_orphan')
-        self.assertStage(issue2, 'stage_warn_partner_and_wait')
+        self.assertInStage(issue1, 'stage_orphan')
+        self.assertInStage(issue2, 'stage_warn_partner_and_wait')
 
-        self.assertIssuesAck(act, 'i1', 'i2')
+        self.assertIssuesAcknowledged(act, 'i1', 'i2')
 
         # Second payment issue for the `self.invoice` invoice:
         # - the previously created odoo issue must be found and its
@@ -235,12 +235,12 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue1.invoice_unpaid_count, 0)
         self.assertEqual(issue2.invoice_unpaid_count, 2)
 
-        self.assertStage(issue1, 'stage_orphan')
-        self.assertStage(issue2, 'stage_warn_partner_and_wait')
+        self.assertInStage(issue1, 'stage_orphan')
+        self.assertInStage(issue2, 'stage_warn_partner_and_wait')
 
         self.assertEqual(issue2.invoice_id.amount_total, 104.17)
 
-        self.assertIssuesAck(act, 'i3')
+        self.assertIssuesAcknowledged(act, 'i3')
 
         # Third payment issue for the `self.invoice` invoice:
         # - the previously created odoo issue must be found and its
@@ -264,12 +264,12 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue1.invoice_unpaid_count, 0)
         self.assertEqual(issue2.invoice_unpaid_count, 3)
 
-        self.assertStage(issue1, 'stage_orphan')
-        self.assertStage(issue2, 'stage_max_trials_reached')
+        self.assertInStage(issue1, 'stage_orphan')
+        self.assertInStage(issue2, 'stage_max_trials_reached')
 
         self.assertEqual(issue2.invoice_id.amount_total, 108.34)
 
-        self.assertIssuesAck(act, 'i4')
+        self.assertIssuesAcknowledged(act, 'i4')
 
     def _reset_on_time_actions_last_run(self):
         for action in self.env['base.action.rule'].search([
