@@ -108,7 +108,7 @@ class ProjectIssue(models.Model):
         params.update(custom_params)
         doc = client.action('GET', 'search-payment-issues', params=params)
 
-        for issue_doc in doc.data['paymentIssues']:
+        for issue_doc in doc.data.get('paymentIssues', ()):
             yield issue_doc
         if 'next' in doc:
             for issue_doc in self._slimpay_payment_issue_fetch(
