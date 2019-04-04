@@ -203,6 +203,21 @@ class ProjectIssue(models.Model):
             if not transaction.s2s_do_transaction():
                 _logger.error('Transaction %s failed', transaction.id)
 
+            initial_payment = invoice.payment_ids[-1]
+            payment = self.env['account.payment'].create({
+                'company_id': initial_payment.company_id.id,
+                'partner_id': invoice.partner_id.id,
+                'partner_type': 'customer',
+                'state': 'draft',
+                'payment_type': 'inbound',
+                'journal_id': initial_payment.journal_id.id,
+                'payment_method_id': initial_payment.payment_method_id.id,
+                'amount': invoice.amount_total,
+                'payment_transaction_id': transaction.id,
+                'invoice_ids': [(6, 0, [invoice.id])],
+            })
+            payment.post()
+
     @api.model
     def _slimpay_payment_issue_handle(self, project, client, issue_doc,
                                       inv_prefix):

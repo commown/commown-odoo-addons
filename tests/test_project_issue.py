@@ -94,6 +94,9 @@ class ProjectTC(TransactionCase):
             })],
         })
 
+        prod = self.env.ref('payment_slimpay_issue.rejected_sepa_fee_product')
+        prod.property_account_income_id = revenue_account.id
+
         self.invoice = self.env['account.invoice'].create({
             'name': u'Test Invoice',
             'reference_type': 'none',
@@ -145,9 +148,7 @@ class ProjectTC(TransactionCase):
         payment.post()
 
         self.assertEqual(self.invoice.state, 'paid')
-
-        prod = self.env.ref('payment_slimpay_issue.rejected_sepa_fee_product')
-        prod.property_account_income_id = revenue_account.id
+        self.assertEqual(len(self._invoice_txs()), 1)
 
     def _execute_cron(self, slimpay_issues):
         ProjectIssue = self.env['project.issue']
@@ -188,6 +189,11 @@ class ProjectTC(TransactionCase):
         }
         data.update(kwargs)
         return self.env['project.issue'].create(data)
+
+    def _invoice_txs(self):
+        return self.env['payment.transaction'].search([
+            ('reference', 'like', self.invoice.number),
+        ])
 
     def test_cron_first_issue(self):
         """ First payment issue:
@@ -275,6 +281,9 @@ class ProjectTC(TransactionCase):
         # incremented with the fees amount only once:
         self.assertEqual(issue.invoice_id.amount_total, 104.17)
         self.assertIssuesAcknowledged(act, 'i3')
+        last_msg = issue.message_ids[0]
+        self.assertEqual(last_msg.subject,
+                         'YourCompany: max payment trials reached')
 
     def _reset_on_time_actions_last_run(self):
         for action in self.env['base.action.rule'].search([
@@ -299,10 +308,14 @@ class ProjectTC(TransactionCase):
         # Check a message is sent when entering the warn and wait stage
         issue.stage_id = self.env.ref(
             'payment_slimpay_issue.stage_warn_partner_and_wait').id
-        self.assertEqual(issue.message_ids[0:1].subject,
-                         'YourCompany: rejected payment')
+        last_msg = issue.message_ids[0]
+        self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
 
         # 3 days later, issue must move to pay retry stage and a payin created
+
+        # Prepare to new payment:
+        self.invoice.payment_move_line_ids.remove_move_reconcile()
+
         act = self._simulate_wait(issue, days=3, minutes=1)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         self.assertEqual(len(self._action_calls(act, 'create-payins')), 1)
@@ -310,3 +323,96 @@ class ProjectTC(TransactionCase):
         # Check the issue finally goes into fixed stage 8 days later
         self._simulate_wait(issue, days=8, minutes=1)
         self.assertInStage(issue, 'stage_issue_fixed')
+
+    def test_functional_1_trial(self):
+        act, get = self._execute_cron([
+            fake_issue_doc(id='i1',
+                           payment_ref='TR%d' % self.transaction.id,
+                           subscriber_ref=self.partner.id),
+        ])
+
+        issue, = self._project_issues()
+        self.assertIssuesAcknowledged(act, 'i1')
+        self.assertEqual(issue.invoice_id, self.invoice)
+        self.assertEqual(issue.invoice_unpaid_count, 1)
+        self.assertInStage(issue, 'stage_warn_partner_and_wait')
+        last_msg = issue.message_ids[0]
+        self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
+
+        act = self._simulate_wait(issue, days=3, minutes=1)
+        self.assertInStage(issue, 'stage_retry_payment_and_wait')
+        self.assertEqual(len(self._action_calls(act, 'create-payins')), 1)
+
+        act = self._simulate_wait(issue, days=8, minutes=1)
+        self.assertInStage(issue, 'stage_issue_fixed')
+
+    def test_functional_3_trials(self):
+        act, get = self._execute_cron([
+            fake_issue_doc(id='i1',
+                           payment_ref='TR%d' % self.transaction.id,
+                           subscriber_ref=self.partner.id),
+        ])
+
+        issue = self._project_issues()
+
+        self.assertEqual(len(issue), 1)
+        self.assertIssuesAcknowledged(act, 'i1')
+        self.assertEqual(issue.invoice_id, self.invoice)
+        self.assertEqual(issue.invoice_unpaid_count, 1)
+        self.assertEqual(issue.invoice_id.amount_total, 100.)
+        self.assertInStage(issue, 'stage_warn_partner_and_wait')
+        last_msg = issue.message_ids[0]
+        self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
+        self.assertEqual(self.invoice.state, 'open')
+
+        act = self._simulate_wait(issue, days=3, minutes=1)
+        self.assertInStage(issue, 'stage_retry_payment_and_wait')
+        txs = self._invoice_txs()
+        self.assertEqual(len(txs), 2)
+        tx1, tx0 = txs
+        self.assertEqual(tx0, self.transaction)
+        payins = self._action_calls(act, 'create-payins')
+        self.assertEqual(len(payins), 1)
+        self.assertEqual(payins[0][1]['params']['label'], txs[0].reference)
+        self.assertEqual(self.invoice.state, 'paid')
+
+        act, get = self._execute_cron([
+            fake_issue_doc(id='i2',
+                           payment_ref='TR%d' % self.transaction.id,
+                           subscriber_ref=self.partner.id),
+        ])
+        self.assertIssuesAcknowledged(act, 'i2')
+        self.assertEqual(issue.invoice_unpaid_count, 2)
+        self.assertEqual(issue.invoice_id.amount_total, 104.17)
+        self.assertInStage(issue, 'stage_warn_partner_and_wait')
+        new_msg = issue.message_ids[0]
+        self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
+        self.assertFalse(last_msg == new_msg)
+        last_msg = new_msg
+        self.assertEqual(self.invoice.state, 'open')
+
+        act = self._simulate_wait(issue, days=3, minutes=1)
+        self.assertInStage(issue, 'stage_retry_payment_and_wait')
+        txs = self._invoice_txs()
+        self.assertEqual(len(txs), 3)
+        self.assertEqual((txs[1], txs[2]), (tx1, tx0))
+        tx3 = txs[0]
+        payins = self._action_calls(act, 'create-payins')
+        self.assertEqual(len(payins), 1)
+        self.assertEqual(payins[0][1]['params']['label'], tx3.reference)
+        self.assertEqual(self.invoice.state, 'paid')
+
+        act, get = self._execute_cron([
+            fake_issue_doc(id='i3',
+                           payment_ref='TR%d' % self.transaction.id,
+                           subscriber_ref=self.partner.id),
+        ])
+        self.assertIssuesAcknowledged(act, 'i3')
+        self.assertEqual(issue.invoice_unpaid_count, 3)
+        self.assertEqual(issue.invoice_id.amount_total, 108.34)
+        self.assertInStage(issue, 'stage_max_trials_reached')
+        last_msg = issue.message_ids[0]
+        self.assertEqual(last_msg.subject,
+                         'YourCompany: max payment trials reached')
+        self.assertFalse(self._action_calls(act, 'create-payins'))
+        self.assertEqual(len(self._invoice_txs()), 3)
