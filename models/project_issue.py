@@ -108,6 +108,8 @@ class ProjectIssue(models.Model):
         params.update(custom_params)
         doc = client.action('GET', 'search-payment-issues', params=params)
 
+        _logger.debug('Slimpay issues doc:\n%s', doc)
+
         for issue_doc in doc.data.get('paymentIssues', ()):
             yield issue_doc
         if 'next' in doc:
