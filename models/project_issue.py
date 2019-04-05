@@ -211,23 +211,24 @@ class ProjectIssue(models.Model):
                 'partner_zip': partner.zip,
                 'partner_email': partner.email,
             })
-            if not transaction.s2s_do_transaction():
-                _logger.error('Transaction %s failed', transaction.id)
 
-            initial_payment = invoice.payment_ids[-1]
+            payment_mode = invoice.payment_mode_id
             payment = self.env['account.payment'].create({
-                'company_id': initial_payment.company_id.id,
+                'company_id': issue.user_id.company_id.id,
                 'partner_id': invoice.partner_id.id,
                 'partner_type': 'customer',
                 'state': 'draft',
                 'payment_type': 'inbound',
-                'journal_id': initial_payment.journal_id.id,
-                'payment_method_id': initial_payment.payment_method_id.id,
-                'amount': invoice.amount_total,
+                'journal_id': payment_mode.fixed_journal_id.id,
+                'payment_method_id': payment_mode.payment_method_id.id,
+                'amount': invoice.residual,
                 'payment_transaction_id': transaction.id,
                 'invoice_ids': [(6, 0, [invoice.id])],
             })
             payment.post()
+
+            if not transaction.s2s_do_transaction():
+                _logger.error('Transaction %s failed', transaction.id)
 
     @api.model
     def _slimpay_payment_issue_handle(self, project, client, issue_doc,

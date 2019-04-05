@@ -12,6 +12,7 @@
     'website': "https://commown.fr",
     'depends': [
         'project_issue', 'payment_slimpay', 'base_action_rule',
+        'account_payment_partner',
     ],
     'data': [
         'data/mail_template.xml',

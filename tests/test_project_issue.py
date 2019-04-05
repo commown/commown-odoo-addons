@@ -77,6 +77,15 @@ class ProjectTC(TransactionCase):
             'default_credit_account_id': customer_account.id,
         })
 
+        payment_mode = self.env['account.payment.mode'].create({
+            'name': 'Electronic inbound to customer journal',
+            'payment_method_id': ref(
+                'payment.account_payment_method_electronic_in').id,
+            'payment_type': 'inbound',
+            'bank_account_link': 'fixed',
+            'fixed_journal_id': customer_journal.id,
+        })
+
         revenue_account = self.env['account.account'].create({
             'code': u'rev_acc', 'name': u'revenue account',
             'user_type_id': ref('account.data_account_type_revenue').id,
@@ -102,6 +111,7 @@ class ProjectTC(TransactionCase):
             'reference_type': 'none',
             'payment_term_id': self.env.ref(
                 'account.account_payment_term_advance').id,
+            'payment_mode_id': payment_mode.id,
             'journal_id': self.env['account.journal'].search(
                 [('type', '=', 'sale')], limit=1).id,
             'partner_id': self.partner.id,
