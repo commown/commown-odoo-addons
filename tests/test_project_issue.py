@@ -388,7 +388,7 @@ class ProjectTC(TransactionCase):
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i2',
-                           payment_ref='TR%d' % self.transaction.id,
+                           payment_ref='TR%d' % tx1.id,
                            subscriber_ref=self.partner.id),
         ])
         self.assertIssuesAcknowledged(act, 'i2')
@@ -406,15 +406,15 @@ class ProjectTC(TransactionCase):
         txs = self._invoice_txs()
         self.assertEqual(len(txs), 3)
         self.assertEqual((txs[1], txs[2]), (tx1, tx0))
-        tx3 = txs[0]
+        tx2 = txs[0]
         payins = self._action_calls(act, 'create-payins')
         self.assertEqual(len(payins), 1)
-        self.assertEqual(payins[0][1]['params']['label'], tx3.reference)
+        self.assertEqual(payins[0][1]['params']['label'], tx2.reference)
         self.assertEqual(self.invoice.state, 'paid')
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i3',
-                           payment_ref='TR%d' % self.transaction.id,
+                           payment_ref='TR%d' % tx2.id,
                            subscriber_ref=self.partner.id),
         ])
         self.assertIssuesAcknowledged(act, 'i3')

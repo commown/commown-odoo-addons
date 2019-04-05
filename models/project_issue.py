@@ -120,6 +120,9 @@ class ProjectIssue(models.Model):
     @api.model
     def _slimpay_payment_issue_find_invoice(self, issue_doc, payment_doc,
                                             inv_prefix):
+        # XXX Fix this in payment_slimpay and report here
+        # (idea: use a Slimpay-generated ref and put it in acquirer_reference
+        #  then use this field's value to find the right transaction)
         if (payment_doc['reference']
                 and payment_doc['reference'].startswith('TR')):
             try:
@@ -130,7 +133,7 @@ class ProjectIssue(models.Model):
             else:
                 if ref and ref.startswith(inv_prefix):
                     return self.env['account.invoice'].search([
-                        ('number', '=', ref)])
+                        ('number', '=', ref.split('x', 1)[0])])
 
     @api.model
     def _slimpay_payment_issue_get_or_create(self, project, client, issue_doc,
@@ -197,6 +200,10 @@ class ProjectIssue(models.Model):
             invoice = issue.invoice_id
             partner = invoice.partner_id
             token = partner.payment_token_ids[0]
+
+            _logger.info(
+                'Issue %s: retrying payment of invoice %s of %s with %s',
+                invoice.number, partner.name, token.name, issue.id)
 
             transaction = Transaction.create({
                 'reference': Transaction.get_next_reference(invoice.number),
