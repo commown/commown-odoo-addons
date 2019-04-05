@@ -27,7 +27,7 @@
           <field name="invoice_unpaid_count" invisible="1"/>
         </field>
         <xpath expr="//div[contains(@class, 'oe_kanban_bottom_right')]" position="inside">
-          <div t-if="record.invoice_id" class="pull-left ml8 mr8 text-danger">
+          <div t-if="record.invoice_id.raw_value !== false" class="pull-left ml8 mr8 text-danger">
             <t t-esc="record.invoice_unpaid_count.value"/> <i class="fa fa-money"/>
           </div>
         </xpath>
