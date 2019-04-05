@@ -18,7 +18,8 @@ Once the module is installed, you probably want to review:
 - The product that prices the payment reject fees: name, price, taxes...
 
   This product will be added to your customer invoices whose Slimpay
-  payment was rejected.
+  payment was rejected. It MUST have Invoicing data set, particularly
+  the `property_account_income_id` (Income account) field.
 
 - The project dashboard that handles the payment issues.
 

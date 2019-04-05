@@ -186,12 +186,15 @@ class ProjectIssue(models.Model):
     def _slimpay_payment_issue_invoice_reject_fees(self, invoice, reject_date):
         prod = self.env.ref('payment_slimpay_issue.'
                             'rejected_sepa_fee_product').product_variant_id
+        _logger.debug('Adding reject fees to invoice amount %s...',
+                      invoice.amount_total)
         invoice.update({'invoice_line_ids': [(0, 0, {
             'name': prod.name,
             'product_id': prod.id,
             'price_unit': prod.list_price,
             'account_id': prod.property_account_income_id.id,
         })]})
+        _logger.debug('... new amount is %s', invoice.amount_total)
 
     @api.multi
     def _slimpay_payment_issue_retry_payment(self):
