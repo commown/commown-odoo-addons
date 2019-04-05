@@ -105,19 +105,8 @@ msgstr "${object.project_id.company_id.name}: rejected payment"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_retry_payment_and_wait
-msgid "A payment is immediately retried when\n"
-"      the issue is move here. The issue then stays here for a given\n"
-"      number of days (see dedicated time-based automated action)\n"
-"      during which the payment may be rejected again. After this\n"
-"      period, the payment is considered OK and the issue fixed: in\n"
-"      this case the issue will be moved to the corresponding\n"
-"      column."
-msgstr "Une tentative de prélèvement est immédiatement effectuée lorsqu'un "
-"      incident de paiement arrive dans cette colonne. Il y reste alors un "
-"      nombre de jours donné (paramétrable dans l'action automatisée dédiée) "
-"      pendant lesquels le prélèvement peut être rejeté de nouveau. À l'issue "
-"      de cette période, le prélèvement est considéré comme validé et l' "
-"      incident est automatiquement bougé dans la colonne correspondante."
+msgid "A payment is immediately retried when the issue is move here. The issue then stays here for a given number of days (see dedicated time-based automated action) during which the payment may be rejected again. After this period, the payment is considered OK and the issue fixed: in this case the issue will be moved to the corresponding column."
+msgstr "Une tentative de prélèvement est immédiatement effectuée lorsqu'un incident de paiement arrive dans cette colonne. Il y reste alors un nombre de jours donné (paramétrable dans l'action automatisée dédiée) pendant lesquels le prélèvement peut être rejeté de nouveau. À l'issue de cette période, le prélèvement est considéré comme validé et l'incident est automatiquement bougé dans la colonne correspondante."
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_issue_fixed
@@ -131,14 +120,8 @@ msgstr "Facture"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_max_trials_reached
-msgid "Issues end-up here once the configured\n"
-"      number of payment retrials (2 by default, can be overriden using\n"
-"      the \"payment_slimpay_issue.max_retrials\" system parameter) was\n"
-"      reached, and stay here until manually handled."
-msgstr "Les incidents de paiement atterrissent ici lorsque le nombre maximum "
-"      de tentatives de re-prélèvement (2 par défaut, peut être redéfini "
-"      grâce au paramètre système \"payment_slimpay_issue.max_retrials\") a "
-"      été atteint, et ils y restent en attendant un traitement manuel."
+msgid "Issues end-up here once the configured number of payment retrials (2 by default, can be overriden using the \"payment_slimpay_issue.max_retrials\" system parameter) was reached, and stay here until manually handled."
+msgstr "Les incidents de paiement atterrissent ici lorsque le nombre maximum de tentatives de re-prélèvement (2 par défaut, peut être redéfini grâce au paramètre système \"payment_slimpay_issue.max_retrials\") a été atteint, et ils y restent en attendant un traitement manuel."
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_max_trials_reached
@@ -183,12 +166,8 @@ msgstr "Paiement"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_orphan
-msgid "Payment issues end-up here when no\n"
-"      corresponding odoo invoice could be identified. They must then\n"
-"      be handled manually."
-msgstr "Les incidents de paiement atterrissent ici lorsque le lien avec une "
-"      facture n'a pas pu être trouvé. Ils doivent alors être traités "
-"      manuellement."
+msgid "Payment issues end-up here when no corresponding odoo invoice could be identified. They must then be handled manually."
+msgstr "Les incidents de paiement atterrissent ici lorsque le lien avec une facture n'a pas pu être trouvé. Ils doivent alors être traités manuellement."
 
 #. module: payment_slimpay_issue
 #: model:ir.model,name:payment_slimpay_issue.model_project_issue
@@ -217,13 +196,5 @@ msgstr "Avertir le partenaire et attendre"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_warn_partner_and_wait
-msgid "When the issue is moved to this stage,\n"
-"      the partner is immediately warned by email that the payment was\n"
-"      rejected. The issue then stays here for a given number of days\n"
-"      (see dedicated time-based automated action), then moves to the\n"
-"      next stage."
-msgstr "Lorsqu'un incident de paiement arrive dans cette colonne, "
-"      le partenaire est immédiatement averti par courriel que le prélèvement \n"
-"      a été rejeté. L'incident reste attend alors dans cette colonne un "
-"       certain nombre de jours (paramétrable dans l'action automatisée "
-"      dédiée), puis est automatiquement bougée dans la colonne suivante."
+msgid "When the issue is moved to this stage, the partner is immediately warned by email that the payment was rejected. The issue then stays here for a given number of days (see dedicated time-based automated action), then moves to the next stage."
+msgstr "Lorsqu'un incident de paiement arrive dans cette colonne,  le partenaire est immédiatement averti par courriel que le prélèvement a été rejeté. L'incident reste alors dans cette colonne un certain nombre de jours (paramétrable dans l'action automatisée dédiée), puis est automatiquement bougée dans la colonne suivante."
