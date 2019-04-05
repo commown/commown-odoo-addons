@@ -26,11 +26,12 @@
     to avoid bank fees to all parties.
   </p>
   <br>
-  <p>Regards,</p>
-  <p>
+  <p>Regards,<br>
+    The
     <a href="${object.project_id.company_id.website}" style="color:#875A7B;">
       ${object.project_id.company_id.name}
-    </a> team.
+    </a>
+    team.
   </p>
 </div>
 ]]>
