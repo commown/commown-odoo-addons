@@ -39,6 +39,12 @@ You may also want to customize following system parameters:
   after which no more automatic mecanism handles the issue (e.g. you
   prefer calling your customer)
 
+As stated above, by default invoices can be added fees (unless you set
+a very big value for the
+`payment_slimpay_issue.invoice_fee_after_trial_number` system
+parameter), so the journal of these invoices must be set to allow
+cancelling entries (`update_posted = True`).
+
 Payment issue detection uses Slimpay's dedicated programming interface
 (API) that is also used for mandate signature in the payment_slimpay
 module. So if payment works, present module should work too without

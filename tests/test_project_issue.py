@@ -56,6 +56,7 @@ class ProjectTC(TransactionCase):
             'code': 'INV',
             'company_id': self.env.user.company_id.id,
             'type': 'sale',
+            'update_posted': True,  # important for fees, see module doc
         })
 
         ref = self.env.ref

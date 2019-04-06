@@ -186,15 +186,24 @@ class ProjectIssue(models.Model):
     def _slimpay_payment_issue_invoice_reject_fees(self, invoice, reject_date):
         prod = self.env.ref('payment_slimpay_issue.'
                             'rejected_sepa_fee_product').product_variant_id
-        _logger.debug('Adding reject fees to invoice amount %s...',
-                      invoice.amount_total)
+        _logger.debug('Adding reject fees to %s invoice amount %s...',
+                      invoice.state, invoice.amount_total)
+
+        invoice.action_invoice_cancel()
+        self.env.invalidate_all  # XXX update invoice.state cache (?)
+        invoice.action_invoice_draft()
+
         invoice.update({'invoice_line_ids': [(0, 0, {
             'name': prod.name,
             'product_id': prod.id,
             'price_unit': prod.list_price,
             'account_id': prod.property_account_income_id.id,
         })]})
-        _logger.debug('... new amount is %s', invoice.amount_total)
+
+        invoice.action_invoice_open()
+
+        _logger.debug('... new amount is %s, state %s',
+                      invoice.amount_total, invoice.state)
 
     @api.multi
     def _slimpay_payment_issue_retry_payment(self):
@@ -206,7 +215,7 @@ class ProjectIssue(models.Model):
 
             _logger.info(
                 'Issue %s: retrying payment of invoice %s of %s with %s',
-                invoice.number, partner.name, token.name, issue.id)
+                issue.id, invoice.number, partner.name, token.name)
 
             transaction = Transaction.create({
                 'reference': Transaction.get_next_reference(invoice.number),
