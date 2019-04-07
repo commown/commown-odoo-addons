@@ -37,18 +37,49 @@ record.update({'stage_id': env.ref('payment_slimpay_issue.stage_issue_fixed').id
     </field>
   </record>
 
-  <!-- Automatic action based on time, triggered when the
-       time spent in the "warn partner and wait" stage was too long -->
-  <record id="move_to_payment_retrial_after_waiting_delay" model="base.action.rule">
-    <field name="name">Move issue to payment retrial after waiting delay</field>
+  <!-- Server action that sets the invoice next payment date -->
+  <record id="set_invoice_next_payment_date" model="ir.actions.server">
+    <field name="name">Set invoice next payment date</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+today = datetime.date.today()
+days = record._slimpay_payment_invoice_payment_next_date_days_delta()
+record.update({
+    'invoice_next_payment_date': today + datetime.timedelta(days=days),
+})
+]]>
+    </field>
+  </record>
+
+  <!-- Set invoice_next_payment_date when issue enters the
+       stage_warn_partner_and_wait stage -->
+  <record id="set_invoice_next_date_when_entering_warn_stage" model="base.action.rule">
+    <field name="name">Set next payment date when entering warn partner and wait stage</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">5</field>
+    <field name="kind">on_write</field>
+    <field name="filter_pre_domain"
+           eval="[('stage_id', '!=', ref('stage_warn_partner_and_wait'))]"/>
+    <field name="filter_domain"
+           eval="[('stage_id', '=', ref('stage_warn_partner_and_wait'))]"/>
+    <field name="server_action_ids"
+           eval="[(6,0,[ref('set_invoice_next_payment_date')])]"/>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the invoice next date
+       of the issue is passed of the specified date range -->
+  <record id="retry_payment_on_programed_date" model="base.action.rule">
+    <field name="name">Move to retry payment stage at invoice next payment date</field>
     <field name="model_id" ref="project_issue.model_project_issue"/>
     <field name="sequence">1</field>
     <field name="kind">on_time</field>
     <field name="filter_domain"
            eval="[('stage_id', '=', ref('payment_slimpay_issue.stage_warn_partner_and_wait'))]"/>
-    <field name="trg_date_id" search="[('model', '=', 'project.issue'), ('name', '=', 'date_last_stage_update')]"/>
-    <field name="trg_date_range">3</field>
-    <field name="trg_date_range_type">day</field>
+    <field name="trg_date_id" search="[('model', '=', 'project.issue'), ('name', '=', 'invoice_next_payment_date')]"/>
+    <field name="trg_date_range">9</field>
+    <field name="trg_date_range_type">hour</field>
     <field name="server_action_ids"
            eval="[(6,0,[ref('action_move_issue_to_payment_retrial')])]"/>
   </record>

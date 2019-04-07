@@ -32,6 +32,10 @@ Once the module is installed, you probably want to review:
 
 You may also want to customize following system parameters:
 
+- payment_slimpay_issue.payment_retry_after_days_number: the number of
+  days to wait before attempting a new payment when an issue enters the
+  stage_warn_partner_and_wait column
+
 - payment_slimpay_issue.invoice_fee_after_trial_number: the number of
   payment issues without extra-fees invoiced to your customer
 

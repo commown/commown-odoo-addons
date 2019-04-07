@@ -19,6 +19,18 @@ class ProjectIssue(models.Model):
     invoice_id = fields.Many2one('account.invoice', string='Invoice')
     invoice_unpaid_count = fields.Integer(
         'Number of payment issues', default=0)
+    invoice_next_payment_date = fields.Date(
+        'Invoice next payment date', help=(
+            'If set in the future, the next payment trial (if any) will occur'
+            ' at this date'))
+
+    @api.model
+    def _slimpay_payment_invoice_payment_next_date_days_delta(self):
+        """ Return the number of days the next payment trial will occur
+        after the partner has been warned.
+        """
+        return int(self.env['ir.config_parameter'].get_param(
+            'payment_slimpay_issue.payment_retry_after_days_number') or 3)
 
     @api.model
     def _slimpay_payment_max_retrials(self):

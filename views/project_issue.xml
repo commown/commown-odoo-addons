@@ -11,6 +11,7 @@
               <group>
                 <field name="invoice_id"/>
                 <field name="invoice_unpaid_count"/>
+                <field name="invoice_next_payment_date"/>
               </group>
             </page>
           </xpath>

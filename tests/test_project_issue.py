@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 import mock
 
-from odoo.fields import DATETIME_FORMAT
+from odoo.fields import Date, DATETIME_FORMAT
 from odoo.tests.common import at_install, post_install, TransactionCase
 
 from odoo.addons.payment_slimpay.models.payment import SlimpayClient
@@ -306,6 +306,9 @@ class ProjectTC(TransactionCase):
     def _simulate_wait(self, issue, **timedelta_kwargs):
         target_date = datetime.utcnow() - timedelta(**timedelta_kwargs)
         issue.date_last_stage_update = target_date.strftime(DATETIME_FORMAT)
+        issue.invoice_next_payment_date = (
+            Date.from_string(issue.invoice_next_payment_date)
+            - timedelta(**timedelta_kwargs))
         self._reset_on_time_actions_last_run()
         with mock.patch.object(
                 SlimpayClient, 'action', side_effect=fake_action) as act:
@@ -327,7 +330,7 @@ class ProjectTC(TransactionCase):
         # Prepare to new payment:
         self.invoice.payment_move_line_ids.remove_move_reconcile()
 
-        act = self._simulate_wait(issue, days=3, minutes=1)
+        act = self._simulate_wait(issue, days=4)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         self.assertEqual(len(self._action_calls(act, 'create-payins')), 1)
 
@@ -350,7 +353,7 @@ class ProjectTC(TransactionCase):
         last_msg = issue.message_ids[0]
         self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
 
-        act = self._simulate_wait(issue, days=3, minutes=1)
+        act = self._simulate_wait(issue, days=4)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         self.assertEqual(len(self._action_calls(act, 'create-payins')), 1)
 
@@ -376,7 +379,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
         self.assertEqual(self.invoice.state, 'open')
 
-        act = self._simulate_wait(issue, days=3, minutes=1)
+        act = self._simulate_wait(issue, days=4)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         txs = self._invoice_txs()
         self.assertEqual(len(txs), 2)
@@ -402,7 +405,7 @@ class ProjectTC(TransactionCase):
         last_msg = new_msg
         self.assertEqual(self.invoice.state, 'open')
 
-        act = self._simulate_wait(issue, days=3, minutes=1)
+        act = self._simulate_wait(issue, days=4)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         txs = self._invoice_txs()
         self.assertEqual(len(txs), 3)
