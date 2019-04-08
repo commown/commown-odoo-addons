@@ -25,7 +25,7 @@ def fake_action(method, func, *args, **kwargs):
                            method, func, args, kwargs)
 
 
-def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='12.35',
+def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
                    currency='EUR', payment_ref=None, subscriber_ref=None):
 
     payment_url = 'https://api.slimpay.net/alps#get-payment'
@@ -104,8 +104,9 @@ class ProjectTC(TransactionCase):
             })],
         })
 
-        prod = self.env.ref('payment_slimpay_issue.rejected_sepa_fee_product')
-        prod.property_account_income_id = revenue_account.id
+        for _ref in ('management_fees_product', 'bank_fees_product'):
+            prod = self.env.ref('payment_slimpay_issue.' + _ref)
+            prod.property_account_income_id = revenue_account.id
 
         self.invoice = self.env['account.invoice'].create({
             'name': u'Test Invoice',
@@ -206,7 +207,7 @@ class ProjectTC(TransactionCase):
             ('reference', 'like', self.invoice.number),
         ])
 
-    def test_cron_first_issue(self):
+    def _test_cron_first_issue(self):
         """ First payment issue:
         - payment issue 1 cannot be attributed to an odoo
           transaction (the payment has no TR reference), so an odoo
@@ -243,7 +244,7 @@ class ProjectTC(TransactionCase):
 
         self.assertIssuesAcknowledged(act, 'i1', 'i2')
 
-    def test_cron_second_issue(self):
+    def _test_cron_second_issue(self):
         """ Second payment issue for the `self.invoice` invoice:
         - the previously created odoo issue must be found and its
           unpaid invoice counter incremented
@@ -265,7 +266,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue.invoice_id.amount_total, 104.17)
         self.assertIssuesAcknowledged(act, 'i2')
 
-    def test_cron_third_issue(self):
+    def _test_cron_third_issue(self):
         """ Third payment issue for the `self.invoice` invoice:
         - the previously created odoo issue must be found and its
           unpaid invoice counter incremented
@@ -316,7 +317,7 @@ class ProjectTC(TransactionCase):
             self.env['base.action.rule']._check()
         return act
 
-    def test_actions(self):
+    def _test_actions(self):
         issue = self._create_odoo_issue()
 
         # Check a message is sent when entering the warn and wait stage
@@ -338,17 +339,19 @@ class ProjectTC(TransactionCase):
         self._simulate_wait(issue, days=8, minutes=1)
         self.assertInStage(issue, 'stage_issue_fixed')
 
-    def test_functional_1_trial(self):
+    def test_functional_1_trial_with_extra_bank_fees(self):
         act, get = self._execute_cron([
             fake_issue_doc(id='i1',
                            payment_ref='TR%d' % self.transaction.id,
-                           subscriber_ref=self.partner.id),
+                           subscriber_ref=self.partner.id,
+                           amount=110),
         ])
 
         issue, = self._project_issues()
         self.assertIssuesAcknowledged(act, 'i1')
         self.assertEqual(issue.invoice_id, self.invoice)
         self.assertEqual(issue.invoice_unpaid_count, 1)
+        self.assertEqual(issue.invoice_id.amount_total, 110)
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
         last_msg = issue.message_ids[0]
         self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
@@ -360,7 +363,7 @@ class ProjectTC(TransactionCase):
         act = self._simulate_wait(issue, days=8, minutes=1)
         self.assertInStage(issue, 'stage_issue_fixed')
 
-    def test_functional_3_trials(self):
+    def _test_functional_3_trials(self):
         act, get = self._execute_cron([
             fake_issue_doc(id='i1',
                            payment_ref='TR%d' % self.transaction.id,

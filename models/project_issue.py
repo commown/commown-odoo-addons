@@ -41,12 +41,12 @@ class ProjectIssue(models.Model):
             'payment_slimpay_issue.max_retrials') or 2)
 
     @api.model
-    def _slimpay_payment_invoice_fee_after_trial_number(self):
-        """ Return the number of payment retrials before applying fees. Use 0
-        to apply fees at first payment issue.
+    def _slimpay_payment_issue_management_fees_retrial_num(self):
+        """ Return the number of payment retrials before applying management
+        fees. Use 0 to apply management fees at first payment issue.
         """
         return int(self.env['ir.config_parameter'].get_param(
-            'payment_slimpay_issue.invoice_fee_after_trial_number') or 1)
+            'payment_slimpay_issue.management_fees_after_retrial_number') or 1)
 
     @api.model
     def _slimpay_payment_invoice_prefix(self):
@@ -195,21 +195,25 @@ class ProjectIssue(models.Model):
         })
 
     @api.model
-    def _slimpay_payment_issue_invoice_reject_fees(self, invoice, reject_date):
-        prod = self.env.ref('payment_slimpay_issue.'
-                            'rejected_sepa_fee_product').product_variant_id
-        _logger.debug('Adding reject fees to %s invoice amount %s...',
-                      invoice.state, invoice.amount_total)
+    def _slimpay_payment_issue_invoice_fees(
+            self, invoice, product_ref, fees_name, amount=None):
+        product = self.env.ref(product_ref).product_variant_id
+        if not product:
+            _logger.info('No %s fees product found', fees_name)
+            return
+
+        _logger.debug('Adding %s fees to %s invoice amount %s...',
+                      fees_name, invoice.state, invoice.amount_total)
 
         invoice.action_invoice_cancel()
         self.env.invalidate_all  # XXX update invoice.state cache (?)
         invoice.action_invoice_draft()
 
         invoice.update({'invoice_line_ids': [(0, 0, {
-            'name': prod.name,
-            'product_id': prod.id,
-            'price_unit': prod.list_price,
-            'account_id': prod.property_account_income_id.id,
+            'name': product.name,
+            'product_id': product.id,
+            'price_unit': amount or product.list_price,
+            'account_id': product.property_account_income_id.id,
         })]})
 
         invoice.action_invoice_open()
@@ -266,20 +270,28 @@ class ProjectIssue(models.Model):
                                       inv_prefix):
         issue = self._slimpay_payment_issue_get_or_create(
             project, client, issue_doc, inv_prefix)
+        invoice = issue.invoice_id
 
         # No related invoice: move to orphan stage and exit
-        if not issue.invoice_id:
+        if not invoice:
             issue.update({'stage_id': self.env.ref(
                 'payment_slimpay_issue.stage_orphan').id})
             return
 
         issue.invoice_unpaid_count += 1
-        issue.invoice_id.payment_move_line_ids.remove_move_reconcile()
+        invoice.payment_move_line_ids.remove_move_reconcile()
 
         if (issue.invoice_unpaid_count
-                > self._slimpay_payment_invoice_fee_after_trial_number()):
-            self._slimpay_payment_issue_invoice_reject_fees(
-                issue.invoice_id, reject_date(issue_doc))
+                > self._slimpay_payment_issue_management_fees_retrial_num()):
+            self._slimpay_payment_issue_invoice_fees(
+                invoice, 'payment_slimpay_issue.management_fees_product',
+                'management')
+
+        rejected_amount = float(issue_doc['rejectAmount'])
+        if invoice.amount_total < rejected_amount:
+            self._slimpay_payment_issue_invoice_fees(
+                invoice, 'payment_slimpay_issue.bank_fees_product', 'bank',
+                rejected_amount - invoice.amount_total)
 
         if issue.invoice_unpaid_count > self._slimpay_payment_max_retrials():
             issue.update({'stage_id': self.env.ref(

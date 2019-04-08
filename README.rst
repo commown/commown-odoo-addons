@@ -15,20 +15,41 @@ Setup
 
 Once the module is installed, you probably want to review:
 
-- The product that prices the payment reject fees: name, price, taxes...
+- The product that prices the payment management fees: name, price,
+  taxes, income account
 
   This product will be added to your customer invoices whose Slimpay
-  payment was rejected. It MUST have Invoicing data set, particularly
-  the `property_account_income_id` (Income account) field.
+  payment was rejected, if the number of payment retrials has become
+  bigger than `payment_slimpay_issue.invoice_fee_after_trial_number`
+  if set (1 by default: first payment issue is free, second will be
+  charged). It **must** have Invoicing data set, particularly the
+  `property_account_income_id` (Income account) field.
 
-- The project dashboard that handles the payment issues.
+  These fees are different from bank fees that some banks (e.g. german
+  bank N26) also invoice to the company, which are systematically
+  added (see below).
+
+- The product that prices the payment bank fees: name, taxes, income
+  account (**mandatory**); these fees are automatically added to the
+  invoice, the price being the difference between the rejected amount
+  of the Slimpay issue and the total amount of the invoice.
+
+- The project dashboard that handles the payment issues. You can
+  rename the existing columns and add new ones to suit your needs, but
+  the functionnalities dedicated to each original stage are not meant
+  to be changed in any way.
 
 - The frequency of the crontab that checks Slimpay API for new payment
   issues.
 
 - The template of the mail sent to your customers when they have
   payment issue (search "rejected payment" in odoo's mail template
-  list)
+  list).
+
+Note that if you delete the above-mentionned products, the issue
+handling process should still work and the invoice will not be added
+the fees. The product will not be recreated on module update, as this
+behaviour is supposed to be done on purpose by the user (you).
 
 You may also want to customize following system parameters:
 
@@ -36,8 +57,9 @@ You may also want to customize following system parameters:
   days to wait before attempting a new payment when an issue enters the
   stage_warn_partner_and_wait column
 
-- payment_slimpay_issue.invoice_fee_after_trial_number: the number of
-  payment issues without extra-fees invoiced to your customer
+- payment_slimpay_issue.management_fees_after_retrial_number: the
+  number of payment issues without extra management fees invoiced to
+  your customer
 
 - payment_slimpay_issue.max_retrials: the number of payment retrials
   after which no more automatic mecanism handles the issue (e.g. you
