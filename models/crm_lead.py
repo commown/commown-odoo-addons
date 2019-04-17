@@ -138,14 +138,17 @@ class CommownCrmLead(models.Model):
         ctx = self.env.context
         action = self.env.ref(
             'crm.crm_case_form_view_salesteams_opportunity').read()[0]
-        action['context'] = safe_eval(action['context'], self.env.context)
-        if ctx.get('active_model') == 'crm.team' and 'active_id' in ctx:
-            crm_team = self.env['crm.team'].browse(ctx['active_id'])
-            custom_view = crm_team.custom_lead_view_id
+        action['xml_id'] = 'commown.action_customisable_lead_form_view'
+        action['id'] = self.env.ref(action['xml_id']).id
+        action['context'] = safe_eval(action['context'], ctx)
+        if 'active_id' in ctx:
+            team = self.env['crm.team'].browse(ctx['active_id']).ensure_one()
+            custom_view = team.custom_lead_view_id
             if custom_view:
                 action['views'] = [
                     [id if type != 'form' else custom_view.id, type]
                     for id, type in action['views']]
+            action['context']['active_id'] = ctx['active_id']
         return action
 
     @api.multi
