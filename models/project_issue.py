@@ -281,17 +281,17 @@ class ProjectIssue(models.Model):
         issue.invoice_unpaid_count += 1
         invoice.payment_move_line_ids.remove_move_reconcile()
 
-        if (issue.invoice_unpaid_count
-                > self._slimpay_payment_issue_management_fees_retrial_num()):
-            self._slimpay_payment_issue_invoice_fees(
-                invoice, 'payment_slimpay_issue.management_fees_product',
-                'management')
-
         rejected_amount = float(issue_doc['rejectAmount'])
         if invoice.amount_total < rejected_amount:
             self._slimpay_payment_issue_invoice_fees(
                 invoice, 'payment_slimpay_issue.bank_fees_product', 'bank',
                 rejected_amount - invoice.amount_total)
+
+        if (issue.invoice_unpaid_count
+                > self._slimpay_payment_issue_management_fees_retrial_num()):
+            self._slimpay_payment_issue_invoice_fees(
+                invoice, 'payment_slimpay_issue.management_fees_product',
+                'management')
 
         if issue.invoice_unpaid_count > self._slimpay_payment_max_retrials():
             issue.update({'stage_id': self.env.ref(
