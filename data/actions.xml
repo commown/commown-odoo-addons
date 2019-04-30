@@ -43,8 +43,7 @@ lead.update({'team_id': TEAM_ID,
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code"><![CDATA[
-sender = env['res.partner'].search([('email', '=', 'elie@commown.fr')]).ensure_one()
-label = record.parcel_labels('fp2-return-ins0', 'colissimo-970066', sender, force_single=True)
+label = record.parcel_labels('fp2-return-ins0', force_single=True)
 
 if record.user_id:
     record = record.sudo(record.user_id)
