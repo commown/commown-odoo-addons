@@ -23,6 +23,7 @@
         'data/parcels.xml',
         'data/actions.xml',
         'data/keychain_accounts.xml',
+        'views/product.xml',
         'views/project.xml',
         'views/team.xml',
     ],
