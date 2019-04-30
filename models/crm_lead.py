@@ -28,12 +28,12 @@ class CrmLead(models.Model):
         return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
 
     @api.multi
-    def parcel_labels(self, parcel_name=None, force_single=False, ref=None):
+    def parcel_labels(self, parcel_name=None, force_single=False):
 
         if parcel_name is not None:
             return super(CrmLead, self).parcel_labels(
-                parcel_name, force_single=force_single, ref=ref)
+                parcel_name, force_single=force_single)
         else:
             return self._print_parcel_labels(
                 self._default_shipping_parcel_type(),
-                force_single=force_single, ref=ref)
+                force_single=force_single)

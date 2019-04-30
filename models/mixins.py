@@ -84,15 +84,13 @@ class CommownShippingMixin(models.AbstractModel):
         return match.groupdict()['ref'] if match else ''
 
     @api.multi
-    def _print_parcel_labels(self, parcel, account=None,
-                             force_single=False, ref=None):
+    def _print_parcel_labels(self, parcel, account=None, force_single=False):
         paths = []
 
         for record in self:
-            ref = ref if ref is not None else record.get_label_ref()
             account = record._default_shipping_account()
             label = record._get_or_create_label(
-                parcel, account, record.partner_id, ref)
+                parcel, account, record.partner_id, record.get_label_ref())
             if len(self) == 1 and force_single:
                 return label
             paths.append(label._full_path(label.store_fname))
@@ -142,14 +140,13 @@ class CommownShippingMixin(models.AbstractModel):
                     _logger.error('Could not remove tmp label file %r', p)
 
     @api.multi
-    def parcel_labels(self, parcel_name, force_single=False, ref=None):
+    def parcel_labels(self, parcel_name, force_single=False):
 
         parcel = self.env['commown.parcel.type'].search([
             ('technical_name', '=', parcel_name),
         ]).ensure_one()
 
-        return self._print_parcel_labels(
-            parcel, force_single=force_single, ref=ref)
+        return self._print_parcel_labels(parcel, force_single=force_single)
 
 
 class CommownShippingParentMixin(models.AbstractModel):
