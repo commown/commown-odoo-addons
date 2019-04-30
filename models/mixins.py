@@ -23,6 +23,18 @@ class CommownShippingMixin(models.AbstractModel):
     _shipping_parent_rel = None
 
     @api.multi
+    def _shipping_parent(self):
+        return self.mapped(self._shipping_parent_rel)
+
+    @api.multi
+    def _default_shipping_account(self):
+        return self._shipping_parent().mapped('shipping_account_id')
+
+    @api.multi
+    def _default_shipping_parcel_type(self):
+        return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
+
+    @api.multi
     def _create_parcel_label(self, parcel, account, sender, recipient, ref):
         """ Generate a new label from following arguments:
         - parcel: a commown.parcel.type entity
@@ -77,28 +89,18 @@ class CommownShippingMixin(models.AbstractModel):
         return match.groupdict()['ref'] if match else ''
 
     @api.multi
-    def parcel_labels(self, parcel_name, account_name, sender,
-                      force_single=False, ref=None):
-
-        parcel = self.env['commown.parcel.type'].search([
-            ('technical_name', '=', parcel_name),
-        ]).ensure_one()
-
-        account = self.env['keychain.account'].search([
-            ('technical_name', '=', account_name),
-        ]).ensure_one()
-
-        if len(self) == 1 and force_single:
-            ref = ref if ref is not None else self.get_label_ref()
-            return self._get_or_create_label(
-                parcel, account, sender, self.partner_id, ref)
-
+    def default_parcel_labels(self, sender, parcel=None, account=None,
+                              force_single=False, ref=None):
         paths = []
 
         for lead in self:
             ref = ref if ref is not None else lead.get_label_ref()
+            parcel = parcel or lead._default_shipping_parcel_type()
+            account = account or lead._default_shipping_account()
             label = lead._get_or_create_label(
                 parcel, account, sender, lead.partner_id, ref)
+            if len(self) == 1 and force_single:
+                return label
             paths.append(label._full_path(label.store_fname))
 
         fpath = os.path.join(gettempdir(), mktemp(suffix=".pdf"))
@@ -119,7 +121,7 @@ class CommownShippingMixin(models.AbstractModel):
         else:
             with open(result_path) as fobj:
                 data = b64encode(fobj.read())
-            parent = getattr(self[0], self._shipping_parent_rel)
+            parent = self[0]._shipping_parent()
             attrs = {'res_model': parent._name,
                      'res_id': parent.id,
                      'name': parcel.name + u'.pdf',
@@ -144,6 +146,22 @@ class CommownShippingMixin(models.AbstractModel):
                     os.unlink(p)
                 except:
                     _logger.error('Could not remove tmp label file %r', p)
+
+    @api.multi
+    def parcel_labels(self, parcel_name, account_name, sender,
+                      force_single=False, ref=None):
+
+        parcel = self.env['commown.parcel.type'].search([
+            ('technical_name', '=', parcel_name),
+        ]).ensure_one()
+
+        account = self.env['keychain.account'].search([
+            ('technical_name', '=', account_name),
+        ]).ensure_one()
+
+        return self.default_parcel_labels(
+            sender, parcel=parcel, account=account,
+            force_single=force_single, ref=ref)
 
 
 class CommownShippingParentMixin(models.AbstractModel):

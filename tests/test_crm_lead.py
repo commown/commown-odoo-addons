@@ -16,12 +16,34 @@ class CrmLeadTC(BaseShippingTC):
 
     def setUp(self):
         super(CrmLeadTC, self).setUp()
+
         portal_partner = self.env.ref('portal.demo_user0_res_partner')
+        product = self.env['product.product'].create({
+            'name': u'Fairphone',
+            'shipping_parcel_type_id': self.parcel_type.id,
+        })
+        team = self.env.ref('sales_team.salesteam_website_sales')
+        team.update({'shipping_account_id': self.shipping_account.id})
+
+        so = self.env['sale.order'].create({
+            'partner_id': portal_partner.id,
+            'partner_invoice_id': portal_partner.id,
+            'partner_shipping_id': portal_partner.id,
+            'order_line': [(0, 0, {
+                'product_id': product.id,
+                'product_uom': product.uom_id.id,
+                'name': product.name,
+                'product_uom_qty': 1,
+                'price_unit': product.list_price,
+            })],
+        })
+
         self.lead = self.env['crm.lead'].create({
             'name': '[SO00000] Fake order',
             'partner_id': portal_partner.id,
             'type': 'opportunity',
-            'team_id': self.env.ref('sales_team.salesteam_website_sales').id,
+            'team_id': team.id,
+            'so_line_id': so.order_line[0].id,
         })
 
     def _country(self, code):
@@ -77,37 +99,22 @@ class CrmLeadTC(BaseShippingTC):
         self.assertEqual(att.name, self.parcel_type.name + '.pdf')
         self.assertEqualFakeLabel(att)
 
-    def test_parcel_labels(self):
+    def test_default_parcel_labels(self):
         leads = self.env['crm.lead']
-        base_args = [self.parcel_type,
-                     self.shipping_account,
-                     self.env['res.partner'],  # empty sender!
-                     self.lead.partner_id,
-                     ]
-
         for num in range(5):
-            lead = self.lead.copy({'name': '[SO%05d] Test lead' % num})
-            args = base_args + [lead.get_label_ref()]
+            leads += self.lead.copy({'name': '[SO%05d] Test lead' % num})
 
-            with mock.patch.object(
-                    requests, 'post', return_value=self.fake_resp):
-                lead._get_or_create_label(*args)
-            leads += lead
-
-        all_labels = leads.parcel_labels(
-            self.parcel_type.technical_name,
-            self.shipping_account.technical_name,
-            self.env['res.partner'],  # empty sender!
-            )
+        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
+            # Empty sender does not crash!
+            all_labels = leads.default_parcel_labels(self.env['res.partner'])
 
         self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')
         self.assertEqual(pdf_page_num(all_labels), 2)
 
         lead = self.lead.copy({'name': '[Test single]'})
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            label = lead.parcel_labels(
-                self.parcel_type.technical_name,
-                self.shipping_account.technical_name,
+            # Empty sender does not crash!
+            label = lead.default_parcel_labels(
                 self.env['res.partner'],
                 force_single=True)
 

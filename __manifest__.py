@@ -8,6 +8,7 @@
     'license': "AGPL-3",
     'website': "https://commown.fr",
     'depends': [
+        'sale',
         'crm',
         'project_issue',
         'keychain',

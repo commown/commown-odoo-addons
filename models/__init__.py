@@ -5,3 +5,4 @@ import crm_lead
 import project_issue
 import crm_team
 import project
+import product

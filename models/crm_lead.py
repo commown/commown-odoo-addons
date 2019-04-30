@@ -21,3 +21,4 @@ class CrmLead(models.Model):
         default=True, string='Automatic email on delivery')
     on_delivery_email_template_id = fields.Many2one(
         'mail.template', string='Custom email model for this lead')
+    so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
