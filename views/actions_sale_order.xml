@@ -107,6 +107,7 @@ for so_line in record.order_line:
             'partner_id': record.partner_id.id,
             'type': 'opportunity',
             'stage_id': stage_id,
+            'so_line_id': so_line.id,
             })
         # Override post-create behaviour that auto-assigns team_id
         data = {'team_id': team.id}

@@ -173,6 +173,8 @@ class SaleOrderTC(common.MockedEmptySessionTC):
         self.assertEqual(
             sorted(l.name.split(' ', 1)[0] for l in leads),
             ["[%s-%02d]" % (self.so.name, i) for i in range(1, 4)])
+        self.assertEqual(sorted(l.so_line_id.product_id.name for l in leads),
+                         ['Fairphone Premium', 'PC', 'PC'])
         self.assertEqual(set([l.team_id for l in leads]),
                          set([p.followup_sales_team_id
                               for p in products if p.followup_sales_team_id]))
