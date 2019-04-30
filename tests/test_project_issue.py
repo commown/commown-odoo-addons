@@ -18,37 +18,34 @@ class ProjectIssueTC(BaseShippingTC):
             'shipping_account_id': self.shipping_account.id
         })
 
-    def test_parcel_labels(self):
-        issues = self.env['project.issue']
-        base_args = [self.parcel_type,
-                     self.shipping_account,
-                     self.issue.partner_id,
-                     ]
+    def test_print_parcel_actions(self):
 
-        # avoid mail track bug in upcoming copies (confusion with project.task)
         orig_issue = self.issue.with_context(mail_notrack=True)
 
+        issues = self.env['project.issue']
         for num in range(5):
-            issue = orig_issue.copy({'name': 'Issue %d' % num})
-            args = base_args + [issue.get_label_ref()]
+            issues += orig_issue.copy({
+                'name': '[SO%05d] Test lead' % num,
+            })
 
-            with mock.patch.object(
-                    requests, 'post', return_value=self.fake_resp):
-                issue._get_or_create_label(*args)
+        ref = self.env.ref
+        act_out = ref('commown_shipping.action_print_outward_fp2_label_issue')
 
-            issues += issue
+        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
+            download_action = act_out.with_context({
+                'active_model': issues._name, 'active_ids': issues.ids}).run()
 
-        all_labels = issues.parcel_labels(
-            self.parcel_type.technical_name,
-            self.shipping_account.technical_name,
-            )
-
+        all_labels = self._attachment_from_download_action(download_action)
         self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')
         self.assertEqual(pdf_page_num(all_labels), 2)
 
+        act_ret = ref('commown_shipping.action_print_return_fp2_label_issue')
+
         issue = orig_issue.copy({'name': '[Test single]'})
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            label = issue.parcel_labels(
-                self.parcel_type.technical_name, force_single=True)
+            download_action = act_ret.with_context({
+                'active_model': issues._name, 'active_id': issue.ids}).run()
+
+        label = self._attachment_from_download_action(download_action)
 
         self.assertEqualFakeLabel(label)

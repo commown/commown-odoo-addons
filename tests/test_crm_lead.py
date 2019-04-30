@@ -1,5 +1,4 @@
 from datetime import datetime
-from urlparse import urlparse
 
 import requests
 import mock
@@ -49,10 +48,6 @@ class CrmLeadTC(BaseShippingTC):
 
     def _country(self, code):
         return self.env['res.country'].search([('code', '=', code)])
-
-    def _attachment_from_download_action(self, download_action):
-        return self.env['ir.attachment'].browse(
-            int(urlparse(download_action['url']).path.rsplit('/', 1)[-1]))
 
     def test_shipping_data_product_code(self):
         base_kwargs = {

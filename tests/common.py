@@ -5,6 +5,7 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email import encoders
 from StringIO import StringIO
+from urlparse import urlparse
 
 from PyPDF2 import PdfFileReader  # dunno how to declare test deps in odoo?
 
@@ -69,3 +70,7 @@ class BaseShippingTC(TransactionCase):
 
     def assertEqualFakeLabel(self, ir_attachment):
         self.assertEqual(b64decode(ir_attachment.datas), self.fake_label_data)
+
+    def _attachment_from_download_action(self, download_action):
+        return self.env['ir.attachment'].browse(
+            int(urlparse(download_action['url']).path.rsplit('/', 1)[-1]))
