@@ -8,6 +8,10 @@ from subprocess import check_call, CalledProcessError
 from tempfile import gettempdir, mktemp
 
 from odoo import api, models, fields
+from odoo.exceptions import UserError
+from odoo.tools.translate import _
+
+from .colissimo_utils import ColissimoError
 
 
 REF_FROM_NAME_RE = re.compile(r'\[(?P<ref>[^\]]+)\].*')
@@ -89,8 +93,12 @@ class CommownShippingMixin(models.AbstractModel):
 
         for record in self:
             account = record._default_shipping_account()
-            label = record._get_or_create_label(
-                parcel, account, record.partner_id, record.get_label_ref())
+            try:
+                label = record._get_or_create_label(
+                    parcel, account, record.partner_id, record.get_label_ref())
+            except ColissimoError as exc:
+                msg = _('Colissimo error:\n%s') % exc.args[0]
+                raise UserError(msg)
             if len(self) == 1 and force_single:
                 return label
             paths.append(label._full_path(label.store_fname))

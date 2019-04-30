@@ -18,6 +18,10 @@ MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 BASE_URL = 'https://ws.colissimo.fr/sls-ws/SlsServiceWSRest'
 
 
+class ColissimoError(Exception):
+    pass
+
+
 def normalize_phone(phone_number, country_code):
     " Colissimo only accepts french phone numbers "
     if country_code == 'FR' and phone_number:
@@ -183,17 +187,33 @@ def parse_multipart(data, boundary):
     return meta_data, label_data
 
 
-def ship(login, password, debug=False, **kwargs):
-    url = BASE_URL + ('/checkGenerateLabel' if debug else '/generateLabel')
-    data = shipping_data(**kwargs)
-    data.update({'contractNumber': login, 'password': password})
-    _logger.debug('Shipping data: %s', data)
-    resp = requests.post(url, json=data)
-    resp.raise_for_status()
-
+def parse_response(resp):
     ctype_main, ctype_details = parse_header(resp.headers['Content-Type'])
     if ctype_main == 'multipart/mixed':
         return parse_multipart(resp.content, ctype_details['boundary'])
     elif ctype_main == 'application/json':
         return resp.json(), None
     return None, None
+
+
+def ship(login, password, debug=False, **kwargs):
+    url = BASE_URL + ('/checkGenerateLabel' if debug else '/generateLabel')
+    data = shipping_data(**kwargs)
+    data.update({'contractNumber': login, 'password': password})
+    _logger.debug('Shipping data: %s', data)
+    resp = requests.post(url, json=data)
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError:
+        # Try to decode the response error:
+        err, _tmp = parse_response(resp)
+        if err is not None:
+            msg = err['messages'][0]['messageContent']
+            _logger.error('Colissimo error. Response text is:\n%s', msg)
+            raise ColissimoError(msg)
+        # But give-up in case of unexpected output
+        else:
+            _logger.error('Colissimo error content:\n%r', resp.content)
+            raise
+
+    return parse_response(resp)
