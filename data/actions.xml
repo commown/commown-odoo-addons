@@ -8,7 +8,7 @@
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">
-labels = (records or [record]).default_parcel_labels()
+labels = (records or [record]).parcel_labels()
 
 action = {
     "type": "ir.actions.act_url",
@@ -24,8 +24,7 @@ action = {
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">
-label = (records or [record]).parcel_labels(
-    'fp2-outward-ins300', 'colissimo-970066')
+label = (records or [record]).parcel_labels('fp2-outward-ins300')
 
 action = {
     "type": "ir.actions.act_url",
@@ -41,8 +40,7 @@ action = {
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">
-label = record.parcel_labels(
-    'fp2-return-ins300', 'colissimo-970066', force_single=True)
+label = record.parcel_labels('fp2-return-ins300', force_single=True)
 
 action = {
     "type": "ir.actions.act_url",

@@ -14,6 +14,9 @@ class ProjectIssueTC(BaseShippingTC):
         super(ProjectIssueTC, self).setUp()
         self.issue = self.env.ref(
             'project_issue.crm_case_buginaccountsmodule0')
+        self.issue.project_id.update({
+            'shipping_account_id': self.shipping_account.id
+        })
 
     def test_parcel_labels(self):
         issues = self.env['project.issue']
@@ -46,9 +49,6 @@ class ProjectIssueTC(BaseShippingTC):
         issue = orig_issue.copy({'name': '[Test single]'})
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
             label = issue.parcel_labels(
-                self.parcel_type.technical_name,
-                self.shipping_account.technical_name,
-                force_single=True,
-                )
+                self.parcel_type.technical_name, force_single=True)
 
         self.assertEqualFakeLabel(label)

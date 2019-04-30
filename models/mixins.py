@@ -31,10 +31,6 @@ class CommownShippingMixin(models.AbstractModel):
         return self._shipping_parent().mapped('shipping_account_id')
 
     @api.multi
-    def _default_shipping_parcel_type(self):
-        return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
-
-    @api.multi
     def _create_parcel_label(self, parcel, account, recipient, ref):
         """ Generate a new label from following arguments:
         - parcel: a commown.parcel.type entity
@@ -88,16 +84,15 @@ class CommownShippingMixin(models.AbstractModel):
         return match.groupdict()['ref'] if match else ''
 
     @api.multi
-    def default_parcel_labels(self, parcel=None, account=None,
-                              force_single=False, ref=None):
+    def _print_parcel_labels(self, parcel, account=None,
+                             force_single=False, ref=None):
         paths = []
 
-        for lead in self:
-            ref = ref if ref is not None else lead.get_label_ref()
-            parcel = parcel or lead._default_shipping_parcel_type()
-            account = account or lead._default_shipping_account()
-            label = lead._get_or_create_label(
-                parcel, account, lead.partner_id, ref)
+        for record in self:
+            ref = ref if ref is not None else record.get_label_ref()
+            account = record._default_shipping_account()
+            label = record._get_or_create_label(
+                parcel, account, record.partner_id, ref)
             if len(self) == 1 and force_single:
                 return label
             paths.append(label._full_path(label.store_fname))
@@ -147,20 +142,14 @@ class CommownShippingMixin(models.AbstractModel):
                     _logger.error('Could not remove tmp label file %r', p)
 
     @api.multi
-    def parcel_labels(self, parcel_name, account_name,
-                      force_single=False, ref=None):
+    def parcel_labels(self, parcel_name, force_single=False, ref=None):
 
         parcel = self.env['commown.parcel.type'].search([
             ('technical_name', '=', parcel_name),
         ]).ensure_one()
 
-        account = self.env['keychain.account'].search([
-            ('technical_name', '=', account_name),
-        ]).ensure_one()
-
-        return self.default_parcel_labels(
-            parcel=parcel, account=account,
-            force_single=force_single, ref=ref)
+        return self._print_parcel_labels(
+            parcel, force_single=force_single, ref=ref)
 
 
 class CommownShippingParentMixin(models.AbstractModel):

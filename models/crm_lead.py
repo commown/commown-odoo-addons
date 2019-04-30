@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class CrmLead(models.Model):
@@ -22,3 +22,18 @@ class CrmLead(models.Model):
     on_delivery_email_template_id = fields.Many2one(
         'mail.template', string='Custom email model for this lead')
     so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
+
+    @api.multi
+    def _default_shipping_parcel_type(self):
+        return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
+
+    @api.multi
+    def parcel_labels(self, parcel_name=None, force_single=False, ref=None):
+
+        if parcel_name is not None:
+            return super(CrmLead, self).parcel_labels(
+                parcel_name, force_single=force_single, ref=ref)
+        else:
+            return self._print_parcel_labels(
+                self._default_shipping_parcel_type(),
+                force_single=force_single, ref=ref)
