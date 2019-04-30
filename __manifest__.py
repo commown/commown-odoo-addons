@@ -2,7 +2,7 @@
     'name': 'Urban mine',
     'category': 'Business',
     'summary': 'Urban mine offer: people sell their device to the company',
-    'version': '10.0.1.0.2',
+    'version': '10.0.1.0.3',
     'description': 'Urban mine offer: people sell their device to the company',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
