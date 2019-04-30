@@ -7,7 +7,7 @@ from datetime import datetime
 from subprocess import check_call, CalledProcessError
 from tempfile import gettempdir, mktemp
 
-from odoo import api, models
+from odoo import api, models, fields
 
 
 REF_FROM_NAME_RE = re.compile(r'\[(?P<ref>[^\]]+)\].*')
@@ -144,3 +144,11 @@ class CommownShippingMixin(models.AbstractModel):
                     os.unlink(p)
                 except:
                     _logger.error('Could not remove tmp label file %r', p)
+
+
+class CommownShippingParentMixin(models.AbstractModel):
+    _name = 'commown.shipping.parent.mixin'
+
+    shipping_account_id = fields.Many2one(
+        'keychain.account', string='Shipping account',
+        domain="[('namespace', '=', 'colissimo')]")
