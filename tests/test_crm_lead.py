@@ -1,4 +1,5 @@
 from datetime import datetime
+from urlparse import urlparse
 
 import requests
 import mock
@@ -49,6 +50,10 @@ class CrmLeadTC(BaseShippingTC):
     def _country(self, code):
         return self.env['res.country'].search([('code', '=', code)])
 
+    def _attachment_from_download_action(self, download_action):
+        return self.env['ir.attachment'].browse(
+            int(urlparse(download_action['url']).path.rsplit('/', 1)[-1]))
+
     def test_shipping_data_product_code(self):
         base_kwargs = {
             'sender': self.env['res.partner'],
@@ -83,7 +88,6 @@ class CrmLeadTC(BaseShippingTC):
         with mock.patch.object(requests, 'post', return_value=self.fake_resp):
             lead._create_parcel_label(self.parcel_type,
                                       self.shipping_account,
-                                      self.env['res.partner'],  # empty sender!
                                       lead.partner_id,
                                       lead.get_label_ref())
 
@@ -99,23 +103,17 @@ class CrmLeadTC(BaseShippingTC):
         self.assertEqual(att.name, self.parcel_type.name + '.pdf')
         self.assertEqualFakeLabel(att)
 
-    def test_default_parcel_labels(self):
+    def test_print_parcel_action(self):
         leads = self.env['crm.lead']
         for num in range(5):
             leads += self.lead.copy({'name': '[SO%05d] Test lead' % num})
 
-        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            # Empty sender does not crash!
-            all_labels = leads.default_parcel_labels(self.env['res.partner'])
+        act = self.env.ref('commown_shipping.action_print_outward_label_lead')
 
+        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
+            download_action = act.with_context({
+                'active_model': leads._name, 'active_ids': leads.ids}).run()
+
+        all_labels = self._attachment_from_download_action(download_action)
         self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')
         self.assertEqual(pdf_page_num(all_labels), 2)
-
-        lead = self.lead.copy({'name': '[Test single]'})
-        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            # Empty sender does not crash!
-            label = lead.default_parcel_labels(
-                self.env['res.partner'],
-                force_single=True)
-
-        self.assertEqualFakeLabel(label)

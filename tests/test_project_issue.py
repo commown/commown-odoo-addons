@@ -19,7 +19,6 @@ class ProjectIssueTC(BaseShippingTC):
         issues = self.env['project.issue']
         base_args = [self.parcel_type,
                      self.shipping_account,
-                     self.env['res.partner'],  # empty sender!
                      self.issue.partner_id,
                      ]
 
@@ -39,7 +38,6 @@ class ProjectIssueTC(BaseShippingTC):
         all_labels = issues.parcel_labels(
             self.parcel_type.technical_name,
             self.shipping_account.technical_name,
-            self.env['res.partner'],  # empty sender!
             )
 
         self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')
@@ -50,7 +48,6 @@ class ProjectIssueTC(BaseShippingTC):
             label = issue.parcel_labels(
                 self.parcel_type.technical_name,
                 self.shipping_account.technical_name,
-                self.env['res.partner'],  # empty sender!
                 force_single=True,
                 )
 

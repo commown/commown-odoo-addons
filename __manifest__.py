@@ -9,6 +9,7 @@
     'website': "https://commown.fr",
     'depends': [
         'sale',
+        'website',
         'crm',
         'project_issue',
         'keychain',

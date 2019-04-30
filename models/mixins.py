@@ -35,18 +35,17 @@ class CommownShippingMixin(models.AbstractModel):
         return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
 
     @api.multi
-    def _create_parcel_label(self, parcel, account, sender, recipient, ref):
+    def _create_parcel_label(self, parcel, account, recipient, ref):
         """ Generate a new label from following arguments:
         - parcel: a commown.parcel.type entity
         - account: a keychain.account entity which namespace is "colissimo"
-        - sender: the sender res.partner entity
         - recipient: the recipient res.partner entity
         - ref: a string reference to be printed on the parcel
         """
         self.ensure_one()
 
         meta_data, label_data = parcel.colissimo_label(
-            account, sender, recipient, ref)
+            account, parcel.sender, recipient, ref)
 
         if meta_data and not label_data:
             raise ValueError(json.dumps(meta_data))
@@ -89,7 +88,7 @@ class CommownShippingMixin(models.AbstractModel):
         return match.groupdict()['ref'] if match else ''
 
     @api.multi
-    def default_parcel_labels(self, sender, parcel=None, account=None,
+    def default_parcel_labels(self, parcel=None, account=None,
                               force_single=False, ref=None):
         paths = []
 
@@ -98,7 +97,7 @@ class CommownShippingMixin(models.AbstractModel):
             parcel = parcel or lead._default_shipping_parcel_type()
             account = account or lead._default_shipping_account()
             label = lead._get_or_create_label(
-                parcel, account, sender, lead.partner_id, ref)
+                parcel, account, lead.partner_id, ref)
             if len(self) == 1 and force_single:
                 return label
             paths.append(label._full_path(label.store_fname))
@@ -148,7 +147,7 @@ class CommownShippingMixin(models.AbstractModel):
                     _logger.error('Could not remove tmp label file %r', p)
 
     @api.multi
-    def parcel_labels(self, parcel_name, account_name, sender,
+    def parcel_labels(self, parcel_name, account_name,
                       force_single=False, ref=None):
 
         parcel = self.env['commown.parcel.type'].search([
@@ -160,7 +159,7 @@ class CommownShippingMixin(models.AbstractModel):
         ]).ensure_one()
 
         return self.default_parcel_labels(
-            sender, parcel=parcel, account=account,
+            parcel=parcel, account=account,
             force_single=force_single, ref=ref)
 
 

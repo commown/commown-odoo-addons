@@ -17,6 +17,12 @@ class ParcelType(models.Model):
         'Insurance value (€)', required=True, default=0.)
     is_return = fields.Boolean('Return parcel', required=True, default=False)
 
+    def _compute_default_sender(self):
+        return self.env.ref('base.main_company').partner_id
+
+    sender = fields.Many2one('res.partner', string='Sender', required=True,
+                             default=_compute_default_sender)
+
     _sql_constraints = [
         ('uniq_technical_name', 'UNIQUE (technical_name)',
          'Parcel technical names must be unique.'),
