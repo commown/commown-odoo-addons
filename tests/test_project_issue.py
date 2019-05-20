@@ -207,7 +207,7 @@ class ProjectTC(TransactionCase):
             ('reference', 'like', self.invoice.number),
         ])
 
-    def _test_cron_first_issue(self):
+    def test_cron_first_issue(self):
         """ First payment issue:
         - payment issue 1 cannot be attributed to an odoo
           transaction (the payment has no TR reference), so an odoo
@@ -244,7 +244,7 @@ class ProjectTC(TransactionCase):
 
         self.assertIssuesAcknowledged(act, 'i1', 'i2')
 
-    def _test_cron_second_issue(self):
+    def test_cron_second_issue(self):
         """ Second payment issue for the `self.invoice` invoice:
         - the previously created odoo issue must be found and its
           unpaid invoice counter incremented
@@ -266,7 +266,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue.invoice_id.amount_total, 104.17)
         self.assertIssuesAcknowledged(act, 'i2')
 
-    def _test_cron_third_issue(self):
+    def test_cron_third_issue(self):
         """ Third payment issue for the `self.invoice` invoice:
         - the previously created odoo issue must be found and its
           unpaid invoice counter incremented
@@ -317,7 +317,7 @@ class ProjectTC(TransactionCase):
             self.env['base.action.rule']._check()
         return act
 
-    def _test_actions(self):
+    def test_actions(self):
         issue = self._create_odoo_issue()
 
         # Check a message is sent when entering the warn and wait stage
@@ -363,7 +363,7 @@ class ProjectTC(TransactionCase):
         act = self._simulate_wait(issue, days=8, minutes=1)
         self.assertInStage(issue, 'stage_issue_fixed')
 
-    def _test_functional_3_trials(self):
+    def test_functional_3_trials(self):
         act, get = self._execute_cron([
             fake_issue_doc(id='i1',
                            payment_ref='TR%d' % self.transaction.id,
