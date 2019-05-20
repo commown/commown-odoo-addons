@@ -12,6 +12,10 @@ class FakeDoc(dict):
     pass
 
 
+def issue_emails(issue):
+    return issue.message_ids.filtered(lambda m: m.message_type == 'email')
+
+
 def fake_action(method, func, *args, **kwargs):
     if method == 'POST' and func == 'ack-payment-issue':
         return {'executionStatus': 'processed'}
@@ -378,8 +382,8 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue.invoice_unpaid_count, 1)
         self.assertEqual(issue.invoice_id.amount_total, 100.)
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
-        last_msg = issue.message_ids[0]
-        self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
+        self.assertEqual(issue_emails(issue).mapped('subject'),
+                         ['YourCompany: rejected payment'])
         self.assertEqual(self.invoice.state, 'open')
 
         act = self._simulate_wait(issue, days=4)
@@ -392,6 +396,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(len(payins), 1)
         self.assertEqual(payins[0][1]['params']['label'], txs[0].reference)
         self.assertEqual(self.invoice.state, 'paid')
+        self.assertEqual(len(issue_emails(issue)), 1)  # no new email
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i2',
@@ -402,10 +407,8 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue.invoice_unpaid_count, 2)
         self.assertEqual(issue.invoice_id.amount_total, 104.17)
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
-        new_msg = issue.message_ids[0]
-        self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
-        self.assertFalse(last_msg == new_msg)
-        last_msg = new_msg
+        self.assertEqual(issue_emails(issue).mapped('subject'),
+                         2 * ['YourCompany: rejected payment'])
         self.assertEqual(self.invoice.state, 'open')
 
         act = self._simulate_wait(issue, days=4)
@@ -428,8 +431,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue.invoice_unpaid_count, 3)
         self.assertEqual(issue.invoice_id.amount_total, 108.34)
         self.assertInStage(issue, 'stage_max_trials_reached')
-        last_msg = issue.message_ids[0]
-        self.assertEqual(last_msg.subject,
+        self.assertEqual(issue_emails(issue)[0].subject,
                          'YourCompany: max payment trials reached')
         self.assertFalse(self._action_calls(act, 'create-payins'))
         self.assertEqual(len(self._invoice_txs()), 3)

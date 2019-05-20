@@ -34,7 +34,6 @@
       <field name="name">Retry payment and wait</field>
       <field name="description">A payment is immediately retried when the issue is move here. The issue then stays here for a given number of days (see dedicated time-based automated action) during which the payment may be rejected again. After this period, the payment is considered OK and the issue fixed: in this case the issue will be moved to the corresponding column.</field>
       <field name="project_ids" eval="[(4, ref('project_payment_issue'))]"/>
-      <field name="mail_template_id" ref="mail_warn_user"/>
     </record>
 
     <record id="stage_max_trials_reached" model="project.task.type">
