@@ -20,7 +20,7 @@
   <p>Hello,</p>
   <br>
   <p>Your payment of invoice number ${object.invoice_id.number} has been
-    rejected${object.invoice_unpaid_count != 1 and ' again' or ''}.
+    rejected${object.invoice_unpaid_count != 0 and object.invoice_unpaid_count != 1 and ' again' or ''}.
   </p>
   <p>Next attempt will occur in the coming days.
     Please contact us quickly in case you think this new payment could be rejected too,
