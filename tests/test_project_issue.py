@@ -108,9 +108,16 @@ class ProjectTC(TransactionCase):
             })],
         })
 
+        tax = self.env['account.tax'].create({
+            'name': 'my tax',
+            'type_tax_use': 'sale',
+            'amount_type': 'percent',
+            'amount': 20.,
+        })
         for _ref in ('management_fees_product', 'bank_fees_product'):
             prod = self.env.ref('payment_slimpay_issue.' + _ref)
             prod.property_account_income_id = revenue_account.id
+            prod.taxes_id = [(6, 0, tax.ids)]
 
         self.invoice = self.env['account.invoice'].create({
             'name': u'Test Invoice',
@@ -267,7 +274,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(len(self._project_issues()), 1)
         self.assertEqual(issue.invoice_unpaid_count, 2)
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
-        self.assertEqual(issue.invoice_id.amount_total, 104.17)
+        self.assertEqual(issue.invoice_id.amount_total, 105.)
         self.assertIssuesAcknowledged(act, 'i2')
 
     def test_cron_third_issue(self):
@@ -295,7 +302,7 @@ class ProjectTC(TransactionCase):
         # We haven't simulated the previous invoice amount raise due
         # to 2nd payment issue here, so the invoice amount was
         # incremented with the fees amount only once:
-        self.assertEqual(issue.invoice_id.amount_total, 104.17)
+        self.assertEqual(issue.invoice_id.amount_total, 105.)
         self.assertIssuesAcknowledged(act, 'i3')
         last_msg = issue.message_ids[0]
         self.assertEqual(last_msg.subject,
@@ -355,7 +362,7 @@ class ProjectTC(TransactionCase):
         self.assertIssuesAcknowledged(act, 'i1')
         self.assertEqual(issue.invoice_id, self.invoice)
         self.assertEqual(issue.invoice_unpaid_count, 1)
-        self.assertEqual(issue.invoice_id.amount_total, 110)
+        self.assertEqual(issue.invoice_id.amount_total, 112)
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
         last_msg = issue.message_ids[0]
         self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
@@ -405,7 +412,7 @@ class ProjectTC(TransactionCase):
         ])
         self.assertIssuesAcknowledged(act, 'i2')
         self.assertEqual(issue.invoice_unpaid_count, 2)
-        self.assertEqual(issue.invoice_id.amount_total, 104.17)
+        self.assertEqual(issue.invoice_id.amount_total, 105)
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
         self.assertEqual(issue_emails(issue).mapped('subject'),
                          2 * ['YourCompany: rejected payment'])
@@ -429,7 +436,7 @@ class ProjectTC(TransactionCase):
         ])
         self.assertIssuesAcknowledged(act, 'i3')
         self.assertEqual(issue.invoice_unpaid_count, 3)
-        self.assertEqual(issue.invoice_id.amount_total, 108.34)
+        self.assertEqual(issue.invoice_id.amount_total, 110)
         self.assertInStage(issue, 'stage_max_trials_reached')
         self.assertEqual(issue_emails(issue)[0].subject,
                          'YourCompany: max payment trials reached')
