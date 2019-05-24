@@ -337,12 +337,12 @@ class ProjectTC(TransactionCase):
         last_msg = issue.message_ids[0]
         self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
 
-        # 3 days later, issue must move to pay retry stage and a payin created
+        # 5 days later, issue must move to pay retry stage and a payin created
 
         # Prepare to new payment:
         self.invoice.payment_move_line_ids.remove_move_reconcile()
 
-        act = self._simulate_wait(issue, days=4)
+        act = self._simulate_wait(issue, days=6)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         self.assertEqual(len(self._action_calls(act, 'create-payins')), 1)
 
@@ -367,7 +367,7 @@ class ProjectTC(TransactionCase):
         last_msg = issue.message_ids[0]
         self.assertEqual(last_msg.subject, 'YourCompany: rejected payment')
 
-        act = self._simulate_wait(issue, days=4)
+        act = self._simulate_wait(issue, days=6)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         self.assertEqual(len(self._action_calls(act, 'create-payins')), 1)
 
@@ -393,7 +393,7 @@ class ProjectTC(TransactionCase):
                          ['YourCompany: rejected payment'])
         self.assertEqual(self.invoice.state, 'open')
 
-        act = self._simulate_wait(issue, days=4)
+        act = self._simulate_wait(issue, days=6)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         txs = self._invoice_txs()
         self.assertEqual(len(txs), 2)
@@ -418,7 +418,7 @@ class ProjectTC(TransactionCase):
                          2 * ['YourCompany: rejected payment'])
         self.assertEqual(self.invoice.state, 'open')
 
-        act = self._simulate_wait(issue, days=4)
+        act = self._simulate_wait(issue, days=6)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
         txs = self._invoice_txs()
         self.assertEqual(len(txs), 3)

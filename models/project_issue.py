@@ -30,7 +30,7 @@ class ProjectIssue(models.Model):
         after the partner has been warned.
         """
         return int(self.env['ir.config_parameter'].get_param(
-            'payment_slimpay_issue.payment_retry_after_days_number') or 3)
+            'payment_slimpay_issue.payment_retry_after_days_number') or 5)
 
     @api.model
     def _slimpay_payment_max_retrials(self):
