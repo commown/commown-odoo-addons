@@ -4,7 +4,7 @@
   <data noupdate="1">
     <record id="smspro_payment_issue" model="mail.template">
       <field name="name">[commown] SMS impayé</field>
-      <field name="subject"><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join(object.partner_id.phone.split()).replace('+', '')}]]></field>
+      <field name="subject"><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
       <field name="email_from">contact@commown.fr</field>
       <field name="email_to">mail2sms@envoyersmspro.com</field>
       <field name="model_id" ref="project_issue.model_project_issue"/>
