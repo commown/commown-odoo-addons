@@ -153,7 +153,8 @@ class ProjectIssue(models.Model):
         meth = client.method_name
         payment_doc = client.get(issue_doc[meth('get-payment')].url)
 
-        name = [reject_date(issue_doc),
+        name = [payment_doc['reference'] or _('No payment ref'),
+                reject_date(issue_doc),
                 '%s %s' % (issue_doc['rejectAmount'], issue_doc['currency']),
                 ]
         partner_id = False
@@ -182,7 +183,6 @@ class ProjectIssue(models.Model):
 
         description = [
             u'Slimpay Id: %s' % issue_doc['id'],
-            u'Payment Reference: %s' % payment_doc['reference'],
             u'Payment Label: %s' % payment_doc['label'],
         ]
 
