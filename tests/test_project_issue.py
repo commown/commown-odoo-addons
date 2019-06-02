@@ -401,7 +401,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(tx0, self.transaction)
         payins = self._action_calls(act, 'create-payins')
         self.assertEqual(len(payins), 1)
-        self.assertEqual(payins[0][1]['params']['label'], txs[0].reference)
+        self.assertEqual(payins[0][1]['params']['label'], 'dummy label')
         self.assertEqual(self.invoice.state, 'paid')
         self.assertEqual(len(issue_emails(issue)), 1)  # no new email
 
@@ -426,7 +426,7 @@ class ProjectTC(TransactionCase):
         tx2 = txs[0]
         payins = self._action_calls(act, 'create-payins')
         self.assertEqual(len(payins), 1)
-        self.assertEqual(payins[0][1]['params']['label'], tx2.reference)
+        self.assertEqual(payins[0][1]['params']['label'], 'dummy label')
         self.assertEqual(self.invoice.state, 'paid')
 
         act, get = self._execute_cron([

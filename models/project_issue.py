@@ -23,6 +23,10 @@ class ProjectIssue(models.Model):
         'Invoice next payment date', help=(
             'If set in the future, the next payment trial (if any) will occur'
             ' at this date'))
+    slimpay_payment_label = fields.Text(
+        'Slimpay payment label', help=(
+            'Label the customer will see on his bank statement.'
+            ' When left empty, the Odoo transaction name will appear.'))
 
     @api.model
     def _slimpay_payment_invoice_payment_next_date_days_delta(self):
@@ -183,7 +187,6 @@ class ProjectIssue(models.Model):
 
         description = [
             u'Slimpay Id: %s' % issue_doc['id'],
-            u'Payment Label: %s' % payment_doc['label'],
         ]
 
         return self.env['project.issue'].create({
@@ -192,6 +195,7 @@ class ProjectIssue(models.Model):
             'project_id': project.id,
             'partner_id': partner_id,
             'invoice_id': invoice.id if invoice else False,
+            'slimpay_payment_label': payment_doc['label'],
         })
 
     @api.model
@@ -263,6 +267,10 @@ class ProjectIssue(models.Model):
                 'invoice_ids': [(6, 0, [invoice.id])],
             })
             payment.post()
+
+            if self.slimpay_payment_label:
+                transaction = transaction.with_context(
+                    slimpay_payin_label=self.slimpay_payment_label)
 
             if not transaction.s2s_do_transaction():
                 _logger.error('Transaction %s failed', transaction.id)
