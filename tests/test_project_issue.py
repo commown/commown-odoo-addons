@@ -255,6 +255,10 @@ class ProjectTC(TransactionCase):
 
         self.assertIssuesAcknowledged(act, 'i1', 'i2')
 
+        self.assertIn('TR%s ' % self.transaction.id, issue2.name)
+        self.assertIn('2019-03-28', issue2.name)
+        self.assertIn(issue2.invoice_id.number, issue2.name)
+
     def test_cron_second_issue(self):
         """ Second payment issue for the `self.invoice` invoice:
         - the previously created odoo issue must be found and its
@@ -276,6 +280,7 @@ class ProjectTC(TransactionCase):
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
         self.assertEqual(issue.invoice_id.amount_total, 105.)
         self.assertIssuesAcknowledged(act, 'i2')
+        self.assertIn('TR%s ' % self.transaction.id, issue.name)
 
     def test_cron_third_issue(self):
         """ Third payment issue for the `self.invoice` invoice:
@@ -404,6 +409,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(payins[0][1]['params']['label'], 'dummy label')
         self.assertEqual(self.invoice.state, 'paid')
         self.assertEqual(len(issue_emails(issue)), 1)  # no new email
+        self.assertIn('TR%s ' % self.transaction.id, issue.name)
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i2',
@@ -417,6 +423,8 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue_emails(issue).mapped('subject'),
                          2 * ['YourCompany: rejected payment'])
         self.assertEqual(self.invoice.state, 'open')
+        self.assertIn('TR%s - TR%s ' % (tx1.id, self.transaction.id),
+                      issue.name)
 
         act = self._simulate_wait(issue, days=6)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
@@ -442,3 +450,6 @@ class ProjectTC(TransactionCase):
                          'YourCompany: max payment trials reached')
         self.assertFalse(self._action_calls(act, 'create-payins'))
         self.assertEqual(len(self._invoice_txs()), 3)
+        self.assertIn(
+            'TR%s - TR%s - TR%s ' % (tx2.id, tx1.id, self.transaction.id),
+            issue.name)

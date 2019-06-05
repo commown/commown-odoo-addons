@@ -170,6 +170,8 @@ class ProjectIssue(models.Model):
                 ('invoice_id', '=', invoice.id),
             ])
             if existing:
+                existing[0].name = ' - '.join(
+                    (payment_doc['reference'], existing[0].name))
                 return existing[0]
             partner_id = invoice.partner_id.id
             name.append(invoice.number)
