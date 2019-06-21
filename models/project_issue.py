@@ -152,15 +152,26 @@ class ProjectIssue(models.Model):
                         ('number', '=', ref.split('x', 1)[0])])
 
     @api.model
+    def _slimpay_payment_issue_name(self, issue_doc, payment_doc,
+                                    invoice=None, issue=None):
+        if issue is None:
+            name = [
+                payment_doc['reference'] or _('No payment ref'),
+                reject_date(issue_doc),
+                '%s %s' % (issue_doc['rejectAmount'], issue_doc['currency']),
+            ]
+            if invoice is not None:
+                name.append(invoice.number)
+        else:
+            name = [payment_doc['reference'], issue.name]
+        return u' - '.join(name)
+
+    @api.model
     def _slimpay_payment_issue_get_or_create(self, project, client, issue_doc,
                                              inv_prefix):
         meth = client.method_name
         payment_doc = client.get(issue_doc[meth('get-payment')].url)
 
-        name = [payment_doc['reference'] or _('No payment ref'),
-                reject_date(issue_doc),
-                '%s %s' % (issue_doc['rejectAmount'], issue_doc['currency']),
-                ]
         partner_id = False
         invoice = self._slimpay_payment_issue_find_invoice(
             issue_doc, payment_doc, inv_prefix)
@@ -170,11 +181,10 @@ class ProjectIssue(models.Model):
                 ('invoice_id', '=', invoice.id),
             ])
             if existing:
-                existing[0].name = ' - '.join(
-                    (payment_doc['reference'], existing[0].name))
+                existing[0].name = self._slimpay_payment_issue_name(
+                    issue_doc, payment_doc, invoice, existing[0])
                 return existing[0]
             partner_id = invoice.partner_id.id
-            name.append(invoice.number)
         else:
             subscriber_doc = client.get(
                 payment_doc[meth('get-subscriber')].url)
@@ -192,7 +202,8 @@ class ProjectIssue(models.Model):
         ]
 
         return self.env['project.issue'].create({
-            'name': u' - '.join(name),
+            'name': self._slimpay_payment_issue_name(
+                issue_doc, payment_doc, invoice),
             'description': u'\n'.join(description),
             'project_id': project.id,
             'partner_id': partner_id,
