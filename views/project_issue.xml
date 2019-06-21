@@ -12,6 +12,7 @@
                 <field name="invoice_id"/>
                 <field name="invoice_unpaid_count"/>
                 <field name="invoice_next_payment_date"/>
+                <field name="slimpay_payment_label"/>
               </group>
             </page>
           </xpath>
