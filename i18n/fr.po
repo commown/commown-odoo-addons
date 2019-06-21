@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-02 07:33+0000\n"
-"PO-Revision-Date: 2019-04-02 07:33+0000\n"
+"POT-Creation-Date: 2019-06-21 15:48+0000\n"
+"PO-Revision-Date: 2019-06-21 15:48+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "\n"
 "      \n"
 "      "
 msgstr "\n"
-"      <p>Max trial number reached for payment issue ${object.name} id ${object.id}.</p>\n"
+"      <p>Nombre maximum de rejets de prélèvement atteint pour ${object.name} id ${object.id}.</p>\n"
 "      \n"
 "      "
 
@@ -30,78 +30,65 @@ msgstr "\n"
 #: model:mail.template,body_html:payment_slimpay_issue.mail_warn_user
 msgid "\n"
 "<div style=\"background:#F0F0F0;color:#515166;padding:10px 0px;font-family:Arial,Helvetica,sans-serif;font-size:14px;\">\n"
-"  <table style=\"width:600px;margin:5px auto;\">\n"
-"    <tbody>\n"
-"      <tr>\n"
-"        <td>\n"
-"          <a href=\"/\"><img src=\"/web/binary/company_logo\" style=\"vertical-align:baseline;max-width:100px;\"></a>\n"
-"        </td>\n"
-"        <td style=\"text-align:right;vertical-align:middle;\">\n"
-"          Satisfaction Survey\n"
-"        </td>\n"
-"      </tr>\n"
-"    </tbody>\n"
-"  </table>\n"
-"  <table style=\"width:600px;margin:0px auto;background:white;border:1px solid #e1e1e1;\">\n"
-"    <tbody>\n"
-"      <tr>\n"
-"        <td style=\"padding:15px 20px 10px 20px;\">\n"
-"          <p>Hello,</p>\n"
-"          <br>\n"
-"          <p>Your payment of invoice number %{object.invoice_id.number} as been rejected.</p>\n"
-"          <p>Next attempt will occur in the coming days.\n"
-"            Please contact us quickly in case you think this new payment could be rejected too,\n"
-"            to avoid bank fees to all parties.</p>\n"
-"        </td>\n"
-"      </tr>\n"
-"    </tbody>\n"
-"  </table>\n"
-"  <p>Email automatically sent by <a href=\"${object.project_id.company_id.website}\" style=\"color:#875A7B;\">${object.project_id.company_id.name}</a></p>\n"
+"  <p>\n"
+"    <a href=\"/\"><img src=\"/web/binary/company_logo\" style=\"vertical-align:baseline;max-width:100px;\"></a>\n"
+"  </p>\n"
+"  <br>\n"
+"  <p>Hello,</p>\n"
+"  <br>\n"
+"  <p>Your payment of invoice number ${object.invoice_id.number} has been\n"
+"    rejected${object.invoice_unpaid_count != 0 and object.invoice_unpaid_count != 1 and ' again' or ''}.\n"
+"  </p>\n"
+"  <p>Next attempt will occur in the coming days.\n"
+"    Please contact us quickly in case you think this new payment could be rejected too,\n"
+"    to avoid bank fees to all parties.\n"
+"  </p>\n"
+"  <br>\n"
+"  <p>Regards,<br>\n"
+"    The\n"
+"    <a href=\"${object.project_id.company_id.website}\" style=\"color:#875A7B;\">\n"
+"      ${object.project_id.company_id.name}\n"
+"    </a>\n"
+"    team.\n"
+"  </p>\n"
 "</div>\n"
 "\n"
 "    "
 msgstr "\n"
 "<div style=\"background:#F0F0F0;color:#515166;padding:10px 0px;font-family:Arial,Helvetica,sans-serif;font-size:14px;\">\n"
-"  <table style=\"width:600px;margin:5px auto;\">\n"
-"    <tbody>\n"
-"      <tr>\n"
-"        <td>\n"
-"          <a href=\"/\"><img src=\"/web/binary/company_logo\" style=\"vertical-align:baseline;max-width:100px;\"></a>\n"
-"        </td>\n"
-"        <td style=\"text-align:right;vertical-align:middle;\">\n"
-"          Satisfaction Survey\n"
-"        </td>\n"
-"      </tr>\n"
-"    </tbody>\n"
-"  </table>\n"
-"  <table style=\"width:600px;margin:0px auto;background:white;border:1px solid #e1e1e1;\">\n"
-"    <tbody>\n"
-"      <tr>\n"
-"        <td style=\"padding:15px 20px 10px 20px;\">\n"
-"          <p>Hello,</p>\n"
-"          <br>\n"
-"          <p>Your payment of invoice number %{object.invoice_id.number} as been rejected.</p>\n"
-"          <p>Next attempt will occur in the coming days.\n"
-"            Please contact us quickly in case you think this new payment could be rejected too,\n"
-"            to avoid bank fees to all parties.</p>\n"
-"        </td>\n"
-"      </tr>\n"
-"    </tbody>\n"
-"  </table>\n"
-"  <p>Email automatically sent by <a href=\"${object.project_id.company_id.website}\" style=\"color:#875A7B;\">${object.project_id.company_id.name}</a></p>\n"
+"  <p>\n"
+"    <a href=\"/\"><img src=\"/web/binary/company_logo\" style=\"vertical-align:baseline;max-width:100px;\"></a>\n"
+"  </p>\n"
+"  <br>\n"
+"  <p>Bonjour,</p>\n"
+"  <br>\n"
+"  <p>Le prélèvement de votre facture ${object.invoice_id.number} a été\n"
+"    rejeté${object.invoice_unpaid_count != 0 and object.invoice_unpaid_count != 1 and ' de nouveau' or ''}.\n"
+"  </p>\n"
+"  <p>La prochaine tentative aura lieu dans les prochains jours.\n"
+"    Merci de nous contacter rapidement si vous pensez que ce prélèvement pourrait être de nouveau rejeté,\n"
+"    afin d'éviter à tous des frais bancaires.\n"
+"  </p>\n"
+"  <br>\n"
+"  <p>Cordialement,<br>\n"
+"    L'équipe \n"
+"    <a href=\"${object.project_id.company_id.website}\" style=\"color:#875A7B;\">\n"
+"      ${object.project_id.company_id.name}\n"
+"    </a>.\n"
+"  </p>\n"
 "</div>\n"
 "\n"
 "    "
 
 #. module: payment_slimpay_issue
-#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
-msgid "${object.project_id.company_id.name}: max payment trials reached"
-msgstr "${object.project_id.company_id.name}: max payment trials reached"
-
-#. module: payment_slimpay_issue
 #: model:mail.template,subject:payment_slimpay_issue.mail_warn_user
 msgid "${object.project_id.company_id.name}: rejected payment"
-msgstr "${object.project_id.company_id.name}: rejected payment"
+msgstr "${object.project_id.company_id.name}: rejet de prélèvement"
+
+#. module: payment_slimpay_issue
+#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
+msgid "${object.user_id.company_id.name}: max payment trials reached"
+msgstr "${object.user_id.company_id.name}: nombre maximum de rejets de prélèvement atteint"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_retry_payment_and_wait
@@ -114,14 +101,29 @@ msgid "Fixed payment issue"
 msgstr "Prélèvement validé"
 
 #. module: payment_slimpay_issue
+#: model:ir.model.fields,help:payment_slimpay_issue.field_project_issue_invoice_next_payment_date
+msgid "If set in the future, the next payment trial (if any) will occur at this date"
+msgstr "Lorsque paramétré dans le futur, la prochaine tentative de prélèvement (le cas échéant) aura lieu à cette date"
+
+#. module: payment_slimpay_issue
 #: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_issue_invoice_id
 msgid "Invoice"
 msgstr "Facture"
 
 #. module: payment_slimpay_issue
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_issue_invoice_next_payment_date
+msgid "Invoice next payment date"
+msgstr "Date du prochain prélèvement"
+
+#. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_max_trials_reached
 msgid "Issues end-up here once the configured number of payment retrials (2 by default, can be overriden using the \"payment_slimpay_issue.max_retrials\" system parameter) was reached, and stay here until manually handled."
 msgstr "Les incidents de paiement atterrissent ici lorsque le nombre maximum de tentatives de re-prélèvement (2 par défaut, peut être redéfini grâce au paramètre système \"payment_slimpay_issue.max_retrials\") a été atteint, et ils y restent en attendant un traitement manuel."
+
+#. module: payment_slimpay_issue
+#: model:ir.model.fields,help:payment_slimpay_issue.field_project_issue_slimpay_payment_label
+msgid "Label the customer will see on his bank statement. When left empty, the Odoo transaction name will appear."
+msgstr "Libellé que le client verra sur son relevé bancaire. Lorsque laissé vide, c'est le nom de la transaction Odoo qui y figure."
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_max_trials_reached
@@ -149,7 +151,13 @@ msgid "No corresponding invoice found"
 msgstr "Facture liée non déterminée"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_issue.py:46
+#: code:addons/payment_slimpay_issue/models/project_issue.py:159
+#, python-format
+msgid "No payment ref"
+msgstr "No payment ref"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/project_issue.py:64
 #, python-format
 msgid "No sale journal defined for this company."
 msgstr "Aucun journal de vente paramétré pour l'entreprise."
@@ -185,9 +193,24 @@ msgid "Retry payment and wait"
 msgstr "Re-tenter un prélèvement et attendre"
 
 #. module: payment_slimpay_issue
-#: model:product.template,name:payment_slimpay_issue.rejected_sepa_fee_product
-msgid "Slimpay payment Reject fees"
-msgstr "Frais de rejet Slimpay"
+#: model:ir.actions.server,name:payment_slimpay_issue.set_invoice_next_payment_date
+msgid "Set invoice next payment date"
+msgstr "Paramétrer la date du prochain prélèvement"
+
+#. module: payment_slimpay_issue
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_issue_slimpay_payment_label
+msgid "Slimpay payment label"
+msgstr "Libellé bancaire"
+
+#. module: payment_slimpay_issue
+#: model:product.template,name:payment_slimpay_issue.bank_fees_product
+msgid "Slimpay reject bank fees"
+msgstr "Frais bancaires des rejets de prélèvement"
+
+#. module: payment_slimpay_issue
+#: model:product.template,name:payment_slimpay_issue.management_fees_product
+msgid "Slimpay reject management fees"
+msgstr "Frais de gestion des rejets de prélèvement"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_warn_partner_and_wait
@@ -198,3 +221,4 @@ msgstr "Avertir le partenaire et attendre"
 #: model:project.task.type,description:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid "When the issue is moved to this stage, the partner is immediately warned by email that the payment was rejected. The issue then stays here for a given number of days (see dedicated time-based automated action), then moves to the next stage."
 msgstr "Lorsqu'un incident de paiement arrive dans cette colonne,  le partenaire est immédiatement averti par courriel que le prélèvement a été rejeté. L'incident reste alors dans cette colonne un certain nombre de jours (paramétrable dans l'action automatisée dédiée), puis est automatiquement bougée dans la colonne suivante."
+
