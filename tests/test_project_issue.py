@@ -55,13 +55,11 @@ class ProjectTC(TransactionCase):
         super(ProjectTC, self).setUp()
         self.addCleanup(patcher.stop)
 
-        self.env['account.journal'].create({
-            'name': 'Sales',
-            'code': 'INV',
-            'company_id': self.env.user.company_id.id,
-            'type': 'sale',
-            'update_posted': True,  # important for fees, see module doc
-        })
+        self.inv_journal = self.env['account.journal'].search([
+            ('type', '=', 'sale'),
+        ]).ensure_one()
+        # important for fees, see module doc:
+        self.inv_journal.update_posted = True
 
         ref = self.env.ref
 
@@ -125,8 +123,7 @@ class ProjectTC(TransactionCase):
             'payment_term_id': self.env.ref(
                 'account.account_payment_term_advance').id,
             'payment_mode_id': payment_mode.id,
-            'journal_id': self.env['account.journal'].search(
-                [('type', '=', 'sale')], limit=1).id,
+            'journal_id': self.inv_journal.id,
             'partner_id': self.partner.id,
             'account_id': customer_account.id,
             'invoice_line_ids': [(0, 0, {
