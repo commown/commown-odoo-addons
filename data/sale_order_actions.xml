@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="action_add_rental_contract" model="ir.actions.server">
+    <field name="name">Add rental contract</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">40</field>
+    <field name="state">code</field>
+    <field name="code">
+record.generate_rental_contracts()
+    </field>
+  </record>
+
+  <record id="order_sent" model="base.action.rule">
+    <field name="name">Sale done</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_write</field>
+    <field name="filter_pre_domain">['|', ('state', '=', 'draft'), ('state', '=', 'sent')]</field>
+    <field name="filter_domain">[('state', '=', 'sale')]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('product_rental.action_add_rental_contract')])]"/>
+  </record>
+
+</odoo>

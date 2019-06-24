@@ -7,7 +7,7 @@
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.fr",
-    'depends': ['website_sale', 'document',
+    'depends': ['website_sale', 'document', 'base_action_rule',
                 'contract_payment_auto', 'contract_payment_mode'],
     'external_dependencies': {},
     'data': [
@@ -16,6 +16,7 @@
         'views/website_portal_sale_templates.xml',
         'views/contract_view.xml',
         'views/payment_transaction.xml',
+        'data/sale_order_actions.xml',
     ],
     'installable': True,
 }
