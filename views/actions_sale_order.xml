@@ -150,24 +150,22 @@ if not account or account.get_xml_id().get(account.id) == 'l10n_fr.1_fr_pcg_recv
     </field>
   </record>
 
-  <record id="action_add_rental_contract" model="ir.actions.server">
-    <field name="name">[commown] Add rental contract</field>
-    <field name="model_id" ref="sale.model_sale_order"/>
-    <field name="sequence">40</field>
-    <field name="state">code</field>
-    <field name="code">
-record.generate_rental_contracts()
-    </field>
+  <record id="product_rental.order_sent" model="base.action.rule">
+    <field name="name">[commown] Sale done</field>
+    <field name="server_action_ids" eval="[(4,ref('commown.action_add_to_support_groups'), False)]"/>
   </record>
 
-  <record id="website_order_mail_sent" model="base.action.rule">
-    <field name="name">[commown] Sale done</field>
-    <field name="model_id" ref="sale.model_sale_order"/>
-    <field name="sequence">1</field>
-    <field name="kind">on_write</field>
-    <field name="filter_pre_domain">['|', ('state', '=', 'draft'), ('state', '=', 'sent')]</field>
-    <field name="filter_domain">[('state', '=', 'sale')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('commown.action_add_followup_lead'), ref('commown.action_add_receivable_account'), ref('commown.action_add_rental_contract')])]"/>
+  <record id="product_rental.order_sent" model="base.action.rule">
+    <field name="server_action_ids" eval="[(4,ref('commown.action_add_investor_management_task'), False)]"/>
   </record>
+
+  <record id="product_rental.order_sent" model="base.action.rule">
+    <field name="server_action_ids" eval="[(4,ref('commown.action_add_followup_lead'), False)]"/>
+  </record>
+
+  <record id="product_rental.order_sent" model="base.action.rule">
+    <field name="server_action_ids" eval="[(4,ref('commown.action_add_receivable_account'), False)]"/>
+  </record>
+
 
 </odoo>
