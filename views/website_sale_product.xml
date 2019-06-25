@@ -1,0 +1,23 @@
+<odoo>
+  <data>
+
+    <template id="variants_b2b" inherit_id="website_sale.variants">
+      <xpath expr="//t[@t-set='attribute_value_ids']" position="attributes">
+        <attribute name="t-value">get_attribute_value_ids(product, category)</attribute>
+      </xpath>
+    </template>
+
+    <template id="product_b2b" inherit_id="website_sale.product">
+      <xpath expr="//t[@t-set='attribute_value_ids']" position="attributes">
+        <attribute name="t-value">get_attribute_value_ids(product, category)</attribute>
+      </xpath>
+    </template>
+
+    <template id="product_price_b2b" inherit_id="website_sale.product_price">
+      <xpath expr="//*[contains(@class, 'oe_price') and contains(@t-options, 'monetary')]" position="after">
+        <span>excl. taxes</span>
+      </xpath>
+    </template>
+
+  </data>
+</odoo>
