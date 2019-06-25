@@ -94,4 +94,22 @@
     </xpath>
   </template>
 
+  <template id="products_add_to_cart_group_sales" inherit_id="website_sale_cart_selectable.products_add_to_cart">
+    <xpath expr="//t[@t-if='len(product.product_variant_ids) == 1'] and product.website_btn_addtocart_published" position="attributes">
+      <attribute name="t-if">len(product.product_variant_ids) == 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
+    </xpath>
+    <xpath expr="//t[@t-if='len(product.product_variant_ids) &gt; 1'] and product.website_btn_addtocart_published" position="attributes">
+      <attribute name="t-if">len(product.product_variant_ids) &gt; 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
+    </xpath>
+  </template>
+
+  <template id="product_group_sales" inherit_id="website_sale_cart_selectable.product">
+    <xpath expr="//a[@id='add_to_cart']" position="after">
+      <div t-if="not product.website_btn_addtocart_published and env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids" class="text-muted">(viewed by sales only)</div>
+    </xpath>
+    <xpath expr="//a[@id='add_to_cart']" position="attributes">
+      <attribute name="t-if">product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids</attribute>
+    </xpath>
+  </template>
+
 </odoo>
