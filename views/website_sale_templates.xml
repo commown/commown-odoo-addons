@@ -78,6 +78,14 @@
 
   </template>
 
+  <template id="product_price_b2b" inherit_id="product_rental.product_price">
+    <!-- Remove deposit price: cannot use deposit price as product price in B2B
+         as sale drafts would use it which is not what we want. -->
+    <xpath expr="//*[contains(@class, 'deposit_price')]" position="replace">
+      <t t-if="not category or not category.is_b2b()">$0</t>
+    </xpath>
+  </template>
+
   <template id="assets_frontend"
             inherit_id="website.assets_frontend">
     <xpath expr="." position="inside">
