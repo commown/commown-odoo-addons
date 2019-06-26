@@ -15,7 +15,7 @@
 
     <template id="product_price_b2b" inherit_id="website_sale.product_price">
       <xpath expr="//*[contains(@class, 'oe_price') and contains(@t-options, 'monetary')]" position="after">
-        <span>excl. taxes</span>
+        <span t-if="category and category.is_b2b()">excl. taxes</span>
       </xpath>
     </template>
 
