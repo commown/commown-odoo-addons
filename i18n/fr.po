@@ -4,16 +4,81 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-31 19:55+0000\n"
-"PO-Revision-Date: 2018-08-31 19:55+0000\n"
+"POT-Creation-Date: 2019-06-26 09:40+0000\n"
+"PO-Revision-Date: 2019-06-26 09:40+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: commown
+#: model:mail.template,body_html:commown.mail_template_issue_reminder
+msgid "\n"
+"<div>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object.partner_id.firstname},</p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Pas de nouvelles, bonnes nouvelles&nbsp;?&nbsp;&nbsp;;-)</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    En effet, nous faisons suite à nos précédents échanges\n"
+"    d’assistance et conseil, pour lesquels nous n’avons pas reçu\n"
+"    d’autres retours de votre part à ce jour.\n"
+"  </p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    C’est peut-être tout à fait normal, et nous supposons que\n"
+"    l’incident est bien résolu&nbsp;! Nous nous permettrons donc de\n"
+"    vous envoyer un questionnaire de satisfaction dans les prochains\n"
+"    jours.\n"
+"  </p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    Belle journée&nbsp;!\n"
+"  </p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown qui reste à votre écoute.</p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    NB&nbsp;: Bien entendu, si ce n’est pas le cas, contactez-nous au plus\n"
+"    vite en répondant directement à ce message…\n"
+"  </p>\n"
+"</div>\n"
+""
+msgstr "\n"
+"<div>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object.partner_id.firstname},</p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  Ceci est un mail envoyé automatiquement car vous avez une demande d'assistance ouverte dans votre espace Commown et nous n'avons plus de nouvelles depuis quelques jours. \n"
+"  </p>\n"
+"  \n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  	Si vous avez simplement besoin de plus de temps pour nous répondre ou si certains points ne sont pas clairs, n'hésitez pas à nous le dire par retour de mail. \n"
+"  </p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  	Si au contraire tout est résolu, vous n'avez rien à faire, un questionnaire de satisfaction vous sera envoyé automatiquement dans les prochains jours.\n"
+"  </p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    Belle journée&nbsp;!\n"
+"  </p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown qui reste à votre écoute.</p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"> NB : Même après résolution du problème et fermeture du ticket, vous pouvez répondre directement à ce message pour réactiver à tout moment&nbsp;le sujet lié à cette demande d'assistance. Pour tout autre sujet nous vous invitons à passer par votre Support dédié (Mon Espace -&gt; Contactez-nous). </p>\n"
+"</div>\n"
+""
+
+#. module: commown
+#: model:mail.template,body_html:commown.mail_template_lead_start_error
+msgid "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Error is: ${object.env.context.get('error', 'Unknown!')}</p>\n"
+""
+msgstr "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Error is: ${object.env.context.get('error', 'Unknown!')}</p>\n"
+""
 
 #. module: commown
 #: model:mail.template,body_html:commown.email_send_invoice_from_contract
@@ -83,6 +148,21 @@ msgstr "\n"
 ""
 
 #. module: commown
+#: model:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "(loyer unitaire :"
+msgstr "(loyer unitaire :"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.product_group_sales
+msgid "(viewed by sales only) - <span>Variant id: <span class=\"variant_id_placeholder\"/></span>"
+msgstr "(vu par les vendeurs seulement) - <span>ID de la variant : <span class=\"variant_id_placeholder\"/></span>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "- fin des périodes d'engagement :"
+msgstr "- fin des périodes d'engagement :"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_first_phone_call
 msgid "1st phone call"
 msgstr "1er appel"
@@ -98,6 +178,11 @@ msgid "3rd phone call"
 msgstr "3ème appel"
 
 #. module: commown
+#: model:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "; fin de la période d'engagement :"
+msgstr "; fin de la période d'engagement :"
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_layout
 msgid "<br/>     <span>Proof of address</span>"
 msgstr "<br/>     <span>Justificatif de domicile</span>"
@@ -108,16 +193,16 @@ msgid "<i class=\"fa fa-copy\"/> <span>ID card</span>"
 msgstr "<i class=\"fa fa-copy\"/> <span>Carte d'identité</span>"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.portal_layout
-msgid "<i class=\"fa fa-euro\"/>  <span>SEPA mandate</span> <i class=\"fa fa-check\"/>"
-msgstr "<i class=\"fa fa-euro\"/>  <span>Mandat SEPA</span> <i class=\"fa fa-check\"/>"
-
-#. module: commown
 #: model:ir.ui.view,arch_db:commown.suggestion_cart
 msgid "<span>Authenticate and pay</span>\n"
 "          <span class=\"fa fa-long-arrow-right\"/>"
 msgstr "<span>Se connecter et payer</span>\n"
 "          <span class=\"fa fa-long-arrow-right\"/>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.product_price_b2b
+msgid "<span>Commitment duration: from </span>"
+msgstr "<span>Durée d'engagement : à partir de </span>"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.suggestion_cart
@@ -130,6 +215,11 @@ msgstr "<span>Créer un compte et payer</span>\n"
 #: model:ir.ui.view,arch_db:commown.cart_lines
 msgid "<strong> - Deposit</strong>"
 msgstr "<strong> - Dépôt de garantie</strong>"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.orders_followup
+msgid "<strong>Documents transmis par mail :</strong>"
+msgstr "<strong>Documents transmis par mail :</strong>"
 
 #. module: commown
 #: model:ir.model,name:commown.model_res_groups
@@ -145,6 +235,16 @@ msgstr "Hésitation marquée élocution addresse"
 #: model:ir.model,name:commown.model_account_analytic_account
 msgid "Analytic Account"
 msgstr "Compte analytique"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_crm_lead_start_contract_on_delivery
+msgid "Automatic contract start on delivery"
+msgstr "Démarrage automatique du contrat à la livraison"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_crm_lead_send_email_on_delivery
+msgid "Automatic email on delivery"
+msgstr "Envoi automatique de l'email à la livraison"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
@@ -172,6 +272,11 @@ msgid "Comments"
 msgstr "Commentaires"
 
 #. module: commown
+#: model:mail.template,subject:commown.mail_template_issue_reminder
+msgid "Commown : Votre demande d'assistance se languit de vous !"
+msgstr "Commown : Votre demande d'assistance se languit de vous !"
+
+#. module: commown
 #: model:mail.template,report_name:commown.email_send_invoice_from_contract
 msgid "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
 msgstr "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
@@ -190,6 +295,21 @@ msgstr "Ultimes tentatives"
 #: model:ir.ui.view,arch_db:commown.portal_layout
 msgid "Contact us"
 msgstr "Contactez-nous"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_crm_lead_on_delivery_email_template_id
+msgid "Custom email model for this lead"
+msgstr "Modèle de courriel spécifique à cette opportunité"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_team_custom_lead_view_id
@@ -220,6 +340,11 @@ msgstr "Adresse de livraison validée"
 #: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
 msgid "Delivery followup"
 msgstr "Suivi de l'expédition"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_partner_details
@@ -273,6 +398,11 @@ msgid "Expedition urgency mail send"
 msgstr "Mail au client pour une récupération urgente"
 
 #. module: commown
+#: model:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Fermer"
+msgstr "Fermer"
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_partner_details
 #: model:ir.ui.view,arch_db:commown.signup_field
 msgid "First name"
@@ -289,6 +419,11 @@ msgstr "Équipe de suivi des ventes"
 #: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
 msgid "Global feeling"
 msgstr "Impression générale"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_id
+msgid "ID"
+msgstr "ID"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_res_partner_id_card1
@@ -340,6 +475,21 @@ msgid "Label to be used for the bank payment. Possible markers: #START#, #END#, 
 msgstr "Libellé du paiement bancaire. Marqueurs utilisables : #START#, #END#, #INV# (numéro de facture)"
 
 #. module: commown
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_partner_details
 #: model:ir.ui.view,arch_db:commown.signup_field
 msgid "Last name"
@@ -374,6 +524,11 @@ msgstr "N° mobile validé"
 #: selection:crm.lead,email_rating:0
 msgid "Motivated"
 msgstr "Motivé"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_project_task_type_portal_displayed_name
+msgid "Name displayed on the portal"
+msgstr "Nom affiché sur le portail client"
 
 #. module: commown
 #: selection:crm.lead,email_rating:0
@@ -468,11 +623,6 @@ msgid "Registered mail sent"
 msgstr "Courrier recommandé"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.portal_layout
-msgid "SEPA mandate"
-msgstr "Mandat SEPA"
-
-#. module: commown
 #: model:ir.model,name:commown.model_sale_order
 msgid "Sales Order"
 msgstr "Bon de commande"
@@ -502,6 +652,11 @@ msgstr "Groupes de support"
 #: selection:crm.lead,global_feeling:0
 msgid "Suspicious"
 msgstr "Méfiance"
+
+#. module: commown
+#: model:ir.model,name:commown.model_project_task_type
+msgid "Task Stage"
+msgstr "Étape de tâche"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_technical_skills
@@ -542,6 +697,11 @@ msgid "Users"
 msgstr "Utilisateurs"
 
 #. module: commown
+#: model:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Voir les détails"
+msgstr "Voir les détails"
+
+#. module: commown
 #: selection:crm.lead,email_rating:0
 msgid "Warm"
 msgstr "Cordial"
@@ -552,15 +712,20 @@ msgid "Web identity Rating"
 msgstr "Évaluation identité Web"
 
 #. module: commown
-#: code:addons/commown/models/crm_lead.py:184
+#: code:addons/commown/models/crm_lead.py:164
 #, python-format
 msgid "Web search link"
 msgstr "Lien de recherche sur le web"
 
 #. module: commown
+#: model:ir.ui.view,arch_db:commown.product_template_form_view
+msgid "Website"
+msgstr "Site Web"
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_my_home_sale
 msgid "Your security deposits / Equities"
-msgstr "Vos dépôts de garantie / Parts sociales"
+msgstr "Mes devis"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.address
@@ -571,6 +736,11 @@ msgstr "Code postal"
 #: model:mail.template,subject:commown.email_send_invoice_from_contract
 msgid "[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})"
 msgstr "[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})"
+
+#. module: commown
+#: model:mail.template,subject:commown.mail_template_lead_start_error
+msgid "[Commown] ERROR starting crm.lead id ${object.id}"
+msgstr "[Commown] Livraison d'un client effectuée (${object.partner_id.name} - ${object.team_id.name})"
 
 #. module: commown
 #: model:ir.actions.server,name:commown.action_add_to_support_groups
@@ -593,19 +763,39 @@ msgid "[commown] Add receivable account"
 msgstr "[commown] Ajouter le compte client"
 
 #. module: commown
-#: model:ir.actions.server,name:commown.action_add_rental_contract
-msgid "[commown] Add rental contract"
-msgstr "[commown] Ajouter le contrat de location"
+#: model:ir.actions.server,name:commown.action_move_issue_to_stop_waiting_stage
+msgid "[commown] Move issue waiting for too long to the next stage"
+msgstr "[commown] Avancer un ticket qui attend depuis trop longtemps"
 
 #. module: commown
-#: model:ir.actions.server,name:commown.action_print_fairphone_label
-msgid "[commown] Print Fairphone parcel label(s)"
-msgstr "[commown] Imprimer l'étiquette d'expédition"
+#: model:ir.actions.server,name:commown.action_awaken_issue_on_partner_message_arrival
+msgid "[commown] Move waiting issues into pending on message arrival"
+msgstr "[commown] Mettre le ticket dans la colonne En cours à l'arrivée d'un message"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.fix_invoice_investment_line_price
+msgid "[commown] Multiply by 10 investments' line amount"
+msgstr "[commown] Correction des lignes d'acompte des investisseurs"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_send_issue_reminder_email
+msgid "[commown] Send a reminder email concerning an issue"
+msgstr "[commown] Envoyer un courriel de rappel concernant un ticket"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_send_delivery_email
+msgid "[commown] Send delivery email"
+msgstr "[commown] Envoyer le courriel de livraison"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_start_contract
+msgid "[commown] Start contract"
+msgstr "[commown] Démarrer le contrat"
 
 #. module: commown
 #: model:ir.model,name:commown.model_account_analytic_contract
 msgid "account.analytic.contract"
-msgstr "account.analytic.contract"
+msgstr "contrat"
 
 #. module: commown
 #: selection:crm.lead,technical_skills:0
@@ -613,14 +803,29 @@ msgid "confirmed"
 msgstr "Confirmé"
 
 #. module: commown
+#: model:ir.model,name:commown.model_coupon_campaign
+msgid "coupon.campaign"
+msgstr "coupon.campaign"
+
+#. module: commown
 #: selection:crm.lead,technical_skills:0
 msgid "intermediary"
 msgstr "Intermédiaire"
 
 #. module: commown
+#: model:ir.model,name:commown.model_mass_reconcile_simple_partner_commown
+msgid "mass.reconcile.simple.partner_commown"
+msgstr "mass.reconcile.simple.partner_commown"
+
+#. module: commown
 #: selection:crm.lead,technical_skills:0
 msgid "neophyte"
 msgstr "Néophyte"
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_mass_reconcile_method
+msgid "reconcile method for account_mass_reconcile"
+msgstr "Méthode de lettrage"
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_crm_lead_second_phone_call
