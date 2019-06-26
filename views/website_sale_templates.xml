@@ -84,6 +84,9 @@
     <xpath expr="//*[contains(@class, 'deposit_price')]" position="replace">
       <t t-if="not category or not category.is_b2b()">$0</t>
     </xpath>
+    <xpath expr="//*[contains(@class, 'oe_rental_price')]" position="attributes">
+      <attribute name="t-esc">(category and category.is_b2b() and product.lst_price or product.website_price)/(product.deposit_price_to_lease_amount_ratio or 1)</attribute>
+    </xpath>
   </template>
 
   <template id="assets_frontend"
