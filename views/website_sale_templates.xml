@@ -82,10 +82,10 @@
     <!-- Remove deposit price: cannot use deposit price as product price in B2B
          as sale drafts would use it which is not what we want. -->
     <xpath expr="//*[contains(@class, 'deposit_price')]" position="replace">
-      <t t-if="not category or not category.is_b2b()">$0</t>
+      <t t-if="not product.is_b2b()">$0</t>
     </xpath>
     <xpath expr="//*[contains(@class, 'min_contract_duration')]/span[1]" position="replace">
-      <t t-if="not category or not category.is_b2b()">
+      <t t-if="not product.is_b2b()">
         <span>Commitment duration: </span>
       </t>
       <t t-else="">
@@ -93,7 +93,7 @@
       </t>
     </xpath>
     <xpath expr="//*[contains(@class, 'oe_rental_price')]" position="attributes">
-      <attribute name="t-esc">(category and category.is_b2b() and product.lst_price or product.website_price)/(product.deposit_price_to_lease_amount_ratio or 1)</attribute>
+      <attribute name="t-esc">(product.is_b2b() and product.lst_price or product.website_price)/(product.deposit_price_to_lease_amount_ratio or 1)</attribute>
     </xpath>
   </template>
 
