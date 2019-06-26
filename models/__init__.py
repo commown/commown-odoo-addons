@@ -1,1 +1,2 @@
 import product_public_category
+import product_template
