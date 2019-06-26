@@ -205,6 +205,11 @@ msgid "<span>Commitment duration: from </span>"
 msgstr "<span>Durée d'engagement : à partir de </span>"
 
 #. module: commown
+#: model:ir.ui.view,arch_db:commown.product_price_b2b
+msgid "<span>Commitment duration: </span>"
+msgstr "<span>Durée d'engagement : </span>"
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.suggestion_cart
 msgid "<span>Create an account and pay</span>\n"
 "          <span class=\"fa fa-long-arrow-right\"/>"

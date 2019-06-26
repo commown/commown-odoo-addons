@@ -85,7 +85,12 @@
       <t t-if="not category or not category.is_b2b()">$0</t>
     </xpath>
     <xpath expr="//*[contains(@class, 'min_contract_duration')]/span[1]" position="replace">
-      <span>Commitment duration: from </span>
+      <t t-if="not category or not category.is_b2b()">
+        <span>Commitment duration: </span>
+      </t>
+      <t t-else="">
+        <span>Commitment duration: from </span>
+      </t>
     </xpath>
     <xpath expr="//*[contains(@class, 'oe_rental_price')]" position="attributes">
       <attribute name="t-esc">(category and category.is_b2b() and product.lst_price or product.website_price)/(product.deposit_price_to_lease_amount_ratio or 1)</attribute>
