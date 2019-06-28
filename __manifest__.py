@@ -11,7 +11,7 @@
         'commown_shipping',
         'payment_slimpay', 'l10n_fr', 'base_action_rule',
         'website_sale_default_country', 'auth_signup',
-        'website_sale_cart_selectable',
+        'website_sale_cart_selectable', 'website_sale_b2b',
         'website_sale_require_login', 'product_rental', 'scic',
         'crm', 'mass_mailing', 'project_issue', 'website_sale_hide_price',
         'mass_mailing_partner', 'report_py3o',
