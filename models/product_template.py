@@ -1,8 +1,13 @@
-from odoo import api, models
+from odoo import api, models, fields
 
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
+
+    website_description_sale = fields.Text(
+        'Sale description for the website', translate=True,
+        help=('A description of the Product that you want to communicate to '
+              'your online customers.'))
 
     @api.multi
     def is_b2b(self):

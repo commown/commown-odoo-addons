@@ -16,6 +16,7 @@
     'data': [
         'data/product_public_category.xml',
         'views/website_sale_product.xml',
+        'views/product_template.xml',
     ],
     'installable': True,
 }
