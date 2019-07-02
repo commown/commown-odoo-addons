@@ -11,8 +11,10 @@
         # Commown modules
         'account_bank_statement_import_credit_coop',
         'account_bank_statement_import_lanef',
+        'account_invoice_merge_auto_pay',
         'account_move_slimpay_import',
         'commown_shipping',
+        'contract_auto_merge_invoice',
         'payment_slimpay',
         'product_rental',
         'scic',
