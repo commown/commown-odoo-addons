@@ -7,24 +7,21 @@ from odoo.tests.common import HttpCase, at_install, post_install, get_db_name
 
 @at_install(False)
 @post_install(True)
-class ResPartnerTC(HttpCase):
+class ResPartnerResetPasswordTC(HttpCase):
 
     def setUp(self):
-        super(ResPartnerTC, self).setUp()
-        partner = self.env['res.partner'].search(
-            [('user_ids.login', '=', 'portal')])
-        partner.signup_prepare()
+        super(ResPartnerResetPasswordTC, self).setUp()
+        self.partner = self.env.ref('portal.demo_user0_res_partner')
+        self.partner.signup_prepare()
         self.env.cr.commit()
-        self.token = partner.signup_token
 
     def test_reset_password(self):
+        token = self.partner.signup_token
         # Fetch reset password form
-        res = self.url_open('/web/reset_password?token=%s' % self.token)
+        res = self.url_open('/web/reset_password?token=%s' % token)
         self.assertEqual(200, res.code)
         # Check that firstname and lastname are present and correctly valued
         html = res.read()
-        with open('/tmp/toto.html', 'w') as fobj:
-            fobj.write(html)
         doc = lxml.html.fromstring(html)
         self.assertEqual(['Demo'],
                          doc.xpath('//input[@name="lastname"]/@value'))
@@ -37,7 +34,7 @@ class ResPartnerTC(HttpCase):
                 'confirm_password': 'dummy_pass',
                 'csrf_token': csrf_token}
         res = self.url_open(
-            '/web/reset_password?token=%s' % self.token,
+            '/web/reset_password?token=%s' % token,
             data=urlencode(data))
         # Test authentication with the new password
         self.assertTrue(self.registry['res.users'].authenticate(
