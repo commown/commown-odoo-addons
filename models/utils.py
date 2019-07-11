@@ -15,13 +15,25 @@ def mandate_doc_ref(acquirer, mandate_doc):
     return mandate_doc['reference']
 
 
+def get_partner(acquirer, mandate_doc):
+    subscriber_url = mandate_doc[
+        acquirer.slimpay_client.method_name('get-subscriber')].url
+    pid = subscriber_url.rsplit('/', 1)[-1]
+    if pid.isdigit:
+        return acquirer.env['res.partner'].search([
+            ('id', '=', int(pid)),
+        ])
+    else:
+        return acquirer.env['res.partner'].search([
+            ('payment_token_id.acquirer_ref', '=', mandate_doc['id']),
+        ])
+
+
 def mandate_doc_to_repr(acquirer, mandate_doc):
     """Return a json representation of the supplied HAPI mandate doc that
     is suitable for creating a copy using the `create-mandates` HAPI call.
     """
-    partner = acquirer.env['res.partner'].search([
-        ('payment_token_id.acquirer_ref', '=', mandate_doc['id']),
-    ])
+    partner = get_partner(acquirer, mandate_doc)
     bank_account_doc = acquirer.slimpay_client.action(
         'GET', 'get-bank-account', doc=mandate_doc)
     if partner:
