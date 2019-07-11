@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 def mandate_doc_ref(acquirer, mandate_doc):
     "Return the reference of the mandate supplied as an HAPI representation"
-    return mandate_doc['reference']
+    return (mandate_doc['reference'], mandate_doc['id'])
 
 
 def get_partner(acquirer, mandate_doc):
@@ -75,21 +75,11 @@ def get_all_mandates_repr(acquirer, transformer_func, **params):
                     yield result
 
 
-def create_and_set_mandate(acquirer, mandate_repr):
-    """ Create a mandate using supplied description `mandate_repr` in given
-    `acquirer`'s context and set it as default mandate for the partner pointed
-    to as the subscriber `mandate_repr`.
-    """
-    mandate_repr['creditor'] = {'reference': acquirer.slimpay_creditor}
-    new_mandate_doc = acquirer.slimpay_client.action(
-        'POST', 'create-mandates', params=mandate_repr)
-    Partner = acquirer.env['res.partner']
-    partner = Partner.browse(mandate_repr['subscriber']['reference']).exists()
+def set_mandate(acquirer, partner, mandate_id):
     partner.payment_token_id.update({
-        'acquirer_ref': new_mandate_doc['id'],
+        'acquirer_ref': mandate_id,
         'acquirer_id': acquirer.id,
     })
-    return new_mandate_doc
 
 
 def set_contract_for_invoice_merge_autopay(contract):
@@ -135,7 +125,10 @@ def replace_mandate(acquirer, mandate_repr):
             partner.name)
         mandate_repr['signatory']['billingAddress']['country'] = 'FR'
 
-    new_mandate_doc = create_and_set_mandate(acquirer, mandate_repr)
+    mandate_repr['creditor'] = {'reference': acquirer.slimpay_creditor}
+    new_mandate_doc = acquirer.slimpay_client.action(
+        'POST', 'create-mandates', params=mandate_repr)
+    set_mandate(acquirer, partner, new_mandate_doc['id'])
     _logger.debug(
         u'Created new mandate %s for %s', new_mandate_doc['reference'],
         partner.name)
@@ -168,16 +161,18 @@ def restore_all_missing_mandates(
     " Restore all mandates from production to preproduction environment "
 
     mandates_repr = json.load(open(mandates_fpath))
-    known_mandate_refs = set(get_all_mandates_repr(
+    known_mandate_refs = dict(get_all_mandates_repr(
         acquirer, mandate_doc_ref, **params))
     for mandate_repr in mandates_repr:
         mandate_repr['reference'] = 'TEST' + mandate_repr['reference'][4:]
         if mandate_repr['reference'] not in known_mandate_refs:
             replace_mandate(acquirer, mandate_repr)
         else:
+            mandate_ref = mandate_repr['reference']
             partner = acquirer.env['res.partner'].browse(
                 mandate_repr['subscriber']['reference'])
-            _logger.debug('No need to create mandate for %s: already done',
-                          partner.name)
+            set_mandate(acquirer, partner, known_mandate_refs[mandate_ref])
+            _logger.debug('Pre-existing mandate %s assigned to %s',
+                          mandate_ref, partner.name)
 
     acquirer.env.cr.commit()
