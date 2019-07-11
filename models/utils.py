@@ -143,9 +143,10 @@ def dump_all_mandates(acquirer, refresh, mandates_fpath):
     if refresh and osp.isfile(mandates_fpath):
         with open(mandates_fpath) as fobj:
             old_mandates = json.load(fobj)
-            params = {
-                'dateSignedAfter': max(m['dateSigned'] for m in old_mandates),
-            }
+            if old_mandates:
+                params = {
+                    'dateSignedAfter': max(m['dateSigned'] for m in old_mandates),
+                }
 
     mandates = old_mandates + list(
         get_all_mandates_repr(acquirer, mandate_doc_to_repr, **params))
