@@ -6,7 +6,7 @@
 {
     'name': 'Payment Slimpay dump and restore utils',
     'category': 'Website',
-    'version': '10.0.0.0.1',
+    'version': '10.0.0.0.2',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.fr",
