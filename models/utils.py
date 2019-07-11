@@ -131,22 +131,20 @@ def replace_mandate(acquirer, mandate_repr):
 
 # High level helpers ##########################################################
 
-def dump_all_mandates(acquirer, refresh, mandates_fpath):
+def dump_all_mandates(acquirer, refresh, mandates_fpath, **params):
     """ Extract all mandates and dump them as a json descr in `mandates_fpath`
     If the `refresh` parameter is True (the default), try to read given file
     for a previous mandate list and only append newly signed mandates.
     """
 
     old_mandates = []
-    params = {}
 
     if refresh and osp.isfile(mandates_fpath):
         with open(mandates_fpath) as fobj:
             old_mandates = json.load(fobj)
             if old_mandates:
-                params = {
-                    'dateSignedAfter': max(m['dateSigned'] for m in old_mandates),
-                }
+                params['dateSignedAfter'] = max(
+                    m['dateSigned'] for m in old_mandates)
 
     mandates = old_mandates + list(
         get_all_mandates_repr(acquirer, mandate_doc_to_repr, **params))
@@ -154,11 +152,12 @@ def dump_all_mandates(acquirer, refresh, mandates_fpath):
 
 
 def restore_all_missing_mandates(
-        acquirer, mandates_fpath='/tmp/mandates.json'):
+        acquirer, mandates_fpath='/tmp/mandates.json', **params):
     " Restore all mandates from production to preproduction environment "
 
     mandates_repr = json.load(open(mandates_fpath))
-    known_mandate_refs = set(get_all_mandates_repr(acquirer, mandate_doc_ref))
+    known_mandate_refs = set(get_all_mandates_repr(
+        acquirer, mandate_doc_ref, **params))
     for mandate_repr in mandates_repr:
         mandate_repr['reference'] = 'TEST' + mandate_repr['reference'][4:]
         if mandate_repr['reference'] not in known_mandate_refs:
