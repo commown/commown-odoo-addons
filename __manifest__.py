@@ -3,34 +3,49 @@
     'category': 'Business',
     'summary': 'Commown SCIC SAS business application',
     'version': '10.0.1.7.1',
-    'description': """Commown SCIC SAS business application on top of dependant modules""",
+    'description': "Commown SCIC SAS business application",
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.fr",
     'depends': [
-        'commown_shipping',
-        'payment_slimpay', 'l10n_fr', 'base_action_rule',
-        'website_sale_default_country', 'auth_signup',
-        'website_sale_cart_selectable', 'website_sale_b2b',
-        'website_sale_require_login', 'product_rental', 'scic',
-        'crm', 'mass_mailing', 'project_issue', 'website_sale_hide_price',
-        'mass_mailing_partner', 'report_py3o',
-        # odt template dependencies:
-        'base_company_extension',  # required for legal_type
-        'sale_usability',  # required for sale.layout_category
-        'account_usability',  # required for account_invoice.has_discount
-        'account_payment_sale',
-        'website_sale_coupon',
-        'website_sale_affiliate_portal',
-        'account_mass_reconcile', 'account_move_stripe_import',
-        'account_move_slimpay_import',
+        # Commown modules
         'account_bank_statement_import_credit_coop',
         'account_bank_statement_import_lanef',
+        'account_move_slimpay_import',
+        'commown_shipping',
+        'payment_slimpay',
+        'product_rental',
+        'scic',
+        'website_sale_affiliate_portal',
+        'website_sale_b2b',
+        'website_sale_coupon',
+
+        # OCA modules
+        'account_usability',  # needed for account_invoice.has_discount (py3o)
+        'account_payment_sale',
+        'account_mass_reconcile',
+        'account_move_stripe_import',
+        'auth_signup',
+        'base_action_rule',
+        'base_company_extension',  # required for legal_type (py3o)
+        'crm',
+        'l10n_fr',
+        'mass_mailing',
+        'mass_mailing_partner',
+        'project_issue',
+        'report_py3o',
+        'sale_usability',  # required for sale.layout_category (py3o)
+        'website_sale_cart_selectable',
+        'website_sale_default_country',
+        'website_sale_hide_price',
+        'website_sale_require_login',
     ],
+
     'external_dependencies': {
         'python': ['magic'],
         'bin': ['rsvg-convert'],
     },
+
     'data': [
         'views/account_analytic_account.xml',
         'views/account_analytic_contract.xml',
