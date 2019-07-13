@@ -45,6 +45,14 @@ class ProjectIssueTC(TransactionCase):
             'user_id': self.env.ref(u'base.user_demo').id,
         })
 
+    def reset_actions_last_run(self):
+        " Unset all commown actions' last_run date "
+        action_refs = self.env['ir.model.data'].search([
+            ('module', '=', 'commown'),
+            ('model', '=', 'base.action.rule')]).mapped('name')
+        for ref in action_refs:
+            self.env.ref('commown.%s' % ref).last_run = False
+
     def test_send_reminder_email(self):
         """ A reminder message to followers must be created when issue is put
         in the dedicated column. """
@@ -69,6 +77,7 @@ class ProjectIssueTC(TransactionCase):
         self.issue.update({'stage_id': self.stage_reminder.id})
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
+        self.reset_actions_last_run()
         self.env['base.action.rule']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_end_ok)
@@ -110,6 +119,7 @@ class ProjectIssueTC(TransactionCase):
         self.issue.update({'stage_id': self.stage_wait.id})
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
+        self.reset_actions_last_run()
         self.env['base.action.rule']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_reminder)
@@ -119,6 +129,7 @@ class ProjectIssueTC(TransactionCase):
         self.issue.update({'stage_id': self.stage_manual.id})
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
+        self.reset_actions_last_run()
         self.env['base.action.rule']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_pending)
