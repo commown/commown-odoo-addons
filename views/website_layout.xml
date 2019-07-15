@@ -9,11 +9,11 @@
         }
       </style>
 
-      <script type="text/javascript" src="https://commown.fr/commown_static/tarteaucitron/tarteaucitron.js"></script>
+      <script type="text/javascript" src="/commown/static/src/tarteaucitron/tarteaucitron.js"></script>
 
       <script type="text/javascript">
           tarteaucitron.init({
-              "privacyUrl": "https://commown.fr/mentions-legales", /* Privacy policy url */
+              "privacyUrl": "https://commown.coop/mentions-legales", /* Privacy policy url */
 
               "hashtag": "#tarteaucitron", /* Open the panel with this hashtag */
               "cookieName": "tartaucitron", /* Cookie name */
@@ -30,7 +30,7 @@
               "removeCredit": false, /* Remove credit link */
               "moreInfoLink": true, /* Show more info link */
 
-              "cookieDomain": ".commown.fr" /* Shared cookie for subdomain */
+              "cookieDomain": ".commown.coop" /* Shared cookie for subdomain */
           });
       </script>
     </xpath>
