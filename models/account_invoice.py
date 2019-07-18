@@ -1,8 +1,14 @@
-from odoo import models, api
+from odoo import models, api, fields
 
 
 class InvoiceMergeAutoPayInvoice(models.Model):
     _inherit = 'account.invoice'
+
+    auto_merge = fields.Boolean(
+        # Override label and help only
+        string=u'Pay automatically',
+        help=u"Pay automatically at partner's next merge date",
+    )
 
     @api.constrains('auto_merge')
     def _check_auto_merge(self):
