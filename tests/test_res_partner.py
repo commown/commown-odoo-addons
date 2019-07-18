@@ -1,5 +1,7 @@
 from mock import patch
 
+from odoo.models import ValidationError
+
 from odoo.tests.common import at_install, post_install
 
 from odoo.addons.account_invoice_merge_auto.tests.common import \
@@ -31,6 +33,7 @@ class ResPartnerAccountingTC(MergeInvoicePartnerTC):
             'acquirer_id': acquirer.id,
             'acquirer_ref': u'test ref',
         })
+        self.partner_1.customer_payment_mode_id = False
         sale_journal = self.env['account.journal'].search([
             ('type', '=', 'bank')], limit=1)
         pmethod = self.env.ref('payment.account_payment_method_electronic_in')
@@ -41,6 +44,12 @@ class ResPartnerAccountingTC(MergeInvoicePartnerTC):
             'bank_account_link': 'fixed',
             'fixed_journal_id': sale_journal.id,
         })
+
+    def test_no_payment_mode(self):
+        with self.assertRaises(ValidationError) as err:
+            self.create_invoice(self.partner_1, '2019-05-09')
+        self.assertEqual('Payment mode is needed to auto pay an invoice',
+                         err.exception.name)
 
     def test_auto_pay_merged_invoices(self):
         self.create_invoice(self.partner_1, '2019-05-09',
