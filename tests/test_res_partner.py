@@ -6,6 +6,8 @@ from odoo.tests.common import at_install, post_install
 
 from odoo.addons.account_invoice_merge_auto.tests.common import \
     MergeInvoicePartnerTC
+from odoo.addons.account_invoice_merge_auto_pay.models.res_partner import \
+    ResPartner
 from odoo.addons.payment.models.payment_acquirer import PaymentTransaction
 
 
@@ -47,25 +49,40 @@ class ResPartnerAccountingTC(MergeInvoicePartnerTC):
 
     def test_no_payment_mode(self):
         with self.assertRaises(ValidationError) as err:
-            self.create_invoice(self.partner_1, '2019-05-09')
+            self.create_invoice(self.partner_1, '2019-05-09',
+                                # Useless but explicit is better than implicit:
+                                payment_mode_id=False)
         self.assertEqual('Payment mode is needed to auto pay an invoice',
                          err.exception.name)
 
-    def test_auto_pay_merged_invoices(self):
-        self.create_invoice(self.partner_1, '2019-05-09',
-                            payment_mode_id=self.payment_mode.id)
-        self.create_invoice(self.partner_1, '2019-05-10',
-                            payment_mode_id=self.payment_mode.id)
+    def _multiple_invoice_merge_test(self, **params):
+        params.setdefault('payment_mode_id', self.payment_mode.id)
+        inv_1 = self.create_invoice(self.partner_1, '2019-05-09', **params)
+        inv_2 = self.create_invoice(self.partner_1, '2019-05-10', **params)
 
-        with patch.object(PaymentTransaction, 's2s_do_transaction',
-                          fake_do_tx_ok):
-            Partner = self.env['res.partner']
-            _invs, merge_infos = Partner._cron_invoice_merge('2019-05-16')
+        Partner = self.env['res.partner']
+        _invs, merge_infos = Partner._cron_invoice_merge('2019-05-16')
         self.assertEqual(len(merge_infos), 1)
         new_inv = self.env['account.invoice'].browse(merge_infos.keys()[0])
-        self.assertEqual(new_inv.state, 'paid')
         self.assertEqual(new_inv.date_invoice, '2019-05-16')
+        self.assertEqual({inv_1.id, inv_2.id}, set(merge_infos[new_inv.id]))
+        self.assertEqual(inv_1.state, 'cancel')
+        self.assertEqual(inv_2.state, 'cancel')
         self.assertEqual(self.partner_1.invoice_merge_next_date, '2019-06-15')
+        return new_inv
+
+    def test_do_not_pay_refund(self):
+        "Do not pay refunds, but do not prevent their merge"
+        with patch.object(PaymentTransaction, 's2s_do_transaction') as autopay:
+            new_inv = self._multiple_invoice_merge_test(type='out_refund')
+        autopay.assert_not_called()
+        self.assertEqual(new_inv.state, 'draft')
+
+    def test_auto_pay_merged_invoices(self):
+        with patch.object(PaymentTransaction, 's2s_do_transaction',
+                          fake_do_tx_ok):
+            new_inv = self._multiple_invoice_merge_test()
+        self.assertEqual(new_inv.state, 'paid')
 
     def test_auto_pay_single_invoices(self):
         inv = self.create_invoice(self.partner_1, '2019-05-10',

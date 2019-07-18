@@ -59,14 +59,16 @@ class ResPartner(models.Model):
 
         for new_inv_id in merge_infos:
             new_inv = self.env['account.invoice'].browse(new_inv_id)
-            _logger.info('Automatically paying merged invoice %s (from %s)',
-                         new_inv.id, merge_infos[new_inv.id])
-            pay_delay._invoice_merge_auto_pay_invoice(new_inv.id)
+            if new_inv.type == 'out_invoice':
+                _logger.info(
+                    'Automatically paying merged invoice %s (from %s)',
+                    new_inv.id, merge_infos[new_inv.id])
+                pay_delay._invoice_merge_auto_pay_invoice(new_inv.id)
 
         merged_invoice_ids = set(inv_id for inv_ids in merge_infos.values()
                                  for inv_id in inv_ids)
         for inv in invoices:
-            if inv.id not in merged_invoice_ids:
+            if inv.type == 'out_invoice' and inv.id not in merged_invoice_ids:
                 _logger.info('Automatically paying non-merged inv %s', inv.id)
                 pay_delay._invoice_merge_auto_pay_invoice(inv.id)
 
