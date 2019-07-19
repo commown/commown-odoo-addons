@@ -1,3 +1,5 @@
+import re
+
 import lxml.html
 
 from odoo.tests.common import at_install, post_install
@@ -60,10 +62,13 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
         so.action_confirm()
         return so
 
-    def open_invoice(self, so, is_refund=False):
+    def open_invoice(self, so, is_refund=False, contract=None):
         inv = self.env['account.invoice'].browse(so.action_invoice_create())
         if is_refund:
             inv.type = 'out_refund'
+        if contract:
+            inv.contract_id = contract.id
+            inv.invoice_line_ids.update({'account_analytic_id': contract.id})
         inv.action_invoice_open()
         return inv
 
@@ -104,12 +109,17 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
             'recurring_invoices': False,
         })
         so = self.sale(self.b2c_partner, [self.std_product])
-        inv = self.open_invoice(
-            so.with_context({'default_contract_id': contract.id}))
-        doc = self.html_invoice(inv)
-        self.assertEqual(doc.xpath('//h1/text()'), [
-            'Invoice %s - Contract %s' % (inv.display_name.strip(),
-                                          contract.name)])
+        inv = self.open_invoice(so, contract=contract)
+        doc = self.html_invoice(inv, '/tmp/toto.html')
+        self.assertEqual(doc.xpath('//h1/text()'),
+                         ['Invoice %s' % inv.display_name.strip()])
+        first_inv_line_descr = doc.xpath(
+            "//thead//b[text()='Description']/ancestor::table[1]"
+            "/tbody/tr[1]/td[1]")[0].text_content().strip()
+        # Internal spaces/ tabs in a text html node are not
+        # significant: replace them by a single space
+        self.assertEqual(re.sub(r'\s\s+', ' ', first_inv_line_descr),
+                         'Contract Test Contract - Std product')
 
     def test_b2c_refund(self):
         inv = self.open_invoice(
