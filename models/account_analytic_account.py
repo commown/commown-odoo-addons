@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from odoo import fields, api, models
+from odoo import api, models
 
 
 class AccountAnalyticAccount(models.Model):

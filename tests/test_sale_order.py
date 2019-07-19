@@ -4,7 +4,6 @@ from .common import MockedEmptySessionMixin
 
 class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
 
-
     def setUp(self):
         super(SaleOrderTC, self).setUp()
 

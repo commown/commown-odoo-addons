@@ -32,7 +32,7 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
             date_1 = fast_to_dt(lines[count]['date_maturity'])
             if count and not count % 10:
                 _logger.info('Reconcile progress: %s/%s', count, len(lines))
-            for i in xrange(count + 1, len(lines)):
+            for i in range(count + 1, len(lines)):
                 if lines[count][self._key_field] != lines[i][self._key_field]:
                     break
                 if self.max_reconcile_days_gap is not None:

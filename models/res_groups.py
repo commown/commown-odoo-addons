@@ -1,8 +1,4 @@
-import logging
-
-from odoo import models, fields, api
-
-_logger = logging.getLogger(__name__)
+from odoo import models, api
 
 
 class CompletedGroup(models.Model):
