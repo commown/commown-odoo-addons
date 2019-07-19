@@ -7,10 +7,10 @@
 ================================
 
 This module completes the `account_invoice_merge_auto` module by
-paying the invoices automatically once all invoice merge candidates
-have been handled, have they finally been merged or not.
+paying the customer invoices automatically once all invoice merge
+candidates have been handled, have they finally been merged or not.
 
-It uses the `queue_job_suscribe` module so that payments are performed
+It uses the `queue_job_subscribe` module so that payments are performed
 in their own database transaction: if one payment crashes for any
 reason, the others are not affected and an administrator can be
 notified (see Configuration below).
@@ -19,8 +19,10 @@ notified (see Configuration below).
 Usage
 =====
 
-See `account_invoice_merge` module usage: no further usage
-instructions apply to this module.
+First see `account_invoice_merge` and `account_invoice_merge_auto`
+modules' usage.
+
+Now create a customer invoice with a payment mode.
 
 
 Configuration
@@ -38,7 +40,8 @@ parameters fit usually well together:
   to a suitable value (at least >= 1).
 
 - Adjust the `Automatically merge invoices` cron task execution hour
-  to your liking; for instance, if you use the `contract` module to
-  generate the draft invoices to be merged and pay, set their cron
-  tasks hours to execute the `contract` cron before the
+  to your liking; for instance, if you use the `contract_auto_merge`
+  module to generate the invoices to be merged and pay, disable the
+  Contract automatic payment cron and set the Generate Recurring
+  Invoices from Contracts cron to be executed before the
   `account_invoice_merge` one.
