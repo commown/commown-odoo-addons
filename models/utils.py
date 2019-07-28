@@ -19,7 +19,7 @@ def get_partner(acquirer, mandate_doc):
     subscriber_url = mandate_doc[
         acquirer.slimpay_client.method_name('get-subscriber')].url
     pid = subscriber_url.rsplit('/', 1)[-1]
-    if pid.isdigit:
+    if pid.isdigit():
         return acquirer.env['res.partner'].search([
             ('id', '=', int(pid)),
         ])
