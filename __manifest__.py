@@ -16,7 +16,7 @@
         'partner_firstname',
     ],
     'external_dependencies': {
-        'bin': ['pdfjam'],
+        'bin': ['pdfjam', 'pdftk'],
     },
     'data': [
         'security/ir.model.access.csv',
