@@ -43,9 +43,6 @@ class ParcelType(models.Model):
 
         commercial_name = self.env.ref('base.main_company').name
 
-        if self.is_return:
-            sender, recipient = recipient, sender
-
         return ship(account.login,
                     account._get_password(),
                     sender=sender,

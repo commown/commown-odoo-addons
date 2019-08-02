@@ -108,7 +108,7 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     (None, the default value, means no insurance).
 
     The `is_return` argument is used to indicate the parcel is sent back from
-    the sender to the recipient.
+    the recipient to the sender.
 
     The `deposit_date` argument is a datetime.Date object (default is today).
 
@@ -120,9 +120,16 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     if deposit_date is None:
         deposit_date = datetime.today()
 
+    if any(p.country_id and p.country_id.code != 'FR'
+           for p in (sender, recipient)):
+        # Colissimo Export/ Return International
+        product_code = 'COLI' if not is_return else 'CORI'
+    else:
+        product_code = 'DOS' if not is_return else 'CORE'
+
     service = {
         'orderNumber': order_number,  # for coliview
-        'productCode': 'DOS' if not is_return else 'CORE',
+        'productCode': product_code,
         'depositDate': deposit_date.strftime('%Y-%m-%d'),
         'commercialName': commercial_name,
     }
@@ -130,15 +137,8 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     parcel = {'weight': weight,
               'insuranceValue': int(insurance_value * 100)}
 
-    # Handle post office destination: must figure in delivery's partner
-    # "comment" field: "[BP] <bp_id>" (where bp_id is a 6-digit number)
-    destination = delivery_data(recipient)
-    if 'BP' in destination:
-        service['productCode'] = 'BPR'
-        parcel['pickupLocationId'] = destination.pop('BP')
-    if destination.get('countryCode', 'FR') != 'FR':
-        # Colissimo Expert/ Return International
-        service['productCode'] = 'COLI' if not is_return else 'CORI'
+    if is_return:
+        sender, recipient = recipient, sender
 
     return {
         'outputFormat': {
@@ -156,7 +156,7 @@ def shipping_data(sender, recipient, order_number, commercial_name,
             },
             'addressee': {
                 'addresseeParcelRef': order_number,  # visible on the label
-                'address': destination,
+                'address': delivery_data(recipient),
             }
         }
     }
