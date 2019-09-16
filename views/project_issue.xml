@@ -130,28 +130,20 @@ for orig, dest in next_stage_marker.items():
   <!-- Server action that moves a sleeping issue to
        the "pending" stage when a customer message arrives -->
   <record id="action_awaken_issue_on_partner_message_arrival" model="ir.actions.server">
-    <field name="name">[commown] Move waiting issues into pending on message arrival</field>
+    <field name="name">[commown] Move waiting issues into pending on user email arrival</field>
     <field name="model_id" ref="calendar.model_mail_message"/>
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code"><![CDATA[
-if record.model == 'project.issue':
-    issue = env[record.model].browse(record.res_id)
-    if issue.partner_id == record.author_id:
-        markers = (
-            '[after-sale: waiting-customer]',
-            '[after-sale: end-ok]',
-            '[after-sale: manual]',
-            '[after-sale: reminder-email]',
-            )
-        for marker in markers:
-            if marker in (issue.stage_id.name or ''):
-                stage = env['project.task.type'].search([
-                    ('project_ids', '=', issue.project_id.id),
-                    ('name', 'like', '[after-sale: pending]'),
-                    ])
-                issue.sudo().update({'stage_id': stage.id})
-                break
+if record.model == 'project.issue' and record.message_type in ('email', 'comment'):
+    issue = env[record.model].browse(record.res_id).sudo()
+    if issue.project_id.name == 'Support' and (
+            not record.author_id or issue.partner_id == record.author_id):
+        stage = env['project.task.type'].search([
+            ('project_ids', '=', issue.project_id.id),
+            ('name', 'like', '[after-sale: pending]'),
+            ])
+        issue.update({'stage_id': stage.id})
 ]]>
     </field>
   </record>
