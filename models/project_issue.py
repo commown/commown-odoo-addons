@@ -303,6 +303,8 @@ class ProjectIssue(models.Model):
 
         issue.invoice_unpaid_count += 1
         invoice.payment_move_line_ids.remove_move_reconcile()
+        for payment in invoice.payment_ids:
+            payment.cancel()
 
         rejected_amount = float(issue_doc['rejectAmount'])
         if invoice.amount_total < rejected_amount:
