@@ -171,6 +171,18 @@ class ProjectTC(TransactionCase):
         self.assertEqual(self.invoice.state, 'paid')
         self.assertEqual(len(self._invoice_txs()), 1)
 
+        expenses_account = self.env['account.account'].create({
+            'code': u'exp_acc', 'name': u'expenses account',
+            'user_type_id': ref('account.data_account_type_expenses').id,
+        })
+
+        self.supplier_fees_product = self.env.ref(
+            'payment_slimpay_issue.bank_supplier_fees_product')
+        self.supplier_fees_product.update({
+            'property_account_expense_id': expenses_account.id,
+            'supplier_taxes_id': False,
+        })
+
     def _execute_cron(self, slimpay_issues):
         ProjectIssue = self.env['project.issue']
 
@@ -358,7 +370,18 @@ class ProjectTC(TransactionCase):
         self._simulate_wait(issue, days=8, minutes=1)
         self.assertInStage(issue, 'stage_issue_fixed')
 
+    def _slimpay_supplier_invoices(self):
+        slimpay_partner = self.env.ref(
+                'payment_slimpay_issue.slimpay_fees_partner')
+        return self.env['account.invoice'].search([
+            ('partner_id', '=', slimpay_partner.id),
+            ('type', '=', 'in_invoice'),
+        ])
+
     def test_functional_1_trial_with_extra_bank_fees(self):
+
+        fee_invoices_before = self._slimpay_supplier_invoices()
+
         act, get = self._execute_cron([
             fake_issue_doc(id='i1',
                            payment_ref='TR%d' % self.transaction.id,
@@ -383,6 +406,15 @@ class ProjectTC(TransactionCase):
 
         act = self._simulate_wait(issue, days=8, minutes=1)
         self.assertInStage(issue, 'stage_issue_fixed')
+
+        fee_invoices_after = self._slimpay_supplier_invoices()
+        new_fee_invoices = fee_invoices_after - fee_invoices_before
+        self.assertEqual(len(new_fee_invoices), 1)
+        self.assertEqual(new_fee_invoices.amount_total, 10)
+        self.assertEqual(new_fee_invoices.reference,
+                         issue.invoice_id.number + '-REJ1')
+        self.assertEqual(new_fee_invoices.mapped('invoice_line_ids.product_id'),
+                         self.supplier_fees_product.product_variant_id)
 
     def test_functional_3_trials(self):
         act, get = self._execute_cron([

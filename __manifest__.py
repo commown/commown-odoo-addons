@@ -20,6 +20,7 @@
         'data/product.xml',
         'data/cron.xml',
         'data/action.xml',
+        'data/res_partner.xml',
         'views/project_issue.xml',
     ],
     'installable': True,

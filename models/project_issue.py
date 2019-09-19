@@ -212,18 +212,24 @@ class ProjectIssue(models.Model):
         })
 
     @api.model
-    def _slimpay_payment_issue_invoice_fees(
-            self, invoice, product_ref, fees_name, amount=None):
-        product = self.env.ref(product_ref).product_variant_id
-        if not product:
+    def _slimpay_payment_issue_fees_product(self, type):
+        try:
+            return self.env.ref('payment_slimpay_issue.'
+                                '%s_fees_product' % type).product_variant_id
+        except ValueError:
             _logger.info('No %s fees product found', fees_name)
+
+    @api.model
+    def _slimpay_payment_issue_invoice_fees(
+            self, invoice, fees_name, amount=None):
+        product = self._slimpay_payment_issue_fees_product(fees_name)
+        if not product:
             return
 
         _logger.debug('Adding %s fees to %s invoice amount %s...',
                       fees_name, invoice.state, invoice.amount_total)
 
         invoice.action_invoice_cancel()
-        self.env.invalidate_all  # XXX update invoice.state cache (?)
         invoice.action_invoice_draft()
 
         invoice.update({'invoice_line_ids': [(0, 0, {
@@ -239,6 +245,32 @@ class ProjectIssue(models.Model):
 
         _logger.debug('... new amount is %s, state %s',
                       invoice.amount_total, invoice.state)
+
+    @api.model
+    def _slimpay_payment_issue_create_supplier_invoice_fees(
+            self, reference, date, amount):
+        slimpay_fees_partner = self.env.ref(
+            'payment_slimpay_issue.slimpay_fees_partner')
+        product = self.env.ref(
+            'payment_slimpay_issue.bank_supplier_fees_product'
+        ).product_variant_ids
+        if not product:
+            _logger.info('Cannot create bank supplier invoice fees.')
+            return
+        invoice = self.env['account.invoice'].create({
+            'type': 'in_invoice',
+            'partner_id': slimpay_fees_partner.id,
+            'reference': reference,
+            'date_invoice': date,
+            'invoice_line_ids': [(0, 0, {
+                'name': product.name,
+                'product_id': product.id,
+                'price_unit': amount,
+                'account_id': product.property_account_expense_id.id,
+                'invoice_line_tax_ids': [(6, 0, product.supplier_taxes_id.ids)],
+            })],
+        })
+        invoice._onchange_invoice_line_ids()
 
     @api.multi
     def _slimpay_payment_issue_retry_payment(self):
@@ -308,15 +340,15 @@ class ProjectIssue(models.Model):
 
         rejected_amount = float(issue_doc['rejectAmount'])
         if invoice.amount_total < rejected_amount:
-            self._slimpay_payment_issue_invoice_fees(
-                invoice, 'payment_slimpay_issue.bank_fees_product', 'bank',
-                rejected_amount - invoice.amount_total)
+            fees = rejected_amount - invoice.amount_total
+            self._slimpay_payment_issue_invoice_fees(invoice, 'bank', fees)
+            self._slimpay_payment_issue_create_supplier_invoice_fees(
+                u'%s-REJ%d' % (invoice.number, issue.invoice_unpaid_count),
+                reject_date(issue_doc), fees)
 
         if (issue.invoice_unpaid_count
                 > self._slimpay_payment_issue_management_fees_retrial_num()):
-            self._slimpay_payment_issue_invoice_fees(
-                invoice, 'payment_slimpay_issue.management_fees_product',
-                'management')
+            self._slimpay_payment_issue_invoice_fees(invoice, 'management')
 
         if issue.invoice_unpaid_count > self._slimpay_payment_max_retrials():
             issue.update({'stage_id': self.env.ref(

@@ -18,5 +18,13 @@
       <field name="sale_ok">True</field>
     </record>
 
+    <record id="bank_supplier_fees_product" model="product.template"
+            forcecreate="false">
+      <field name="name">Slimpay supplier fees</field>
+      <field name="type">service</field>
+      <field name="list_price">0</field>
+      <field name="sale_ok">False</field>
+    </record>
+
   </data>
 </odoo>
