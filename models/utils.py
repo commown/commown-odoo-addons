@@ -112,7 +112,7 @@ def set_contract_for_invoice_merge_autopay(contract):
 
 def replace_mandate(acquirer, mandate_repr):
     """ Replace partner's mandate by a new one described by `mandate_repr`
-    in the context of give `acquirer`.
+    in the context of given `acquirer`.
     """
     partner = acquirer.env['res.partner'].browse(
         mandate_repr['subscriber']['reference'])
@@ -164,15 +164,17 @@ def restore_all_missing_mandates(
     known_mandate_refs = dict(get_all_mandates_repr(
         acquirer, mandate_doc_ref, **params))
     for mandate_repr in mandates_repr:
-        mandate_repr['reference'] = 'TEST' + mandate_repr['reference'][4:]
-        if mandate_repr['reference'] not in known_mandate_refs:
+        ref = mandate_repr['reference'] = 'TEST' + mandate_repr['reference'][4:]
+        if ref not in known_mandate_refs:
             replace_mandate(acquirer, mandate_repr)
+            mandate_repr_ = get_all_mandates_repr(
+                acquirer, mandate_doc_ref, mandateReference=ref).next()
+            known_mandate_refs[ref] = mandate_repr_
         else:
-            mandate_ref = mandate_repr['reference']
             partner = acquirer.env['res.partner'].browse(
                 mandate_repr['subscriber']['reference'])
-            set_mandate(acquirer, partner, known_mandate_refs[mandate_ref])
+            set_mandate(acquirer, partner, known_mandate_refs[ref])
             _logger.debug('Pre-existing mandate %s assigned to %s',
-                          mandate_ref, partner.name)
+                          ref, partner.name)
 
     acquirer.env.cr.commit()
