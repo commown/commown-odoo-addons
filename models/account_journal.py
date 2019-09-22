@@ -85,7 +85,7 @@ class SlimpayParser(FileParser):
         if _pid is not None:
             partner = self.env['res.partner'].search([('id', '=', _pid)])
             if len(partner) == 1:
-                return partner.id
+                return partner.commercial_partner_id.id
         if line['CodeOP'].startswith('FEE-'):
             return self.journal.partner_id.id
         return False
