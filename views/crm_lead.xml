@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <record model="ir.ui.view" id="crm_case_form_view_oppor">
+        <field name="name">commown_shipping.lead.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+          <xpath expr="//notebook/page/field[@name='description']/ancestor::page[1]"
+                 position="before">
+            <page name="delivery" string="Delivery followup">
+              <group>
+                <group>
+                  <field name="expedition_ref"/>
+                  <field name="expedition_date"/>
+                  <field name="delivery_date"/>
+                </group>
+                <group>
+                  <field readonly="1" name="expedition_status"/>
+                  <field readonly="1" name="expedition_status_fetch_date"/>
+                  <field readonly="1" name="expedition_urgency_mail_sent"/>
+                </group>
+              </group>
+              <group name="delivery_actions">
+                <field name="start_contract_on_delivery"/>
+                <field name="send_email_on_delivery"/>
+                <field name="on_delivery_email_template_id"
+                       attrs="{'invisible': [('send_email_on_delivery', '=', False)]}"/>
+              </group>
+            </page>
+          </xpath>
+        </field>
+    </record>
+
+
+    <record id="action_send_delivery_email" model="ir.actions.server">
+      <field name="name">[commown] Send delivery email</field>
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="sequence">10</field>
+      <field name="state">code</field>
+      <field name="code">
+# "uid" is in env: action launched from GUI
+if 'uid' in env or object.send_email_on_delivery:
+    template = (object.on_delivery_email_template_id
+       or (object.team_id and
+           object.team_id.used_for_shipping and
+           object.team_id.on_delivery_email_template_id))
+
+    if template:
+        status = object.expedition_status
+        ctx = {}
+        if status[0] == '[' and ']' in status:
+            ctx['postal_code'] = status[1:status.find(']')]
+        object.with_context(ctx).message_post_with_template(template.id)
+      </field>
+    </record>
+
+    <record id="lead_product_delivered" model="base.action.rule">
+      <field name="name">[commown] Lead product delivered</field>
+      <field name="model_id" ref="model_crm_lead"/>
+      <field name="sequence">1</field>
+      <field name="kind">on_write</field>
+      <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
+      <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
+      <field name="server_action_ids"
+             eval="[(6,0,[ref('commown_shipping.action_send_delivery_email')])]"/>
+    </record>
+
+  </data>
+
+</odoo>

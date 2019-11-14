@@ -26,6 +26,10 @@
         'views/product.xml',
         'views/project.xml',
         'views/team.xml',
+        'views/crm_lead.xml',
+    ],
+    "demo": [
+        'data/demo.xml',
     ],
     'installable': True,
 }
