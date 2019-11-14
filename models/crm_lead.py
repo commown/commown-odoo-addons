@@ -22,6 +22,8 @@ class CrmLead(models.Model):
     on_delivery_email_template_id = fields.Many2one(
         'mail.template', string='Custom email model for this lead')
     so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
+    used_for_shipping = fields.Boolean(
+        'Use for shipping', related='team_id.used_for_shipping')
 
     @api.multi
     def delivery_email_template(self):

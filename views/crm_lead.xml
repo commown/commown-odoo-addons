@@ -10,9 +10,11 @@
         <field name="arch" type="xml">
           <xpath expr="//notebook/page/field[@name='description']/ancestor::page[1]"
                  position="before">
-            <page name="delivery" string="Delivery followup">
+            <page name="delivery" string="Delivery followup"
+                  attrs="{'invisible': [('used_for_shipping', '=', False)]}">
               <group>
                 <group>
+                  <field name="used_for_shipping" visible="false"/>
                   <field name="expedition_ref"/>
                   <field name="expedition_date"/>
                   <field name="delivery_date"/>
