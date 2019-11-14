@@ -1,0 +1,214 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_shipping
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0-20180123\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-14 23:37+0000\n"
+"PO-Revision-Date: 2019-11-14 23:37+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_shipping
+#: code:addons/commown_shipping/models/mixins.py:100
+#, python-format
+msgid "Colissimo error:\n"
+"%s"
+msgstr "Erreur Colissimo :\n"
+"%s"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_team_on_delivery_email_template_id
+msgid "Default delivery email model for this team"
+msgstr "Modèle de mail post-livraison par défaut"
+
+#. module: commown_shipping
+#: model:ir.ui.view,arch_db:commown_shipping.crm_case_form_view_oppor
+msgid "Delivery followup"
+msgstr "Suivi de l'expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_display_name
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin_display_name
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_id
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin_id
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin_id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_insurance_value
+msgid "Insurance value (€)"
+msgstr "Valeur assurée (€)"
+
+#. module: commown_shipping
+#: sql_constraint:commown.parcel.type:0
+msgid "Insurance value must be >= 0!"
+msgstr "La valeur assurée doit être >= 0!"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type___last_update
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin___last_update
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Piste/opportunité"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_so_line_id
+msgid "Ligne de commande"
+msgstr "Ligne de commande"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_commown_parcel_type
+msgid "Parcel description"
+msgstr "Description colis"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_name
+msgid "Parcel name"
+msgstr "Nom du colis"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_technical_name
+msgid "Parcel technical name"
+msgstr "Nom technique du colis"
+
+#. module: commown_shipping
+#: sql_constraint:commown.parcel.type:0
+msgid "Parcel technical names must be unique."
+msgstr "Le nom technique du colis doit être unique."
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_product_product_shipping_parcel_type_id
+#: model:ir.model.fields,field_description:commown_shipping.field_product_template_shipping_parcel_type_id
+msgid "Parcel type"
+msgstr "Type de colis"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_project_project
+msgid "Project"
+msgstr "Projet"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_project_issue
+msgid "Project Issue"
+msgstr "Incident"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_is_return
+msgid "Return parcel"
+msgstr "Colis retour"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_crm_team
+msgid "Sales Team"
+msgstr "Équipe commerciale"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_sender
+msgid "Sender"
+msgstr "Expéditeur"
+
+#. module: commown_shipping
+#: model:ir.ui.view,arch_db:commown_shipping.crm_team_view_form
+#: model:ir.ui.view,arch_db:commown_shipping.edit_project
+msgid "Shipping"
+msgstr "Expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin_shipping_account_id
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_team_shipping_account_id
+#: model:ir.model.fields,field_description:commown_shipping.field_project_project_shipping_account_id
+msgid "Shipping account"
+msgstr "Compte d'expédition"
+
+#. module: commown_shipping
+#: sql_constraint:commown.parcel.type:0
+msgid "The weight must be > 0!"
+msgstr "Le poids doit être > 0 !"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_team_used_for_shipping
+msgid "Used for shipping"
+msgstr "Usage pour l'expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_weight
+msgid "Weight (kg)"
+msgstr "Poids (kg)"
+
+#. module: commown_shipping
+#: model:ir.actions.server,name:commown_shipping.action_print_outward_fp2_label_issue
+msgid "[commown] Print Fairphone parcel outward label(s)"
+msgstr "[commown] Imprimer une (des) étiquette(s) aller Fairphone"
+
+#. module: commown_shipping
+#: model:ir.actions.server,name:commown_shipping.action_print_return_fp2_label_issue
+msgid "[commown] Print Fairphone parcel return label"
+msgstr "[commown] Imprimer une étiquette de retour Fairphone"
+
+#. module: commown_shipping
+#: model:ir.actions.server,name:commown_shipping.action_print_outward_label_lead
+msgid "[commown] Print related product label(s)"
+msgstr "[commown] Imprimer l(es) étiquette(s) d'expédition"
+
+#. module: commown_shipping
+#: model:ir.actions.server,name:commown_shipping.action_send_delivery_email
+msgid "[commown] Send delivery email"
+msgstr "[commown] Envoyer le courriel de livraison"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_commown_shipping_mixin
+msgid "commown.shipping.mixin"
+msgstr "commown.shipping.mixin"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_commown_shipping_parent_mixin
+msgid "commown.shipping.parent.mixin"
+msgstr "commown.shipping.parent.mixin"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_keychain_account
+msgid "keychain.account"
+msgstr "keychain.account"
