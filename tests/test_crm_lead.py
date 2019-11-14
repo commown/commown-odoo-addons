@@ -155,6 +155,18 @@ class CrmLeadDeliveryTC(TransactionCase):
         # Check result
         self.check_mail_delivered(u'Product delivered', 'LIVCFM')
 
+    def test_actions_on_delivery_send_email_no_status(self):
+        " Check empty expedition status is OK "
+
+        self.assertTrue(self.lead.send_email_on_delivery)
+
+        # Simulate delivery
+        self.lead.expedition_status = False
+        self.lead.delivery_date = '2018-01-01'
+
+        # Check result
+        self.check_mail_delivered(u'Product delivered', 'EMPTY_CODE')
+
     def test_actions_on_delivery_send_email_custom_template(self):
 
         self.assertTrue(self.lead.send_email_on_delivery)

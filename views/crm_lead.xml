@@ -51,7 +51,7 @@ if 'uid' in env or object.send_email_on_delivery:
     if template:
         status = object.expedition_status
         ctx = {}
-        if status[0] == '[' and ']' in status:
+        if status and status[0] == '[' and ']' in status:
             ctx['postal_code'] = status[1:status.find(']')]
         object.with_context(ctx).message_post_with_template(template.id)
       </field>
