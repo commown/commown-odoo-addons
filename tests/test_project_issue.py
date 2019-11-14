@@ -8,7 +8,8 @@ class ProjectIssueTC(TransactionCase):
     def setUp(self):
         super(ProjectIssueTC, self).setUp()
 
-        self.project = self.env.ref('project.project_project_1')
+        self.project = self.env.ref('project.project_project_1').copy({
+            'name': u'Support'})
 
         # Adapt defined stages to our needs: use expected name
         # conventions and remove email model as they are buggy for
@@ -93,10 +94,10 @@ class ProjectIssueTC(TransactionCase):
             'subtype_id': self.env.ref('mail.mt_comment').id,
         })
 
-    def test_move_issue_in_reminder_when_partner_message_arrives(self):
-        """ When an issue is in the reminder stage and it's partner sends a
-        message concerning it, the issue moves automatically to the
-        pending stage. """
+    def test_move_issue_when_partner_message_arrives(self):
+        """ When a partner sends a message concerning an issue, it moves
+        automatically to the pending stage.
+        """
 
         self.issue.update({'stage_id': self.stage_reminder.id})
 
