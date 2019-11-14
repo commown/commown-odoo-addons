@@ -37,6 +37,7 @@
         'project_issue',
         'report_py3o',
         'sale_usability',  # required for sale.layout_category (py3o)
+        'website_project_issue',
         'website_sale_cart_selectable',
         'website_sale_default_country',
         'website_sale_hide_price',
