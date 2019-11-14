@@ -3,6 +3,8 @@ from datetime import datetime
 import requests
 import mock
 
+from odoo.exceptions import UserError
+
 from odoo.addons.commown_shipping.models.colissimo_utils import shipping_data
 
 from odoo.tests.common import TransactionCase, at_install, post_install
@@ -183,3 +185,14 @@ class CrmLeadDeliveryTC(TransactionCase):
 
         # Check result
         self.check_mail_delivered(u'Test custom email', 'LIVGAR')
+
+    def test_actions_on_delivery_send_email_no_template(self):
+        " A user error must be raised in the case no template was specified "
+
+        self.assertTrue(self.lead.send_email_on_delivery)
+        self.lead.on_delivery_email_template_id = False
+        self.lead.team_id.on_delivery_email_template_id = False
+
+        # Simulate delivery
+        self.assertRaises(UserError,
+                          self.lead.update, {'delivery_date': '2018-01-01'})

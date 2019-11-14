@@ -54,6 +54,9 @@ if 'uid' in env or object.send_email_on_delivery:
         if status and status[0] == '[' and ']' in status:
             ctx['postal_code'] = status[1:status.find(']')]
         object.with_context(ctx).message_post_with_template(template.id)
+    else:
+        raise Warning('No mail email template specified'
+                     ' (neither in current lead nor its team)')
       </field>
     </record>
 
