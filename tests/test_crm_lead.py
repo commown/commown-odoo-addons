@@ -146,6 +146,29 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.assertIn(u'code: %s' % code, last_message.body)
         return last_message
 
+    def test_delivery_email_template(self):
+        # Shipping deactivated, template set => None expected
+        self.lead.team_id.used_for_shipping = False
+        assert self.lead.team_id.on_delivery_email_template_id, (
+            'test prerequisite error')
+        self.assertIsNone(self.lead.delivery_email_template())
+
+        # Shipping activated, no lead custom template => custom expected
+        self.lead.team_id.used_for_shipping = True
+        self.lead.on_delivery_email_template_id = False
+        self.assertEqual(self.lead.delivery_email_template(),
+                         self.lead.team_id.on_delivery_email_template_id)
+
+        # Shipping activated, custom template => custom expected
+        self.lead.on_delivery_email_template_id = \
+            self.lead.team_id.on_delivery_email_template_id.copy().id
+        self.assertEqual(self.lead.delivery_email_template().name,
+                         u'Post-delivery email (copy)')
+
+        # Shipping deactivated, even with custom template => None expected
+        self.lead.team_id.used_for_shipping = False
+        self.assertIsNone(self.lead.delivery_email_template())
+
     def test_actions_on_delivery_send_email_team_template(self):
 
         self.assertTrue(self.lead.send_email_on_delivery)

@@ -43,11 +43,8 @@
       <field name="code">
 # "uid" is in env: action launched from GUI
 if 'uid' in env or object.send_email_on_delivery:
-    template = (object.on_delivery_email_template_id
-       or (object.team_id and
-           object.team_id.used_for_shipping and
-           object.team_id.on_delivery_email_template_id))
 
+    template = object.delivery_email_template()
     if template:
         status = object.expedition_status
         ctx = {}

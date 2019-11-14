@@ -24,6 +24,18 @@ class CrmLead(models.Model):
     so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
 
     @api.multi
+    def delivery_email_template(self):
+        """ If current lead is attached to a team with shipping activated,
+        return the lead's custom delivery mail template if any or the team's
+        delivery mail template if any. Return None if all other cases.
+        """
+        self.ensure_one()
+        return self.team_id and self.team_id.used_for_shipping and (
+            self.on_delivery_email_template_id
+            or self.team_id.on_delivery_email_template_id
+            ) or None
+
+    @api.multi
     def _default_shipping_parcel_type(self):
         return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
 
