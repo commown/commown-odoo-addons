@@ -31,6 +31,23 @@
     </xpath>
   </template>
 
+  <!-- Edit task list on portal -->
+  <template id="my_tasks" inherit_id="website_project.my_tasks">
+    <xpath expr="//span[@t-esc='task.stage_id.name']" position="attributes">
+      <!-- Prefer portal stage name over administrative stage name -->
+      <attribute name="t-esc">task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
+    </xpath>
+  </template>
+
+  <!-- Edit task page on portal -->
+  <template id="my_task" inherit_id="website_project.my_task">
+    <xpath expr="//span[@t-field='task.stage_id.name']" position="attributes">
+      <!-- Prefer portal stage name over administrative stage name -->
+      <attribute name="t-field"></attribute>
+      <attribute name="t-esc">task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
+    </xpath>
+  </template>
+
   <!-- Server action that sends the reminder email
        to the followers of given issue -->
   <record id="action_send_issue_reminder_email" model="ir.actions.server">
