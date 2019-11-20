@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-26 09:40+0000\n"
-"PO-Revision-Date: 2019-06-26 09:40+0000\n"
+"POT-Creation-Date: 2019-11-20 18:50+0000\n"
+"PO-Revision-Date: 2019-11-20 18:50+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -201,13 +201,13 @@ msgstr "<span>Se connecter et payer</span>\n"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.product_price_b2b
-msgid "<span>Commitment duration: from </span>"
-msgstr "<span>Durée d'engagement : à partir de </span>"
+msgid "<span>Commitment duration: </span>"
+msgstr "<span>Durée d'engagement : </span>"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.product_price_b2b
-msgid "<span>Commitment duration: </span>"
-msgstr "<span>Durée d'engagement : </span>"
+msgid "<span>Commitment duration: from </span>"
+msgstr "<span>Durée d'engagement : à partir de </span>"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.suggestion_cart
@@ -342,11 +342,6 @@ msgid "Delivery address validated"
 msgstr "Adresse de livraison validée"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Delivery followup"
-msgstr "Suivi de l'expédition"
-
-#. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_display_name
 msgid "Display Name"
 msgstr "Nom affiché"
@@ -408,6 +403,12 @@ msgid "Fermer"
 msgstr "Fermer"
 
 #. module: commown
+#: code:addons/commown/models/res_partner.py:66
+#, python-format
+msgid "File too big (limit is %dMo)"
+msgstr "Fichier trop gros (la limite est %d Mo)"
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_partner_details
 #: model:ir.ui.view,arch_db:commown.signup_field
 msgid "First name"
@@ -440,7 +441,7 @@ msgstr "Carte d'identité"
 #: model:ir.model.fields,field_description:commown.field_res_partner_id_card2
 #: model:ir.model.fields,field_description:commown.field_res_users_id_card2
 msgid "ID card (2)"
-msgstr "Carte d'identité (2)"
+msgstr "Carte d'identité (verso, si besoin)"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_identity_validated
@@ -456,6 +457,11 @@ msgstr "Données personnelles initiales"
 #: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
 msgid "Initial product data"
 msgstr "Données de commandes initiales"
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_invoice
+msgid "Invoice"
+msgstr "Facture"
 
 #. module: commown
 #: selection:crm.lead,webid_rating:0
@@ -723,11 +729,6 @@ msgid "Web search link"
 msgstr "Lien de recherche sur le web"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.product_template_form_view
-msgid "Website"
-msgstr "Site Web"
-
-#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_my_home_sale
 msgid "Your security deposits / Equities"
 msgstr "Mes devis"
@@ -774,8 +775,8 @@ msgstr "[commown] Avancer un ticket qui attend depuis trop longtemps"
 
 #. module: commown
 #: model:ir.actions.server,name:commown.action_awaken_issue_on_partner_message_arrival
-msgid "[commown] Move waiting issues into pending on message arrival"
-msgstr "[commown] Mettre le ticket dans la colonne En cours à l'arrivée d'un message"
+msgid "[commown] Move waiting issues into pending on user email arrival"
+msgstr "[commown] Réactiver les tickets en attente d'un retour client quand un email de sa part arrive"
 
 #. module: commown
 #: model:ir.actions.server,name:commown.fix_invoice_investment_line_price
@@ -786,11 +787,6 @@ msgstr "[commown] Correction des lignes d'acompte des investisseurs"
 #: model:ir.actions.server,name:commown.action_send_issue_reminder_email
 msgid "[commown] Send a reminder email concerning an issue"
 msgstr "[commown] Envoyer un courriel de rappel concernant un ticket"
-
-#. module: commown
-#: model:ir.actions.server,name:commown.action_send_delivery_email
-msgid "[commown] Send delivery email"
-msgstr "[commown] Envoyer le courriel de livraison"
 
 #. module: commown
 #: model:ir.actions.server,name:commown.action_start_contract
