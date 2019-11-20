@@ -4,6 +4,9 @@ from base64 import b64encode
 from odoo import http
 from odoo.addons.website_portal.controllers.main import website_account
 
+from odoo.addons.commown.models.res_partner import FileTooBig
+
+
 _logger = logging.getLogger(__name__)
 
 
@@ -29,6 +32,11 @@ class WebSiteAccount(website_account):
         for attribute, message in Partner.slimpay_checks(values).items():
             error[attribute] = 'error'
             error_message.append(message)
+        try:
+            Partner._apply_bin_field_size_policy(values)
+        except FileTooBig as exc:
+            error[exc.field] = 'error'
+            error_message.append(exc.msg)
         return error, error_message
 
     @http.route(['/my/account'])

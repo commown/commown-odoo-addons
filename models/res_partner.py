@@ -3,10 +3,17 @@ from base64 import b64decode
 
 import magic
 
-from odoo import models, fields, tools, api
+from odoo import models, fields, tools, api, _
 
 
 _logger = logging.getLogger(__name__)
+
+
+class FileTooBig(Exception):
+
+    def __init__(self, field, msg):
+        self.field = field
+        self.msg = msg
 
 
 class CommownPartner(models.Model):
@@ -55,9 +62,9 @@ class CommownPartner(models.Model):
                         b64value, avoid_if_small=True,
                         size=self.max_doc_image_size)
                     value = b64decode(vals[field])
-                assert len(value) < 1024 * 1024 * self.max_doc_size_Mo, (
-                    'Too big file for %s (%s > %dMo)'
-                    % (field, len(value), self.max_doc_size_Mo))
+                if len(value) > 1024 * 1024 * self.max_doc_size_Mo:
+                    raise FileTooBig(field, _(
+                        'File too big (limit is %dMo)') % self.max_doc_size_Mo)
 
     @api.model
     @api.returns('self', lambda value: value.id)
