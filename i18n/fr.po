@@ -163,21 +163,6 @@ msgid "- fin des périodes d'engagement :"
 msgstr "- fin des périodes d'engagement :"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_first_phone_call
-msgid "1st phone call"
-msgstr "1er appel"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_second_phone_call
-msgid "2nd phone call"
-msgstr "2nd appel"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_third_phone_call
-msgid "3rd phone call"
-msgstr "3ème appel"
-
-#. module: commown
 #: model:ir.ui.view,arch_db:commown.orders_followup_products_links
 msgid "; fin de la période d'engagement :"
 msgstr "; fin de la période d'engagement :"
@@ -232,11 +217,6 @@ msgid "Access Groups"
 msgstr "Groupes d'accès"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_address_hesitation
-msgid "Address spelling hesitation"
-msgstr "Hésitation marquée élocution addresse"
-
-#. module: commown
 #: model:ir.model,name:commown.model_account_analytic_account
 msgid "Analytic Account"
 msgstr "Compte analytique"
@@ -252,29 +232,9 @@ msgid "Automatic email on delivery"
 msgstr "Envoi automatique de l'email à la livraison"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Before call"
-msgstr "Éval. risque avant appel"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_billing_address_validated
-msgid "Billing address validated"
-msgstr "Adresse de facturation validée"
-
-#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_layout
 msgid "Channel"
 msgstr "Canal"
-
-#. module: commown
-#: selection:crm.lead,email_rating:0
-msgid "Cold"
-msgstr "Froid"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_comments
-msgid "Comments"
-msgstr "Commentaires"
 
 #. module: commown
 #: model:mail.template,subject:commown.mail_template_issue_reminder
@@ -285,16 +245,6 @@ msgstr "Commown : Votre demande d'assistance se languit de vous !"
 #: model:mail.template,report_name:commown.email_send_invoice_from_contract
 msgid "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
 msgstr "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Communication process"
-msgstr "Suivi des appels"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Conflicting contacts"
-msgstr "Ultimes tentatives"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_layout
@@ -317,60 +267,15 @@ msgid "Custom email model for this lead"
 msgstr "Modèle de courriel spécifique à cette opportunité"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_team_custom_lead_view_id
-msgid "Custom lead view"
-msgstr "Vue personnalisée pour les opportunités"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_questions
-msgid "Customer questions"
-msgstr "Questions du client"
-
-#. module: commown
-#: model:ir.actions.server,name:commown.action_customisable_lead_form_view
-msgid "Customisable lead form view server action"
-msgstr "Action serveur de personnalisation de la vue d'opportunité"
-
-#. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_delivery_date
 msgid "Delivery Date"
 msgstr "Date de livraison"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_delivery_address_validated
-msgid "Delivery address validated"
-msgstr "Adresse de livraison validée"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_display_name
-msgid "Display Name"
-msgstr "Nom affiché"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_partner_details
 #: model:ir.ui.view,arch_db:commown.view_partner_form
 msgid "Documents"
 msgstr "Documents"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_email_rating
-msgid "Email Rating"
-msgstr "Évaluation mail"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_email_boost
-msgid "Email boost sent"
-msgstr "Relance mail"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_email_ultimatum
-msgid "Email ultimatum"
-msgstr "Ultimatum mail"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_email_validated
-msgid "Email validated"
-msgstr "Mail validé"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_date
@@ -421,12 +326,6 @@ msgid "Followup sales team"
 msgstr "Équipe de suivi des ventes"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_global_feeling
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Global feeling"
-msgstr "Impression générale"
-
-#. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_id
 msgid "ID"
 msgstr "ID"
@@ -449,34 +348,9 @@ msgid "Identity validated"
 msgstr "Identité validée"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Initial personal data"
-msgstr "Données personnelles initiales"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Initial product data"
-msgstr "Données de commandes initiales"
-
-#. module: commown
 #: model:ir.model,name:commown.model_account_invoice
 msgid "Invoice"
 msgstr "Facture"
-
-#. module: commown
-#: selection:crm.lead,webid_rating:0
-msgid "Known Coherent"
-msgstr "Connu cohérent"
-
-#. module: commown
-#: selection:crm.lead,webid_rating:0
-msgid "Known neutral"
-msgstr "Connu neutre"
-
-#. module: commown
-#: selection:crm.lead,webid_rating:0
-msgid "Known strange"
-msgstr "Connu étrange"
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_account_analytic_account_transaction_label
@@ -512,78 +386,9 @@ msgid "Lead Partner"
 msgstr "Client"
 
 #. module: commown
-#: model:ir.model,name:commown.model_crm_lead
-msgid "Lead/Opportunity"
-msgstr "Piste/opportunité"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Marketing"
-msgstr "Marketing"
-
-#. module: commown
-#: selection:crm.lead,global_feeling:0
-msgid "Medium"
-msgstr "Ça passe"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_mobile_validated
-msgid "Mobile phone validated"
-msgstr "N° mobile validé"
-
-#. module: commown
-#: selection:crm.lead,email_rating:0
-msgid "Motivated"
-msgstr "Motivé"
-
-#. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_task_type_portal_displayed_name
 msgid "Name displayed on the portal"
 msgstr "Nom affiché sur le portail client"
-
-#. module: commown
-#: selection:crm.lead,email_rating:0
-msgid "Neutral"
-msgstr "Neutre"
-
-#. module: commown
-#: selection:crm.lead,email_rating:0
-#: selection:crm.lead,global_feeling:0
-#: selection:crm.lead,technical_skills:0
-#: selection:crm.lead,webid_rating:0
-msgid "No data"
-msgstr "Pas de données"
-
-#. module: commown
-#: selection:crm.lead,global_feeling:0
-msgid "No go"
-msgstr "No go"
-
-#. module: commown
-#: selection:crm.lead,global_feeling:0
-msgid "No hesitation"
-msgstr "Pas d'hésitation"
-
-#. module: commown
-#: selection:crm.lead,email_rating:0
-msgid "No mail received"
-msgstr "Aucun mail reçu"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Normal contacts"
-msgstr "Tentatives normales"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_initial_data_notes
-#: model:ir.model.fields,field_description:commown.field_crm_lead_webid_notes
-msgid "Notes"
-msgstr "Notes"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_orders_description
-msgid "Orders"
-msgstr "Commandes"
 
 #. module: commown
 #: model:ir.model,name:commown.model_res_partner
@@ -603,21 +408,6 @@ msgid "Payment label"
 msgstr "Libellé bancaire"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Phone call"
-msgstr "Éval. risque pendant l'appel"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Phone call validation"
-msgstr "Validations pendant l'appel"
-
-#. module: commown
-#: selection:crm.lead,global_feeling:0
-msgid "Pretty good"
-msgstr "Plutôt bien"
-
-#. module: commown
 #: model:ir.model,name:commown.model_product_template
 msgid "Product Template"
 msgstr "Modèle d'article"
@@ -629,29 +419,9 @@ msgid "Proof of address"
 msgstr "Justificatif de domicile"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_registered_mail_sent
-msgid "Registered mail sent"
-msgstr "Courrier recommandé"
-
-#. module: commown
 #: model:ir.model,name:commown.model_sale_order
 msgid "Sales Order"
 msgstr "Bon de commande"
-
-#. module: commown
-#: model:ir.model,name:commown.model_crm_team
-msgid "Sales Team"
-msgstr "Équipe commerciale"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_web_searchurl
-msgid "Search on the web"
-msgstr "Rechercher sur le web"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_sent_collective_email
-msgid "Sent collective email"
-msgstr "Mail collectif"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_product_product_support_group_ids
@@ -660,24 +430,9 @@ msgid "Support groups"
 msgstr "Groupes de support"
 
 #. module: commown
-#: selection:crm.lead,global_feeling:0
-msgid "Suspicious"
-msgstr "Méfiance"
-
-#. module: commown
 #: model:ir.model,name:commown.model_project_task_type
 msgid "Task Stage"
 msgstr "Étape de tâche"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_technical_skills
-msgid "Technical skills"
-msgstr "Évaluation technique"
-
-#. module: commown
-#: model:ir.ui.view,arch_db:commown.crm_case_form_view_oppor
-msgid "Technicalities"
-msgstr "Connaissances techniques"
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner_proof_of_address
@@ -698,11 +453,6 @@ msgid "This field holds a file to store the ID card. Images are resized to 1240x
 msgstr "Ce champ contient un fichier de stockage pour la carte d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_webid_unknown
-msgid "Unknown on the web"
-msgstr "Inconnu sur le web"
-
-#. module: commown
 #: model:ir.model,name:commown.model_res_users
 msgid "Users"
 msgstr "Utilisateurs"
@@ -711,22 +461,6 @@ msgstr "Utilisateurs"
 #: model:ir.ui.view,arch_db:commown.orders_followup_products_links
 msgid "Voir les détails"
 msgstr "Voir les détails"
-
-#. module: commown
-#: selection:crm.lead,email_rating:0
-msgid "Warm"
-msgstr "Cordial"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_webid_rating
-msgid "Web identity Rating"
-msgstr "Évaluation identité Web"
-
-#. module: commown
-#: code:addons/commown/models/crm_lead.py:164
-#, python-format
-msgid "Web search link"
-msgstr "Lien de recherche sur le web"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_my_home_sale
@@ -799,19 +533,9 @@ msgid "account.analytic.contract"
 msgstr "contrat"
 
 #. module: commown
-#: selection:crm.lead,technical_skills:0
-msgid "confirmed"
-msgstr "Confirmé"
-
-#. module: commown
 #: model:ir.model,name:commown.model_coupon_campaign
 msgid "coupon.campaign"
 msgstr "coupon.campaign"
-
-#. module: commown
-#: selection:crm.lead,technical_skills:0
-msgid "intermediary"
-msgstr "Intermédiaire"
 
 #. module: commown
 #: model:ir.model,name:commown.model_mass_reconcile_simple_partner_commown
@@ -819,22 +543,7 @@ msgid "mass.reconcile.simple.partner_commown"
 msgstr "mass.reconcile.simple.partner_commown"
 
 #. module: commown
-#: selection:crm.lead,technical_skills:0
-msgid "neophyte"
-msgstr "Néophyte"
-
-#. module: commown
 #: model:ir.model,name:commown.model_account_mass_reconcile_method
 msgid "reconcile method for account_mass_reconcile"
 msgstr "Méthode de lettrage"
-
-#. module: commown
-#: model:ir.model.fields,help:commown.field_crm_lead_second_phone_call
-msgid "with a message"
-msgstr "Avec message vocal"
-
-#. module: commown
-#: model:ir.model.fields,help:commown.field_crm_lead_first_phone_call
-msgid "without leaving a message"
-msgstr "Sans message vocal"
 
