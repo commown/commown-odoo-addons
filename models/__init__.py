@@ -2,8 +2,6 @@ import account_analytic_account
 import account_analytic_contract
 import account_invoice
 import coupon
-import crm_lead
-import crm_team
 import mass_reconcile
 import product_template
 import res_groups
