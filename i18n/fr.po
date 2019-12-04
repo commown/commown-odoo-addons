@@ -4,16 +4,26 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0-20180123\n"
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-14 23:37+0000\n"
-"PO-Revision-Date: 2019-11-14 23:37+0000\n"
+"POT-Creation-Date: 2019-12-04 12:19+0000\n"
+"PO-Revision-Date: 2019-12-04 12:19+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_start_contract_on_delivery
+msgid "Automatic contract start on delivery"
+msgstr "Démarrage automatique du contrat à la livraison"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_send_email_on_delivery
+msgid "Automatic email on delivery"
+msgstr "Envoi automatique de l'email à la livraison"
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/mixins.py:100
@@ -34,9 +44,19 @@ msgid "Created on"
 msgstr "Créé le"
 
 #. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_on_delivery_email_template_id
+msgid "Custom email model for this lead"
+msgstr "Modèle de courriel spécifique à cette opportunité"
+
+#. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_team_on_delivery_email_template_id
 msgid "Default delivery email model for this team"
 msgstr "Modèle de mail post-livraison par défaut"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_delivery_date
+msgid "Delivery Date"
+msgstr "Date de livraison"
 
 #. module: commown_shipping
 #: model:ir.ui.view,arch_db:commown_shipping.crm_case_form_view_oppor
@@ -49,6 +69,31 @@ msgstr "Suivi de l'expédition"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin_display_name
 msgid "Display Name"
 msgstr "Nom affiché"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_expedition_date
+msgid "Expedition Date"
+msgstr "Date d'expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_expedition_ref
+msgid "Expedition reference"
+msgstr "N° d'expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_expedition_status
+msgid "Expedition status"
+msgstr "Statut de l'expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_expedition_status_fetch_date
+msgid "Expedition status fetch date"
+msgstr "Date de récupération du statut"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_expedition_urgency_mail_sent
+msgid "Expedition urgency mail send"
+msgstr "Mail au client pour une récupération urgente"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_id
