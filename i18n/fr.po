@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-20 18:50+0000\n"
-"PO-Revision-Date: 2019-11-20 18:50+0000\n"
+"POT-Creation-Date: 2019-12-04 11:25+0000\n"
+"PO-Revision-Date: 2019-12-04 11:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -222,16 +222,6 @@ msgid "Analytic Account"
 msgstr "Compte analytique"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_start_contract_on_delivery
-msgid "Automatic contract start on delivery"
-msgstr "Démarrage automatique du contrat à la livraison"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_send_email_on_delivery
-msgid "Automatic email on delivery"
-msgstr "Envoi automatique de l'email à la livraison"
-
-#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_layout
 msgid "Channel"
 msgstr "Canal"
@@ -262,45 +252,15 @@ msgid "Created on"
 msgstr "Créé le"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_on_delivery_email_template_id
-msgid "Custom email model for this lead"
-msgstr "Modèle de courriel spécifique à cette opportunité"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_delivery_date
-msgid "Delivery Date"
-msgstr "Date de livraison"
+#: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_partner_details
 #: model:ir.ui.view,arch_db:commown.view_partner_form
 msgid "Documents"
 msgstr "Documents"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_date
-msgid "Expedition Date"
-msgstr "Date d'expédition"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_ref
-msgid "Expedition reference"
-msgstr "N° d'expédition"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_status
-msgid "Expedition status"
-msgstr "Statut de l'expédition"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_status_fetch_date
-msgid "Expedition status fetch date"
-msgstr "Date de récupération du statut"
-
-#. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_expedition_urgency_mail_sent
-msgid "Expedition urgency mail send"
-msgstr "Mail au client pour une récupération urgente"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.orders_followup_products_links
@@ -343,11 +303,6 @@ msgid "ID card (2)"
 msgstr "Carte d'identité (verso, si besoin)"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead_identity_validated
-msgid "Identity validated"
-msgstr "Identité validée"
-
-#. module: commown
 #: model:ir.model,name:commown.model_account_invoice
 msgid "Invoice"
 msgstr "Facture"
@@ -386,6 +341,11 @@ msgid "Lead Partner"
 msgstr "Client"
 
 #. module: commown
+#: model:ir.model,name:commown.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Piste/opportunité"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_task_type_portal_displayed_name
 msgid "Name displayed on the portal"
 msgstr "Nom affiché sur le portail client"
@@ -422,6 +382,11 @@ msgstr "Justificatif de domicile"
 #: model:ir.model,name:commown.model_sale_order
 msgid "Sales Order"
 msgstr "Bon de commande"
+
+#. module: commown
+#: model:ir.model,name:commown.model_crm_team
+msgid "Sales Team"
+msgstr "Équipe commerciale"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_product_product_support_group_ids
