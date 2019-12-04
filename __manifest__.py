@@ -9,6 +9,8 @@
     'website': "https://commown.fr",
     'depends': [
         # Commown modules
+        'account_asset_fiscal_year',
+        'account_loan',
         'account_bank_statement_import_credit_coop',
         'account_bank_statement_import_lanef',
         'account_invoice_merge_auto_pay',
@@ -17,9 +19,14 @@
         'commown_lead_risk_analysis',
         'contract_auto_merge_invoice',
         'payment_slimpay',
+        'payment_slimpay_issue',
         'product_rental',
+        'rating_project_issue_nps',
+        'sale_product_email',
         'scic',
+        'urban_mine',
         'website_sale_affiliate_portal',
+        'website_sale_affiliate_product_restriction',
         'website_sale_b2b',
         'website_sale_coupon',
 
