@@ -14,9 +14,6 @@
           <xpath expr="//field[@name='priority']/ancestor::group[1]" position="attributes">
             <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', False)]}</attribute>
           </xpath>
-          <xpath expr="//field[@name='email_from']" position="attributes">
-            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', False)]}</attribute>
-          </xpath>
           <xpath expr="//field[@name='phone']" position="attributes">
             <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', False)]}</attribute>
           </xpath>
@@ -75,7 +72,6 @@
                   <field readonly="1" name="city"/>
                   <field readonly="1" name="state_id" invisible="1"/>
                   <field readonly="1" name="country_id"/>
-                  <field readonly="1" name="email_from"/>
                 </group>
                 <group>
                   <field name="initial_data_notes" colspan="2"/>
