@@ -9,12 +9,13 @@
       <!-- Move partner_id to the sheet and contract next to it -->
       <xpath expr="//page[@name='extra_info']//field[@name='partner_id']" position="replace"></xpath>
       <xpath expr="//sheet//group[1]" position="inside">
-        <group name="contract">
+        <group name="partner">
           <field name="partner_id"/>
         </group>
-        <group>
+        <group name="contract">
           <field name="contract_id" options="{'no_create': True}"
-                 domain="[('partner_id', 'parent_of', partner_id)]"/>
+                 domain="[('partner_id', 'child_of', 'commercial_partner_id)]"/>
+          <field name="commercial_partner_id" invisible="True"/>
           <field name="contractual_issues_tracking" invisible="True"/>
         </group>
       </xpath>
