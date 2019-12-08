@@ -1,3 +1,4 @@
 import project
 import project_issue
 import project_task
+import account_analytic_account

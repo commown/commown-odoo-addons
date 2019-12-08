@@ -17,7 +17,8 @@
     'data': [
         'views/project.xml',
         'views/project_issue.xml',
-        'views/project_task.xml'
+        'views/project_task.xml',
+        'views/account_analytic_account.xml',
     ],
     'installable': True,
     'application': False,
