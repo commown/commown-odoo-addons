@@ -1,9 +1,4 @@
-import logging
-
 from odoo import models, api, fields, _
-
-
-_logger = logging.getLogger(__name__)
 
 
 class ProjectTask(models.Model):
