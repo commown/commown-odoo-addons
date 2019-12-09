@@ -2,7 +2,7 @@
 
 <odoo>
 
-  <record model="ir.ui.view" id="edit_project">
+  <record model="ir.ui.view" id="account_analytic_contract_view_form">
     <field name="name">Contract form</field>
     <field name="model">account.analytic.account</field>
     <field name="inherit_id" ref="contract.account_analytic_account_recurring_form_form"/>
