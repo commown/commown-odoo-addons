@@ -59,7 +59,7 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
         """ Buying a rental product must add a rental followup card """
 
         # Trigger the automatic action
-        self.so.write({'state': 'sale'})
+        self.so.action_confirm()
 
         # Check effects
         partner = self.so.partner_id
@@ -89,12 +89,12 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
             'seller_id': self.env.ref('base.res_partner_1').id,
         })
         self.env['coupon.coupon'].create({
-            'used_for_sale_id': self.so.id,
+            'reserved_for_sale_id': self.so.id,
             'campaign_id': campaign.id,
         })
 
         # Trigger the automatic action
-        self.so.write({'state': 'sale'})
+        self.so.action_confirm()
 
         # Check effects
         partner = self.so.partner_id
