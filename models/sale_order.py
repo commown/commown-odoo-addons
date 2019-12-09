@@ -10,8 +10,8 @@ class CouponSaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
-        res = super(CouponSaleOrder, self).action_confirm()
         self.confirm_coupons()
+        res = super(CouponSaleOrder, self).action_confirm()
         return res
 
     @api.multi
