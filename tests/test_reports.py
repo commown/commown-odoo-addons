@@ -6,6 +6,11 @@ from odoo.tests.common import at_install, post_install
 from . import common
 
 
+def _product_descriptions(invoice_doc):
+    return [descr for descr in invoice_doc.xpath('//tbody//tr//td[1]//text()')
+            if descr.strip()]
+
+
 @at_install(False)
 @post_install(True)
 class InvoiceReportTC(common.MockedEmptySessionTC):
@@ -148,3 +153,20 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
         doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Invoice %s' % inv.display_name.strip()])
+
+    def test_b2c_qty_zero(self):
+        "Invoice lines with quantity equal to zero must not appear on invoice"
+        so1 = self.sale(self.b2c_partner, [self.std_product, self.std_product])
+        inv1 = self.open_invoice(so1)
+        doc1 = self.html_invoice(inv1)
+
+        self.assertEqual(_product_descriptions(doc1),
+                         [self.std_product.name] * 2)  # 2 product lines
+
+        so2 = self.sale(self.b2c_partner, [self.std_product, self.std_product])
+        so2.order_line[1].product_uom_qty = 0  # Quantity 0 for second product
+        inv2 = self.open_invoice(so2)
+        doc2 = self.html_invoice(inv2)
+
+        self.assertEqual(_product_descriptions(doc2),
+                         [self.std_product.name])  # 1 product line only
