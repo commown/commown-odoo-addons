@@ -13,7 +13,9 @@
           <field name="partner_id"/>
         </group>
         <group name="contract">
-          <field name="contract_id" options="{'no_create': True}"
+          <field name="contract_id"
+                 attrs="{'required': [('contractual_issues_tracking', '=', True)]}"
+                 options="{'no_create': True}"
                  domain="[('partner_id', 'child_of', 'commercial_partner_id)]"/>
           <field name="commercial_partner_id" invisible="True"/>
           <field name="contractual_issues_tracking" invisible="True"/>
