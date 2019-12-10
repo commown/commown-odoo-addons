@@ -8,13 +8,21 @@
     <field name="inherit_id" ref="contract.account_analytic_account_recurring_form_form"/>
     <field name="arch" type="xml">
       <xpath expr="//group[@name='main']" position="after">
-        <group string="Contractual issues">
-          <field name="contractual_issue_ids" readonly="1" nolabel="1">
-            <tree>
+        <group string="Related issues">
+          <field name="contractual_issue_ids" readonly="1">
+            <tree default_order="project_id, penalty_exemption, contractual_issue_date desc, contractual_issue_type, stage_id, name">
+              <field name="project_id"/>
               <field name="name"/>
               <field name="contractual_issue_date"/>
               <field name="contractual_issue_type"/>
               <field name="penalty_exemption"/>
+              <field name="stage_id"/>
+            </tree>
+          </field>
+          <field name="other_issue_ids" readonly="1">
+            <tree default_order="project_id, stage_id, name">
+              <field name="project_id"/>
+              <field name="name"/>
               <field name="stage_id"/>
             </tree>
           </field>
