@@ -6,6 +6,15 @@ from odoo import api, models
 class AccountAnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
 
+    def name_get(self):
+        result = []
+        for record in self:
+            _id, name = super(AccountAnalyticAccount, record).name_get()[0]
+            if record.contract_template_id:
+                name += u' (%s)' % record.contract_template_id.name
+            result.append((record.id, name))
+        return result
+
     def _transaction_label_subtitutions(self, invoice):
         """ Return a dict {marker: value} mapping marker in the contract's
         transaction label attribute value to their real value.
