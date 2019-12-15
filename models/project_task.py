@@ -21,3 +21,6 @@ class ProjectTask(models.Model):
     contractual_issues_tracking = fields.Boolean(
         'Used for contractual issue tracking',
         related='project_id.contractual_issues_tracking')
+    require_contract = fields.Boolean(
+        'Requires a contract',
+        related='project_id.require_contract')

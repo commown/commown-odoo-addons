@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-10 16:14+0000\n"
-"PO-Revision-Date: 2019-12-10 16:14+0000\n"
+"POT-Creation-Date: 2019-12-15 06:09+0000\n"
+"PO-Revision-Date: 2019-12-15 06:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -38,9 +38,13 @@ msgid "Contract"
 msgstr "Contrat"
 
 #. module: commown_contractual_issue
+#: model:ir.ui.view,arch_db:commown_contractual_issue.edit_project
+msgid "Contracts"
+msgstr "Contrats"
+
+#. module: commown_contractual_issue
 #: model:ir.model.fields,field_description:commown_contractual_issue.field_account_analytic_account_contractual_issue_ids
 #: model:ir.model.fields,field_description:commown_contractual_issue.field_project_project_contractual_issue_ids
-#: model:ir.ui.view,arch_db:commown_contractual_issue.edit_project
 #: model:ir.ui.view,arch_db:commown_contractual_issue.view_task_form2
 msgid "Contractual issues"
 msgstr "Incidents régis par contrat"
@@ -69,6 +73,11 @@ msgstr "Date de l'incident"
 #: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_contractual_issue_type
 msgid "Issue type"
 msgstr "Type d'incident"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_project_require_contract
+msgid "Issues/ tasks require a contract"
+msgstr "Les tickets / tâches requièrent un contrat"
 
 #. module: commown_contractual_issue
 #: selection:project.task,contractual_issue_type:0
@@ -100,6 +109,12 @@ msgstr "Incident"
 #: model:ir.ui.view,arch_db:commown_contractual_issue.account_analytic_contract_view_form
 msgid "Related issues"
 msgstr "Incidents liés"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_issue_require_contract
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_require_contract
+msgid "Requires a contract"
+msgstr "Requiert un contrat"
 
 #. module: commown_contractual_issue
 #: model:ir.model,name:commown_contractual_issue.model_project_task
