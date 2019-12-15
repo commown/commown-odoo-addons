@@ -103,8 +103,9 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
             ('name', 'ilike', '%' + self.so.name + '%'),
         ])
         self.assertEqual(len(leads), 3)
-        self.assertTrue(all('coupon' in name.lower()
-                            for name in leads.mapped('name')))
+        self.assertTrue(
+            all(u'COUPON: %s' % campaign.name in name
+                for name in leads.mapped('name')))
 
     def test_add_receivable_account(self):
         " Buying a product must add the buyer a dedicated receivable account "

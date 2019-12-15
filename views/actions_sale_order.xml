@@ -76,8 +76,11 @@ if len(project) == 1 and len(manager) == 1:
     <field name="code">
 title_template = u'[%(sale)s-%(count)02d] %(descr)s'
 
-if record.used_coupons():
-    title_template += u' - COUPON'
+coupons = record.used_coupons()
+if coupons:
+    title_template += (
+        u' - COUPON: ' +
+        u', '.join(coupons.mapped('campaign_id.name')))
 ctx = {'sale': record.name, 'count': 0}
 
 for so_line in record.order_line:
