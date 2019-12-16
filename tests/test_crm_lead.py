@@ -79,6 +79,33 @@ class CrmLeadShippingTC(BaseShippingTC):
         data = shipping_data(is_return=True, **base_kwargs)
         self.assertEqual(data['letter']['service']['productCode'], 'CORI')
 
+    def _print_outward_labels(self, leads):
+        act = self.env.ref('commown_shipping.action_print_outward_label_lead')
+
+        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
+            return act.with_context({
+                'active_model': leads._name, 'active_ids': leads.ids}).run()
+
+    def test_shipping_data_address_too_long(self):
+        """ When a partner has a too long address, a user error is raised
+        with its name (useful when printing several labels at once).
+        """
+        other_partner = self.lead.partner_id.copy({
+            'street': u'x' * 100,
+        })
+        other_partner.name = u'John TestAddressTooLong'
+
+        leads = self.env['crm.lead']
+        for num in range(5):
+            leads += self.lead.copy({'name': '[SO%05d] Test lead' % num})
+            if num == 3:
+                leads[-1].partner_id = other_partner
+
+        with self.assertRaises(UserError) as err:
+            self._print_outward_labels(leads)
+        self.assertEqual(err.exception.name,
+                         u'Address too long for "John TestAddressTooLong"')
+
     def test_create_parcel_label(self):
         lead = self.lead
 
@@ -105,11 +132,7 @@ class CrmLeadShippingTC(BaseShippingTC):
         for num in range(5):
             leads += self.lead.copy({'name': '[SO%05d] Test lead' % num})
 
-        act = self.env.ref('commown_shipping.action_print_outward_label_lead')
-
-        with mock.patch.object(requests, 'post', return_value=self.fake_resp):
-            download_action = act.with_context({
-                'active_model': leads._name, 'active_ids': leads.ids}).run()
+        download_action = self._print_outward_labels(leads)
 
         all_labels = self._attachment_from_download_action(download_action)
         self.assertEqual(all_labels.name, self.parcel_type.name + '.pdf')

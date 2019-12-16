@@ -22,6 +22,12 @@ class ColissimoError(Exception):
     pass
 
 
+class AddressTooLong(Exception):
+
+    def __init__(self, partner):
+        self.partner = partner
+
+
 def normalize_phone(phone_number, country_code):
     " Colissimo only accepts french phone numbers "
     if country_code == 'FR' and phone_number:
@@ -85,7 +91,7 @@ def delivery_data(partner):
 
     for attr in ('line1', 'line2', 'line3'):
         if len(result_data.get(attr) or '') > 35:  # handle False and None
-            raise ValueError('Address too long for %r' % partner.name)
+            raise AddressTooLong(partner)
 
     return result_data
 
