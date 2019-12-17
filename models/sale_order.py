@@ -1,5 +1,9 @@
+import logging
+
 from odoo import api, models
 
+
+_logger = logging.getLogger(__name__)
 
 CONTRACT_EMPTY_DATE = '2030-01-01'
 CONTRACT_PROD_MARKER = '##PRODUCT##'
@@ -55,6 +59,11 @@ class ProductRentalSaleOrder(models.Model):
         email_act = super(ProductRentalSaleOrder, self).action_quotation_send()
         order_attachments = self.contractual_documents()
         if order_attachments:
+            _logger.info(
+                u'Prepare sending %s with %d attachment(s): %s',
+                self.name, len(order_attachments),
+                u', '.join([u"'%s'" % n
+                            for n in order_attachments.mapped('name')]))
             ids = [att.id for att in sorted(order_attachments,
                                             key=lambda att: att.name)]
             email_act['context'].setdefault(
