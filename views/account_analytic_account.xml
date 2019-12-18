@@ -20,10 +20,11 @@
             </tree>
           </field>
           <field name="other_issue_ids" readonly="1">
-            <tree default_order="project_id, stage_id, name">
+            <tree default_order="project_id, create_date, stage_id, name">
               <field name="project_id"/>
               <field name="name"/>
               <field name="stage_id"/>
+              <field name="create_date"/>
             </tree>
           </field>
         </group>
