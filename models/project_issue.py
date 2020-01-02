@@ -10,7 +10,7 @@ class ProjectIssue(models.Model):
         compute='_compute_last_partner_msg_date',
         store=True)
 
-    @api.depends('message_ids')
+    @api.depends('date_action_last')
     def _compute_last_partner_msg_date(self):
         """By default, set the issue's creation date. If the partner has made
         at least one email or comment on the issue, the last one's
