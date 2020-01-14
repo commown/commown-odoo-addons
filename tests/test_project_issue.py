@@ -96,31 +96,34 @@ class ProjectIssueTC(TransactionCase):
             'subtype_id': self.env.ref('mail.mt_comment').id,
         })
 
-    def test_move_issue_when_message_arrives_if_not_from_default_company(self):
+    def test_move_issue_when_message_arrives_if_not_from_employee(self):
         """ When a partner sends a message concerning an issue, it moves
-        automatically to the pending stage, unless its company is the default.
+        automatically to the pending stage, unless it is an employee.
         """
-
-        default_company = self.env['res.partner']._default_company().partner_id
+        employees = self.env.ref('base.group_user')
 
         # Check test prerequisite
-        assert self.issue.partner_id.commercial_partner_id != default_company
+        assert employees not in self.issue.partner_id.mapped(
+            'user_ids.groups_id')
 
         self.issue.update({'stage_id': self.stage_reminder.id})
         self._send_partner_email()
         self.assertEqual(self.issue.stage_id, self.stage_pending)
 
-        other_partner = self.partner.copy({'firstname': u'Other'})
+        other_partner = self.env.ref('portal.partner_demo_portal')
         self.issue.update({'stage_id': self.stage_reminder.id})
         self._send_partner_email(author_id=other_partner.id)
         self.assertEqual(self.issue.stage_id, self.stage_pending)
 
-        other_partner.parent_id = default_company.id
-        # Check test prerequisite
-        assert self.issue.partner_id.commercial_partner_id == default_company
-
+        other_partner.user_ids.groups_id |= employees
         self.issue.update({'stage_id': self.stage_reminder.id})
         self._send_partner_email(author_id=other_partner.id)
+        self.assertEqual(self.issue.stage_id, self.stage_reminder)
+
+        admin = self.env.user.partner_id
+        assert employees in admin.mapped('user_ids.groups_id')
+        self.issue.update({'stage_id': self.stage_reminder.id})
+        self._send_partner_email(author_id=admin.id)
         self.assertEqual(self.issue.stage_id, self.stage_reminder)
 
     def test_move_customer_long_waiting_issue_to_reminder(self):

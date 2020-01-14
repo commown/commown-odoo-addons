@@ -173,8 +173,8 @@ for orig, dest in next_stage_marker.items():
 if record.model == 'project.issue' and record.message_type in ('email', 'comment'):
     issue = env[record.model].browse(record.res_id).sudo()
     if issue.project_id.name == 'Support':
-        default_company = env['res.partner']._default_company()
-        if record.author_id.commercial_partner_id != default_company.partner_id:
+        employees = env.ref('base.group_user')
+        if employees not in record.author_id.mapped('user_ids.groups_id'):
             stage = env['project.task.type'].search([
                 ('project_ids', '=', issue.project_id.id),
                 ('name', 'like', '[after-sale: pending]'),
