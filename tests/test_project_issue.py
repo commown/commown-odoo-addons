@@ -35,8 +35,8 @@ class ProjectIssueTC(TransactionCase):
             'name': u'Solved [after-sale: manual]',
             'mail_template_id': False})[0]
 
-        self.partner = self.env.ref('base.res_partner_1')
-        self.partner.update({'firstname': 'Flo', 'lastname': 'Cay'})
+        self.partner = self.env.ref('portal.demo_user0_res_partner')
+        self.partner.update({'firstname': u'Flo', 'company_id': False})
 
         self.issue = self.env['project.issue'].create({
             'name': u'Commown test',
@@ -83,9 +83,9 @@ class ProjectIssueTC(TransactionCase):
 
         self.assertEqual(self.issue.stage_id, self.stage_end_ok)
 
-    def _send_partner_email(self):
+    def _send_partner_email(self, author_id=None):
         self.env['mail.message'].create({
-            'author_id': self.issue.partner_id.id,
+            'author_id': author_id or self.issue.partner_id.id,
             'subject': u'Test subject',
             'body': u"<p>Test body</p>",
             'message_type': u'comment',
@@ -94,26 +94,26 @@ class ProjectIssueTC(TransactionCase):
             'subtype_id': self.env.ref('mail.mt_comment').id,
         })
 
-    def test_move_issue_when_partner_message_arrives(self):
+    def test_move_issue_when_message_arrives_if_not_from_default_company(self):
         """ When a partner sends a message concerning an issue, it moves
-        automatically to the pending stage.
+        automatically to the pending stage, unless its company is the default.
         """
+        # Check test prerequisite
+        assert not self.issue.partner_id.company_id
 
         self.issue.update({'stage_id': self.stage_reminder.id})
-
         self._send_partner_email()
-
         self.assertEqual(self.issue.stage_id, self.stage_pending)
 
-    def test_move_customer_waiting_issue_when_message_arrives(self):
-        """ When a customer message arrives which concerns a waiting
-        issue, the issue is moved to the pending stage. """
-
-        self.issue.update({'stage_id': self.stage_wait.id})
-
-        self._send_partner_email()
-
+        other_partner = self.partner.copy({'firstname': u'Other'})
+        self.issue.update({'stage_id': self.stage_reminder.id})
+        self._send_partner_email(author_id=other_partner.id)
         self.assertEqual(self.issue.stage_id, self.stage_pending)
+
+        self.issue.update({'stage_id': self.stage_reminder.id})
+        other_partner.company_id = self.env['res.partner']._default_company()
+        self._send_partner_email(author_id=other_partner.id)
+        self.assertEqual(self.issue.stage_id, self.stage_reminder)
 
     def test_move_customer_long_waiting_issue_to_reminder(self):
 
