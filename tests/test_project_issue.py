@@ -36,7 +36,8 @@ class ProjectIssueTC(TransactionCase):
             'mail_template_id': False})[0]
 
         self.partner = self.env.ref('portal.demo_user0_res_partner')
-        self.partner.update({'firstname': u'Flo', 'company_id': False})
+        self.partner.update({'firstname': u'Flo', 'company_id': False,
+                             'phone': u'0000000000'})
 
         self.issue = self.env['project.issue'].create({
             'name': u'Commown test',
@@ -54,7 +55,7 @@ class ProjectIssueTC(TransactionCase):
         for ref in action_refs:
             self.env.ref('commown.%s' % ref).last_run = False
 
-    def test_send_reminder_email(self):
+    def test_send_reminder_email_and_sms(self):
         """ A reminder message to followers must be created when issue is put
         in the dedicated column. """
 
@@ -62,14 +63,16 @@ class ProjectIssueTC(TransactionCase):
         self.issue.update({'stage_id': self.stage_reminder.id})
 
         # Check messages: one for the stage change, one for the email
-        self.assertEqual(len(self.issue.message_ids), message_num + 2)
-        message = self.issue.message_ids[1]
-        self.assertEqual(message.subtype_id.get_xml_id().values(),
-                         [u'mail.mt_comment'])
-        self.assertIn('Bonjour Flo', message.body)
-        self.assertIn('Pas de nouvelles', message.body)
+        self.assertEqual(len(self.issue.message_ids), message_num + 3)
+        sms_msg, email_msg = self.issue.message_ids[1:3]
+        expected_subtype = self.env.ref('mail.mt_comment')
+        self.assertEqual(email_msg.subtype_id, expected_subtype)
+        self.assertEqual(sms_msg.subtype_id, expected_subtype)
+        self.assertIn('Bonjour Flo', email_msg.body)
+        self.assertIn('Pas de nouvelles', email_msg.body)
         expected_sender = self.env.ref(u'base.user_demo').partner_id
-        self.assertEqual(message.author_id, expected_sender)
+        self.assertEqual(email_msg.author_id, expected_sender)
+        self.assertIn('ignorez ce SMS', sms_msg.body)
 
     def test_move_issue_after_expiry(self):
         """ After 10 days spent in the reminder stage, crontab should
