@@ -36,8 +36,7 @@ class ProjectIssueTC(TransactionCase):
             'mail_template_id': False})[0]
 
         self.partner = self.env.ref('portal.demo_user0_res_partner')
-        self.partner.update({'firstname': u'Flo', 'company_id': False,
-                             'phone': u'0000000000'})
+        self.partner.update({'firstname': u'Flo', 'phone': u'0000000000'})
 
         self.issue = self.env['project.issue'].create({
             'name': u'Commown test',
@@ -101,8 +100,11 @@ class ProjectIssueTC(TransactionCase):
         """ When a partner sends a message concerning an issue, it moves
         automatically to the pending stage, unless its company is the default.
         """
+
+        default_company = self.env['res.partner']._default_company().partner_id
+
         # Check test prerequisite
-        assert not self.issue.partner_id.company_id
+        assert self.issue.partner_id.commercial_partner_id != default_company
 
         self.issue.update({'stage_id': self.stage_reminder.id})
         self._send_partner_email()
@@ -113,8 +115,11 @@ class ProjectIssueTC(TransactionCase):
         self._send_partner_email(author_id=other_partner.id)
         self.assertEqual(self.issue.stage_id, self.stage_pending)
 
+        other_partner.parent_id = default_company.id
+        # Check test prerequisite
+        assert self.issue.partner_id.commercial_partner_id == default_company
+
         self.issue.update({'stage_id': self.stage_reminder.id})
-        other_partner.company_id = self.env['res.partner']._default_company()
         self._send_partner_email(author_id=other_partner.id)
         self.assertEqual(self.issue.stage_id, self.stage_reminder)
 

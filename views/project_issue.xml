@@ -174,7 +174,7 @@ if record.model == 'project.issue' and record.message_type in ('email', 'comment
     issue = env[record.model].browse(record.res_id).sudo()
     if issue.project_id.name == 'Support':
         default_company = env['res.partner']._default_company()
-        if record.author_id.company_id != default_company:
+        if record.author_id.commercial_partner_id != default_company.partner_id:
             stage = env['project.task.type'].search([
                 ('project_ids', '=', issue.project_id.id),
                 ('name', 'like', '[after-sale: pending]'),
