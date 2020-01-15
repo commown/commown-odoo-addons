@@ -82,7 +82,10 @@ class ProjectIssueTC(TransactionCase):
         # 3 expected messages: email, sms, stage change (in reverse order)
         self.assertEqual(len(self.issue.message_ids), message_num + 3)
         self.assertIsStageChangeMessage(self.issue.message_ids[0])
-        self.assertIsReminderSMS(self.issue.message_ids[1])
+        sms = self.issue.message_ids[1]
+        self.assertIsReminderSMS(sms)
+        self.assertEqual(sms.mapped('notification_ids.res_partner_id.email'),
+                         [u'mail2sms@envoyersmspro.com'])
         self.assertIsReminderEmail(self.issue.message_ids[2])
 
     def test_send_reminder_no_sms(self):
