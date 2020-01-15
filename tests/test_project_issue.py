@@ -54,24 +54,56 @@ class ProjectIssueTC(TransactionCase):
         for ref in action_refs:
             self.env.ref('commown.%s' % ref).last_run = False
 
-    def test_send_reminder_email_and_sms(self):
-        """ A reminder message to followers must be created when issue is put
-        in the dedicated column. """
+    def assertIsReminderEmail(self, message):
+        self.assertEqual(message.subtype_id, self.env.ref('mail.mt_comment'))
+        self.assertEqual(
+            message.subject,
+            u"Commown : votre demande d'assistance se languit de vous !")
+        self.assertEqual(message.author_id,
+                         self.env.ref(u'base.user_demo').partner_id)
+
+    def assertIsReminderSMS(self, message):
+        self.assertEqual(message.subtype_id, self.env.ref('mail.mt_comment'))
+        self.assertIn(u'ignorez ce SMS', message.body)
+
+    def assertIsStageChangeMessage(self, message):
+        self.assertEqual(message.subtype_id,
+                         self.env.ref('project_issue.mt_issue_stage'))
+
+    def test_send_reminders(self):
+        """A reminder mail to followers and SMS to partner must be sent
+        when issue is put in the dedicated column.
+        """
 
         message_num = len(self.issue.message_ids)
         self.issue.update({'stage_id': self.stage_reminder.id})
 
-        # Check messages: one for the stage change, one for the email
+        # Check email message
+        # 3 expected messages: email, sms, stage change (in reverse order)
         self.assertEqual(len(self.issue.message_ids), message_num + 3)
-        sms_msg, email_msg = self.issue.message_ids[1:3]
-        expected_subtype = self.env.ref('mail.mt_comment')
-        self.assertEqual(email_msg.subtype_id, expected_subtype)
-        self.assertEqual(sms_msg.subtype_id, expected_subtype)
-        self.assertIn('Bonjour Flo', email_msg.body)
-        self.assertIn('Pas de nouvelles', email_msg.body)
-        expected_sender = self.env.ref(u'base.user_demo').partner_id
-        self.assertEqual(email_msg.author_id, expected_sender)
-        self.assertIn('ignorez ce SMS', sms_msg.body)
+        self.assertIsStageChangeMessage(self.issue.message_ids[0])
+        self.assertIsReminderSMS(self.issue.message_ids[1])
+        self.assertIsReminderEmail(self.issue.message_ids[2])
+
+    def test_send_reminder_no_sms(self):
+        """A reminder SMS must not be sent when a non-employee message
+        (interpreted as a message from the partner) has already been sent.
+        """
+
+        # Check test prerequisite: issue's partner is not an employee
+        assert self.env.ref(
+            'base.group_user') not in self.issue.partner_id.mapped(
+                'user_ids.groups_id')
+
+        # Simulate partner sending a message, then put issue back to reminder
+        self._send_partner_email()
+        message_num = len(self.issue.message_ids)
+        self.issue.update({'stage_id': self.stage_reminder.id})
+
+        # 2 expected messages: email, stage change (in reverse order)
+        self.assertEqual(len(self.issue.message_ids), message_num + 2)
+        self.assertIsStageChangeMessage(self.issue.message_ids[0])
+        self.assertIsReminderEmail(self.issue.message_ids[1])
 
     def test_move_issue_after_expiry(self):
         """ After 10 days spent in the reminder stage, crontab should

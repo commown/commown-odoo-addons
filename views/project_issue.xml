@@ -74,10 +74,11 @@ record.message_post_with_template(email_template)
 if record.user_id:
     record = record.sudo(record.user_id)
 if record.partner_id.mobile or record.partner_id.phone:
-    template = env.ref('commown.sms_template_issue_reminder')
-    record = record.with_context(custom_layout='commown_payment_slimpay_issue.message_nowrap_template')
-    record.message_post_with_template(template.id, message_type='comment')
-
+    employees = env.ref('base.group_user')
+    if not any(m for m in record.message_ids if employees not in m.author_id.mapped('user_ids.groups_id')):
+        template = env.ref('commown.sms_template_issue_reminder')
+        record = record.with_context(custom_layout='commown_payment_slimpay_issue.message_nowrap_template')
+        record.message_post_with_template(template.id, message_type='comment')
 ]]>
     </field>
   </record>
