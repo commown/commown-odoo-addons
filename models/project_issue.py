@@ -75,7 +75,7 @@ class ProjectIssue(models.Model):
 
         for acquirer in self.env['payment.acquirer'].search([
                 ('provider', '=', 'slimpay')]):
-            _logger.info(u'Checking payment issues for "%s"' % acquirer.name)
+            _logger.info(u'Checking payment issues for "%s"', acquirer.name)
 
             try:
                 client = acquirer.slimpay_client
@@ -226,8 +226,8 @@ class ProjectIssue(models.Model):
         if not product:
             return
 
-        _logger.debug('Adding %s fees to %s invoice amount %s...',
-                      fees_name, invoice.state, invoice.amount_total)
+        _logger.info('Adding %s fees to %s invoice amount %s...',
+                     fees_name, invoice.state, invoice.amount_total)
 
         invoice.action_invoice_cancel()
         invoice.action_invoice_draft()
@@ -255,7 +255,8 @@ class ProjectIssue(models.Model):
             'payment_slimpay_issue.bank_supplier_fees_product'
         ).product_variant_ids
         if not product:
-            _logger.info('Cannot create bank supplier invoice fees.')
+            _logger.info('Issue %s: No bank supplier fees product:'
+                         ' skipping fees invoice creation', self.id)
             return
         invoice = self.env['account.invoice'].create({
             'type': 'in_invoice',
@@ -334,8 +335,12 @@ class ProjectIssue(models.Model):
             return
 
         issue.invoice_unpaid_count += 1
+
+        _logger.info(u'Unreconciling invoice "%s"', invoice.name)
         invoice.payment_move_line_ids.remove_move_reconcile()
+        _logger.info(u'Invoice payments "%s"', invoice.payment_ids.ids)
         for payment in invoice.payment_ids:
+            _logger.info(u'Canceling payment "%s"', payment.id)
             payment.cancel()
 
         rejected_amount = float(issue_doc['rejectAmount'])
