@@ -85,8 +85,9 @@ class ProjectIssue(models.Model):
                 #  or not in an environment or another -prod or debug-)
                 continue
 
-            for num, issue_doc in enumerate(self._slimpay_payment_issue_fetch(
-                    client, **(custom_issue_params or {}))):
+            issues = list(self._slimpay_payment_issue_fetch(
+                client, **(custom_issue_params or {})))
+            for num, issue_doc in enumerate(issues):
                 _logger.debug('Handling Slimpay issue id %s', issue_doc['id'])
                 if not num:
                     project = self.env.ref(
@@ -94,6 +95,9 @@ class ProjectIssue(models.Model):
                     inv_prefix = self._slimpay_payment_invoice_prefix()
                 self._slimpay_payment_issue_handle(
                     project, client, issue_doc, inv_prefix)
+            # 2nd loop to lower rollback with sent slimpay acks probability
+            # XXX Use a db checkpoint for each issue, or queue_job
+            for issue_doc in issues:
                 _logger.debug('Ack Slimpay issue id %s', issue_doc['id'])
                 self._slimpay_payment_issue_ack(client, issue_doc)
 
