@@ -65,44 +65,44 @@ class ProjectTC(TransactionCase):
 
         self.project = ref('payment_slimpay_issue.project_payment_issue')
 
-        customer_account = self.env['account.account'].create({
+        self.customer_account = self.env['account.account'].create({
             'code': u'cust_acc', 'name': u'customer account',
             'user_type_id': ref('account.data_account_type_receivable').id,
             'reconcile': True,
         })
 
-        customer_journal = self.env['account.journal'].create({
+        self.customer_journal = self.env['account.journal'].create({
             'name': 'Customer journal',
             'code': 'RC',
             'company_id': self.env.user.company_id.id,
             'type': 'bank',
-            'default_debit_account_id': customer_account.id,
-            'default_credit_account_id': customer_account.id,
+            'default_debit_account_id': self.customer_account.id,
+            'default_credit_account_id': self.customer_account.id,
             'update_posted': True,
         })
 
-        payment_mode = self.env['account.payment.mode'].create({
+        self.payment_mode = self.env['account.payment.mode'].create({
             'name': 'Electronic inbound to customer journal',
             'payment_method_id': ref(
                 'payment.account_payment_method_electronic_in').id,
             'payment_type': 'inbound',
             'bank_account_link': 'fixed',
-            'fixed_journal_id': customer_journal.id,
+            'fixed_journal_id': self.customer_journal.id,
         })
 
-        revenue_account = self.env['account.account'].create({
+        self.revenue_account = self.env['account.account'].create({
             'code': u'rev_acc', 'name': u'revenue account',
             'user_type_id': ref('account.data_account_type_revenue').id,
         })
 
-        slimpay = self.env['payment.acquirer'].search(
+        self.slimpay = self.env['payment.acquirer'].search(
             [('provider', '=', 'slimpay')], limit=1).ensure_one()
         self.partner = ref('base.res_partner_3')
         self.partner.update({
-            'property_account_receivable_id': customer_account.id,
+            'property_account_receivable_id': self.customer_account.id,
             'payment_token_ids': [(0, 0, {
                 'name': 'Test Slimpay Token',
-                'active': True, 'acquirer_id': slimpay.id,
+                'active': True, 'acquirer_id': self.slimpay.id,
                 'acquirer_ref': 'Slimpay mandate ref',
             })],
         })
@@ -115,61 +115,10 @@ class ProjectTC(TransactionCase):
         })
         for _ref in ('management_fees_product', 'bank_fees_product'):
             prod = self.env.ref('payment_slimpay_issue.' + _ref)
-            prod.property_account_income_id = revenue_account.id
+            prod.property_account_income_id = self.revenue_account.id
             prod.taxes_id = [(6, 0, tax.ids)]
 
-        self.invoice = self.env['account.invoice'].create({
-            'name': u'Test Invoice',
-            'reference_type': 'none',
-            'payment_term_id': self.env.ref(
-                'account.account_payment_term_advance').id,
-            'payment_mode_id': payment_mode.id,
-            'journal_id': self.inv_journal.id,
-            'partner_id': self.partner.id,
-            'account_id': customer_account.id,
-            'invoice_line_ids': [(0, 0, {
-                'name': 'product test 5',
-                'product_id': ref('product.product_product_5').id,
-                'account_id': revenue_account.id,
-                'price_unit': 100.00,
-            })],
-        })
-        self.invoice.action_invoice_open()
-
-        Transaction = self.env['payment.transaction']
-        self.transaction = Transaction.create({
-            'reference': Transaction.get_next_reference(self.invoice.number),
-            'acquirer_id': slimpay.id,
-            'payment_token_id': self.partner.payment_token_ids[0].id,
-            'amount': self.invoice.residual,
-            'state': 'done',
-            'date_validate': '2019-01-01',
-            'currency_id': self.invoice.currency_id.id,
-            'partner_id': self.partner.id,
-            'partner_country_id': self.partner.country_id.id,
-            'partner_city': self.partner.city,
-            'partner_zip': self.partner.zip,
-            'partner_email': self.partner.email,
-            })
-
-        payment = self.env['account.payment'].create({
-            'company_id': self.env.user.company_id.id,
-            'partner_id': self.invoice.partner_id.id,
-            'partner_type': 'customer',
-            'state': 'draft',
-            'payment_type': 'inbound',
-            'journal_id': customer_journal.id,
-            'payment_method_id': ref(
-                'payment.account_payment_method_electronic_in').id,
-            'amount': self.invoice.amount_total,
-            'payment_transaction_id': self.transaction.id,
-            'invoice_ids': [(6, 0, [self.invoice.id])],
-        })
-
-        payment.post()
-
-        self.assertEqual(self.invoice.state, 'paid')
-        self.assertEqual(len(self._invoice_txs()), 1)
+        self.invoice, self.transaction, _p = self._create_inv_tx_and_payment()
 
         expenses_account = self.env['account.account'].create({
             'code': u'exp_acc', 'name': u'expenses account',
@@ -223,9 +172,65 @@ class ProjectTC(TransactionCase):
         data.update(kwargs)
         return self.env['project.issue'].create(data)
 
-    def _invoice_txs(self):
+    def _create_inv_tx_and_payment(self):
+        invoice = self.env['account.invoice'].create({
+            'name': u'Test Invoice',
+            'reference_type': 'none',
+            'payment_term_id': self.env.ref(
+                'account.account_payment_term_advance').id,
+            'payment_mode_id': self.payment_mode.id,
+            'journal_id': self.inv_journal.id,
+            'partner_id': self.partner.id,
+            'account_id': self.customer_account.id,
+            'invoice_line_ids': [(0, 0, {
+                'name': 'product test 5',
+                'product_id': self.env.ref('product.product_product_5').id,
+                'account_id': self.revenue_account.id,
+                'price_unit': 100.00,
+            })],
+        })
+        invoice.action_invoice_open()
+
+        Transaction = self.env['payment.transaction']
+        transaction = Transaction.create({
+            'reference': Transaction.get_next_reference(invoice.number),
+            'acquirer_id': self.slimpay.id,
+            'payment_token_id': self.partner.payment_token_ids[0].id,
+            'amount': invoice.residual,
+            'state': 'done',
+            'date_validate': '2019-01-01',
+            'currency_id': invoice.currency_id.id,
+            'partner_id': self.partner.id,
+            'partner_country_id': self.partner.country_id.id,
+            'partner_city': self.partner.city,
+            'partner_zip': self.partner.zip,
+            'partner_email': self.partner.email,
+            })
+
+        payment = self.env['account.payment'].create({
+            'company_id': self.env.user.company_id.id,
+            'partner_id': invoice.partner_id.id,
+            'partner_type': 'customer',
+            'state': 'draft',
+            'payment_type': 'inbound',
+            'journal_id': self.customer_journal.id,
+            'payment_method_id': self.env.ref(
+                'payment.account_payment_method_electronic_in').id,
+            'amount': invoice.amount_total,
+            'payment_transaction_id': transaction.id,
+            'invoice_ids': [(6, 0, [invoice.id])],
+        })
+
+        payment.post()
+
+        self.assertEqual(invoice.state, 'paid')
+        self.assertEqual(len(self._invoice_txs(invoice)), 1)
+
+        return invoice, transaction, payment
+
+    def _invoice_txs(self, invoice):
         return self.env['payment.transaction'].search([
-            ('reference', 'like', self.invoice.number),
+            ('reference', 'like', invoice.number),
         ])
 
     def test_cron_first_issue(self):
@@ -439,7 +444,7 @@ class ProjectTC(TransactionCase):
 
         act = self._simulate_wait(issue, days=6)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
-        txs = self._invoice_txs()
+        txs = self._invoice_txs(self.invoice)
         self.assertEqual(len(txs), 2)
         tx1, tx0 = txs
         self.assertEqual(tx0, self.transaction)
@@ -469,7 +474,7 @@ class ProjectTC(TransactionCase):
 
         act = self._simulate_wait(issue, days=6)
         self.assertInStage(issue, 'stage_retry_payment_and_wait')
-        txs = self._invoice_txs()
+        txs = self._invoice_txs(self.invoice)
         self.assertEqual(len(txs), 3)
         self.assertEqual((txs[1], txs[2]), (tx1, tx0))
         tx2 = txs[0]
@@ -492,7 +497,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue_emails(issue)[0].subject,
                          'YourCompany: max payment trials reached')
         self.assertFalse(self._action_calls(act, 'create-payins'))
-        self.assertEqual(len(self._invoice_txs()), 3)
+        self.assertEqual(len(self._invoice_txs(self.invoice)), 3)
         self.assertIn(
             'TR%s - TR%s - TR%s ' % (tx2.id, tx1.id, self.transaction.id),
             issue.name)
