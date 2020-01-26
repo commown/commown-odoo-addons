@@ -90,7 +90,7 @@ the reference of a payment transaction in your odoo database.
 
 In the opposite case, the issue will be related to the invoice and an
 issue payment counter incremented for that invoice (stored in the
-issue, and displayed on it in the dashboard XXX).
+issue, and displayed on it in the dashboard).
 
 The module will then automatically emit a warning email to the
 partner, stating that a new payment trial will occur 3 calendar days
@@ -104,6 +104,37 @@ is performed again, in the limit of a maximum (2 by default), where
 the issue is moved to the "Max payment trials reached" column, for
 manual handling (an email is then sent to the company's email by
 default).
+
+Testing (developers)
+====================
+
+It may be difficult to test the effect of a payment issue as it is not
+straightforward to trigger one on Slimpay testing infrastructure (see
+https://dev.slimpay.com/hapi/guide/payments/handle-payment-issues).
+
+Of course you can execute the unit tests to simulate such a event, but
+it may be useful to see the result in the web interface. To achieve
+this, a script like this can be executed in a shell, given an unpaid
+invoice `invoice`::
+
+  # If you want to reuse an existing payment issue instead of creating a new
+  # one, just get it using ``env['project.issue'].browse``:
+  issue = env['project.issue'].create({
+      'name': u'Test rejected payment',
+      'invoice_id': invoice.id,
+      'partner_id': invoice.partner_id.id,
+      'project_id': env.ref('payment_slimpay_issue.project_payment_issue').id,
+      'slimpay_payment_label': u'Test payment label',
+  })
+  issue._slimpay_payment_issue_get_or_create = lambda *args: issue
+  issue._slimpay_payment_issue_handle(
+      issue.project_id,
+      None,
+      # Use a bigger rejected amount to simulate bank fees:
+      {'rejectAmount': issue.invoice_id.amount_total,
+       'dateCreated': u'2020-01-01T00:00'},
+      issue._slimpay_payment_invoice_prefix()
+  )
 
 
 Roadmap
