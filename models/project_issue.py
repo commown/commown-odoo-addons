@@ -279,6 +279,10 @@ class ProjectIssue(models.Model):
         for issue in self:
             invoice = issue.invoice_id
             partner = invoice.partner_id
+
+            if not partner.payment_token_ids:
+                _logger.error(
+                    u'Invoice %s: partner has no payment token!', invoice.id)
             token = partner.payment_token_ids[0]
 
             _logger.info(
