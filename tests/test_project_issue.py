@@ -29,6 +29,15 @@ def fake_action(method, func, *args, **kwargs):
                            method, func, args, kwargs)
 
 
+def fake_action_crash_for(for_func, for_issue_id):
+    def fake_action_crash(method, func, *args, **kwargs):
+        if func == for_func and kwargs['doc']['id'] == for_issue_id:
+            raise ValueError('TEST ERROR!')
+        else:
+            return fake_action(method, func, *args, **kwargs)
+    return fake_action_crash
+
+
 def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
                    currency='EUR', payment_ref=None, subscriber_ref=None):
 
@@ -132,14 +141,16 @@ class ProjectTC(TransactionCase):
             'supplier_taxes_id': False,
         })
 
-    def _execute_cron(self, slimpay_issues):
+    def _execute_cron(self, slimpay_issues, action=None):
         ProjectIssue = self.env['project.issue']
 
+        if action is None:
+            action = fake_action
         with mock.patch.object(
                 ProjectIssue, '_slimpay_payment_issue_fetch',
                 return_value=slimpay_issues):
             with mock.patch.object(
-                    SlimpayClient, 'action', side_effect=fake_action) as act:
+                    SlimpayClient, 'action', side_effect=action) as act:
                 with mock.patch.object(
                         SlimpayClient, 'get', side_effect=lambda o: o) as get:
                     ProjectIssue._slimpay_payment_issue_cron()
@@ -501,3 +512,31 @@ class ProjectTC(TransactionCase):
         self.assertIn(
             'TR%s - TR%s - TR%s ' % (tx2.id, tx1.id, self.transaction.id),
             issue.name)
+
+    def test_db_savepoint(self):
+        """ If only one http ack to Slimpay fails, its db updates and only
+        them must be rolled back.
+        """
+
+        [(inv0, tx0, p0), (inv1, tx1, p1), (inv2, tx2, p2)] = [
+            self._create_inv_tx_and_payment() for i in range(3)]
+        act, get = self._execute_cron(
+            [fake_issue_doc(id='i0',
+                            payment_ref='TR%d' % tx0,
+                            subscriber_ref=self.partner.id),
+             fake_issue_doc(id='i1',
+                            payment_ref='TR%d' % tx1,
+                            subscriber_ref=self.partner.id),
+             fake_issue_doc(id='i2',
+                            payment_ref='TR%d' % tx2,
+                            subscriber_ref=self.partner.id)
+            ],
+            fake_action_crash_for('ack-payment-issue', 'i1')
+        )
+        # Check the http ack method was called for all issue docs
+        self.assertIssuesAcknowledged(act, 'i0', 'i1', 'i2')
+        # Check inv1 db changes were rolled backed, not the others'
+        self.assertEqual((inv0.state, inv1.state, inv2.state),
+                         ('open', 'paid', 'open'))
+        self.assertEqual((p0.state, p1.state, p2.state),
+                         ('draft', 'posted', 'draft'))
