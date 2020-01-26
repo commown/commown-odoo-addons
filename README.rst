@@ -130,8 +130,7 @@ invoice `invoice`::
   issue._slimpay_payment_issue_handle(
       issue.project_id,
       None,
-      # Use a bigger rejected amount to simulate bank fees:
-      {'rejectAmount': issue.invoice_id.amount_total,
+      {'rejectAmount': issue.invoice_id.amount_total + 5.,
        'dateCreated': u'2020-01-01T00:00'},
       issue._slimpay_payment_invoice_prefix()
   )

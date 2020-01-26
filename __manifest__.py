@@ -6,7 +6,7 @@
 {
     'name': 'Payment Slimpay issue',
     'category': 'Website',
-    'version': '10.0.1.1.0',
+    'version': '10.0.1.2.0',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.fr",
