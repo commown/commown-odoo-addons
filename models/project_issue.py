@@ -291,6 +291,7 @@ class ProjectIssue(models.Model):
             })],
         })
         invoice._onchange_invoice_line_ids()
+        invoice.action_invoice_open()
 
     @api.multi
     def _slimpay_payment_issue_retry_payment(self):

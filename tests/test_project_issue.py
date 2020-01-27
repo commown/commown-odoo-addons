@@ -431,6 +431,7 @@ class ProjectTC(TransactionCase):
                          issue.invoice_id.number + '-REJ1')
         self.assertEqual(new_fee_invoices.mapped('invoice_line_ids.product_id'),
                          self.supplier_fees_product.product_variant_id)
+        self.assertEqual(new_fee_invoices.state, 'open')
 
     def test_functional_3_trials(self):
         act, get = self._execute_cron([
