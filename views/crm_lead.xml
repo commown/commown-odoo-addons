@@ -9,13 +9,13 @@
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
         <field name="arch" type="xml">
           <xpath expr="//div[@class='oe_title']//h2[@class='o_row']" position="attributes">
-            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', False)]}</attribute>
+            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
           </xpath>
           <xpath expr="//field[@name='priority']/ancestor::group[1]" position="attributes">
-            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', False)]}</attribute>
+            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
           </xpath>
           <xpath expr="//field[@name='phone']" position="attributes">
-            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', False)]}</attribute>
+            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
           </xpath>
           <xpath expr="//notebook/page[1]" position="before">
             <page name="before_call_risk_eval" string="Before call" autofocus="autofocus"
