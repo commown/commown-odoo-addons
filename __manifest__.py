@@ -73,9 +73,10 @@
         'views/website_site_portal_sale_templates.xml',
         'views/res_partner.xml',
         'views/crm_lead.xml',
-        'data/mail_templates.xml',
         'data/account_invoice_report.xml',
         'data/product.xml',
+        'data/mail_templates.xml',
+        'data/project_project.xml',
     ],
     'qweb': [
         'static/src/xml/account_reconciliation.xml',

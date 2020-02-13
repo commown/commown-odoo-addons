@@ -17,6 +17,13 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
         self.product1.followup_sales_team_id = self._create_sales_team(1).id
         self.product2.followup_sales_team_id = self._create_sales_team(3).id
 
+        _investment_project = self.env.ref('commown.investment_followup_project')
+        _stage = self.env['project.task.type'].create({
+            'sequence': 1,
+            'name': u'investment received',
+            'project_ids': [(6, 0, (_investment_project.id,))],
+        })
+
     def _create_sales_team(self, num, **kwargs):
         kwargs.setdefault('name', 'Test team%d' % num)
         kwargs.setdefault('use_leads', True)
