@@ -39,7 +39,8 @@ def fake_action_crash_for(for_func, for_issue_id):
 
 
 def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
-                   currency='EUR', payment_ref=None, subscriber_ref=None):
+                   currency='EUR', payment_ref=None, subscriber_ref=None,
+                   **kwargs):
 
     payment_url = 'https://api.slimpay.net/alps#get-payment'
     subscriber_url = 'https://api.slimpay.net/alps#get-subscriber'
@@ -48,9 +49,11 @@ def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
     payment = FakeDoc({'id': 'fake_payment', 'reference': payment_ref,
                        'label': 'dummy label',
                        subscriber_url: mock.Mock(url=subscriber)})
-    return FakeDoc({'id': id, 'dateCreated': date + 'T00:00:00',
-                    'rejectAmount': str(amount), 'currency': currency,
-                    payment_url: mock.Mock(url=payment)})
+    defaults = {'id': id, 'dateCreated': date + 'T00:00:00',
+                'rejectAmount': str(amount), 'currency': currency,
+                payment_url: mock.Mock(url=payment)}
+    defaults.update(kwargs)
+    return FakeDoc(defaults)
 
 
 @at_install(False)
@@ -343,6 +346,19 @@ class ProjectTC(TransactionCase):
         last_msg = issue.message_ids[0]
         self.assertEqual(last_msg.subject,
                          'YourCompany: max payment trials reached')
+
+    def test_handle_focr(self):
+        """An issue due to a creditor cancellation must be acknowledged to
+        slimpay but should not create anything in the database.
+        """
+
+        act, get = self._execute_cron([
+            fake_issue_doc(id='i1',
+                           rejectReason='sepaReturnReasonCode.focr.reason'),
+        ])
+
+        self.assertEqual(len(self._project_issues()), 0)
+        self.assertIssuesAcknowledged(act, 'i1')
 
     def _reset_on_time_actions_last_run(self):
         for action in self.env['base.action.rule'].search([

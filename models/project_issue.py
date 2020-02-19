@@ -75,8 +75,14 @@ class ProjectIssue(models.Model):
         """
         try:
             with self.env.cr.savepoint():
-                self._slimpay_payment_issue_handle(
-                    project, client, issue_doc, inv_prefix)
+                if issue_doc.get('rejectReason', None) != \
+                       'sepaReturnReasonCode.focr.reason':
+                    self._slimpay_payment_issue_handle(
+                        project, client, issue_doc, inv_prefix)
+                else:
+                    _logger.info(
+                        'Slimpay payment cancelled by creditor id %s: will be'
+                        ' definitively ignored (ack coming)', issue_doc['id'])
                 _logger.debug('Ack Slimpay issue id %s', issue_doc['id'])
                 self._slimpay_payment_issue_ack(client, issue_doc)
         except:
