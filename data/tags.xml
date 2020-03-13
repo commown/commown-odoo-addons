@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="tag-device-fp2" model="project.tags">
+      <field name="name">Appareil FP2</field>
+    </record>
+
+    <record id="tag-fp2-mod-camera" model="project.tags">
+      <field name="name">FP MOD caméra</field>
+    </record>
+
+    <record id="tag-need-screwdriver" model="project.tags">
+      <field name="name">Tournevis demandé</field>
+    </record>
+
+    <record id="tag-self-troubleshooting" model="project.tags">
+      <field name="name">Auto-dépannage</field>
+    </record>
+
+    <record id="tag-to-be-shipped" model="project.tags">
+      <field name="name">EXPED À FAIRE</field>
+    </record>
+
+  </data>
+</odoo>

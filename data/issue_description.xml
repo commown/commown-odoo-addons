@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <record id="issue-description-camera" model="ir.ui.view">
+      <field name="name">issue-description-camera</field>
+      <field name="type">qweb</field>
+      <field name="key">website.issue-description-camera</field>
+      <field name="arch" type="xml">
+        <t t-name="website.issue-description-camera">
+          <t t-set="old_or_new" t-value="camera_model == u'new' and u'nouveau' or u'ancien'" />
+            Bonjour,
+
+            après avoir effectué un auto-dépannage, il ressort que la
+            caméra (<t t-esc="old_or_new"/> modèle) de mon FP2 doit être
+            changée.
+
+            L'adresse d'expédition est la suivante :
+            <t t-esc="name"/>
+            <t t-esc="u'\n'.join((street, street2)).strip()"/>
+            <t t-esc="zipcode"/> <t t-esc="city"/>
+            <t t-esc="country"/>
+
+            Informations supplémentaires utiles à la livraison :
+            Numéro de téléphone : <t t-esc="phone"/>
+            Adresse de courriel : <t t-esc="email"/>
+        </t>
+      </field>
+    </record>
+
+  </data>
+
+</odoo>
