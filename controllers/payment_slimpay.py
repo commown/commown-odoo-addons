@@ -15,6 +15,12 @@ class CommownSlimpayController(SlimpayController):
                 type='json', auth="public", website=True)
     def payment_slimpay_transaction(
             self, acquirer_id, tx_type='form', token=None, **kwargs):
+        """This method reuses the partner's token unless the SEPA mandate
+        product is in current sale order. Note this plays weel with
+        the `commown.payment` template (in website_sale_templates.xml)
+        that hides the token choices from the user. This simplifies
+        things for the user, which only sees one payment choice.
+        """
         _logger.debug("Examine if partner's mandate can be reused...")
         if token is None:
             so = request.env['sale.order'].sudo().browse(
