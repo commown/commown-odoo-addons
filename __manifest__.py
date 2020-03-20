@@ -75,6 +75,7 @@
         'views/crm_lead.xml',
         'data/mail_templates.xml',
         'data/account_invoice_report.xml',
+        'data/product.xml',
     ],
     'qweb': [
         'static/src/xml/account_reconciliation.xml',
