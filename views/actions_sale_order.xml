@@ -86,9 +86,6 @@ ctx = {'sale': record.name, 'count': 0}
 for so_line in record.order_line:
     product = so_line.product_id
 
-    if not product.is_rental or not product.rental_contract_tmpl_id:
-        continue
-
     team = product.followup_sales_team_id
     if not team:
         continue
