@@ -51,8 +51,12 @@ class CommownShippingMixin(models.AbstractModel):
             raise ValueError(json.dumps(meta_data))
         assert meta_data and label_data
 
-        self.expedition_ref = meta_data['labelResponse']['parcelNumber']
-        self.expedition_date = datetime.today()
+        self.update({
+            'expedition_ref': meta_data['labelResponse']['parcelNumber'],
+            'expedition_date': datetime.today(),
+            'delivery_date': False  ,
+        })
+
         return self.env['ir.attachment'].create({
             'res_model': self._name,
             'res_id': self.id,
