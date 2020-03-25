@@ -2,7 +2,7 @@
     'name': 'Commown SCIC SAS',
     'category': 'Business',
     'summary': 'Commown SCIC SAS business application',
-    'version': '10.0.1.11.1',
+    'version': '10.0.1.11.2',
     'description': "Commown SCIC SAS business application",
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
