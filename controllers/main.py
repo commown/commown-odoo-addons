@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 class SelfHelp(http.Controller):
 
     def _description(self, **post):
-        view = request.env.ref('commown-self-troubleshooting.'
+        view = request.env.ref('commown_self_troubleshooting.'
                                + post['issue-description-template'])
         return view.render(post)
 
@@ -17,14 +17,14 @@ class SelfHelp(http.Controller):
         env = request.env
         names = post.pop('tags', '').split(u',')
         ids = [
-            env.ref('commown-self-troubleshooting.tag-self-troubleshooting').id,
-            env.ref('commown-self-troubleshooting.tag-to-be-shipped').id,
+            env.ref('commown_self_troubleshooting.tag-self-troubleshooting').id,
+            env.ref('commown_self_troubleshooting.tag-to-be-shipped').id,
         ]
         if names:
             ids.extend(env['project.tags'].search([('name', 'in', names)]).ids)
         if post.get('screwdriver', None) == 'yes':
             ids.append(
-                env.ref('commown-self-troubleshooting.tag-need-screwdriver').id)
+                env.ref('commown_self_troubleshooting.tag-need-screwdriver').id)
         return ids
 
     @http.route(['/self-troubleshoot'], type='http',
@@ -42,7 +42,7 @@ class SelfHelp(http.Controller):
             'partner_id': partner.id,
             'description': self._description(**post),
             'project_id': ref(
-                'commown-self-troubleshooting.support_project').id,
+                'commown_self_troubleshooting.support_project').id,
             'contract_id': contract_id,
             'tag_ids': [(6, 0, self._tag_ids(**post))]
         })

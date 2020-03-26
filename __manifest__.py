@@ -18,7 +18,7 @@
     'data': [
         'data/issue_description.xml',
         'data/project.xml',
-        'data/self-troubleshoot-fp2-camera.xml',
+        'data/fp2-camera.xml',
         'data/tags.xml',
         'views/website_portal_templates.xml',
     ],

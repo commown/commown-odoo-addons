@@ -45,7 +45,7 @@ tag_defs = [
 
 for res_model, name, res_id in tag_defs:
     env['ir.model.data'].create({
-        'module': 'commown-self-troubleshooting',
+        'module': 'commown_self_troubleshooting',
         'name': name,
         'noupdate': True,
         'model': res_model,

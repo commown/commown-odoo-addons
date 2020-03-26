@@ -3,20 +3,14 @@
 
   <data>
 
-    <record id="self-troubleshoot-fp2-camera" model="ir.ui.view">
-      <field name="name">self-troubleshoot-fp2-camera</field>
+    <record id="fp2-camera" model="ir.ui.view">
+      <field name="name">Self-troubleshoot an FP2 camera</field>
       <field name="type">qweb</field>
       <field name="key">website.self-troubleshoot-fp2-camera</field>
       <field name="arch" type="xml">
 
         <t t-name="website.self-troubleshoot-fp2-camera">
           <t t-call="commown-self-troubleshoot.web-layout">
-            <t t-set="head">
-              <link rel="stylesheet" type="text/css"
-                    href="/commown-self-troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
-              <link rel="stylesheet" type="text/css"
-                    href="/commown-self-troubleshooting/static/src/smartwizard/css/smart_wizard.css"/>
-            </t>
 
             <!-- Variables à modifier ici -->
             <t t-set="contract_name_like">FP2/</t>
@@ -30,6 +24,7 @@
                t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', partner.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
             <t t-set="delivery"
                t-value="env['res.partner'].browse(partner.address_get(['delivery']).get('delivery', partner.id))"/>
+
             <div class="container">
               <br />
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
@@ -223,10 +218,10 @@
               </form>
 
             </div>
-            <script src="/commown-self-troubleshooting/static/src/jquery-3.3.1.min.js"></script>
-            <script src="/commown-self-troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
-            <script src="/commown-self-troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
-            <script src="/commown-self-troubleshooting/static/src/fp2-camera.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/fp2-camera.js"></script>
 
           </t>
         </t>
