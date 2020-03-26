@@ -1,12 +1,10 @@
 $(function() {
 
-    // Smart Wizard
     $('#smartwizard').smartWizard({
         selected: 0,
         keyNavigation: false,  // buggy (changes steps even when in an input)
         useURLhash: false,
         showStepURLhash: false,
-        disabledSteps: [2, 3, 4],
         transitionEffect: 'slide',
         toolbarSettings: {
             toolbarPosition: 'top',
