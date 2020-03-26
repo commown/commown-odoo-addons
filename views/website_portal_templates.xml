@@ -52,12 +52,19 @@
           <link rel="stylesheet" type="text/css"
                 href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.css"/>
 
+          <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
+          <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
+          <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
+          <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
+
           <t t-raw="head or ''"/>
+
         </head>
+
         <body t-att-class="body_classname">
           <t t-raw="0"/>
-          <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
         </body>
+
       </html>
       </t>
     </field>

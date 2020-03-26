@@ -12,6 +12,10 @@
         <t t-name="website.self-troubleshoot-fp2-camera">
           <t t-call="commown-self-troubleshoot.web-layout">
 
+            <t t-set="head">
+              <script src="/commown_self_troubleshooting/static/src/fp2-camera.js"></script>
+            </t>
+
             <!-- Variables à modifier ici -->
             <t t-set="contract_name_like">FP2/</t>
             <t t-set="tag_names">Appareil FP2,FP MOD caméra</t>
@@ -224,10 +228,6 @@
               </form>
 
             </div>
-            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/fp2-camera.js"></script>
 
           </t>
         </t>
