@@ -1,6 +1,6 @@
-$(function() {
+function setUpWizard($container) {
 
-    $('#smartwizard').smartWizard({
+    $container.smartWizard({
         selected: 0,
         keyNavigation: false,  // buggy (changes steps even when in an input)
         useURLhash: false,
@@ -22,7 +22,7 @@ $(function() {
         }
     });
 
-    $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+    $container.on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
         var elmForm = $("#form-step-" + stepNumber);
         // stepDirection === 'forward' :- this condition allows to do the form validation
         // only on forward navigation, that makes easy navigation on backwards still do the validation when going next
@@ -37,4 +37,28 @@ $(function() {
         return true;
     });
 
-});
+    var prefix = "form-step-";
+    var required_fields = {};
+    var selector = 'input[required],select[required],radio[required],checkbox[required],textarea[required]';
+
+    $container.find('div[id*="form-step-"]').each(function(index, formContainer) {
+        var step = formContainer.id.substring(prefix.length);
+        required_fields[step] = $(selector, formContainer);
+      });
+
+    /**
+     * Enable or disable a wizard step, handling required attributes
+     * at the same time (i.e: unsetting required on fields which step
+     * is disabled, resetting it if step is re-enabled)
+     *
+     * @param  {integer} number    0-index of the step.
+     * @param  {boolean} enabled   0-index of the step.
+     */
+    $container.toggleStep = function(number, enabled) {
+        $container.find("li").eq(number).toggleClass('disabled', !enabled);
+        required_fields[number].attr('required', enabled ? 'required' : null);
+    }
+
+    return $container;
+
+}

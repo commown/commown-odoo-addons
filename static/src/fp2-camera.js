@@ -1,21 +1,16 @@
 $(document).ready(function(){
 
+    var $wizard = setUpWizard($('#smartwizard'));
+
     $('#camera_model').change(function () {
-        $('#tighten_screws_solved_pb').attr('required', this.value!=='old' ? 'required' : null)
-        $("#smartwizard li").eq(2).toggleClass('disabled', this.value!=='new');
-        $("#smartwizard li").eq(3).toggleClass('disabled', this.value!=='old');
-        $("#smartwizard li").eq(4).toggleClass('disabled', this.value!=='old');
-        $('input[name="screwdriver"]').attr('required', this.value==='old' ? 'required' : null)
+        $wizard.toggleStep(2, this.value==='new');
+        $wizard.toggleStep(5, this.value==='new');
     });
 
     $('#tighten_screws_solved_pb').change(function () {
-        $("#smartwizard li").eq(3).toggleClass('disabled', this.value!=='no');
-        $("#smartwizard li").eq(4).toggleClass('disabled', this.value!=='no');
-        $('input[name="screwdriver"]').attr('required', this.value==='no' ? 'required' : null)
-        $("#smartwizard li").eq(5).toggleClass('disabled', this.value!=='yes');
+        $wizard.toggleStep(3, this.value==='no');
+        $wizard.toggleStep(4, this.value==='no');
+        $wizard.toggleStep(5, this.value==='yes');
     });
-
-    $('#camera_model').change();
-    $('#tighten_screws_solved_pb').change();
 
 });

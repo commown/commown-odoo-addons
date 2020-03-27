@@ -43,10 +43,10 @@
                   <ul>
                     <li><a href="#step-0">Contexte<br /><small>Appareil concerné</small></a></li>
                     <li><a href="#step-1">Étape 1<br /><small>Modèle de la caméra</small></a></li>
-                    <li><a href="#step-2">Étape 2<br /><small>Resserrage des vis</small></a></li>
-                    <li><a href="#step-3">Étape 3<br /><small>Expédition</small></a></li>
-                    <li><a href="#step-4">Étape 4<br /><small>Confirmation</small></a></li>
-                    <li><a href="#step-5">Étape 5<br /><small>Problème résolu</small></a></li>
+                    <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Resserrage des vis</small></a></li>
+                    <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                    <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
+                    <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Problème résolu</small></a></li>
                   </ul>
 
                   <div>
@@ -100,7 +100,9 @@
                       tutoriel en ligne</a>, puis dites-nous si le problème est résolu :</p>
                       <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <select class="form-control" id="tighten_screws_solved_pb" name="tighten_screws_solved_pb">
+                          <select class="form-control"
+                                  id="tighten_screws_solved_pb" name="tighten_screws_solved_pb"
+                                  required="required">
                             <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
                             <option value="yes">Le problème est résolu</option>
                             <option value="no">Le problème n'est pas résolu</option>
