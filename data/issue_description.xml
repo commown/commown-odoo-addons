@@ -15,13 +15,13 @@
             après avoir effectué un auto-dépannage, il ressort que la
             caméra (<t t-esc="old_or_new"/> modèle) de mon FP2 doit être
             changée.
-
+            <t t-if="more_info">
             J'ai porté à votre connaissance les informations
             complémentaires suivantes :
             ---
             <t t-esc="more_info"/>
             ---
-
+            </t>
             L'adresse d'expédition est la suivante :
             <t t-esc="name"/>
             <t t-esc="u'\n'.join((street, street2)).strip()"/>
