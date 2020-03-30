@@ -10,6 +10,7 @@ function setUpWizard($container) {
             toolbarPosition: 'top',
             toolbarButtonPosition: 'right',  // buggy: still on the left
         },
+        theme: 'arrows',
         lang: {
             next: 'Suivant',
             previous: 'Précédent',

@@ -50,7 +50,9 @@
           <link rel="stylesheet" type="text/css"
                 href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
           <link rel="stylesheet" type="text/css"
-                href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.css"/>
+                href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
+          <link rel="stylesheet" type="text/css"
+                href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
 
           <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
           <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
