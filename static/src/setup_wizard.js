@@ -1,14 +1,41 @@
 function setUpWizard($container) {
 
+    var extraButtons = [];
+
+    var $humanContactButton = $container.find('button[value="contact"]');
+    if ($humanContactButton.length) {
+        var prefix = 'form-step-';
+        var contactStep = parseInt(
+            $humanContactButton
+                .closest('div[id*="form-step"]')[0].id
+                .substring(prefix.length));
+        extraButtons.push(
+            $('<button/>').text('Contacter un être humain !')
+                .addClass('btn btn-warning')
+                .on('click', function(event) {
+                    event.preventDefault();
+                    var wizard = $container.data('smartWizard');
+                    $.map(wizard.steps, function(step, stepIndex) {
+                        if (stepIndex !== contactStep) {
+                            $container.toggleStep(stepIndex, false);
+                            wizard.stepState(stepIndex, 'disable');
+                        }
+                    });
+                    wizard.goToStep(contactStep);
+                })
+        );
+    }
+
     $container.smartWizard({
         selected: 0,
-        keyNavigation: false,  // buggy (changes steps even when in an input)
+        keyNavigation: false,
         useURLhash: false,
         showStepURLhash: false,
         transitionEffect: 'slide',
         toolbarSettings: {
             toolbarPosition: 'top',
-            toolbarButtonPosition: 'right',  // buggy: still on the left
+            toolbarButtonPosition: 'end', // does not work with bootstrap 3!
+            toolbarExtraButtons: extraButtons
         },
         theme: 'arrows',
         lang: {
