@@ -18,7 +18,7 @@ class SelfHelp(http.Controller):
         return self.ref(post['issue-description-template']).render(post)
 
     def _tag_ids(self, **post):
-        ids = [self.ref(t).id for t in self.action_tags.get(post['action'])]
+        ids = [self.ref(t).id for t in self.action_tags.get(post['action'], ())]
         ids.append(self.ref('tag-self-troubleshooting').id)
         names = post.get('tags', '').split(u',')
         if names:
