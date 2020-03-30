@@ -39,7 +39,9 @@ function setUpWizard($container) {
 
     var prefix = "form-step-";
     var required_fields = {};
-    var selector = 'input[required],select[required],radio[required],checkbox[required],textarea[required]';
+    var widgets = ['input', 'select', 'radio', 'checkbox', 'textarea'];
+
+    var selector = widgets.map(function(w) {return w + '[required]'}).join(',');
 
     $container.find('div[id*="form-step-"]').each(function(index, formContainer) {
         var step = formContainer.id.substring(prefix.length);
@@ -57,6 +59,10 @@ function setUpWizard($container) {
     $container.toggleStep = function(number, enabled) {
         $container.find("li").eq(number).toggleClass('disabled', !enabled);
         required_fields[number].attr('required', enabled ? 'required' : null);
+        $container
+            .find('div[id*="form-step-' + number + '"]')
+            .find(widgets.join(','))
+            .attr('disabled', enabled ? null : 'disabled');
     }
 
     return $container;

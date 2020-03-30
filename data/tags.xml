@@ -23,5 +23,9 @@
       <field name="name">EXPED À FAIRE</field>
     </record>
 
+    <record id="tag-inform-only" model="project.tags">
+      <field name="name">Pour information</field>
+    </record>
+
   </data>
 </odoo>

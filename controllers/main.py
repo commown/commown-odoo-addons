@@ -8,23 +8,24 @@ _logger = logging.getLogger(__name__)
 
 class SelfHelp(http.Controller):
 
+    action_tags = {'inform': ['tag-inform-only'],
+                   'ship': ['tag-to-be-shipped']}
+
+    def ref(self, suffix):
+        return request.env.ref('commown_self_troubleshooting.' + suffix)
+
     def _description(self, **post):
-        view = request.env.ref('commown_self_troubleshooting.'
-                               + post['issue-description-template'])
-        return view.render(post)
+        return self.ref(post['issue-description-template']).render(post)
 
     def _tag_ids(self, **post):
-        env = request.env
-        names = post.pop('tags', '').split(u',')
-        ids = [
-            env.ref('commown_self_troubleshooting.tag-self-troubleshooting').id,
-            env.ref('commown_self_troubleshooting.tag-to-be-shipped').id,
-        ]
+        ids = [self.ref(t).id for t in self.action_tags.get(post['action'])]
+        ids.append(self.ref('tag-self-troubleshooting').id)
+        names = post.get('tags', '').split(u',')
         if names:
-            ids.extend(env['project.tags'].search([('name', 'in', names)]).ids)
+            ids.extend(request.env['project.tags'].search(
+                [('name', 'in', names)]).ids)
         if post.get('screwdriver', None) == 'yes':
-            ids.append(
-                env.ref('commown_self_troubleshooting.tag-need-screwdriver').id)
+            ids.append(self.ref('tag-need-screwdriver').id)
         return ids
 
     @http.route(['/self-troubleshoot'], type='http',
@@ -32,17 +33,15 @@ class SelfHelp(http.Controller):
     def create_support_card(self, **kw):
         _logger.info('create_support_card called with parameters %s', kw)
         env = request.env
-        ref = env.ref
         post = request.params.copy()
-        name = post.pop('self-troubleshoot-type')
-        contract_id = int(post.pop('device_contract'))
+        name = post['self-troubleshoot-type']
+        contract_id = int(post['device_contract'])
         partner = env.user.partner_id
         issue = env['project.issue'].sudo().create({
             'name': name,
             'partner_id': partner.id,
             'description': self._description(**post),
-            'project_id': ref(
-                'commown_self_troubleshooting.support_project').id,
+            'project_id': self.ref('support_project').id,
             'contract_id': contract_id,
             'tag_ids': [(6, 0, self._tag_ids(**post))]
         })
@@ -51,8 +50,8 @@ class SelfHelp(http.Controller):
             'res_id': issue.id,
             'partner_id': partner.id,
             'subtype_ids': [(6, 0, [
-                ref('mail.mt_comment').id,
-                ref('rating_project_issue.mt_issue_rating').id,
+                env.ref('mail.mt_comment').id,
+                env.ref('rating_project_issue.mt_issue_rating').id,
             ])],
         })
         return request.redirect('/my/issues/%d' % issue.id)

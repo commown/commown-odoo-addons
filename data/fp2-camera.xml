@@ -230,7 +230,8 @@
                         </div>
 
                         <div class="form-group">
-                          <button type="submit" class="btn btn-primary">Confirmer ma demande</button>
+                          <button type="submit" class="btn btn-primary"
+                                  name="action" value="ship">Confirmer ma demande</button>
                         </div>
                       </div>
                     </div>
@@ -261,7 +262,8 @@
                         </div>
 
                         <div class="form-group">
-                          <button type="submit" class="btn btn-primary">Envoyer les informations</button>
+                          <button type="submit" class="btn btn-primary"
+                                  name="action" value="inform">Envoyer les informations</button>
                         </div>
                       </div>
                     </div>
