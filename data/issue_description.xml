@@ -10,30 +10,31 @@
       <field name="arch" type="xml">
         <t t-name="website.issue-description-camera">
           <t t-set="old_or_new" t-value="camera_model == u'new' and u'nouveau' or u'ancien'" />
-            Bonjour,
-            <t t-if="action=='ship'">
-            après avoir effectué un auto-dépannage, il ressort que la
-            caméra (<t t-esc="old_or_new"/> modèle) de mon FP2 doit être
-            changée.
-            L'adresse d'expédition est la suivante :
-            <t t-esc="name"/>
-            <t t-esc="u'\n'.join((street, street2)).strip()"/>
-            <t t-esc="zipcode"/> <t t-esc="city"/>
-            <t t-esc="country"/>
+Bonjour,
+<t t-if="action=='ship'">
+après avoir effectué un auto-dépannage, il ressort que la
+caméra (<t t-esc="old_or_new"/> modèle) de mon FP2 doit être
+changée.
 
-            Informations supplémentaires utiles à la livraison :
-            Numéro de téléphone : <t t-esc="phone"/>
-            Adresse de courriel : <t t-esc="email"/></t>
-            <t t-elif="action=='inform'">
-            je vous informe que j'ai revissé la caméra
-            (<t t-esc="old_or_new"/> modèle) de mon FP2 et que cela a
-            résolu mon problème.</t>
-            <t t-if="more_info">
-            J'ai porté à votre connaissance les informations
-            complémentaires suivantes :
-            ---
-            <t t-esc="more_info"/>
-            ---</t>
+L'adresse d'expédition est la suivante :
+<t t-esc="name"/>
+<t t-esc="u'\n'.join((street, street2)).strip()"/>
+<t t-esc="zipcode"/> <t t-esc="city"/>
+<t t-esc="country"/>
+
+Informations supplémentaires utiles à la livraison :
+Numéro de téléphone : <t t-esc="phone"/>
+Adresse de courriel : <t t-esc="email"/></t>
+<t t-elif="action=='inform'">
+je vous informe que j'ai revissé la caméra
+(<t t-esc="old_or_new"/> modèle) de mon FP2 et que cela a
+résolu mon problème.</t>
+<t t-if="more_info">
+J'ai porté à votre connaissance les informations
+complémentaires suivantes :
+---
+<t t-esc="more_info"/>
+---</t>
         </t>
       </field>
     </record>
