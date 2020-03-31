@@ -57,7 +57,9 @@
                       <div id="form-step-0" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label for="device_contract">Contrat de votre appareil :</label>
-                          <select class="form-control" id="device_contract" name="device_contract" required="required">
+                          <select class="form-control" required="required"
+                                  id="device_contract" name="device_contract"
+                                  data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
                             <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
                             <t t-foreach="contracts" t-as="c">
                               <t t-set="date" t-value="c.date_start.split('-')"/>
@@ -81,7 +83,9 @@
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label for="camera_model">Modèle de caméra :</label>
-                          <select class="form-control" id="camera_model" name="camera_model" required="required">
+                          <select class="form-control" required="required"
+                                  id="camera_model" name="camera_model"
+                                  data-required-error="Veuillez sélectionner un modèle de caméra dans la liste ci-dessus.">
                             <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
                             <option value="new">Nouveau modèle</option>
                             <option value="old">Ancien modèle</option>
@@ -101,9 +105,9 @@
                       tutoriel en ligne</a>, puis dites-nous si le problème est résolu :</p>
                       <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <select class="form-control"
+                          <select class="form-control" required="required"
                                   id="tighten_screws_solved_pb" name="tighten_screws_solved_pb"
-                                  required="required">
+                                  data-required-error="Veuillez sélectionner un élément de la liste ci-dessus.">
                             <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
                             <option value="yes">Le problème est résolu</option>
                             <option value="no">Le problème n'est pas résolu</option>
@@ -125,15 +129,17 @@
 
                         <div class="form-group">
                           <label for="name">Nom complet</label>
-                          <input class="form-control" name="name" id="name"
-                                 required="required" t-att-value="delivery.name"></input>
+                          <input class="form-control" name="name" id="name" required="required"
+                                 t-att-value="delivery.name"
+                                 data-required-error="Saisissez un nom pour la livraison."></input>
                           <div class="help-block with-errors"></div>
                         </div>
 
                         <div class="form-group">
                           <label for="street">Rue - 1ère ligne</label>
                           <input class="form-control" name="street" id="street" maxlength="35"
-                                 required="required" t-att-value="delivery.street"></input>
+                                 required="required" t-att-value="delivery.street"
+                                 data-required-error="Saisissez le numéro et nom de la rue pour la livraison."></input>
                           <div class="help-block with-errors"></div>
                         </div>
 
@@ -145,21 +151,24 @@
                         </div>
 
                         <div class="row">
-                          <div class="col-xs-4">
+                          <div class="col-xs-4 form-group">
                             <label for="zipcode">Code postal</label>
-                            <input class="form-control" name="zipcode" id="zipcode" pattern="^[0-9]{5}$"
-                                   required="required" t-att-value="delivery.zip"></input>
+                            <input class="form-control" name="zipcode" id="zipcode" required="required"
+                                   t-att-value="delivery.zip"
+                                   data-required-error="Saisissez un code postal pour la livraison."></input>
                             <div class="help-block with-errors"></div>
                           </div>
-                          <div class="col-xs-4">
+                          <div class="col-xs-4 form-group">
                             <label for="city">Ville</label>
-                            <input class="form-control" name="city" id="city"
-                                   required="required" t-att-value="delivery.city"></input>
+                            <input class="form-control" name="city" id="city" required="required"
+                                   t-att-value="delivery.city"
+                                   data-required-error="Saisissez une ville pour la livraison."></input>
                             <div class="help-block with-errors"></div>
                           </div>
-                          <div class="col-xs-4">
+                          <div class="col-xs-4 form-group">
                             <label for="country">Pays</label>
-                            <select class="form-control" id="country" name="country" required="required">
+                            <select class="form-control" id="country" name="country" required="required"
+                                    data-required-error="Saisissez un pays pour la livraison.">
                               <option selected="1" t-att-value="delivery.country_id.name"><t t-esc="delivery.country_id.name"/></option>
                               <option t-if="delivery.country_id.name != 'France'" value="France">France</option>
                               <option t-if="delivery.country_id.name != 'Belgique'" value="Belgique">Belgique</option>
@@ -169,16 +178,18 @@
                         </div>
 
                         <div class="row">
-                          <div class="col-xs-6">
+                          <div class="col-xs-6 form-group">
                             <label for="phone">Numéro de téléphone</label>
-                            <input class="form-control" name="phone" id="phone" type="tel"
-                                   required="required" t-att-value="delivery.phone or delivery.mobile"></input>
+                            <input class="form-control" name="phone" id="phone" type="tel" required="required"
+                                   t-att-value="delivery.phone or delivery.mobile"
+                                   data-required-error="Saisissez un numéro de téléphone pour la livraison."></input>
                             <div class="help-block with-errors"></div>
                           </div>
-                          <div class="col-xs-6">
+                          <div class="col-xs-6 form-group">
                             <label for="email">Adresse email</label>
                             <input class="form-control" name="email" id="email" type="email"
-                                   required="required" t-att-value="delivery.email"></input>
+                                   required="required" t-att-value="delivery.email"
+                                   data-required-error="Saisissez une adresse email pour la livraison."></input>
                             <div class="help-block with-errors"></div>
                           </div>
                         </div>
@@ -216,7 +227,8 @@
                           <p>Avez-vous besoin d'un tournevis ?</p>
                           <label class="radio-inline" for="screwdriver-yes">Oui</label>
                           <input type="radio" name="screwdriver" id="screwdriver-yes"
-                                 value="yes" required="required"></input>
+                                 value="yes" required="required"
+                                 data-required-error="Dites-nous si vous avez besoin d'un tournevis."></input>
                           <label class="radio-inline" for="screwdriver-no">Non</label>
                           <input type="radio" name="screwdriver" id="screwdriver-no"
                                  value="no" required="required"></input>

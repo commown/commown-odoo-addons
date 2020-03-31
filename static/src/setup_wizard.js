@@ -56,7 +56,7 @@ function setUpWizard($container) {
         // only on forward navigation, that makes easy navigation on backwards still do the validation when going next
         if(stepDirection === 'forward' && elmForm){
             elmForm.validator('validate');
-            var elmErr = elmForm.children('.has-error');
+            var elmErr = elmForm.find('.form-group.has-error');
             if(elmErr && elmErr.length > 0){
                 // Form validation failed
                 return false;
