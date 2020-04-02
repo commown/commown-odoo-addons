@@ -11,9 +11,26 @@
 
         <t t-name="website.self-troubleshoot-fp2-camera">
           <t t-call="commown-self-troubleshoot.web-layout">
-
+            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Caméra</t>
             <t t-set="head">
-              <script src="/commown_self_troubleshooting/static/src/fp2-camera.js"></script>
+              <script type="text/javascript">
+$(document).ready(function() {
+
+    const wizard = setUpWizard($('#smartwizard'));
+
+    $('#camera_model').change(function () {
+        wizard.toggleStep(2, this.value==='new');
+        wizard.toggleStep(5, this.value==='new');
+    });
+
+    $('#tighten_screws_solved_pb').change(function () {
+        wizard.toggleStep(3, this.value==='no');
+        wizard.toggleStep(4, this.value==='no');
+        wizard.toggleStep(5, this.value==='yes');
+    });
+
+});
+              </script>
             </t>
 
             <!-- Variables à modifier ici -->
