@@ -37,7 +37,7 @@ $(document).ready(function() {
             <t t-set="contract_name_like">FP2/</t>
             <t t-set="tag_names">Appareil FP2,FP MOD caméra</t>
             <t t-set="issue_title">FP2 - Caméra</t>
-            <t t-set="issue_description_template">issue-description-camera</t>
+            <t t-set="issue_description_template">issue-description-fp2-camera</t>
             <!-- Fin des variables à modifier -->
 
             <t t-set="partner" t-value="env.user.partner_id"/>

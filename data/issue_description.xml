@@ -3,12 +3,12 @@
 
   <data>
 
-    <record id="issue-description-camera" model="ir.ui.view">
-      <field name="name">issue-description-camera</field>
+    <record id="issue-description-fp2-camera" model="ir.ui.view">
+      <field name="name">self-troubleshoot-issue-description-fp2-camera</field>
       <field name="type">qweb</field>
-      <field name="key">website.issue-description-camera</field>
+      <field name="key">commown_self_troubleshooting.issue-description-fp2-camera</field>
       <field name="arch" type="xml">
-        <t t-name="website.issue-description-camera">
+        <t t-name="self-troubleshoot-issue-description-fp2-camera">
           <t t-set="old_or_new" t-value="camera_model == u'new' and u'nouveau' or u'ancien'" />
 Bonjour,
 <t t-if="action=='ship'">

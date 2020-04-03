@@ -15,7 +15,7 @@
   </template>
 
 
-  <template id="portal_self_troubleshooting_layout" inherit_id="website_portal.portal_layout">
+  <template id="self-troubleshoot-portal-access" inherit_id="website_portal.portal_layout">
 
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
 
