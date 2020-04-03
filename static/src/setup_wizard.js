@@ -97,7 +97,9 @@ function setUpWizard($container) {
    */
   wizard.toggleStep = function(number, enabled) {
     $container.find('li').eq(number).toggleClass('disabled', !enabled);
-    requiredFields[number].attr('required', enabled ? 'required' : null);
+    if (requiredFields[number] !== undefined) {
+      requiredFields[number].attr('required', enabled ? 'required' : null);
+    }
     $container
       .find('#' + formStepIdPrefix + number)
       .find(widgets.join(','))
