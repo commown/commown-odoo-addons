@@ -6,7 +6,7 @@
 {
     'name': 'Account invoice merge auto pay',
     'category': 'accounting',
-    'version': '10.0.0.0.2',
+    'version': '10.0.0.0.3',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.coop",
