@@ -10,7 +10,7 @@ class InvoiceMergeAutoPayInvoice(models.Model):
         help=u"Pay automatically at partner's next merge date",
     )
 
-    @api.constrains('auto_merge')
+    @api.constrains('auto_merge', 'payment_mode_id')
     def _check_auto_merge(self):
         for inv in self:
             if inv.auto_merge and not inv.payment_mode_id:

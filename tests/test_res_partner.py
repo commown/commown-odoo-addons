@@ -20,6 +20,14 @@ class ResPartnerTC(AutoPayInvoiceTC):
         self.assertEqual('Payment mode is needed to auto pay an invoice',
                          err.exception.name)
 
+    def test_no_more_payment_mode(self):
+        inv = self.create_invoice(self.partner_1, '2019-05-10',
+                                  payment_mode_id=self.payment_mode.id)
+        with self.assertRaises(ValidationError) as err:
+            inv.update({'payment_mode_id': False})
+        self.assertEqual('Payment mode is needed to auto pay an invoice',
+                         err.exception.name)
+
     def test_do_not_pay_refund(self):
         "Do not pay refunds, but do not prevent their merge"
         with patch.object(PaymentTransaction, 's2s_do_transaction') as autopay:
