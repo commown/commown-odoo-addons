@@ -11,6 +11,7 @@
     'author': 'Commown',
     'website': 'https://github.com/OCA/account-financial-tools',
     'depends': [
+        'account_asset',
         'account_fiscal_year',
     ],
     'data': [
