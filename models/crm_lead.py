@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from odoo import models, fields, api
 
 
@@ -40,6 +42,17 @@ class CrmLead(models.Model):
     @api.multi
     def _default_shipping_parcel_type(self):
         return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
+
+    @api.multi
+    def _attachment_from_label(self, name, meta_data, label_data):
+        self.update({
+            'expedition_ref': meta_data['labelResponse']['parcelNumber'],
+            'expedition_date': datetime.today(),
+            'delivery_date': False  ,
+        })
+        return super(CrmLead, self)._attachment_from_label(
+            name, meta_data, label_data)
+
 
     @api.multi
     def parcel_labels(self, parcel_name=None, force_single=False):

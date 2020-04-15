@@ -3,7 +3,6 @@ import json
 import os
 import re
 from base64 import b64encode
-from datetime import datetime
 from subprocess import check_call, CalledProcessError
 from tempfile import gettempdir, mktemp
 
@@ -51,19 +50,18 @@ class CommownShippingMixin(models.AbstractModel):
             raise ValueError(json.dumps(meta_data))
         assert meta_data and label_data
 
-        self.update({
-            'expedition_ref': meta_data['labelResponse']['parcelNumber'],
-            'expedition_date': datetime.today(),
-            'delivery_date': False  ,
-        })
+        return self._attachment_from_label(parcel.name + '.pdf',
+                                           meta_data, label_data)
 
+    @api.multi
+    def _attachment_from_label(self, name, meta_data, label_data):
         return self.env['ir.attachment'].create({
             'res_model': self._name,
             'res_id': self.id,
             'mimetype': u'application/pdf',
             'datas': b64encode(label_data),
-            'datas_fname': self.expedition_ref + '.pdf',
-            'name': parcel.name + '.pdf',
+            'datas_fname': meta_data['labelResponse']['parcelNumber'] + '.pdf',
+            'name': name,
             'public': False,
             'type': 'binary',
         })
