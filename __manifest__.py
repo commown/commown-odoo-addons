@@ -2,7 +2,7 @@
     'name': 'Commown shipping',
     'category': 'Business',
     'summary': 'Commown shipping-related features',
-    'version': '10.0.1.3.6',
+    'version': '10.0.1.3.7',
     'description': 'Commown label printing and shipping followup',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
