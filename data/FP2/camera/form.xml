@@ -114,6 +114,12 @@ $(document).ready(function() {
                         </div>
                       </div>
                     </div>
+
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">3</t>
+                      <t t-set="new_module">une nouvelle caméra</t>
+                    </t>
+
                     <div id="step-3">
                       <h2>Informations d'expédition</h2>
                       <p>Nous allons vous envoyer une nouvelle caméra pour
