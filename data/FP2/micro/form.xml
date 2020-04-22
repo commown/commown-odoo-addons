@@ -76,7 +76,7 @@
                     <t t-call="commown_self_troubleshooting.step-contract-choice"/>
 
                     <div id="step-1">
-                      <h2><i class="fa fa-microphone-slash" aria-hidden="true"></i> Mode micro coupé</h2>
+                      <h2><i class="fas fa-microphone-slash"></i> Mode micro coupé</h2>
                       <p> Tout d'abord, veuillez vérifier que vous n'avez pas activé le mode "micro coupé" ("mute" en anglais) lors des appels. Vous pouvez vérifier cela pendant un appel en jetant un oeil sur l'icône du micro.
                       </p>
                       <div id="form-step-1" role="form" data-toggle="validator">
@@ -92,7 +92,7 @@
                     </div>
 
                     <div id="step-2">
-                      <h2><i class="fa fa-cogs" aria-hidden="true"></i> Test de maintenance</h2>
+                      <h2><i class="fas fa-cogs"></i> Test de maintenance</h2>
                       <p> Afin de voir si le problème provient bien du micro (et non d’un problème logiciel / réseau ou haut parleur), veuillez vous rendre dans le menu <i>Paramètres > Maintenance > Checkup > Primary Microphone > Start test</i>.</p>
                       <p>Pendant le test, tenez le téléphone comme si vous appeliez, et parlez. Vous devez vous entendre en écho avec une demi-seconde de décalage. Si vous n’entendez rien ou que le son est mauvais, avec des grésillements par exemple, c’est que le micro est en panne et nous vous aiderons à le changer.</p>
                       <p>Veillez à faire le test en pinçant plus ou moins fortement le bas de votre téléphone (où se trouve justement le micro), car les faux contacts sont fréquents à cet endroit.</p>
@@ -110,7 +110,7 @@
                     </div>
 
                     <div id="step-3">
-                      <h2>Test d'une autre carte SIM</h2>
+                      <h2><i class="fas fa-sim-card"></i> Test d'une autre carte SIM</h2>
                       <p> Si le test de maintenance montre que le
                       micro principal est fonctionnel mais que
                       l'interlocuteur ne vous entend toujours pas,

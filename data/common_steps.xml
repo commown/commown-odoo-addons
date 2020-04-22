@@ -34,7 +34,7 @@
 
     <template id="step-ship-module">
       <div t-attf-id="step-{{ step }}">
-        <h2><i class="fa fa-truck" aria-hidden="true"></i> Informations d'expédition</h2>
+        <h2><i class="fas fa-shipping-fast"></i> Informations d'expédition</h2>
         <p>Nous allons vous envoyer <t t-esc="new_module"/> pour
         résoudre le problème. Veuillez vérifier attentivement
         les informations d'expédition ci-dessous, et les
@@ -45,36 +45,36 @@
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
           <div class="form-group">
-            <label for="name"><i class="fa fa-user" aria-hidden="true"></i> Nom complet</label>
+            <label for="name"><i class="fas fa-id-card" aria-hidden="true"></i> Nom complet</label>
             <input class="form-control" name="name" id="name" required="required" t-att-value="delivery.name" data-required-error="Saisissez un nom pour la livraison."/>
             <div class="help-block with-errors"/>
           </div>
 
           <div class="form-group">
-            <label for="street"><i class="fa fa-home" aria-hidden="true"></i> Rue - 1ère ligne</label>
+            <label for="street"><i class="fas fa-home"></i> Rue - 1ère ligne</label>
             <input class="form-control" name="street" id="street" maxlength="35" required="required" t-att-value="delivery.street" data-required-error="Saisissez le numéro et nom de la rue pour la livraison."/>
             <div class="help-block with-errors"/>
           </div>
 
           <div class="form-group">
-            <label for="street2"><i class="fa fa-home" aria-hidden="true"></i> Rue - 2ème ligne (si nécessaire)</label>
+            <label for="street2"><i class="fas fa-home"></i> Rue - 2ème ligne (si nécessaire)</label>
             <input class="form-control" name="street2" id="street2" maxlength="35" t-att-value="delivery.street2"/>
             <div class="help-block with-errors"/>
           </div>
 
           <div class="row">
             <div class="col-xs-4 form-group">
-              <label for="zipcode"><i class="fa fa-map-marker" aria-hidden="true"></i> Code postal</label>
+              <label for="zipcode"><i class="fas fa-map-marker-alt"></i> Code postal</label>
               <input class="form-control" name="zipcode" id="zipcode" required="required" t-att-value="delivery.zip" data-required-error="Saisissez un code postal pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
             <div class="col-xs-4 form-group">
-              <label for="city"><i class="fa fa-map-marker" aria-hidden="true"></i> Ville</label>
+              <label for="city"><i class="fas fa-map-marker-alt"></i> Ville</label>
               <input class="form-control" name="city" id="city" required="required" t-att-value="delivery.city" data-required-error="Saisissez une ville pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
             <div class="col-xs-4 form-group">
-              <label for="country"><i class="fa fa-map-marker" aria-hidden="true"></i> Pays</label>
+              <label for="country"><i class="fas fa-map-marker-alt"></i> Pays</label>
               <select class="form-control" id="country" name="country" required="required" data-required-error="Saisissez un pays pour la livraison.">
                 <option selected="1" t-att-value="delivery.country_id.name"><t t-esc="delivery.country_id.name"/></option>
                 <option t-if="delivery.country_id.name != 'France'" value="France">France</option>
@@ -86,12 +86,12 @@
 
           <div class="row">
             <div class="col-xs-6 form-group">
-              <label for="phone"><i class="fa fa-phone" aria-hidden="true"></i> Numéro de téléphone</label>
+              <label for="phone"><i class="fas fa-phone-alt"></i> Numéro de téléphone</label>
               <input class="form-control" name="phone" id="phone" type="tel" required="required" t-att-value="delivery.phone or delivery.mobile" data-required-error="Saisissez un numéro de téléphone pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
             <div class="col-xs-6 form-group">
-              <label for="email"><i class="fa fa-envelope" aria-hidden="true"></i> Adresse email</label>
+              <label for="email"><i class="fas fa-envelope"></i> Adresse email</label>
               <input class="form-control" name="email" id="email" type="email" required="required" t-att-value="delivery.email" data-required-error="Saisissez une adresse email pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
@@ -103,7 +103,7 @@
 
     <template id="step-self-solved">
       <div t-attf-id="step-{{ step }}">
-        <h2><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> Problème résolu</h2>
+        <h2><i class="far fa-thumbs-up" aria-hidden="true"></i> Problème résolu</h2>
         <p>Vous avez réussi à résoudre le problème, bravo !</p>
         <p>Nous espérons que cet outil vous a été utile pour y parvenir.</p>
         <p>Dans le but de nous aider à améliorer continuellement le service aux
@@ -137,7 +137,7 @@
 
     <template id="step-contact-human">
       <div t-attf-id="step-{{ step }}">
-        <h2>Contacter un humain</h2> <p>Vous pouvez ici
+        <h2><i class="fas fa-hands-helping"></i> Contacter un humain</h2> <p>Vous pouvez ici
         directement créer une demande d'assistance à
         notre intention en expliquant au mieux le souci
         que vous rencontrez ci-dessous.</p>
@@ -179,7 +179,7 @@
 
     <template id="step-confirm-module-change">
       <div t-attf-id="step-{{ step }}">
-        <h2>Confirmation de votre demande</h2>
+        <h2><i class="fas fa-check-double"></i> Confirmation de votre demande</h2>
         <p>En appuyant sur le bouton ci-dessous, vous
         confirmerez votre demande d'envoi.</p>
         <p>Vous aurez besoin d’un tout petit tournevis
