@@ -258,38 +258,9 @@ $(document).ready(function() {
                       </div>
                     </div>
 
-                    <div id="step-5">
-                      <h2>Problème résolu</h2>
-                      <p>Vous avez réussi à résoudre le problème, bravo !</p>
-                      <p>Nous espérons que cet outil vous a été utile pour y parvenir.</p>
-                      <p>Dans le but de nous aider à améliorer continuellement le service aux
-                      Commowners (notamment grâce aux statistiques de panne), vous pouvez nous
-                      faire part de cette expérience au moyen du bouton d'envoi ci-dessous. Si
-                      vous préférez ne pas nous fournir d'information, fermez simplement cette
-                      page.
-                      </p>
-
-                      --<br/>
-                      <p>L'équipe Commown,<br/>
-                      <img alt="logo" src="https://shop.commown.coop/web/content/25787"/>
-                      </p>
-                      --<br/>
-
-                      <div id="form-step-5" role="form" data-toggle="validator">
-
-                        <div class="form-group">
-                          <label for="more_info_step_5">Ajoutez ici toute information que vous jugerez utile :</label>
-                          <textarea class="form-control" rows="3"
-                                    id="more_info_step_5" name="more_info"/>
-                        </div>
-
-                        <div class="form-group">
-                          <input type="hidden" name="stage_id" t-att-value="stage_solved"/>
-                          <button type="submit" class="btn btn-primary"
-                                  name="action" value="inform">Envoyer les informations</button>
-                        </div>
-                      </div>
-                    </div>
+                    <t t-call="commown_self_troubleshooting.step-self-solved">
+                      <t t-set="step">5</t>
+                    </t>
 
                     <div id="step-6">
                       <h2>Contacter un être humain</h2> <p>Vous pouvez
