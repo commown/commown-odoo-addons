@@ -33,18 +33,21 @@ class SelfHelp(http.Controller):
     def create_support_card(self, **kw):
         _logger.info('create_support_card called with parameters %s', kw)
         env = request.env
-        post = request.params.copy()
-        name = post['self-troubleshoot-type']
-        contract_id = int(post['device_contract'])
         partner = env.user.partner_id
-        issue = env['project.issue'].sudo().create({
-            'name': name,
+        post = request.params.copy()
+
+        issue_data = {
+            'name': post['self-troubleshoot-type'],
+            'contract_id': int(post['device_contract']),
             'partner_id': partner.id,
             'description': self._description(**post),
             'project_id': self.ref('support_project').id,
-            'contract_id': contract_id,
-            'tag_ids': [(6, 0, self._tag_ids(**post))]
-        })
+            'tag_ids': [(6, 0, self._tag_ids(**post))],
+        }
+        if post.get('stage_id', None):
+            issue_data['stage_id'] = int(post['stage_id'])
+        issue = env['project.issue'].sudo().create(issue_data)
+
         env['mail.followers'].create({
             'res_model': issue._name,
             'res_id': issue.id,

@@ -38,6 +38,8 @@ $(document).ready(function() {
             <t t-set="tag_names">Appareil FP2,FP MOD caméra</t>
             <t t-set="issue_title">FP2 - Caméra</t>
             <t t-set="issue_description_template">issue-description-fp2-camera</t>
+            <t t-set="stage_pending" t-value="env.ref('commown_self_troubleshooting.stage_pending').id"/>
+            <t t-set="stage_solved" t-value="env.ref('commown_self_troubleshooting.stage_solved').id"/>
             <!-- Fin des variables à modifier -->
 
             <t t-set="partner" t-value="env.user.partner_id"/>
@@ -259,6 +261,7 @@ $(document).ready(function() {
                         </div>
 
                         <div class="form-group">
+                          <input type="hidden" name="stage_id" t-att-value="stage_pending"/>
                           <button type="submit" class="btn btn-primary"
                                   name="action" value="ship">Confirmer ma demande</button>
                         </div>
@@ -291,6 +294,7 @@ $(document).ready(function() {
                         </div>
 
                         <div class="form-group">
+                          <input type="hidden" name="stage_id" t-att-value="stage_solved"/>
                           <button type="submit" class="btn btn-primary"
                                   name="action" value="inform">Envoyer les informations</button>
                         </div>
