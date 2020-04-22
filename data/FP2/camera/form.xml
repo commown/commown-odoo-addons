@@ -73,11 +73,14 @@ $(document).ready(function() {
                     <t t-call="commown_self_troubleshooting.step-contract-choice"/>
 
                     <div id="step-1">
-                      <h2>Modèle de la caméra</h2>
-                      <p>Allez voir
-                      <a target="_blank" href="https://wiki.commown.coop/Reconnaître-la-version-de-votre-caméra">cette
+                      <div class="clearfix">
+                        <img class="pull-left" src="/commown_self_troubleshooting/static/images/FP2/camera/fp2_camera_front.jpg"
+                             alt="Logo de commown" />
+                        <h2>Modèle de la caméra</h2>
+                        <p>Allez voir <a target="_blank" href="https://wiki.commown.coop/Reconnaître-la-version-de-votre-caméra">cette
                       page de notre wiki</a> et répondez à la question
-                      ci-dessous :</p>
+                        ci-dessous :</p>
+                      </div>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label for="camera_model">Modèle de caméra :</label>
@@ -95,6 +98,8 @@ $(document).ready(function() {
                     </div>
                     <div id="step-2">
                       <h2>Resserrage des vis</h2>
+                      <img src="/commown_self_troubleshooting/static/images/FP2/camera/fp2_screws.jpg"
+                           alt="Éclaté d'un Fairphone 2 avec ses vis" style="display: block; margin: auto;"/>
                       <p>Avec ce modèle de caméra, le cas le plus fréquent de
                       dysfonctionnement est celui d'un faux contact. Essayez
                       de resserrer les vis de la caméra grace
