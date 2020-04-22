@@ -267,7 +267,7 @@ $(document).ready(function() {
 
                     <div id="step-5">
                       <h2>Problème résolu</h2>
-                      <p>Vous avez réussi à résoudre seul votre problème, bravo !</p>
+                      <p>Vous avez réussi à résoudre le problème, bravo !</p>
                       <p>Nous espérons que cet outil vous a été utile pour y parvenir.</p>
                       <p>Dans le but de nous aider à améliorer continuellement le service aux
                       Commowners (notamment grâce aux statistiques de panne), vous pouvez nous

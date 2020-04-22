@@ -26,12 +26,9 @@ Informations supplémentaires utiles à la livraison :
 Numéro de téléphone : <t t-esc="phone"/>
 Adresse de courriel : <t t-esc="email"/></t>
 <t t-elif="action=='inform'">
-je vous informe que j'ai revissé la caméra
-(<t t-esc="old_or_new"/> modèle) de mon FP2 et que cela a
-résolu mon problème.</t>
+je vous informe que j'ai revissé la caméra (<t t-esc="old_or_new"/> modèle) de mon FP2 et que cela a résolu mon problème.</t>
 <t t-if="more_info">
-J'ai porté à votre connaissance les informations
-complémentaires suivantes :
+J'ai porté à votre connaissance les informations complémentaires suivantes :
 ---
 <t t-esc="more_info"/>
 ---</t>
