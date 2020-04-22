@@ -16,11 +16,12 @@
         'project',
     ],
     'data': [
-        'data/project.xml',
         'data/FP2/camera/form.xml',
         'data/FP2/camera/issue_template.xml',
         'data/FP2/micro/form.xml',
         'data/FP2/micro/issue_template.xml',
+        'data/common_steps.xml',
+        'data/project.xml',
         'data/tags.xml',
         'views/website_portal_templates.xml',
     ],

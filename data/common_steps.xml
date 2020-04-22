@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <template id="step-contract-choice">
+      <div id="step-0">
+        <h2>Appareil concerné</h2>
+        <p>Choisissez ci-dessous le contrat dont l'appareil en panne fait l'objet.</p>
+        <div id="form-step-0" role="form" data-toggle="validator">
+          <div class="form-group">
+            <label for="device_contract">Contrat de votre appareil :</label>
+            <select class="form-control" required="required"
+                    id="device_contract" name="device_contract"
+                    data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
+              <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+              <t t-foreach="contracts" t-as="c">
+                <t t-set="date" t-value="c.date_start.split('-')"/>
+                <option
+                    t-att-value="c.id"
+                    t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"
+                    />
+              </t>
+            </select>
+            <div class="help-block with-errors"></div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+  </data>
+
+</odoo>
