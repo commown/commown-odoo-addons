@@ -262,48 +262,9 @@ $(document).ready(function() {
                       <t t-set="step">5</t>
                     </t>
 
-                    <div id="step-6">
-                      <h2>Contacter un être humain</h2> <p>Vous pouvez
-                      ici directement créer une demande d'assistance à
-                      notre intention en expliquant au mieux le souci
-                      que vous rencontrez ci-dessous.</p>
-
-                      --<br/>
-                      <p>L'équipe Commown,<br/>
-                      <img alt="logo" src="https://shop.commown.coop/web/content/25787"/>
-                      </p>
-                      --<br/>
-
-                      <div id="form-step-6" role="form" data-toggle="validator">
-
-                        <div class="form-group">
-                          <label for="device_contract">Contrat de votre appareil :</label>
-                          <select class="form-control" id="device_contract" name="device_contract" required="required">
-                            <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
-                            <t t-foreach="contracts" t-as="c">
-                              <t t-set="date" t-value="c.date_start.split('-')"/>
-                              <option
-                                  t-att-value="c.id"
-                                  t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"
-                                  />
-                            </t>
-                          </select>
-                          <div class="help-block with-errors"></div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="more_info_step_6">En quoi pouvons-nous vous aider ?</label>
-                          <textarea class="form-control" rows="3" required="required"
-                                    id="more_info_step_6" name="more_info"/>
-                        </div>
-
-                        <div class="form-group">
-                          <button type="submit" class="btn btn-primary"
-                                  name="action" value="contact">Envoyer les informations</button>
-                        </div>
-
-                      </div>
-                    </div>
+                    <t t-call="commown_self_troubleshooting.step-contact-human">
+                      <t t-set="step">6</t>
+                    </t>
 
                   </div>
 
