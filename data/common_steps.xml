@@ -176,6 +176,62 @@
       </div>
     </template>
 
+
+    <template id="step-confirm-module-change">
+      <div t-attf-id="step-{{ step }}">
+        <h2>Confirmation de votre demande</h2>
+        <p>En appuyant sur le bouton ci-dessous, vous
+        confirmerez votre demande d'envoi.</p>
+        <p>Vous aurez besoin d’un tout petit tournevis
+        cruciforme, de taille #0
+        (voir <a target="_blank"
+        href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici</a>).
+        Nous pouvons vous en prêter un à nous retourner
+        ensuite avec le module en panne.
+        </p>
+        <p>Une demande d'assistance va être créée
+        automatiquement lorsque vous aurez soumis ce
+        formulaire. Elle sera affichée ici, ce qui vous
+        donnera l'opportunité d'ajouter un mot à
+        l'attention de notre équipe de support, si besoin.
+        </p>
+
+        --<br/>
+        <p>L'équipe Commown,<br/>
+        <img alt="logo" src="https://shop.commown.coop/web/content/25787"/>
+        </p>
+        --<br/>
+
+        <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
+
+          <div class="form-group">
+            <p>Avez-vous besoin d'un tournevis ?</p>
+            <label class="radio-inline" for="screwdriver-yes">Oui</label>
+            <input type="radio" name="screwdriver" id="screwdriver-yes"
+                   value="yes" required="required"
+                   data-required-error="Dites-nous si vous avez besoin d'un tournevis."></input>
+            <label class="radio-inline" for="screwdriver-no">Non</label>
+            <input type="radio" name="screwdriver" id="screwdriver-no"
+                   value="no" required="required"></input>
+            <div class="help-block with-errors"></div>
+          </div>
+
+          <div class="form-group">
+            <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toute information que vous jugerez utile :</label>
+            <textarea class="form-control" rows="3"
+                       t-attf-id="more_info_step_{{ step }}" name="more_info" />
+          </div>
+
+          <div class="form-group">
+            <input type="hidden" name="stage_id" t-att-value="stage_pending"/>
+            <button type="submit" class="btn btn-primary"
+                    name="action" value="ship">Confirmer ma demande</button>
+          </div>
+        </div>
+      </div>
+
+    </template>
+
   </data>
 
 </odoo>
