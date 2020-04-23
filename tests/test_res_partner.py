@@ -1,6 +1,6 @@
 from mock import patch
 
-from odoo.models import ValidationError
+from odoo.exceptions import ValidationError
 from odoo.tests.common import at_install, post_install
 
 from odoo.addons.payment.models.payment_acquirer import PaymentTransaction
@@ -52,3 +52,11 @@ class ResPartnerTC(AutoPayInvoiceTC):
         self.assertEqual(inv.state, 'paid')
         self.assertEqual(inv.date_invoice, '2019-05-10')
         self.assertEqual(self.partner_1.invoice_merge_next_date, '2019-06-15')
+
+    def test_auto_pay_no_token_error(self):
+        self.partner_1.payment_token_id = False
+        with self.assertRaises(ValidationError) as err:
+            with patch.object(PaymentTransaction, 's2s_do_transaction',
+                              fake_do_tx_ok):
+                self._multiple_invoice_merge_test()
+        self.assertIn(u'No payment token', err.exception.name)

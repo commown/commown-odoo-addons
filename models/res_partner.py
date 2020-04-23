@@ -1,6 +1,7 @@
 import logging
 
-from odoo import models, api
+from odoo import _, models, api
+from odoo.exceptions import ValidationError
 
 from odoo.addons.queue_job.job import job
 
@@ -19,6 +20,10 @@ class ResPartner(models.Model):
         create and return a payment
         """
         pay_mode = invoice.payment_mode_id
+        token = invoice.partner_id.payment_token_id
+        if not token:
+            raise ValidationError(_(u'No payment token for invoice id %s (%s)')
+                                  % (invoice.id, invoice.number))
         return self.env['account.payment'].create({
             'partner_id': invoice.partner_id.id,
             'partner_type': 'customer',
@@ -29,7 +34,7 @@ class ResPartner(models.Model):
             'amount': invoice.amount_total,
             'currency_id': invoice.currency_id.id,
             'invoice_ids': [(6, 0, [invoice.id])],
-            'payment_token_id': invoice.partner_id.payment_token_id.id,
+            'payment_token_id': token.id,
         })
 
     @api.model
