@@ -6,7 +6,7 @@
 {
     'name': 'Import La Nef CSV bank statements',
     'category': 'Accouting',
-    'version': '10.0.0.0.1',
+    'version': '10.0.1.0.0',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.fr",
