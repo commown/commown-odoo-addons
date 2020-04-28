@@ -18,7 +18,6 @@
               <field name="is_deposit"/>
               <field name="rental_price" widget="monetary" attrs="{'required': [('is_rental', '=', True)]}"/>
               <field name="rental_frequency"/>
-              <field name="rental_contract_tmpl_id"/>
             </group>
           </xpath>
         </field>

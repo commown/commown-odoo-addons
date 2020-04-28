@@ -47,7 +47,7 @@ class ProductRentalSaleOrder(models.Model):
     @api.multi
     def contractual_documents(self):
         self.ensure_one()
-        rcts = self.mapped('order_line.product_id.rental_contract_tmpl_id')
+        rcts = self.mapped('order_line.product_id.contract_template_id')
         return self.env['ir.attachment'].search([
             ('res_model', '=', 'account.analytic.contract'),
             ('res_id', 'in', rcts.ids),
@@ -74,7 +74,7 @@ class ProductRentalSaleOrder(models.Model):
     def _create_rental_contract(self, count, product):
         self.ensure_one()
 
-        tmpl = product.rental_contract_tmpl_id
+        tmpl = product.contract_template_id
         contract = self.env['account.analytic.account'].create({
             'name': '%s-%02d' % (self.name, count),
             'partner_id': self.partner_id.id,
@@ -111,7 +111,7 @@ class ProductRentalSaleOrder(models.Model):
                 product = so_line.product_id
                 if not product.is_rental:
                     continue  # equity, fairphone open install, etc.
-                elif not product.rental_contract_tmpl_id:
+                elif not product.contract_template_id:
                     to_classify.append(so_line)  # accessory
                     continue
                 for accessory in product.accessory_product_ids:
