@@ -47,10 +47,6 @@
             <t t-set="stage_long_term_followup" t-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
             <!-- Fin des variables à modifier -->
 
-            <t t-set="partner" t-value="env.user.partner_id"/>
-            <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', partner.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])"/>
-            <t t-set="delivery" t-value="env['res.partner'].browse(partner.address_get(['delivery']).get('delivery', partner.id))"/>
-
             <div class="container">
               <br/>
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">

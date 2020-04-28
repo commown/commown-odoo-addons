@@ -4,6 +4,8 @@
   <data>
 
     <template id="step-contract-choice">
+      <t t-set="contracts"
+         t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
       <div id="step-0">
         <div class="clearfix">
           <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png"
@@ -33,6 +35,9 @@
     </template>
 
     <template id="step-ship-module">
+      <t t-set="partner" t-value="env.user.partner_id"/>
+      <t t-set="delivery"
+         t-value="env['res.partner'].browse(partner.address_get(['delivery']).get('delivery', partner.id))"/>
       <div t-attf-id="step-{{ step }}">
         <h2><i class="fas fa-shipping-fast"></i> Informations d'expédition</h2>
         <p>Nous allons vous envoyer <t t-esc="new_module"/> pour
@@ -136,6 +141,8 @@
     </template>
 
     <template id="step-contact-human">
+      <t t-set="contracts"
+         t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
       <div t-attf-id="step-{{ step }}">
         <h2><i class="fas fa-hands-helping"></i> Contacter un humain</h2> <p>Vous pouvez ici
         directement créer une demande d'assistance à
