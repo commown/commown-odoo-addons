@@ -6,7 +6,7 @@ _logger = logging.getLogger(__name__)
 
 
 class SCICSaleOrder(models.Model):
-    _inherit = "sale.order"
+    _inherit = 'sale.order'
 
     @api.multi
     @api.depends('website_order_line.product_uom_qty',
@@ -23,7 +23,7 @@ class SCICSaleOrder(models.Model):
 
     @api.multi
     def _cart_update(self, product_id=None, line_id=None, add_qty=0, set_qty=0,
-                     attributes=None, **kwargs):
+                     **kwargs):
         """If given product is a crowd equity one, limit its quantity to 1.
 
         Note this does not enforce the quantity in the DB, which may
@@ -33,8 +33,7 @@ class SCICSaleOrder(models.Model):
         """
         result = super(SCICSaleOrder, self)._cart_update(
             product_id=product_id, line_id=line_id,
-            add_qty=add_qty, set_qty=set_qty,
-            attributes=attributes, **kwargs)
+            add_qty=add_qty, set_qty=set_qty, **kwargs)
         product = self.env['product.product'].browse(product_id)
         if product.product_tmpl_id.is_crowd_equity() and result['quantity'] > 1:
             line = self.env['sale.order.line'].sudo().browse(result['line_id'])

@@ -5,7 +5,7 @@ from odoo import models, fields, api
 _logger = logging.getLogger(__name__)
 
 
-class EquityProductTemplate(models.Model):
+class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     is_equity = fields.Boolean('Is equity product')

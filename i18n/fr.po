@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-09 11:06+0000\n"
-"PO-Revision-Date: 2018-02-09 11:06+0000\n"
+"POT-Creation-Date: 2020-04-21 09:58+0000\n"
+"PO-Revision-Date: 2020-04-21 09:58+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,14 +21,14 @@ msgid "Crowd equity"
 msgstr "Part sociale bénéficiaire"
 
 #. module: scic
-#: model:ir.model.fields,field_description:scic.field_product_product_equity_type
-#: model:ir.model.fields,field_description:scic.field_product_template_equity_type
+#: model:ir.model.fields,field_description:scic.field_product_product__equity_type
+#: model:ir.model.fields,field_description:scic.field_product_template__equity_type
 msgid "Equity type"
 msgstr "Type de part sociale"
 
 #. module: scic
-#: model:ir.model.fields,help:scic.field_product_product_equity_type
-#: model:ir.model.fields,help:scic.field_product_template_equity_type
+#: model:ir.model.fields,help:scic.field_product_product__equity_type
+#: model:ir.model.fields,help:scic.field_product_template__equity_type
 msgid "Equity type: crowd are limited to 1 per person"
 msgstr "Equity type: crowd are limited to 1 per person"
 
@@ -38,8 +38,8 @@ msgid "Investment"
 msgstr "Investment"
 
 #. module: scic
-#: model:ir.model.fields,field_description:scic.field_product_product_is_equity
-#: model:ir.model.fields,field_description:scic.field_product_template_is_equity
+#: model:ir.model.fields,field_description:scic.field_product_product__is_equity
+#: model:ir.model.fields,field_description:scic.field_product_template__is_equity
 msgid "Is equity product"
 msgstr "Is equity product"
 
@@ -47,4 +47,9 @@ msgstr "Is equity product"
 #: model:ir.model,name:scic.model_product_template
 msgid "Product Template"
 msgstr "Modèle d'article"
+
+#. module: scic
+#: model:ir.model,name:scic.model_sale_order
+msgid "Sale Order"
+msgstr "Commande de vente"
 
