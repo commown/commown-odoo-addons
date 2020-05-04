@@ -23,28 +23,22 @@
         'product_rental',
         'rating_project_issue_nps',
         'sale_product_email',
-        'scic',
         'urban_mine',
+        'custom_report',
         'website_sale_affiliate_portal',
         'website_sale_affiliate_product_restriction',
         'website_sale_b2b',
         'website_sale_coupon',
-
         # OCA modules
-        'account_usability',  # needed for account_invoice.has_discount (py3o)
         'account_payment_sale',
         'account_mass_reconcile',
         'account_move_stripe_import',
         'auth_signup',
         'base_action_rule',
-        'base_company_extension',  # required for legal_type (py3o)
         'crm',
-        'l10n_fr',
         'mass_mailing',
         'mass_mailing_partner',
         'project_issue',
-        'report_py3o',
-        'sale_usability',  # required for sale.layout_category (py3o)
         'website_project_issue',
         'website_sale_cart_selectable',
         'website_sale_default_country',
@@ -73,7 +67,6 @@
         'views/website_site_portal_sale_templates.xml',
         'views/res_partner.xml',
         'views/crm_lead.xml',
-        'data/account_invoice_report.xml',
         'data/product.xml',
         'data/mail_templates.xml',
         'data/project_project.xml',
