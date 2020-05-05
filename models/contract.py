@@ -17,6 +17,17 @@ class AccountAnalyticContract(models.Model):
     )
 
 
+class AccountAnalyticContractLine(models.Model):
+    _inherit = 'account.analytic.contract.line'
+
+    sale_order_line_id = fields.Many2one(
+        comodel_name="sale.order.line",
+        string="Sale Order Line",
+        required=False,
+        copy=False,
+    )
+
+
 class AccountAnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
 
