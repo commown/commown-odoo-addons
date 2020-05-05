@@ -18,7 +18,6 @@
         'views/website_portal_sale_templates.xml',
         'views/contract_view.xml',
         'views/payment_transaction.xml',
-        'data/sale_order_actions.xml',
     ],
     'installable': True,
 }

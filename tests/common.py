@@ -20,7 +20,7 @@ class RentalSaleOrderTC(TransactionCase):
                 ])
         self.product1 = self._create_rental_product(
             1, name='Fairphone Premium', list_price=60., rental_price=30.,
-            rental_contract_tmpl_id=contract_tmpl1.id)
+            contract_template_id=contract_tmpl1.id)
         oline1 = self._oline(self.product1)
 
         contract_tmpl2 = self._create_rental_contract_tmpl(
@@ -31,28 +31,28 @@ class RentalSaleOrderTC(TransactionCase):
                 ])
         self.product2 = self._create_rental_product(
             2, name="PC", list_price=120., rental_price=60.,
-            rental_contract_tmpl_id=contract_tmpl2.id)
+            contract_template_id=contract_tmpl2.id)
         oline2 = self._oline(self.product2, product_uom_qty=2)
 
         # Accessory products
         product3 = self._create_rental_product(
             3, name='headset', list_price=3., rental_price=1.5,
-            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+            contract_template_id=False)
         oline3 = self._oline(product3)
 
         product4 = self._create_rental_product(
             4, name='screen', list_price=30., rental_price=15.,
-            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+            contract_template_id=False)
         oline4 = self._oline(product4, product_uom_qty=2)
 
         product5 = self._create_rental_product(
             5, name='keyboard', list_price=12., rental_price=6.,
-            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+            contract_template_id=False)
         oline5 = self._oline(product5)
 
         product6 = self._create_rental_product(
             6, name='keyboard deluxe', list_price=15., rental_price=7.5,
-            followup_sales_team_id=False, rental_contract_tmpl_id=False)
+            contract_template_id=False)
         oline6 = self._oline(product6)
 
         self.product1.accessory_product_ids |= product3
@@ -69,9 +69,10 @@ class RentalSaleOrderTC(TransactionCase):
         kwargs.setdefault('name', 'product %d' % num)
         kwargs.setdefault('is_rental', True)
         kwargs.setdefault('type', 'service')
-        if 'rental_contract_tmpl_id' not in kwargs:
-            kwargs['rental_contract_tmpl_id'] = \
+        if 'contract_template_id' not in kwargs:
+            kwargs['contract_template_id'] = \
                 self._create_rental_contract_tmpl(num).id
+        kwargs['is_contract'] = bool(kwargs['contract_template_id'])
         return self.env['product.product'].create(kwargs)
 
     def _create_rental_contract_tmpl(self, num, **kwargs):
