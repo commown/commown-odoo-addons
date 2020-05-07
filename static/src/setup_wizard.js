@@ -23,19 +23,51 @@ function setUpWizard($container) {
   }
 
   function createHumanContactButton(contactStep) {
-    return $('<button/>').text('Contact humain')
+
+    function isStepEnabled(wizard, stepNumber) {
+      return ! wizard.steps.eq(stepNumber).parent('li').hasClass('disabled');
+    }
+
+    function getCurrentState(wizard, $button) {
+      return {
+        text: $button.text(),
+        stepStates: $.map(wizard.steps, function(step, stepIndex) {
+          return isStepEnabled(wizard, stepIndex) ? 'enable' : 'disable';
+        }),
+        currentStep: wizard.current_index,
+      };
+    }
+
+    function setState(wizard, $button, state) {
+      $button.text(state.text);
+      $.each(wizard.steps, function(stepIndex, step) {
+        wizard.stepState(stepIndex, state.stepStates[stepIndex]);
+      });
+      wizard.goToStep(state.currentStep);
+    }
+
+    var previousState;
+
+    return $('<button/>').text('Contacter un humain')
       .addClass('btn btn-warning')
       .on('click', function(event) {
         event.preventDefault();
+        const $button = $(this);
         const wizard = $container.data('smartWizard');
-        $.map(wizard.steps, function(step, stepIndex) {
-          if (stepIndex !== contactStep) {
-            $container.toggleStep(stepIndex, false);
-            wizard.stepState(stepIndex, 'disable');
-          }
-        });
-        $container.toggleStep(contactStep, true);
-        wizard.goToStep(contactStep);
+
+        if (!isStepEnabled(wizard, contactStep)) {
+          previousState = getCurrentState(wizard, $button);
+          setState(wizard, $button, {
+            text: "Revenir à l'auto-dépannage",
+            stepStates: $.map(wizard.steps, function(step, stepIndex) {
+              return stepIndex === contactStep ? 'enable' : 'disable';
+            }),
+            currentStep: contactStep,
+          });
+        }
+        else {
+          setState(wizard, $button, previousState);
+        }
       });
   }
 
