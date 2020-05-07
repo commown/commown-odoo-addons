@@ -23,7 +23,7 @@ function setUpWizard($container) {
   }
 
   function createHumanContactButton(contactStep) {
-    return $('<button/>').text('Contacter un humain !')
+    return $('<button/>').text('Contact humain')
       .addClass('btn btn-warning')
       .on('click', function(event) {
         event.preventDefault();
