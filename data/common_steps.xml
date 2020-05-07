@@ -11,8 +11,8 @@
           <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png"
                alt="Logo de commown" />
           <h2>Appareil concerné</h2>
-          <p>Choisissez ci-dessous le contrat dont l'appareil en panne fait l'objet.</p>
         </div>
+        <p>Choisissez ci-dessous le contrat dont l'appareil en panne fait l'objet.</p>
         <div id="form-step-0" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="device_contract">Contrat de votre appareil :</label>
