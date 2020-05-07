@@ -48,6 +48,8 @@
             <!-- Fin des variables à modifier -->
 
             <div class="container">
+              <h1>Auto-dépannage : Fairphone 2</h1>
+              <h2>Mon interlocuteur ne m'entend pas</h2>
               <br/>
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 

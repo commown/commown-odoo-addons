@@ -43,6 +43,8 @@ $(document).ready(function() {
             <!-- Fin des variables à modifier -->
 
             <div class="container">
+              <h1>Auto-dépannage : Fairphone 2</h1>
+              <h2>Ma caméra principale fonctionne mal ou plus du tout</h2>
               <br />
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
                     id="myForm" role="form">
