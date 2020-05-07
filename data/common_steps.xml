@@ -69,7 +69,7 @@
 
           <div class="row">
             <div class="col-xs-4 form-group">
-              <label for="zipcode"><i class="fas fa-map-marker-alt"></i> Code postal</label>
+              <label for="zipcode"><i class="fas fa-map-marker-alt"></i> C. Postal</label>
               <input class="form-control" name="zipcode" id="zipcode" required="required" t-att-value="delivery.zip" data-required-error="Saisissez un code postal pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
@@ -91,7 +91,7 @@
 
           <div class="row">
             <div class="col-xs-6 form-group">
-              <label for="phone"><i class="fas fa-phone-alt"></i> Numéro de téléphone</label>
+              <label for="phone"><i class="fas fa-phone-alt"></i> N° de mobile</label>
               <input class="form-control" name="phone" id="phone" type="tel" required="required" t-att-value="delivery.phone or delivery.mobile" data-required-error="Saisissez un numéro de téléphone pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
