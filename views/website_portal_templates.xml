@@ -1,98 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <template id="web_layout" inherit_id="web.layout">
-    <xpath expr="//link[@rel='shortcut icon']" position="after">
-      <style>
-        @media (max-width: 768px) {
-          #wrap>div.container.mb64 {
-            display: flex;
-            flex-direction: column-reverse;
+  <data noupdate="1">
+
+    <template id="web_layout" inherit_id="web.layout">
+      <xpath expr="//link[@rel='shortcut icon']" position="after">
+        <style>
+          @media (max-width: 768px) {
+            #wrap>div.container.mb64 {
+              display: flex;
+              flex-direction: column-reverse;
+            }
           }
-        }
-      </style>
-    </xpath>
-  </template>
+        </style>
+      </xpath>
+    </template>
 
 
-  <template id="self-troubleshoot-portal-access" inherit_id="website_portal.portal_layout">
+    <template id="self-troubleshoot-portal-access" inherit_id="website_portal.portal_layout">
 
-    <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
+      <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
 
-      <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('date_end', '=', False)])"/>
-      <t t-set="contract_types" t-value="set(c.contract_template_id.name.split(u'/', 1)[0] for c in contracts)"/>
+        <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('date_end', '=', False)])"/>
+        <t t-set="contract_types" t-value="set(c.contract_template_id.name.split(u'/', 1)[0] for c in contracts)"/>
 
-      <h3 t-if="contract_types" class="page-header">Self troubleshooting</h3>
-      <div t-if="'FP2' in contract_types">
-        <h4 class="page-header">Fairphone 2</h4>
-        <div class="list-group">
-          <a target="_blank" class="list-group-item"
-             t-attf-href="/page/self-troubleshoot-fp2-camera">
-            Ma caméra principale fonctionne mal ou plus du tout
-          </a>
-          <a target="_blank" class="list-group-item"
-             t-attf-href="/page/self-troubleshoot-fp2-micro">
-            Mon interlocuteur ne m'entend pas
-          </a>
+        <h3 t-if="contract_types" class="page-header">Self troubleshooting</h3>
+        <div t-if="'FP2' in contract_types">
+          <h4 class="page-header">Fairphone 2</h4>
+          <div class="list-group">
+            <a target="_blank" class="list-group-item"
+               t-attf-href="/page/self-troubleshoot-fp2-camera">
+              Ma caméra principale fonctionne mal ou plus du tout
+            </a>
+            <a target="_blank" class="list-group-item"
+               t-attf-href="/page/self-troubleshoot-fp2-micro">
+              Mon interlocuteur ne m'entend pas
+            </a>
+          </div>
         </div>
-      </div>
 
-    </xpath>
+      </xpath>
 
-  </template>
+    </template>
 
 
-  <record id="self-troubleshoot-web-layout" model="ir.ui.view">
-    <field name="name">Web layout for self troubleshooting pages</field>
-    <field name="type">qweb</field>
-    <field name="key">commown-self-troubleshoot.web-layout</field>
-    <field name="arch" type="xml">
+    <record id="self-troubleshoot-web-layout" model="ir.ui.view">
+      <field name="name">Web layout for self troubleshooting pages</field>
+      <field name="type">qweb</field>
+      <field name="key">commown-self-troubleshoot.web-layout</field>
+      <field name="arch" type="xml">
 
-      <t name="Web layout for self troubleshooting pages"
-         t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
-      <html t-att="html_data or {}">
-        <head>
-          <meta charset="utf-8"/>
-          <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <t name="Web layout for self troubleshooting pages"
+           t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
+        <html t-att="html_data or {}">
+          <head>
+            <meta charset="utf-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-          <title t-esc="title or 'Odoo'"/>
-          <link type="image/x-icon" rel="shortcut icon" t-att-href="x_icon or '/web/static/src/img/favicon.ico'"/>
+            <title t-esc="title or 'Odoo'"/>
+            <link type="image/x-icon" rel="shortcut icon" t-att-href="x_icon or '/web/static/src/img/favicon.ico'"/>
 
-          <style>
-            .btn-toolbar .btn-group.sw-btn-group-extra {float: right;}
-          </style>
+            <style>
+              .btn-toolbar .btn-group.sw-btn-group-extra {float: right;}
+            </style>
 
-          <script type="text/javascript">
-            var odoo = {
-            csrf_token: "<t t-esc="request.csrf_token(None)"/>",
-            };
-          </script>
+            <script type="text/javascript">
+              var odoo = {
+              csrf_token: "<t t-esc="request.csrf_token(None)"/>",
+              };
+            </script>
 
-          <link rel="stylesheet" type="text/css"
-                href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
-          <link rel="stylesheet" type="text/css"
-                href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
-          <link rel="stylesheet" type="text/css"
-                href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
-          <link rel="stylesheet" type="text/css"
-                href="/commown_self_troubleshooting/static/src/fontawesome-5.13.0/css/all.min.css"/>
+            <link rel="stylesheet" type="text/css"
+                  href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
+            <link rel="stylesheet" type="text/css"
+                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
+            <link rel="stylesheet" type="text/css"
+                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
+            <link rel="stylesheet" type="text/css"
+                  href="/commown_self_troubleshooting/static/src/fontawesome-5.13.0/css/all.min.css"/>
 
-          <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
-          <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
-          <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
-          <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
 
-          <t t-raw="head or ''"/>
+            <t t-raw="head or ''"/>
 
-        </head>
+          </head>
 
-        <body t-att-class="body_classname">
-          <t t-raw="0"/>
-        </body>
+          <body t-att-class="body_classname">
+            <t t-raw="0"/>
+          </body>
 
-      </html>
-      </t>
-    </field>
-  </record>
+        </html>
+        </t>
+      </field>
+    </record>
 
+  </data>
 </odoo>

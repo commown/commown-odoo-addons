@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-  <data>
+  <data noupdate="1">
 
     <template id="step-contract-choice">
       <t t-set="contracts"
@@ -241,5 +240,4 @@
     </template>
 
   </data>
-
 </odoo>
