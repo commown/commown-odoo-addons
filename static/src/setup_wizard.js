@@ -32,7 +32,7 @@ function setUpWizard($container) {
       return {
         text: $button.text(),
         stepStates: $.map(wizard.steps, function(step, stepIndex) {
-          return isStepEnabled(wizard, stepIndex) ? 'enable' : 'disable';
+          return isStepEnabled(wizard, stepIndex);
         }),
         currentStep: wizard.current_index,
       };
@@ -41,7 +41,7 @@ function setUpWizard($container) {
     function setState(wizard, $button, state) {
       $button.text(state.text);
       $.each(wizard.steps, function(stepIndex, step) {
-        wizard.stepState(stepIndex, state.stepStates[stepIndex]);
+        wizard.toggleStep(stepIndex, state.stepStates[stepIndex]);
       });
       wizard.goToStep(state.currentStep);
     }
@@ -60,7 +60,7 @@ function setUpWizard($container) {
           setState(wizard, $button, {
             text: "Revenir à l'auto-dépannage",
             stepStates: $.map(wizard.steps, function(step, stepIndex) {
-              return stepIndex === contactStep ? 'enable' : 'disable';
+              return stepIndex === contactStep;
             }),
             currentStep: contactStep,
           });
@@ -83,7 +83,7 @@ function setUpWizard($container) {
     extraButtons.push(createHumanContactButton(contactStep));
   }
 
-  const wizard = $container.smartWizard({
+  $container.smartWizard({
     selected: 0,
     keyNavigation: false,
     useURLhash: false,
@@ -127,6 +127,7 @@ function setUpWizard($container) {
    * @param  {integer} number    0-index of the step.
    * @param  {boolean} enabled   0-index of the step.
    */
+  const wizard = $container.data('smartWizard');
   wizard.toggleStep = function(number, enabled) {
     $container.find('li').eq(number).toggleClass('disabled', !enabled);
     if (requiredFields[number] !== undefined) {
