@@ -11,7 +11,6 @@
                 'contract_payment_auto', 'contract_payment_mode'],
     'external_dependencies': {},
     'data': [
-        'views/cart.xml',
         'views/product_template.xml',
         'views/website_sale_templates.xml',
         'views/website_portal_sale_templates.xml',
