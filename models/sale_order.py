@@ -15,7 +15,7 @@ def rental_product_price(product, partner):
         partner = partner.parent_id
     tax = partner.property_account_receivable_id.tax_ids
     to_excl = 1. / (1. + tax.amount / 100.)
-    ratio = product.deposit_price_to_lease_amount_ratio
+    ratio = product.list_price / product.rental_price
     return (product.website_public_price * to_excl / ratio)
 
 

@@ -15,7 +15,8 @@
           </xpath>
           <xpath expr="//group[@name='group_standard_price']" position="after">
             <group name="rental" attrs="{'invisible':[('is_rental','=',False)]}" >
-              <field name="deposit_price_to_lease_amount_ratio"/>
+              <field name="is_deposit"/>
+              <field name="rental_price" widget="monetary" attrs="{'required': [('is_rental', '=', True)]}"/>
               <field name="rental_frequency"/>
               <field name="rental_contract_tmpl_id"/>
             </group>

@@ -10,9 +10,10 @@ class RentalProductTemplate(models.Model):
     _inherit = 'product.template'
 
     is_rental = fields.Boolean('Is rental product')
-    deposit_price_to_lease_amount_ratio = fields.Float(
-        'Deposit price to lease amount ratio', default=2,
-        digits=dp.get_precision('Product Price'))
+    is_deposit = fields.Boolean(
+        'Is initial payment a deposit', default=True)
+    rental_price = fields.Float(
+        'Rental price', dp.get_precision('Product Price'))
     rental_frequency = fields.Selection(
         [('daily', 'Daily'), ('weekly', 'Weekly'), ('monthly', 'Monthly'),
          ('yearly', 'Yearly')], 'Rental payment frequency',

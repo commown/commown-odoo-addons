@@ -6,22 +6,22 @@
     <xpath expr="div" position="before">
       <div t-if="product.is_rental" class="product_price mt16">
         <p>
-          <b t-if="product.deposit_price_to_lease_amount_ratio&gt;0"
-             class="deposit_price"><span>Initial deposit: </span><span t-esc="'%g' % product.deposit_price_to_lease_amount_ratio"/> <span>lease payments</span></b>
+          <b t-if="product.is_deposit"
+             class="deposit_price"><span>Initial deposit: </span><span t-esc="'%g' % (product.list_price / (product.rental_price or 1))"/> <span>lease payments</span></b>
         </p>
         <t t-set="contract_tmpl" t-value="product.sudo().rental_contract_tmpl_id"/>
         <p t-if="contract_tmpl.min_contract_duration">
           <b class="min_contract_duration"><span>Commitment duration: </span><span t-esc="contract_tmpl.min_contract_duration"/> <span t-esc="dict(contract_tmpl.fields_get()['recurring_rule_type']['selection'])[contract_tmpl.recurring_rule_type].lower()"/></b>
         </p>
         <h3>
-          <span class="oe_price oe_rental_price" t-att-data-rental-ratio="product.deposit_price_to_lease_amount_ratio" style="white-space: nowrap;" t-esc="product.website_price/(product.deposit_price_to_lease_amount_ratio or 1)" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <b t-field="product.rental_frequency"/>
+          <span class="oe_price oe_rental_price" t-att-data-rental-ratio="product.list_price / (product.rental_price or 1)" style="white-space: nowrap;" t-esc="product.website_price * product.rental_price / (product.list_price or 1)" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <b t-field="product.rental_frequency"/>
         </h3>
         <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"/>
       </div>
     </xpath>
 
     <xpath expr="//h4//span[1]" position="before">
-      <b t-if="product.is_rental" class="deposit_price">Initial deposit:</b>
+      <b t-if="product.is_deposit" class="deposit_price">Initial deposit:</b>
     </xpath>
 
   </template>
