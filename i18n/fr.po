@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-14 08:19+0000\n"
-"PO-Revision-Date: 2020-05-14 08:19+0000\n"
+"POT-Creation-Date: 2020-05-14 11:59+0000\n"
+"PO-Revision-Date: 2020-05-14 11:59+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,8 @@ msgstr "<span>loyers</span>"
 
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.cart_lines
+#: model:ir.ui.view,arch_db:product_rental.confirmation
+#: model:ir.ui.view,arch_db:product_rental.payment
 msgid "<strong> - Deposit</strong>"
 msgstr "<strong> - Dépôt de garantie</strong>"
 
