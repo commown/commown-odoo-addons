@@ -29,7 +29,7 @@
         <div t-if="ol.product_id.is_rental" class="rent">
           <t t-set="contracts" t-value="env['account.analytic.account'].search([('name', 'like', ol.order_id.name + '-'), ('contract_template_id', '=', ol.product_id.rental_contract_tmpl_id.id), ('recurring_invoices', '=', True), ('date_start', '&lt;', '2030-01-01')])"/>
           (loyer unitaire :
-          <span t-esc="ol.price_unit/(ol.product_id.deposit_price_to_lease_amount_ratio or 1)"
+          <span t-esc="ol.price_unit * ol.product_id.rental_price / (ol.product_id.list_price or 1)"
                 t-options="{'widget': 'monetary', 'display_currency': ol.order_id.pricelist_id.currency_id}"/>
           <span t-field="ol.product_id.rental_frequency"/>
           <span t-if="len(contracts)==1">; fin de la période d'engagement :</span>
@@ -95,7 +95,7 @@
     </xpath>
 
     <xpath expr="//*[contains(@class, 'oe_rental_price')]" position="attributes">
-      <attribute name="t-esc">(product.is_b2b() and product.lst_price or product.website_price)/(product.deposit_price_to_lease_amount_ratio or 1)</attribute>
+      <attribute name="t-esc">(product.is_b2b() and product.lst_price or product.website_price) * product.rental_price / (product.list_price or 1)</attribute>
     </xpath>
 
     <!-- Add attribute-value dependent show/ hide html functions -->
