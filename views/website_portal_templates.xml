@@ -25,6 +25,7 @@
         <t t-set="contract_types" t-value="set(c.contract_template_id.name.split(u'/', 1)[0] for c in contracts)"/>
 
         <h3 t-if="contract_types" class="page-header">Self troubleshooting</h3>
+
         <div t-if="'FP2' in contract_types">
           <h4 class="page-header">Fairphone 2</h4>
           <div class="list-group">
@@ -36,6 +37,16 @@
                t-attf-href="/page/self-troubleshoot-fp2-micro">
               Mon interlocuteur ne m'entend pas
             </a>
+          </div>
+        </div>
+
+        <div t-if="'GS' in contract_types">
+          <h4 class="page-header">Gerrard Street</h4>
+          <div class="list-group">
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-gs-day">
+              Problème de son avec mon casque DAY
+            </a>
+
           </div>
         </div>
 
