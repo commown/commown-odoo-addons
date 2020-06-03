@@ -27,7 +27,7 @@
           </a>
         </t>
         <div t-if="ol.product_id.is_rental" class="rent">
-          <t t-set="contracts" t-value="env['account.analytic.account'].search([('name', 'like', ol.order_id.name + '-'), ('contract_template_id', '=', ol.product_id.rental_contract_tmpl_id.id), ('recurring_invoices', '=', True), ('date_start', '&lt;', '2030-01-01')])"/>
+          <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('recurring_invoice_line_ids.sale_order_line_id', '=', ol.id), ('recurring_invoices', '=', True), ('date_start', '&lt;', '2030-01-01')])"/>
           (loyer unitaire :
           <span t-esc="ol.price_unit * ol.product_id.rental_price / (ol.product_id.list_price or 1)"
                 t-options="{'widget': 'monetary', 'display_currency': ol.order_id.pricelist_id.currency_id}"/>
