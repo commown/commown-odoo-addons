@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-14 11:59+0000\n"
-"PO-Revision-Date: 2020-05-14 11:59+0000\n"
+"POT-Creation-Date: 2020-06-04 13:57+0000\n"
+"PO-Revision-Date: 2020-06-04 13:57+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -38,14 +38,19 @@ msgid "<strong> - Deposit</strong>"
 msgstr "<strong> - Dépôt de garantie</strong>"
 
 #. module: product_rental
-#: model:ir.actions.server,name:product_rental.action_add_rental_contract
-msgid "Add rental contract"
-msgstr "[Commown] Ajout du contrat"
-
-#. module: product_rental
 #: model:ir.model,name:product_rental.model_account_analytic_account
 msgid "Analytic Account"
 msgstr "Compte analytique"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_account_analytic_contract_line
+msgid "Contract Lines"
+msgstr "Lignes du contrat"
+
+#. module: product_rental
+#: model:ir.ui.view,arch_db:product_rental.view_order_form
+msgid "Contracts"
+msgstr "Contrats"
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
@@ -57,6 +62,11 @@ msgstr "par jour"
 #: model:ir.model.fields,help:product_rental.field_product_template_rental_frequency
 msgid "Frequency of the rental price payment"
 msgstr "Fréquence de paiement de la location"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_sale_order_has_rental_product
+msgid "Has rental product"
+msgstr "Contient une location"
 
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.product_price
@@ -111,10 +121,21 @@ msgid "Product Template"
 msgstr "Modèle d'article"
 
 #. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product_rental_contract_tmpl_id
-#: model:ir.model.fields,field_description:product_rental.field_product_template_rental_contract_tmpl_id
-msgid "Rental contract template"
-msgstr "Modèle de contrat de location"
+#: model:ir.model.fields,field_description:product_rental.field_sale_order_contract_count
+msgid "Related contract count"
+msgstr "Nombre de contrats associés"
+
+#. module: product_rental
+#: code:addons/product_rental/models/sale_order.py:73
+#, python-format
+msgid "Related contracts"
+msgstr "Contrats associés"
+
+#. module: product_rental
+#: code:addons/product_rental/models/account_analytic_account.py:88
+#, python-format
+msgid "Related sales"
+msgstr "Ventes associées"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product_rental_frequency
@@ -134,9 +155,25 @@ msgid "Report"
 msgstr "Rapport"
 
 #. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_account_analytic_contract_line_sale_order_line_id
+#: model:ir.model.fields,field_description:product_rental.field_account_analytic_invoice_line_sale_order_line_id
+msgid "Sale Order Line"
+msgstr "Ligne de commande"
+
+#. module: product_rental
+#: model:ir.ui.view,arch_db:product_rental.account_analytic_account_recurring_form_form
+msgid "Sale order"
+msgstr "Vente"
+
+#. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order
 msgid "Sales Order"
 msgstr "Bon de commande"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de bons de commande"
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
@@ -157,4 +194,9 @@ msgstr "[commown] Paiement automatique des transactions induites par un contrat"
 #: model:ir.model,name:product_rental.model_account_analytic_contract
 msgid "account.analytic.contract"
 msgstr "contrat"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_account_analytic_invoice_line
+msgid "account.analytic.invoice.line"
+msgstr "Ligne de contrat"
 
