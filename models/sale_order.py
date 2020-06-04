@@ -17,8 +17,12 @@ class ProductRentalSaleOrder(models.Model):
         u'Related contract count', compute='_compute_contract_count')
 
     def _compute_contract_count(self):
+        model = self.env['account.analytic.account']
         for sale in self:
-            sale.contract_count = len(sale.order_line.mapped('contract_id'))
+            sale.contract_count = model.search_count([
+                ('recurring_invoice_line_ids.sale_order_line_id.order_id',
+                 '=', sale.id),
+        ])
 
     @api.depends(
         'order_line',
@@ -63,7 +67,10 @@ class ProductRentalSaleOrder(models.Model):
         return email_act
 
     def button_open_contracts(self):
-        contracts = self.mapped('order_line.contract_id')
+        contracts = self.env['account.analytic.account'].search([
+            ('recurring_invoice_line_ids.sale_order_line_id.order_id',
+             'in', self.ids),
+        ])
         result = {
             'type': 'ir.actions.act_window',
             'res_model': 'account.analytic.account',
