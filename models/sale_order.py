@@ -1,6 +1,7 @@
 import logging
 
 from odoo import api, models, fields
+from odoo.tools.translate import _
 
 
 _logger = logging.getLogger(__name__)
@@ -60,3 +61,25 @@ class ProductRentalSaleOrder(models.Model):
             email_act['context'].setdefault(
                 'default_attachment_ids', []).append((6, 0, ids))
         return email_act
+
+    def button_open_contracts(self):
+        contracts = self.mapped('order_line.contract_id')
+        result = {
+            'type': 'ir.actions.act_window',
+            'res_model': 'account.analytic.account',
+            'domain': [('id', 'in', contracts.ids)],
+            'name': _('Related contracts'),
+            'context': {'is_contract': 1},
+        }
+        if len(contracts) == 1:  # single contract: display it directly
+            view_types = ['form']
+            result['res_id'] = contracts.id
+        else:  # display a list
+            view_types = ['list', 'form']
+        view_xmlids = {
+            'list': 'contract.view_account_analytic_account_journal_tree',
+            'form': 'contract.account_analytic_account_recurring_form_form',
+        }
+        views = [self.env.ref(view_xmlids[t]) for t in view_types]
+        result['views'] = [(v.id, v.type) for v in views]
+        return result
