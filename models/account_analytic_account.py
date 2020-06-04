@@ -1,6 +1,7 @@
 import logging
 
-from odoo import api, models
+from odoo import api, models,fields
+from odoo.tools.translate import _
 
 
 _logger = logging.getLogger(__name__)
@@ -76,3 +77,20 @@ class ProductRentalAccountAnalyticAccount(models.Model):
                 contract_lines.append(new_line)
 
         return contract_lines
+
+    def button_open_sales(self):
+        sales = self.mapped(
+            'recurring_invoice_line_ids.sale_order_line_id.order_id')
+        result = {
+            'type': 'ir.actions.act_window',
+            'res_model': 'sale.order',
+            'domain': [('id', 'in', sales.ids)],
+            'name': _('Related sales'),
+        }
+        if len(sales) == 1:  # single sale: display it directly
+            views = [(False, 'form')]
+            result['res_id'] = sales.id
+        else:  # display a list
+            views = [(False, 'list'), (False, 'form')]
+        result['views'] = views
+        return result
