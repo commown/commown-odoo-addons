@@ -14,6 +14,7 @@
     },
     'depends': [
         'project',
+        'commown_shipping',
     ],
     'data': [
         'data/FP2/camera/form.xml',
