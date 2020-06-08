@@ -463,5 +463,13 @@ def check_sale_complete(sale):
                 so_line.product_id.product_tmpl_id.id)
 
 
+def fix_mail_templates(env):
+    for mt in env['mail.template'].search([('body_html', 'like', 'rental_contract_tmpl_id')]):
+        mt.body_html = mt.body_html.replace(
+            u'rental_contract_tmpl_id', u'contract_template_id')
+
+
 def migrate(cr, version):
-    link_sales_and_contracts(Environment(cr, SUPERUSER_ID, {}))
+    env = Environment(cr, SUPERUSER_ID, {})
+    link_sales_and_contracts(env)
+    fix_mail_templates(env)
