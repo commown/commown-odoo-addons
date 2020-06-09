@@ -6,7 +6,7 @@
 {
     'name': 'Commown contractual issues management',
     'category': '',
-    'version': '10.0.0.0.3',
+    'version': '10.0.0.0.4',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.coop",
