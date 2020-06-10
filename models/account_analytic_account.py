@@ -11,6 +11,7 @@ CONTRACT_ACCESSORY_MARKER = '##ACCESSORY##'
 
 
 def rental_product_price(product, partner):
+    assert partner, 'Cannot compute rental product price: no partner'
     while partner.parent_id:
         partner = partner.parent_id
     tax = partner.property_account_receivable_id.tax_ids
@@ -42,7 +43,7 @@ class ProductRentalAccountAnalyticAccount(models.Model):
             return new_lines
 
         contract_lines = []
-        partner = contract.partner_id
+        partner = sale_context['main_so_line'].order_id.partner_id
         rental_products = {
             CONTRACT_PROD_MARKER: [
                 (sale_context['main_product'], sale_context['main_so_line'], 1)

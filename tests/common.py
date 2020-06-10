@@ -99,4 +99,3 @@ class RentalSaleOrderTC(TransactionCase):
         kwargs.setdefault('specific_price', 0.)
         kwargs.setdefault('quantity', 1)
         return (0, 0, kwargs)
-
