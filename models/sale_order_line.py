@@ -7,6 +7,9 @@ from odoo import api, models
 _logger = logging.getLogger(__name__)
 
 
+NO_DATE = '2030-01-01'
+
+
 class ProductRentalSaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
@@ -19,6 +22,8 @@ class ProductRentalSaleOrderLine(models.Model):
         data.update({
             'name': '%s-%02d' % (order.name, index),
             'is_auto_pay': False,
+            'date_start': NO_DATE,
+            'recurring_next_date': NO_DATE,
         })
         return data
 

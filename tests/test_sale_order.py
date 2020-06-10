@@ -19,7 +19,7 @@ class SaleOrderTC(RentalSaleOrderTC):
             for l in c.recurring_invoice_line_ids)
         #self.assertEqual(sale_monthly_amount, 195)
 
-        self.assertEqual(len(contracts), 3)
+        self.assertEqual(contracts.mapped('date_start'), 3 * ['2030-01-01'])
         c1, c2, c3 = contracts
 
         ilines1 = c1.recurring_invoice_line_ids
