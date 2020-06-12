@@ -1,7 +1,7 @@
 import logging
 from base64 import b64decode
 
-from odoo.tools.mimetypes import guess_mimetype
+import magic
 
 from odoo import models, fields, tools, api, _
 
@@ -57,7 +57,7 @@ class CommownPartner(models.Model):
             b64value = vals.get(field)
             if b64value:
                 value = b64decode(b64value)
-                if guess_mimetype(value).startswith('image'):
+                if magic.from_buffer(value, mime=True).startswith('image'):
                     vals[field] = tools.image_resize_image(
                         b64value, avoid_if_small=True,
                         size=self.max_doc_image_size)
