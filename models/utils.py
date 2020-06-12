@@ -2,6 +2,8 @@ import os.path as osp
 import json
 import logging
 
+from odoo.exceptions import MissingError
+
 from odoo.addons.payment_slimpay.models import slimpay_utils
 
 
@@ -115,7 +117,7 @@ def replace_mandate(acquirer, mandate_repr):
     in the context of given `acquirer`.
     """
     partner = acquirer.env['res.partner'].browse(
-        mandate_repr['subscriber']['reference'])
+        mandate_repr['subscriber']['reference']).ensure_one()
     # Fix wrong data for companies and missing country
     if partner.is_company:
         mandate_repr['signatory']['givenName'] = '-'
@@ -166,7 +168,12 @@ def restore_all_missing_mandates(
     for mandate_repr in mandates_repr:
         ref = mandate_repr['reference'] = 'TEST' + mandate_repr['reference'][4:]
         if ref not in known_mandate_refs:
-            replace_mandate(acquirer, mandate_repr)
+            try:
+                replace_mandate(acquirer, mandate_repr)
+            except MissingError:
+                print "Could not replace mandate for %s" % mandate_repr[
+                    'signatory']['email']
+                continue
             mandate_repr_ = get_all_mandates_repr(
                 acquirer, mandate_doc_ref, mandateReference=ref).next()
             known_mandate_refs[ref] = mandate_repr_
