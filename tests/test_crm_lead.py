@@ -12,6 +12,7 @@ class CrmLeadTC(TransactionCase):
             'partner_id': self.env.ref('portal.demo_user0_res_partner').id,
             'type': 'opportunity',
             'team_id': self.env.ref('sales_team.salesteam_website_sales').id,
+            'send_email_on_delivery': False,
         })
 
     def _link_lead_to_contract(self):
