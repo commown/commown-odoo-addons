@@ -113,53 +113,14 @@ for so_line in record.order_line:
     </field>
   </record>
 
-  <record id="action_add_receivable_account" model="ir.actions.server">
-    <field name="name">[commown] Add receivable account</field>
+  <record id="order_sent" model="base.action.rule">
+    <field name="name">[Commown] Sale done</field>
     <field name="model_id" ref="sale.model_sale_order"/>
-    <field name="sequence">30</field>
-    <field name="state">code</field>
-    <field name="code">
-# If partner's receivable account does not exist or is a standard one,
-# create an account dedicated to the partner.
-# For employees of a company, go up the parent_id hierarchy and create
-# the account there.
-
-partner = record.partner_id
-
-while partner.parent_id:
-    partner = partner.parent_id
-
-account = partner.property_account_receivable_id
-if not account or account.get_xml_id().get(account.id) == 'l10n_fr.1_fr_pcg_recv':
-    account = env['account.account'].create({
-        'code': '411-C-%s' % partner.id,
-        'name': partner.name,
-        'tag_ids': [(6, 0, [env.ref('account.account_tag_operating').id])],
-        'user_type_id': env.ref('account.data_account_type_receivable').id,
-        'tax_ids': [(6, 0, [env.ref('l10n_fr.1_tva_normale').id])],
-        'reconcile': True,
-    })
-
-    partner.update({'property_account_receivable_id': account.id})
-    </field>
+    <field name="sequence">1</field>
+    <field name="kind">on_write</field>
+    <field name="filter_pre_domain">['|', ('state', '=', 'draft'), ('state', '=', 'sent')]</field>
+    <field name="filter_domain">[('state', '=', 'sale')]</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('commown.action_add_followup_lead')])]"/>
   </record>
-
-  <record id="product_rental.order_sent" model="base.action.rule">
-    <field name="name">[commown] Sale done</field>
-    <field name="server_action_ids" eval="[(4,ref('commown.action_add_to_support_groups'), False)]"/>
-  </record>
-
-  <record id="product_rental.order_sent" model="base.action.rule">
-    <field name="server_action_ids" eval="[(4,ref('commown.action_add_investor_management_task'), False)]"/>
-  </record>
-
-  <record id="product_rental.order_sent" model="base.action.rule">
-    <field name="server_action_ids" eval="[(4,ref('commown.action_add_followup_lead'), False)]"/>
-  </record>
-
-  <record id="product_rental.order_sent" model="base.action.rule">
-    <field name="server_action_ids" eval="[(4,ref('commown.action_add_receivable_account'), False)]"/>
-  </record>
-
 
 </odoo>

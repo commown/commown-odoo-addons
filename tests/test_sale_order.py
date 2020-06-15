@@ -117,10 +117,9 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
     def test_add_receivable_account(self):
         " Buying a product must add the buyer a dedicated receivable account "
 
-        # Trigger the automatic action
-        self.so.write({'state': 'sale'})
+        self.so.action_confirm()
 
-        # Check effects
-        partner = self.so.partner_id
-        self.assertEqual(partner.property_account_receivable_id.name,
-                         partner.name)
+        account = self.so.partner_id.property_account_receivable_id
+        self.assertEqual(account.name, self.so.partner_id.name)
+        self.assertEqual(account.code, '411-C-%d' % self.so.partner_id.id)
+        self.assertEqual(account.tax_ids, self.env.ref('l10n_fr.1_tva_normale'))
