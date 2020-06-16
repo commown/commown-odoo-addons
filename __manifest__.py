@@ -4,8 +4,12 @@
     'name': 'Custom reports',
     'category': 'Custom',
     'summary': 'Custom reports',
-    'version': '10.0.1.0.0',
-    'description': """This module adds custom reports.""",
+    'version': '12.0.1.0.0',
+    'description': """
+    Custom Reports
+    ==============
+    This module adds custom reports.
+    """,
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.fr",
@@ -19,7 +23,7 @@
     ],
     'data': [
         'data/fusion_server.xml',
-        'report/reports.xml',
+        'report/report.xml',
     ],
     'installable': True,
     'application': True,

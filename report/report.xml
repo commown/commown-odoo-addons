@@ -2,20 +2,20 @@
 <odoo>
     
 <!-- invoice report -->
-<record id="account.account_invoices" model="ir.actions.report.xml">
+<record id="account.account_invoices" model="ir.actions.report">
     <field name="report_type">py3o</field>
-    <field name="py3o_filetype">pdf</field>
-    <field name="py3o_server_id" ref="py3o_server"/>
     <field name="module">custom_report</field>
     <field name="py3o_template_fallback">report/account_invoice.odt</field>
+    <field name="py3o_server_id" ref="py3o_server"/>
+    <field name="py3o_filetype">pdf</field>
 </record>
 
-<record id="account.account_invoice_action_report_duplicate" model="ir.actions.report.xml">
+<record id="account.account_invoices_without_payment" model="ir.actions.report">
     <field name="report_type">py3o</field>
-    <field name="py3o_filetype">pdf</field>
-    <field name="py3o_server_id" ref="py3o_server"/>
     <field name="module">custom_report</field>
     <field name="py3o_template_fallback">report/account_invoice.odt</field>
+    <field name="py3o_server_id" ref="py3o_server"/>
+    <field name="py3o_filetype">pdf</field>
 </record>
 
 </odoo>
