@@ -3,10 +3,11 @@ import account_analytic_contract
 import account_invoice
 import coupon
 import mass_reconcile
+import payment
 import product_template
+import project_task_type
 import res_groups
 import res_partner
 import res_user
 import sale_order
 import simple_reconciliation
-import project_task_type
