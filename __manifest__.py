@@ -23,6 +23,8 @@
         'data/FP2/micro/issue_template.xml',
         'data/FP2/battery/form.xml',
         'data/FP2/battery/issue_template.xml',
+        'data/FP3/screen_protection/form.xml',
+        'data/FP3/screen_protection/issue_template.xml',
         'data/GS/form_day.xml',
         'data/GS/issue_template.xml',
         'data/common_steps.xml',
