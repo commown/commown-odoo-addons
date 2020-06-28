@@ -2,6 +2,14 @@
 <odoo>
   <data noupdate="1">
 
+    <template id="commown-signature">
+        <p>
+            --<br/>
+            L'équipe Commown.<br/>
+            --
+        </p>
+    </template>
+
     <template id="step-contract-choice">
       <t t-set="contracts"
          t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
@@ -135,11 +143,7 @@
         page.
         </p>
 
-        --<br/>
-        <p>L'équipe Commown,<br/>
-        <img alt="logo" src="https://shop.commown.coop/web/content/25787"/>
-        </p>
-        --<br/>
+        <t t-call="commown_self_troubleshooting.commown-signature"/>
 
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
@@ -166,11 +170,7 @@
         notre intention en expliquant au mieux le souci
         que vous rencontrez ci-dessous.</p>
 
-        --<br/>
-        <p>L'équipe Commown,<br/>
-        <img alt="logo" src="https://shop.commown.coop/web/content/25787"/>
-        </p>
-        --<br/>
+        <t t-call="commown_self_troubleshooting.commown-signature"/>
 
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
@@ -210,11 +210,7 @@
         section "Mes demandes d'assistance" pour en suivre l'avancement et en consulter l'historique.
         </p>
 
-        <p>
-            --<br/>
-            L'équipe Commown.<br/>
-            --
-        </p>
+        <t t-call="commown_self_troubleshooting.commown-signature"/>
 
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
@@ -251,11 +247,7 @@
         l'attention de notre équipe de support, si besoin.
         </p>
 
-        --<br/>
-        <p>L'équipe Commown,<br/>
-        <img alt="logo" src="https://shop.commown.coop/web/content/25787"/>
-        </p>
-        --<br/>
+        <t t-call="commown_self_troubleshooting.commown-signature"/>
 
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
