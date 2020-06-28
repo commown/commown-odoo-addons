@@ -12,6 +12,10 @@
       <field name="name">Pending</field>
     </record>
 
+    <record id="stage_received" model="project.task.type">
+      <field name="name">Received</field>
+    </record>
+
     <record id="stage_solved" model="project.task.type">
       <field name="name">Solved</field>
     </record>
