@@ -64,9 +64,11 @@ function setUpWizard($container) {
             }),
             currentStep: contactStep,
           });
+          $('.sw-btn-group').hide();
         }
         else {
           setState(wizard, $button, previousState);
+          $('.sw-btn-group').show();
         }
       });
   }
