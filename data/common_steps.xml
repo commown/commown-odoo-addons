@@ -204,10 +204,13 @@
     <template id="step-confirm-change">
       <div t-attf-id="step-{{ step }}">
         <h2><i class="fas fa-check-double"/> Confirmation de votre demande</h2>
-        <p>En appuyant sur le bouton ci-dessous vous confirmerez votre demande d'envoi.</p>
-        <p>Une demande d'assistance va être créée automatiquement lorsque vous aurez soumis ce
-        formulaire. Vous pourrez y accéder à tout moment depuis votre espace personnel, via la
-        section "Mes demandes d'assistance" pour en suivre l'avancement et en consulter l'historique.
+        <p>En appuyant sur le bouton ci-dessous vous confirmerez votre
+        demande d'envoi.</p>
+        <p>Une demande d'assistance va être créée automatiquement
+        lorsque vous aurez soumis ce formulaire. Vous pourrez y
+        accéder à tout moment depuis votre espace personnel, via la
+        section <i>Mes demandes d'assistance</i> pour en suivre
+        l'avancement et en consulter l'historique.
         </p>
 
         <t t-call="commown_self_troubleshooting.commown-signature"/>
@@ -240,11 +243,11 @@
         Nous pouvons vous en prêter un à nous retourner
         ensuite avec le module en panne.
         </p>
-        <p>Une demande d'assistance va être créée
-        automatiquement lorsque vous aurez soumis ce
-        formulaire. Elle sera affichée ici, ce qui vous
-        donnera l'opportunité d'ajouter un mot à
-        l'attention de notre équipe de support, si besoin.
+        <p>Une demande d'assistance va être créée automatiquement
+        lorsque vous aurez soumis ce formulaire. Vous pourrez y
+        accéder à tout moment depuis votre espace personnel, via la
+        section <i>Mes demandes d'assistance</i> pour en suivre
+        l'avancement et en consulter l'historique.
         </p>
 
         <t t-call="commown_self_troubleshooting.commown-signature"/>
