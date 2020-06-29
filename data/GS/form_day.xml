@@ -83,7 +83,8 @@
 
                   <div id="step-1">
                     <div class="clearfix">
-                      <img height="330" width="220" src="https://gerrardstreet.nl/wp-content/uploads/2019/05/GS-DAY-350x605-9.png" alt="Casque DAY"/>
+                      <img class="pull-left" alt="Casque DAY"
+                           src="/commown_self_troubleshooting/static/images/GS/day.png"/>
                       <h2>Type de problème</h2>
                     </div>
                     <div id="form-step-1" role="form" data-toggle="validator">
@@ -108,10 +109,10 @@
                         Si vous trouvez une position dans laquelle le son est présent cela confirme qu'il y a un faux contact
                         et nous vous enverrons un nouveau câble. Faites ce test avec les deux extrémités du câble, pour les
                         deux prises <i>jack</i>. L'image ci-dessous représente une extrémité du câble, du côté du casque.</p>
-                        <br />
                         <br/>
-                        <img height="300" width="200" src="https://odoo.commown.fr/web/image/42350?" alt="câble"/>
-                        <br />
+                        <br/>
+                        <img alt="câble" src="/commown_self_troubleshooting/static/images/GS/cable.png"/>
+                        <br/>
                         <br/>
                         <label>Est-ce que le son est revenu à la normale pendant ce test ?</label>
                         <label class="radio-inline" for="cable_sound-yes">Oui</label>
@@ -130,7 +131,7 @@
                         <p> Les connecteurs USB-C sont sûrement mal branchés ! Afin de vérifier cela, veuillez débrancher puis
                         rebrancher les connecteurs et s'assurer que vous entendez bien un petit "clic" lors du branchement.
                         Si cela ne résout pas votre problème, nous vous enverrons alors un autre casque.</p>
-                        <img height="300" width="250" src="https://odoo.commown.fr/web/image/42351?" alt="Connecteur"/>
+                        <img alt="Connecteur" src="/commown_self_troubleshooting/static/images/GS/connector.png" />
                         <br />
                         <br />
                         <label>Entendez-vous du son dans les deux haut-parleurs ?</label>
@@ -149,7 +150,7 @@
                     Veuillez vérifier que le câble est orienté de façon à avoir le microphone en haut et non en bas.
                     Si ce n'est pas le cas, branchez le câble comme sur l'image ci-dessous. Si cela ne résout
                     pas votre problème, nous vous enverrons alors un autre casque.</p>
-                    <img height="300" width="250" src="https://odoo.commown.fr/web/content/42352?" alt="branchement"/>
+                    <img alt="branchement" src="/commown_self_troubleshooting/static/images/GS/plug.png"/>
                     <div id="form-step-4" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label>Est ce que cela a permis de résoudre le problème ?</label>
