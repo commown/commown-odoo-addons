@@ -8,5 +8,10 @@
       <field name="use_issues">False</field>
     </record>
 
+    <record id="investment_followup_start_stage" model="project.task.type">
+      <field name="name">Initial amount paid on website</field>
+      <field name="project_id" ref="commown.investment_followup_project"/>
+    </record>
+
   </data>
 </odoo>
