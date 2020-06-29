@@ -52,9 +52,6 @@
             <t t-set="tag_names">Appareil GS Day</t>
             <t t-set="issue_title">Casque DAY - Son</t>
             <t t-set="issue_description_template">issue-description-gs</t>
-            <t t-set="stage_pending" t-value="env.ref('commown_self_troubleshooting.stage_pending').id"/>
-            <t t-set="stage_solved" t-value="env.ref('commown_self_troubleshooting.stage_solved').id"/>
-            <t t-set="stage_long_term_followup" t-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
             <!-- Fin des variables à modifier -->
 
             <div class="container">

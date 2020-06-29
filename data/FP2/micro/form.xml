@@ -42,9 +42,6 @@
             <t t-set="tag_names">Appareil FP2,FP MOD micro</t>
             <t t-set="issue_title">FP2 - Micro</t>
             <t t-set="issue_description_template">issue-description-fp2-micro</t>
-            <t t-set="stage_pending" t-value="env.ref('commown_self_troubleshooting.stage_pending').id"/>
-            <t t-set="stage_solved" t-value="env.ref('commown_self_troubleshooting.stage_solved').id"/>
-            <t t-set="stage_long_term_followup" t-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
             <!-- Fin des variables à modifier -->
 
             <div class="container">
@@ -134,7 +131,8 @@
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" name="stage_id" t-att-value="stage_long_term_followup"/>
+                          <input type="hidden" name="stage_id"
+                                 t-att-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
                           <button type="submit" class="btn btn-primary" name="action" value="wait-simcard">Envoyer les informations</button>
                         </div>
                       </div>
