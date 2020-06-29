@@ -6,7 +6,7 @@
 {
     'name': 'Commown Self Troubleshooting',
     'category': '',
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.0.1',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
     'website': "https://commown.coop",
