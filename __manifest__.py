@@ -18,7 +18,7 @@
         'commown_shipping',
         'commown_lead_risk_analysis',
         'contract_auto_merge_invoice',
-        'payment_slimpay',
+        'payment_slimpay_website_sale',
         'payment_slimpay_issue',
         'product_rental',
         'rating_project_issue_nps',
