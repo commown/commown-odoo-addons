@@ -1,9 +1,9 @@
-import keychain
-import parcel
-import mixins
-import crm_lead
-import project_issue
-import crm_team
-import project
-import product
-import res_partner
+from . import keychain
+from . import parcel
+from . import mixins
+from . import crm_lead
+from . import project_issue
+from . import crm_team
+from . import project
+from . import product
+from . import res_partner

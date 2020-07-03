@@ -1,31 +1,35 @@
 from datetime import datetime
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class CrmLead(models.Model):
-    _name = 'crm.lead'
-    _inherit = ['crm.lead', 'commown.shipping.mixin']
+    _name = "crm.lead"
+    _inherit = ["crm.lead", "commown.shipping.mixin"]
 
-    _shipping_parent_rel = 'team_id'
+    _shipping_parent_rel = "team_id"
 
     expedition_ref = fields.Text("Expedition reference", size=64)
     expedition_date = fields.Date("Expedition Date")
     expedition_status = fields.Text("Expedition status", size=256)
-    expedition_status_fetch_date = fields.Datetime(
-        "Expedition status fetch date")
+    expedition_status_fetch_date = fields.Datetime("Expedition status fetch date")
     expedition_urgency_mail_sent = fields.Boolean(
-        "Expedition urgency mail send", default=False)
+        "Expedition urgency mail send", default=False
+    )
     delivery_date = fields.Date("Delivery Date")
     start_contract_on_delivery = fields.Boolean(
-        default=True, string='Automatic contract start on delivery')
+        default=True, string="Automatic contract start on delivery"
+    )
     send_email_on_delivery = fields.Boolean(
-        default=True, string='Automatic email on delivery')
+        default=True, string="Automatic email on delivery"
+    )
     on_delivery_email_template_id = fields.Many2one(
-        'mail.template', string='Custom email model for this lead')
-    so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
+        "mail.template", string="Custom email model for this lead"
+    )
+    so_line_id = fields.Many2one("sale.order.line", "Ligne de commande")
     used_for_shipping = fields.Boolean(
-        'Used for shipping', related='team_id.used_for_shipping')
+        "Used for shipping", related="team_id.used_for_shipping"
+    )
 
     @api.multi
     def delivery_email_template(self):
@@ -34,33 +38,39 @@ class CrmLead(models.Model):
         delivery mail template if any. Return None if all other cases.
         """
         self.ensure_one()
-        return self.team_id and self.team_id.used_for_shipping and (
-            self.on_delivery_email_template_id
-            or self.team_id.on_delivery_email_template_id
-            ) or None
+        return (
+            self.team_id
+            and self.team_id.used_for_shipping
+            and (
+                self.on_delivery_email_template_id
+                or self.team_id.on_delivery_email_template_id
+            )
+            or None
+        )
 
     @api.multi
     def _default_shipping_parcel_type(self):
-        return self.mapped('so_line_id.product_id.shipping_parcel_type_id')
+        return self.mapped("so_line_id.product_id.shipping_parcel_type_id")
 
     @api.multi
     def _attachment_from_label(self, name, meta_data, label_data):
-        self.update({
-            'expedition_ref': meta_data['labelResponse']['parcelNumber'],
-            'expedition_date': datetime.today(),
-            'delivery_date': False  ,
-        })
-        return super(CrmLead, self)._attachment_from_label(
-            name, meta_data, label_data)
-
+        self.update(
+            {
+                "expedition_ref": meta_data["labelResponse"]["parcelNumber"],
+                "expedition_date": datetime.today(),
+                "delivery_date": False,
+            }
+        )
+        return super(CrmLead, self)._attachment_from_label(name, meta_data, label_data)
 
     @api.multi
     def parcel_labels(self, parcel_name=None, force_single=False):
 
         if parcel_name is not None:
             return super(CrmLead, self).parcel_labels(
-                parcel_name, force_single=force_single)
+                parcel_name, force_single=force_single
+            )
         else:
             return self._print_parcel_labels(
-                self._default_shipping_parcel_type(),
-                force_single=force_single)
+                self._default_shipping_parcel_type(), force_single=force_single
+            )

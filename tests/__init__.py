@@ -1,2 +1,2 @@
-import test_crm_lead
-import test_project_issue
+from . import test_crm_lead
+from . import test_project_issue
