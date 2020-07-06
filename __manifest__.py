@@ -6,7 +6,7 @@
     'description': "Commown SCIC SAS business application",
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://commown.coop",
     'depends': [
         # Commown modules
         'account_asset_fiscal_year',
