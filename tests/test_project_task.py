@@ -11,35 +11,38 @@ from .common import BaseShippingTC, pdf_page_num
 class ProjectIssueTC(BaseShippingTC):
     def setUp(self):
         super(ProjectIssueTC, self).setUp()
-        self.issue = self.env.ref("project_issue.crm_case_buginaccountsmodule0")
-        self.issue.project_id.update({"shipping_account_id": self.shipping_account.id})
+        self.task = self.env.ref("project_task.crm_case_buginaccountsmodule0")
+        self.task.project_id.update({
+            "shipping_account_id": self.shipping_account,
+            "shipping_password": self.shipping_password
+        })
 
     def test_print_parcel_actions(self):
 
-        orig_issue = self.issue.with_context(mail_notrack=True)
+        orig_task = self.task.with_context(mail_notrack=True)
 
-        issues = self.env["project.issue"]
+        tasks = self.env["project.task"]
         for num in range(5):
-            issues += orig_issue.copy({"name": "[SO%05d] Test lead" % num,})
+            tasks += orig_task.copy({"name": "[SO%05d] Test lead" % num, })
 
         ref = self.env.ref
-        act_out = ref("commown_shipping.action_print_outward_fp2_label_issue")
+        act_out = ref("commown_shipping.action_print_outward_fp2_label_task")
 
         with mock.patch.object(requests, "post", return_value=self.fake_resp):
             download_action = act_out.with_context(
-                {"active_model": issues._name, "active_ids": issues.ids}
+                {"active_model": tasks._name, "active_ids": tasks.ids}
             ).run()
 
         all_labels = self._attachment_from_download_action(download_action)
         self.assertEqual(all_labels.name, self.parcel_type.name + ".pdf")
         self.assertEqual(pdf_page_num(all_labels), 2)
 
-        act_ret = ref("commown_shipping.action_print_return_fp2_label_issue")
+        act_ret = ref("commown_shipping.action_print_return_fp2_label_task")
 
-        issue = orig_issue.copy({"name": "[Test single]"})
+        task = orig_task.copy({"name": "[Test single]"})
         with mock.patch.object(requests, "post", return_value=self.fake_resp):
             download_action = act_ret.with_context(
-                {"active_model": issues._name, "active_id": issue.ids}
+                {"active_model": tasks._name, "active_id": task.ids}
             ).run()
 
         label = self._attachment_from_download_action(download_action)

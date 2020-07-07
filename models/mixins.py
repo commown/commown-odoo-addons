@@ -33,24 +33,29 @@ class CommownShippingMixin(models.AbstractModel):
         return self._shipping_parent().mapped("shipping_account_id")
 
     @api.multi
-    def _create_parcel_label(self, parcel, account, recipient, ref):
+    def _create_parcel_label(
+            self, parcel, shipping_account, shipping_password, recipient, ref):
         """ Generate a new label from following arguments:
         - parcel: a commown.parcel.type entity
-        - account: a keychain.account entity which namespace is "colissimo"
+        - shipping_account: Shipping Account for colissimo
+        (use server_env to encrypt data)
+        - shipping_password: Shipping Password for colissimo
+        (use server_env to encrypt data)
         - recipient: the recipient res.partner entity
         - ref: a string reference to be printed on the parcel
         """
         self.ensure_one()
 
         meta_data, label_data = parcel.colissimo_label(
-            account, parcel.sender, recipient, ref
+            shipping_account, shipping_password, parcel.sender, recipient, ref
         )
 
         if meta_data and not label_data:
             raise ValueError(json.dumps(meta_data))
         assert meta_data and label_data
 
-        return self._attachment_from_label(parcel.name + ".pdf", meta_data, label_data)
+        return self._attachment_from_label(
+            parcel.name + ".pdf", meta_data, label_data)
 
     @api.multi
     def _attachment_from_label(self, name, meta_data, label_data):
@@ -60,12 +65,12 @@ class CommownShippingMixin(models.AbstractModel):
                 "res_id": self.id,
                 "mimetype": "application/pdf",
                 "datas": b64encode(label_data),
-                "datas_fname": meta_data["labelResponse"]["parcelNumber"] + ".pdf",
+                "datas_fname": meta_data["labelResponse"]["parcelNumber"] +
+                ".pdf",
                 "name": name,
                 "public": False,
                 "type": "binary",
-            }
-        )
+            })
 
     @api.multi
     def label_attachment(self, parcel):
@@ -170,7 +175,7 @@ class CommownShippingMixin(models.AbstractModel):
                     continue
                 try:
                     os.unlink(p)
-                except:
+                except BaseException:
                     _logger.error("Could not remove tmp label file %r", p)
 
     @api.multi
@@ -178,7 +183,7 @@ class CommownShippingMixin(models.AbstractModel):
 
         parcel = (
             self.env["commown.parcel.type"]
-            .search([("technical_name", "=", parcel_name),])
+            .search([("technical_name", "=", parcel_name), ])
             .ensure_one()
         )
 
@@ -188,8 +193,5 @@ class CommownShippingMixin(models.AbstractModel):
 class CommownShippingParentMixin(models.AbstractModel):
     _name = "commown.shipping.parent.mixin"
 
-    shipping_account_id = fields.Many2one(
-        "keychain.account",
-        string="Shipping account",
-        domain="[('namespace', '=', 'colissimo')]",
-    )
+    shipping_account = fields.Char()
+    shipping_password = fields.Char()

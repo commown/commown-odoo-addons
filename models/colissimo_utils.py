@@ -81,7 +81,8 @@ def delivery_data(partner):
                 result_data = partner_data
                 result_data["BP"] = match.groupdict()["bp"]
         if result_data is None:
-            result_data = delivery_data(partner.env["res.partner"].browse(delivery_id))
+            result_data = delivery_data(
+                partner.env["res.partner"].browse(delivery_id))
             # Add fallback contact values if not set in delivery contact:
             for attr in "phoneNumber", "mobileNumber", "email", "companyName":
                 if not result_data.get(attr) and attr in partner_data:
@@ -132,7 +133,8 @@ def shipping_data(
     if deposit_date is None:
         deposit_date = datetime.today()
 
-    if any(p.country_id and p.country_id.code != "FR" for p in (sender, recipient)):
+    if any(p.country_id and p.country_id.code !=
+           "FR" for p in (sender, recipient)):
         # Colissimo Export/ Return International
         product_code = "COLI" if not is_return else "CORI"
     else:

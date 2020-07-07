@@ -54,15 +54,8 @@ class BaseShippingTC(TransactionCase):
         with open(osp.join(HERE, "fake_label.pdf")) as fobj:
             self.fake_label_data = fobj.read()
         self.fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
-        self.shipping_account = self.env["keychain.account"].create(
-            {
-                "namespace": "colissimo",
-                "name": "Colissimo standard",
-                "technical_name": "colissmo-std",
-                "login": "ColissimoLogin",
-                "clear_password": "test",
-            }
-        )
+        self.shipping_account = "ColissimoLogin"
+        self.shipping_password = "test"
         self.parcel_type = self.env.ref("commown_shipping.fp2-outward-ins300")
 
     def assertEqualFakeLabel(self, ir_attachment):

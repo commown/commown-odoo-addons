@@ -12,7 +12,8 @@ class CrmLead(models.Model):
     expedition_ref = fields.Text("Expedition reference", size=64)
     expedition_date = fields.Date("Expedition Date")
     expedition_status = fields.Text("Expedition status", size=256)
-    expedition_status_fetch_date = fields.Datetime("Expedition status fetch date")
+    expedition_status_fetch_date = fields.Datetime(
+        "Expedition status fetch date")
     expedition_urgency_mail_sent = fields.Boolean(
         "Expedition urgency mail send", default=False
     )
@@ -61,7 +62,12 @@ class CrmLead(models.Model):
                 "delivery_date": False,
             }
         )
-        return super(CrmLead, self)._attachment_from_label(name, meta_data, label_data)
+        return super(
+            CrmLead,
+            self)._attachment_from_label(
+            name,
+            meta_data,
+            label_data)
 
     @api.multi
     def parcel_labels(self, parcel_name=None, force_single=False):

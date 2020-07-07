@@ -17,11 +17,13 @@ class CrmLeadShippingTC(BaseShippingTC):
         super(CrmLeadShippingTC, self).setUp()
 
         portal_partner = self.env.ref("portal.demo_user0_res_partner")
-        product = self.env["product.product"].create(
-            {"name": "Fairphone", "shipping_parcel_type_id": self.parcel_type.id,}
-        )
+        product = self.env["product.product"].create({
+            "name": "Fairphone",
+            "shipping_parcel_type_id": self.parcel_type.id,
+        })
         team = self.env.ref("sales_team.salesteam_website_sales")
-        team.update({"shipping_account_id": self.shipping_account.id})
+        team.update({"shipping_account": self.shipping_account,
+                     "shipping_password": self.shipping_password})
 
         so = self.env["sale.order"].create(
             {
@@ -97,7 +99,7 @@ class CrmLeadShippingTC(BaseShippingTC):
         """ When a partner has a too long address, a user error is raised
         with its name (useful when printing several labels at once).
         """
-        other_partner = self.lead.partner_id.copy({"street": "x" * 100,})
+        other_partner = self.lead.partner_id.copy({"street": "x" * 100, })
         other_partner.name = "John TestAddressTooLong"
 
         leads = self.env["crm.lead"]
@@ -108,9 +110,8 @@ class CrmLeadShippingTC(BaseShippingTC):
 
         with self.assertRaises(UserError) as err:
             self._print_outward_labels(leads)
-        self.assertEqual(
-            err.exception.name, 'Address too long for "John TestAddressTooLong"'
-        )
+        self.assertEqual(err.exception.name,
+                         'Address too long for "John TestAddressTooLong"')
 
     def test_create_parcel_label(self):
         lead = self.lead
@@ -119,14 +120,17 @@ class CrmLeadShippingTC(BaseShippingTC):
             lead._create_parcel_label(
                 self.parcel_type,
                 self.shipping_account,
+                self.shipping_password,
                 lead.partner_id,
                 lead.get_label_ref(),
             )
 
         self.assertEqual(lead.expedition_ref, "6X0000000000")
-        self.assertEqual(lead.expedition_date, datetime.today().strftime("%Y-%m-%d"))
+        self.assertEqual(
+            lead.expedition_date,
+            datetime.today().strftime("%Y-%m-%d"))
         attachments = self.env["ir.attachment"].search(
-            [("res_model", "=", "crm.lead"), ("res_id", "=", lead.id),]
+            [("res_model", "=", "crm.lead"), ("res_id", "=", lead.id), ]
         )
         self.assertEqual(len(attachments), 1)
         att = attachments[0]
@@ -202,8 +206,8 @@ class CrmLeadDeliveryTC(TransactionCase):
             self.lead.team_id.on_delivery_email_template_id.copy().id
         )
         self.assertEqual(
-            self.lead.delivery_email_template().name, "Post-delivery email (copy)"
-        )
+            self.lead.delivery_email_template().name,
+            "Post-delivery email (copy)")
 
         # Shipping deactivated, even with custom template => None expected
         self.lead.team_id.used_for_shipping = False
@@ -236,9 +240,9 @@ class CrmLeadDeliveryTC(TransactionCase):
 
         self.assertTrue(self.lead.send_email_on_delivery)
 
-        self.lead.on_delivery_email_template_id = self.lead.team_id.on_delivery_email_template_id.copy(
-            {"subject": "Test custom email", "body": "coucou"}
-        ).id
+        self.lead.on_delivery_email_template_id =\
+            self.lead.team_id.on_delivery_email_template_id.copy(
+                {"subject": "Test custom email", "body": "coucou"}).id
 
         # Simulate delivery
         self.lead.expedition_status = "[LIVGAR] Test"
@@ -255,4 +259,6 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.lead.team_id.on_delivery_email_template_id = False
 
         # Simulate delivery
-        self.assertRaises(UserError, self.lead.update, {"delivery_date": "2018-01-01"})
+        self.assertRaises(
+            UserError, self.lead.update,
+            {"delivery_date": "2018-01-01"})

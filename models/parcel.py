@@ -8,16 +8,19 @@ class ParcelType(models.Model):
     _description = "Parcel description"
 
     name = fields.Char("Parcel name", required=True, index=True)
-    technical_name = fields.Char("Parcel technical name", required=True, index=True)
+    technical_name = fields.Char(
+        "Parcel technical name", required=True, index=True)
     weight = fields.Float("Weight (kg)", required=True)
-    insurance_value = fields.Float("Insurance value (€)", required=True, default=0.0)
+    insurance_value = fields.Float(
+        "Insurance value (€)", required=True, default=0.0)
     is_return = fields.Boolean("Return parcel", required=True, default=False)
 
     def _compute_default_sender(self):
         return self.env.ref("base.main_company").partner_id
 
     sender = fields.Many2one(
-        "res.partner", string="Sender", required=True, default=_compute_default_sender
+        "res.partner", string="Sender",
+        required=True, default=_compute_default_sender
     )
 
     _sql_constraints = [
@@ -34,10 +37,15 @@ class ParcelType(models.Model):
         ),
     ]
 
-    def colissimo_label(self, account, sender, recipient, ref=""):
+    def colissimo_label(
+            self, shipping_account, shipping_password,
+            sender, recipient, ref=""):
         """ Return the meta data and the PDF data of a colissimo label from:
 
-        - account: a keychain.account entity which namespace is "colissimo"
+        - shipping_account: Shipping Account for colissimo
+        (use server_env to encrypt data)
+        - shipping_password: Shipping Password for colissimo
+        (use server_env to encrypt data)
         - sender: the sender res.partner entity
         - recipient: the recipient res.partner entity
         - ref: a string reference to be printed on the parcel
@@ -47,8 +55,8 @@ class ParcelType(models.Model):
         commercial_name = self.env.ref("base.main_company").name
 
         return ship(
-            account.login,
-            account._get_password(),
+            shipping_account,
+            shipping_password,
             sender=sender,
             recipient=recipient,
             order_number=ref,

@@ -66,11 +66,11 @@ if 'uid' in env or object.send_email_on_delivery:
       </field>
     </record>
 
-    <record id="lead_product_delivered" model="base.action.rule">
+    <record id="lead_product_delivered" model="base.automation">
       <field name="name">[commown] Lead product delivered</field>
       <field name="model_id" ref="model_crm_lead" />
       <field name="sequence">1</field>
-      <field name="kind">on_write</field>
+      <field name="trigger">on_write</field>
       <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
       <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
       <field
