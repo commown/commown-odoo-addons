@@ -3,13 +3,14 @@ import logging
 from odoo import http
 from odoo.http import request
 
-from odoo.addons.payment_slimpay.controllers.main import SlimpayController
+from odoo.addons.payment_slimpay_website_sale.controllers.main \
+    import SlimpayControllerWebsiteSale
 
 
 _logger = logging.getLogger(__name__)
 
 
-class CommownSlimpayController(SlimpayController):
+class CommownSlimpayController(SlimpayControllerWebsiteSale):
 
     @http.route(['/payment/slimpay_transaction/<int:acquirer_id>'],
                 type='json', auth="public", website=True)
