@@ -14,15 +14,14 @@
     'license': "AGPL-3",
     'website': "https://commown.fr",
     'depends': [
-        'report_py3o_fusion_server',
+        'report_py3o',
         'account_usability',  # needed for account_invoice.has_discount (py3o)
         'base_company_extension',  # required for legal_type (py3o)
         'sale_usability',  # required for sale.layout_category (py3o)
-        'l10n_fr_siret',   # required for siret (py3o)
+        'l10n_fr',   # required for siret (py3o)
         'scic',     # required for is_equity (py3o)
     ],
     'data': [
-        'data/fusion_server.xml',
         'report/report.xml',
     ],
     'installable': True,

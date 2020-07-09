@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <record id="py3o_server" model="py3o.server">
-    	<!-- py3ofusion is defined in docker-compose -->
-		<field name="url">http://py3ofusion:8765/form</field>
-	</record>
- 		
-</odoo>
