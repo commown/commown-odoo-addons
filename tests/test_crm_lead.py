@@ -106,6 +106,18 @@ class CrmLeadShippingTC(BaseShippingTC):
         self.assertEqual(err.exception.name,
                          u'Address too long for "John TestAddressTooLong"')
 
+    def test_shipping_data_empty_name(self):
+        self.lead.partner_id.firstname = False
+        data = shipping_data(
+            sender=self.env['res.partner'],
+            recipient=self.lead.partner_id,
+            order_number= u'SO00000',
+            commercial_name=u'Commown',
+            weight=0.5,
+        )
+        self.assertEqual(data['letter']['addressee']['address']['firstName'],
+                         '')
+
     def test_create_parcel_label(self):
         lead = self.lead
 

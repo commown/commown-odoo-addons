@@ -54,8 +54,8 @@ def delivery_data(partner):
         if phonenumbers.number_type(fixed_obj) == MOBILE_TYPE:
             mobile, fixed = fixed, None
     partner_data = {
-        'lastName': partner.lastname,
-        'firstName': partner.firstname,
+        'lastName': partner.lastname or '',
+        'firstName': partner.firstname or '',
         'line2': partner.street,
         'countryCode': partner.country_id.code or 'FR',
         'city': partner.city,
