@@ -5,6 +5,7 @@ import coupon
 import mass_reconcile
 import payment
 import product_template
+import project_issue
 import project_task_type
 import res_groups
 import res_partner
