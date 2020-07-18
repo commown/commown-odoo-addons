@@ -12,6 +12,14 @@ class FakeDoc(dict):
     pass
 
 
+def next_payment_reference(value=None, counter=[0]):
+    if value is not None:
+        counter[0] = value
+    else:
+        counter[0] = counter[0] + 1
+    return 'slimpay_ref_%d' % counter[0]
+
+
 def issue_emails(issue):
     return issue.message_ids.filtered(lambda m: m.message_type == 'email')
 
@@ -22,7 +30,8 @@ def fake_action(method, func, *args, **kwargs):
     elif method == 'GET' and func == 'get-mandates':
         return {'reference': 'mandate ref'}
     elif method == 'POST' and func == 'create-payins':
-        return {'executionStatus': 'toprocess', 'state': 'accepted'}
+        return {'executionStatus': 'toprocess', 'state': 'accepted',
+                'reference': next_payment_reference()}
     else:
         raise RuntimeError('Unexpected call to slimpay API action: '
                            'method=%r, func=%r, args=%r, kwargs=%r',
@@ -32,7 +41,7 @@ def fake_action(method, func, *args, **kwargs):
 def fake_action_crash_for(for_func, for_issue_id):
     def fake_action_crash(method, func, *args, **kwargs):
         if func == for_func and kwargs['doc']['id'] == for_issue_id:
-            raise ValueError('TEST ERROR!')
+            raise ValueError('ON PURPOSE TEST ERROR!')
         else:
             return fake_action(method, func, *args, **kwargs)
     return fake_action_crash
@@ -130,6 +139,8 @@ class ProjectTC(TransactionCase):
             prod.property_account_income_id = self.revenue_account.id
             prod.taxes_id = [(6, 0, tax.ids)]
 
+        # Reset payment reference between tests
+        next_payment_reference(0)
         self.invoice, self.transaction, _p = self._create_inv_tx_and_payment()
 
         expenses_account = self.env['account.account'].create({
@@ -209,6 +220,7 @@ class ProjectTC(TransactionCase):
         transaction = Transaction.create({
             'reference': Transaction.get_next_reference(invoice.number),
             'acquirer_id': self.slimpay.id,
+            'acquirer_reference': next_payment_reference(),
             'payment_token_id': self.partner.payment_token_ids[0].id,
             'amount': invoice.residual,
             'state': 'done',
@@ -250,7 +262,7 @@ class ProjectTC(TransactionCase):
     def test_cron_first_issue(self):
         """ First payment issue:
         - payment issue 1 cannot be attributed to an odoo
-          transaction (the payment has no TR reference), so an odoo
+          transaction (the payment has no tx reference), so an odoo
           issue must be created in the orphan column
         - payment issue 2 can be linked to an odoo transaction (see
           the payment reference), so an odoo issue must be created
@@ -261,7 +273,7 @@ class ProjectTC(TransactionCase):
         act, get = self._execute_cron([
             fake_issue_doc(id='i1'),
             fake_issue_doc(id='i2',
-                           payment_ref='TR%d' % self.transaction.id,
+                           payment_ref='slimpay_ref_1',
                            subscriber_ref=self.partner.id),
         ])
 
@@ -285,7 +297,7 @@ class ProjectTC(TransactionCase):
 
         self.assertIssuesAcknowledged(act, 'i1', 'i2')
 
-        self.assertIn('TR%s ' % self.transaction.id, issue2.name)
+        self.assertIn('slimpay_ref_1 ', issue2.name)
         self.assertIn('2019-03-28', issue2.name)
         self.assertIn(issue2.invoice_id.number, issue2.name)
 
@@ -301,7 +313,7 @@ class ProjectTC(TransactionCase):
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i2',
-                           payment_ref='TR%d' % self.transaction.id,
+                           payment_ref='slimpay_ref_1',
                            subscriber_ref=self.partner.id),
         ])
 
@@ -312,7 +324,7 @@ class ProjectTC(TransactionCase):
         self.assertInStage(issue, 'stage_warn_partner_and_wait')
         self.assertEqual(issue.invoice_id.amount_total, 105.)
         self.assertIssuesAcknowledged(act, 'i2')
-        self.assertIn('TR%s ' % self.transaction.id, issue.name)
+        self.assertIn('slimpay_ref_1 ', issue.name)
 
     def test_cron_third_issue(self):
         """ Third payment issue for the `self.invoice` invoice:
@@ -329,7 +341,7 @@ class ProjectTC(TransactionCase):
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i3',
-                           payment_ref='TR%d' % self.transaction.id,
+                           payment_ref='slimpay_ref_1',
                            subscriber_ref=self.partner.id),
         ])
 
@@ -416,7 +428,7 @@ class ProjectTC(TransactionCase):
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i1',
-                           payment_ref='TR%d' % self.transaction.id,
+                           payment_ref='slimpay_ref_1',
                            subscriber_ref=self.partner.id,
                            amount=110),
         ])
@@ -452,7 +464,7 @@ class ProjectTC(TransactionCase):
     def test_functional_3_trials(self):
         act, get = self._execute_cron([
             fake_issue_doc(id='i1',
-                           payment_ref='TR%d' % self.transaction.id,
+                           payment_ref='slimpay_ref_1',
                            subscriber_ref=self.partner.id),
         ])
 
@@ -481,11 +493,11 @@ class ProjectTC(TransactionCase):
         self.assertEqual(payins[0][1]['params']['label'], 'dummy label')
         self.assertEqual(self.invoice.state, 'paid')
         self.assertEqual(len(issue_emails(issue)), 1)  # no new email
-        self.assertIn('TR%s ' % self.transaction.id, issue.name)
+        self.assertIn('slimpay_ref_1 ', issue.name)
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i2',
-                           payment_ref='TR%d' % tx1.id,
+                           payment_ref='slimpay_ref_2',
                            subscriber_ref=self.partner.id),
         ])
         self.assertIssuesAcknowledged(act, 'i2')
@@ -497,7 +509,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(issue_emails(issue).mapped('subject'),
                          2 * ['YourCompany: rejected payment'])
         self.assertEqual(self.invoice.state, 'open')
-        self.assertIn('TR%s - TR%s ' % (tx1.id, self.transaction.id),
+        self.assertIn('slimpay_ref_2 - slimpay_ref_1 ',
                       issue.name)
 
         act = self._simulate_wait(issue, days=6)
@@ -513,7 +525,7 @@ class ProjectTC(TransactionCase):
 
         act, get = self._execute_cron([
             fake_issue_doc(id='i3',
-                           payment_ref='TR%d' % tx2.id,
+                           payment_ref='slimpay_ref_3',
                            subscriber_ref=self.partner.id),
         ])
         self.assertIssuesAcknowledged(act, 'i3')
@@ -526,33 +538,41 @@ class ProjectTC(TransactionCase):
                          'YourCompany: max payment trials reached')
         self.assertFalse(self._action_calls(act, 'create-payins'))
         self.assertEqual(len(self._invoice_txs(self.invoice)), 3)
-        self.assertIn(
-            'TR%s - TR%s - TR%s ' % (tx2.id, tx1.id, self.transaction.id),
-            issue.name)
+        self.assertIn('slimpay_ref_3 - slimpay_ref_2 - slimpay_ref_1 ',
+                      issue.name)
 
     def test_db_savepoint(self):
         """ If only one http ack to Slimpay fails, its db updates and only
         them must be rolled back.
         """
 
+        # Avoid confusion when debugging references: start at 1000
+        next_payment_reference(999)
+
+        # Create 3 invoice, transaction and payment series
         [(inv0, tx0, p0), (inv1, tx1, p1), (inv2, tx2, p2)] = [
             self._create_inv_tx_and_payment() for i in range(3)]
+
+        # Execute test: generate 3 issues and simulate a crash when the
+        # second is acknowledged to Slimpay
         act, get = self._execute_cron(
             [fake_issue_doc(id='i0',
-                            payment_ref='TR%d' % tx0,
+                            payment_ref=tx0.acquirer_reference,
                             subscriber_ref=self.partner.id),
              fake_issue_doc(id='i1',
-                            payment_ref='TR%d' % tx1,
+                            payment_ref=tx1.acquirer_reference,
                             subscriber_ref=self.partner.id),
              fake_issue_doc(id='i2',
-                            payment_ref='TR%d' % tx2,
+                            payment_ref=tx2.acquirer_reference,
                             subscriber_ref=self.partner.id)
             ],
             fake_action_crash_for('ack-payment-issue', 'i1')
         )
+
         # Check the http ack method was called for all issue docs
         self.assertIssuesAcknowledged(act, 'i0', 'i1', 'i2')
-        # Check inv1 db changes were rolled backed, not the others'
+        # Check only the 2 invoice, transaction, payment serie was
+        # rolled backed, not the others:
         self.assertEqual((inv0.state, inv1.state, inv2.state),
                          ('open', 'paid', 'open'))
         self.assertEqual((p0.state, p1.state, p2.state),

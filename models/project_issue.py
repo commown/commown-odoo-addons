@@ -159,22 +159,22 @@ class ProjectIssue(models.Model):
                 yield issue_doc
 
     @api.model
-    def _slimpay_payment_issue_find_invoice(self, issue_doc, payment_doc,
-                                            inv_prefix):
-        # XXX Fix this in payment_slimpay and report here
-        # (idea: use a Slimpay-generated ref and put it in acquirer_reference
-        #  then use this field's value to find the right transaction)
-        if (payment_doc['reference']
-                and payment_doc['reference'].startswith('TR')):
-            try:
-                tr_id = int(payment_doc['reference'][2:])
-                ref = self.env['payment.transaction'].browse(tr_id).reference
-            except:
-                pass
-            else:
-                if ref and ref.startswith(inv_prefix):
-                    return self.env['account.invoice'].search([
-                        ('number', '=', ref.split('x', 1)[0])])
+    def _slimpay_payment_issue_find_invoice(
+            self, issue_doc, payment_doc, inv_prefix):
+        tr_ref = payment_doc['id']
+        try:
+            tr_ref = payment_doc['reference']
+            tr = self.env['payment.transaction'].search([
+                ('acquirer_reference', '=', tr_ref),
+            ]).ensure_one()
+        except:
+            _logger.warning('Could not find Odoo transaction for'
+                            ' Slimpay payment %r', tr_ref)
+        else:
+            ref = tr.reference
+            if ref and ref.startswith(inv_prefix):
+                return self.env['account.invoice'].search([
+                    ('number', '=', ref.split('x', 1)[0])])
 
     @api.model
     def _slimpay_payment_issue_name(self, issue_doc, payment_doc,
@@ -235,6 +235,17 @@ class ProjectIssue(models.Model):
             'invoice_id': invoice.id if invoice else False,
             'slimpay_payment_label': payment_doc['label'],
         })
+
+    def slimpay_payment_issue_process_automatically(self):
+        """Override this if you want special rules to deny automatic
+        processing of some issues.
+
+        The default implementation handles basically all issues for
+        which an invoice has been found.
+
+        """
+        self.ensure_one()
+        return bool(self.invoice_id)
 
     @api.model
     def _slimpay_payment_issue_fees_product(self, type):
@@ -359,7 +370,7 @@ class ProjectIssue(models.Model):
         invoice = issue.invoice_id
 
         # No related invoice: move to orphan stage and exit
-        if not invoice:
+        if not issue.slimpay_payment_issue_process_automatically():
             issue.update({'stage_id': self.env.ref(
                 'payment_slimpay_issue.stage_orphan').id})
             return
