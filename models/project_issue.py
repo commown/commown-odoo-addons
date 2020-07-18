@@ -67,7 +67,7 @@ class ProjectIssue(models.Model):
 
     @api.model
     def _slimpay_payment_issue_single_issue(self, project, client, issue_doc,
-                                            inv_prefix):
+                                                inv_prefix):
         """Handle DB updates and HTTP transaction individually so that if one
         Slimpay HTTP ack fails, only the corresponding DB updates are
         rolled back. This uses DB save point as a mecanism, but could
@@ -77,7 +77,7 @@ class ProjectIssue(models.Model):
             with self.env.cr.savepoint():
                 if issue_doc.get('rejectReason', None) != \
                        'sepaReturnReasonCode.focr.reason':
-                    self._slimpay_payment_issue_handle(
+                    issue = self._slimpay_payment_issue_handle(
                         project, client, issue_doc, inv_prefix)
                 else:
                     _logger.info(
@@ -178,7 +178,7 @@ class ProjectIssue(models.Model):
 
     @api.model
     def _slimpay_payment_issue_name(self, issue_doc, payment_doc,
-                                    invoice=None, issue=None):
+                                       invoice=None, issue=None):
         if issue is None:
             name = [
                 payment_doc['reference'] or _('No payment ref'),
@@ -353,7 +353,7 @@ class ProjectIssue(models.Model):
 
     @api.model
     def _slimpay_payment_issue_handle(self, project, client, issue_doc,
-                                      inv_prefix):
+                                         inv_prefix):
         issue = self._slimpay_payment_issue_get_or_create(
             project, client, issue_doc, inv_prefix)
         invoice = issue.invoice_id
@@ -391,3 +391,4 @@ class ProjectIssue(models.Model):
         else:
             issue.update({'stage_id': self.env.ref(
                 'payment_slimpay_issue.stage_warn_partner_and_wait').id})
+        return issue
