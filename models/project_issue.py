@@ -1,7 +1,8 @@
-from odoo.addons.payment_slimpay_issue.models.project_issue import ProjectIssue
+from odoo import models
 
 
-def CommownProjectIssue(ProjectIssue):
+class ProjectIssue(models.Model):
+    _inherit = 'project.issue'
 
     def slimpay_payment_issue_process_automatically(self):
         """ Handle a payment issue automatically only when it comes from a

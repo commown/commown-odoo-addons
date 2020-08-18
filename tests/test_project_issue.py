@@ -190,3 +190,18 @@ class ProjectIssueTC(TransactionCase):
         self._send_partner_email()
 
         self.assertEqual(self.issue.stage_id, self.stage_pending)
+
+    def test_payment_issue_process_automatically(self):
+        inv = self.env['account.invoice'].search(
+            [('contract_id', '=', False)], limit=1).ensure_one()
+        self.issue.invoice_id = inv.id
+
+        self.assertFalse(
+            self.issue.slimpay_payment_issue_process_automatically())
+
+        contract = self.env['account.analytic.account'].search(
+            [], limit=1).ensure_one()
+        inv.contract_id = contract.id
+
+        self.assertTrue(
+            self.issue.slimpay_payment_issue_process_automatically())
