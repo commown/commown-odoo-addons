@@ -13,9 +13,14 @@ from odoo.tools.translate import _
 from .colissimo_utils import ColissimoError, AddressTooLong
 
 
-REF_FROM_NAME_RE = re.compile(r'\[(?P<ref>[^\]]+)\].*')
+REF_FROM_NAME_RE = re.compile(r'.*\[(?P<ref>[^\]]+)\].*')
 
 _logger = logging.getLogger(__name__)
+
+
+def _ref_from_name(name):
+    match = REF_FROM_NAME_RE.match(name)
+    return match.groupdict()['ref'] if match else ''
 
 
 class CommownShippingMixin(models.AbstractModel):
@@ -86,8 +91,14 @@ class CommownShippingMixin(models.AbstractModel):
     @api.multi
     def get_label_ref(self):
         self.ensure_one()
-        match = REF_FROM_NAME_RE.match(self.name)
-        return match.groupdict()['ref'] if match else ''
+        entity_ref = _ref_from_name(self.name)
+        if entity_ref:
+            return entity_ref
+        else:
+            entity_ref = unicode(self.id)
+            parent = self._shipping_parent()
+            parent_ref = _ref_from_name(parent.name) or unicode(parent.id)
+            return u'%s-%s' % (parent_ref, entity_ref)
 
     @api.multi
     def _print_parcel_labels(self, parcel, account=None, force_single=False):
