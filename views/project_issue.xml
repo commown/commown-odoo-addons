@@ -184,7 +184,7 @@ for orig, dest in next_stage_marker.items():
     <field name="code"><![CDATA[
 if record.model == 'project.issue' and record.message_type in ('email', 'comment'):
     issue = env[record.model].browse(record.res_id).sudo()
-    if issue.project_id.name == 'Support':
+    if issue.project_id == env.ref('commown_self_troubleshooting.support_project'):
         employees = env.ref('base.group_user')
         if employees not in record.author_id.mapped('user_ids.groups_id'):
             stage = env['project.task.type'].search([
