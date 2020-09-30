@@ -18,17 +18,20 @@ def mandate_doc_ref(acquirer, mandate_doc):
 
 
 def get_partner(acquirer, mandate_doc):
-    subscriber_url = mandate_doc[
-        acquirer.slimpay_client.method_name('get-subscriber')].url
+    client = acquirer.slimpay_client
+    subscriber_url = mandate_doc[client.method_name('get-subscriber')].url
     pid = subscriber_url.rsplit('/', 1)[-1]
+    partner_model = acquirer.env['res.partner']
     if pid.isdigit():
-        return acquirer.env['res.partner'].search([
-            ('id', '=', int(pid)),
-        ])
+        partner = partner_model.browse(int(pid))
     else:
-        return acquirer.env['res.partner'].search([
+        partner = acquirer.env['res.partner'].search([
             ('payment_token_id.acquirer_ref', '=', mandate_doc['id']),
         ])
+        if len(partner) > 1:
+            pid = client.get(subscriber_url)['reference']
+            partner = partner_model.browse(int(pid))
+    return partner
 
 
 def mandate_doc_to_repr(acquirer, mandate_doc):
