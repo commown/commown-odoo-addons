@@ -174,8 +174,14 @@ def restore_all_missing_mandates(
             try:
                 replace_mandate(acquirer, mandate_repr)
             except MissingError:
-                print "Could not replace mandate for %s" % mandate_repr[
-                    'signatory']['email']
+                print ('Partner not found when trying to replace mandate for %s'
+                       % mandate_repr['signatory']['email'])
+                continue
+            except Exception as exc:
+                import traceback as tb
+                _logger.error(
+                    'Error when trying to replace mandate for %s:\n%s',
+                    mandate_repr['signatory']['email'], tb.format_exc(exc))
                 continue
             mandate_repr_ = get_all_mandates_repr(
                 acquirer, mandate_doc_ref, mandateReference=ref).next()
