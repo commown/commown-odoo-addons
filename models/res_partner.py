@@ -1,10 +1,10 @@
-from odoo import models, api
+from odoo import api, models
 
 from .colissimo_utils import delivery_data
 
 
 class ResPartner(models.Model):
-    _inherit = 'res.partner'
+    _inherit = "res.partner"
 
     @api.multi
     def colissimo_delivery_data(self):

@@ -4,17 +4,21 @@
     <record model="ir.ui.view" id="crm_team_view_form">
       <field name="name">crm.team.form</field>
       <field name="model">crm.team</field>
-      <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+      <field name="inherit_id" ref="sales_team.crm_team_view_form" />
       <field name="arch" type="xml">
         <xpath expr="//group[@name='right']" position="inside">
-          <field name="used_for_shipping"/>
+          <field name="used_for_shipping" />
         </xpath>
         <xpath expr="//notebook" position="inside">
-          <page name="shipping" string="Shipping"
-                attrs="{'invisible': [('used_for_shipping', '=', False)]}">
+          <page
+            name="shipping"
+            string="Shipping"
+            attrs="{'invisible': [('used_for_shipping', '=', False)]}"
+          >
             <group>
-              <field name="shipping_account_id"/>
-              <field name="on_delivery_email_template_id"/>
+                <field name="shipping_account" />
+                <field name="shipping_password" />
+                <field name="on_delivery_email_template_id" />
             </group>
           </page>
         </xpath>
