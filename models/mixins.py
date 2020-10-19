@@ -38,22 +38,18 @@ class CommownShippingMixin(models.AbstractModel):
         return self._shipping_parent().mapped("shipping_account_id")
 
     @api.multi
-    def _create_parcel_label(
-        self, parcel, shipping_account, shipping_password, recipient, ref
-    ):
+    def _create_parcel_label(self, parcel, shipping_account, recipient, ref):
         """ Generate a new label from following arguments:
         - parcel: a commown.parcel.type entity
         - shipping_account: Shipping Account for colissimo
-        (use server_env to encrypt data)
-        - shipping_password: Shipping Password for colissimo
-        (use server_env to encrypt data)
         - recipient: the recipient res.partner entity
         - ref: a string reference to be printed on the parcel
         """
         self.ensure_one()
 
         meta_data, label_data = parcel.colissimo_label(
-            shipping_account, shipping_password, parcel.sender, recipient, ref
+            shipping_account.account, shipping_account.password, parcel.sender,
+            recipient, ref
         )
 
         if meta_data and not label_data:
@@ -204,5 +200,6 @@ class CommownShippingMixin(models.AbstractModel):
 class CommownShippingParentMixin(models.AbstractModel):
     _name = "commown.shipping.parent.mixin"
 
-    shipping_account = fields.Char()
-    shipping_password = fields.Char()
+    shipping_account_id = fields.Many2one(
+        'commown.shipping_account', string='Shipping account'
+    )

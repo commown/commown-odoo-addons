@@ -6,3 +6,4 @@ from . import crm_team
 from . import project
 from . import product
 from . import res_partner
+from . import shipping_account

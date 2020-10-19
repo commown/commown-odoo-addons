@@ -16,8 +16,7 @@
             attrs="{'invisible': [('used_for_shipping', '=', False)]}"
           >
             <group>
-                <field name="shipping_account" />
-                <field name="shipping_password" />
+                <field name="shipping_account_id" />
                 <field name="on_delivery_email_template_id" />
             </group>
           </page>
