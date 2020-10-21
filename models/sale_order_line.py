@@ -68,10 +68,11 @@ class ProductRentalSaleOrderLine(models.Model):
                           for (a, so_lines) in bought_accessories.items())
                       or 'None')
 
-        for accessory, so_lines in bought_accessories.items():
-            contract_descrs[-1]['accessories'].extend([
-                (accessory, so_line) for so_line in so_lines
-            ])
+        if contract_descrs:
+            for accessory, so_lines in bought_accessories.items():
+                contract_descrs[-1]['accessories'].extend([
+                    (accessory, so_line) for so_line in so_lines
+                ])
 
         _logger.info(
             u'Contracts to be created for %s:\n%s', self[0].order_id.name,
