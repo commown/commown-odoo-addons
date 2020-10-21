@@ -48,8 +48,11 @@ class CommownShippingMixin(models.AbstractModel):
         self.ensure_one()
 
         meta_data, label_data = parcel.colissimo_label(
-            shipping_account.account, shipping_account.password, parcel.sender,
-            recipient, ref
+            shipping_account.account,
+            shipping_account.password,
+            parcel.sender,
+            recipient,
+            ref,
         )
 
         if meta_data and not label_data:
@@ -209,5 +212,5 @@ class CommownShippingParentMixin(models.AbstractModel):
     _name = "commown.shipping.parent.mixin"
 
     shipping_account_id = fields.Many2one(
-        'commown.shipping_account', string='Shipping account'
+        "commown.shipping_account", string="Shipping account"
     )
