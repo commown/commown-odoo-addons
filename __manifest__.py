@@ -6,8 +6,15 @@
     "author": "Commown SCIC SAS,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "website": "https://commown.coop",
-    "depends": ["sale", "website", "crm", "project", "partner_firstname",
-                "server_environment_data_encryption"],
+    "depends": [
+        "base_automation",
+        "sale",
+        "website",
+        "crm",
+        "partner_firstname",
+        "project",
+        "server_environment_data_encryption",
+    ],
     "external_dependencies": {"bin": ["pdfjam", "pdftk"]},
     "data": [
         "security/ir.model.access.csv",

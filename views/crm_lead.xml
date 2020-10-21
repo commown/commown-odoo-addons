@@ -51,15 +51,15 @@
       <field name="state">code</field>
       <field name="code">
 # "uid" is in env: action launched from GUI
-if 'uid' in env or object.send_email_on_delivery:
+if 'uid' in env or record.send_email_on_delivery:
 
-    template = object.delivery_email_template()
+    template = record.delivery_email_template()
     if template:
-        status = object.expedition_status
+        status = record.expedition_status
         ctx = {}
         if status and status[0] == '[' and ']' in status:
             ctx['postal_code'] = status[1:status.find(']')]
-        object.with_context(ctx).message_post_with_template(template.id)
+        record.with_context(ctx).message_post_with_template(template.id)
     else:
         raise Warning('No mail email template specified'
                      ' (neither in current lead nor its team)')
@@ -74,8 +74,8 @@ if 'uid' in env or object.send_email_on_delivery:
       <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
       <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
       <field
-        name="server_action_ids"
-        eval="[(6,0,[ref('commown_shipping.action_send_delivery_email')])]"
+        name="action_server_id"
+        eval="ref('commown_shipping.action_send_delivery_email')"
       />
     </record>
 

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 import mock
 import requests
@@ -15,23 +15,18 @@ class CrmLeadShippingTC(BaseShippingTC):
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
 
-        portal_partner = self.env.ref("portal.demo_user0_res_partner")
+        partner = self.env.ref("base.res_partner_1")
         product = self.env["product.product"].create(
             {"name": "Fairphone", "shipping_parcel_type_id": self.parcel_type.id}
         )
         team = self.env.ref("sales_team.salesteam_website_sales")
-        team.update(
-            {
-                "shipping_account": self.shipping_account,
-                "shipping_password": self.shipping_password,
-            }
-        )
+        team.shipping_account_id = self.shipping_account
 
         so = self.env["sale.order"].create(
             {
-                "partner_id": portal_partner.id,
-                "partner_invoice_id": portal_partner.id,
-                "partner_shipping_id": portal_partner.id,
+                "partner_id": partner.id,
+                "partner_invoice_id": partner.id,
+                "partner_shipping_id": partner.id,
                 "order_line": [
                     (
                         0,
@@ -51,7 +46,7 @@ class CrmLeadShippingTC(BaseShippingTC):
         self.lead = self.env["crm.lead"].create(
             {
                 "name": "[SO00000] Fake order",
-                "partner_id": portal_partner.id,
+                "partner_id": partner.id,
                 "type": "opportunity",
                 "team_id": team.id,
                 "so_line_id": so.order_line[0].id,
@@ -134,13 +129,12 @@ class CrmLeadShippingTC(BaseShippingTC):
             lead._create_parcel_label(
                 self.parcel_type,
                 self.shipping_account,
-                self.shipping_password,
                 lead.partner_id,
                 lead.get_label_ref(),
             )
 
         self.assertEqual(lead.expedition_ref, "6X0000000000")
-        self.assertEqual(lead.expedition_date, datetime.today().strftime("%Y-%m-%d"))
+        self.assertEqual(lead.expedition_date, date.today())
         attachments = self.env["ir.attachment"].search(
             [("res_model", "=", "crm.lead"), ("res_id", "=", lead.id)]
         )
@@ -179,7 +173,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.lead = self.env["crm.lead"].create(
             {
                 "name": "[SO99999-01] TEST DELIVERY",
-                "partner_id": self.env.ref("portal.demo_user0_res_partner").id,
+                "partner_id": self.env.ref("base.res_partner_1").id,
                 "type": "opportunity",
                 "team_id": team.id,
             }
@@ -253,7 +247,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.assertTrue(self.lead.send_email_on_delivery)
 
         self.lead.on_delivery_email_template_id = self.lead.team_id.on_delivery_email_template_id.copy(  # noqa: B950
-            {"subject": "Test custom email", "body": "coucou"}
+            {"subject": "Test custom email"}
         ).id
 
         # Simulate delivery

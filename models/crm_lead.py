@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from odoo import api, fields, models
 
@@ -57,7 +57,7 @@ class CrmLead(models.Model):
         self.update(
             {
                 "expedition_ref": meta_data["labelResponse"]["parcelNumber"],
-                "expedition_date": datetime.today(),
+                "expedition_date": date.today(),
                 "delivery_date": False,
             }
         )

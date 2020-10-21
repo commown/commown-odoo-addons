@@ -3,7 +3,7 @@ import logging
 import os
 import re
 from base64 import b64encode
-from subprocess import CalledProcessError, check_call
+from subprocess import CalledProcessError, run
 from tempfile import gettempdir, mktemp
 
 from odoo import api, fields, models
@@ -126,8 +126,12 @@ class CommownShippingMixin(models.AbstractModel):
         fpath = os.path.join(gettempdir(), mktemp(suffix=".pdf"))
         result_path = None
         try:
-            check_call(["pdftk"] + paths + ["cat", "output", fpath])
-            check_call(
+            run(
+                ["pdftk"] + paths + ["cat", "output", fpath],
+                capture_output=True,
+                check=True,
+            )
+            run(
                 [
                     "pdfjam",
                     "--nup",
@@ -145,16 +149,20 @@ class CommownShippingMixin(models.AbstractModel):
                     "--outfile",
                     gettempdir(),
                     fpath,
-                ]
+                ],
+                capture_output=True,
+                check=True,
             )
             result_path = fpath[:-4] + "-pdfjam" + fpath[-4:]
 
-        except CalledProcessError:
+        except CalledProcessError as exc:
+            msg = exc.stderr.decode("utf-8") if exc.stderr else "No err output"
+            _logger.exception("PDF concatenation or assembly failed:\n%s", msg)
             fpath = None
-            raise ValueError("PDF concatenation or assembly failed")
+            raise
 
         else:
-            with open(result_path) as fobj:
+            with open(result_path, "rb") as fobj:
                 data = b64encode(fobj.read())
             parent = self[0]._shipping_parent()
             attrs = {

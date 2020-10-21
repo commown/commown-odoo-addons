@@ -2,9 +2,9 @@ import json
 import os.path as osp
 from base64 import b64decode
 from email import encoders
-from email.MIMEBase import MIMEBase
-from email.MIMEMultipart import MIMEMultipart
-from io import StringIO
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from io import BytesIO
 from urllib.parse import urlparse
 
 from odoo.tests.common import TransactionCase
@@ -14,7 +14,7 @@ HERE = osp.dirname(__file__)
 
 
 def pdf_page_num(ir_attachment):
-    pdf = PdfFileReader(StringIO(b64decode(ir_attachment.datas)))
+    pdf = PdfFileReader(BytesIO(b64decode(ir_attachment.datas)))
     return pdf.getNumPages()
 
 
@@ -51,11 +51,16 @@ class BaseShippingTC(TransactionCase):
     def setUp(self):
         super(BaseShippingTC, self).setUp()
         fake_meta_data = {"labelResponse": {"parcelNumber": "6X0000000000"}}
-        with open(osp.join(HERE, "fake_label.pdf")) as fobj:
+        with open(osp.join(HERE, "fake_label.pdf"), "rb") as fobj:
             self.fake_label_data = fobj.read()
         self.fake_resp = FakeResponse(fake_meta_data, self.fake_label_data)
-        self.shipping_account = "ColissimoLogin"
-        self.shipping_password = "test"
+        self.shipping_account = self.env["commown.shipping_account"].create(
+            {
+                "name": "ColissimoPrincipal",
+                "account": "987654",
+                # "password": "xxxxxx",
+            }
+        )
         self.parcel_type = self.env.ref("commown_shipping.fp2-outward-ins300")
 
     def assertEqualFakeLabel(self, ir_attachment):
