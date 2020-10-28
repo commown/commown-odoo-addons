@@ -162,7 +162,6 @@ class CrmLeadDeliveryTC(TransactionCase):
             'used_for_shipping': True,
             'on_delivery_email_template_id': self.env.ref(
                 'commown_shipping.delivery_email_example').id,
-            'default_perform_actions_on_delivery': True,
         })
         self.lead = self.env['crm.lead'].create({
             'name': u'[SO99999-01] TEST DELIVERY',

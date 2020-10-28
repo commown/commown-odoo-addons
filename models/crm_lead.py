@@ -15,7 +15,7 @@ class CrmLead(models.Model):
             context = self.env.context
             if "default_team_id" in context:
                 team = self.env["crm.team"].browse(context["default_team_id"])
-        return team.default_perform_actions_on_delivery
+        return team.default_perform_actions_on_delivery if team else True
 
     expedition_ref = fields.Text("Expedition reference", size=64)
     expedition_date = fields.Date("Expedition Date")
