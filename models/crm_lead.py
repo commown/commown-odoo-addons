@@ -9,6 +9,14 @@ class CrmLead(models.Model):
 
     _shipping_parent_rel = 'team_id'
 
+    def _default_perform_actions_on_delivery(self):
+        team = self.team_id
+        if not team:
+            context = self.env.context
+            if "default_team_id" in context:
+                team = self.env["crm.team"].browse(context["default_team_id"])
+        return team.default_perform_actions_on_delivery
+
     expedition_ref = fields.Text("Expedition reference", size=64)
     expedition_date = fields.Date("Expedition Date")
     expedition_status = fields.Text("Expedition status", size=256)
@@ -18,9 +26,11 @@ class CrmLead(models.Model):
         "Expedition urgency mail send", default=False)
     delivery_date = fields.Date("Delivery Date")
     start_contract_on_delivery = fields.Boolean(
-        default=True, string='Automatic contract start on delivery')
+        default=_default_perform_actions_on_delivery,
+        string='Automatic contract start on delivery')
     send_email_on_delivery = fields.Boolean(
-        default=True, string='Automatic email on delivery')
+        default=_default_perform_actions_on_delivery,
+        string='Automatic email on delivery')
     on_delivery_email_template_id = fields.Many2one(
         'mail.template', string='Custom email model for this lead')
     so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
