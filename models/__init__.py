@@ -1,6 +1,7 @@
 import keychain
 import parcel
-import mixins
+import shipping_mixin
+import delivery_mixin
 import crm_lead
 import project_issue
 import project_task
