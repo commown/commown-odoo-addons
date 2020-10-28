@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-16 16:18+0000\n"
-"PO-Revision-Date: 2019-12-16 16:18+0000\n"
+"POT-Creation-Date: 2020-10-28 05:11+0000\n"
+"PO-Revision-Date: 2020-10-28 05:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/mixins.py:103
+#: code:addons/commown_shipping/models/mixins.py:116
 #, python-format
 msgid "Address too long for \"%s\""
 msgstr "Adresse de \"%s\" trop longue"
@@ -32,7 +32,12 @@ msgid "Automatic email on delivery"
 msgstr "Envoi automatique de l'email à la livraison"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/mixins.py:100
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_team_default_perform_actions_on_delivery
+msgid "By default, perform actions on delivery"
+msgstr "Effectuer les actions post-livraison par défaut"
+
+#. module: commown_shipping
+#: code:addons/commown_shipping/models/mixins.py:113
 #, python-format
 msgid "Colissimo error:\n"
 "%s"
@@ -172,6 +177,11 @@ msgid "Parcel type"
 msgstr "Type de colis"
 
 #. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_product_template
 msgid "Product Template"
 msgstr "Modèle d'article"
@@ -236,19 +246,19 @@ msgid "[commown] Print Fairphone parcel outward label(s)"
 msgstr "[commown] Imprimer une (des) étiquette(s) aller Fairphone"
 
 #. module: commown_shipping
-#: model:ir.actions.server,name:commown_shipping.action_print_return_fp2_label_issue
-msgid "[commown] Print Fairphone parcel return label"
-msgstr "[commown] Imprimer une étiquette de retour Fairphone"
-
-#. module: commown_shipping
-#: model:ir.actions.server,name:commown_shipping.action_print_outward_label_lead
-msgid "[commown] Print related product label(s)"
-msgstr "[commown] Imprimer l(es) étiquette(s) d'expédition"
-
-#. module: commown_shipping
 #: model:ir.actions.server,name:commown_shipping.action_send_delivery_email
 msgid "[commown] Send delivery email"
 msgstr "[commown] Envoyer le courriel de livraison"
+
+#. module: commown_shipping
+#: model:ir.actions.server,name:commown_shipping.action_print_outward_label_lead
+msgid "[commown] Étiquette aller Crosscall (<1kg, 300€)"
+msgstr "[commown] Étiquette aller Crosscall (<1kg, 300€)"
+
+#. module: commown_shipping
+#: model:ir.actions.server,name:commown_shipping.action_print_return_fp2_label_issue
+msgid "[commown] Étiquette retour FP2"
+msgstr "[commown] Étiquette retour FP2"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_shipping_mixin
@@ -264,3 +274,4 @@ msgstr "commown.shipping.parent.mixin"
 #: model:ir.model,name:commown_shipping.model_keychain_account
 msgid "keychain.account"
 msgstr "keychain.account"
+
