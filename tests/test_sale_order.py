@@ -37,7 +37,7 @@ class SaleOrderTC(RentalSaleOrderTC):
             u'1 month of keyboard',
             u'1 month of keyboard deluxe',
         ])
-        self.assertEqual(ilines2.mapped('price_unit'), [60., 15., 6.0, 7.5])
+        self.assertEqual(ilines2.mapped('price_unit'), [55., 15., 5.4, 7.5])
         self.assertEqual(ilines2.mapped('quantity'), [1, 1, 1, 1])
         self.assertEqual(ilines2.mapped('sale_order_line_id.product_id.name'),
                          [u'PC', u'screen', u'keyboard', u'keyboard deluxe'])
@@ -45,7 +45,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         ilines3 = c3.recurring_invoice_line_ids
         self.assertEqual(ilines3.mapped('name'),
                          [u'1 month of PC', u'1 month of screen'])
-        self.assertEqual(ilines3.mapped('price_unit'), [60., 15.])
+        self.assertEqual(ilines3.mapped('price_unit'), [55., 15.])
         self.assertEqual(ilines3.mapped('quantity'), [1, 1])
         self.assertEqual(ilines3.mapped('sale_order_line_id.product_id.name'),
                          [u'PC', u'screen'])

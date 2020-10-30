@@ -10,6 +10,8 @@ class RentalSaleOrderTC(TransactionCase):
 
         partner_portal = self.env.ref('portal.demo_user0_res_partner')
         self.user = partner_portal.user_ids.ensure_one()
+        tax = self.env.ref('l10n_generic_coa.1_sale_tax_template')
+        partner_portal.property_account_receivable_id.tax_ids |= tax
 
         # Main rental products (with a rental contract template)
         contract_tmpl1 = self._create_rental_contract_tmpl(
@@ -32,7 +34,8 @@ class RentalSaleOrderTC(TransactionCase):
         self.product2 = self._create_rental_product(
             2, name="PC", list_price=120., rental_price=60.,
             contract_template_id=contract_tmpl2.id)
-        oline2 = self._oline(self.product2, product_uom_qty=2)
+        oline2 = self._oline(self.product2, product_uom_qty=2,
+                             price_unit=110)
 
         # Accessory products
         product3 = self._create_rental_product(
@@ -48,7 +51,7 @@ class RentalSaleOrderTC(TransactionCase):
         product5 = self._create_rental_product(
             5, name='keyboard', list_price=12., rental_price=6.,
             contract_template_id=False)
-        oline5 = self._oline(product5)
+        oline5 = self._oline(product5, discount=10)
 
         product6 = self._create_rental_product(
             6, name='keyboard deluxe', list_price=15., rental_price=7.5,
