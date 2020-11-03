@@ -61,7 +61,7 @@ class ProductRentalAccountAnalyticAccount(models.Model):
                         so_price = so_line.price_total / so_line.product_uom_qty
                         vals.update({
                             'name': vals['name'].replace(
-                                marker, product.display_name),
+                                marker, product.name),
                             'specific_price': rental_product_price(
                                 so_price, product, partner),
                             'qtty': qtty,
