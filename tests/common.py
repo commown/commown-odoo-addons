@@ -5,76 +5,101 @@ from odoo.tests.common import at_install, post_install, TransactionCase
 @post_install(True)
 class RentalSaleOrderTC(TransactionCase):
 
-    def setUp(self):
-        super(RentalSaleOrderTC, self).setUp()
+    def get_default_tax(self):
+        company = self.env.user.company_id
+        tax_id = self.env['ir.values'].get_default(
+            'product.template', 'taxes_id', company_id=company.id)
+        return self.env['account.tax'].browse(tax_id).exists()
 
-        partner_portal = self.env.ref('portal.demo_user0_res_partner')
-        self.user = partner_portal.user_ids.ensure_one()
-        tax = self.env.ref('l10n_generic_coa.1_sale_tax_template')
-        partner_portal.property_account_receivable_id.tax_ids |= tax
-
+    def create_sale_order(self, partner=None, tax=None):
+        """Given tax (defaults to company's default) is used for contract
+        products.
+        """
+        if partner is None:
+            partner = self.env.ref('portal.demo_user0_res_partner')
+        if tax is None:
+            tax = self.get_default_tax()
         # Main rental products (with a rental contract template)
         contract_tmpl1 = self._create_rental_contract_tmpl(
             1, recurring_invoice_line_ids=[
-                self._invoice_line(
-                    1, name='1 month Fairphone premium', specific_price=30.),
-                self._invoice_line(2, name='1 month ##ACCESSORY##'),
+                self._invoice_line(1, '1 month Fairphone premium', tax,
+                                   specific_price=25.),
+                self._invoice_line(2, '1 month ##ACCESSORY##', tax),
                 ])
-        self.product1 = self._create_rental_product(
-            1, name='Fairphone Premium', list_price=60., rental_price=30.,
+        product1 = self._create_rental_product(
+            name='Fairphone Premium', list_price=60., rental_price=30.,
             contract_template_id=contract_tmpl1.id)
-        oline1 = self._oline(self.product1)
+        oline_p1 = self._oline(product1)
 
         contract_tmpl2 = self._create_rental_contract_tmpl(
             2, recurring_invoice_line_ids=[
                 self._invoice_line(
-                    2, '1 month of ##PRODUCT##', specific_price=0.0),
-                self._invoice_line(3, '1 month of ##ACCESSORY##'),
+                    1, '1 month of ##PRODUCT##', tax, specific_price=0.0),
+                self._invoice_line(2, '1 month of ##ACCESSORY##', tax),
                 ])
-        self.product2 = self._create_rental_product(
-            2, name="PC", list_price=120., rental_price=60.,
+        product2 = self._create_rental_product(
+            name="PC", list_price=130., rental_price=65.,
             contract_template_id=contract_tmpl2.id)
-        oline2 = self._oline(self.product2, product_uom_qty=2,
-                             price_unit=110)
+        oline_p2 = self._oline(product2, product_uom_qty=2,
+                               price_unit=120)
+
+        contract_tmpl3 = self._create_rental_contract_tmpl(
+            3, recurring_invoice_line_ids=[
+                self._invoice_line(
+                    1, '1 month of ##PRODUCT##', tax, specific_price=0.0),
+                ])
+        product3 = self._create_rental_product(
+            name="GS Headset", list_price=1., rental_price=10.,
+            contract_template_id=contract_tmpl3.id, is_deposit=False)
+        oline_p3 = self._oline(product3, product_uom_qty=1, price_unit=1.)
+
+        contract_tmpl4 = self._create_rental_contract_tmpl(
+            4, recurring_invoice_line_ids=[
+                self._invoice_line(1, '1 month of ##PRODUCT##', tax,
+                                   specific_price=0.0),
+            ])
+        product4 = self._create_rental_product(
+            name="FP2", list_price=40., rental_price=20.,
+            contract_template_id=contract_tmpl4.id)
+        oline_p4 = self._oline(product4, product_uom_qty=1)
 
         # Accessory products
-        product3 = self._create_rental_product(
-            3, name='headset', list_price=3., rental_price=1.5,
+        a1 = self._create_rental_product(
+            name='headset', list_price=3., rental_price=1.5,
             contract_template_id=False)
-        oline3 = self._oline(product3)
+        oline_a1 = self._oline(a1)
 
-        product4 = self._create_rental_product(
-            4, name='screen', list_price=30., rental_price=15.,
+        a2 = self._create_rental_product(
+            name='screen', list_price=30., rental_price=15.,
             contract_template_id=False)
-        oline4 = self._oline(product4, product_uom_qty=2)
+        oline_a2 = self._oline(a2, product_uom_qty=2)
 
-        product5 = self._create_rental_product(
-            5, name='keyboard', list_price=12., rental_price=6.,
+        a3 = self._create_rental_product(
+            name='keyboard', list_price=12., rental_price=6.,
             contract_template_id=False)
-        oline5 = self._oline(product5, discount=10)
+        oline_a3 = self._oline(a3, discount=10)
 
-        product6 = self._create_rental_product(
-            6, name='keyboard deluxe', list_price=15., rental_price=7.5,
+        a4 = self._create_rental_product(
+            name='keyboard deluxe', list_price=15., rental_price=7.5,
             contract_template_id=False)
-        oline6 = self._oline(product6)
+        oline_a4 = self._oline(a4)
 
-        self.product1.accessory_product_ids |= product3
-        self.product2.accessory_product_ids |= product4 + product5 + product6
+        product1.accessory_product_ids |= a1
+        product2.accessory_product_ids |= a2 + a3 + a4
 
-        self.so = self.env['sale.order'].create({
-            'partner_id': partner_portal.id,
-            'partner_invoice_id': partner_portal.id,
-            'partner_shipping_id': partner_portal.id,
-            'order_line': [oline1, oline2, oline3, oline4, oline5, oline6],
+        return self.env['sale.order'].create({
+            'partner_id': partner.id,
+            'partner_invoice_id': partner.id,
+            'partner_shipping_id': partner.id,
+            'order_line': [oline_p1, oline_p2, oline_p3, oline_p4,
+                           oline_a1, oline_a2, oline_a3, oline_a4],
         })
 
-    def _create_rental_product(self, num, **kwargs):
-        kwargs.setdefault('name', 'product %d' % num)
+    def _create_rental_product(self, name, **kwargs):
+        kwargs['name'] = name
         kwargs.setdefault('is_rental', True)
         kwargs.setdefault('type', 'service')
-        if 'contract_template_id' not in kwargs:
-            kwargs['contract_template_id'] = \
-                self._create_rental_contract_tmpl(num).id
+        kwargs.setdefault('taxes_id', False)
         kwargs['is_contract'] = bool(kwargs['contract_template_id'])
         return self.env['product.product'].create(kwargs)
 
@@ -92,10 +117,13 @@ class RentalSaleOrderTC(TransactionCase):
         kwargs.setdefault('price_unit', product.list_price)
         return (0, 0, kwargs)
 
-    def _invoice_line(self, num, name, **kwargs):
+    def _invoice_line(self, num, name, product_tax=None, **kwargs):
         if 'product_id' not in kwargs:
             product = self.env['product.product'].create({
-                'name': 'Line product %d' % num, 'type': 'service'})
+                'name': 'Contract product %d' % num, 'type': 'service'})
+            if product_tax is not None:
+                product.taxes_id = False
+                product.taxes_id |= product_tax
             kwargs['product_id'] = product.id
             kwargs['uom_id'] = product.uom_id.id
         kwargs['name'] = name

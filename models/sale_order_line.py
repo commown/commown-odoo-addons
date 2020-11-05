@@ -27,6 +27,12 @@ class ProductRentalSaleOrderLine(models.Model):
         })
         return data
 
+    def compute_rental_price(self, rental_taxes):
+        "Return the rental recurring amount"
+        self.ensure_one()
+        ratio = self.product_id.list_price / self.product_id.rental_price
+        return self.price_unit * (1 - (self.discount or 0.0) / 100.0) / ratio
+
     @api.multi
     def assign_contract_products(self):
         "Assign main product and accessories to n contracts per sale order line"

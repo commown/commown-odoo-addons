@@ -10,15 +10,6 @@ CONTRACT_PROD_MARKER = '##PRODUCT##'
 CONTRACT_ACCESSORY_MARKER = '##ACCESSORY##'
 
 
-def rental_product_price(price, product, partner):
-    assert partner, 'Cannot compute rental product price: no partner'
-    partner = partner.commercial_partner_id
-    tax = partner.property_account_receivable_id.tax_ids
-    to_excl = 1. / (1. + tax.amount / 100.)
-    ratio = product.list_price / product.rental_price
-    return price * to_excl / ratio
-
-
 class ProductRentalAccountAnalyticAccount(models.Model):
     _inherit = "account.analytic.account"
 
@@ -57,13 +48,13 @@ class ProductRentalAccountAnalyticAccount(models.Model):
                 if marker in new_line[2]['name']:
                     for product, so_line, qtty in products:
                         vals = new_line[2].copy()
-                        # price with taxes and discount:
-                        so_price = so_line.price_total / so_line.product_uom_qty
+                        rental_taxes = self.env['product.product'].browse(
+                            vals['product_id']).taxes_id
                         vals.update({
                             'name': vals['name'].replace(
                                 marker, product.name),
-                            'specific_price': rental_product_price(
-                                so_price, product, partner),
+                            'specific_price': so_line.compute_rental_price(
+                                rental_taxes),
                             'qtty': qtty,
                             'sale_order_line_id': so_line.id,
                         })
