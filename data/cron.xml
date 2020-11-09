@@ -4,15 +4,14 @@
 
     <record id="ir_cron_check" model="ir.cron" forcecreate="True">
       <field name="name">Check Slimpay payment issues</field>
-      <field eval="True" name="active"/>
+      <field name="active" eval="True"/>
       <field name="user_id" ref="base.user_root"/>
       <field name="interval_number">8</field>
       <field name="interval_type">hours</field>
       <field name="numbercall">-1</field>
-      <field eval="False" name="doall"/>
-      <field eval="'project.issue'" name="model"/>
-      <field eval="'_slimpay_payment_issue_cron'" name="function"/>
-      <field eval="'()'" name="args"/>
+      <field name="doall" eval="False"/>
+      <field name="model_id" ref="project_issue.model_project_issue"/>
+      <field name="code">model._slimpay_payment_issue_cron()</field>
     </record>
 
   </data>

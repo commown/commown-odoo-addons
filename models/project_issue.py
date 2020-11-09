@@ -102,7 +102,7 @@ class ProjectIssue(models.Model):
 
         for acquirer in self.env['payment.acquirer'].search([
                 ('provider', '=', 'slimpay')]):
-            _logger.info(u'Checking payment issues for "%s"', acquirer.name)
+            _logger.info('Checking payment issues for "%s"', acquirer.name)
 
             try:
                 client = acquirer.slimpay_client
@@ -126,7 +126,7 @@ class ProjectIssue(models.Model):
     def _slimpay_payment_issue_ack(self, client, issue_doc):
         """ Set a Slimpay issue designated by given document as processed """
         doc = client.action('POST', 'ack-payment-issue', doc=issue_doc)
-        assert doc['executionStatus'] == u'processed'
+        assert doc['executionStatus'] == 'processed'
         _logger.debug('Issue id %s marked as processed', issue_doc['id'])
 
     @api.model
@@ -189,7 +189,7 @@ class ProjectIssue(models.Model):
                 name.append(invoice.number)
         else:
             name = [payment_doc['reference'], issue.name]
-        return u' - '.join(name)
+        return ' - '.join(name)
 
     @api.model
     def _slimpay_payment_issue_get_or_create(self, project, client, issue_doc,
@@ -223,13 +223,13 @@ class ProjectIssue(models.Model):
                     partner_id = _pid
 
         description = [
-            u'Slimpay Id: %s' % issue_doc['id'],
+            'Slimpay Id: %s' % issue_doc['id'],
         ]
 
         return self.env['project.issue'].create({
             'name': self._slimpay_payment_issue_name(
                 issue_doc, payment_doc, invoice),
-            'description': u'\n'.join(description),
+            'description': '\n'.join(description),
             'project_id': project.id,
             'partner_id': partner_id,
             'invoice_id': invoice.id if invoice else False,
@@ -319,7 +319,7 @@ class ProjectIssue(models.Model):
 
             if not partner.payment_token_ids:
                 _logger.error(
-                    u'Invoice %s: partner has no payment token!', invoice.id)
+                    'Invoice %s: partner has no payment token!', invoice.id)
             token = partner.payment_token_ids[0]
 
             _logger.info(
@@ -377,11 +377,11 @@ class ProjectIssue(models.Model):
 
         issue.invoice_unpaid_count += 1
 
-        _logger.info(u'Unreconciling invoice "%s"', invoice.name)
+        _logger.info('Unreconciling invoice "%s"', invoice.name)
         invoice.payment_move_line_ids.remove_move_reconcile()
-        _logger.info(u'Invoice payments "%s"', invoice.payment_ids.ids)
+        _logger.info('Invoice payments "%s"', invoice.payment_ids.ids)
         for payment in invoice.payment_ids:
-            _logger.info(u'Canceling payment "%s"', payment.id)
+            _logger.info('Canceling payment "%s"', payment.id)
             payment.cancel()
 
         rejected_amount = float(issue_doc['rejectAmount'])
@@ -389,7 +389,7 @@ class ProjectIssue(models.Model):
             fees = rejected_amount - invoice.amount_total
             self._slimpay_payment_issue_invoice_fees(invoice, 'bank', fees)
             self._slimpay_payment_issue_create_supplier_invoice_fees(
-                u'%s-REJ%d' % (invoice.number, issue.invoice_unpaid_count),
+                '%s-REJ%d' % (invoice.number, issue.invoice_unpaid_count),
                 reject_date(issue_doc), fees)
 
         if (issue.invoice_unpaid_count

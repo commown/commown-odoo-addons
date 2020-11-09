@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 import mock
 
-from odoo.fields import Date, DATETIME_FORMAT
 from odoo.tests.common import at_install, post_install, TransactionCase
 
 from odoo.addons.payment_slimpay.models.payment import SlimpayClient
@@ -87,7 +86,7 @@ class ProjectTC(TransactionCase):
         self.project = ref('payment_slimpay_issue.project_payment_issue')
 
         self.customer_account = self.env['account.account'].create({
-            'code': u'cust_acc', 'name': u'customer account',
+            'code': 'cust_acc', 'name': 'customer account',
             'user_type_id': ref('account.data_account_type_receivable').id,
             'reconcile': True,
         })
@@ -112,7 +111,7 @@ class ProjectTC(TransactionCase):
         })
 
         self.revenue_account = self.env['account.account'].create({
-            'code': u'rev_acc', 'name': u'revenue account',
+            'code': 'rev_acc', 'name': 'revenue account',
             'user_type_id': ref('account.data_account_type_revenue').id,
         })
 
@@ -144,7 +143,7 @@ class ProjectTC(TransactionCase):
         self.invoice, self.transaction, _p = self._create_inv_tx_and_payment()
 
         expenses_account = self.env['account.account'].create({
-            'code': u'exp_acc', 'name': u'expenses account',
+            'code': 'exp_acc', 'name': 'expenses account',
             'user_type_id': ref('account.data_account_type_expenses').id,
         })
 
@@ -176,7 +175,7 @@ class ProjectTC(TransactionCase):
         ], order='invoice_unpaid_count')
 
     def assertInStage(self, issue, ref_name):
-        self.assertEqual(issue.stage_id.get_xml_id().values(),
+        self.assertEqual(list(issue.stage_id.get_xml_id().values()),
                          ['payment_slimpay_issue.%s' % ref_name])
 
     def assertIssuesAcknowledged(self, act, *expected_slimpay_ids):
@@ -190,7 +189,7 @@ class ProjectTC(TransactionCase):
     def _create_odoo_issue(self, **kwargs):
         data = {
             'project_id': self.project.id,
-            'name': u'Test issue',
+            'name': 'Test issue',
             'partner_id': self.partner.id,
             'invoice_id': self.invoice.id,
         }
@@ -199,7 +198,7 @@ class ProjectTC(TransactionCase):
 
     def _create_inv_tx_and_payment(self):
         invoice = self.env['account.invoice'].create({
-            'name': u'Test Invoice',
+            'name': 'Test Invoice',
             'reference_type': 'none',
             'payment_term_id': self.env.ref(
                 'account.account_payment_term_advance').id,
@@ -375,16 +374,15 @@ class ProjectTC(TransactionCase):
     def _reset_on_time_actions_last_run(self):
         for action in self.env['base.action.rule'].search([
                 ('kind', '=', 'on_time')]):
-            xml_ids = action.get_xml_id().values()
+            xml_ids = list(action.get_xml_id().values())
             if xml_ids and xml_ids[0].startswith('payment_slimpay_issue'):
                 action.last_run = False
 
     def _simulate_wait(self, issue, **timedelta_kwargs):
-        target_date = datetime.utcnow() - timedelta(**timedelta_kwargs)
-        issue.date_last_stage_update = target_date.strftime(DATETIME_FORMAT)
+        issue.date_last_stage_update = (
+            datetime.utcnow() - timedelta(**timedelta_kwargs))
         issue.invoice_next_payment_date = (
-            Date.from_string(issue.invoice_next_payment_date)
-            - timedelta(**timedelta_kwargs))
+            issue.invoice_next_payment_date - timedelta(**timedelta_kwargs))
         self._reset_on_time_actions_last_run()
         with mock.patch.object(
                 SlimpayClient, 'action', side_effect=fake_action) as act:
