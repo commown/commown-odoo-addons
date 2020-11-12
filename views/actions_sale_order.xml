@@ -96,6 +96,7 @@ for so_line in record.order_line:
             'name': title_template % ctx,
             'partner_id': record.partner_id.id,
             'type': 'opportunity',
+            'team_id': team.id,
             'stage_id': stage_id,
             'so_line_id': so_line.id,
             })
