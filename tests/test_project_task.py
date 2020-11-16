@@ -288,7 +288,8 @@ class ProjectTC(TransactionCase):
         self.assertFalse(task1.invoice_id)
         self.assertEqual(task2.invoice_id, self.invoice)
         self.assertEqual(self.invoice.state, 'open')
-        self.assertEqual(self.invoice.mapped('payment_ids.state'), ['draft'])
+        self.assertEqual(self.invoice.mapped('payment_ids.state'),
+                         ['cancelled'])
 
         self.assertInStage(task1, 'stage_orphan')
         self.assertInStage(task2, 'stage_warn_partner_and_wait')
@@ -318,7 +319,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(len(self._project_tasks()), 1)
         self.assertEqual(task.invoice_unpaid_count, 2)
         self.assertEqual(task.invoice_id.mapped('payment_ids.state'),
-                         ['draft'])
+                         ['cancelled'])
         self.assertInStage(task, 'stage_warn_partner_and_wait')
         self.assertEqual(task.invoice_id.amount_total, 105.)
         self.assertIssuesAcknowledged(act, 'i2')
@@ -346,7 +347,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(len(self._project_tasks()), 1)
         self.assertEqual(task.invoice_unpaid_count, 3)
         self.assertEqual(task.invoice_id.mapped('payment_ids.state'),
-                         ['draft'])
+                         ['cancelled'])
         self.assertInStage(task, 'stage_max_trials_reached')
         # We haven't simulated the previous invoice amount raise due
         # to 2nd payment issue here, so the invoice amount was
@@ -435,7 +436,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(task.invoice_id, self.invoice)
         self.assertEqual(task.invoice_unpaid_count, 1)
         self.assertEqual(task.invoice_id.mapped('payment_ids.state'),
-                         ['draft'])
+                         ['cancelled'])
         self.assertEqual(task.invoice_id.amount_total, 112)
         self.assertInStage(task, 'stage_warn_partner_and_wait')
         last_msg = task.message_ids[0]
@@ -472,7 +473,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(task.invoice_id, self.invoice)
         self.assertEqual(task.invoice_unpaid_count, 1)
         self.assertEqual(task.invoice_id.mapped('payment_ids.state'),
-                         ['draft'])
+                         ['cancelled'])
         self.assertEqual(task.invoice_id.amount_total, 100.)
         self.assertInStage(task, 'stage_warn_partner_and_wait')
         self.assertEqual(task_emails(task).mapped('subject'),
@@ -500,7 +501,7 @@ class ProjectTC(TransactionCase):
         self.assertIssuesAcknowledged(act, 'i2')
         self.assertEqual(task.invoice_unpaid_count, 2)
         self.assertEqual(task.invoice_id.mapped('payment_ids.state'),
-                         ['draft', 'draft'])
+                         ['cancelled', 'cancelled'])
         self.assertEqual(task.invoice_id.amount_total, 105)
         self.assertInStage(task, 'stage_warn_partner_and_wait')
         self.assertEqual(task_emails(task).mapped('subject'),
@@ -528,7 +529,7 @@ class ProjectTC(TransactionCase):
         self.assertIssuesAcknowledged(act, 'i3')
         self.assertEqual(task.invoice_unpaid_count, 3)
         self.assertEqual(task.invoice_id.mapped('payment_ids.state'),
-                         ['draft', 'draft', 'draft'])
+                         ['cancelled', 'cancelled', 'cancelled'])
         self.assertEqual(task.invoice_id.amount_total, 110)
         self.assertInStage(task, 'stage_max_trials_reached')
         self.assertEqual(task_emails(task)[0].subject,
@@ -573,4 +574,4 @@ class ProjectTC(TransactionCase):
         self.assertEqual((inv0.state, inv1.state, inv2.state),
                          ('open', 'paid', 'open'))
         self.assertEqual((p0.state, p1.state, p2.state),
-                         ('draft', 'posted', 'draft'))
+                         ('cancelled', 'posted', 'cancelled'))
