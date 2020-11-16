@@ -173,8 +173,10 @@ class ProjectTask(models.Model):
         else:
             ref = tr.reference
             if ref and ref.startswith(inv_prefix):
-                return self.env['account.invoice'].search([
-                    ('number', '=', ref.split('x', 1)[0])])
+                for sep in ('x', '-'):  # 'x' in v10-, '-' in v12 -generated data
+                    if sep in ref:
+                        return self.env['account.invoice'].search([
+                            ('number', '=', ref.split(sep, 1)[0])])
 
     @api.model
     def _slimpay_payment_issue_name(self, issue_doc, payment_doc,
