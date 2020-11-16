@@ -5,10 +5,10 @@
 {
     'name': 'Payment Slimpay issue',
     'category': 'Website',
-    'version': '10.0.1.3.0',
+    'version': '12.0.1.0.0',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://commown.coop",
     'depends': [
         'account_payment_partner',
         'account_payment_slimpay',

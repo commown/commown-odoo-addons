@@ -53,21 +53,7 @@ class ProjectTask(models.Model):
             'payment_slimpay_issue.management_fees_after_retrial_number') or 1)
 
     @api.model
-    def _slimpay_payment_invoice_prefix(self):
-        """ Return the invoice number prefix to filter payment transactions
-        which reference an invoice. """
-        Journal = self.env['account.journal']
-        Invoice = self.env['account.invoice']
-
-        journal_id = Invoice.default_get(['journal_id'])['journal_id']
-        if not journal_id:
-            raise UserError(_('No sale journal defined for this company.'))
-        inv_journal = Journal.browse(journal_id)
-        return inv_journal.sequence_id.prefix.split('%', 1)[0]
-
-    @api.model
-    def _slimpay_payment_issue_single_issue(self, project, client, issue_doc,
-                                                inv_prefix):
+    def _slimpay_payment_issue_single_issue(self, project, client, issue_doc):
         """Handle DB updates and HTTP transaction individually so that if one
         Slimpay HTTP ack fails, only the corresponding DB updates are
         rolled back. This uses DB save point as a mecanism, but could
@@ -78,7 +64,7 @@ class ProjectTask(models.Model):
                 if issue_doc.get('rejectReason', None) != \
                        'sepaReturnReasonCode.focr.reason':
                     task = self._slimpay_payment_issue_handle(
-                        project, client, issue_doc, inv_prefix)
+                        project, client, issue_doc)
                 else:
                     _logger.info(
                         'Slimpay payment cancelled by creditor id %s: will be'
@@ -119,9 +105,8 @@ class ProjectTask(models.Model):
                 if not num:
                     project = self.env.ref(
                         'payment_slimpay_issue.project_payment_issue')
-                    inv_prefix = self._slimpay_payment_invoice_prefix()
-                self._slimpay_payment_issue_single_issue(project, client,
-                                                         issue_doc, inv_prefix)
+                self._slimpay_payment_issue_single_issue(
+                    project, client, issue_doc)
     @api.model
     def _slimpay_payment_issue_ack(self, client, issue_doc):
         """ Set a Slimpay issue designated by given document as processed """
@@ -159,8 +144,7 @@ class ProjectTask(models.Model):
                 yield issue_doc
 
     @api.model
-    def _slimpay_payment_issue_find_invoice(
-            self, issue_doc, payment_doc, inv_prefix):
+    def _slimpay_payment_issue_find_invoice(self, issue_doc, payment_doc):
         tr_ref = payment_doc['id']
         try:
             tr_ref = payment_doc['reference']
@@ -171,12 +155,7 @@ class ProjectTask(models.Model):
             _logger.warning('Could not find Odoo transaction for'
                             ' Slimpay payment %r', tr_ref)
         else:
-            ref = tr.reference
-            if ref and ref.startswith(inv_prefix):
-                for sep in ('x', '-'):  # 'x' in v10-, '-' in v12 -generated data
-                    if sep in ref:
-                        return self.env['account.invoice'].search([
-                            ('number', '=', ref.split(sep, 1)[0])])
+            return tr.invoice_ids and tr.invoice_ids[0]
 
     @api.model
     def _slimpay_payment_issue_name(self, issue_doc, payment_doc,
@@ -187,21 +166,20 @@ class ProjectTask(models.Model):
                 reject_date(issue_doc),
                 '%s %s' % (issue_doc['rejectAmount'], issue_doc['currency']),
             ]
-            if invoice is not None:
+            if invoice:
                 name.append(invoice.number)
         else:
             name = [payment_doc['reference'], task.name]
         return ' - '.join(name)
 
     @api.model
-    def _slimpay_payment_issue_get_or_create(self, project, client, issue_doc,
-                                             inv_prefix):
+    def _slimpay_payment_issue_get_or_create(self, project, client, issue_doc):
         meth = client.method_name
         payment_doc = client.get(issue_doc[meth('get-payment')].url)
 
         partner_id = False
         invoice = self._slimpay_payment_issue_find_invoice(
-            issue_doc, payment_doc, inv_prefix)
+            issue_doc, payment_doc)
         if invoice:
             existing = self.env['project.task'].search([
                 ('project_id', '=', project.id),
@@ -365,10 +343,9 @@ class ProjectTask(models.Model):
                 _logger.error('Transaction %s failed', transaction.id)
 
     @api.model
-    def _slimpay_payment_issue_handle(self, project, client, issue_doc,
-                                         inv_prefix):
+    def _slimpay_payment_issue_handle(self, project, client, issue_doc):
         task = self._slimpay_payment_issue_get_or_create(
-            project, client, issue_doc, inv_prefix)
+            project, client, issue_doc)
         invoice = task.invoice_id
 
         # No related invoice: move to orphan stage and exit
