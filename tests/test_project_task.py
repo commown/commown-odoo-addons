@@ -199,7 +199,6 @@ class ProjectTC(TransactionCase):
     def _create_inv_tx_and_payment(self):
         invoice = self.env['account.invoice'].create({
             'name': 'Test Invoice',
-            'reference_type': 'none',
             'payment_term_id': self.env.ref(
                 'account.account_payment_term_advance').id,
             'payment_mode_id': self.payment_mode.id,
@@ -222,7 +221,7 @@ class ProjectTC(TransactionCase):
             'payment_token_id': self.partner.payment_token_ids[0].id,
             'amount': invoice.residual,
             'state': 'done',
-            'date_validate': '2019-01-01',
+            'date': '2019-01-01',
             'currency_id': invoice.currency_id.id,
             'partner_id': self.partner.id,
             'partner_country_id': self.partner.country_id.id,
