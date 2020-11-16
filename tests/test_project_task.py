@@ -4,7 +4,7 @@ import mock
 
 from odoo.tests.common import at_install, post_install, TransactionCase
 
-from odoo.addons.payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
 
 
 class FakeDoc(dict):
@@ -69,8 +69,8 @@ def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
 class ProjectTC(TransactionCase):
 
     def setUp(self):
-        patcher = mock.patch(
-            'odoo.addons.payment_slimpay.models.slimpay_utils.get_client')
+        patcher = mock.patch('odoo.addons.account_payment_slimpay'
+                             '.models.slimpay_utils.get_client')
         patcher.start()
         super(ProjectTC, self).setUp()
         self.addCleanup(patcher.stop)
