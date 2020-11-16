@@ -372,8 +372,8 @@ class ProjectTC(TransactionCase):
         self.assertIssuesAcknowledged(act, 'i1')
 
     def _reset_on_time_actions_last_run(self):
-        for action in self.env['base.action.rule'].search([
-                ('kind', '=', 'on_time')]):
+        for action in self.env['base.automation'].search([
+                ('trigger', '=', 'on_time')]):
             xml_ids = list(action.get_xml_id().values())
             if xml_ids and xml_ids[0].startswith('payment_slimpay_issue'):
                 action.last_run = False
@@ -387,7 +387,7 @@ class ProjectTC(TransactionCase):
         with mock.patch.object(
                 SlimpayClient, 'action', side_effect=fake_action) as act:
             # triggers actions based on time
-            self.env['base.action.rule']._check()
+            self.env['base.automation']._check()
         return act
 
     def test_actions(self):
