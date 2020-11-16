@@ -329,7 +329,6 @@ class ProjectTask(models.Model):
                 task.id, invoice.number, partner.name, token.name)
 
             transaction = Transaction.create({
-                'reference': Transaction.get_next_reference(invoice.number),
                 'acquirer_id': token.acquirer_id.id,
                 'payment_token_id': token.id,
                 'amount': invoice.residual,
@@ -340,6 +339,7 @@ class ProjectTask(models.Model):
                 'partner_city': partner.city,
                 'partner_zip': partner.zip,
                 'partner_email': partner.email,
+                'invoice_ids': [(6, 0, invoice.ids)],
             })
 
             payment_mode = invoice.payment_mode_id

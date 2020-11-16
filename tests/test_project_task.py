@@ -217,7 +217,6 @@ class ProjectTC(TransactionCase):
 
         Transaction = self.env['payment.transaction']
         transaction = Transaction.create({
-            'reference': Transaction.get_next_reference(invoice.number),
             'acquirer_id': self.slimpay.id,
             'acquirer_reference': next_payment_reference(),
             'payment_token_id': self.partner.payment_token_ids[0].id,
@@ -230,6 +229,7 @@ class ProjectTC(TransactionCase):
             'partner_city': self.partner.city,
             'partner_zip': self.partner.zip,
             'partner_email': self.partner.email,
+            'invoice_ids': [(6, 0, invoice.ids)],
             })
 
         payment = self.env['account.payment'].create({
