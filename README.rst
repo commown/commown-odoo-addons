@@ -54,7 +54,7 @@ behaviour is supposed to be done on purpose by the user (you).
 You may also want to customize following system parameters:
 
 - payment_slimpay_issue.payment_retry_after_days_number: the number of
-  days to wait before attempting a new payment when an issue enters the
+  days to wait before attempting a new payment when a task enters the
   stage_warn_partner_and_wait column
 
 - payment_slimpay_issue.management_fees_after_retrial_number: the
@@ -80,28 +80,28 @@ Documentation
 =============
 
 The module regularly checks with Slimpay for payment issues (every 8
-hours by default), and creates an issue in the dedicated project
+hours by default), and creates a task in the dedicated project
 (called "Slimpay payment issues tracking" by default).
 
-If the issue cannot be related to an invoice, it ends-up in the "No
+If the task cannot be related to an invoice, it ends-up in the "No
 corresponding invoice found", and no further automatic action will
 occur. This happens when the Slimpay payment reference does not match
 the reference of a payment transaction in your odoo database.
 
-In the opposite case, the issue will be related to the invoice and an
+In the opposite case, the task will be related to the invoice and an
 issue payment counter incremented for that invoice (stored in the
-issue, and displayed on it in the dashboard).
+task, and displayed on it in the dashboard).
 
 The module will then automatically emit a warning email to the
 partner, stating that a new payment trial will occur 3 calendar days
-later. The issue then stays in the "Warn partner then wait" for 3
+later. The task then stays in the "Warn partner then wait" for 3
 days. When this delay expires, it is automatically moved to the "Retry
 payment and wait" column, where a new SEPA order is sent to Slimpay,
 and wait there for 8 more calendar days. If no other payment issue is
-raised after this period, the issue is considered fixed and moved in
+raised after this period, the issue is considered fixed and the task moved in
 the corresponding column. Otherwise this warning-wait-pay-wait cycle
 is performed again, in the limit of a maximum (2 by default), where
-the issue is moved to the "Max payment trials reached" column, for
+the task is moved to the "Max payment trials reached" column, for
 manual handling (an email is then sent to the company's email by
 default).
 
@@ -118,21 +118,21 @@ this, a script like this can be executed in a shell, given an unpaid
 invoice `invoice`::
 
   # If you want to reuse an existing payment issue instead of creating a new
-  # one, just get it using ``env['project.issue'].browse``:
-  issue = env['project.issue'].create({
+  # one, just get it using ``env['project.task'].browse``:
+  task = env['project.task'].create({
       'name': u'Test rejected payment',
       'invoice_id': invoice.id,
       'partner_id': invoice.partner_id.id,
       'project_id': env.ref('payment_slimpay_issue.project_payment_issue').id,
       'slimpay_payment_label': u'Test payment label',
   })
-  issue._slimpay_payment_issue_get_or_create = lambda *args: issue
-  issue._slimpay_payment_issue_handle(
-      issue.project_id,
+  task._slimpay_payment_issue_get_or_create = lambda *args: task
+  task._slimpay_payment_issue_handle(
+      task.project_id,
       None,
-      {'rejectAmount': issue.invoice_id.amount_total + 5.,
+      {'rejectAmount': task.invoice_id.amount_total + 5.,
        'dateCreated': u'2020-01-01T00:00'},
-      issue._slimpay_payment_invoice_prefix()
+      task._slimpay_payment_invoice_prefix()
   )
 
 

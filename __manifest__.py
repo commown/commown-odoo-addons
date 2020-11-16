@@ -10,8 +10,10 @@
     'license': "AGPL-3",
     'website': "https://commown.fr",
     'depends': [
-        'project_issue', 'payment_slimpay', 'base_action_rule',
         'account_payment_partner',
+        'account_payment_slimpay',
+        'base_automation',
+        'project',
     ],
     'data': [
         'data/mail_template.xml',
@@ -20,7 +22,7 @@
         'data/cron.xml',
         'data/action.xml',
         'data/res_partner.xml',
-        'views/project_issue.xml',
+        'views/project_task.xml',
     ],
     'installable': True,
 }

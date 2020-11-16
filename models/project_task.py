@@ -13,8 +13,8 @@ def reject_date(issue_doc):
     return issue_doc['dateCreated'].split('T', 1)[0]
 
 
-class ProjectIssue(models.Model):
-    _inherit = 'project.issue'
+class ProjectTask(models.Model):
+    _inherit = 'project.task'
 
     invoice_id = fields.Many2one('account.invoice', string='Invoice')
     invoice_unpaid_count = fields.Integer(
@@ -77,7 +77,7 @@ class ProjectIssue(models.Model):
             with self.env.cr.savepoint():
                 if issue_doc.get('rejectReason', None) != \
                        'sepaReturnReasonCode.focr.reason':
-                    issue = self._slimpay_payment_issue_handle(
+                    task = self._slimpay_payment_issue_handle(
                         project, client, issue_doc, inv_prefix)
                 else:
                     _logger.info(
@@ -178,8 +178,8 @@ class ProjectIssue(models.Model):
 
     @api.model
     def _slimpay_payment_issue_name(self, issue_doc, payment_doc,
-                                       invoice=None, issue=None):
-        if issue is None:
+                                       invoice=None, task=None):
+        if task is None:
             name = [
                 payment_doc['reference'] or _('No payment ref'),
                 reject_date(issue_doc),
@@ -188,7 +188,7 @@ class ProjectIssue(models.Model):
             if invoice is not None:
                 name.append(invoice.number)
         else:
-            name = [payment_doc['reference'], issue.name]
+            name = [payment_doc['reference'], task.name]
         return ' - '.join(name)
 
     @api.model
@@ -201,7 +201,7 @@ class ProjectIssue(models.Model):
         invoice = self._slimpay_payment_issue_find_invoice(
             issue_doc, payment_doc, inv_prefix)
         if invoice:
-            existing = self.env['project.issue'].search([
+            existing = self.env['project.task'].search([
                 ('project_id', '=', project.id),
                 ('invoice_id', '=', invoice.id),
             ])
@@ -226,7 +226,7 @@ class ProjectIssue(models.Model):
             'Slimpay Id: %s' % issue_doc['id'],
         ]
 
-        return self.env['project.issue'].create({
+        return self.env['project.task'].create({
             'name': self._slimpay_payment_issue_name(
                 issue_doc, payment_doc, invoice),
             'description': '\n'.join(description),
@@ -291,7 +291,7 @@ class ProjectIssue(models.Model):
             'payment_slimpay_issue.bank_supplier_fees_product'
         ).product_variant_ids
         if not product:
-            _logger.info('Issue %s: No bank supplier fees product:'
+            _logger.info('Task %s: No bank supplier fees product:'
                          ' skipping fees invoice creation', self.id)
             return
         invoice = self.env['account.invoice'].create({
@@ -313,8 +313,8 @@ class ProjectIssue(models.Model):
     @api.multi
     def _slimpay_payment_issue_retry_payment(self):
         Transaction = self.env['payment.transaction']
-        for issue in self:
-            invoice = issue.invoice_id
+        for task in self:
+            invoice = task.invoice_id
             partner = invoice.partner_id
 
             if not partner.payment_token_ids:
@@ -323,8 +323,8 @@ class ProjectIssue(models.Model):
             token = partner.payment_token_ids[0]
 
             _logger.info(
-                'Issue %s: retrying payment of invoice %s of %s with %s',
-                issue.id, invoice.number, partner.name, token.name)
+                'Task %s: retrying payment of invoice %s of %s with %s',
+                task.id, invoice.number, partner.name, token.name)
 
             transaction = Transaction.create({
                 'reference': Transaction.get_next_reference(invoice.number),
@@ -342,7 +342,7 @@ class ProjectIssue(models.Model):
 
             payment_mode = invoice.payment_mode_id
             payment = self.env['account.payment'].create({
-                'company_id': issue.user_id.company_id.id,
+                'company_id': task.user_id.company_id.id,
                 'partner_id': invoice.partner_id.id,
                 'partner_type': 'customer',
                 'state': 'draft',
@@ -365,17 +365,17 @@ class ProjectIssue(models.Model):
     @api.model
     def _slimpay_payment_issue_handle(self, project, client, issue_doc,
                                          inv_prefix):
-        issue = self._slimpay_payment_issue_get_or_create(
+        task = self._slimpay_payment_issue_get_or_create(
             project, client, issue_doc, inv_prefix)
-        invoice = issue.invoice_id
+        invoice = task.invoice_id
 
         # No related invoice: move to orphan stage and exit
-        if not issue.slimpay_payment_issue_process_automatically():
-            issue.update({'stage_id': self.env.ref(
+        if not task.slimpay_payment_issue_process_automatically():
+            task.update({'stage_id': self.env.ref(
                 'payment_slimpay_issue.stage_orphan').id})
             return
 
-        issue.invoice_unpaid_count += 1
+        task.invoice_unpaid_count += 1
 
         _logger.info('Unreconciling invoice "%s"', invoice.name)
         invoice.payment_move_line_ids.remove_move_reconcile()
@@ -389,17 +389,17 @@ class ProjectIssue(models.Model):
             fees = rejected_amount - invoice.amount_total
             self._slimpay_payment_issue_invoice_fees(invoice, 'bank', fees)
             self._slimpay_payment_issue_create_supplier_invoice_fees(
-                '%s-REJ%d' % (invoice.number, issue.invoice_unpaid_count),
+                '%s-REJ%d' % (invoice.number, task.invoice_unpaid_count),
                 reject_date(issue_doc), fees)
 
-        if (issue.invoice_unpaid_count
+        if (task.invoice_unpaid_count
                 > self._slimpay_payment_issue_management_fees_retrial_num()):
             self._slimpay_payment_issue_invoice_fees(invoice, 'management')
 
-        if issue.invoice_unpaid_count > self._slimpay_payment_max_retrials():
-            issue.update({'stage_id': self.env.ref(
+        if task.invoice_unpaid_count > self._slimpay_payment_max_retrials():
+            task.update({'stage_id': self.env.ref(
                 'payment_slimpay_issue.stage_max_trials_reached').id})
         else:
-            issue.update({'stage_id': self.env.ref(
+            task.update({'stage_id': self.env.ref(
                 'payment_slimpay_issue.stage_warn_partner_and_wait').id})
-        return issue
+        return task

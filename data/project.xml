@@ -4,8 +4,6 @@
 
     <record id="project_payment_issue" model="project.project">
       <field name="name">Slimpay payment issues tracking</field>
-      <field name="use_tasks">False</field>
-      <field name="use_issues">True</field>
     </record>
 
     <record id="stage_new" model="project.task.type">
