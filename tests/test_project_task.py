@@ -20,7 +20,7 @@ def next_payment_reference(value=None, counter=[0]):
 
 
 def task_emails(task):
-    return task.message_ids.filtered(lambda m: m.message_type == 'email')
+    return task.message_ids.filtered('partner_ids')
 
 
 def fake_action(method, func, *args, **kwargs):
