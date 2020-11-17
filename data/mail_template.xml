@@ -7,7 +7,7 @@
       <field name="subject"><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
       <field name="email_from">contact@commown.fr</field>
       <field name="email_to">mail2sms@envoyersmspro.com</field>
-      <field name="model_id" ref="project_issue.model_project_issue"/>
+      <field name="model_id" ref="project.model_project_task"/>
       <field name="lang">fr_FR</field>
       <field name="auto_delete">True</field>
       <field name="body_html"><![CDATA[
