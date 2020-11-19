@@ -14,10 +14,6 @@ Setup
 - set recaptcha.key.* system parameters in
   Configuration > Parameters > System parameters
 
-- there is an example campaign for coupons, which name must contain
-  "mine urbaine"; the last created campaign matching this criterion
-  will be used to generate the coupons into
-
 - there is an example product with default_code field valued
   "urban-mine";
 

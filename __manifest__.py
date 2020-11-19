@@ -1,32 +1,32 @@
+# Copyright 2020 Commown SCIC SAS (https://commown.fr)
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Urban mine',
-    'category': 'Business',
+    'category': 'Custom',
     'summary': 'Urban mine offer: people sell their device to the company',
-    'version': '10.0.1.0.3',
+    'version': '12.0.1.0.0',
     'description': 'Urban mine offer: people sell their device to the company',
-    'author': "Commown SCIC SAS",
-    'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'author': 'Commown SCIC SAS',
+    'license': 'AGPL-3',
+    'website': 'https://commown.fr',
     'depends': [
         'commown_shipping',
-        'crm',
         'l10n_fr',
-        'report_py3o',
-        'website_sale_coupon',
+        'crm',
+        'website_sale_promotion_rule',
         'website_form_builder',
         'website_form_recaptcha',
+        'report_py3o',
     ],
-    'external_dependencies': {
-    },
     'data': [
         'data/model.xml',
         'data/product.xml',
         'data/crm.xml',
-        'data/coupon.xml',
         'data/report.xml',
         'data/registration_page.xml',
         'data/actions.xml',
         'data/mail_templates.xml',
+        'data/coupon.xml',
     ],
     'installable': True,
 }

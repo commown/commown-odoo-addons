@@ -26,25 +26,27 @@ class TestRegistration(TransactionCase):
             'from_urban_mine': True,
         })
 
-    def get_leads(self, partner_id):
+    def get_leads(self):
         return self.env['crm.lead'].search([
             ('team_id', '=', self.team.id),
-            ('partner_id', '=', partner_id),
+            ('partner_id', '=', self.partner.id),
         ])
 
     def get_last_note_message(self, lead):
+        mt_comment = self.env.ref("mail.mt_comment")
         return [
             m for m in lead.message_ids
-            if m.subtype_id.get_xml_id().values() == ["mail.mt_comment"]][0]
+            if m.subtype_id.id == mt_comment.id and
+            m.model == "crm.lead"][0]
 
     def test_opportunity_creation(self):
-        self.assertEqual(len(self.get_leads(self.partner.id)), 1)
+        self.assertEqual(len(self.get_leads()), 1)
 
     def test_opportunity_ok(self):
-        lead = self.get_leads(self.partner.id)
+        lead = self.get_leads()
 
         fake_meta_data = {'labelResponse': {'parcelNumber': '8R0000000000'}}
-        with open(osp.join(osp.dirname(__file__), 'fake_label.pdf')) as fobj:
+        with open(osp.join(osp.dirname(__file__), 'fake_label.pdf'), 'rb') as fobj:
             fake_label_data = fobj.read()
 
         with mock.patch(
@@ -86,10 +88,10 @@ class TestRegistration(TransactionCase):
         attachments = self.env['ir.attachment'].search([
             ("res_model", "=", invoice._name),
             ("res_id", "=", invoice.id),
-            ])
+        ])
         self.assertEqual(len(attachments), 1)
         last_note_msg = self.get_last_note_message(lead)
         self.assertIn(u'Accord de reprise', last_note_msg.subject)
         self.assertIn('COMMOWN-MU-%d' % lead.id, last_note_msg.subject)
-        last_coupon = self.env['coupon.coupon'].search([])[0]
+        last_coupon = self.env.ref("urban_mine.urban_mine_campaing")
         self.assertIn(last_coupon.code, last_note_msg.body)

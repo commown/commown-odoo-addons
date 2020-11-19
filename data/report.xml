@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
 
-  <record id="report_autoinvoice" model="ir.actions.report.xml">
+  <record id="report_autoinvoice" model="ir.actions.report">
     <field name="name">[commown] Imprimer auto-facture</field>
     <field name="report_type">py3o</field>
     <field name="py3o_filetype">pdf</field>

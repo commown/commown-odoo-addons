@@ -11,8 +11,8 @@
       <field name="purchase_ok">True</field>
       <field name="list_price">0</field>
       <field name="standard_price">50</field>
-      <field name="invoice_policy">order</field>
-      <field name="property_account_expense_id" ref="l10n_fr.1_pcg_6068"/>
+      <field name="purchase_method">purchase</field>
+      <field name="property_account_expense_id" ref="l10n_fr.pcg_6068"/>
     </record>
 
   </data>

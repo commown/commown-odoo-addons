@@ -2,11 +2,11 @@
 <odoo>
   <data noupdate="1">
 
-    <record id="campaing" model="coupon.campaign">
+    <record id="urban_mine_campaing" model="sale.promotion.rule">
       <field name="name">Mine urbaine : campagne de test</field>
-      <field name="description">Vous avez la première mensualité offerte grâce à votre code !</field>
-      <field name="seller_id" ref="base.main_partner"/>
-      <field name="coupons_are_exclusive">True</field>
+      <field name="code">Mine Urbaine</field>
+      <field name="discount_amount">0.0</field>
+      <field name="multi_rule_strategy">exclusive</field>
     </record>
 
   </data>
