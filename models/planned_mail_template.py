@@ -51,7 +51,7 @@ class PlannedMailTemplate(models.Model):
     def cron_send_planned_mails(self):
         planned_mails = self.env[self._name].search([
             ("effective_send_time", "=", False),
-            ("planned_send_date", "<", fields.Datetime.now()),
+            ("planned_send_date", "<=", fields.Datetime.now()),
         ])
         for planned_mail in planned_mails:
             src_obj = self.env[planned_mail.model_id.model].browse(
