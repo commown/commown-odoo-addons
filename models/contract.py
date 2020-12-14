@@ -65,6 +65,12 @@ class ContractTemplatePlannedMailGenerator(models.Model):
 class ContractTemplate(models.Model):
     _inherit = "account.analytic.contract"
 
+    planned_mail_gen_ids = fields.One2many(
+        string=u"Planned emails",
+        comodel_name=u"contract_emails.planned_mail_generator",
+        inverse_name='contract_id'
+    )
+
     @api.multi
     def generate_planned_mail_templates(self, domain=None):
         " Method that generates planned emails for all related contracts. "
