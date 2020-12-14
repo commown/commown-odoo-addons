@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 
 
 _logger = logging.getLogger(__name__)
@@ -87,3 +87,28 @@ class ContractTemplate(models.Model):
                         "planned_send_date": mgen.compute_send_date(contract),
                         "res_id": contract.id,
                     })
+
+
+class Contract(models.Model):
+    _inherit = "account.analytic.account"
+
+    def button_open_planned_emails(self):
+        self.ensure_one()
+        pmt_model = 'contract_emails.planned_mail_template'
+        emails = self.env[pmt_model].search([
+            ("res_id", "=", self.id),
+            ("model_id.model", "=", self._name),
+        ])
+        result = {
+            'type': 'ir.actions.act_window',
+            'res_model': pmt_model,
+            'domain': [('id', 'in', emails.ids)],
+            'name': _('Planned emails'),
+        }
+        if len(emails) == 1:  # single sale: display it directly
+            views = [(False, 'form')]
+            result['res_id'] = emails.id
+        else:  # display a list
+            views = [(False, 'list'), (False, 'form')]
+        result['views'] = views
+        return result
