@@ -35,6 +35,18 @@ class PlannedMailTemplate(models.Model):
         help="The type of document this template can be used with",
     )
 
+    document = fields.Char(
+        'Document',
+        compute='_compute_document',
+        readonly=True,
+        store=False,
+    )
+
+    @api.depends('model_id', 'res_id')
+    def _compute_document(self):
+        for pmt in self:
+            pmt.document = "%s,%s" % (pmt.model_id.model, pmt.res_id)
+
     @api.model
     def cron_send_planned_mails(self):
         planned_mails = self.env[self._name].search([

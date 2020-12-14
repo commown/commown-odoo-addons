@@ -16,6 +16,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "views/planned_mail_template.xml",
     ],
     "installable": True,
     "application": False,
