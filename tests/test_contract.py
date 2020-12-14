@@ -18,7 +18,6 @@ class ContractTemplateMailGenerator(ContractPlannedMailBaseTC):
             "interval_type": "monthly",
         })
 
-
     def test_generator(self):
         self.create_gen(0)
         self.create_gen(6)
