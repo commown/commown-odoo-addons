@@ -4,11 +4,10 @@ from .common import ContractPlannedMailBaseTC
 class ContractTemplateMailGenerator(ContractPlannedMailBaseTC):
 
     def create_contract(self, date, template, **kwargs):
-        kwargs.setdefault("recurring_next_date", date)
+        kwargs["recurring_next_date"] = date
         kwargs["contract_template_id"] = template.id
-        contract = self.contract.copy(kwargs)
-        contract.date_start = date  # avoid recurring_next_date comparison error
-        return contract
+        kwargs["date_start"] = date
+        return self.contract.copy(kwargs)
 
     def create_gen(self, interval_number):
         return self.env['contract_emails.planned_mail_generator'].create({
@@ -18,18 +17,32 @@ class ContractTemplateMailGenerator(ContractPlannedMailBaseTC):
             "interval_type": "monthly",
         })
 
+    def assertContractPmtDatesEqual(self, dates_by_contract_id):
+        pmts = self.env["contract_emails.planned_mail_template"].search([
+            ("res_id", "in", dates_by_contract_id.keys()),
+        ])
+        self.assertEqual(
+            sorted([(pmt.res_id, pmt.planned_send_date) for pmt in pmts]),
+            sorted([(c_id, date)
+                    for c_id, dates in dates_by_contract_id.items()
+                    for date in dates
+            ])
+        )
+
     def test_generator(self):
         self.create_gen(0)
         self.create_gen(6)
         c1 = self.create_contract("2020-09-15", self.template)
         c2 = self.create_contract("2021-01-03", self.template)
-        self.template.generate_planned_mail_templates()
 
-        pmts = self.env["contract_emails.planned_mail_template"].search([
-            ("res_id", "in", (c1.id, c2.id)),
-        ])
-        self.assertEqual(
-            sorted([(pmt.res_id, pmt.planned_send_date) for pmt in pmts]),
-            [(c1.id, "2020-09-15"), (c1.id, "2021-03-15"),
-             (c2.id, "2021-01-03"), (c2.id, "2021-07-03")]
-        )
+        self.assertContractPmtDatesEqual({
+            c1.id: ["2020-09-15", "2021-03-15"],
+            c2.id: ["2021-01-03", "2021-07-03"],
+        })
+
+        c1.date_start = "2020-05-03"
+        c1._onchange_date_start()
+        self.assertContractPmtDatesEqual({
+            c1.id: ["2020-05-03", "2020-11-03"],
+            c2.id: ["2021-01-03", "2021-07-03"],
+        })

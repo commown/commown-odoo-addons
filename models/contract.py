@@ -61,7 +61,7 @@ class ContractTemplatePlannedMailGenerator(models.Model):
         for gen in self:
             create({
                 "mail_template_id": gen.mail_template_id.id,
-                "planned_send_date": self.compute_send_date(contract),
+                "planned_send_date": gen.compute_send_date(contract),
                 "res_id": contract.id,
             })
 
@@ -72,46 +72,31 @@ class ContractTemplate(models.Model):
     planned_mail_gen_ids = fields.One2many(
         string=u"Planned emails",
         comodel_name=u"contract_emails.planned_mail_generator",
-        inverse_name='contract_id'
+        inverse_name='contract_id',
     )
-
-    @api.multi
-    def generate_planned_mail_templates(self, domain=None):
-        " Method that generates planned emails for all related contracts. "
-        domain = domain or []
-
-        c_model = self.env["account.analytic.account"]
-        mgen_model = self.env["contract_emails.planned_mail_generator"]
-        pmt_model = self.env["contract_emails.planned_mail_template"]
-
-        for c_template in self:
-            domain = domain + [("contract_template_id", "=", c_template.id)]
-            contracts = c_model.search(domain)
-            mgens = mgen_model.search([('contract_id', '=', c_template.id)])
-            _logger.info(u"Generating %d planned mails of contract template %s",
-                         len(contracts) * len(mgens), c_template.name)
-            for contract in contracts:
-                for mgen in mgens:
-                    pmt_model.create({
-                        "mail_template_id": mgen.mail_template_id.id,
-                        "planned_send_date": mgen.compute_send_date(contract),
-                        "res_id": contract.id,
-                    })
-
 
 class Contract(models.Model):
     _inherit = "account.analytic.account"
 
-    def button_open_planned_emails(self):
-        self.ensure_one()
-        pmt_model = 'contract_emails.planned_mail_template'
-        emails = self.env[pmt_model].search([
-            ("res_id", "=", self.id),
+    def _planned_emails(self):
+        return self.env['contract_emails.planned_mail_template'].search([
+            ("res_id", "in", self.ids),
             ("model_id.model", "=", self._name),
         ])
+
+    def _generate_planned_emails(self, unlink_first=False):
+        self.ensure_one()
+        if unlink_first:
+            self._planned_emails().unlink()
+        pmts = self.contract_template_id.planned_mail_gen_ids
+        pmts.generate_planned_mail_templates(self)
+
+    def button_open_planned_emails(self):
+        self.ensure_one()
+        emails = self._planned_emails()
         result = {
             'type': 'ir.actions.act_window',
-            'res_model': pmt_model,
+            'res_model': 'contract_emails.planned_mail_template',
             'domain': [('id', 'in', emails.ids)],
             'name': _('Planned emails'),
         }
@@ -122,3 +107,19 @@ class Contract(models.Model):
             views = [(False, 'list'), (False, 'form')]
         result['views'] = views
         return result
+
+    @api.model
+    def create(self, values):
+        contract = super(Contract, self).create(values)
+        contract._generate_planned_emails()
+        return contract
+
+    @api.onchange('contract_template_id')
+    def _onchange_contract_template_id(self):
+        " (Re-)generate the planned emails "
+        self._generate_planned_emails(unlink_first=True)
+
+    @api.onchange('date_start')
+    def _onchange_date_start(self):
+        if self.date_start:
+            self._generate_planned_emails(unlink_first=True)

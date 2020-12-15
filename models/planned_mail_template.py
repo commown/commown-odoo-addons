@@ -11,6 +11,7 @@ class PlannedMailTemplate(models.Model):
         "mail.template",
         string="Email to send",
         required=True,
+        ondelete="cascade",
     )
 
     planned_send_date = fields.Date(
