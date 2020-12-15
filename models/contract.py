@@ -55,6 +55,8 @@ class ContractTemplatePlannedMailGenerator(models.Model):
                     self.interval_type, self.interval_number))
 
     def generate_planned_mail_templates(self, contract):
+        if not contract.date_start:
+            return
         create = self.env['contract_emails.planned_mail_template'].create
         for gen in self:
             create({
