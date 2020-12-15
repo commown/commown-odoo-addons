@@ -17,13 +17,15 @@ class ContractTemplatePlannedMailGenerator(models.Model):
         "account.analytic.contract",
         string=u"Contract template",
         required=True,
+        ondelete="cascade",
     )
 
     mail_template_id = fields.Many2one(
         "mail.template",
         string="Email to send",
         required=True,
-        domain="[('model', '=', 'account.analytic.account')]"
+        domain="[('model', '=', 'account.analytic.account')]",
+        ondelete="restrict",
     )
 
     interval_number = fields.Integer(
