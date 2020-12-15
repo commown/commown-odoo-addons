@@ -27,6 +27,7 @@
         <field name="mail_template_id"/>
         <field name="planned_send_date"/>
         <field name="effective_send_time"/>
+        <field name="model_id"/>
       </tree>
     </field>
   </record>
@@ -36,7 +37,6 @@
     <field name="res_model">contract_emails.planned_mail_template</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
-    <field name="context">{}</field>
   </record>
 
   <menuitem
