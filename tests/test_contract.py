@@ -40,8 +40,7 @@ class ContractTemplateMailGenerator(ContractPlannedMailBaseTC):
             c2.id: ["2021-01-03", "2021-07-03"],
         })
 
-        c1.date_start = "2020-05-03"
-        c1._onchange_date_start()
+        c1.write({"date_start": "2020-05-03"})
         self.assertContractPmtDatesEqual({
             c1.id: ["2020-05-03", "2020-11-03"],
             c2.id: ["2021-01-03", "2021-07-03"],

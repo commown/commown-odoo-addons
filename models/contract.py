@@ -115,15 +115,13 @@ class Contract(models.Model):
         contract._generate_planned_emails()
         return contract
 
-    @api.onchange('contract_template_id')
-    def _onchange_contract_template_id(self):
-        " (Re-)generate the planned emails "
-        self._generate_planned_emails(unlink_first=True)
-
-    @api.onchange('date_start')
-    def _onchange_date_start(self):
-        if self.date_start:
-            self._generate_planned_emails(unlink_first=True)
+    @api.multi
+    def write(self, values):
+        res = super(Contract, self).write(values)
+        if "date_start" in values or "contract_template_id" in values:
+            for contract in self:
+                contract._generate_planned_emails(unlink_first=True)
+        return res
 
     @api.multi
     def unlink(self):
