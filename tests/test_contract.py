@@ -46,6 +46,6 @@ class ContractTemplateMailGenerator(ContractPlannedMailBaseTC):
             c2.id: ["2021-01-03", "2021-07-03"],
         })
 
-        pmts = c1._planned_emails()
+        pmts = c1._get_planned_emails()
         c1.unlink()
         self.assertFalse(pmts.exists())

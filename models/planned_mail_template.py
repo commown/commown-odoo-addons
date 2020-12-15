@@ -70,13 +70,17 @@ class PlannedMailTemplate(models.Model):
 class PlannedMailTemplateObject(models.AbstractModel):
     _name = "contract_emails.planned_mail_template_object"
 
+    def planned_email_generators(self):
+        " This method is to be overloaded "
+        raise NotImplementedError()
+
     def _generate_planned_emails(self, unlink_first=False):
         self.ensure_one()
         if unlink_first:
-            self._planned_emails().unlink()
+            self._get_planned_emails().unlink()
         self.planned_email_generators().generate_planned_mail_templates(self)
 
-    def _planned_emails(self):
+    def _get_planned_emails(self):
         return self.env['contract_emails.planned_mail_template'].search([
             ("res_id", "in", self.ids),
             ("model_id.model", "=", self._name),
@@ -84,7 +88,7 @@ class PlannedMailTemplateObject(models.AbstractModel):
 
     def button_open_planned_emails(self):
         self.ensure_one()
-        emails = self._planned_emails()
+        emails = self._get_planned_emails()
         result = {
             'type': 'ir.actions.act_window',
             'res_model': 'contract_emails.planned_mail_template',
@@ -102,5 +106,5 @@ class PlannedMailTemplateObject(models.AbstractModel):
     @api.multi
     def unlink(self):
         "Cascade delete related planned emails"
-        self._planned_emails().unlink()
+        self._get_planned_emails().unlink()
         super(PlannedMailTemplateObject, self).unlink()
