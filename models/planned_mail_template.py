@@ -65,3 +65,42 @@ class PlannedMailTemplate(models.Model):
         self.ensure_one()
         src_obj.message_post_with_template(self.mail_template_id.id)
         self.effective_send_time = fields.Datetime.now()
+
+
+class PlannedMailTemplateObject(models.AbstractModel):
+    _name = "contract_emails.planned_mail_template_object"
+
+    def _generate_planned_emails(self, unlink_first=False):
+        self.ensure_one()
+        if unlink_first:
+            self._planned_emails().unlink()
+        self.planned_email_generators().generate_planned_mail_templates(self)
+
+    def _planned_emails(self):
+        return self.env['contract_emails.planned_mail_template'].search([
+            ("res_id", "in", self.ids),
+            ("model_id.model", "=", self._name),
+        ])
+
+    def button_open_planned_emails(self):
+        self.ensure_one()
+        emails = self._planned_emails()
+        result = {
+            'type': 'ir.actions.act_window',
+            'res_model': 'contract_emails.planned_mail_template',
+            'domain': [('id', 'in', emails.ids)],
+            'name': _('Planned emails'),
+        }
+        if len(emails) == 1:  # single sale: display it directly
+            views = [(False, 'form')]
+            result['res_id'] = emails.id
+        else:  # display a list
+            views = [(False, 'list'), (False, 'form')]
+        result['views'] = views
+        return result
+
+    @api.multi
+    def unlink(self):
+        "Cascade delete related planned emails"
+        self._planned_emails().unlink()
+        super(PlannedMailTemplateObject, self).unlink()

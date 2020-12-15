@@ -77,37 +77,14 @@ class ContractTemplate(models.Model):
 
 
 class Contract(models.Model):
-    _inherit = "account.analytic.account"
+    _name = "account.analytic.account"
+    _inherit = [
+        "account.analytic.account",
+        "contract_emails.planned_mail_template_object",
+    ]
 
-    def _planned_emails(self):
-        return self.env['contract_emails.planned_mail_template'].search([
-            ("res_id", "in", self.ids),
-            ("model_id.model", "=", self._name),
-        ])
-
-    def _generate_planned_emails(self, unlink_first=False):
-        self.ensure_one()
-        if unlink_first:
-            self._planned_emails().unlink()
-        pmts = self.contract_template_id.planned_mail_gen_ids
-        pmts.generate_planned_mail_templates(self)
-
-    def button_open_planned_emails(self):
-        self.ensure_one()
-        emails = self._planned_emails()
-        result = {
-            'type': 'ir.actions.act_window',
-            'res_model': 'contract_emails.planned_mail_template',
-            'domain': [('id', 'in', emails.ids)],
-            'name': _('Planned emails'),
-        }
-        if len(emails) == 1:  # single sale: display it directly
-            views = [(False, 'form')]
-            result['res_id'] = emails.id
-        else:  # display a list
-            views = [(False, 'list'), (False, 'form')]
-        result['views'] = views
-        return result
+    def planned_email_generators(self):
+        return self.mapped('contract_template_id.planned_mail_gen_ids')
 
     @api.model
     def create(self, values):
@@ -122,9 +99,3 @@ class Contract(models.Model):
             for contract in self:
                 contract._generate_planned_emails(unlink_first=True)
         return res
-
-    @api.multi
-    def unlink(self):
-        "Cascade delete related planned emails"
-        self._planned_emails().unlink()
-        super(Contract, self).unlink()
