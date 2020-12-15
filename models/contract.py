@@ -75,6 +75,7 @@ class ContractTemplate(models.Model):
         inverse_name='contract_id',
     )
 
+
 class Contract(models.Model):
     _inherit = "account.analytic.account"
 
@@ -123,3 +124,9 @@ class Contract(models.Model):
     def _onchange_date_start(self):
         if self.date_start:
             self._generate_planned_emails(unlink_first=True)
+
+    @api.multi
+    def unlink(self):
+        "Cascade delete related planned emails"
+        self._planned_emails().unlink()
+        super(Contract, self).unlink()
