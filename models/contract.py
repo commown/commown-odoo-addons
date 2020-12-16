@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 
 from odoo import api, fields, models, _
 
@@ -59,9 +60,13 @@ class ContractTemplatePlannedMailGenerator(models.Model):
             return
         create = self.env['contract_emails.planned_mail_template'].create
         for gen in self:
+            planned_send_date = gen.compute_send_date(contract)
+            if planned_send_date < date.today():
+                # Skip mails that should have been sent already:
+                continue
             create({
                 "mail_template_id": gen.mail_template_id.id,
-                "planned_send_date": gen.compute_send_date(contract),
+                "planned_send_date": planned_send_date,
                 "res_id": contract.id,
             })
 

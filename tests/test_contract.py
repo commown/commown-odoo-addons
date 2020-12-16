@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from .common import ContractPlannedMailBaseTC
 
 
@@ -32,20 +34,25 @@ class ContractTemplateMailGenerator(ContractPlannedMailBaseTC):
     def test_generator(self):
         self.create_gen(0)
         self.create_gen(6)
-        c1 = self.create_contract("2020-09-15", self.template)
-        c2 = self.create_contract("2021-01-03", self.template)
+        c1 = self.create_contract("2050-09-15", self.template)
+        c2 = self.create_contract("2051-01-03", self.template)
 
         self.assertContractPmtDatesEqual({
-            c1.id: ["2020-09-15", "2021-03-15"],
-            c2.id: ["2021-01-03", "2021-07-03"],
+            c1.id: ["2050-09-15", "2051-03-15"],
+            c2.id: ["2051-01-03", "2051-07-03"],
         })
 
-        c1.write({"date_start": "2020-05-03"})
+        c1.write({"date_start": "2050-05-03"})
         self.assertContractPmtDatesEqual({
-            c1.id: ["2020-05-03", "2020-11-03"],
-            c2.id: ["2021-01-03", "2021-07-03"],
+            c1.id: ["2050-05-03", "2050-11-03"],
+            c2.id: ["2051-01-03", "2051-07-03"],
         })
 
         pmts = c1._get_planned_emails()
+        self.assertTrue(pmts.exists())
         c1.unlink()
         self.assertFalse(pmts.exists())
+
+        self.assertEqual(len(c2._get_planned_emails()), 2)
+        c2.write({'date_start': date.today() - timedelta(days=90)})
+        self.assertEqual(len(c2._get_planned_emails()), 1)
