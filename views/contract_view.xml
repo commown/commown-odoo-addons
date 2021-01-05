@@ -2,17 +2,23 @@
 <odoo>
 
   <record id="account_analytic_contract_view_form" model="ir.ui.view">
-    <field name="name">Account Analytic Contract Form View</field>
-    <field name="model">account.analytic.contract</field>
-    <field name="inherit_id" ref="contract.account_analytic_contract_view_form" />
+    <field name="name">contract.contract form view (in product_rental)</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract_contract_form_view" />
     <field name="arch" type="xml">
 
       <xpath expr="//group[@name='group_main_left']" position="inside">
         <field name="payment_mode_id" />
+        <field name="commitment_duration" />
       </xpath>
 
-      <xpath expr="//group[@name='group_main_right']" position="inside">
-        <field name="min_contract_duration" />
+      <xpath expr="//group[@name='group_invoice_lines']//tree" position="inside">
+        <field name="commitment_duration" />
+      </xpath>
+
+      <xpath expr="//group[@name='group_legend']" position="inside">
+        <p> <strong>##PRODUCT##</strong> (in the description): mark the rental product template line; substituted by the actual product name</p>
+        <p> <strong>##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name</p>
       </xpath>
 
     </field>

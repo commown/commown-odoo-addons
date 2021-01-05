@@ -1,5 +1,5 @@
 import logging
-from collections import defaultdict
+from datetime import date
 
 from odoo import api, models
 
@@ -7,25 +7,64 @@ from odoo import api, models
 _logger = logging.getLogger(__name__)
 
 
-NO_DATE = '2030-01-01'
+CONTRACT_PROD_MARKER = '##PRODUCT##'
+CONTRACT_ACCESSORY_MARKER = '##ACCESSORY##'
+NO_DATE = date(2030, 1, 1)
+
+
+def _gen_contract_lines(so_line, contract, rental_products):
+    """Use contract_template to generate (yield) contract lines, with
+    following conventions:
+
+    - the contract template line which name contains ##PRODUCT## is
+      used as a model for the rental product line described in
+      `rental_products` dict value which key is ##PRODUCT##
+
+    - the contract template line which name contains ##ACCESSORY## is
+      used as a model for the rental product lines described in
+      `rental_products` dict value which key is ##ACCESSORY##
+
+    - other contract template lines generate normal contract lines
+
+    All generated lines are associated by the given sale order line,
+    `so_line`.
+
+    """
+    for line in contract.contract_line_ids:
+        for marker, products in rental_products.items():
+            if marker in line.name:
+                for product, so_line, quantity in products:
+                    line_copy = line.copy({
+                        'name': line.name.replace(marker, product.name),
+                        'specific_price': so_line.compute_rental_price(
+                            line.product_id.taxes_id),
+                        'quantity': quantity,
+                        'sale_order_line_id': so_line.id,
+                    })
+                    yield line_copy
+                # Remove marked line once it was used
+                line.cancel()
+                line.unlink()
+                break
+        else:
+            line.sale_order_line_id = so_line.id
+            yield line
+
+
+def _rental_products(so_line, acc_by_so_line):
+    " Helper function to prepare data required for contract line generation "
+    _acs = acc_by_so_line[so_line]
+    __acs = [(p, l, l.product_uom_qty) for (p, l) in set(_acs)]
+    qtty = so_line.product_uom_qty
+
+    return {
+        CONTRACT_PROD_MARKER: [(so_line.product_id, so_line, qtty)],
+        CONTRACT_ACCESSORY_MARKER: sorted(__acs, key=lambda a: a[0].id),
+    }
 
 
 class ProductRentalSaleOrderLine(models.Model):
     _inherit = "sale.order.line"
-
-    @api.multi
-    def _prepare_contract_vals(self):
-        self.ensure_one()
-        order = self.order_id
-        index = self.env.context['contract_from_so']['index']
-        data = super(ProductRentalSaleOrderLine, self)._prepare_contract_vals()
-        data.update({
-            'name': '%s-%02d' % (order.name, index),
-            'is_auto_pay': False,
-            'date_start': NO_DATE,
-            'recurring_next_date': NO_DATE,
-        })
-        return data
 
     def compute_rental_price(self, rental_taxes):
         "Return the rental recurring amount"
@@ -34,92 +73,31 @@ class ProductRentalSaleOrderLine(models.Model):
         return self.price_unit * (1 - (self.discount or 0.0) / 100.0) / ratio
 
     @api.multi
-    def assign_contract_products(self):
-        "Assign main product and accessories to n contracts per sale order line"
+    def create_contract_line(self, contract):
+        """Return contract lines from current sale order lines.
 
-        bought_accessories = defaultdict(list)
-        for l in self:
-            accessory = l.product_id
-            if accessory.is_rental and not accessory.is_contract:
-                bought_accessories[l.product_id] += int(l.product_uom_qty) * [l]
-        _logger.debug(u'%s: bought %d accessories', self[0].order_id.name,
-                      sum(len(l) for l in bought_accessories.values()))
-
-        contract_descrs = [
-            {'so_line': so_line, 'main': so_line.product_id, 'accessories': []}
-            for so_line in self.filtered('product_id.is_contract')
-            for num in range(int(so_line.product_uom_qty))
-        ]
-
-        for contract_num, contract_descr in enumerate(contract_descrs, 1):
-            _logger.debug(u'Examining so_line %s (contract %d)',
-                          contract_descr['so_line'].name, contract_num)
-            _logger.debug(
-                u'Unassigned accessories: %s',
-                u', '.join('%s (x%d)' % (a.name, len(so_lines))
-                           for (a, so_lines) in bought_accessories.items()))
-            for accessory, so_lines in bought_accessories.items():
-                if accessory in contract_descr['main'].accessory_product_ids:
-                    contract_descr['accessories'].append(
-                        (accessory, so_lines.pop(0))
-                    )
-                    _logger.debug(u'> Assigned accessory %s', accessory.name)
-                    if len(bought_accessories[accessory]) == 0:
-                        del bought_accessories[accessory]
-
-        _logger.debug(u'Accessories to be assigned to last contract (%d): %s',
-                      len(contract_descrs),
-                      u', '.join(
-                          '%s (x%d)' % (a.name, len(so_lines))
-                          for (a, so_lines) in bought_accessories.items())
-                      or 'None')
-
-        if contract_descrs:
-            for accessory, so_lines in bought_accessories.items():
-                contract_descrs[-1]['accessories'].extend([
-                    (accessory, so_line) for so_line in so_lines
-                ])
-
-        _logger.info(
-            u'Contracts to be created for %s:\n%s', self[0].order_id.name,
-            u'\n'.join(u'%d/ %s: %s' % (
-                n, c['main'].name, u', '.join(
-                    '%s (SO line %d)' % (product.name, so_line.id)
-                    for (product, so_line) in c['accessories']))
-                for n, c in enumerate(contract_descrs, 1)))
-
-        return contract_descrs
-
-    @api.multi
-    def create_contract(self):
-        """Create one contract per rented "main" *unitary* product (mind
-        product qtty!) for all sale order lines.
-
-        "Main" product are the one that are associated to a contract
-        template. Main product accessories bought at the same time are
-        added to the created contract lines using the ##ACCESSORY##
-        marker feature described in the `_convert_contract_lines`
-        method of the `account.analytic.account model`.
-
-        This method should be called on confirmation of sale order.
+        Contract lines are built from the contract template and the
+        context value of product_rental_acc_by_so_line. See
+        `_gen_contract_lines` docstring for more details.
 
         """
+        acc_by_so_line = self._context.get('product_rental_acc_by_so_line', {})
+        contract_lines = self.env['contract.line']
+        sequence = 0
 
-        contract_model = self.env['account.analytic.account']
-        contract_descrs = self.assign_contract_products()
+        for rec in self:
+            products = _rental_products(rec, acc_by_so_line)
+            _logger.debug('(%s) rental_products: %s', contract.name, products)
 
-        for count, contract_descr in enumerate(contract_descrs, 1):
-            so_line = contract_descr['so_line']
-            _acs = contract_descr['accessories']
-            acs = [(p, l, _acs.count((p, l))) for (p, l) in set(_acs)]
+            for contract_line in _gen_contract_lines(rec, contract, products):
+                sequence += 1
+                contract_line.update({
+                    'sequence': sequence,
+                    'analytic_account_id': rec.order_id.analytic_account_id.id,
+                    'recurring_next_date': NO_DATE,
+                })
+                contract_line.date_start = NO_DATE
+                contract_line._onchange_date_start()
+                contract_lines |= contract_line
 
-            _so_line = so_line.with_context({'contract_from_so': {
-                'index': count,
-                'main_product': so_line.product_id,
-                'main_so_line': so_line,
-                'accessories': sorted(acs, key=lambda a: a[0].id),
-            }})
-
-            contract = contract_model.create(_so_line._prepare_contract_vals())
-            if not so_line.contract_id:  # Several contracts per so_line!
-                so_line.contract_id = contract.id
+        return contract_lines

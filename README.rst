@@ -6,6 +6,18 @@
  Product rental
 ================
 
+Design notes:
+
+- as of today, a product sold on the website is associated to a
+  contract template; this association make us associate a "main"
+  contract product and an accessory contract product to the products
+  sold on the website; the contract template also carries the
+  standard commitment duration
+
+- the real contracts are generated from the sale order using these
+  configuration elements; 
+
+
 This module helps creating rental contracts from rental products sold
 on your website.
 

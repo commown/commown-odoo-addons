@@ -26,9 +26,11 @@
 
   </template>
 
+<!-- XXX TO BE PORTED TO V12
+
   <template id="variants" inherit_id="website_sale.variants">
 
-    <!-- Hide spans containing the extra prices in both select and radio inputs -->
+    ### Hide spans containing the extra prices in both select and radio inputs ###
     <xpath expr="//span[@t-if='value_id.price_extra']" position="replace">
     </xpath>
     <xpath expr="//span[@t-if='value_id.price_extra']" position="replace">
@@ -47,9 +49,8 @@
     </xpath>
   </template>
 
-
   <template id="payment" inherit_id="website_sale.payment">
-    <!-- Add rental and deposit right after product display name -->
+    ### Add rental and deposit right after product display name ###
     <xpath expr="//td//*[contains(@t-field, 'display_name')]" position="after">
       <t t-if="line.product_id.product_tmpl_id.is_rental">
         (<t t-esc="line.product_id.website_price * line.product_id.rental_price / (line.product_id.list_price or 1)" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <span  t-field="line.product_id.rental_frequency"/>)
@@ -60,9 +61,8 @@
     </xpath>
   </template>
 
-
   <template id="confirmation" inherit_id="website_sale.confirmation">
-    <!-- Add rental and deposit right after product display name -->
+    ### Add rental and deposit right after product display name ###
     <xpath expr="//td//*[contains(@t-esc, 'display_name')]" position="after">
       <t t-if="line.product_id.product_tmpl_id.is_rental">
         (<t t-esc="line.product_id.website_price * line.product_id.rental_price / (line.product_id.list_price or 1)" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <span  t-field="line.product_id.rental_frequency"/>)
@@ -72,5 +72,7 @@
       </t>
     </xpath>
   </template>
+
+-->
 
 </odoo>

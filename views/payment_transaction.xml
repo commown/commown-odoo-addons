@@ -36,14 +36,16 @@ if (invoice
     </field>
   </record>
 
-  <record id="payment_transaction_done" model="base.action.rule">
+  <record id="payment_transaction_done" model="base.automation">
     <field name="name">[commown] Payment transaction done</field>
     <field name="model_id" ref="payment.model_payment_transaction"/>
     <field name="sequence">1</field>
-    <field name="kind">on_write</field>
+    <field name="trigger">on_write</field>
     <field name="filter_pre_domain">[('state', '!=', 'done')]</field>
     <field name="filter_domain">[('state', '=', 'done')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('product_rental.action_contract_auto_account_payment')])]"/>
+    <field
+        name="action_server_id"
+        eval="ref('product_rental.action_contract_auto_account_payment')"/>
   </record>
 
 </odoo>
