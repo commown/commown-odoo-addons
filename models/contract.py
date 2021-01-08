@@ -93,6 +93,7 @@ class Contract(models.Model):
 
     @api.model
     def create(self, values):
+        values.pop('planned_mail_gen_ids', None)  # XXX
         contract = super(Contract, self).create(values)
         contract._generate_planned_emails()
         return contract
