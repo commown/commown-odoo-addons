@@ -54,17 +54,13 @@ class PlannedMailTemplate(models.Model):
             ("effective_send_time", "=", False),
             ("planned_send_date", "<=", fields.Datetime.now()),
         ])
-        for planned_mail in planned_mails:
-            src_obj = self.env[planned_mail.model_id.model].browse(
-                planned_mail.res_id)
-            planned_mail.send_planned_mail(src_obj)
+        for pmail in planned_mails:
+            pmail.get_object().planned_mail_send(pmail)
 
     @api.multi
-    def send_planned_mail(self, src_obj):
-        """Post planned mail from given mail.thread instance `src_obj`."""
+    def get_object(self):
         self.ensure_one()
-        src_obj.message_post_with_template(self.mail_template_id.id)
-        self.effective_send_time = fields.Datetime.now()
+        return self.env[self.model_id.model].browse(self.res_id)
 
 
 class PlannedMailTemplateObject(models.AbstractModel):
@@ -73,6 +69,12 @@ class PlannedMailTemplateObject(models.AbstractModel):
     def planned_email_generators(self):
         " This method is to be overloaded "
         raise NotImplementedError()
+
+    def planned_mail_send(self, planned_mail):
+        " Post planned mail with given mail template "
+        self.ensure_one()
+        self.message_post_with_template(planned_mail.mail_template_id.id)
+        self.effective_send_time = fields.Datetime.now()
 
     def _generate_planned_emails(self, unlink_first=False):
         self.ensure_one()
