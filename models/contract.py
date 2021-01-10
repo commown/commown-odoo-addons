@@ -55,14 +55,19 @@ class ContractTemplatePlannedMailGenerator(models.Model):
                 + contract.get_relative_delta(
                     self.interval_type, self.interval_number))
 
-    def generate_planned_mail_templates(self, contract):
+    def generate_planned_mail_templates(self, contract, before, after):
+        """ Generate planned mails for given contract, which send date is
+        strictly before the `before` date and after or equal to the `after`
+        date.
+        """
         if not contract.date_start:
             return
         create = self.env['contract_emails.planned_mail_template'].create
         for gen in self:
             planned_send_date = gen.compute_send_date(contract)
-            if planned_send_date < date.today():
-                # Skip mails that should have been sent already:
+            if before is not None and planned_send_date >= before:
+                continue
+            if after is not None and planned_send_date <= after:
                 continue
             create({
                 "mail_template_id": gen.mail_template_id.id,
@@ -100,8 +105,31 @@ class Contract(models.Model):
 
     @api.multi
     def write(self, values):
+        old_date_end = self.date_end
         res = super(Contract, self).write(values)
         if "date_start" in values or "contract_template_id" in values:
             for contract in self:
                 contract._generate_planned_emails(unlink_first=True)
+        if "date_end" in values:
+            if not values["date_end"]:
+                # date_end is unset: regenerate emails after old end date
+                after = fields.Date.from_string(old_date_end)
+                for contract in self:
+                    contract._generate_planned_emails(after=after)
+            else:
+                if not old_date_end or values["date_end"] < old_date_end:
+                    # date_end is set from unset or set sooner: remove planned
+                    # emails to be sent after the new end date
+                    for contract in self:
+                        for pmt in contract._get_planned_emails():
+                            if pmt.planned_send_date >= values["date_end"]:
+                                pmt.unlink()
+                else:
+                    # date_end is set later: regenerate planned emails between
+                    # the old and new end dates
+                    for contract in self:
+                        before = fields.Date.from_string(values["date_end"])
+                        after = fields.Date.from_string(old_date_end)
+                        contract._generate_planned_emails(
+                            before=before, after=after)
         return res

@@ -1,3 +1,4 @@
+from datetime import date
 from odoo import api, fields, models, _
 
 
@@ -77,11 +78,15 @@ class PlannedMailTemplateObject(models.AbstractModel):
         self.message_post_with_template(planned_mail.mail_template_id.id)
         self.effective_send_time = fields.Datetime.now()
 
-    def _generate_planned_emails(self, unlink_first=False):
+    def _generate_planned_emails(self, unlink_first=False, before=None,
+                                 after=None):
+        if after is None:
+            after = date.today()
         self.ensure_one()
         if unlink_first:
             self._get_planned_emails().unlink()
-        self.planned_email_generators().generate_planned_mail_templates(self)
+        self.planned_email_generators().generate_planned_mail_templates(
+            self, before=before, after=after)
 
     def _get_planned_emails(self):
         return self.env['contract_emails.planned_mail_template'].search([
