@@ -6,6 +6,7 @@ class PlannedMailTemplate(models.Model):
     at a given date in the future, and store when it was effectively sent.
     """
     _name = "contract_emails.planned_mail_template"
+    _order = 'planned_send_date asc, effective_send_time desc'
 
     mail_template_id = fields.Many2one(
         "mail.template",

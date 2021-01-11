@@ -32,11 +32,34 @@
     </field>
   </record>
 
- <record id="action_view_planned_mail_template" model="ir.actions.act_window">
+  <record model="ir.ui.view" id="search_planned_mail_template">
+    <field name="name">planned_mail_template.search</field>
+    <field name="model" eval="'contract_emails.planned_mail_template'" />
+    <field name="arch" type="xml">
+      <search string="Planned mail template Search">
+        <field name="mail_template_id" />
+        <field name="model_id" />
+        <filter
+            string="To be sent"
+            name="to_be_sent"
+            help="Planned mails not yet sent"
+            domain="[('effective_send_time', '=', False)]"/>
+        <filter
+            string="Already sent"
+            name="already_sent"
+            help="Planned mails already sent"
+            domain="[('effective_send_time', '!=', False)]"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_view_planned_mail_template" model="ir.actions.act_window">
     <field name="name">Planned emails</field>
     <field name="res_model">contract_emails.planned_mail_template</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="search_planned_mail_template"/>
+    <field name="context">{'search_default_to_be_sent': 1}</field>
   </record>
 
   <menuitem
