@@ -1,0 +1,227 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* contract_emails
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-11 10:07+0000\n"
+"PO-Revision-Date: 2021-01-11 10:07+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: contract_emails
+#: model:ir.ui.view,arch_db:contract_emails.search_planned_mail_template
+msgid "Already sent"
+msgstr "Envoyés"
+
+#. module: contract_emails
+#: model:ir.model,name:contract_emails.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Compte analytique"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_model_id
+msgid "Applies to"
+msgstr "S'applique à"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_contract_id
+msgid "Contract template"
+msgstr "Modèle de contrat"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_create_uid
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_create_date
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_interval_number
+msgid "Date interval number after contract start"
+msgstr "Nombre d'intervalles de temps après le début du contrat"
+
+#. module: contract_emails
+#: selection:contract_emails.planned_mail_generator,interval_type:0
+msgid "Day(s)"
+msgstr "Jour(s)"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_display_name
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_display_name
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_object_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_document
+msgid "Document"
+msgstr "Document"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_effective_send_time
+msgid "Effective send date and time"
+msgstr "Date d'envoi effective"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_mail_template_id
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_mail_template_id
+msgid "Email to send"
+msgstr "Mail à envoyer"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_id
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_id
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_object_id
+msgid "ID"
+msgstr "ID"
+
+#. module: contract_emails
+#: model:ir.model.fields,help:contract_emails.field_contract_emails_planned_mail_template_res_id
+msgid "Id of the mail origin resource"
+msgstr "Id du document source du courriel planifié"
+
+#. module: contract_emails
+#: model:ir.model.fields,help:contract_emails.field_contract_emails_planned_mail_generator_interval_number
+msgid "In units defined below (Days/Week/Month/Year)"
+msgstr "Dans les unités définies ci-dessous (Jours/Semaines/Mois/Années)"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator___last_update
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template___last_update
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_object___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_write_uid
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_write_date
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: contract_emails
+#: selection:contract_emails.planned_mail_generator,interval_type:0
+msgid "Month(s)"
+msgstr "Mois"
+
+#. module: contract_emails
+#: selection:contract_emails.planned_mail_generator,interval_type:0
+msgid "Month(s) last day"
+msgstr "Dernier jour du mois"
+
+#. module: contract_emails
+#: code:addons/contract_emails/models/planned_mail_template.py:99
+#: model:ir.actions.act_window,name:contract_emails.action_view_planned_mail_template
+#: model:ir.model.fields,field_description:contract_emails.field_account_analytic_account_planned_mail_gen_ids
+#: model:ir.model.fields,field_description:contract_emails.field_account_analytic_contract_planned_mail_gen_ids
+#: model:ir.model.fields,field_description:contract_emails.field_project_project_planned_mail_gen_ids
+#: model:ir.ui.menu,name:contract_emails.menu_planned_mail_template
+#: model:ir.ui.view,arch_db:contract_emails.account_analytic_account_recurring_form_form
+#: model:ir.ui.view,arch_db:contract_emails.account_analytic_contract_view_form
+#: model:ir.ui.view,arch_db:contract_emails.planned_mail_generator_tree
+#: model:ir.ui.view,arch_db:contract_emails.planned_mail_template_tree
+#, python-format
+msgid "Planned emails"
+msgstr "Courriels planifiés"
+
+#. module: contract_emails
+#: model:ir.ui.view,arch_db:contract_emails.planned_mail_generator_form
+msgid "Planned mail generator"
+msgstr "Générateur de courriels planifiés"
+
+#. module: contract_emails
+#: model:ir.ui.view,arch_db:contract_emails.planned_mail_template_form
+msgid "Planned mail template"
+msgstr "Courriel planifié"
+
+#. module: contract_emails
+#: model:ir.ui.view,arch_db:contract_emails.search_planned_mail_template
+msgid "Planned mail template Search"
+msgstr "Recherche d'un courriel planifié"
+
+#. module: contract_emails
+#: model:ir.ui.view,arch_db:contract_emails.search_planned_mail_template
+msgid "Planned mails already sent"
+msgstr "Courriels planifiés déjà envoyés"
+
+#. module: contract_emails
+#: model:ir.ui.view,arch_db:contract_emails.search_planned_mail_template
+msgid "Planned mails not yet sent"
+msgstr "Courriels planifiés pas encore envoyés"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_planned_send_date
+msgid "Planned send date"
+msgstr "Date d'envoi planifiée"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_template_res_id
+msgid "Related Document ID"
+msgstr "ID du document associé"
+
+#. module: contract_emails
+#: model:ir.model.fields,help:contract_emails.field_contract_emails_planned_mail_template_model_id
+msgid "The type of document this template can be used with"
+msgstr "Type de document avec lequel ce modèle peut être utilisé"
+
+#. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator_interval_type
+msgid "Time unit"
+msgstr "Unité de temps"
+
+#. module: contract_emails
+#: model:ir.ui.view,arch_db:contract_emails.search_planned_mail_template
+msgid "To be sent"
+msgstr "À envoyer"
+
+#. module: contract_emails
+#: model:ir.model.fields,help:contract_emails.field_contract_emails_planned_mail_generator_interval_type
+msgid "Unit of the time interval after contract start date when the email will be sent"
+msgstr "Unité de temps pour le calcul de la date d'envoi"
+
+#. module: contract_emails
+#: selection:contract_emails.planned_mail_generator,interval_type:0
+msgid "Week(s)"
+msgstr "Semaine(s)"
+
+#. module: contract_emails
+#: selection:contract_emails.planned_mail_generator,interval_type:0
+msgid "Year(s)"
+msgstr "Année(s)"
+
+#. module: contract_emails
+#: model:ir.model,name:contract_emails.model_account_analytic_contract
+msgid "account.analytic.contract"
+msgstr "contrat"
+
+#. module: contract_emails
+#: model:ir.model,name:contract_emails.model_contract_emails_planned_mail_generator
+msgid "contract_emails.planned_mail_generator"
+msgstr "contract_emails.planned_mail_generator"
+
+#. module: contract_emails
+#: model:ir.model,name:contract_emails.model_contract_emails_planned_mail_template
+msgid "contract_emails.planned_mail_template"
+msgstr "contract_emails.planned_mail_template"
+
+#. module: contract_emails
+#: model:ir.model,name:contract_emails.model_contract_emails_planned_mail_template_object
+msgid "contract_emails.planned_mail_template_object"
+msgstr "contract_emails.planned_mail_template_object"
