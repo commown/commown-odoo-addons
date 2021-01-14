@@ -4,7 +4,7 @@
 {
     'name': 'Contract queue job',
     'category': 'Contract Management',
-    'version': '10.0.0.0.1',
+    'version': '10.0.1.0.0',
     "author": "ACSONE SA/NV,Odoo Community Association (OCA),Commown SCIC SAS",
     'license': "AGPL-3",
     "website": "https://github.com/OCA/contract",
