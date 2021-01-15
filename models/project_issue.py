@@ -377,7 +377,8 @@ class ProjectIssue(models.Model):
 
         issue.invoice_unpaid_count += 1
 
-        _logger.info(u'Unreconciling invoice "%s"', invoice.name)
+        _logger.info(u'Unreconciling invoice id "%s" (%s)', invoice.id,
+                     invoice.reference or invoice.name or invoice.number)
         invoice.payment_move_line_ids.remove_move_reconcile()
         _logger.info(u'Invoice payments "%s"', invoice.payment_ids.ids)
         for payment in invoice.payment_ids:
