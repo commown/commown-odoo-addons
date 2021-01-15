@@ -33,3 +33,10 @@ class PlannedMailTemplateTC(ContractPlannedMailBaseTC):
         self.assertEqual(len(contract_emails), 3)
         self.assertEqual(contract_emails.mapped('body'),
                          [u"<p>Test 3</p>", u"<p>Test 2</p>", u"<p>Test 1</p>"])
+
+    def test_name(self):
+        self.contract.name = u"My contract"
+        pmt = self.plan_mail(
+            self.create_mt(name=u"My template", body_html=u"Test").id, days=0)
+        self.assertEqual(pmt.display_name,
+                         u"My contract - Agrolait - My template")

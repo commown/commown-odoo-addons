@@ -45,6 +45,21 @@ class PlannedMailTemplate(models.Model):
         store=False,
     )
 
+    def name_get(self):
+        result = []
+        for record in self:
+            name = None
+            if record.mail_template_id and record.model_id and record.res_id:
+                try:
+                    name = u' - '.join((record.get_object().display_name,
+                                        record.mail_template_id.display_name))
+                except:  # noqa
+                    pass
+            if name is None:
+                _id, name = super(PlannedMailTemplate, record).name_get()[0]
+            result.append((record.id, name))
+        return result
+
     @api.depends('model_id', 'res_id')
     def _compute_document(self):
         for pmt in self:
