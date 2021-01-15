@@ -28,8 +28,8 @@ class ContractTemplateMailGenerator(ContractPlannedMailBaseTC):
             sorted([(c_id, date)
                     for c_id, dates in dates_by_contract_id.items()
                     for date in dates
-            ])
-        )
+                    ])
+            )
 
     def test_create_and_write(self):
         """ Creating a contract from a template with generators creates planned
