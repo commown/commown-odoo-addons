@@ -6,7 +6,7 @@
 {
     "name": "Contract emails",
     "category": "",
-    "version": "10.0.1.1.0",
+    "version": "10.0.1.1.1",
     "author": "Commown SCIC SAS",
     "license": "AGPL-3",
     "website": "https://commown.coop",
