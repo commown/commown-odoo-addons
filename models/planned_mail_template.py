@@ -91,7 +91,7 @@ class PlannedMailTemplateObject(models.AbstractModel):
         " Post planned mail with given mail template "
         self.ensure_one()
         self.message_post_with_template(planned_mail.mail_template_id.id)
-        self.effective_send_time = fields.Datetime.now()
+        planned_mail.effective_send_time = fields.Datetime.now()
 
     def _generate_planned_emails(self, unlink_first=False, before=None,
                                  after=None):
