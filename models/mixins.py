@@ -28,6 +28,7 @@ class CommownShippingMixin(models.AbstractModel):
     # Needs to be overloaded: used to store multiple label pdfs
     # (when printing several labels at once)
     _shipping_parent_rel = None
+    _description = "Object used to edit shipping labels and track parcels"
 
     @api.multi
     def _shipping_parent(self):
@@ -210,6 +211,7 @@ class CommownShippingMixin(models.AbstractModel):
 
 class CommownShippingParentMixin(models.AbstractModel):
     _name = "commown.shipping.parent.mixin"
+    _description = "Object that contains shipping objects"
 
     shipping_account_id = fields.Many2one(
         "commown.shipping_account", string="Shipping account"
