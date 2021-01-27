@@ -1,14 +1,14 @@
-import account_analytic_account
-import account_analytic_contract
-import account_invoice
-import coupon
-import mass_reconcile
-import payment
-import product_template
-import project_issue
-import project_task_type
-import res_groups
-import res_partner
-import res_user
-import sale_order
-import simple_reconciliation
+from . import contract_contract
+from . import contract_template
+from . import account_invoice
+from . import coupon
+from . import mass_reconcile
+from . import payment
+from . import product_template
+from . import project_issue
+from . import project_task_type
+from . import res_groups
+from . import res_partner
+from . import res_user
+from . import sale_order
+from . import simple_reconciliation

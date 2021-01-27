@@ -48,8 +48,8 @@ def convert_svg_to_pdf(svg_content, settings):
         shutil.rmtree(directory, ignore_errors=True)
 
 
-class Campaign(models.Model):
-    _inherit = 'coupon.campaign'
+class SalePromotionRule(models.Model):
+    _inherit = 'sale.promotion.rule'
 
     def _generate_svg(self):
         self.ensure_one()
@@ -65,7 +65,7 @@ class Campaign(models.Model):
         if ctx['debug']:
             label_template += ctx['COUPON_DEBUG_FORM']
 
-        Coupon = self.env['coupon.coupon']
+        Coupon = self.env['sale.promotion.rule']
         content = []
         for nb in range(ctx['nx'] * ctx['ny']):
             i, j = nb % ctx['nx'], nb % ctx['ny']

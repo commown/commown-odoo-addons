@@ -1,8 +1,8 @@
 from odoo import fields, models
 
 
-class AccountAnalyticContract(models.Model):
-    _inherit = 'account.analytic.contract'
+class ContractTemplate(models.Model):
+    _inherit = 'contract.template'
 
     transaction_label = fields.Text(
         string='Payment label', required=True, default='#INV#',

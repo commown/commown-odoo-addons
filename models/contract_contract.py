@@ -2,19 +2,24 @@ import logging
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, models
+from odoo import api, fields, models
 
 
 _logger = logging.getLogger(__name__)
 
 
-class AccountAnalyticAccount(models.Model):
-    _inherit = 'account.analytic.account'
+class Contract(models.Model):
+    _inherit = 'contract.contract'
 
+    transaction_label = fields.Text(
+        string='Payment label', required=True, default='#INV#',
+        help=('Label to be used for the bank payment. '
+              'Possible markers: #START#, #END#, #INV# (invoice number)'),
+    )
     def name_get(self):
         result = []
         for record in self:
-            _id, name = super(AccountAnalyticAccount, record).name_get()[0]
+            _id, name = super(Contract).name_get()[0]
             if record.contract_template_id:
                 name += u' (%s)' % record.contract_template_id.name
             result.append((record.id, name))
@@ -29,4 +34,4 @@ class AccountAnalyticAccount(models.Model):
             label = label.replace('#INV#', invoice.number)
             _logger.debug('Bank label for invoice %s: %s', invoice.number, label)
             self = self.with_context(slimpay_payin_label=label)
-        return super(AccountAnalyticAccount, self)._pay_invoice(invoice)
+        return super(Contract)._pay_invoice(invoice)

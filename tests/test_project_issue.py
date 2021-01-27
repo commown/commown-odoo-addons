@@ -3,10 +3,10 @@ from odoo.tests.common import TransactionCase, at_install, post_install
 
 @at_install(False)
 @post_install(True)
-class ProjectIssueTC(TransactionCase):
+class ProjectTaskTC(TransactionCase):
 
     def setUp(self):
-        super(ProjectIssueTC, self).setUp()
+        super(ProjectTaskTC, self).setUp()
 
         self.project = self.env.ref('project.project_project_1').copy({
             'name': u'Support'})
@@ -38,7 +38,7 @@ class ProjectIssueTC(TransactionCase):
         self.partner = self.env.ref('portal.demo_user0_res_partner')
         self.partner.update({'firstname': u'Flo', 'phone': u'0000000000'})
 
-        self.issue = self.env['project.issue'].create({
+        self.issue = self.env['project.task'].create({
             'name': u'Commown test',
             'project_id': self.project.id,
             'stage_id': self.stage_pending.id,
@@ -50,7 +50,7 @@ class ProjectIssueTC(TransactionCase):
         " Unset all commown actions' last_run date "
         action_refs = self.env['ir.model.data'].search([
             ('module', '=', 'commown'),
-            ('model', '=', 'base.action.rule')]).mapped('name')
+            ('model', '=', 'base.automation')]).mapped('name')
         for ref in action_refs:
             self.env.ref('commown.%s' % ref).last_run = False
 
@@ -116,7 +116,7 @@ class ProjectIssueTC(TransactionCase):
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
         self.reset_actions_last_run()
-        self.env['base.action.rule']._check()  # method called by crontab
+        self.env['base.automation']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_end_ok)
 
@@ -126,7 +126,7 @@ class ProjectIssueTC(TransactionCase):
             'subject': u'Test subject',
             'body': u"<p>Test body</p>",
             'message_type': u'comment',
-            'model': u'project.issue',
+            'model': u'project.task',
             'res_id': self.issue.id,
             'subtype_id': self.env.ref('mail.mt_comment').id,
         })
@@ -167,7 +167,7 @@ class ProjectIssueTC(TransactionCase):
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
         self.reset_actions_last_run()
-        self.env['base.action.rule']._check()  # method called by crontab
+        self.env['base.automation']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_reminder)
 
@@ -177,7 +177,7 @@ class ProjectIssueTC(TransactionCase):
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
         self.reset_actions_last_run()
-        self.env['base.action.rule']._check()  # method called by crontab
+        self.env['base.automation']._check()  # method called by crontab
 
         self.assertEqual(self.issue.stage_id, self.stage_pending)
 

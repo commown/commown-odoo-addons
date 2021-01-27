@@ -40,7 +40,7 @@ if 'uid' in env or object.start_contract_on_delivery:
       </field>
     </record>
 
-  <record id="commown_shipping.lead_product_delivered" model="base.action.rule">
+  <record id="commown_shipping.lead_product_delivered" model="base.automation">
     <field name="server_action_ids" eval="[(4,ref('commown.action_start_contract'), False)]"/>
   </record>
 
