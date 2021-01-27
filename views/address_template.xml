@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="address" inherit_id="payment_slimpay_website_sale.address">
+  <template id="address" inherit_id="website_sale_payment_slimpay.address">
     <xpath expr="//form//input[@name='company_name']/ancestor::div[1]" position="replace"></xpath>
     <xpath expr="//form//input[@name='vat']/ancestor::div[1]" position="replace"></xpath>
     <!-- Add zip as required: -->

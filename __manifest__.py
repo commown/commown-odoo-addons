@@ -18,7 +18,7 @@
         'commown_shipping',
         # 'commown_lead_risk_analysis',
         # 'contract_auto_merge_invoice',
-        # 'payment_slimpay_website_sale',
+        'website_sale_payment_slimpay',
         'payment_slimpay_issue',
         'product_rental',
         # 'rating_project_issue_nps',
@@ -55,7 +55,7 @@
     'data': [
         'views/contract_contract_view.xml',
         'views/contract_template_view.xml',
-        # 'views/address_template.xml',
+        'views/address_template.xml',
         'views/auth_signup.xml',
         # 'views/cart.xml',
         'views/actions_sale_order.xml',

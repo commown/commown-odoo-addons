@@ -3,7 +3,7 @@ import logging
 from odoo import http
 from odoo.http import request
 
-# from odoo.addons.payment_slimpay_website_sale.controllers.main \
+# from odoo.addons.website_sale_payment_slimpay.controllers.main \
 #     import SlimpayControllerWebsiteSale
 #
 #
