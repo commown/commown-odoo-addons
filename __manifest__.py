@@ -28,7 +28,7 @@
         'website_sale_affiliate_portal',
         'website_sale_affiliate_product_restriction',
         # 'website_sale_b2b',
-        # 'website_sale_coupon',
+        'sale_promotion_rule',
         # OCA modules
         'account_payment_sale',
         'account_mass_reconcile',
