@@ -1,4 +1,18 @@
 <?xml version="1.0"?>
+
+<!--
+
+    WARNING: This automatic payment generation is badly designed:
+
+    - it does obviously not belong to this module
+    - it may simply be slimpay specific
+    - it should probably belong to a contract_auto_payment_slimpay
+      module that implement the auto payment as method override
+      (mind the website sale order confirmation probably creates the
+      payment as an example, but I'm unable to find out where).
+
+ -->
+
 <odoo>
 
   <record id="action_contract_auto_account_payment" model="ir.actions.server">
@@ -9,7 +23,7 @@
     <field name="code">
 <![CDATA[
 
-invoice = env['account.invoice'].search([('number', '=', object.reference)])
+invoice = env['account.invoice'].search([('number', '=', record.reference)])
 
 if (invoice
         and invoice.contract_id
@@ -25,8 +39,8 @@ if (invoice
         'payment_type': 'inbound',
         'journal_id': contract.payment_mode_id.fixed_journal_id.id,
         'payment_method_id': contract.payment_mode_id.payment_method_id.id,
-        'amount': object.amount,
-        'payment_transaction_id': object.id,
+        'amount': record.amount,
+        'payment_transaction_id': record.id,
         'invoice_ids': [(6, 0, [invoice.id])],
     })
 
