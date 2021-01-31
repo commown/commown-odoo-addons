@@ -127,4 +127,5 @@ class RentalSaleOrderTC(SavepointCase):
         kwargs.setdefault('quantity', 1)
         kwargs.setdefault('recurring_rule_type', 'monthly')
         kwargs.setdefault('recurring_interval', 1)
+        kwargs.setdefault('commitment_duration', 12)
         return (0, 0, kwargs)
