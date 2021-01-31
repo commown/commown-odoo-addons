@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+  <!-- Sale order initial payment of rental product may be deposits: write it on portal -->
+  <template
+      id="rental_sale_order_portal_content"
+      name="Orders Followup Products Links"
+      inherit_id="website_sale.sale_order_portal_content_inherit_website_sale">
+
+    <xpath expr="//td[@id='product_name']" position="inside">
+      <t t-if="line.product_id.is_rental and line.product_id.is_deposit">
+        <span>(deposit)</span>
+      </t>
+    </xpath>
+
+  </template>
+
   <template id="product_price" inherit_id="website_sale.product_price">
 
     <xpath expr="div" position="before">

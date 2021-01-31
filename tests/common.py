@@ -3,11 +3,14 @@ from odoo.tests.common import SavepointCase
 
 class RentalSaleOrderTC(SavepointCase):
 
-    def get_default_tax(self):
-        company = self.env.user.company_id
-        tax_id = self.env['ir.values'].get_default(
-            'product.template', 'taxes_id', company_id=company.id)
-        return self.env['account.tax'].browse(tax_id).exists()
+    def get_default_tax(self, amount=20.0):
+        return self.env['account.tax'].create({
+            'amount': amount,
+            'amount_type': 'percent',
+            'price_include': True,  # french style
+            'name': 'Default test tax',
+            'type_tax_use': 'sale',
+        })
 
     def create_sale_order(self, partner=None, tax=None):
         """Given tax (defaults to company's default) is used for contract
