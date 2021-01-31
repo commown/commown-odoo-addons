@@ -4,13 +4,6 @@ from odoo import fields, models, api
 class ContractLine(models.Model):
     _inherit = 'contract.line'
 
-    sale_order_line_id = fields.Many2one(
-        comodel_name="sale.order.line",
-        string="Sale Order Line",
-        required=False,
-        copy=False,
-    )
-
     commitment_duration = fields.Integer(
         string='Commitment duration',
         help='Commitment duration in recurring interval unit',
