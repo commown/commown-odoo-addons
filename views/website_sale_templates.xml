@@ -15,6 +15,40 @@
 
   </template>
 
+  <template id="portal_contract_page" inherit_id="contract.portal_contract_page">
+
+    <!-- Remove sections we do not want to display -->
+    <xpath expr="//div[@t-if='contract.user_id']" position="replace"></xpath>
+    <xpath expr="//section[hasclass('s_timeline')]" position="replace"></xpath>
+
+    <!-- Add start date and commitment duration to details table -->
+    <xpath
+        expr="//table[@id='sales_order_table']//th[@name='th_recurring_interval']"
+        position="after">
+      <th name="th_rental_start_date" class="text-right">Rental start date</th>
+      <th name="th_commitment_duration" class="text-right">Commitment duration</th>
+    </xpath>
+
+    <xpath
+        expr="//table[@id='sales_order_table']//td[@name='td_recurring_interval']"
+        position="after">
+      <td name="td_rental_start_date" class="text-right">
+        <span t-field="line.date_start"/>
+      </td>
+      <td name="td_commitment_duration" class="text-right">
+        <span t-field="line.commitment_duration"/>
+        <t t-if="line.recurring_rule_type=='daily'">Day(s)</t>
+        <t t-if="line.recurring_rule_type=='weekly'">Week(s)</t>
+        <t t-if="line.recurring_rule_type=='monthly'">Month(s)</t>
+        <t t-if="line.recurring_rule_type=='monthlylastday'">Month(s) last day</t>
+        <t t-if="line.recurring_rule_type=='quarterly'">Quarter(s)</t>
+        <t t-if="line.recurring_rule_type=='semesterly'">Semester(s)</t>
+        <t t-if="line.recurring_rule_type=='yearly'">Year(s)</t>
+      </td>
+    </xpath>
+
+  </template>
+
   <template id="product_price" inherit_id="website_sale.product_price">
 
     <xpath expr="div" position="before">
