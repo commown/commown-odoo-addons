@@ -76,17 +76,16 @@
 
   </template>
 
-<!-- XXX TO BE PORTED TO V12
 
-  <template id="variants" inherit_id="website_sale.variants">
+  <template id="variants" inherit_id="sale.variants">
 
-    ### Hide spans containing the extra prices in both select and radio inputs ###
-    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace">
-    </xpath>
-    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace">
-    </xpath>
+    <!-- Hide spans containing the extra prices in both select and radio inputs -->
+    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace"/>
+    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace"/>
 
   </template>
+
+<!-- XXX TO BE PORTED TO V12
 
   <template id="cart_lines" inherit_id="website_sale.cart_lines">
     <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div/a/strong/ancestor::div[1]" position="inside">
