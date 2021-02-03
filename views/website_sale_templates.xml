@@ -54,8 +54,11 @@
     <xpath expr="div" position="before">
       <div t-if="product.is_rental" class="product_price mt16">
         <p>
-          <b t-if="product.is_deposit"
-             class="deposit_price"><span>Initial deposit: </span><span t-esc="toto"/><span t-esc="'%g' % (product.list_price / (product.rental_price or 1))"/> <span>lease payments</span></b>
+          <b t-if="product.is_deposit" class="deposit_price">
+            <span>Initial deposit: </span>
+            <span t-esc="'%g' % rental_price_ratio"/>
+            <span>lease payments</span>
+          </b>
         </p>
         <t t-set="recurring_rule_type" t-value="main_contract_line.recurring_rule_type"/>
         <p t-if="main_contract_line.commitment_duration > 0">
@@ -63,7 +66,7 @@
         </p>
         <h4 class="oe_price_h4 css_editable_mode_hidden">
           <b class="oe_rental_price" style="white-space: nowrap;"
-             t-att-data-rental-ratio="rental_price_base" t-esc="rental_price_base"
+             t-att-data-rental-ratio="rental_price_ratio" t-esc="rental_price_base"
              t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <b t-field="product.rental_frequency"/>
         </h4>
         <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"/>
