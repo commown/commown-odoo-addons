@@ -116,20 +116,4 @@
     </xpath>
   </template>
 
-<!-- XXX TO BE PORTED TO V12
-
-  <template id="confirmation" inherit_id="website_sale.confirmation">
-    ### Add rental and deposit right after product display name ###
-    <xpath expr="//td//*[contains(@t-esc, 'display_name')]" position="after">
-      <t t-if="line.product_id.product_tmpl_id.is_rental">
-        (<t t-esc="line.product_id.website_price * line.product_id.rental_price / (line.product_id.list_price or 1)" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <span  t-field="line.product_id.rental_frequency"/>)
-      </t>
-      <t t-if="line.product_id.product_tmpl_id.is_rental and line.product_id.product_tmpl_id.is_deposit">
-        <strong> - Deposit</strong>
-      </t>
-    </xpath>
-  </template>
-
--->
-
 </odoo>
