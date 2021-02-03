@@ -100,19 +100,23 @@
     </xpath>
   </template>
 
-<!-- XXX TO BE PORTED TO V12
+  <template id="cart_summary" inherit_id="website_sale.cart_summary">
 
-  <template id="payment" inherit_id="website_sale.payment">
-    ### Add rental and deposit right after product display name ###
-    <xpath expr="//td//*[contains(@t-field, 'display_name')]" position="after">
-      <t t-if="line.product_id.product_tmpl_id.is_rental">
-        (<t t-esc="line.product_id.website_price * line.product_id.rental_price / (line.product_id.list_price or 1)" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <span  t-field="line.product_id.rental_frequency"/>)
-      </t>
-      <t t-if="line.product_id.product_tmpl_id.is_rental and line.product_id.product_tmpl_id.is_deposit">
-        <strong> - Deposit</strong>
+    <!-- Add rental and deposit right after product display name -->
+    <xpath expr="//*[@id='cart_products']//td//*[@t-field='line.name_short']"
+           position="after">
+      <t t-set="product" t-value="line.product_id"/>
+      <t t-set="product_tmpl" t-value="product.product_tmpl_id"/>
+      <t t-if="product_tmpl.is_rental">
+        (<t t-esc="product.website_price / product_tmpl.rental_price_ratio()"
+            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+        <span t-field="product.rental_frequency"/>)
+        <p t-if="product_tmpl.is_deposit">Deposit</p>
       </t>
     </xpath>
   </template>
+
+<!-- XXX TO BE PORTED TO V12
 
   <template id="confirmation" inherit_id="website_sale.confirmation">
     ### Add rental and deposit right after product display name ###
