@@ -2,7 +2,7 @@
     'name': 'Commown SCIC SAS',
     'category': 'Business',
     'summary': 'Commown SCIC SAS business application',
-    'version': '10.0.1.15.4',
+    'version': '10.0.1.16.0',
     'description': "Commown SCIC SAS business application",
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
@@ -32,7 +32,6 @@
         # OCA modules
         'account_payment_sale',
         'account_mass_reconcile',
-        'account_move_stripe_import',
         'auth_signup',
         'base_action_rule',
         'crm',
