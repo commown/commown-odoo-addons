@@ -22,5 +22,6 @@
         "views/product_template.xml",
         "views/website_sale_templates.xml",
     ],
+    "demo": ["demo/data.xml"],
     "installable": True,
 }
