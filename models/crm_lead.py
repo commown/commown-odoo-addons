@@ -95,8 +95,7 @@ class CommownCrmLead(models.Model):
         'Used for risk analysis', related='team_id.used_for_risk_analysis')
 
     def _onchange_partner_id_values(self, partner_id):
-        vals = super(CommownCrmLead, self)._onchange_partner_id_values(
-            partner_id)
+        vals = super()._onchange_partner_id_values(partner_id)
         vals['orders_description'] = self._compute_orders_descr(partner_id)
         return vals
 
@@ -128,7 +127,7 @@ class CommownCrmLead(models.Model):
             vals['orders_description'] = self._compute_orders_descr(partner_id)
         # CRM module does not seem to update partner values for now
         vals.update(self._onchange_partner_id_values(partner_id))
-        return super(CommownCrmLead, self).create(vals)
+        return super().create(vals)
 
     @api.multi
     def _compute_web_searchurl(self):
