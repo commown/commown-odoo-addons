@@ -51,7 +51,7 @@ class CommownCrmLead(models.Model):
     webid_rating = fields.Selection(
         WEBID_RATINGS, string='Web identity Rating',
         default=WEBID_RATINGS[0][0])
-    webid_notes = fields.Text('Notes')
+    webid_notes = fields.Text('Notes web')
 
     sent_collective_email = fields.Boolean(
         'Sent collective email', default=False)
@@ -70,7 +70,7 @@ class CommownCrmLead(models.Model):
 
     orders_description = fields.Html(
         'Orders', sanitize_attributes=False)
-    initial_data_notes = fields.Text('Notes')
+    initial_data_notes = fields.Text('Notes initiales')
     identity_validated = fields.Boolean(
         'Identity validated', default=False)
     mobile_validated = fields.Boolean(
