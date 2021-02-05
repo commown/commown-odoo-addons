@@ -9,7 +9,6 @@
     'website': "https://commown.fr",
     'depends': [
         'crm',
-        'partner_firstname',
     ],
     'data': [
         'views/crm_team.xml',
