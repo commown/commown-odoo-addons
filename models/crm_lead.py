@@ -1,5 +1,5 @@
 import cgi
-from urllib import urlencode
+from urllib.parse import urlencode
 
 from odoo import models, fields, api, _
 from odoo.tools.safe_eval import safe_eval
@@ -112,13 +112,13 @@ class CommownCrmLead(models.Model):
         ])
         descr = []
         for order in orders:
-            descr.append(u'<h4>%s</h4>' % cgi.escape(order.name, quote=True))
+            descr.append('<h4>%s</h4>' % cgi.escape(order.name, quote=True))
             oline_descr = []
             for oline in order.order_line:
-                oline_descr.append(u'<li>%s</li>' % cgi.escape(
+                oline_descr.append('<li>%s</li>' % cgi.escape(
                     oline.product_id.display_name, quote=True))
-            descr.append(u'<ul>%s</ul>' % u'\n'.join(oline_descr))
-        return u'\n'.join(descr)
+            descr.append('<ul>%s</ul>' % '\n'.join(oline_descr))
+        return '\n'.join(descr)
 
     @api.model
     @api.returns('self', lambda value: value.id)
@@ -134,10 +134,10 @@ class CommownCrmLead(models.Model):
     def _compute_web_searchurl(self):
         for lead in self:
             # XXX template me!
-            query = u' '.join((lead.contact_name or u'',
-                               lead.city or u'')).strip().encode('utf-8')
-            url = u'http://www.google.fr/search?%s' % urlencode({'q': query})
+            query = ' '.join((lead.contact_name or '',
+                               lead.city or '')).strip().encode('utf-8')
+            url = 'http://www.google.fr/search?%s' % urlencode({'q': query})
             lead.web_searchurl = (
-                u"<a target='_blank' href='%s'>%s</a>"
+                "<a target='_blank' href='%s'>%s</a>"
                 % (cgi.escape(url, quote=True),
                    cgi.escape(_('Web search link'), quote=True)))
