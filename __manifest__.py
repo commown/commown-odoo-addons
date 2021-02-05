@@ -32,7 +32,6 @@
         # OCA modules
         'account_payment_sale',
         'account_mass_reconcile',
-        # 'account_move_stripe_import',
         'auth_signup',
         'base_automation',
         'crm',
