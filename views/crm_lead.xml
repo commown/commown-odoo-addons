@@ -70,13 +70,11 @@ if 'uid' in env or record.send_email_on_delivery:
       <field name="name">[commown] Lead product delivered</field>
       <field name="model_id" ref="model_crm_lead" />
       <field name="sequence">1</field>
+      <field name="state">multi</field>
       <field name="trigger">on_write</field>
       <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
       <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
-      <field
-        name="action_server_id"
-        eval="ref('commown_shipping.action_send_delivery_email')"
-      />
+      <field name="child_ids" eval="[(6, 0, [ref('action_send_delivery_email')])]"/>
     </record>
 
   </data>
