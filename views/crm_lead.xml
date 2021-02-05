@@ -41,7 +41,7 @@ if 'uid' in env or object.start_contract_on_delivery:
     </record>
 
   <record id="commown_shipping.lead_product_delivered" model="base.automation">
-    <field name="server_action_ids" eval="[(4,ref('commown.action_start_contract'), False)]"/>
+    <field name="child_ids" eval="[(4,ref('action_start_contract'), False)]"/>
   </record>
 
   </data>

@@ -114,10 +114,11 @@ for so_line in record.order_line:
     <field name="name">[Commown] Sale done</field>
     <field name="model_id" ref="sale.model_sale_order"/>
     <field name="sequence">1</field>
+    <field name="state">multi</field>
     <field name="trigger">on_write</field>
     <field name="filter_pre_domain">['|', ('state', '=', 'draft'), ('state', '=', 'sent')]</field>
     <field name="filter_domain">[('state', '=', 'sale')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('commown.action_add_followup_lead')])]"/>
+    <field name="child_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('commown.action_add_followup_lead')])]"/>
   </record>
 
 </odoo>
