@@ -8,7 +8,7 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
         <field name="arch" type="xml">
-          <xpath expr="//div[@class='oe_title']//h2[@class='o_row']" position="attributes">
+          <xpath expr="//div[hasclass('oe_title')]//h2[hasclass('o_row')]" position="attributes">
             <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
           </xpath>
           <xpath expr="//field[@name='priority']/ancestor::group[1]" position="attributes">
@@ -65,13 +65,13 @@
                   <field readonly="1" name="mobile"/>
                   <field readonly="1" name="partner_name" invisible="1"/>
                   <field readonly="1" name="function" invisible="1"/>
-                  <field readonly="1" name="fax" invisible="1"/>
                 </group>
                 <group>
                   <field readonly="1" name="zip" class="oe_inline"/>
                   <field readonly="1" name="city"/>
                   <field readonly="1" name="state_id" invisible="1"/>
                   <field readonly="1" name="country_id"/>
+                  <field name="website" invisible="1"/>
                 </group>
                 <group>
                   <field name="initial_data_notes" colspan="2"/>
