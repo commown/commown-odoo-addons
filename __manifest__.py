@@ -6,7 +6,7 @@
     'description': 'Risk analysis data storage for Commown leads',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://commown.coop",
     'depends': [
         'crm',
     ],
