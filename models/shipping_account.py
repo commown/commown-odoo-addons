@@ -14,7 +14,6 @@ class CommownShippingAccount(models.Model):
     def _server_env_fields(self):
         base_fields = super()._server_env_fields
         shipping_fields = {
-            "account": {},
             "password": {},
         }
         shipping_fields.update(base_fields)
