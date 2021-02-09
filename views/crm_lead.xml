@@ -25,18 +25,18 @@
       <field name="state">code</field>
       <field name="code">
 # "uid" is in env: action launched from GUI
-if 'uid' in env or object.start_contract_on_delivery:
-    if object.name.startswith('[SO') and ']' in object.name:
-        so_name = object.name[1:object.name.index(']')]
+if 'uid' in env or record.start_contract_on_delivery:
+    if record.name.startswith('[SO') and ']' in record.name:
+        so_name = record.name[1:record.name.index(']')]
         if '-' not in so_name:
             so_name += '-01'  # XXX backward compat
 
-        contract = object.env['account.analytic.account'].search([
+        contract = record.env['account.analytic.account'].search([
             ('name', 'like', so_name),
         ]).ensure_one()
 
-        contract.update({'date_start': object.delivery_date, 'is_auto_pay': True})
-        contract.update({'recurring_next_date': object.delivery_date})
+        contract.update({'date_start': record.delivery_date, 'is_auto_pay': True})
+        contract.update({'recurring_next_date': record.delivery_date})
       </field>
     </record>
 
