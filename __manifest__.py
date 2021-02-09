@@ -51,6 +51,7 @@
     },
 
     'data': [
+        'views/account_invoice.xml',
         'views/account_analytic_account.xml',
         'views/account_analytic_contract.xml',
         'views/address_template.xml',
