@@ -51,8 +51,14 @@
     },
 
     'data': [
+<<<<<<< HEAD
         'views/contract_contract_view.xml',
         'views/contract_template_view.xml',
+=======
+        'views/account_invoice.xml',
+        'views/account_analytic_account.xml',
+        'views/account_analytic_contract.xml',
+>>>>>>> master
         'views/address_template.xml',
         'views/auth_signup.xml',
         # 'views/cart.xml',
