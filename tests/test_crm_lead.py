@@ -234,7 +234,6 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.lead.on_delivery_email_template_id = \
             self.lead.team_id.on_delivery_email_template_id.copy({
                 'subject': u'Test custom email',
-                'body': u'coucou'
             }).id
 
         # Simulate delivery
