@@ -7,11 +7,11 @@
       <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
       <field name="arch" type="xml">
         <xpath expr="//group[@name='right']" position="inside">
-          <field name="used_for_shipping"/>
+          <field name="delivery_tracking"/>
         </xpath>
         <xpath expr="//notebook" position="inside">
           <page name="shipping" string="Shipping"
-                attrs="{'invisible': [('used_for_shipping', '=', False)]}">
+                attrs="{'invisible': [('delivery_tracking', '=', False)]}">
             <group>
               <field name="shipping_account_id"/>
               <field name="default_perform_actions_on_delivery"/>

@@ -3,7 +3,6 @@ from odoo import api, models, fields
 
 class CommownTrackDeliveryMixin(models.AbstractModel):
     _name = "commown.track_delivery.mixin"
-    _inherit = "commown.shipping.mixin"
 
     expedition_ref = fields.Text("Expedition reference", size=64)
     expedition_date = fields.Date("Expedition Date")
@@ -48,7 +47,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         """
         self.ensure_one()
         parent = self._delivery_tracking_parent()
-        return parent and parent.used_for_shipping and (
+        return parent and parent.delivery_tracking and (
             self.on_delivery_email_template_id
             or parent.on_delivery_email_template_id
             ) or None
@@ -57,6 +56,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 class CommownDeliveryParentMixin(models.AbstractModel):
     _name = 'commown.delivery.parent.mixin'
 
+    delivery_tracking = fields.Boolean('Used for shipping', default=False)
     default_perform_actions_on_delivery = fields.Boolean(
         'By default, perform actions on delivery',
         default=True)

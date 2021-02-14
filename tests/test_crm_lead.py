@@ -159,7 +159,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         super(CrmLeadDeliveryTC, self).setUp()
         team = self.env.ref('sales_team.salesteam_website_sales')
         team.update({
-            'used_for_shipping': True,
+            'delivery_tracking': True,
             'on_delivery_email_template_id': self.env.ref(
                 'commown_shipping.delivery_email_example').id,
         })
@@ -183,13 +183,13 @@ class CrmLeadDeliveryTC(TransactionCase):
 
     def test_delivery_email_template(self):
         # Shipping deactivated, template set => None expected
-        self.lead.team_id.used_for_shipping = False
+        self.lead.team_id.delivery_tracking = False
         assert self.lead.team_id.on_delivery_email_template_id, (
             'test prerequisite error')
         self.assertIsNone(self.lead.delivery_email_template())
 
         # Shipping activated, no lead custom template => custom expected
-        self.lead.team_id.used_for_shipping = True
+        self.lead.team_id.delivery_tracking = True
         self.lead.on_delivery_email_template_id = False
         self.assertEqual(self.lead.delivery_email_template(),
                          self.lead.team_id.on_delivery_email_template_id)
@@ -201,7 +201,7 @@ class CrmLeadDeliveryTC(TransactionCase):
                          u'Post-delivery email (copy)')
 
         # Shipping deactivated, even with custom template => None expected
-        self.lead.team_id.used_for_shipping = False
+        self.lead.team_id.delivery_tracking = False
         self.assertIsNone(self.lead.delivery_email_template())
 
     def test_actions_on_delivery_send_email_team_template(self):

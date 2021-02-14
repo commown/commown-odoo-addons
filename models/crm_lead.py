@@ -14,8 +14,8 @@ class CrmLead(models.Model):
     _delivery_tracking_parent_rel = _shipping_parent_rel = "team_id"
 
     so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
-    used_for_shipping = fields.Boolean(
-        'Used for shipping', related='team_id.used_for_shipping')
+    delivery_tracking = fields.Boolean(
+        'Used for shipping', related='team_id.delivery_tracking')
 
     @api.multi
     def _default_shipping_parcel_type(self):
@@ -26,11 +26,10 @@ class CrmLead(models.Model):
         self.update({
             'expedition_ref': meta_data['labelResponse']['parcelNumber'],
             'expedition_date': datetime.today(),
-            'delivery_date': False  ,
+            'delivery_date': False,
         })
         return super(CrmLead, self)._attachment_from_label(
             name, meta_data, label_data)
-
 
     @api.multi
     def parcel_labels(self, parcel_name=None, force_single=False):

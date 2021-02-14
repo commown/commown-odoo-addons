@@ -1,4 +1,4 @@
-from odoo import models, api, fields
+from odoo import models, fields
 
 
 class CommownProjectIssue(models.Model):
@@ -11,5 +11,5 @@ class CommownProjectIssue(models.Model):
 
     _delivery_tracking_parent_rel = _shipping_parent_rel = "project_id"
 
-    used_for_shipping = fields.Boolean(
-        'Used for shipping', related='project_id.used_for_shipping')
+    delivery_tracking = fields.Boolean(
+        'Used for shipping', related='project_id.delivery_tracking')

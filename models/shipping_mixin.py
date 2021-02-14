@@ -176,7 +176,6 @@ class CommownShippingMixin(models.AbstractModel):
 class CommownShippingParentMixin(models.AbstractModel):
     _name = 'commown.shipping.parent.mixin'
 
-    used_for_shipping = fields.Boolean('Used for shipping', default=False)
     shipping_account_id = fields.Many2one(
         'keychain.account', string='Shipping account',
         domain="[('namespace', '=', 'colissimo')]")
