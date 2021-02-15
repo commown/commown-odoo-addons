@@ -14,6 +14,7 @@
         'project_issue',
         'keychain',
         'partner_firstname',
+        'queue_job',
     ],
     'external_dependencies': {
         'bin': ['pdfjam', 'pdftk'],
