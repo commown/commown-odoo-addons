@@ -16,9 +16,6 @@ class CrmLead(models.Model):
     so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
     delivery_tracking = fields.Boolean(
         'Used for shipping', related='team_id.delivery_tracking')
-    start_contract_on_delivery = fields.Boolean(
-        default='_default_perform_actions_on_delivery',
-        string='Automatic contract start on delivery')
 
     @api.multi
     def _default_shipping_parcel_type(self):

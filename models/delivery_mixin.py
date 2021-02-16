@@ -146,7 +146,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         date = parse_date(infos['date'])
 
         if code in ('LIVCFM', 'LIVGAR', 'LIVVOI'):
-            # Parcel is considered delivered: start contract, etc.
+            # Parcel is considered delivered: this will trigger delivery actions
             final_stage = self._delivery_final_stage()
             if not final_stage:
                 raise ValueError(u'No final stage found for %s' % self)

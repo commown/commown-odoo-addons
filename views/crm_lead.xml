@@ -26,7 +26,6 @@
                 </group>
               </group>
               <group name="delivery_actions">
-                <field name="start_contract_on_delivery"/>
                 <field name="send_email_on_delivery"/>
                 <field name="on_delivery_email_template_id"
                        attrs="{'invisible': [('send_email_on_delivery', '=', False)]}"/>
