@@ -69,9 +69,6 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                 parent = self.env[parent._name].browse(context[default_rel])
         return parent.default_perform_actions_on_delivery if parent else True
 
-    start_contract_on_delivery = fields.Boolean(
-        default=_default_perform_actions_on_delivery,
-        string='Automatic contract start on delivery')
     send_email_on_delivery = fields.Boolean(
         default=_default_perform_actions_on_delivery,
         string='Automatic email on delivery')
