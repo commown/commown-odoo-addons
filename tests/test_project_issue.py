@@ -8,8 +8,8 @@ class ProjectIssueTC(TransactionCase):
     def setUp(self):
         super(ProjectIssueTC, self).setUp()
 
-        self.project = self.env.ref('project.project_project_1').copy({
-            'name': u'Support'})
+        self.project = self.env.ref(
+            'commown_self_troubleshooting.support_project')
 
         # Adapt defined stages to our needs: use expected name
         # conventions and remove email model as they are buggy for
@@ -68,7 +68,7 @@ class ProjectIssueTC(TransactionCase):
 
     def assertIsStageChangeMessage(self, message):
         self.assertEqual(message.subtype_id,
-                         self.env.ref('project_issue.mt_issue_stage'))
+                         self.env.ref("project_issue.mt_issue_new"))
 
     def test_send_reminders(self):
         """A reminder mail to followers and SMS to partner must be sent

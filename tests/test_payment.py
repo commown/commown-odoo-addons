@@ -20,6 +20,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         self.fake_session = request_mock.session
 
         super(PaymentTC, self).setUp()
+        self.so = self.create_sale_order()
 
         self.setup_mocks()
         self.addCleanup(request_patcher.stop)
