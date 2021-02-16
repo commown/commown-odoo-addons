@@ -1,6 +1,7 @@
 import account_analytic_account
 import account_analytic_contract
 import account_invoice
+import crm_lead
 import coupon
 import mass_reconcile
 import payment

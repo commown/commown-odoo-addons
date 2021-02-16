@@ -18,31 +18,16 @@
       </field>
     </record>
 
-    <record id="action_start_contract" model="ir.actions.server">
-      <field name="name">[commown] Start contract</field>
-      <field name="model_id" ref="crm.model_crm_lead"/>
-      <field name="sequence">5</field>
-      <field name="state">code</field>
-      <field name="code">
-# "uid" is in env: action launched from GUI
-if 'uid' in env or object.start_contract_on_delivery:
-    if object.name.startswith('[SO') and ']' in object.name:
-        so_name = object.name[1:object.name.index(']')]
-        if '-' not in so_name:
-            so_name += '-01'  # XXX backward compat
-
-        contract = object.env['account.analytic.account'].search([
-            ('name', 'like', so_name),
-        ]).ensure_one()
-
-        contract.update({'date_start': object.delivery_date, 'is_auto_pay': True})
-        contract.update({'recurring_next_date': object.delivery_date})
-      </field>
+    <record model="ir.ui.view" id="crm_case_form_view_oppor">
+        <field name="name">commown.lead.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="commown_shipping.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='send_email_on_delivery']" position="before">
+                <field name="start_contract_on_delivery"/>
+          </xpath>
+        </field>
     </record>
-
-  <record id="commown_shipping.lead_product_delivered" model="base.action.rule">
-    <field name="server_action_ids" eval="[(4,ref('commown.action_start_contract'), False)]"/>
-  </record>
 
   </data>
 
