@@ -8,6 +8,7 @@ from iso8601 import parse_date
 from pytz import UTC
 
 from odoo import api, models, fields
+from odoo.exceptions import UserError
 from odoo.addons.queue_job.job import job
 
 
@@ -74,6 +75,29 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         string='Automatic email on delivery')
     on_delivery_email_template_id = fields.Many2one(
         'mail.template', string='Custom email model for this entity')
+
+    @api.multi
+    def write(self, values):
+        res = super(CommownTrackDeliveryMixin, self).write(values)
+        if values.get("delivery_date", False):
+            self.delivery_perform_actions()
+        return res
+
+    @api.multi
+    def delivery_perform_actions(self):
+        for record in self.filtered('send_email_on_delivery'):
+            template = record.delivery_email_template()
+            if template:
+                status = record.expedition_status
+                ctx = {}
+                if status and status[0] == '[' and ']' in status:
+                    ctx['postal_code'] = status[1:status.find(']')]
+                record.with_context(ctx).message_post_with_template(template.id)
+            else:
+                raise UserError(
+                    'No mail email template specified for %s'
+                    ' (neither in current record nor its parent)' % record)
+
 
     @api.multi
     def delivery_email_template(self):
