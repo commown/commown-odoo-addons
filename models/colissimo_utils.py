@@ -77,7 +77,7 @@ def delivery_data(partner):
         result_data = None
         comment = partner.browse(delivery_id).comment
         if comment:
-            match = re.match('^\[BP\] (?P<bp>[0-9]+)$', comment)
+            match = re.match(r'^\[BP\] (?P<bp>[0-9]+)$', comment)
             if match:
                 result_data = partner_data
                 result_data['BP'] = match.groupdict()['bp']
