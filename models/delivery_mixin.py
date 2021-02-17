@@ -11,8 +11,6 @@ from odoo.exceptions import UserError
 from odoo.addons.queue_job.job import job
 
 
-_logger = logging.getLogger(__file__)
-
 BASE_URL = ('https://www.coliposte.fr/tracking-chargeur-cxf/'
             'TrackingServiceWS/track')
 
@@ -130,11 +128,15 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     @job(default_channel=QUEUE_CHANNEL)
     def _delivery_tracking_update(self):
+        self.ensure_one()
         now = datetime.utcnow()
 
         infos = self._delivery_tracking_colissimo_status()
         infos.update({'name': self.partner_id.name,
-                      'number': self.expedition_ref})
+                      'number': self.expedition_ref,
+                      'rec_model': self._name,
+                      'rec_id': self.id,
+                      })
         self.update({
             'expedition_status': u'[%(code)s] %(label)s' % infos,
             'expedition_status_fetch_date': fields.Datetime.to_string(now),
@@ -142,6 +144,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
         code = infos['code']
         date = parse_date(infos['date'])
+        result = [u'%(number)s - %(name)s : %(code)s (%(label)s)' % infos]
 
         if code in ('LIVCFM', 'LIVGAR', 'LIVVOI'):
             # Parcel is considered delivered: this will trigger delivery actions
@@ -152,18 +155,17 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                 'delivery_date': date.astimezone(UTC),
                 'stage_id': final_stage.id,
             })
+            result.append(u'Delivered.')
 
         elif code.endswith('CFM') or code in (
                 'DEPGUI', 'RENARV', 'RSTDIL', 'RSTNCG', 'RSTNRV', 'RENLNA'):
             # Wait!
-            msg = u'Nothing done for parcel %(number)s (%(name)s).' % infos
-            _logger.info(msg)
+            result.append(u'Nothing done')
 
         elif code in ('MLVARS', 'RENAVI'):
             # More than 8 day-old MLVARS: log a warning and send an email once
             if (now.replace(tzinfo=UTC) - date) > MLVARS_MAX_WAIT:
-                _logger.warning('Parcel %(number)s (%(name)s): %(label)s',
-                                infos)
+                result.append(u'Urgency mail sent.')
                 if not self.expedition_urgency_mail_sent:
                     self.expedition_urgency_mail_sent = True
                     _self = self.with_context({'postal_code': code})
@@ -172,9 +174,9 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
         else:
             # Unexpected code: emit a warning
-            _logger.warning(
-                u'Parcel %(number)s (%(name)s): code %(code)s (%(label)s)',
-                infos)
+            result.append(u'Unhandled code')
+
+        return u'\n'.join(result)
 
     def _delivery_tracking_colissimo_status(self):
         self.ensure_one()
