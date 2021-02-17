@@ -10,6 +10,7 @@ class CommownProjectTask(models.Model):
     ]
 
     _delivery_tracking_parent_rel = _shipping_parent_rel = "project_id"
+    _delivery_tracking_stage_parent_rel = "project_ids"
 
     delivery_tracking = fields.Boolean(
         'Delivery tracking', related='project_id.delivery_tracking')

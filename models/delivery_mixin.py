@@ -49,6 +49,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     # Need to be overloaded
     _delivery_tracking_parent_rel = None
+    _delivery_tracking_stage_parent_rel = None
 
     @api.model
     def _delivery_tracking_stage_type(cls):
@@ -122,7 +123,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         self.ensure_one()
         return self.env[self._delivery_tracking_stage_type()].search([
             ('name', 'like', '%' + marker),
-            (self._delivery_tracking_parent_rel, '=',
+            (self._delivery_tracking_stage_parent_rel, '=',
              self._delivery_tracking_parent().id)
         ])
 
