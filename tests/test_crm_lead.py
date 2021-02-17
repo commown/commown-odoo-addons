@@ -114,7 +114,7 @@ class CrmLeadShippingTC(BaseShippingTC):
         data = shipping_data(
             sender=self.env['res.partner'],
             recipient=self.lead.partner_id,
-            order_number= u'SO00000',
+            order_number=u'SO00000',
             commercial_name=u'Commown',
             weight=0.5,
         )
@@ -308,8 +308,8 @@ class CrmLeadDeliveryTrackingTC(TransactionCase):
             "delivery_tracking": False,
         })
         stage_track2 = self._add_stage(u"Wait2 [colissimo: tracking]", team2)
-        lead21 = self._add_lead(u"l21", stage_track2, team2, u"l21ref")
-        stage_final2 = self._add_stage(u"Done2 [colissimo: final]", team2)
+        self._add_lead(u"l21", stage_track2, team2, u"l21ref")
+        self._add_stage(u"Done2 [colissimo: final]", team2)
 
         self.assertEqual(self.env["crm.lead"]._delivery_tracked_records().ids,
                          [self.lead2.id, self.lead1.id])

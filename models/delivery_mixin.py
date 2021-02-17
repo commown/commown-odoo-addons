@@ -1,5 +1,4 @@
 import logging
-import re
 from datetime import datetime, timedelta
 
 import lxml.etree
@@ -98,7 +97,6 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                     'No mail email template specified for %s'
                     ' (neither in current record nor its parent)' % record)
 
-
     @api.multi
     def delivery_email_template(self):
         """ If current entity is attached to a parent with shipping activated,
@@ -140,7 +138,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         self.update({
             'expedition_status': u'[%(code)s] %(label)s' % infos,
             'expedition_status_fetch_date': fields.Datetime.to_string(now),
-        })
+            })
 
         code = infos['code']
         date = parse_date(infos['date'])
