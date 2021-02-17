@@ -206,7 +206,7 @@ class CommownDeliveryParentMixin(models.AbstractModel):
     _name = 'commown.delivery.parent.mixin'
     _inherit = 'commown.shipping.parent.mixin'
 
-    delivery_tracking = fields.Boolean('Used for shipping', default=False)
+    delivery_tracking = fields.Boolean('Delivery tracking', default=False)
     default_perform_actions_on_delivery = fields.Boolean(
         'By default, perform actions on delivery',
         default=True)

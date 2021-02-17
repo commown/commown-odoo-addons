@@ -12,4 +12,4 @@ class CommownProjectIssue(models.Model):
     _delivery_tracking_parent_rel = _shipping_parent_rel = "project_id"
 
     delivery_tracking = fields.Boolean(
-        'Used for shipping', related='project_id.delivery_tracking')
+        'Delivery tracking', related='project_id.delivery_tracking')

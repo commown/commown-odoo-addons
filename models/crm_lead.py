@@ -15,7 +15,7 @@ class CrmLead(models.Model):
 
     so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
     delivery_tracking = fields.Boolean(
-        'Used for shipping', related='team_id.delivery_tracking')
+        'Delivery tracking', related='team_id.delivery_tracking')
 
     @api.multi
     def _default_shipping_parcel_type(self):
