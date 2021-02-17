@@ -1,4 +1,4 @@
-from odoo import api, models
+from odoo import models
 
 
 class ProjectTask(models.Model):
@@ -6,8 +6,3 @@ class ProjectTask(models.Model):
     _inherit = ["project.task", "commown.shipping.mixin"]
 
     _shipping_parent_rel = "project_id"
-
-    @api.multi
-    def get_label_ref(self):
-        self.ensure_one()
-        return "SAV%d" % self.id

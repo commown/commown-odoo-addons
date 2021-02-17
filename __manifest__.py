@@ -3,7 +3,7 @@
     "category": "Business",
     "summary": "Commown shipping-related features",
     "version": "12.0.1.0.0",
-    "author": "Commown SCIC SAS,Odoo Community Association (OCA)",
+    "author": "Commown SCIC,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [

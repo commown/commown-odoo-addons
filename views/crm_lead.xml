@@ -74,7 +74,10 @@ if 'uid' in env or record.send_email_on_delivery:
       <field name="trigger">on_write</field>
       <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
       <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
-      <field name="child_ids" eval="[(6, 0, [ref('action_send_delivery_email')])]"/>
+      <field
+        name="child_ids"
+        eval="[(6, 0, [ref('action_send_delivery_email')])]"
+      />
     </record>
 
   </data>
