@@ -4,7 +4,7 @@ from mock import patch
 
 from odoo.tests.common import at_install, post_install
 
-from odoo.addons.payment_slimpay.tests.common import MockedSlimpayMixin
+from odoo.addons.account_payment_slimpay.tests.common import MockedSlimpayMixin
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
