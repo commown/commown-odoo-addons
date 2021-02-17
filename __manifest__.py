@@ -20,9 +20,9 @@
         'bin': ['pdfjam', 'pdftk'],
     },
     'data': [
-        'security/ir.model.access.csv',
-        'data/parcels.xml',
         'data/actions.xml',
+        'data/cron.xml',
+        'data/parcels.xml',
         'data/keychain_accounts.xml',
         'views/crm_team.xml',
         'views/crm_lead.xml',
@@ -30,6 +30,7 @@
         'views/project_issue.xml',
         'views/project_project.xml',
         'views/project_task.xml',
+        'security/ir.model.access.csv',
     ],
     "demo": [
         'data/demo.xml',
