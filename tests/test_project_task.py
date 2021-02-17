@@ -7,16 +7,11 @@ from .common import BaseShippingTC, pdf_page_num
 
 @at_install(False)
 @post_install(True)
-class ProjectIssueTC(BaseShippingTC):
+class ProjectTaskTC(BaseShippingTC):
     def setUp(self):
-        super(ProjectIssueTC, self).setUp()
-        self.task = self.env.ref("project_task.crm_case_buginaccountsmodule0")
-        self.task.project_id.update(
-            {
-                "shipping_account_id": self.shipping_account,
-                "shipping_password": self.shipping_password,
-            }
-        )
+        super(ProjectTaskTC, self).setUp()
+        self.task = self.env.ref("project.project_task_1")
+        self.task.project_id.shipping_account_id = self.shipping_account.id
 
     def test_print_parcel_actions(self):
 
