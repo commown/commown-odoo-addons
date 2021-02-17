@@ -36,14 +36,14 @@ def colissimo_status_request(login, password, ref):
 class CommownTrackDeliveryMixin(models.AbstractModel):
     _name = "commown.track_delivery.mixin"
 
-    expedition_ref = fields.Text("Expedition reference", size=64)
-    expedition_date = fields.Date("Expedition Date")
-    expedition_status = fields.Text("Expedition status", size=256)
+    expedition_ref = fields.Text("Expedition reference", size=64, copy=False)
+    expedition_date = fields.Date("Expedition Date", copy=False)
+    expedition_status = fields.Text("Expedition status", size=256, copy=False)
     expedition_status_fetch_date = fields.Datetime(
-        "Expedition status fetch date")
+        "Expedition status fetch date", copy=False)
     expedition_urgency_mail_sent = fields.Boolean(
-        "Expedition urgency mail send", default=False)
-    delivery_date = fields.Date("Delivery Date")
+        "Expedition urgency mail send", default=False, copy=False)
+    delivery_date = fields.Date("Delivery Date", copy=False)
 
     _delivery_tracking_stage_rel = 'stage_id'
 
