@@ -15,11 +15,11 @@
             <page
             name="delivery"
             string="Delivery followup"
-            attrs="{'invisible': [('used_for_shipping', '=', False)]}"
+            attrs="{'invisible': [('delivery_tracking', '=', False)]}"
           >
               <group>
                 <group>
-                  <field name="used_for_shipping" invisible="1" />
+                  <field name="delivery_tracking" invisible="1" />
                   <field name="expedition_ref" />
                   <field name="expedition_date" />
                   <field name="delivery_date" />
@@ -31,7 +31,6 @@
                 </group>
               </group>
               <group name="delivery_actions">
-                <field name="start_contract_on_delivery" />
                 <field name="send_email_on_delivery" />
                 <field
                 name="on_delivery_email_template_id"
@@ -41,43 +40,6 @@
             </page>
           </xpath>
         </field>
-    </record>
-
-
-    <record id="action_send_delivery_email" model="ir.actions.server">
-      <field name="name">[commown] Send delivery email</field>
-      <field name="model_id" ref="crm.model_crm_lead" />
-      <field name="sequence">10</field>
-      <field name="state">code</field>
-      <field name="code">
-# "uid" is in env: action launched from GUI
-if 'uid' in env or record.send_email_on_delivery:
-
-    template = record.delivery_email_template()
-    if template:
-        status = record.expedition_status
-        ctx = {}
-        if status and status[0] == '[' and ']' in status:
-            ctx['postal_code'] = status[1:status.find(']')]
-        record.with_context(ctx).message_post_with_template(template.id)
-    else:
-        raise Warning('No mail email template specified'
-                     ' (neither in current lead nor its team)')
-      </field>
-    </record>
-
-    <record id="lead_product_delivered" model="base.automation">
-      <field name="name">[commown] Lead product delivered</field>
-      <field name="model_id" ref="model_crm_lead" />
-      <field name="sequence">1</field>
-      <field name="state">multi</field>
-      <field name="trigger">on_write</field>
-      <field name="filter_pre_domain">[('delivery_date', u'=', False)]</field>
-      <field name="filter_domain">[('delivery_date', u'!=', False)]</field>
-      <field
-        name="child_ids"
-        eval="[(6, 0, [ref('action_send_delivery_email')])]"
-      />
     </record>
 
   </data>

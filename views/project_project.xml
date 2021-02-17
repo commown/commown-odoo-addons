@@ -9,6 +9,15 @@
         <xpath expr="//group[@name='misc']" position="inside">
           <group string="Shipping">
             <field name="shipping_account_id" />
+            <field name="delivery_tracking" />
+            <field
+              name="default_perform_actions_on_delivery"
+              attrs="{'invisible': [('delivery_tracking', '=', False)]}"
+            />
+            <field
+              name="on_delivery_email_template_id"
+              attrs="{'invisible': [('delivery_tracking', '=', False)]}"
+            />
           </group>
         </xpath>
       </field>
