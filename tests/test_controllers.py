@@ -9,7 +9,7 @@ from .common import MockedEmptySessionMixin
 @post_install(True)
 class ControllerTC(MockedEmptySessionMixin, HttpCase):
 
-    def test_shop_redirect(self):
+    def check_redirect(self, path, expected_path):
         # Required by the affiliate request creation
         self.request_mock.httprequest.headers.environ = {
             'REMOTE_ADDR': '127.0.0.1',
@@ -17,12 +17,17 @@ class ControllerTC(MockedEmptySessionMixin, HttpCase):
             'HTTP_ACCEPT_LANGUAGE': 'fr',
         }
 
-        aff = self.env['sale.affiliate'].search([])[0]
         url = 'http://%s:%s' % (HOST, PORT)
         resp = requests.get(
-            url + '/shop/redirect?aff_ref=%s&redirect=/test/a' % aff.id,
+            url + '/shop/redirect?' + path,
             headers={'Cookie': 'session_id=%s' % self.session_id})
 
         self.assertTrue(resp.history and resp.history[0].is_redirect)
-        self.assertEqual(resp.history[0].headers['Location'], url + '/test/a')
-        self.assertEqual(len(aff.request_ids), 1)
+        self.assertEqual(resp.history[0].headers['Location'],
+                         url + expected_path)
+
+    def test_shop_redirect_ok(self):
+        self.check_redirect('aff_ref=1&redirect=/test/a', '/test/a')
+
+    def test_shop_redirect_spam(self):
+        self.check_redirect('redirect=https://mystupidsite.com', '/shop')

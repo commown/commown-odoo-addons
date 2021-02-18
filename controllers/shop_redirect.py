@@ -1,4 +1,5 @@
 import logging
+from urlparse import urlparse
 
 from odoo.http import request, route
 
@@ -13,5 +14,8 @@ class ShopRedirect(WebsiteSale):
     def shop_redirect(self, redirect='/', **kwargs):
         _logger.debug('shop redirect called redirect=%s, kwargs=%s',
                       redirect, kwargs)
+        if redirect.startswith("http://") or redirect.startswith("https://"):
+            if not urlparse(redirect).netloc.endswith('commown.coop'):
+                return request.redirect('/shop')
         self._store_affiliate_info(**kwargs)
         return request.redirect(redirect)
