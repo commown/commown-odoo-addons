@@ -29,6 +29,7 @@ def colissimo_status_request(login, password, ref):
 
 class CommownTrackDeliveryMixin(models.AbstractModel):
     _name = "commown.track_delivery.mixin"
+    _description = "Class holding the fields and methods to track parcel delivery"
 
     expedition_ref = fields.Text("Expedition reference", size=64, copy=False)
     expedition_date = fields.Date("Expedition Date", copy=False)
