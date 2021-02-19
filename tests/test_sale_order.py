@@ -7,18 +7,28 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
     def setUp(self):
         super(SaleOrderTC, self).setUp()
 
+        partner = self.env.ref('base.partner_demo_portal')
+        self.user = partner.user_ids
+        self.so = self.create_sale_order(partner)
+
         self.g1 = self.env['res.groups'].create({'name': 'standard'})
         self.g2 = self.env['res.groups'].create({'name': 'premium'})
         self.g3 = self.env['res.groups'].create({'name': 'computer'})
 
-        self.product1.product_tmpl_id.support_group_ids |= self.g1 + self.g2
-        self.product2.product_tmpl_id.support_group_ids |= self.g3
+        def p_by_name(name):
+            pts = self.so.mapped('order_line.product_id.product_tmpl_id')
+            return pts.filtered(lambda p: p.name == name).ensure_one()
 
-        self.product1.followup_sales_team_id = self._create_sales_team(1).id
-        self.product2.followup_sales_team_id = self._create_sales_team(3).id
+        p1 = p_by_name(u'Fairphone Premium')
+        p2 = p_by_name(u'PC')
+        p1.support_group_ids |= self.g1 + self.g2
+        p2.support_group_ids |= self.g3
+        p1.followup_sales_team_id = self._create_sales_team(1).id
+        p2.followup_sales_team_id = self._create_sales_team(3).id
 
-        _investment_project = self.env.ref('commown.investment_followup_project')
-        _stage = self.env['project.task.type'].create({
+        _investment_project = self.env.ref(
+            'commown.investment_followup_project')
+        self.env['project.task.type'].create({
             'sequence': 1,
             'name': u'investment received',
             'project_ids': [(6, 0, (_investment_project.id,))],

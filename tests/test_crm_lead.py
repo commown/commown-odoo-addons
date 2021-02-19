@@ -9,7 +9,7 @@ class CrmLeadTC(TransactionCase):
         super(CrmLeadTC, self).setUp()
         self.lead = self.env['crm.lead'].create({
             'name': u'[SO99999-01] TEST',
-            'partner_id': self.env.ref('portal.demo_user0_res_partner').id,
+            'partner_id': self.env.ref('base.res_partner_1').id,
             'type': 'opportunity',
             'team_id': self.env.ref('sales_team.salesteam_website_sales').id,
             'send_email_on_delivery': False,
@@ -17,11 +17,9 @@ class CrmLeadTC(TransactionCase):
 
     def _link_lead_to_contract(self):
         "Create a contract link to the lead by its (sale order like) name"
-        return self.env['account.analytic.account'].create({
+        return self.env['contract.contract'].create({
             'name': u'SO99999-01',
-            'recurring_invoices': True,
             'is_auto_pay': False,
-            'date_start': '2030-01-01',
             'recurring_next_date': '2030-01-01',
             'partner_id': self.lead.partner_id.id,
         })
@@ -36,7 +34,8 @@ class CrmLeadTC(TransactionCase):
 
         # Check results: contract started
         self.assertTrue(contract.is_auto_pay)
-        self.assertTrue(contract.date_start.startswith('2018-01-01'))
+        self.assertTrue(all(l.startswith('2018-01-01')
+                            for l in contract.contract_line_ids))
 
     def test_actions_on_delivery_no_start_contract(self):
 

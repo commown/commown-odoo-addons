@@ -19,6 +19,7 @@
         'commown_lead_risk_analysis',
         # 'contract_auto_merge_invoice',
         'website_sale_payment_slimpay',
+        #'commown_self_troubleshooting',
         'payment_slimpay_issue',
         'product_rental',
         'project_rating_nps',
@@ -26,7 +27,6 @@
         'urban_mine',
         'custom_report',
         'website_sale_affiliate_portal',
-        'website_sale_affiliate_product_restriction',
         # 'website_sale_b2b',
         'sale_promotion_rule',
         # OCA modules
@@ -35,6 +35,7 @@
         'auth_signup',
         'base_automation',
         'crm',
+        'sale_management',
         'mass_mailing',
         'mass_mailing_partner',
         'project',

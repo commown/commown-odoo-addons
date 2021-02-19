@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-04 11:25+0000\n"
-"PO-Revision-Date: 2019-12-04 11:25+0000\n"
+"POT-Creation-Date: 2021-02-17 14:18+0000\n"
+"PO-Revision-Date: 2021-02-17 14:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -148,6 +148,15 @@ msgstr "\n"
 ""
 
 #. module: commown
+#: model:mail.template,body_html:commown.sms_template_issue_reminder
+msgid "\n"
+"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.</p>\n"
+""
+msgstr "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.</p>\n"
+""
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.orders_followup_products_links
 msgid "(loyer unitaire :"
 msgstr "(loyer unitaire :"
@@ -171,6 +180,16 @@ msgstr "; fin de la période d'engagement :"
 #: model:ir.ui.view,arch_db:commown.portal_layout
 msgid "<br/>     <span>Proof of address</span>"
 msgstr "<br/>     <span>Justificatif de domicile</span>"
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "<font style=\"font-size: 14px;\">Le processus vous demandera de vous connecter à votre espace Commown avec les   </font>"
+msgstr "<font style=\"font-size: 14px;\">Le processus vous demandera de vous connecter à votre espace Commown avec les   </font>"
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "<font style=\"font-size: 14px;\">              identifiants choisis lors de votre commande.</font>"
+msgstr "<font style=\"font-size: 14px;\">              identifiants choisis lors de votre commande.</font>"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_layout
@@ -202,11 +221,6 @@ msgstr "<span>Créer un compte et payer</span>\n"
 "          <span class=\"fa fa-long-arrow-right\"/>"
 
 #. module: commown
-#: model:ir.ui.view,arch_db:commown.cart_lines
-msgid "<strong> - Deposit</strong>"
-msgstr "<strong> - Dépôt de garantie</strong>"
-
-#. module: commown
 #: model:ir.ui.view,arch_db:commown.orders_followup
 msgid "<strong>Documents transmis par mail :</strong>"
 msgstr "<strong>Documents transmis par mail :</strong>"
@@ -220,6 +234,11 @@ msgstr "Groupes d'accès"
 #: model:ir.model,name:commown.model_contract_contract
 msgid "Analytic Account"
 msgstr "Compte analytique"
+
+#. module: commown
+#: model:ir.ui.view,arch_db:commown.view_account_invoice_filter
+msgid "Analytic tags"
+msgstr "Analytic tags"
 
 #. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_layout
@@ -250,6 +269,11 @@ msgstr "Créé par"
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_create_date
 msgid "Created on"
 msgstr "Créé le"
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "De quoi ai-je besoin ?<br>"
+msgstr "De quoi ai-je besoin ?<br>"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown_display_name
@@ -346,6 +370,31 @@ msgid "Lead/Opportunity"
 msgstr "Piste/opportunité"
 
 #. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Ma pièce d'identité<br>"
+msgstr "Ma pièce d'identité<br>"
+
+#. module: commown
+#: model:product.template,name:commown.sepa_mandate
+msgid "Mandat SEPA"
+msgstr "Mandat SEPA"
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Mes identifiants Commown"
+msgstr "Mes identifiants Commown"
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Mon IBAN<br>"
+msgstr "Mon IBAN<br>"
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Mon numéro de téléphone<br>"
+msgstr "Mon numéro de téléphone<br>"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_task_type_portal_displayed_name
 msgid "Name displayed on the portal"
 msgstr "Nom affiché sur le portail client"
@@ -354,6 +403,11 @@ msgstr "Nom affiché sur le portail client"
 #: model:ir.model,name:commown.model_res_partner
 msgid "Partner"
 msgstr "Partenaire"
+
+#. module: commown
+#: model:ir.model,name:commown.model_payment_acquirer
+msgid "Payment Acquirer"
+msgstr "Intermédiaire de Paiement"
 
 #. module: commown
 #: model:ir.model,name:commown.model_payment_transaction
@@ -368,9 +422,24 @@ msgid "Payment label"
 msgstr "Libellé bancaire"
 
 #. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
+msgstr "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
+
+#. module: commown
+#: model:product.template,description_sale:commown.sepa_mandate
+msgid "Pour créer le mandat SEPA et le valider, ce processus vous guide dans la signature du mandat en ligne et un premier paiement de test d'une valeur de 1 centime."
+msgstr "Pour créer un mandat SEPA et le valider, ce processus vous guide dans la signature du mandat en ligne et un premier paiement de test d'une valeur de 1 centime."
+
+#. module: commown
 #: model:ir.model,name:commown.model_product_template
 msgid "Product Template"
 msgstr "Modèle d'article"
+
+#. module: commown
+#: model:ir.model,name:commown.model_project_issue
+msgid "Project Issue"
+msgstr "Incident"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_res_partner_proof_of_address
@@ -387,6 +456,11 @@ msgstr "Bon de commande"
 #: model:ir.model,name:commown.model_crm_team
 msgid "Sales Team"
 msgstr "Équipe commerciale"
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans votre espace Commown, ce sera l'occasion."
+msgstr "Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans votre espace Commown, ce sera l'occasion."
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_product_product_support_group_ids
@@ -428,6 +502,16 @@ msgid "Voir les détails"
 msgstr "Voir les détails"
 
 #. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Vous allez recevoir un SMS avec un code pour valider le mandat."
+msgstr "Vous allez recevoir un SMS avec un code pour valider le mandat."
+
+#. module: commown
+#: model:product.template,website_description:commown.sepa_mandate
+msgid "Vous devrez entrer l'IBAN de votre compte pour créer le mandat."
+msgstr "Vous devrez entrer l'IBAN de votre compte pour créer le mandat."
+
+#. module: commown
 #: model:ir.ui.view,arch_db:commown.portal_my_home_sale
 msgid "Your security deposits / Equities"
 msgstr "Mes devis"
@@ -460,12 +544,7 @@ msgstr "[commown] Ajouter la piste de suivi de commande"
 #. module: commown
 #: model:ir.actions.server,name:commown.action_add_investor_management_task
 msgid "[commown] Add investor management task"
-msgstr "[commown] Ajouter la tâche de gestion des investisseurs"
-
-#. module: commown
-#: model:ir.actions.server,name:commown.action_add_receivable_account
-msgid "[commown] Add receivable account"
-msgstr "[commown] Ajouter le compte client"
+msgstr "[commown] Ajouter une tâche de suivi de l'investisseur"
 
 #. module: commown
 #: model:ir.actions.server,name:commown.action_move_issue_to_stop_waiting_stage
@@ -481,6 +560,11 @@ msgstr "[commown] Réactiver les tickets en attente d'un retour client quand un 
 #: model:ir.actions.server,name:commown.fix_invoice_investment_line_price
 msgid "[commown] Multiply by 10 investments' line amount"
 msgstr "[commown] Correction des lignes d'acompte des investisseurs"
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_send_issue_reminder_sms
+msgid "[commown] Send a reminder SMS concerning an issue"
+msgstr "[commown] Envoyer un rappel SMS concernant un incident"
 
 #. module: commown
 #: model:ir.actions.server,name:commown.action_send_issue_reminder_email
@@ -501,6 +585,11 @@ msgstr "contrat"
 #: model:ir.model,name:commown.model_coupon_campaign
 msgid "coupon.campaign"
 msgstr "coupon.campaign"
+
+#. module: commown
+#: model:mail.template,subject:commown.sms_template_issue_reminder
+msgid "mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
+msgstr "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
 
 #. module: commown
 #: model:ir.model,name:commown.model_mass_reconcile_simple_partner_commown

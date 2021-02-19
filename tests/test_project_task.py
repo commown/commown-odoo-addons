@@ -8,8 +8,8 @@ class ProjectTaskTC(TransactionCase):
     def setUp(self):
         super(ProjectTaskTC, self).setUp()
 
-        self.project = self.env.ref('project.project_project_1').copy({
-            'name': u'Support'})
+        self.project = self.env.ref(
+            'commown_self_troubleshooting.support_project')
 
         # Adapt defined stages to our needs: use expected name
         # conventions and remove email model as they are buggy for
@@ -68,7 +68,7 @@ class ProjectTaskTC(TransactionCase):
 
     def assertIsStageChangeMessage(self, message):
         self.assertEqual(message.subtype_id,
-                         self.env.ref('project_issue.mt_issue_stage'))
+                         self.env.ref("project_issue.mt_issue_new"))
 
     def test_send_reminders(self):
         """A reminder mail to followers and SMS to partner must be sent
@@ -199,7 +199,7 @@ class ProjectTaskTC(TransactionCase):
         self.assertFalse(
             self.issue.slimpay_payment_issue_process_automatically())
 
-        contract = self.env['account.analytic.account'].search(
+        contract = self.env['contract.contract'].search(
             [], limit=1).ensure_one()
         inv.contract_id = contract.id
 
