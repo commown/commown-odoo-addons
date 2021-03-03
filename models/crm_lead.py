@@ -5,8 +5,11 @@ class CrmLead(models.Model):
     _name = "crm.lead"
     _inherit = "crm.lead"
 
+    def _default_perform_actions_on_delivery(self):
+        return super(CrmLead, self)._default_perform_actions_on_delivery()
+
     start_contract_on_delivery = fields.Boolean(
-        default='_default_perform_actions_on_delivery',
+        default=_default_perform_actions_on_delivery,
         string='Automatic contract start on delivery')
 
     @api.multi
