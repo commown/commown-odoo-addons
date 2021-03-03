@@ -13,5 +13,10 @@ class ShopRedirect(WebsiteSale):
     def shop_redirect(self, redirect='/', **kwargs):
         _logger.debug('shop redirect called redirect=%s, kwargs=%s',
                       redirect, kwargs)
+        if redirect.startswith("http://") or redirect.startswith("https://"):
+            if not urlparse(redirect).netloc.endswith('commown.coop'):
+                redirect = "/shop"
+                _logger.info('Redirecting spammer to %s', redirect)
+                return request.redirect(redirect)
         self._store_affiliate_info(**kwargs)
         return request.redirect(redirect)
