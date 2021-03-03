@@ -20,7 +20,7 @@ class SelfHelp(http.Controller):
     def _tag_ids(self, **post):
         ids = [self.ref(t).id for t in self.action_tags.get(post['action'], ())]
         ids.append(self.ref('tag-self-troubleshooting').id)
-        names = post.get('tags', '').split(u',')
+        names = post.get('tags', '').split(',')
         if names:
             ids.extend(request.env['project.tags'].search(
                 [('name', 'in', names)]).ids)
