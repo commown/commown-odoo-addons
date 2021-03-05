@@ -1,4 +1,3 @@
-import project
-import project_issue
-import project_task
-import account_analytic_account
+from . import contract_contract
+from . import project_project
+from . import project_task
