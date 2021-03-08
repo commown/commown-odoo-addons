@@ -8,6 +8,6 @@ class CrmStage(models.Model):
         'mail.template',
         string='Email Template',
         domain=[('model', '=', 'crm.lead')],
-        help=(u'If set an email will be sent to the partner'
+        help=('If set an email will be sent to the partner'
               'when the lead reaches this step.'),
     )

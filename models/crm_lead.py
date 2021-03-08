@@ -6,7 +6,7 @@ class CrmLead(models.Model):
 
     @api.multi
     def _track_template(self, tracking):
-        res = super(CrmLead, self)._track_template(tracking)
+        res = super()._track_template(tracking)
         test_lead = self[0]
         changes, tracking_value_ids = tracking[test_lead.id]
         if 'stage_id' in changes and test_lead.stage_id.mail_template_id:
