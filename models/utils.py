@@ -4,7 +4,7 @@ import logging
 
 from odoo.exceptions import MissingError
 
-from odoo.addons.payment_slimpay.models import slimpay_utils
+from odoo.addons.account_payment_slimpay.models import slimpay_utils
 
 
 _logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ def get_all_mandates_repr(acquirer, transformer_func, **params):
     """
     client = acquirer.slimpay_client
     params['creditorReference'] = acquirer.slimpay_creditor
-    _logger.debug(u'Fetching first mandates...')
+    _logger.debug('Fetching first mandates...')
     doc = client.action('GET', 'search-mandates', params=params)
     if 'mandates' in doc:
         for mandate_doc in doc['mandates']:
@@ -72,7 +72,7 @@ def get_all_mandates_repr(acquirer, transformer_func, **params):
                 yield result
         page_num = doc['page']['totalPages']
         for page in range(1, page_num):
-            _logger.debug(u'Fetching page %d / %d...', page+1, page_num)
+            _logger.debug('Fetching page %d / %d...', page+1, page_num)
             doc = client.get(doc.links['next'].url)
             for mandate_doc in doc['mandates']:
                 result = transformer_func(acquirer, mandate_doc)
@@ -101,7 +101,7 @@ def set_contract_for_invoice_merge_autopay(contract):
         next_date = max(partner.invoice_merge_reference_date,
                         contract.recurring_next_date)
         if next_date != contract.recurring_next_date:
-            _logger.debug(u'%s %s -> %s (%s)',
+            _logger.debug('%s %s -> %s (%s)',
                           contract.name, contract.recurring_next_date,
                           next_date, partner.name)
     else:
@@ -126,7 +126,7 @@ def replace_mandate(acquirer, mandate_repr):
         mandate_repr['signatory']['givenName'] = '-'
     if mandate_repr['signatory']['billingAddress']['country'] is None:
         _logger.debug(
-            u'WARNING! No country set for %s. Assuming FR. Please fix data.',
+            'WARNING! No country set for %s. Assuming FR. Please fix data.',
             partner.name)
         mandate_repr['signatory']['billingAddress']['country'] = 'FR'
 
@@ -135,7 +135,7 @@ def replace_mandate(acquirer, mandate_repr):
         'POST', 'create-mandates', params=mandate_repr)
     set_mandate(acquirer, partner, new_mandate_doc['id'])
     _logger.debug(
-        u'Created new mandate %s for %s', new_mandate_doc['reference'],
+        'Created new mandate %s for %s', new_mandate_doc['reference'],
         partner.name)
 
 
@@ -174,7 +174,7 @@ def restore_all_missing_mandates(
             try:
                 replace_mandate(acquirer, mandate_repr)
             except MissingError:
-                print ('Partner not found when trying to replace mandate for %s'
+                print('Partner not found when trying to replace mandate for %s'
                        % mandate_repr['signatory']['email'])
                 continue
             except Exception as exc:
@@ -183,8 +183,8 @@ def restore_all_missing_mandates(
                     'Error when trying to replace mandate for %s:\n%s',
                     mandate_repr['signatory']['email'], tb.format_exc(exc))
                 continue
-            mandate_repr_ = get_all_mandates_repr(
-                acquirer, mandate_doc_ref, mandateReference=ref).next()
+            mandate_repr_ = next(get_all_mandates_repr(
+                acquirer, mandate_doc_ref, mandateReference=ref))
             known_mandate_refs[ref] = mandate_repr_
         else:
             partner = acquirer.env['res.partner'].browse(
