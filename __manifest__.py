@@ -1,10 +1,10 @@
 {
-    'name': 'Commown SCIC SAS',
+    'name': 'Commown SCIC',
     'category': 'Business',
-    'summary': 'Commown SCIC SAS business application',
-    'version': '10.0.1.18.3',
-    'description': "Commown SCIC SAS business application",
-    'author': "Commown SCIC SAS",
+    'summary': 'Commown SCIC business application',
+    'version': '10.0.1.18.4',
+    'description': "Commown SCIC business application",
+    'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
     'depends': [
