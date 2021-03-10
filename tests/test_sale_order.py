@@ -133,3 +133,27 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
         self.assertEqual(account.name, self.so.partner_id.name)
         self.assertEqual(account.code, '411-C-%d' % self.so.partner_id.id)
         self.assertEqual(account.tax_ids, self.env.ref('l10n_fr.1_tva_normale'))
+
+    def test_add_receivable_account_already_exists(self):
+        """ When a buyer's account already exists but is not set, it is set to
+        the existing account (and there is no crash creating an account with
+        the same name) """
+
+        partner = self.so.partner_id
+        expected_code = '411-C-%s' % partner.id
+        self.assertNotEqual(partner.property_account_receivable_id.code,
+                            expected_code)
+
+        ref = self.env.ref
+        account = self.env['account.account'].create({
+            'code': expected_code,
+            'name': partner.name,
+            'tag_ids': [(6, 0, [ref('account.account_tag_operating').id])],
+            'user_type_id': ref('account.data_account_type_receivable').id,
+            'tax_ids': [(6, 0, ref('l10n_fr.1_tva_normale').ids)],
+            'reconcile': True,
+        })
+
+        self.so.action_confirm()
+
+        self.assertEquals(partner.property_account_receivable_id, account)
