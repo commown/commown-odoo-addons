@@ -69,7 +69,7 @@ class CommownCrmLead(models.Model):
         'Registered mail sent', default=False)
 
     orders_description = fields.Html(
-        'Orders', sanitize_attributes=False)
+        'Orders at date', sanitize_attributes=False)
     initial_data_notes = fields.Text('Notes initiales')
     identity_validated = fields.Boolean(
         'Identity validated', default=False)
