@@ -2,6 +2,8 @@ import account_analytic_account
 import account_analytic_contract
 import account_bank_statement
 import account_invoice
+import account_move_line
+import account_partial_reconcile
 import crm_lead
 import coupon
 import mass_reconcile
