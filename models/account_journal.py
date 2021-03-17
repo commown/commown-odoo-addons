@@ -81,13 +81,18 @@ class SlimpayParser(FileParser):
         return super(SlimpayParser, self)._post(*args, **kwargs)
 
     def _get_partner_id(self, line):
-        _pid = line['ReferenceClient']
-        if _pid is not None:
-            partner = self.env['res.partner'].search([('id', '=', _pid)])
-            if len(partner) == 1:
-                return partner.commercial_partner_id.id
         if line['CodeOP'].startswith('FEE-'):
             return self.journal.partner_id.id
+        partner = self.env['res.partner']
+        _pid = line['ReferenceClient']
+        if _pid is not None:
+            partner = partner.search([('id', '=', _pid)])
+        if not partner and line['TransactionID']:
+            partner = self.env['payment.transaction'].search([
+                ('acquirer_reference', '=', line['TransactionID']),
+            ]).mapped('partner_id')
+        if len(partner) == 1:
+            return partner.commercial_partner_id.id
         return False
 
     def _get_account_id(self, line):
