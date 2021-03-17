@@ -6,7 +6,7 @@
 {
     "name": "Account Move Slimpay Import",
     "summary": "Import Slimpay payment reports",
-    "version": "10.0.1.0.1",
+    "version": "10.0.1.1.0",
     "category": "Finance",
     "website": "https://commown.fr",
     'author': "Commown,Odoo Community Association (OCA)",
