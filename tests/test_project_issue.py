@@ -6,6 +6,7 @@ from odoo.fields import Date, DATETIME_FORMAT
 from odoo.tests.common import at_install, post_install, TransactionCase
 
 from odoo.addons.payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.queue_job.job import Job
 
 
 class FakeDoc(dict):
@@ -379,18 +380,47 @@ class ProjectTC(TransactionCase):
             if xml_ids and xml_ids[0].startswith('payment_slimpay_issue'):
                 action.last_run = False
 
-    def _simulate_wait(self, issue, **timedelta_kwargs):
+    def _simulate_wait(self, issues, execute_jobs=True, **timedelta_kwargs):
+        if execute_jobs:
+            old_jobs = self.env["queue.job"].search([])
         target_date = datetime.utcnow() - timedelta(**timedelta_kwargs)
-        issue.date_last_stage_update = target_date.strftime(DATETIME_FORMAT)
-        issue.invoice_next_payment_date = (
-            Date.from_string(issue.invoice_next_payment_date)
-            - timedelta(**timedelta_kwargs))
+        for issue in issues:
+            issue.date_last_stage_update = target_date.strftime(DATETIME_FORMAT)
+            issue.invoice_next_payment_date = (
+                Date.from_string(issue.invoice_next_payment_date)
+                - timedelta(**timedelta_kwargs))
         self._reset_on_time_actions_last_run()
         with mock.patch.object(
                 SlimpayClient, 'action', side_effect=fake_action) as act:
             # triggers actions based on time
             self.env['base.action.rule']._check()
+            if execute_jobs:
+                new_jobs = self.env["queue.job"].search([]) - old_jobs
+                self.assertFalse(self._perform_jobs(new_jobs))
         return act
+
+    def _perform_jobs(self, queued_jobs):
+        """Execute given jobs in current test transaction and raised errors
+        as a dict like {job resultset: exception}.
+
+        Note the result is not the same as IRL as jobs do not use an individual
+        transaction here but the same. Database savepoints are used to
+        approximate reality though: successful jobs result is preserved, but
+        erroneous jobs are rollbacked (while they would fail IRL).
+
+        """
+        errors = {}
+        for queued_job in queued_jobs:
+            job = Job.load(self.env, queued_job.uuid)
+            # Save db state here as we are in a single transaction
+            # which is not the case IRL where each job is executed
+            # in its own.
+            try:
+                with self.env.cr.savepoint():
+                    job.perform()
+            except Exception as exc:
+                errors[job.recordset] = exc
+        return errors
 
     def test_actions(self):
         issue = self._create_odoo_issue()
@@ -577,3 +607,46 @@ class ProjectTC(TransactionCase):
                          ('open', 'paid', 'open'))
         self.assertEqual((p0.state, p1.state, p2.state),
                          ('draft', 'posted', 'draft'))
+
+    def test_jobs_retry_payment(self):
+        "Payment retrials are isolated: if one crashes other are not affected"
+        # 1. Prepare test data
+        [(inv0, tx0, p0), (inv1, tx1, p1), (inv2, tx2, p2)] = [
+            self._create_inv_tx_and_payment() for i in range(3)]
+
+        self._execute_cron(
+            [fake_issue_doc(id='i0',
+                            payment_ref=tx0.acquirer_reference,
+                            subscriber_ref=self.partner.id),
+             fake_issue_doc(id='i1',
+                            payment_ref=tx1.acquirer_reference,
+                            subscriber_ref=self.partner.id),
+             fake_issue_doc(id='i2',
+                            payment_ref=tx2.acquirer_reference,
+                            subscriber_ref=self.partner.id)
+            ]
+        )
+
+        issues = self._project_issues()
+        for issue in issues:
+            self.assertInStage(issue, 'stage_warn_partner_and_wait')
+
+        # 2. Remove one payment_mode to generate a crash and launch simulation
+        inv1.payment_mode_id = False
+        old_jobs = self.env["queue.job"].search([])
+        self._simulate_wait(issues, days=6, execute_jobs=False)
+        new_jobs = self.env["queue.job"].search([]) - old_jobs
+        with mock.patch.object(
+                SlimpayClient, 'action', side_effect=fake_action):
+            errors = self._perform_jobs(new_jobs)
+
+        # 3. Check issue states and job errors
+        for issue in issues:
+            exception = errors.get(issue)
+            if issue.invoice_id == inv1:
+                self.assertInStage(issue, 'stage_warn_partner_and_wait')
+                self.assertIn('IntegrityError', repr(exception))
+                self.assertIn('journal_id', repr(exception))
+            else:
+                self.assertInStage(issue, 'stage_retry_payment_and_wait')
+                self.assertIsNone(exception)

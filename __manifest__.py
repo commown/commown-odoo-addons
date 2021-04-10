@@ -13,6 +13,7 @@
     'depends': [
         'project_issue', 'payment_slimpay', 'base_action_rule',
         'account_payment_partner',
+        'queue_job',
     ],
     'data': [
         'data/mail_template.xml',

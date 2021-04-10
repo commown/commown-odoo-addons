@@ -8,7 +8,7 @@
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code"><![CDATA[
-record.update({'stage_id': env.ref('payment_slimpay_issue.stage_retry_payment_and_wait').id})
+record.with_delay()._slimpay_payment_issue_move_and_retry_payment()
 ]]>
     </field>
   </record>

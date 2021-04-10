@@ -5,6 +5,10 @@ import requests
 from odoo import models, api, fields, _
 from odoo.exceptions import UserError
 
+from odoo.addons.queue_job.job import job
+
+
+QUEUE_CHANNEL = "root.SLIMPAY_PAYMENT_ISSUE"
 
 _logger = logging.getLogger(__name__)
 
@@ -311,6 +315,12 @@ class ProjectIssue(models.Model):
         invoice.action_invoice_open()
 
     @api.multi
+    @job(default_channel=QUEUE_CHANNEL)
+    def _slimpay_payment_issue_move_and_retry_payment(self):
+        " Use a job to rollback the stage change too in case of a crash "
+        self.stage_id = self.env.ref(
+            'payment_slimpay_issue.stage_retry_payment_and_wait').id
+
     def _slimpay_payment_issue_retry_payment(self):
         Transaction = self.env['payment.transaction']
         for issue in self:
