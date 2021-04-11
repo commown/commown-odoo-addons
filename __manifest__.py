@@ -15,6 +15,9 @@
         'account_payment_partner',
         'queue_job',
     ],
+    'external_dependencies': {
+        'python': ['jsonpickle']
+    },
     'data': [
         'data/mail_template.xml',
         'data/project.xml',

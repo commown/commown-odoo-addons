@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from collections import namedtuple
 
 import mock
 
@@ -48,6 +49,9 @@ def fake_action_crash_for(for_func, for_issue_id):
     return fake_action_crash
 
 
+Link = namedtuple('Link', ('url',))
+
+
 def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
                    currency='EUR', payment_ref=None, subscriber_ref=None,
                    **kwargs):
@@ -58,10 +62,10 @@ def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
     subscriber = FakeDoc(id='fake_subscriber', reference=subscriber_ref)
     payment = FakeDoc({'id': 'fake_payment', 'reference': payment_ref,
                        'label': 'dummy label',
-                       subscriber_url: mock.Mock(url=subscriber)})
+                       subscriber_url: Link(subscriber)})
     defaults = {'id': id, 'dateCreated': date + 'T00:00:00',
                 'rejectAmount': str(amount), 'currency': currency,
-                payment_url: mock.Mock(url=payment)}
+                payment_url: Link(payment)}
     defaults.update(kwargs)
     return FakeDoc(defaults)
 
@@ -168,7 +172,10 @@ class ProjectTC(TransactionCase):
                     SlimpayClient, 'action', side_effect=action) as act:
                 with mock.patch.object(
                         SlimpayClient, 'get', side_effect=lambda o: o) as get:
+                    old_jobs = self.env["queue.job"].search([])
                     ProjectIssue._slimpay_payment_issue_cron()
+                    new_jobs = self.env["queue.job"].search([]) - old_jobs
+                    self._perform_jobs(new_jobs)
         return act, get
 
     def _project_issues(self):

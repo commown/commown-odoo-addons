@@ -1,5 +1,6 @@
 import logging
 
+import jsonpickle
 import requests
 
 from odoo import models, api, fields, _
@@ -70,31 +71,21 @@ class ProjectIssue(models.Model):
         return inv_journal.sequence_id.prefix.split('%', 1)[0]
 
     @api.model
-    def _slimpay_payment_issue_single_issue(self, project, client, issue_doc,
-                                                inv_prefix):
-        """Handle DB updates and HTTP transaction individually so that if one
-        Slimpay HTTP ack fails, only the corresponding DB updates are
-        rolled back. This uses DB save point as a mecanism, but could
-        be easily overriden to use a job queue.
-        """
-        try:
-            with self.env.cr.savepoint():
-                if issue_doc.get('rejectReason', None) != \
-                       'sepaReturnReasonCode.focr.reason':
-                    issue = self._slimpay_payment_issue_handle(
-                        project, client, issue_doc, inv_prefix)
-                else:
-                    _logger.info(
-                        'Slimpay payment cancelled by creditor id %s: will be'
-                        ' definitively ignored (ack coming)', issue_doc['id'])
-                _logger.debug('Ack Slimpay issue id %s', issue_doc['id'])
-                self._slimpay_payment_issue_ack(client, issue_doc)
-        except:
-            _logger.exception(
-                'Error occurred while handling payment issue %s (see below).'
-                'Everything concerning this specific issue has been'
-                ' cleanly rolled back. Trying to continue with other issues!',
-                issue_doc['id'])
+    @job(default_channel=QUEUE_CHANNEL)
+    def _slimpay_payment_issue_single_issue(
+            self, project, acquirer, issue_doc, inv_prefix):
+        issue_doc = jsonpickle.loads(issue_doc)
+        client = acquirer.slimpay_client
+        if issue_doc.get('rejectReason', None) != \
+               'sepaReturnReasonCode.focr.reason':
+            issue = self._slimpay_payment_issue_handle(
+                project, client, issue_doc, inv_prefix)
+        else:
+            _logger.info(
+                'Slimpay payment cancelled by creditor id %s: will be'
+                ' definitively ignored (ack coming)', issue_doc['id'])
+        _logger.debug('Ack Slimpay issue id %s', issue_doc['id'])
+        self._slimpay_payment_issue_ack(client, issue_doc)
 
     @api.model
     def _slimpay_payment_issue_cron(self, custom_issue_params=None):
@@ -124,8 +115,8 @@ class ProjectIssue(models.Model):
                     project = self.env.ref(
                         'payment_slimpay_issue.project_payment_issue')
                     inv_prefix = self._slimpay_payment_invoice_prefix()
-                self._slimpay_payment_issue_single_issue(project, client,
-                                                         issue_doc, inv_prefix)
+                self.with_delay()._slimpay_payment_issue_single_issue(
+                    project, acquirer, jsonpickle.dumps(issue_doc), inv_prefix)
     @api.model
     def _slimpay_payment_issue_ack(self, client, issue_doc):
         """ Set a Slimpay issue designated by given document as processed """
