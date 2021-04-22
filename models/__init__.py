@@ -1,1 +1,1 @@
-import account_analytic_account
+from . import contract

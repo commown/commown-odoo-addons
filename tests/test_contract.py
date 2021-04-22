@@ -5,7 +5,7 @@ from odoo.tests.common import at_install, post_install
 
 @at_install(False)
 @post_install(True)
-class AccountAnalyticAccountTC(TestContractBase):
+class ContractTC(TestContractBase):
 
     def test_auto_merge_invoice(self):
         invoice = self.contract.recurring_create_invoice()
