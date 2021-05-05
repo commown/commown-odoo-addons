@@ -7,7 +7,7 @@
       <div t-if="product.is_rental" class="product_price mt16">
         <p>
           <b t-if="product.is_deposit"
-             class="deposit_price"><span>Initial deposit: </span><span t-esc="'%g' % (product.list_price / (product.rental_price or 1))"/> <span>lease payments</span></b>
+             class="deposit_price"><span>Initial deposit: </span><span class="oe_deposit_price" style="white-space: nowrap;" t-esc="product.list_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/></b>
         </p>
         <t t-set="contract_tmpl" t-value="product.sudo().contract_template_id"/>
         <p t-if="contract_tmpl.min_contract_duration">
