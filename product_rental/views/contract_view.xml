@@ -42,6 +42,12 @@
     <field name="inherit_id" ref="contract.contract_contract_form_view" />
     <field name="arch" type="xml">
 
+      <xpath expr="//field[@name='recurring_next_date']" position="before">
+        <field name="date_start" />
+        <field name="min_contract_duration" />
+        <field name="min_contract_end_date" />
+      </xpath>
+
       <xpath
           expr="//field[@name='contract_line_ids']//tree//field[@name='date_end']"
           position="after">
