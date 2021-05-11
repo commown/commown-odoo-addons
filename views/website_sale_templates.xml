@@ -140,4 +140,39 @@
     </xpath>
   </template>
 
+  <template id="products_categories" inherit_id="website_sale.products_categories">
+    <xpath expr="//div[@id='products_grid_before']/ul[hasclass('nav')]/li[1]" position="attributes">
+      <attribute name="t-if">request.lang == 'fr_FR'</attribute>
+    </xpath>
+    <xpath expr="//t[@t-call='website_sale.categories_recursive']" position="attributes">
+      <attribute name="t-if">(request.lang == 'fr_FR' and c != env.ref('commown.categ_de')) or request.env.user.has_group('website.group_website_publisher')</attribute>
+    </xpath>
+  </template>
+
+  <template id="product" inherit_id="website_sale_b2b.product_b2b">
+    <xpath expr="//t[@t-call='website.layout']/*[1]" position="before">
+      <t t-set="display_product"
+         t-value="request.lang == 'fr_FR' or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"/>
+    </xpath>
+    <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
+    </xpath>
+
+    <xpath expr="//hr[@t-if='product.website_description_sale']" position="replace">
+    </xpath>
+    <xpath expr="//p[@t-field='product.website_description_sale']" position="replace">
+    </xpath>
+    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@property='og:description']" position="replace">
+    </xpath>
+    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@name='twitter:description']" position="replace">
+    </xpath>
+
+    <xpath expr="//div[@id='product_details']" position="inside">
+      <div t-if="not display_product"><b>Product is not available for the moment</b></div>
+    </xpath>
+    <xpath expr="//div[@t-field='product.website_description']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
+    </xpath>
+  </template>
+
 </odoo>

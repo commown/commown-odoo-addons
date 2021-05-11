@@ -12,8 +12,10 @@ import product_template
 import project_issue
 import project_task_type
 import res_groups
+import res_lang
 import res_partner
 import res_user
 import sale_order
 import simple_reconciliation
 import utm_source
+import website
