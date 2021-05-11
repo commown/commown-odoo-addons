@@ -46,7 +46,14 @@ class ProductRentalSaleOrder(models.Model):
 
     @api.multi
     def assign_accessories(self):
-        "Assign accessories to contract sale order lines"
+        """Assign accessories to contract sale order lines
+
+        Return a dict with keys being the main rental products of
+        current order, and values a list of
+        (accessory product, order line) pairs to be consumed with
+        the considered main rental product (current dict key).
+
+        """
 
         bought_accessories = defaultdict(list)
         for so_line in self.order_line:
