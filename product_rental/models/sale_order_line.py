@@ -26,8 +26,8 @@ def _gen_contract_lines(so_line, contract, rental_products):
 
     - other contract template lines generate normal contract lines
 
-    All generated lines are associated by the given sale order line,
-    `so_line`.
+    Contract lines that are not marked as main or accessory are
+    associated to the give sale order line `so_line`.
 
     """
     for line in contract.contract_line_ids:
