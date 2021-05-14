@@ -43,9 +43,9 @@ class SaleOrderTC(RentalSaleOrderTC):
         specific tax (see sale.order.line `compute_rental_price` method doc)
 
         """
-        i1, i2, i3, i4 = invs = self.generate_contract_invoices(
+        i1, i2, i3, i4, i5 = invs = self.generate_contract_invoices(
             tax=self.new_tax(20.0))
-        c1, c2, c3, c4 = invs.mapped(
+        c1, c2, c3, c4, c5 = invs.mapped(
             'invoice_line_ids.contract_line_id.contract_id')
 
         self.assert_rounded_equals(i1.amount_total, 26.50)
@@ -59,34 +59,44 @@ class SaleOrderTC(RentalSaleOrderTC):
                 'Fairphone Premium', 'headset'],
         })
 
-        self.assert_rounded_equals(i2.amount_total, 162.90)
-        self.assert_rounded_equals(i2.amount_untaxed, 162.90 / 1.2)
+        self.assert_rounded_equals(i2.amount_total, 87.90)
+        self.assert_rounded_equals(i2.amount_untaxed, 73.25)
 
         self.assert_contract_lines_attributes_equal(c2, {
             'name': ['1 month of PC', '1 month of screen',
                      '1 month of keyboard', '1 month of keyboard deluxe',
                      ],
             'price_unit': [60.0, 15.0, 5.4, 7.5],
-            'quantity': [2, 2, 1, 1],
+            'quantity': [1, 1, 1, 1],
             'sale_order_line_id.product_id.name': [
                 'PC', 'screen', 'keyboard', 'keyboard deluxe'],
         })
 
 
-        self.assert_rounded_equals(i3.amount_total, 10.0)
-        self.assert_rounded_equals(i3.amount_untaxed, 8.33)
+        self.assert_rounded_equals(i3.amount_total, 75.0)
+        self.assert_rounded_equals(i3.amount_untaxed, 62.5)
 
         self.assert_contract_lines_attributes_equal(c3, {
+            'name': [u'1 month of PC', u'1 month of screen'],
+            'price_unit': [60.0, 15.0],
+            'quantity': [1, 1],
+            'sale_order_line_id.product_id.name': [u'PC', u'screen'],
+        })
+
+        self.assert_rounded_equals(i4.amount_total, 10.0)
+        self.assert_rounded_equals(i4.amount_untaxed, 8.33)
+
+        self.assert_contract_lines_attributes_equal(c4, {
             'name': ['1 month of GS Headset'],
             'price_unit': [10.0],
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['GS Headset'],
         })
 
-        self.assert_rounded_equals(i4.amount_total, 20.0)
-        self.assert_rounded_equals(i4.amount_untaxed, 16.67)
+        self.assert_rounded_equals(i5.amount_total, 20.0)
+        self.assert_rounded_equals(i5.amount_untaxed, 16.67)
 
-        self.assert_contract_lines_attributes_equal(c4, {
+        self.assert_contract_lines_attributes_equal(c5, {
             'name': ['1 month of FP2'],
             'price_unit': [20.0],
             'quantity': [1],
@@ -110,9 +120,9 @@ class SaleOrderTC(RentalSaleOrderTC):
             ],
         })
 
-        i1, i2, i3, i4 = invs = self.generate_contract_invoices(
+        i1, i2, i3, i4, i5 = invs = self.generate_contract_invoices(
             partner, tax_src)
-        c1, c2, c3, c4 = invs.mapped(
+        c1, c2, c3, c4, c5 = invs.mapped(
             'invoice_line_ids.contract_line_id.contract_id')
 
         self.assert_rounded_equals(i1.amount_total, 26.50)
@@ -126,33 +136,43 @@ class SaleOrderTC(RentalSaleOrderTC):
                 'Fairphone Premium', 'headset'],
         })
 
-        self.assert_rounded_equals(i2.amount_total, 162.90)
-        self.assert_rounded_equals(i2.amount_untaxed, 162.90 / 1.2)
+        self.assert_rounded_equals(i2.amount_total, 87.90)
+        self.assert_rounded_equals(i2.amount_untaxed, 73.25)
 
         self.assert_contract_lines_attributes_equal(c2, {
             'name': ['1 month of PC', '1 month of screen',
                      '1 month of keyboard', '1 month of keyboard deluxe',
                      ],
             'price_unit': [60.0, 15.0, 5.4, 7.5],
-            'quantity': [2, 2, 1, 1],
+            'quantity': [1, 1, 1, 1],
             'sale_order_line_id.product_id.name': [
                 'PC', 'screen', 'keyboard', 'keyboard deluxe'],
         })
 
-        self.assert_rounded_equals(i3.amount_total, 10.0)
-        self.assert_rounded_equals(i3.amount_untaxed, 8.33)
+        self.assert_rounded_equals(i3.amount_total, 75.0)
+        self.assert_rounded_equals(i3.amount_untaxed, 62.5)
 
         self.assert_contract_lines_attributes_equal(c3, {
+            'name': [u'1 month of PC', u'1 month of screen'],
+            'price_unit': [60.0, 15.0],
+            'quantity': [1, 1],
+            'sale_order_line_id.product_id.name': [u'PC', u'screen'],
+        })
+
+        self.assert_rounded_equals(i4.amount_total, 10.0)
+        self.assert_rounded_equals(i4.amount_untaxed, 8.33)
+
+        self.assert_contract_lines_attributes_equal(c4, {
             'name': ['1 month of GS Headset'],
             'price_unit': [10.0],
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['GS Headset'],
         })
 
-        self.assert_rounded_equals(i4.amount_total, 20.0)
-        self.assert_rounded_equals(i4.amount_untaxed, 16.67)
+        self.assert_rounded_equals(i5.amount_total, 20.0)
+        self.assert_rounded_equals(i5.amount_untaxed, 16.67)
 
-        self.assert_contract_lines_attributes_equal(c4, {
+        self.assert_contract_lines_attributes_equal(c5, {
             'name': ['1 month of FP2'],
             'price_unit': [20.0],
             'quantity': [1],

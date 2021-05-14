@@ -74,30 +74,44 @@ class ProductRentalSaleOrderLine(models.Model):
 
     @api.multi
     def create_contract_line(self, contract):
-        """Return contract lines from current sale order lines.
+        "v12 API must no more be called, see order's action_create_contract"
+        _logger.error("Order line create_contract_line must not be called!")
+        return self.env['contract.line']
 
-        Contract lines are built from the contract template and the
-        context value of product_rental_acc_by_so_line. See
-        `_gen_contract_lines` docstring for more details.
+    @api.model
+    def _product_rental_create_contract_line(
+            self, contract, contract_descr):
+        """Return contract lines from given contract template and products.
 
+        See `_gen_contract_lines` docstring for more details.
         """
-        acc_by_so_line = self._context.get('product_rental_acc_by_so_line', {})
         contract_lines = self.env['contract.line']
         sequence = 0
+        so_line = contract_descr['so_line']  # main product so line
+        order = so_line.order_id
+        products = _rental_products(contract_descr)
 
-        for rec in self:
-            products = _rental_products(rec, acc_by_so_line)
-            _logger.debug('(%s) rental_products: %s', contract.name, products)
-
-            for contract_line in _gen_contract_lines(rec, contract, products):
-                sequence += 1
-                contract_line.update({
-                    'sequence': sequence,
-                    'analytic_account_id': rec.order_id.analytic_account_id.id,
-                    'recurring_next_date': NO_DATE,
-                })
-                contract_line.date_start = NO_DATE
-                contract_line._onchange_date_start()
-                contract_lines |= contract_line
+        for contract_line in _gen_contract_lines(so_line, contract, products):
+            sequence += 1
+            contract_line.update({
+                'sequence': sequence,
+                'analytic_account_id': order.analytic_account_id.id,
+                'recurring_next_date': NO_DATE,
+            })
+            contract_line.date_start = NO_DATE
+            contract_line._onchange_date_start()
+            contract_lines |= contract_line
 
         return contract_lines
+
+
+def _rental_products(contract_descr):
+    " Helper function to prepare data required for contract line generation "
+    so_line = contract_descr['so_line']
+    _acs = contract_descr['accessories']
+    __acs = [(p, l, 1) for (p, l) in set(_acs)]
+
+    return {
+        CONTRACT_PROD_MARKER: [(so_line.product_id, so_line, 1)],
+        CONTRACT_ACCESSORY_MARKER: sorted(__acs, key=lambda a: a[0].id),
+    }
