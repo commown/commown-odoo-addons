@@ -8,11 +8,11 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
         <field name="arch" type="xml">
-          <xpath expr="//field[@name='team_id']" position="after">
-            <field
-                name="contract_id"
-                attrs="{'invisible': [('contract_id', '=', False)]}"
-                context="{'form_view_ref': 'contract.account_analytic_account_recurring_form_form'}"
+          <xpath expr="//div[@name='button_box']" position="inside">
+            <button
+                string="Contract"
+                class="oe_stat_button" icon="fa-file-text-o"
+                type="object" name="button_open_contract"
                 />
           </xpath>
         </field>
