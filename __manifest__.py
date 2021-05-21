@@ -13,5 +13,8 @@
     'depends': [
         'stock'
     ],
+    'data': [
+        'views/contract.xml',
+    ],
     'installable': True,
 }
