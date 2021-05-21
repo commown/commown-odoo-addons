@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <record model="ir.ui.view" id="crm_case_form_view_oppor">
+        <field name="name">commown_device.crm.lead.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='team_id']" position="after">
+            <field
+                name="contract_id"
+                attrs="{'invisible': [('contract_id', '=', False)]}"
+                context="{'form_view_ref': 'contract.account_analytic_account_recurring_form_form'}"
+                />
+          </xpath>
+        </field>
+    </record>
+
+  </data>
+
+</odoo>
