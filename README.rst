@@ -19,4 +19,7 @@ Open the menu...
 Configuration
 =============
 
-The following settings...
+A minimal version of commown module must preexist to install this module.
+
+The parcel preparation column must be assigned the
+"commown.parcel_preparation_stage" xml id.
