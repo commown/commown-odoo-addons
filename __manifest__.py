@@ -16,6 +16,7 @@
     'data': [
         'views/contract.xml',
         'views/crm_lead.xml',
+        'views/product.xml',
     ],
     'installable': True,
 }
