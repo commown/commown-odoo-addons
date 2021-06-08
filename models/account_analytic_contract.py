@@ -9,3 +9,13 @@ class AccountAnalyticContract(models.Model):
         help=('Label to be used for the bank payment. '
               'Possible markers: #START#, #END#, #INV# (invoice number)'),
     )
+
+
+class AccountAnalyticContractLine(models.Model):
+    _inherit = 'account.analytic.contract.line'
+
+    name = fields.Text(
+        string='Description',
+        required=True,
+        translate=True,
+    )
