@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, models,fields
+from odoo import api, models, fields
 from odoo.tools.translate import _
 
 
@@ -33,7 +33,6 @@ class ProductRentalAccountAnalyticAccount(models.Model):
             return new_lines
 
         contract_lines = []
-        partner = sale_context['main_so_line'].order_id.partner_id
         rental_products = {
             CONTRACT_PROD_MARKER: [
                 (sale_context['main_product'], sale_context['main_so_line'], 1)
