@@ -14,7 +14,6 @@ class CrmLead(models.Model):
     _delivery_tracking_parent_rel = _shipping_parent_rel = "team_id"
     _delivery_tracking_stage_parent_rel = "team_id"
 
-    so_line_id = fields.Many2one('sale.order.line', 'Ligne de commande')
     delivery_tracking = fields.Boolean(
         'Delivery tracking', related='team_id.delivery_tracking')
 

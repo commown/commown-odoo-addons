@@ -10,6 +10,7 @@
     'depends': [
         'sale',
         'website',
+        'commown_lead_risk_analysis',
         'crm',
         'project_issue',
         'keychain',
