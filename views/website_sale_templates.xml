@@ -158,13 +158,17 @@
       <attribute name="t-if">display_product</attribute>
     </xpath>
 
-    <xpath expr="//hr[@t-if='product.website_description_sale']" position="replace">
+    <xpath expr="//hr[@t-if='product.website_description_sale']" position="attributes">
+      <attribute name="t-if">product.website_description_sale and display_product</attribute>
     </xpath>
-    <xpath expr="//p[@t-field='product.website_description_sale']" position="replace">
+    <xpath expr="//p[@t-field='product.website_description_sale']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
     </xpath>
-    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@property='og:description']" position="replace">
+    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@property='og:description']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
     </xpath>
-    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@name='twitter:description']" position="replace">
+    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@name='twitter:description']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
     </xpath>
 
     <xpath expr="//div[@id='product_details']" position="inside">
