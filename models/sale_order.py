@@ -49,3 +49,13 @@ class SaleOrder(models.Model):
             partner.update({'property_account_receivable_id': new_account.id})
 
         return super(SaleOrder, self).action_confirm()
+
+    def risk_analysis_lead_title(self, so_line, contract=None):
+        title = super(SaleOrder, self).risk_analysis_lead_title(
+            so_line, contract=contract)
+        coupons = self.used_coupons()
+        if coupons:
+            title += (
+                u' - COUPON: ' +
+                u', '.join(coupons.mapped('campaign_id.name')))
+        return title

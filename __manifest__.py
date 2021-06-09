@@ -16,7 +16,6 @@
         'account_invoice_merge_auto_pay',
         'account_move_slimpay_import',
         'commown_shipping',
-        'commown_lead_risk_analysis',
         'commown_self_troubleshooting',
         'contract_auto_merge_invoice',
         'payment_slimpay_website_sale',
