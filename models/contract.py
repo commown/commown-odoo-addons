@@ -44,3 +44,12 @@ class AccountAnalyticAccount(models.Model):
                 record.min_contract_duration*record.recurring_interval)
             record.min_contract_end_date = fields.Date.from_string(
                 record.date_start) + date_delta
+
+    def amount(self):
+        """Compute the sum of contract line price that have no formula or a
+        formula marked with '[DE]' (for 'commitment duration' in french).
+        """
+        self.ensure_one()
+        return sum(self.recurring_invoice_line_ids.filtered(lambda l: (
+            l.qty_type != 'variable' or u'[DE]' in l.qty_formula_id.name
+        )).mapped('price_subtotal'))
