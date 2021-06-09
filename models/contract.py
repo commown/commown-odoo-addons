@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api
+from odoo import fields, models
 
 
 class AccountAnalyticContract(models.Model):
@@ -26,30 +26,3 @@ class AccountAnalyticContractLine(models.Model):
         required=False,
         copy=False,
     )
-
-
-class AccountAnalyticAccount(models.Model):
-    _inherit = 'account.analytic.account'
-
-    min_contract_end_date = fields.Date(
-        string='Min contract end date',
-        compute='_compute_min_end_date', store=True,
-    )
-
-    @api.depends('date_start', 'min_contract_duration')
-    def _compute_min_end_date(self):
-        for record in self:
-            date_delta = self.get_relative_delta(
-                record.recurring_rule_type,
-                record.min_contract_duration*record.recurring_interval)
-            record.min_contract_end_date = fields.Date.from_string(
-                record.date_start) + date_delta
-
-    def amount(self):
-        """Compute the sum of contract line price that have no formula or a
-        formula marked with '[DE]' (for 'commitment duration' in french).
-        """
-        self.ensure_one()
-        return sum(self.recurring_invoice_line_ids.filtered(lambda l: (
-            l.qty_type != 'variable' or u'[DE]' in l.qty_formula_id.name
-        )).mapped('price_subtotal'))
