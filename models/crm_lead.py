@@ -16,15 +16,11 @@ class CrmLead(models.Model):
     def delivery_perform_actions(self):
         super(CrmLead, self).delivery_perform_actions()
         for record in self.filtered('start_contract_on_delivery'):
-            if record.name.startswith('[SO') and ']' in record.name:
-                contract = record.env['account.analytic.account'].search([
-                    ('name', 'like', record.name[1:record.name.index(']')]),
-                ]).ensure_one()
-
-                contract.update({
-                    'date_start': record.delivery_date,
-                    'is_auto_pay': True,
-                })
-                # Perform date coherency check after delivery date update
-                # as date_start is always before recurring_next_date here:
-                contract.update({'recurring_next_date': record.delivery_date})
+            contract = record.contract_id
+            contract.update({
+                'date_start': record.delivery_date,
+                'is_auto_pay': True,
+            })
+            # Perform date coherency check after delivery date update
+            # as date_start is always before recurring_next_date here:
+            contract.update({'recurring_next_date': record.delivery_date})
