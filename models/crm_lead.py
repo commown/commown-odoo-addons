@@ -2,7 +2,6 @@ import cgi
 from urllib import urlencode
 
 from odoo import models, fields, api, _
-from odoo.tools.safe_eval import safe_eval
 
 
 EMAIL_RATINGS = [
@@ -40,6 +39,8 @@ GLOBAL_FEELING = [
 
 class CommownCrmLead(models.Model):
     _inherit = 'crm.lead'
+
+    so_line_id = fields.Many2one('sale.order.line', _('Sale order line'))
 
     email_rating = fields.Selection(
         EMAIL_RATINGS, string='Email Rating',

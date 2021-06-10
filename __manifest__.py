@@ -10,6 +10,7 @@
     'depends': [
         'crm',
         'partner_firstname',
+        'sale',
     ],
     'data': [
         'views/crm_team.xml',
