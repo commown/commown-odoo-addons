@@ -2,58 +2,12 @@
 
   <data>
 
-    <record id="generate_order_picking" model="ir.actions.server">
-      <field name="name">[commown] Generate sale order picking</field>
+    <record id="generate_picking" model="ir.actions.server">
+      <field name="name">[commown] Generate picking</field>
       <field name="model_id" ref="model_crm_lead"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
-      <field name="code">
-lead = record
-
-product = lead.so_line_id.product_id.product_tmpl_id.stockable_product_id
-contract = lead.get_contract()
-partner = lead.partner_id
-
-date = datetime.datetime.today().strftime('%Y-%m-%d')
-
-orig_location = env.ref('stock.stock_location_stock')
-
-if partner.property_stock_customer == env.ref('stock.stock_location_customers'):
-    location = env['stock.location'].create({
-        'name': partner.name,
-        'usage': 'internal',
-        'partner_id': partner.id,
-        'location_id': env.ref('stock.stock_location_customers').id,
-    })
-    partner.update({'property_stock_customer': location.id})
-
-dest_location = partner.property_stock_customer
-
-picking_data = {
-    'move_type': 'direct',
-    'picking_type_id': env.ref('stock.picking_type_internal').id,
-    'location_id': orig_location.id,
-    'location_dest_id': dest_location.id,
-    'min_date': date,
-    'move_lines': [
-        (0, 0, {
-            'name': '/',
-            'picking_type_id': env.ref('stock.picking_type_internal').id,
-            'location_id': orig_location.id,
-            'location_dest_id': dest_location.id,
-            'product_id': product.id,
-            'product_uom_qty': 1,
-            'product_uom': env.ref('product.product_uom_unit').id,
-        })
-    ],
-}
-
-picking = env['stock.picking'].create(picking_data)
-picking.action_confirm()
-picking.action_assign()
-
-contract.update({'picking_ids' : picking.ids})
-      </field>
+      <field name="code">action = record.action_generate_picking()</field>
     </record>
 
   </data>

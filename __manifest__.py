@@ -11,7 +11,9 @@
     'license': "AGPL-3",
     'website': "https://commown.coop",
     'depends': [
-        'stock'
+        'commown_lead_risk_analysis',  # SO to risk analysis lead relation
+        'product_rental',
+        'stock',
     ],
     'data': [
         'data/action_crm_lead.xml',

@@ -1,4 +1,7 @@
-from odoo import models, _
+import datetime
+
+from odoo import models, fields, _, api
+from odoo.exceptions import UserError
 
 
 class CrmLead(models.Model):
@@ -10,6 +13,25 @@ class CrmLead(models.Model):
             ('recurring_invoice_line_ids.sale_order_line_id',
              '=', self.so_line_id.id),
         ])
+
+    def action_generate_picking(self):
+        contract = self.get_contract()
+
+        if contract.picking_ids.filtered(lambda p: p.state != 'cancel'):
+            raise UserError(
+                _('The contract has already non-canceled picking(s)!\n'
+                  'Either cancel or validate one.')
+            )
+
+        picking = contract.send_all_picking()
+        view = self.env.ref('stock.view_picking_form')
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'stock.picking',
+            'res_id': picking.id,
+            'name': _('Initial picking'),
+            'views': [(view.id, 'form')],
+        }
 
     def button_open_contract(self):
         contract = self.get_contract()
