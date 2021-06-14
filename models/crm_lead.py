@@ -45,3 +45,12 @@ class CrmLead(models.Model):
             'context': {'is_contract': 1},
             'views': [(view.id, 'form')],
         }
+
+    @api.multi
+    def delivery_perform_actions(self):
+        "Validate shipping"
+        super(CrmLead, self).delivery_perform_actions()
+        picking = self.get_contract().picking_ids.filtered(
+            lambda p: p.state == 'assigned')
+        if len(picking) == 1:
+            picking.do_new_transfer()
