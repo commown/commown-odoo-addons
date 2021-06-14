@@ -37,6 +37,7 @@ class ContractTC(RentalSaleOrderTC):
         picking = contract.send_all_picking()
 
         self.assertEqual(picking.state, 'confirmed')
+        self.assertEqual(picking.origin, contract.name)
 
         location = contract.partner_id.property_stock_customer
         self.assertEqual(location.name, contract.partner_id.name)
