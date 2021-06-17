@@ -99,7 +99,7 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
 
         # Simulate the usage of a coupon in the sale:
         campaign = self.env['coupon.campaign'].create({
-            'name': u'Test campaign',
+            'name': u'Test campaign 40% reduction',  # % used deliberately here
             'seller_id': self.env.ref('base.res_partner_1').id,
         })
         self.env['coupon.coupon'].create({
