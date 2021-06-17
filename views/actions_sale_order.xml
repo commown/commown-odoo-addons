@@ -67,10 +67,6 @@ if description:
 title_template = u'[%(sale)s-%(count)02d] %(descr)s'
 
 coupons = record.used_coupons()
-if coupons:
-    title_template += (
-        u' - COUPON: ' +
-        u', '.join(coupons.mapped('campaign_id.name')))
 ctx = {'sale': record.name, 'count': 0}
 
 for so_line in record.order_line:
@@ -92,8 +88,13 @@ for so_line in record.order_line:
 
     for _num in range(int(so_line.product_uom_qty)):
         ctx['count'] += 1
+        title = title_template % ctx
+        if coupons:
+            title += (
+                u' - COUPON: ' +
+                u', '.join(coupons.mapped('campaign_id.name')))
         lead = env['crm.lead'].create({
-            'name': title_template % ctx,
+            'name': title,
             'partner_id': record.partner_id.id,
             'type': 'opportunity',
             'team_id': team.id,
