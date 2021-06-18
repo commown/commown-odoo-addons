@@ -41,6 +41,7 @@ class CommownCrmLead(models.Model):
     _inherit = 'crm.lead'
 
     so_line_id = fields.Many2one('sale.order.line', _('Sale order line'))
+    contract_id = fields.Many2one('account.analytic.account', _('Contract'))
 
     email_rating = fields.Selection(
         EMAIL_RATINGS, string='Email Rating',
