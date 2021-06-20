@@ -13,7 +13,7 @@ class SaleOrder(models.Model):
     def choose_stage(self, team):
         stages = self.env['crm.stage'].search(
             [('team_id', '=', team.id)], order='sequence')
-        stage = stages[0] if stages else False
+        stage = stages[0] if stages else self.env['crm.stage']
         for _stage in stages:
             if '[stage: start]' in _stage.name:
                 stage = _stage
@@ -33,7 +33,7 @@ class SaleOrder(models.Model):
             'partner_id': self.partner_id.id,
             'type': 'opportunity',
             'team_id': team.id,
-            'stage_id': self.choose_stage(team),
+            'stage_id': self.choose_stage(team).id,
             'so_line_id': so_line.id,
         }
         data.update(kwargs)

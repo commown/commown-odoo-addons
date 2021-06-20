@@ -9,6 +9,10 @@ class SaleOrderTC(RentalSaleOrderTC):
         tax = self.get_default_tax()
 
         self.team1 = self.env.ref("sales_team.salesteam_website_sales")
+        self.stage1 = self.env["crm.stage"].create({
+            "team_id": self.team1.id,
+            "name": u"[stage: start] TEST",
+        })
         contract_tmpl1 = self._create_rental_contract_tmpl(
             1, recurring_invoice_line_ids=[
                 self._invoice_line(1, "1 month Fairphone premium", tax,
@@ -49,6 +53,8 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertEqual(new_leads, leads1 | leads2)
         self.assertEqual(len(leads1), 2)
         self.assertEqual(len(leads2), 1)
+        self.assertEqual(leads1.mapped('stage_id'), self.stage1)
+        self.assertEqual(leads2.mapped('stage_id'), self.env['crm.stage'])
         self.assertEqual(leads1.mapped("so_line_id"), so_line1)
         self.assertEqual(leads2.so_line_id, so_line2)
 
