@@ -1,4 +1,9 @@
+import logging
+
 from odoo import models, api
+
+
+_logger = logging.getLogger(__name__)
 
 
 class SaleOrder(models.Model):
@@ -7,7 +12,8 @@ class SaleOrder(models.Model):
     @api.multi
     def action_confirm(self):
         result = super(SaleOrder, self).action_confirm()
-        self.create_risk_analysis_leads()
+        for record in self:
+            record.create_risk_analysis_leads()
         return result
 
     def choose_stage(self, team):
@@ -47,20 +53,29 @@ class SaleOrder(models.Model):
         return u'[%s] %s' % (name, so_line.product_id.display_name)
 
     def create_risk_analysis_leads(self):
+        self.ensure_one()
+
         leads = self.env['crm.lead']
 
-        # Create a RA lead for each contract line with a contract product
-        # that has a followup team (as of today, should create 1 per contract)
-        for contract in self.related_contracts():
-            for _line in contract.recurring_invoice_line_ids:
-                so_line = _line.sale_order_line_id
-                product = so_line.product_id
-                team = product.followup_sales_team_id
-                if not team:
-                    continue
-                name = self.risk_analysis_lead_title(so_line, contract)
-                leads |= self._create_lead(name, team, so_line,
-                                           contract_id=contract.id)
+        contract_lines = self.env['account.analytic.invoice.line'].search([
+            ('sale_order_line_id.order_id', '=', self.id),
+            ('sale_order_line_id.product_id.is_contract', '=', True),
+            ('sale_order_line_id.product_id.followup_sales_team_id', '!=',
+             False),
+        ])
+
+        deserve_ra = set((cl.analytic_account_id, cl.sale_order_line_id)
+                         for cl in contract_lines)
+
+        for contract, so_line in deserve_ra:
+            leads |= self._create_lead(
+                self.risk_analysis_lead_title(so_line, contract),
+                so_line.product_id.followup_sales_team_id,
+                so_line, contract_id=contract.id)
+        else:
+            _logger.debug('No contract line of contract product with a followup'
+                          ' sale team: no crm.lead for risk analysis created'
+                          ' (%s)', self.name)
 
         # Also create a lead for non contract products with a followup team
         for so_line in self.order_line:
