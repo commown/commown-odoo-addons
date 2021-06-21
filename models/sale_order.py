@@ -50,9 +50,10 @@ class SaleOrder(models.Model):
 
         return super(SaleOrder, self).action_confirm()
 
-    def risk_analysis_lead_title(self, so_line, contract=None):
+    def risk_analysis_lead_title(
+            self, so_line, contract=None, secondary_index=None):
         title = super(SaleOrder, self).risk_analysis_lead_title(
-            so_line, contract=contract)
+            so_line, contract=contract, secondary_index=secondary_index)
         coupons = self.used_coupons()
         if coupons:
             title += (
