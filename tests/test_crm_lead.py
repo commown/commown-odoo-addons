@@ -12,9 +12,8 @@ class CrmLeadTC(DeviceAsAServiceTC):
             ('so_line_id.order_id', '=', self.so.id),
         ]).ensure_one()
         lead.send_email_on_delivery = False  # avoid setting-up email
-        contract = lead.get_contract()
         self.adjust_stock()  # have 1 product in stock
-        picking = contract.send_all_picking()
+        picking = lead.contract_id.send_all_picking()
         picking.pack_operation_ids.pack_lot_ids.do_plus()
         self.assertEqual(picking.state, 'assigned')
 
