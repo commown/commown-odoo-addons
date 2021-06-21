@@ -5,3 +5,19 @@
 .attribute-value-match.attribute-show {
   display: block;
 }
+
+.lang {
+  display: none;
+}
+
+body.editor_enable .lang {
+  display: inherit;
+}
+
+html[lang="de-DE"] .lang.de {
+  display: inherit;
+}
+
+html[lang="fr-DE"] .lang.fr {
+  display: inherit;
+}
