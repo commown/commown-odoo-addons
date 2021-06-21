@@ -143,3 +143,29 @@ class CommownCrmLead(models.Model):
                 u"<a target='_blank' href='%s'>%s</a>"
                 % (cgi.escape(url, quote=True),
                    cgi.escape(_('Web search link'), quote=True)))
+
+    def button_open_sale_order(self):
+        self.ensure_one()
+        order_id = self.so_line_id.mapped('order_id').id
+        if order_id:
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'sale.order',
+                'name': _('Sale Order'),
+                'views': [(False, 'form')],
+                'res_id': order_id,
+            }
+
+    def button_open_contract(self):
+        contract = self.contract_id
+        if contract:
+            view = self.env.ref(
+                'contract.account_analytic_account_recurring_form_form')
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'account.analytic.account',
+                'res_id': contract.id,
+                'name': _('Related contracts'),
+                'context': {'is_contract': 1},
+                'views': [(view.id, 'form')],
+            }
