@@ -31,7 +31,7 @@ class SaleOrderTC(RentalSaleOrderTC):
             "type": u"service",
         })
         product2.followup_sales_team_id = self.team2.id
-        so_line2 = self._oline(product2, product_uom_qty=1)
+        so_line2 = self._oline(product2, product_uom_qty=3)
 
         self.so = self.env["sale.order"].create({
             "partner_id": partner.id,
@@ -52,13 +52,14 @@ class SaleOrderTC(RentalSaleOrderTC):
 
         self.assertEqual(new_leads, leads1 | leads2)
         self.assertEqual(len(leads1), 2)
-        self.assertEqual(len(leads2), 1)
+        self.assertEqual(len(leads2), 3)
         self.assertEqual(leads1.mapped('stage_id'), self.stage1)
-        self.assertEqual(leads2.mapped('stage_id'), self.env['crm.stage'])
+        self.assertFalse(leads2.mapped('stage_id'))
         self.assertEqual(leads1.mapped("so_line_id"), so_line1)
-        self.assertEqual(leads2.so_line_id, so_line2)
+        self.assertEqual(leads2.mapped("so_line_id"), so_line2)
 
         self.assertEqual(sorted(leads1.mapped("contract_id.name")),
                          [u"%s-01" % self.so.name, u"%s-02" % self.so.name])
-        self.assertFalse(leads2.contract_id)
-        self.assertEqual(leads2.name, u"[%s-00] Install /e/OS" % self.so.name)
+        self.assertFalse(leads2.mapped("contract_id"))
+        self.assertEqual(sorted(leads2.mapped("name")), [
+            u"[%s-00/%d] Install /e/OS" % (self.so.name, i) for i in (1, 2, 3)])

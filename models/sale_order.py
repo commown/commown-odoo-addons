@@ -48,8 +48,11 @@ class SaleOrder(models.Model):
         lead.update({'team_id': team.id})
         return lead
 
-    def risk_analysis_lead_title(self, so_line, contract=None):
+    def risk_analysis_lead_title(
+            self, so_line, contract=None, secondary_index=None):
         name = u'%s-00' % self.name if contract is None else contract.name
+        if secondary_index is not None:
+            name += u'/%s' % secondary_index
         return u'[%s] %s' % (name, so_line.product_id.display_name)
 
     def create_risk_analysis_leads(self):
@@ -69,7 +72,7 @@ class SaleOrder(models.Model):
 
         for contract, so_line in deserve_ra:
             leads |= self._create_lead(
-                self.risk_analysis_lead_title(so_line, contract),
+                self.risk_analysis_lead_title(so_line, contract=contract),
                 so_line.product_id.followup_sales_team_id,
                 so_line, contract_id=contract.id)
         else:
@@ -78,11 +81,14 @@ class SaleOrder(models.Model):
                           ' (%s)', self.name)
 
         # Also create a lead for non contract products with a followup team
+        count = 0
         for so_line in self.order_line:
             product = so_line.product_id
             team = product.followup_sales_team_id
             if team and not product.is_contract:
-                name = self.risk_analysis_lead_title(so_line)
-                leads |= self._create_lead(name, team, so_line)
-
+                for _num in range(int(so_line.product_uom_qty)):
+                    count += 1
+                    name = self.risk_analysis_lead_title(so_line,
+                                                         secondary_index=count)
+                    leads |= self._create_lead(name, team, so_line)
         return leads
