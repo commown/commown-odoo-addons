@@ -33,6 +33,8 @@ class ContractTemplateLine(models.Model):
     _inherit = "account.analytic.contract.line"
 
     discount_formula = fields.Text("Discount formula")
+    variable_discount = fields.Boolean(
+        "Variable discount?", store=False, compute='_compute_variable_discount')
 
     @api.constrains('discount_formula')
     def _check_discount_formula(self):
@@ -44,6 +46,11 @@ class ContractTemplateLine(models.Model):
                 except YAMLError as exc:
                     raise ValidationError(
                         _('Invalid YAML (detail below):\n%s') % str(exc))
+
+    @api.depends('discount_formula')
+    def _compute_variable_discount(self):
+        for record in self:
+            record.variable_discount = bool(record.discount_formula)
 
 
 class Contract(models.Model):
