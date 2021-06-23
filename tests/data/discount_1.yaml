@@ -1,0 +1,32 @@
+Early adopter discount:
+
+  amount:
+    type: percent
+    value: 5
+
+2 years loyalty:
+
+  start:
+    reference: date_start
+    value: 2
+    unit: years
+
+  end:
+    reference: date_start
+    value: 3
+    unit: years
+
+  amount:
+    type: percent
+    value: 10
+
+More than 3 years loyalty:
+
+  start:
+    reference: date_start
+    value: 3
+    unit: years
+
+  amount:
+    type: percent
+    value: 20
