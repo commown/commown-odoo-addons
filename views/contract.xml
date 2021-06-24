@@ -1,0 +1,60 @@
+<odoo>
+
+  <record id="account_analytic_contract_view_form" model="ir.ui.view">
+    <field name="name">Variable discount Contract Template</field>
+    <field name="model">account.analytic.contract</field>
+    <field name="inherit_id"
+           ref="contract.account_analytic_contract_view_form"/>
+    <field name="arch" type="xml">
+
+      <!-- Remove editable on tree: a big form is needed to edit discount formula -->
+      <xpath expr="//field[@name='recurring_invoice_line_ids']/tree"
+             position="attributes">
+        <attribute name="editable"></attribute>
+      </xpath>
+
+      <!-- Insert `variable_discount` before `discount` -->
+      <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='discount']"
+             position="before">
+        <field name="discount_formula" invisible="1" widget="ace"/>
+        <field name="variable_discount"/>
+      </xpath>
+
+      <!-- Do not show discount if `variable_discount` is True -->
+      <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='discount']"
+             position="attributes">
+        <attribute name="attrs">{'invisible': [('variable_discount', '=', True)]}</attribute>
+      </xpath>
+
+    </field>
+  </record>
+
+  <!-- Create a contract line form view the tree view can no more be editable -->
+  <record id="account_analytic_contract_line_view_form" model="ir.ui.view">
+    <field name="name">Account Analytic Contract Line Form View</field>
+    <field name="model">account.analytic.contract.line</field>
+    <field name="arch" type="xml">
+      <form string="Contract Template Line">
+        <group>
+          <group name="Article">
+            <field name="product_id"/>
+            <field name="name"/>
+            <field name="analytic_tag_ids" widget="many2many_tags"/>
+          </group>
+          <group name="Price">
+            <field name="uom_id"/>
+            <field name="automatic_price"/>
+            <field name="specific_price" attrs="{'invisible': [('automatic_price', '=', True)]}"/>
+            <field name="price_unit" attrs="{'invisible': [('automatic_price', '=', False)]}"/>
+            <field name="quantity"/>
+            <field name="price_subtotal"/>
+          </group>
+        </group>
+        <group name="Discount">
+          <field name="discount_formula" widget="ace"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+</odoo>
