@@ -70,6 +70,7 @@
         'views/res_lang.xml',
         'views/res_partner.xml',
         'views/crm_lead.xml',
+        'views/website_templates.xml',
         'data/product.xml',
         'data/mail_templates.xml',
         'data/project_project.xml',
