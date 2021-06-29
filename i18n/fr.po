@@ -1,0 +1,112 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* contract_variable_discount
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-29 11:10+0000\n"
+"PO-Revision-Date: 2021-06-29 11:10+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: contract_variable_discount
+#: model:ir.model,name:contract_variable_discount.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Contrat"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:70
+#, python-format
+msgid "Applied discounts:\n"
+"- %s"
+msgstr "Réductions appliquées :\n"
+"- %s"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.account_analytic_invoice_line_view_form
+msgid "Contract Line"
+msgstr "Ligne du contrat"
+
+#. module: contract_variable_discount
+#: model:ir.model,name:contract_variable_discount.model_account_analytic_contract_line
+msgid "Contract Lines"
+msgstr "Lignes du contrat"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.account_analytic_contract_line_view_form
+msgid "Contract Template Line"
+msgstr "Ligne du modèle de contrat"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_contract_line_discount_formula
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_discount_formula
+msgid "Discount formula"
+msgstr "Formule de réduction"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:92
+#, python-format
+msgid "Incorrect reference '%s' in discount date of contract %s"
+msgstr "Référence de date '%s' incorrecte dans une formule de réduction du contrat %s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:98
+#, python-format
+msgid "Incorrect reference date value for '%s' of contract %s"
+msgstr "Valeur de date de référence incorrecte '%s' dans une formule du contrat %s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:48
+#, python-format
+msgid "Invalid YAML (detail below):\n"
+"%s"
+msgstr "Format YAML invalide (détail ci-dessous):\n"
+"%s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:128
+#, python-format
+msgid "Invalid discount condition %s in contract %s"
+msgstr "Condition de réduction invalide %s dans une formule du contrat %s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:81
+#, python-format
+msgid "Invalid discount formula amount type '%s' for contract %s"
+msgstr "Type de montant '%s' invalide dans une formule de réduction du contrat %s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:108
+#, python-format
+msgid "Invalid unit '%s' in discount date of contract %s"
+msgstr "Unité de date '%s' invalide dans une formule de réduction du contrat %s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:118
+#, python-format
+msgid "Invalid value %r in discount date of contract %s"
+msgstr "Valeur de montant %r invalide dans une formule de réduction du contrat %s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:103
+#, python-format
+msgid "Missing unit in discount date of contract %s"
+msgstr "Unité de date manquante dans une formule de réduction du contrat %s"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/contract.py:113
+#, python-format
+msgid "Missing value to discount date definition in contract %s"
+msgstr "Valeur de montant manquante dans une formule de réduction du contrat %s"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_contract_line_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_variable_discount
+msgid "Variable discount?"
+msgstr "Réduction variable ?"
