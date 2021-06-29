@@ -165,7 +165,7 @@ class ContractTC(TestContractBase):
             self.contract.mapped('recurring_invoice_line_ids.discount_formula'),
             [SIMPLE_FORMULA])
 
-    def test_condition(self):
+    def test_condition_and_description(self):
         self.set_discount_formula(CONDITIONAL_FORMULA)
 
         method = "_discount_formula_condition_test"
@@ -176,3 +176,10 @@ class ContractTC(TestContractBase):
 
         self.assertEqual(invoice1.mapped("invoice_line_ids.discount"), [0.])
         self.assertEqual(invoice2.mapped("invoice_line_ids.discount"), [5.])
+
+        self.assertEqual(invoice1.mapped("invoice_line_ids.name"),
+                         [u"Services from 02/29/2016 to 03/28/2016"])
+        self.assertEqual(invoice2.mapped("invoice_line_ids.name"),
+                         [u"Services from 03/29/2016 to 04/28/2016\n"
+                          u"Applied discounts:\n"
+                          u"- Fix discount after 1 month under condition"])

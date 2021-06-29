@@ -65,8 +65,10 @@ class Contract(models.Model):
             date_invoice = fields.Date.from_string(
                 line.analytic_account_id.recurring_next_date)
             result = self.discount_formula_compute(line, date_invoice)
-            vals["discount"] = result["discount"]
-            vals["name"] += u"\n" + result["customer_description"]
+            vals["discount"] = result["total"]
+            if result["descriptions"]:
+                vals["name"] += u"\n" + (_("Applied discounts:\n- %s")
+                                         % u"\n- ".join(result["descriptions"]))
         return vals
 
     def _discount_formula_amount(self, line, date_invoice, amount_descr):
@@ -129,8 +131,12 @@ class Contract(models.Model):
 
     @api.model
     def discount_formula_compute(self, line, date_invoice):
+        """ Compute the formula and returns a dict like:
+        - total: the total computed amount
+        - descriptions: a list of strings describing the discounts
+        """
         total_discount = 0
-        customer_description = []
+        customer_descriptions = []
 
         for name, descr in ordered_load(line.discount_formula).items():
 
@@ -153,9 +159,9 @@ class Contract(models.Model):
 
             total_discount += self._discount_formula_amount(
                 line, date_invoice, descr["amount"])
-            customer_description.append(name)
+            customer_descriptions.append(name)
 
         return {
-            "discount": total_discount,
-            "customer_description": u"\n".join(customer_description),
+            "total": total_discount,
+            "descriptions": customer_descriptions,
         }
