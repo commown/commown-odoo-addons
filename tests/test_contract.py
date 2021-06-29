@@ -1,6 +1,10 @@
 from os import path as osp
 from datetime import date
 
+from mock import patch
+
+from odoo.addons.contract_variable_discount.models.contract import Contract
+
 from odoo.addons.contract.tests.test_contract import TestContractBase
 from odoo.exceptions import ValidationError
 
@@ -12,6 +16,19 @@ Fix discount:
   amount:
     type: fix
     value: 2
+"""
+
+
+CONDITIONAL_FORMULA = u"""
+Fix discount after 1 month under condition:
+  condition: test
+  amount:
+    type: percent
+    value: 5
+  start:
+    reference: date_start
+    value: 1
+    unit: months
 """
 
 
@@ -139,3 +156,15 @@ class ContractTC(TestContractBase):
         self.assertEqual(
             self.contract.mapped('recurring_invoice_line_ids.discount_formula'),
             [SIMPLE_FORMULA])
+
+    def test_condition(self):
+        self.set_discount_formula(CONDITIONAL_FORMULA)
+
+        method = "_discount_formula_condition_test"
+        with patch.object(Contract, method, create=True) as mock:
+            mock.return_value = True
+            invoice1 = self.contract.recurring_create_invoice()
+            invoice2 = self.contract.recurring_create_invoice()
+
+        self.assertEqual(invoice1.mapped("invoice_line_ids.discount"), [0.])
+        self.assertEqual(invoice2.mapped("invoice_line_ids.discount"), [5.])
