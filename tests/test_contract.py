@@ -120,6 +120,14 @@ class ContractTC(TestContractBase):
         self._check_formula_date_error({"unit": "days", "value": "wrong"},
                                        "Invalid value")
 
+    def test_discount_amount_type_error(self):
+        self.set_discount_formula(SIMPLE_FORMULA.replace('fix', 'not_exist'))
+        with self.assertRaises(ValidationError) as err:
+            self.contract.recurring_create_invoice()
+
+        self.assertIn("Invalid discount formula amount type 'not_exist'",
+                      err.exception.args[0])
+
     def test_discount_formula_compute_0(self):
         self.set_discount_formula(SIMPLE_FORMULA)
         invoice = self.contract.recurring_create_invoice()

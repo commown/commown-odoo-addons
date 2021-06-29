@@ -75,7 +75,9 @@ class Contract(models.Model):
         elif amount_descr["type"] == "percent":
             discount = amount_descr["value"]
         else:
-            raise ValidationError
+            raise ValidationError(
+                _("Invalid discount formula amount type '%s' for contract %s")
+                % (amount_descr["type"], line.analytic_account_id.name))
         return discount
 
     def _discount_formula_date(self, line, date_invoice, date_descr):
