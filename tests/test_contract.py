@@ -7,6 +7,7 @@ from odoo.addons.contract_variable_discount.models.contract import Contract
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 from odoo.exceptions import ValidationError
+from odoo import fields
 
 
 HERE = osp.abspath(osp.dirname(__file__))
@@ -171,15 +172,21 @@ class ContractTC(TestContractBase):
         method = "_discount_formula_condition_test"
         with patch.object(Contract, method, create=True) as mock:
             mock.return_value = True
-            invoice1 = self.contract.recurring_create_invoice()
-            invoice2 = self.contract.recurring_create_invoice()
+            inv1 = self.contract.recurring_create_invoice()
+            inv2 = self.contract.recurring_create_invoice()
 
-        self.assertEqual(invoice1.mapped("invoice_line_ids.discount"), [0.])
-        self.assertEqual(invoice2.mapped("invoice_line_ids.discount"), [5.])
+        self.assertEqual(mock.call_count, 2)
+        self.assertEqual([tuple(c) for c in mock.call_args_list], [
+            ((self.acct_line, fields.Date.from_string(inv1.date_invoice)), {}),
+            ((self.acct_line, fields.Date.from_string(inv2.date_invoice)), {}),
+        ])
 
-        self.assertEqual(invoice1.mapped("invoice_line_ids.name"),
+        self.assertEqual(inv1.mapped("invoice_line_ids.discount"), [0.])
+        self.assertEqual(inv2.mapped("invoice_line_ids.discount"), [5.])
+
+        self.assertEqual(inv1.mapped("invoice_line_ids.name"),
                          [u"Services from 02/29/2016 to 03/28/2016"])
-        self.assertEqual(invoice2.mapped("invoice_line_ids.name"),
+        self.assertEqual(inv2.mapped("invoice_line_ids.name"),
                          [u"Services from 03/29/2016 to 04/28/2016\n"
                           u"Applied discounts:\n"
                           u"- Fix discount after 1 month under condition"])
