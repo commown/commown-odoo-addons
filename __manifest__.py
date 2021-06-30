@@ -2,7 +2,7 @@
     'name': 'Commown SCIC',
     'category': 'Business',
     'summary': 'Commown SCIC business application',
-    'version': '10.0.1.24.5',
+    'version': '10.0.1.25.0',
     'description': "Commown SCIC business application",
     'author': "Commown SCIC",
     'license': "AGPL-3",
