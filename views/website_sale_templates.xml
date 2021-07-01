@@ -140,6 +140,8 @@
     </xpath>
   </template>
 
+  <!-- Language related hacks START -->
+
   <template id="products_categories" inherit_id="website_sale.products_categories">
     <xpath expr="//div[@id='products_grid_before']/ul[hasclass('nav')]/li[1]" position="attributes">
       <attribute name="t-if">request.lang == 'fr_FR'</attribute>
@@ -152,7 +154,7 @@
   <template id="product" inherit_id="website_sale_b2b.product_b2b">
     <xpath expr="//t[@t-call='website.layout']/*[1]" position="before">
       <t t-set="display_product"
-         t-value="request.lang == 'fr_FR' or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"/>
+         t-value="request.env.user.has_group('website.group_website_publisher') or request.lang == 'fr_FR' or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"/>
     </xpath>
     <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
       <attribute name="t-if">display_product</attribute>
@@ -178,5 +180,7 @@
       <attribute name="t-if">display_product</attribute>
     </xpath>
   </template>
+
+  <!-- Language related hacks END -->
 
 </odoo>
