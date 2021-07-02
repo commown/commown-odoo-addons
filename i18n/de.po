@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-01 10:49+0000\n"
-"PO-Revision-Date: 2021-07-01 10:49+0000\n"
+"POT-Creation-Date: 2021-07-01 10:46+0000\n"
+"PO-Revision-Date: 2021-07-01 10:46+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,175 +18,175 @@ msgstr ""
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.product_price
 msgid "<span>Commitment duration: </span>"
-msgstr "<span>Durée d'engagement : </span>"
+msgstr "<span>Verpflichtungszeitraum: </span>"
 
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.product_price
 msgid "<span>Initial deposit: </span>"
-msgstr "<span>Dépôt de garantie à régler à la commande : </span>"
+msgstr "<span>Kaution: </span>"
 
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.cart_lines
 #: model:ir.ui.view,arch_db:product_rental.confirmation
 #: model:ir.ui.view,arch_db:product_rental.payment
 msgid "<strong> - Deposit</strong>"
-msgstr "<strong> - Dépôt de garantie</strong>"
+msgstr "<strong> - Kaution</strong>"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_account_analytic_account
 msgid "Analytic Account"
-msgstr "Compte analytique"
+msgstr "Kostenstelle"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_account_analytic_contract_line
 msgid "Contract Lines"
-msgstr "Lignes du contrat"
+msgstr "Vertragspositionen"
 
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.view_order_form
 msgid "Contracts"
-msgstr "Contrats"
+msgstr "Verträge"
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Daily"
-msgstr "par jour"
+msgstr "pro Tag"
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_product_product_rental_frequency
 #: model:ir.model.fields,help:product_rental.field_product_template_rental_frequency
 msgid "Frequency of the rental price payment"
-msgstr "Fréquence de paiement de la location"
+msgstr "Frequency of the rental price payment"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_sale_order_has_rental_product
 msgid "Has rental product"
-msgstr "Contient une location"
+msgstr "Has rental product"
 
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.product_price
 msgid "Initial deposit:"
-msgstr "Dépôt de garantie à régler à la commande :"
+msgstr "Initial deposit:"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product_is_deposit
 #: model:ir.model.fields,field_description:product_rental.field_product_template_is_deposit
 msgid "Is initial payment a deposit"
-msgstr "Paiement initial = dépôt de garantie ?"
+msgstr "Is initial payment a deposit"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product_is_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_template_is_rental
 msgid "Is rental product"
-msgstr "Location"
+msgstr "Is rental product"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_account_analytic_account_min_contract_duration
 #: model:ir.model.fields,field_description:product_rental.field_account_analytic_contract_min_contract_duration
 #: model:ir.model.fields,field_description:product_rental.field_project_project_min_contract_duration
 msgid "Min contract duration"
-msgstr "Durée d'engagement"
+msgstr "Min contract duration"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_account_analytic_account_min_contract_end_date
 #: model:ir.model.fields,field_description:product_rental.field_project_project_min_contract_end_date
 msgid "Min contract end date"
-msgstr "Fin de la période d'engagement"
+msgstr "Min contract end date"
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_account_analytic_account_min_contract_duration
 #: model:ir.model.fields,help:product_rental.field_account_analytic_contract_min_contract_duration
 #: model:ir.model.fields,help:product_rental.field_project_project_min_contract_duration
 msgid "Minimum contract duration in recurring interval unit"
-msgstr "Durée d'engagement en nombre de récurrences"
+msgstr "Minimum contract duration in recurring interval unit"
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Monthly"
-msgstr "par mois"
+msgstr "pro Monat"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_account_analytic_contract_payment_mode_id
 msgid "Payment Mode"
-msgstr "Mode de paiement"
+msgstr "Zahlungsmodus"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_product_template
 msgid "Product Template"
-msgstr "Modèle d'article"
+msgstr "Produktvorlage"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_sale_order_contract_count
 msgid "Related contract count"
-msgstr "Nombre de contrats associés"
+msgstr "Related contract count"
 
 #. module: product_rental
 #: code:addons/product_rental/models/sale_order.py:78
 #, python-format
 msgid "Related contracts"
-msgstr "Contrats associés"
+msgstr "Related contracts"
 
 #. module: product_rental
 #: code:addons/product_rental/models/account_analytic_account.py:103
 #, python-format
 msgid "Related sales"
-msgstr "Ventes associées"
+msgstr "Related sales"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product_rental_frequency
 #: model:ir.model.fields,field_description:product_rental.field_product_template_rental_frequency
 msgid "Rental payment frequency"
-msgstr "Fréquence de paiement"
+msgstr "Rental payment frequency"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product_rental_price
 #: model:ir.model.fields,field_description:product_rental.field_product_template_rental_price
 msgid "Rental price"
-msgstr "Tarif de la location"
+msgstr "Rental price"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_report
 msgid "Report"
-msgstr "Rapport"
+msgstr "Bericht"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_account_analytic_contract_line_sale_order_line_id
 #: model:ir.model.fields,field_description:product_rental.field_account_analytic_invoice_line_sale_order_line_id
 msgid "Sale Order Line"
-msgstr "Ligne de commande"
+msgstr "Auftragspositionen"
 
 #. module: product_rental
 #: model:ir.ui.view,arch_db:product_rental.account_analytic_account_recurring_form_form
 msgid "Sale order"
-msgstr "Vente"
+msgstr "Verkaufsauftrag"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order
 msgid "Sales Order"
-msgstr "Bon de commande"
+msgstr "Verkaufsauftrag"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Ligne de bons de commande"
+msgstr "Auftragsposition"
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Weekly"
-msgstr "par semaine"
+msgstr "pro Woche"
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Yearly"
-msgstr "par an"
+msgstr "pro Jahr"
 
 #. module: product_rental
 #: model:ir.actions.server,name:product_rental.action_contract_auto_account_payment
 msgid "[commown] Automatic account payment on contract driven transaction"
-msgstr "[commown] Paiement automatique des transactions induites par un contrat"
+msgstr "[commown] Automatic account payment on contract driven transaction"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_account_analytic_contract
 msgid "account.analytic.contract"
-msgstr "contrat"
+msgstr "Vertrag"
 
