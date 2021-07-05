@@ -17,6 +17,7 @@
     ],
     'data': [
         'data/action_crm_lead.xml',
+        'data/stock_location.xml',
         'views/contract.xml',
         'views/product.xml',
     ],
