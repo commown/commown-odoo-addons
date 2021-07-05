@@ -36,6 +36,6 @@ class ResPartner(models.Model):
         customers.
         """
 
-        return self._set_location('internal',
+        return self._set_location('customer',
                                   'stock.stock_location_customers',
                                   'property_stock_customer')
