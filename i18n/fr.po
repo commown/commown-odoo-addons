@@ -1,0 +1,108 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_devices
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-05 13:22+0000\n"
+"PO-Revision-Date: 2021-07-05 13:22+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Compte analytique"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_picking_contract_id
+msgid "Contract"
+msgstr "Contrat"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_available_for_rent
+msgid "Devices available for rent"
+msgstr "Appareils disponibles à la location"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_to_check
+msgid "Fairphone 3/3+ to check/ diagnose"
+msgstr "Fairphone 3/3+ à diagnostiquer"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_outsourced_repair
+msgid "Fairphone 3/3+ waiting for an outsourced repair"
+msgstr "Fairphone 3/3+ à réparer en sous-traitance"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/crm_lead.py:25
+#, python-format
+msgid "Initial picking"
+msgstr "Expédition initiale"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Piste/opportunité"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_new
+msgid "New Fairphone 3"
+msgstr "Fairphone 3/3+ neufs"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_account_analytic_account_picking_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_project_picking_ids
+msgid "Pickings"
+msgstr "Expéditions"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_repackaged
+msgid "Repackaged Fairphone 3"
+msgstr "Fairphone 3/3+ reconditionnés"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.account_analytic_contract_view_form
+msgid "Stock pickings"
+msgstr "Expéditions"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product_stockable_product_id
+#: model:ir.model.fields,field_description:commown_devices.field_product_template_stockable_product_id
+msgid "Stockable product"
+msgstr "Produit stockable"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/crm_lead.py:15
+#, python-format
+msgid "The contract has already non-canceled picking(s)!\n"
+"Either cancel or validate one."
+msgstr "Le contrat a déjà une expédition prévue !\n"
+"Annulez ou validez-la."
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_stock_picking
+msgid "Transfer"
+msgstr "Transfert"
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.generate_picking
+msgid "[commown] Generate picking"
+msgstr "[commown] Expédier"
+
