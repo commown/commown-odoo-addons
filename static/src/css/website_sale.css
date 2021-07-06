@@ -11,13 +11,13 @@
 }
 
 body.editor_enable .lang {
-  display: inherit;
+  display: unset;
 }
 
 html[lang="de-DE"] .lang.de {
-  display: inherit;
+  display: unset;
 }
 
 html[lang="fr-FR"] .lang.fr {
-  display: inherit;
+  display: unset;
 }
