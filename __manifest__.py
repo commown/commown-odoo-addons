@@ -8,15 +8,11 @@
     'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
-    'external_dependencies': {
-        'python': ['yaml'],
-    },
     'depends': [
         'contract',
     ],
     'data': [
-        'views/contract.xml',
-        'views/contract_template.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
 }
