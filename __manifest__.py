@@ -12,6 +12,8 @@
         'contract',
     ],
     'data': [
+        'data/report.xml',
+        'data/report_simulate_payments.xml',
         'security/ir.model.access.csv',
         'views/contract.xml',
         'views/contract_template.xml',

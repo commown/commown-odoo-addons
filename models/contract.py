@@ -1,7 +1,25 @@
+# coding: utf-8
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import uuid
+
+from texttable import Texttable
+
 from odoo import fields, models, api, _
+from odoo.exceptions import UserError
+
+
+def _format_discount(value):
+    if isinstance(value, unicode):
+        return value
+    return u"%.2f %%" % value
+
+
+def _format_amount(value):
+    if isinstance(value, unicode):
+        return value
+    return u"%.2f €" % value
 
 
 class ContractTemplateLine(models.Model):
@@ -135,3 +153,38 @@ class Contract(models.Model):
                                      % u"\n- ".join(descriptions))
 
         return vals
+
+    @api.multi
+    def simulate_payments(self):
+        self.ensure_one()
+
+        max_date = fields.Date.from_string(self.date_start)
+
+        for contract_line in self.recurring_invoice_line_ids:
+            for discount_line in contract_line._applicable_discount_lines():
+                date_start = discount_line._compute_date(contract_line, "start")
+                if date_start > max_date:
+                    max_date = date_start
+                if discount_line.end_value:
+                    date_end = discount_line._compute_date(contract_line, "end")
+                    if date_end > max_date:
+                        max_date = date_start
+
+        lang = self.env['res.lang'].search([('code', '=', self.env.user.lang)])
+
+        inv_data = []
+        last_amount = None
+
+        point_name = uuid.uuid1().hex
+        self.env.cr.execute('SAVEPOINT "%s"' % point_name)
+        try:
+            while fields.Date.from_string(self.recurring_next_date) <= max_date:
+                inv = self.recurring_create_invoice()
+                if last_amount != inv.amount_total:
+                    last_amount = inv.amount_total
+                    data = inv.read()[0]
+                    data["invoice_line_ids"] = inv.invoice_line_ids.read()
+                    inv_data.append(data)
+            return inv_data
+        finally:
+            self.env.cr.execute('ROLLBACK TO SAVEPOINT "%s"' % point_name)
