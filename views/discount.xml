@@ -1,0 +1,66 @@
+<odoo>
+
+  <record id="contract_template_discount_line" model="ir.ui.view">
+    <field name="name">Contract template discount line form</field>
+    <field name="model">contract.template.discount.line</field>
+    <field name="arch" type="xml">
+      <form string="Contract template discount line">
+        <group>
+          <group name="general" string="General">
+            <field name="name"/>
+            <field name="condition"/>
+          </group>
+          <group name="amount" string="Amount">
+            <field name="amount_value"/>
+            <field name="amount_type"/>
+          </group>
+        </group>
+        <group>
+          <group name="start" string="Start date">
+            <field name="start_reference"/>
+            <field name="start_value"/>
+            <field name="start_unit"/>
+          </group>
+          <group name="end" string="End date">
+            <field name="end_reference"/>
+            <field name="end_value"/>
+            <field name="end_unit"/>
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="contract_discount_line" model="ir.ui.view">
+    <field name="name">Contract discount line form</field>
+    <field name="model">contract.discount.line</field>
+    <field name="arch" type="xml">
+      <form string="Contract discount line">
+        <group>
+          <group name="general" string="General">
+            <field name="name"/>
+            <field name="condition"/>
+            <field name="replace_discount_line_id"/>
+          </group>
+          <group name="amount" string="Amount">
+            <field name="amount_value"/>
+            <field name="amount_type"/>
+          </group>
+        </group>
+        <group>
+          <group name="start" string="Start date">
+            <field name="start_reference"/>
+            <field name="start_value"/>
+            <field name="start_unit"/>
+          </group>
+          <group name="end" string="End date">
+            <field name="end_reference"/>
+            <field name="end_value"/>
+            <field name="end_unit"/>
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+
+</odoo>

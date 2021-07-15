@@ -15,6 +15,14 @@ class ContractTemplateLine(models.Model):
         copy=True,
     )
 
+    variable_discount = fields.Boolean(
+        "Variable discount?", store=False, compute='_compute_variable_discount')
+
+    @api.depends('discount_line_ids')
+    def _compute_variable_discount(self):
+        for record in self:
+            record.variable_discount = bool(record.discount_line_ids)
+
 
 class ContractLine(models.Model):
     _inherit = "account.analytic.invoice.line"
@@ -32,6 +40,17 @@ class ContractLine(models.Model):
         inverse_name="contract_line_id",
         copy=True,
     )
+
+    variable_discount = fields.Boolean(
+        "Variable discount?", store=False, compute='_compute_variable_discount')
+
+    @api.depends('contract_template_line_id.discount_line_ids',
+                 'specific_discount_line_ids')
+    def _compute_variable_discount(self):
+        for record in self:
+            record.variable_discount = bool(
+                record.specific_discount_line_ids or
+                record.contract_template_line_id.discount_line_ids)
 
     @api.multi
     def compute_discount(self, date_invoice):

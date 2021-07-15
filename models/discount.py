@@ -179,4 +179,5 @@ class ContractDiscountLine(models.Model):
         help=(u"If a discount line is added here, it will no more apply"
               " but be replaced by current line"),
         required=False,
+        domain="[('id', 'in', contract_line_id.contract_template_line_id.discount_line_ids.ids)]",
     )

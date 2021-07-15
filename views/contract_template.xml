@@ -16,7 +16,7 @@
       <!-- Insert `variable_discount` before `discount` -->
       <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='discount']"
              position="before">
-        <field name="discount_formula" invisible="1"/>
+        <field name="discount_line_ids" invisible="1"/>
         <field name="variable_discount"/>
       </xpath>
 
@@ -51,7 +51,7 @@
           </group>
         </group>
         <group name="Discount">
-          <field name="discount_formula" widget="ace"/>
+          <field name="discount_line_ids"/>
         </group>
       </form>
     </field>
