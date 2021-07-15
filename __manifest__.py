@@ -13,6 +13,7 @@
     'depends': [
         'commown_contractual_issue',
         'contract_variable_discount',
+        'product_rental',
     ],
     'installable': True,
 }

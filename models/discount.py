@@ -9,7 +9,15 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     _inherit = "contract.template.abstract.discount.line"
 
     condition = fields.Selection(
-        selection_add=[('no_issue_to_date', "No contractual issue to date")],
+        selection_add=[("no_issue_to_date", "No contractual issue to date")],
+    )
+
+    start_reference = fields.Selection(
+        selection_add=[("min_contract_end_date", "Min contract end date")]
+    )
+
+    end_reference = fields.Selection(
+        selection_add=[("min_contract_end_date", "Min contract end date")]
     )
 
     def _compute_condition_no_issue_to_date(self, line, date):
