@@ -51,6 +51,13 @@ class ContractLine(models.Model):
         comodel_name="account.analytic.contract.line",
     )
 
+    inherited_discount_line_ids = fields.One2many(
+        string=u"Inherited discount lines",
+        help=u"Discount lines from the related contract model",
+        related=u"contract_template_line_id.discount_line_ids",
+        readonly=True,
+    )
+
     specific_discount_line_ids = fields.One2many(
         string=u"Specific discount lines",
         help=u"These lines complete the contract template's, if any",

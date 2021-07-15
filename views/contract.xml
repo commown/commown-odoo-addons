@@ -50,6 +50,7 @@
           </group>
         </group>
         <group name="Discount">
+          <field name="inherited_discount_line_ids"/>
           <field name="specific_discount_line_ids"/>
         </group>
       </form>
