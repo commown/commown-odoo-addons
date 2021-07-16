@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 11:10+0000\n"
-"PO-Revision-Date: 2021-06-29 11:10+0000\n"
+"POT-Creation-Date: 2021-07-16 07:08+0000\n"
+"PO-Revision-Date: 2021-07-16 07:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,17 +16,45 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_discount_line
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_template_discount_line
+#: model:ir.ui.view,arch_db:contract_variable_discount.report_simulate_payments_html
+msgid "Amount"
+msgstr "Montant"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_amount_type
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_amount_type
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_amount_type
+msgid "Amount type"
+msgstr "Type de montant"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_amount_value
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_amount_value
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_amount_value
+msgid "Amount value"
+msgstr "Montant"
+
+#. module: contract_variable_discount
 #: model:ir.model,name:contract_variable_discount.model_account_analytic_account
 msgid "Analytic Account"
 msgstr "Contrat"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:70
+#: code:addons/contract_variable_discount/models/contract.py:159
 #, python-format
 msgid "Applied discounts:\n"
 "- %s"
-msgstr "Réductions appliquées :\n"
+msgstr "Remises appliquées :\n"
 "- %s"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_condition
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_condition
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_condition
+msgid "Condition of this discount applicability"
+msgstr "Condition d'application de la remise"
 
 #. module: contract_variable_discount
 #: model:ir.ui.view,arch_db:contract_variable_discount.account_analytic_invoice_line_view_form
@@ -44,69 +72,371 @@ msgid "Contract Template Line"
 msgstr "Ligne du modèle de contrat"
 
 #. module: contract_variable_discount
-#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_contract_line_discount_formula
-#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_discount_formula
-msgid "Discount formula"
-msgstr "Formule de réduction"
+#: model:ir.model,name:contract_variable_discount.model_contract_discount_line
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_discount_line
+msgid "Contract discount line"
+msgstr "Ligne de remise du contrat"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:92
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_contract_line_id
+msgid "Contract line"
+msgstr "Ligne du contrat"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,end_reference:0
+#: selection:contract.discount.line,start_reference:0
+#: selection:contract.template.abstract.discount.line,end_reference:0
+#: selection:contract.template.abstract.discount.line,start_reference:0
+#: selection:contract.template.discount.line,end_reference:0
+#: selection:contract.template.discount.line,start_reference:0
+msgid "Contract start date"
+msgstr "démarrage du contrat"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_template_discount_line
+msgid "Contract template discount line"
+msgstr "Ligne de remise du modèle de contrat"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_contract_template_line_id
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_contract_template_line_id
+msgid "Contract template line"
+msgstr "Ligne du modèle de contrat"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_account_analytic_invoice_line_contract_template_line_id
+msgid "Contract template line which generated current contract line"
+msgstr "Ligne du modèle de contrat qui a généré cette ligne"
+
+#. module: contract_variable_discount
+#: model:ir.model,name:contract_variable_discount.model_contract_template_abstract_discount_line
+msgid "Contract template variable discount line"
+msgstr "Ligne de remise variable du modèle de contrat"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_create_uid
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_create_date
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.report_simulate_payments_html
+msgid "Date"
+msgstr "Date"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_discount_line_end_reference
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_abstract_discount_line_end_reference
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_discount_line_end_reference
+msgid "Date reference used to compute the discount end date"
+msgstr "Date de référence pour le calcul de la fin de la remise"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_discount_line_start_reference
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_abstract_discount_line_start_reference
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_discount_line_start_reference
+msgid "Date reference used to compute the discount start date"
+msgstr "Date de référence pour le calcul du début la fin de la remise"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,end_unit:0
+#: selection:contract.discount.line,start_unit:0
+#: selection:contract.template.abstract.discount.line,end_unit:0
+#: selection:contract.template.abstract.discount.line,start_unit:0
+#: selection:contract.template.discount.line,end_unit:0
+#: selection:contract.template.discount.line,start_unit:0
+msgid "Days"
+msgstr "Jours"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.report_simulate_payments_html
+msgid "Discount"
+msgstr "Remise"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_account_analytic_invoice_line_inherited_discount_line_ids
+msgid "Discount lines from the related contract model"
+msgstr "Lignes de remises liées au modèle de contrat"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_display_name
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_display_name
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_discount_line
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_template_discount_line
+msgid "End date"
+msgstr "Date de fin"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_end_reference
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_end_reference
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_end_reference
+msgid "End reference date"
+msgstr "Date de référence de fin"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,amount_type:0
+#: selection:contract.template.abstract.discount.line,amount_type:0
+#: selection:contract.template.discount.line,amount_type:0
+msgid "Fixed"
+msgstr "Fixe"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_discount_line
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_template_discount_line
+msgid "General"
+msgstr "Général"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_id
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_id
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_id
+msgid "ID"
+msgstr "ID"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_discount_line_replace_discount_line_id
+msgid "If a discount line is added here, it will no more apply but be replaced by current line"
+msgstr "Si une ligne de remise est pointée ici elle ne s'applique plus mais est remplacée par la ligne en cours d'édition"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_discount_line_condition
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_abstract_discount_line_condition
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_discount_line_condition
+msgid "If empty: discount line always apply"
+msgstr "Si vide : la ligne de remise s'applique toujours"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/discount.py:114
 #, python-format
 msgid "Incorrect reference '%s' in discount date of contract %s"
-msgstr "Référence de date '%s' incorrecte dans une formule de réduction du contrat %s"
+msgstr "Référence '%s' incorrect dans une date du contrat %s"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:98
+#: code:addons/contract_variable_discount/models/discount.py:120
 #, python-format
 msgid "Incorrect reference date value for '%s' of contract %s"
-msgstr "Valeur de date de référence incorrecte '%s' dans une formule du contrat %s"
+msgstr "Valeur de référence incorrecte '%s' pour le contrat %s"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:48
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_inherited_discount_line_ids
+msgid "Inherited discount lines"
+msgstr "Lignes de remise héritées"
+
+#. module: contract_variable_discount
+#: code:addons/contract_variable_discount/models/discount.py:103
 #, python-format
-msgid "Invalid YAML (detail below):\n"
-"%s"
-msgstr "Format YAML invalide (détail ci-dessous):\n"
-"%s"
+msgid "Invalid discount amount type '%s' for contract %s"
+msgstr "Type de montant de remise '%s' invalide pour le contrat %s"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:128
+#: code:addons/contract_variable_discount/models/discount.py:146
 #, python-format
 msgid "Invalid discount condition %s in contract %s"
-msgstr "Condition de réduction invalide %s dans une formule du contrat %s"
+msgstr "Condition de remise %s invalide dans le contrat %s"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:81
-#, python-format
-msgid "Invalid discount formula amount type '%s' for contract %s"
-msgstr "Type de montant '%s' invalide dans une formule de réduction du contrat %s"
+#: model:ir.ui.view,arch_db:contract_variable_discount.report_simulate_payments_html
+msgid "Invoice line description"
+msgstr "Description de la ligne de facture"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:108
-#, python-format
-msgid "Invalid unit '%s' in discount date of contract %s"
-msgstr "Unité de date '%s' invalide dans une formule de réduction du contrat %s"
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line___last_update
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line___last_update
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:118
-#, python-format
-msgid "Invalid value %r in discount date of contract %s"
-msgstr "Valeur de montant %r invalide dans une formule de réduction du contrat %s"
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_write_uid
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:103
-#, python-format
-msgid "Missing unit in discount date of contract %s"
-msgstr "Unité de date manquante dans une formule de réduction du contrat %s"
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_write_date
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
 
 #. module: contract_variable_discount
-#: code:addons/contract_variable_discount/models/contract.py:113
-#, python-format
-msgid "Missing value to discount date definition in contract %s"
-msgstr "Valeur de montant manquante dans une formule de réduction du contrat %s"
+#: model:ir.ui.view,arch_db:contract_variable_discount.report_simulate_payments_html
+msgid "Line n°"
+msgstr "Ligne n°"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,end_reference:0
+#: selection:contract.discount.line,start_reference:0
+#: selection:contract.template.abstract.discount.line,end_reference:0
+#: selection:contract.template.abstract.discount.line,start_reference:0
+#: selection:contract.template.discount.line,end_reference:0
+#: selection:contract.template.discount.line,start_reference:0
+msgid "Min contract end date"
+msgstr "Date de fin minimum"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,end_unit:0
+#: selection:contract.discount.line,start_unit:0
+#: selection:contract.template.abstract.discount.line,end_unit:0
+#: selection:contract.template.abstract.discount.line,start_unit:0
+#: selection:contract.template.discount.line,end_unit:0
+#: selection:contract.template.discount.line,start_unit:0
+msgid "Months"
+msgstr "Mois"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_name
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_name
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_name
+msgid "Name"
+msgstr "Nom"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,condition:0
+#: selection:contract.template.abstract.discount.line,condition:0
+#: selection:contract.template.discount.line,condition:0
+msgid "No contractual issue to date"
+msgstr "Aucun incident de contrat à ce jour"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.report_simulate_payments_html
+msgid "No simulation data"
+msgstr "Pas de données de simulation"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_discount_line_end_value
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_abstract_discount_line_end_value
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_discount_line_end_value
+msgid "No value means no end for this discount"
+msgstr "Pas de valeur signifie pas de fin programmée pour cette remise"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,amount_type:0
+#: selection:contract.template.abstract.discount.line,amount_type:0
+#: selection:contract.template.discount.line,amount_type:0
+msgid "Percentage"
+msgstr "Pourcentage"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_replace_discount_line_id
+msgid "Replace discount line"
+msgstr "Replace la remise"
+
+#. module: contract_variable_discount
+#: model:ir.actions.report.xml,name:contract_variable_discount.simulate_payments_html
+msgid "Simulate payments"
+msgstr "Simuler les futures factures"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_specific_discount_line_ids
+msgid "Specific discount lines"
+msgstr "Remises particulières"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_discount_line
+#: model:ir.ui.view,arch_db:contract_variable_discount.contract_template_discount_line
+msgid "Start date"
+msgstr "Date de début"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_start_reference
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_start_reference
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_start_reference
+msgid "Start reference date"
+msgstr "Référence de début"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_account_analytic_invoice_line_specific_discount_line_ids
+msgid "These lines complete the contract template's, if any"
+msgstr "Ces lignes complètent celles éventuellement définies sur le modèle de contrat"
+
+#. module: contract_variable_discount
+#: model:ir.ui.view,arch_db:contract_variable_discount.report_simulate_payments_html
+msgid "Total"
+msgstr "Total"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_end_unit
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_start_unit
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_end_unit
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_start_unit
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_end_unit
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_start_unit
+msgid "Units"
+msgstr "Unité"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_discount_line_end_unit
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_abstract_discount_line_end_unit
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_discount_line_end_unit
+msgid "Units of the discount end difference with the reference date"
+msgstr "Unité de l'intervalle entre la référence et la date de fin de la remise"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_discount_line_start_unit
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_abstract_discount_line_start_unit
+#: model:ir.model.fields,help:contract_variable_discount.field_contract_template_discount_line_start_unit
+msgid "Units of the discount start difference with the reference date"
+msgstr "Unité de l'intervalle entre la référence et la date de début de la remise"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_end_value
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_discount_line_start_value
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_end_value
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_start_value
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_end_value
+#: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_start_value
+msgid "Value"
+msgstr "Valeur"
+
+#. module: contract_variable_discount
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_contract_line_discount_line_ids
+#: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_discount_line_ids
+msgid "Variable discount lines"
+msgstr "Lignes de remise variable"
 
 #. module: contract_variable_discount
 #: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_contract_line_variable_discount
 #: model:ir.model.fields,field_description:contract_variable_discount.field_account_analytic_invoice_line_variable_discount
 msgid "Variable discount?"
-msgstr "Réduction variable ?"
+msgstr "Remise variable ?"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,end_unit:0
+#: selection:contract.discount.line,start_unit:0
+#: selection:contract.template.abstract.discount.line,end_unit:0
+#: selection:contract.template.abstract.discount.line,start_unit:0
+#: selection:contract.template.discount.line,end_unit:0
+#: selection:contract.template.discount.line,start_unit:0
+msgid "Weeks"
+msgstr "Semaines"
+
+#. module: contract_variable_discount
+#: selection:contract.discount.line,end_unit:0
+#: selection:contract.discount.line,start_unit:0
+#: selection:contract.template.abstract.discount.line,end_unit:0
+#: selection:contract.template.abstract.discount.line,start_unit:0
+#: selection:contract.template.discount.line,end_unit:0
+#: selection:contract.template.discount.line,start_unit:0
+msgid "Years"
+msgstr "Années"
+
+#. module: contract_variable_discount
+#: model:ir.model,name:contract_variable_discount.model_account_analytic_invoice_line
+msgid "account.analytic.invoice.line"
+msgstr "Ligne de contrat"
+
+#. module: contract_variable_discount
+#: model:ir.model,name:contract_variable_discount.model_contract_template_discount_line
+msgid "contract.template.discount.line"
+msgstr "Ligne de remise de modèle de contrat"
