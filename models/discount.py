@@ -30,6 +30,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     amount_value = fields.Float(
         string=u"Amount value",
+        help=u"A positive amount indicates a price discount",
         required=True,
     )
 
