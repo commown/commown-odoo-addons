@@ -34,11 +34,20 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         required=True,
     )
 
+    start_type = fields.Selection(
+        [("relative", "Relative"),
+         ("absolute", "Absolute")],
+        default="relative",
+        string=u"Start type",
+        required=True,
+    )
+
     start_value = fields.Integer(
         string=u"Value",
         default=0,
-        required=True,
     )
+
+    start_date = fields.Date(string=u"Start date")
 
     start_reference = fields.Selection(
         [("date_start", "Contract start date")],
@@ -59,10 +68,20 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         required=True,
     )
 
+    end_type = fields.Selection(
+        [("empty", "Empty"),
+         ("relative", "Relative"),
+         ("absolute", "Absolute")],
+        default="empty",
+        string=u"End type",
+        required=True,
+    )
     end_value = fields.Integer(
         string=u"Value",
         help=u"No value means no end for this discount",
     )
+
+    end_date = fields.Date(string=u"End date")
 
     end_reference = fields.Selection(
         [("date_start", "Contract start date")],
@@ -106,6 +125,20 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         return discount
 
     def _compute_date(self, contract_line, date_attr_prefix):
+        """ Return the start or end date (depending on `date_attr_prefix`)
+
+        If the date type is 'empty', return None.
+        """
+
+        assert date_attr_prefix in ('start', 'end')
+
+        date_type = getattr(self, "%s_type" % date_attr_prefix)
+        if date_type == "empty":
+            return None
+        elif date_type == "absolute":
+            return fields.Date.from_string(
+                getattr(self, '%s_date' % date_attr_prefix))
+
         contract = contract_line.analytic_account_id
         cfields = contract.fields_get()
 
@@ -129,14 +162,11 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     def _start_date_ok(self, contract_line, date_invoice):
         date_start = self._compute_date(contract_line, "start")
-        return date_start <= date_invoice
+        return date_start is None or date_start <= date_invoice
 
     def _end_date_ok(self, contract_line, date_invoice):
-        if not self.end_value:
-            return True
-        else:
-            date_end = self._compute_date(contract_line, "end")
-        return date_end > date_invoice
+        date_end = self._compute_date(contract_line, "end")
+        return date_end is None or date_end > date_invoice
 
     def _condition_ok(self, contract_line, date_invoice):
         if not self.condition:

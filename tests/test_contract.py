@@ -91,6 +91,13 @@ class ContractTC(TestContractBase):
         self.assertEqual(
             self._discount_date(start_unit="years", start_value=3),
             date(2019, 2, 15))
+        self.assertEqual(
+            self._discount_date(start_type="absolute", start_date="2021-07-17"),
+            date(2021, 7, 17))
+        self.assertEqual(
+            self._discount_date(prefix="start"),
+            date(2016, 2, 15))
+        self.assertIsNone(self._discount_date(prefix="end"))
 
     def test_discount_compute_0(self):
         self.set_cdiscounts(self.cdiscount(
@@ -114,6 +121,7 @@ class ContractTC(TestContractBase):
                 start_reference=u"date_start",
                 start_value=2,
                 start_unit=u"years",
+                end_type=u"relative",
                 end_reference=u"date_start",
                 end_value=3,
                 end_unit=u"years",
