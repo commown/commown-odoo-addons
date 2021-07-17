@@ -24,18 +24,22 @@
           <tbody>
 
             <t t-foreach="inv_data" t-as="inv">
-              <tr>
-                <t t-foreach="inv['invoice_line_ids']" t-as="line">
-                  <td t-if="line_first" t-esc="inv['date_invoice']"/>
+              <t t-foreach="inv['invoice_line_ids']" t-as="line">
+                <tr>
+                  <td t-esc="inv['date_invoice'] if line_first else ''"/>
                   <td t-esc="line_index + 1"/>
                   <td><pre t-esc="line['name']" style="background-color: #fff; border:none;"/></td>
                   <td><span t-esc="line['discount']"/> %</td>
-                  <td><span t-esc="line['price_subtotal']"/> <span t-esc="line['currency_id'][1]"/></td>
-                </t>
+                  <td style="text-align: right"><span t-esc="line['price_subtotal']"/> <span t-esc="line['currency_id'][1]"/></td>
+                </tr>
+              </t>
+              <tr>
+                <td style="text-align: right" colspan="4">Taxes</td>
+                <td style="text-align: right"><span t-esc="inv['amount_tax']"/> <span t-esc="inv['currency_id'][1]"/></td>
               </tr>
               <tr class="active">
                 <td style="text-align: right" colspan="4">Total</td>
-                <td t-esc="inv['amount_total']"/>
+                <td style="text-align: right"><span t-esc="inv['amount_total']"/> <span t-esc="inv['currency_id'][1]"/></td>
               </tr>
             </t>
 
