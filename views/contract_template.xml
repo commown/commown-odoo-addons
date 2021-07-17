@@ -51,6 +51,7 @@
           </group>
         </group>
         <group name="Discount">
+          <field name="variable_discount" invisible="1"/>
           <field name="discount_line_ids"/>
         </group>
       </form>
