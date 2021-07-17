@@ -182,7 +182,7 @@ msgstr "Date de fin"
 #: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_abstract_discount_line_end_reference
 #: model:ir.model.fields,field_description:contract_variable_discount.field_contract_template_discount_line_end_reference
 msgid "End reference date"
-msgstr "Date de référence de fin"
+msgstr "Référence de fin"
 
 #. module: contract_variable_discount
 #: selection:contract.discount.line,amount_type:0
