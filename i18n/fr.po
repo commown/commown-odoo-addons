@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-05 13:22+0000\n"
-"PO-Revision-Date: 2021-07-05 13:22+0000\n"
+"POT-Creation-Date: 2021-07-18 06:17+0000\n"
+"PO-Revision-Date: 2021-07-18 06:17+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,17 @@ msgstr "Compte analytique"
 #: model:ir.model.fields,field_description:commown_devices.field_stock_picking_contract_id
 msgid "Contract"
 msgstr "Contrat"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_account_analytic_account_quant_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_project_quant_ids
+msgid "Contract-related stock"
+msgstr "Stock lié au contrat"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.account_analytic_contract_view_form
+msgid "Devices"
+msgstr "Appareils"
 
 #. module: commown_devices
 #: model:stock.location,name:commown_devices.stock_location_available_for_rent
@@ -64,6 +75,7 @@ msgstr "Partenaire"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_account_analytic_account_picking_ids
 #: model:ir.model.fields,field_description:commown_devices.field_project_project_picking_ids
+#: model:ir.ui.view,arch_db:commown_devices.account_analytic_contract_view_form
 msgid "Pickings"
 msgstr "Expéditions"
 
@@ -79,14 +91,19 @@ msgstr "Fairphone 3/3+ reconditionnés"
 
 #. module: commown_devices
 #: model:ir.ui.view,arch_db:commown_devices.account_analytic_contract_view_form
-msgid "Stock pickings"
-msgstr "Expéditions"
+msgid "Stock"
+msgstr "Stock"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_product_product_stockable_product_id
 #: model:ir.model.fields,field_description:commown_devices.field_product_template_stockable_product_id
 msgid "Stockable product"
 msgstr "Produit stockable"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_supplier_scrap
+msgid "Supplier scrap location"
+msgstr "Emplacement rebut fournisseur"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/crm_lead.py:15
