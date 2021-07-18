@@ -1,6 +1,6 @@
 import logging
 
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 _logger = logging.getLogger(__name__)
@@ -13,6 +13,21 @@ class Contract(models.Model):
         "stock.picking",
         "contract_id",
         string=u"Pickings")
+
+    quant_ids = fields.One2many(
+        "stock.quant",
+        string=u"Contract-related stock",
+        compute="_compute_stock",
+        store=False,
+        readonly=True,
+    )
+
+    @api.depends("picking_ids")
+    def _compute_stock(self):
+        for record in self:
+            self.quant_ids = self.env["stock.quant"].search([
+                ("history_ids.picking_id.contract_id", "=", record.id),
+            ], order="location_id desc")
 
     def send_all_picking(self):
         products = self.recurring_invoice_line_ids.mapped(
