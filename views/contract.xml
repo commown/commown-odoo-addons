@@ -17,7 +17,16 @@
               <field name="in_date"/>
             </tree>
           </field>
-          <field name="picking_ids" string="Pickings"/>
+          <field name="picking_ids" string="Pickings">
+            <tree colors="red: state not in ('done', 'cancel');
+                          grey: state == 'cancel'">
+              <field name="name"/>
+              <field name="location_id"/>
+              <field name="location_dest_id"/>
+              <field name="min_date"/>
+              <field name="state"/>
+            </tree>
+          </field>
         </group>
       </xpath>
     </field>
