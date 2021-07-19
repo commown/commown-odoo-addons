@@ -24,9 +24,11 @@ class Contract(models.Model):
 
     @api.depends("picking_ids")
     def _compute_stock(self):
+        customer_loc = self.partner_id.property_stock_customer
         for record in self:
             self.quant_ids = self.env["stock.quant"].search([
                 ("history_ids.picking_id.contract_id", "=", record.id),
+                ("location_id", "=", customer_loc.id)
             ], order="location_id desc")
 
     def send_all_picking(self):
