@@ -11,6 +11,7 @@
     'license': "AGPL-3",
     'website': "https://commown.coop",
     'depends': [
+        'commown_contractual_issue',
         'commown_shipping',
         'product_rental',
         'stock',
