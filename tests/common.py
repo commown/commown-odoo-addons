@@ -33,15 +33,18 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         })
         self.so.action_confirm()
 
-    def adjust_stock(self, product=None, qty=1., serial=u'serial-0'):
+    def adjust_stock(self, product=None, qty=1., serial=u'serial-0',
+                     location=None):
         if product is None:
             product = self.stockable_product.product_variant_id
         lot = self.env['stock.production.lot'].create({
             'name': serial,
             'product_id': product.id,
         })
+        location = location or self.env.ref(
+            'commown_devices.stock_location_fp3_new')
         product_qty = self.env['stock.change.product.qty'].create({
-            'location_id': self.env.ref('stock.stock_location_stock').id,
+            'location_id': location.id,
             'product_id': product.id,
             'new_quantity': qty,
             'lot_id': lot.id,
