@@ -18,6 +18,7 @@
         'commown_shipping',
         'commown_self_troubleshooting',
         'contract_auto_merge_invoice',
+        'commown_contract_variable_discount',
         'payment_slimpay_website_sale',
         'payment_slimpay_issue',
         'product_rental',
