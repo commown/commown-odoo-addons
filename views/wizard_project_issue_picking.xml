@@ -1,7 +1,7 @@
 <odoo>
 
   <record id="wizard_project_issue_outward_picking_form" model="ir.ui.view">
-    <field name="name">Project issue outward picking creation form view</field>
+    <field name="name">[commown] Project issue outward picking creation form view</field>
     <field name="model">project.issue.outward.picking.wizard</field>
     <field name="arch" type="xml">
       <form string="Send a device">
@@ -26,7 +26,7 @@
   </record>
 
   <record id="action_wizard_outward_project_issue_picking" model="ir.actions.act_window">
-    <field name="name">Send a device</field>
+    <field name="name">[commown] Send a device</field>
     <field name="src_model">project.issue</field>
     <field name="res_model">project.issue.outward.picking.wizard</field>
     <field name="view_type">form</field>
@@ -36,18 +36,17 @@
   </record>
 
   <record id="action_menu_wizard_outward_project_issue_picking" model="ir.values">
-    <field name="name">Open Send a device action</field>
+    <field name="name">[commown] Open Send a device action</field>
+    <field name="model">project.issue</field>
+    <field name="key">action</field>
     <field name="key2">client_action_multi</field>
     <field
         name="value"
-        eval="'ir.actions.act_window,' + str(ref('action_wizard_outward_project_issue_picking'))">
-    </field>
-    <field name="key">action</field>
-    <field name="model">project.issue</field>
+        eval="'ir.actions.act_window,' + str(ref('action_wizard_outward_project_issue_picking'))"/>
   </record>
 
   <record id="wizard_project_issue_inward_picking_form" model="ir.ui.view">
-    <field name="name">Project issue inward picking creation form view</field>
+    <field name="name">[commown] Project issue inward picking creation form view</field>
     <field name="model">project.issue.inward.picking.wizard</field>
     <field name="arch" type="xml">
       <form string="Receive a device">
@@ -68,7 +67,7 @@
   </record>
 
   <record id="action_wizard_inward_project_issue_picking" model="ir.actions.act_window">
-    <field name="name">Receive a device</field>
+    <field name="name">[commown] Receive a device</field>
     <field name="src_model">project.issue</field>
     <field name="res_model">project.issue.inward.picking.wizard</field>
     <field name="view_type">form</field>
@@ -78,7 +77,7 @@
   </record>
 
   <record id="action_menu_wizard_inward_project_issue_picking" model="ir.values">
-    <field name="name">Open Receive a device action</field>
+    <field name="name">[commown] Open Receive a device action</field>
     <field name="key2">client_action_multi</field>
     <field
         name="value"
