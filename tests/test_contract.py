@@ -1,5 +1,8 @@
+# coding: utf-8
+
 from datetime import date
 
+import lxml.html
 from mock import patch
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
@@ -108,8 +111,8 @@ class ContractTC(TestContractBase):
         invoice = self.contract.recurring_create_invoice()
         self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [2.])
 
-    def test_discount_compute_1(self):
-        self.set_cdiscounts(
+    def _discounts_1(self):
+        return (
             self.cdiscount(
                 name=u"Early adopter discount",
                 amount_type="percent",
@@ -134,6 +137,10 @@ class ContractTC(TestContractBase):
                 start_unit=u"years",
             )
         )
+
+    def test_discount_compute_1(self):
+        self.set_cdiscounts(self._discounts_1())
+
         self.check_cdiscounts([
             ('2016-02-29', 5.),
             ('2018-01-28', 5.),
@@ -226,3 +233,26 @@ class ContractTC(TestContractBase):
                           u"- Fix discount after 1 month under condition"])
         self.assertEqual(inv3.mapped("invoice_line_ids.name"),
                          [u"Services from 04/29/2016 to 05/28/2016"])
+
+    def test_simulate_payments(self):
+        self.set_cdiscounts(self._discounts_1())
+
+        self.contract.recurring_next_date = self.contract.date_start
+
+        report = self.env.ref(
+            "contract_variable_discount.report_simulate_payments_html")
+        fragment = report.render({"docs": self.contract}, 'ir.qweb')
+
+        html = ('<html><head><meta charset="utf-8"/></head>'
+                '<body>%s<//body></html>' % fragment)
+        doc = lxml.html.fromstring(html)
+
+        # First column contains dates:
+        self.assertEqual(
+            doc.xpath("//tbody/tr/td[1][not(@colspan)]/text()"),
+            ['2016-02-15', '2018-02-15', '2019-02-15'])
+
+        # Fourth contains discounts:
+        self.assertEqual(
+            [n.text_content() for n in doc.xpath("//tbody/tr/td[4]")],
+            [u"5.0 %", u"15.0 %", u"25.0 %"])
