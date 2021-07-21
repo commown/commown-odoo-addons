@@ -11,6 +11,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             1, recurring_invoice_line_ids=[
                 self._invoice_line(1, '1 month Fairphone premium',
                                    self.get_default_tax()),
+                self._invoice_line(1, 'Accessory: ##ACCESSORY##',
+                                   self.get_default_tax()),
                 ])
         self.stockable_product = self.env['product.template'].create({
             'name': u'Fairphone 3', 'type': u'product', 'tracking': u'serial',

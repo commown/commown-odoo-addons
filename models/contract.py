@@ -32,24 +32,16 @@ class Contract(models.Model):
             ], order="location_id desc")
 
     def send_all_picking(self):
-        products = self.recurring_invoice_line_ids.mapped(
-            "sale_order_line_id.product_id.product_tmpl_id.stockable_product_id"
-        )
+        self.ensure_one()
 
-        if not products:
-            _logger.warning("Empty initial picking for contract %s", self.name)
-            return None
-        elif len(products) > 1:
-            _logger.warning("More than 1 product to deliver for %s", self.name)
-            return None
-
-        # XXX hardcoded
-        picking_type = self.env.ref("stock.picking_type_internal")
-        orig_location = self.env.ref("stock.stock_location_stock")
+        ref = self.env.ref
+        picking_type = ref("stock.picking_type_internal")
+        orig_location = ref("commown_devices.stock_location_available_for_rent")
 
         # XXX incorrect partner for B2B:
         dest_location = self.partner_id.set_customer_location()
 
+        move_lines = []
         picking_data = {
             "move_type": "direct",
             "picking_type_id": picking_type.id,
@@ -57,18 +49,26 @@ class Contract(models.Model):
             "location_dest_id": dest_location.id,
             "min_date": fields.Date.today(),
             "origin": self.name,
-            "move_lines": [
-                (0, 0, {
-                    "name": "/",
+            "move_lines": move_lines,
+        }
+
+        for so_line in self.mapped(
+                "recurring_invoice_line_ids.sale_order_line_id"):
+            product = so_line.product_id.product_tmpl_id.stockable_product_id
+            if product and product.tracking == "serial":
+                move_lines.append((0, 0, {
+                    "name": product.name,
                     "picking_type_id": picking_type.id,
                     "location_id": orig_location.id,
                     "location_dest_id": dest_location.id,
-                    "product_id": products.id,
-                    "product_uom_qty": 1,  # XXX hardcoded
-                    "product_uom": self.env.ref("product.product_uom_unit").id,
-                })
-            ],
-        }
+                    "product_id": product.id,
+                    "product_uom_qty": so_line.product_uom_qty,
+                    "product_uom": so_line.product_uom.id,
+                }))
+
+        if not move_lines:
+            raise ValueError("No storable product found on contract %s"
+                             % self.name)
 
         picking = self.env["stock.picking"].create(picking_data)
         picking.action_confirm()
