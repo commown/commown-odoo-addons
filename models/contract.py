@@ -4,10 +4,7 @@
 
 import uuid
 
-from texttable import Texttable
-
 from odoo import fields, models, api, _
-from odoo.exceptions import UserError
 
 
 def _format_discount(value):
@@ -182,8 +179,6 @@ class Contract(models.Model):
                     date_end = discount_line._compute_date(contract_line, "end")
                     if date_end > max_date:
                         max_date = date_start
-
-        lang = self.env['res.lang'].search([('code', '=', self.env.user.lang)])
 
         inv_data = []
         last_amount = None
