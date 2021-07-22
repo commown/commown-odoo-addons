@@ -169,10 +169,10 @@ class Contract(models.Model):
                 date_start = discount_line._compute_date(contract_line, "start")
                 if date_start > max_date:
                     max_date = date_start
-                if discount_line.end_value:
+                if discount_line.end_type != "empty":
                     date_end = discount_line._compute_date(contract_line, "end")
                     if date_end > max_date:
-                        max_date = date_start
+                        max_date = date_end
 
         inv_data = []
         last_amount = None
