@@ -162,12 +162,6 @@ class Contract(models.Model):
     def simulate_payments(self):
         self.ensure_one()
 
-        # This is ugly (as is_auto_pay is introduced by contract_payment_auto)
-        # BUT it is so dangerous not to unset it in the simulation that we
-        # prefer this over more complex and not so secure solutions...
-        if getattr(self, 'is_auto_pay', False):
-            self.is_auto_pay = False
-
         max_date = fields.Date.from_string(self.date_start)
 
         for contract_line in self.recurring_invoice_line_ids:
@@ -185,6 +179,13 @@ class Contract(models.Model):
 
         point_name = uuid.uuid1().hex
         self.env.cr.execute('SAVEPOINT "%s"' % point_name)
+
+        # This is ugly (as is_auto_pay is introduced by contract_payment_auto)
+        # BUT it is so dangerous not to unset it in the simulation that we
+        # prefer this over more complex and not so secure solutions...
+        if getattr(self, 'is_auto_pay', False):
+            self.is_auto_pay = False
+
         try:
             while fields.Date.from_string(self.recurring_next_date) <= max_date:
                 inv = self.recurring_create_invoice()
