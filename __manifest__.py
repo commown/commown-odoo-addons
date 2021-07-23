@@ -4,7 +4,7 @@
 {
     'name': 'Contract variable discount',
     'category': 'Contract Management',
-    'version': '10.0.1.0.3',
+    'version': '10.0.1.0.4',
     'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
