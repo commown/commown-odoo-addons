@@ -11,6 +11,11 @@
         <attribute name="editable"></attribute>
       </xpath>
 
+      <xpath expr="//field[@name='recurring_invoice_line_ids']"
+             position="attributes">
+        <attribute name="context">{"analytic_account_id": active_id}</attribute>
+      </xpath>
+
       <!-- Insert `variable_discount` before `discount` -->
       <xpath expr="//field[@name='recurring_invoice_line_ids']/tree/field[@name='discount']"
              position="before">
@@ -40,6 +45,7 @@
             <field name="name"/>
             <field name="analytic_tag_ids" widget="many2many_tags"/>
             <field name="variable_discount" invisible="1"/>
+            <field name="contract_template_line_id"/>
           </group>
           <group name="Price">
             <field name="uom_id"/>

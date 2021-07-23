@@ -44,8 +44,9 @@ class ContractLine(models.Model):
 
     contract_template_line_id = fields.Many2one(
         string=u"Contract template line",
-        help=u"Contract template line which generated current contract line",
+        help=u"Contract template line which discount lines apply here",
         comodel_name="account.analytic.contract.line",
+        domain=lambda self: self._domain_contract_template_line_id(),
     )
 
     inherited_discount_line_ids = fields.One2many(
@@ -65,6 +66,12 @@ class ContractLine(models.Model):
 
     variable_discount = fields.Boolean(
         "Variable discount?", store=False, compute='_compute_variable_discount')
+
+    def _domain_contract_template_line_id(self):
+        contract = self.analytic_account_id
+        if not contract and "analytic_account_id" in self.env.context:
+            contract = contract.browse(self.env.context["analytic_account_id"])
+        return [('analytic_account_id', '=', contract.contract_template_id.id)]
 
     @api.depends('contract_template_line_id.discount_line_ids',
                  'specific_discount_line_ids')

@@ -122,8 +122,8 @@ msgstr "Ligne du modèle de contrat"
 
 #. module: contract_variable_discount
 #: model:ir.model.fields,help:contract_variable_discount.field_account_analytic_invoice_line_contract_template_line_id
-msgid "Contract template line which generated current contract line"
-msgstr "Ligne du modèle de contrat qui a généré cette ligne"
+msgid "Contract template line which discount lines apply here"
+msgstr "Ligne du modèle dont les remises s'appliquent ici"
 
 #. module: contract_variable_discount
 #: model:ir.model,name:contract_variable_discount.model_contract_template_abstract_discount_line
