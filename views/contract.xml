@@ -39,6 +39,7 @@
             <field name="product_id"/>
             <field name="name"/>
             <field name="analytic_tag_ids" widget="many2many_tags"/>
+            <field name="variable_discount" invisible="1"/>
           </group>
           <group name="Price">
             <field name="uom_id"/>
