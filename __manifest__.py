@@ -3,7 +3,7 @@
     'category': 'Business',
     'summary': ('Emit coupons that customers can buy elsewhere'
                 ' and use to reduce the price of a product on your shop'),
-    'version': '10.0.1.0.3',
+    'version': '10.0.1.0.4',
     'description': ('Emit coupons that customers can buy elsewhere'
                     ' and use to reduce the price of a product on your shop'),
     'author': "Commown SCIC SAS",
