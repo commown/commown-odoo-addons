@@ -54,7 +54,7 @@
   <!-- Display the coupons on the order followup page -->
   <template id="orders_followup"
             inherit_id="website_portal_sale.orders_followup">
-    <xpath expr="//strong[text()='Contact']/ancestor::div[@class='row'][1]"
+    <xpath expr="//div[@t-field='order.user_id.partner_id']/ancestor::div[@class='row'][1]"
            position="after">
       <t t-set="coupons" t-value="order.used_coupons()"/>
       <div t-if="coupons" class="row">
