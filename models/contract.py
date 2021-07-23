@@ -38,7 +38,6 @@ class Contract(models.Model):
         picking_type = ref("stock.picking_type_internal")
         orig_location = ref("commown_devices.stock_location_available_for_rent")
 
-        # XXX incorrect partner for B2B:
         dest_location = self.partner_id.set_customer_location()
 
         move_lines = []

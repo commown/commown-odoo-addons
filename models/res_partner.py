@@ -11,6 +11,9 @@ class ResPartner(models.Model):
         customers.
         """
 
+        if self.commercial_partner_id != self:
+            return self.commercial_partner_id.set_customer_location()
+
         parent_location = self.env.ref('stock.stock_location_customers')
 
         if self.property_stock_customer == parent_location:
