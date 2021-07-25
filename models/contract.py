@@ -1,5 +1,7 @@
 import logging
 
+from collections import OrderedDict
+
 from odoo import models, fields, api
 
 
@@ -75,3 +77,24 @@ class Contract(models.Model):
         self.picking_ids |= picking
 
         return picking
+
+    @api.multi
+    def stock_at_date(self, date):
+        "Return the lots at partner's location at the given date"
+        self.ensure_one()
+
+        moves = self.env["stock.move"].search([
+            ("picking_id.contract_id", "=", self.id),
+            ("date", "<=", date),
+        ], order="date ASC")
+
+        lot_ids = OrderedDict()
+        partner_loc = self.partner_id.set_customer_location()
+        for m in moves:
+            for l in m.mapped("lot_ids"):
+                lot_ids.setdefault(l.id, 0)
+                lot_ids[l.id] += m.location_dest_id == partner_loc and 1 or -1
+
+        return self.env["stock.production.lot"].browse([
+            l_id for (l_id, total) in lot_ids.items() if total > 0
+        ])
