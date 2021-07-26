@@ -12,12 +12,8 @@ class ProjectIssueAbstractPickingWizard(models.AbstractModel):
 
     date = fields.Datetime(
         string=u"date",
-        required=True,
-        default=lambda self: self._default_date(),
+        help=u"Defaults to now - To be set only to force a date",
     )
-
-    def _default_date(self):
-        return fields.Datetime.now()
 
     @api.multi
     def _create_picking(self, orig_location, dest_location, lot):

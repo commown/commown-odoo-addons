@@ -40,11 +40,6 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
                     domain)
         return defaults, possible_values
 
-    def assertDatetimeAlmostEqual(self, d1, d2, seconds=2):
-        _d1 = fields.Datetime.from_string(d1)
-        _d2 = fields.Datetime.from_string(d2)
-        self.assertTrue((_d2 - _d1).total_seconds() < seconds)
-
     def test_outward_defaults_and_domains(self):
         loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
         loc_rep = self.env.ref("commown_devices.stock_location_fp3_repackaged")
@@ -59,7 +54,6 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
         # Check defaults of issue_id, date, product_id
         self.assertEqual(defaults["issue_id"], self.issue.id)
-        self.assertDatetimeAlmostEqual(defaults["date"], fields.Datetime.now())
         self.assertEqual(defaults["product_id"],
                          self.stockable_product.product_variant_id.id)
 
