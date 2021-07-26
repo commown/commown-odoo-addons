@@ -36,7 +36,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         self.so.action_confirm()
 
     def adjust_stock(self, product=None, qty=1., serial=u'serial-0',
-                     location=None):
+                     location=None, date="2000-01-01"):
         if product is None:
             product = self.stockable_product.product_variant_id
         lot = self.env['stock.production.lot'].create({
@@ -45,6 +45,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         })
         location = location or self.env.ref(
             'commown_devices.stock_location_fp3_new')
+
+        old_quants = self.env["stock.quant"].search([])
         product_qty = self.env['stock.change.product.qty'].create({
             'location_id': location.id,
             'product_id': product.id,
@@ -52,3 +54,9 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             'lot_id': lot.id,
         })
         product_qty.change_product_qty()
+        new_quants = self.env["stock.quant"].search([]) - old_quants
+        self.env.cr.execute(
+            "UPDATE stock_quant SET in_date=%(date)s WHERE id in %(ids)s",
+            {"date": date, "ids": tuple(new_quants.ids)})
+        self.env.cache.clear()
+        return lot

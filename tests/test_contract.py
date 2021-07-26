@@ -44,3 +44,22 @@ class ContractTC(DeviceAsAServiceTC):
         self.assertEqual(picking.origin, contract.name)
         self.assertEqual(picking.move_lines.mapped("product_id.name"),
                          [u"Fairphone 3", u"Charger"])
+
+    def test_stock_at_date(self):
+        loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
+        loc_check = self.env.ref("commown_devices.stock_location_fp3_to_check")
+
+        lot1 = self.adjust_stock(serial=u"my-fp3-1", location=loc_new)
+        lot2 = self.adjust_stock(serial=u"my-fp3-2", location=loc_new)
+
+        contract = self.so.order_line[0].contract_id
+
+        contract.send_device(lot1, loc_new, "2021-07-01 17:00:00",
+                             do_transfer=True)
+        contract.send_device(lot2, loc_new, "2021-07-14", do_transfer=True)
+        contract.receive_device(lot1, loc_check, "2021-07-22", do_transfer=True)
+
+        self.assertFalse(contract.stock_at_date("2021-07-01 16:59:59"))
+        self.assertEqual(contract.stock_at_date("2021-07-01 17:00:01"), lot1)
+        self.assertEqual(contract.stock_at_date("2021-07-20"), lot1 | lot2)
+        self.assertEqual(contract.stock_at_date("2021-07-25"), lot2)
