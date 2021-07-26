@@ -48,7 +48,6 @@ class Contract(models.Model):
             "picking_type_id": picking_type.id,
             "location_id": orig_location.id,
             "location_dest_id": dest_location.id,
-            "min_date": fields.Date.today(),
             "origin": self.name,
             "move_lines": move_lines,
         }
