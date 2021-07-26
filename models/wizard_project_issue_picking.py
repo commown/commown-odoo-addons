@@ -119,6 +119,15 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
         required=True,
     )
 
+    location_dest_id = fields.Many2one(
+        "stock.location",
+        string=u"Destination",
+        domain=lambda self: [(
+            'location_id', '=', self.env.ref(
+                'commown_devices.stock_location_devices_to_check').id)],
+        required=True,
+    )
+
     def _domain_quant(self):
         model = self.env.context.get("active_model")
         if model == "project.issue":
@@ -130,6 +139,6 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
     def create_picking(self):
         self._create_picking(
             self.issue_id.partner_id.set_customer_location(),
-            self.env.ref("commown_devices.stock_location_fp3_to_check"),
+            self.location_dest_id,
             self.quant_id.lot_id,
         )

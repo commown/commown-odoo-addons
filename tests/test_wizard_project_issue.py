@@ -93,10 +93,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         # Create the wizard and the picking
         vals, possibilities = self.prepare_wizard(
             "outward", user_choices={"location_id": loc_new.id})
-        vals.update({
-            "location_id": possibilities["location_id"][0].id,
-            "quant_id": possibilities["quant_id"][0].id,
-        })
+        vals.update({k: v[0].id for k, v in possibilities.items()})
         wizard = self.env["project.issue.outward.picking.wizard"].create(vals)
         wizard.create_picking()
 
@@ -128,10 +125,12 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
         # Check defaults and domains
         self.assertEqual(defaults["issue_id"], self.issue.id)
-        self.assertDatetimeAlmostEqual(defaults["date"], fields.Datetime.now())
         self.assertEqual(
             sorted(possibilities["quant_id"].mapped("lot_id.name")),
             [u"my-fp3-1", u"my-fp3-2"])
+        self.assertEqual(
+            possibilities["location_dest_id"].mapped("name"),
+            [u"Fairphone 3/3+ to check/ diagnose"])
 
     def test_create_inward_picking(self):
         partner = self.issue.partner_id
@@ -140,7 +139,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
         # Create the wizard and the picking
         vals, possibilities = self.prepare_wizard("inward")
-        vals["quant_id"] = possibilities["quant_id"][0].id
+        vals.update({k: v[0].id for k, v in possibilities.items()})
         wizard = self.env["project.issue.inward.picking.wizard"].create(vals)
         wizard.create_picking()
 

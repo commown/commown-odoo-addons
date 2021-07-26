@@ -23,10 +23,17 @@
       <field name="location_id" ref="stock_location_available_for_rent"/>
     </record>
 
+    <record id="stock_location_devices_to_check" model="stock.location">
+      <field name="name">Devices to check/ diagnose</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+    </record>
+
     <record id="stock_location_fp3_to_check" model="stock.location">
       <field name="name">Fairphone 3/3+ to check/ diagnose</field>
       <field name="usage">internal</field>
       <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_devices_to_check"/>
     </record>
 
     <record id="stock_location_fp3_outsourced_repair" model="stock.location">
