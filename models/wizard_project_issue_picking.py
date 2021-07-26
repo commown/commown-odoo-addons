@@ -15,43 +15,6 @@ class ProjectIssueAbstractPickingWizard(models.AbstractModel):
         help=u"Defaults to now - To be set only to force a date",
     )
 
-    @api.multi
-    def _create_picking(self, orig_location, dest_location, lot):
-        picking_type = self.env.ref("stock.picking_type_internal")
-        contract = self.issue_id.contract_id
-
-        picking_data = {
-            "move_type": "direct",
-            "picking_type_id": picking_type.id,
-            "location_id": orig_location.id,
-            "location_dest_id": dest_location.id,
-            "min_date": self.date,
-            "origin": contract.name,
-            "move_lines": [
-                (0, 0, {
-                    "name": lot.product_id.name,
-                    "picking_type_id": picking_type.id,
-                    "location_id": orig_location.id,
-                    "location_dest_id": dest_location.id,
-                    "product_id": lot.product_id.id,
-                    'product_uom_qty': lot.product_qty,
-                    'product_uom': lot.product_uom_id.id,
-                })
-            ],
-        }
-
-        picking = self.env["stock.picking"].create(picking_data)
-        picking.action_confirm()
-        picking.action_assign()
-
-        pack_op = picking.pack_operation_product_ids.ensure_one()
-        pack_op.pack_lot_ids.unlink()
-        pack_op.write({'pack_lot_ids': [(0, 0, {
-            'lot_id': lot.id, 'lot_name': lot.name, 'qty': lot.product_qty,
-        })]})
-        pack_op.save()
-
-        contract.picking_ids |= picking
 
 
 class ProjectIssueOutwardPickingWizard(models.TransientModel):
@@ -97,11 +60,8 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        self._create_picking(
-            self.location_id,
-            self.issue_id.partner_id.set_customer_location(),
-            self.quant_id.lot_id
-        )
+        self.issue_id.contract_id.send_device(
+            self.quant_id.lot_id, self.location_id, date=self.date)
 
 
 class ProjectIssueInwardPickingWizard(models.TransientModel):
@@ -133,8 +93,5 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        self._create_picking(
-            self.issue_id.partner_id.set_customer_location(),
-            self.location_dest_id,
-            self.quant_id.lot_id,
-        )
+        self.issue_id.contract_id.receive_device(
+            self.quant_id.lot_id, self.location_dest_id, date=self.date)
