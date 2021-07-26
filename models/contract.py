@@ -19,13 +19,13 @@ class Contract(models.Model):
     quant_ids = fields.One2many(
         "stock.quant",
         string=u"Contract-related stock",
-        compute="_compute_stock",
+        compute="_compute_quant_ids",
         store=False,
         readonly=True,
     )
 
     @api.depends("picking_ids")
-    def _compute_stock(self):
+    def _compute_quant_ids(self):
         customer_loc = self.partner_id.property_stock_customer
         for record in self:
             self.quant_ids = self.env["stock.quant"].search([
