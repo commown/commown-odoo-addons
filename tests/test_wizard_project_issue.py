@@ -1,7 +1,5 @@
 import six
 
-from odoo import fields
-
 from .common import DeviceAsAServiceTC
 
 
@@ -10,10 +8,17 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
     def setUp(self):
         super(WizardProjectIssuePickingTC, self).setUp()
         self.assertTrue(self.so.partner_id.set_customer_location())
+
+        contract = self.so.order_line.contract_id
+        lot = self.adjust_stock(serial=u"init-fp3")
+        quant = self.env["stock.quant"].search([("lot_id", "=", lot.id)])
+        contract.send_device(quant, "2000-01-02", True)
+
         self.issue = self.env["project.issue"].create({
             "name": u"Test issue",
-            "contract_id": self.so.order_line.contract_id.id,
+            "contract_id": contract.id,
             "partner_id": self.so.partner_id.id,
+            "lot_id": lot.id,
         })
 
     def prepare_wizard(self, direction, issue=None, user_choices=None):
@@ -41,6 +46,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         return defaults, possible_values
 
     def test_outward_defaults_and_domains(self):
+
         loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
         loc_rep = self.env.ref("commown_devices.stock_location_fp3_repackaged")
         self.adjust_stock(serial=u"my-fp3-1", location=loc_new)
@@ -55,7 +61,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         # Check defaults of issue_id, date, product_id
         self.assertEqual(defaults["issue_id"], self.issue.id)
         self.assertEqual(defaults["product_id"],
-                         self.stockable_product.product_variant_id.id)
+                         self.issue.lot_id.product_id.id)
 
         # Check domains of location_id, product_id, quant_id
         self.assertEqual(
@@ -81,19 +87,17 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
         self.adjust_stock(serial=u"my-fp3", location=loc_new)
 
-        # Check prerequisite
-        self.assertFalse(self.issue.contract_id.picking_ids)
-
         # Create the wizard and the picking
-        vals, possibilities = self.prepare_wizard(
-            "outward", user_choices={"location_id": loc_new.id})
+        vals, possibilities = self.prepare_wizard("outward", user_choices={
+            "location_id": loc_new.id,
+            "product_id": self.issue.lot_id.product_id.id,
+        })
         vals.update({k: v[0].id for k, v in possibilities.items()})
         wizard = self.env["project.issue.outward.picking.wizard"].create(vals)
-        wizard.create_picking()
+        picking = wizard.create_picking()
 
         # Check resulting picking
-        picking = self.issue.contract_id.picking_ids
-        self.assertEqual(len(picking), 1)
+        self.assertIn(picking, self.issue.contract_id.picking_ids)
         self.assertEqual(picking.state, u"assigned")
         self.assertEqual(picking.move_type, u"direct")
 
@@ -108,44 +112,46 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         # Test setup: 2 devices at the customer's location, 1 somewhere else
         partner = self.issue.partner_id
         loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
-        self.adjust_stock(serial=u"my-fp3-1",
-                          location=partner.property_stock_customer)
-        self.adjust_stock(serial=u"my-fp3-2",
-                          location=partner.property_stock_customer)
+        loc_partner = partner.property_stock_customer
+        self.adjust_stock(serial=u"my-fp3-1", location=loc_partner)
+        self.adjust_stock(serial=u"my-fp3-2", location=loc_partner)
         self.adjust_stock(serial=u"my-fp3-3", location=loc_new)
 
         defaults, possibilities = self.prepare_wizard(
-            "inward", user_choices={"location_id": loc_new.id})
+            "inward", user_choices={
+                "location_id": loc_new.id,
+                "contract_partner_location_id": loc_partner.id})
 
         # Check defaults and domains
         self.assertEqual(defaults["issue_id"], self.issue.id)
         self.assertEqual(
             sorted(possibilities["quant_id"].mapped("lot_id.name")),
-            [u"my-fp3-1", u"my-fp3-2"])
+            [u"init-fp3", u"my-fp3-1", u"my-fp3-2"])
         self.assertEqual(
             possibilities["location_dest_id"].mapped("name"),
             [u"Fairphone 3/3+ to check/ diagnose"])
 
     def test_create_inward_picking(self):
         partner = self.issue.partner_id
-        self.adjust_stock(serial=u"my-fp3",
-                          location=partner.property_stock_customer)
+        loc_partner = partner.property_stock_customer
+        self.adjust_stock(serial=u"my-fp3", location=loc_partner)
 
         # Create the wizard and the picking
-        vals, possibilities = self.prepare_wizard("inward")
+        vals, possibilities = self.prepare_wizard("inward", user_choices={
+            "contract_partner_location_id": loc_partner.id,
+        })
         vals.update({k: v[0].id for k, v in possibilities.items()})
         wizard = self.env["project.issue.inward.picking.wizard"].create(vals)
-        wizard.create_picking()
+        picking = wizard.create_picking()
 
         # Check resulting picking
-        picking = self.issue.contract_id.picking_ids
-        self.assertEqual(len(picking), 1)
+        self.assertIn(picking, self.issue.contract_id.picking_ids)
         self.assertEqual(picking.state, u"assigned")
         self.assertEqual(picking.move_type, u"direct")
 
         loc_check = self.env.ref("commown_devices.stock_location_fp3_to_check")
         move = picking.move_lines
         self.assertEqual(len(move), 1)
-        self.assertEqual(move.location_id, partner.property_stock_customer)
+        self.assertEqual(move.location_id, loc_partner)
         self.assertEqual(move.location_dest_id, loc_check)
         self.assertEqual(picking.move_lines.mapped("lot_ids.name"), [u"my-fp3"])

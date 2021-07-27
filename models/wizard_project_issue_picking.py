@@ -35,7 +35,7 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
         string=u"Product",
         domain="[('tracking', '=', 'serial')]",
         required=True,
-        default=lambda self: self._default_product(),
+        default=lambda self: self._compute_default_product_id(),
     )
 
     quant_id = fields.Many2one(
@@ -46,17 +46,13 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
         required=True,
     )
 
-    def _default_product(self):
-        contract = self._issue().contract_id
-        stockable = self.env["product.template"].search([
-            ("contract_template_id", "=", contract.contract_template_id.id)
-        ]).mapped("stockable_product_id")
-        return stockable and stockable[0]
-
-    def _issue(self):
-        if "default_issue_id" in self.env.context:
-            return self.env["project.issue"].browse(
+    def _compute_default_product_id(self):
+        if not self.issue_id and "default_issue_id" in self.env.context:
+            issue = self.env["project.issue"].browse(
                 self.env.context["default_issue_id"])
+        else:
+            issue = self.issue
+        return issue.lot_id.product_id
 
     @api.multi
     def create_picking(self):
@@ -71,8 +67,14 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
     quant_id = fields.Many2one(
         "stock.quant",
         string=u"Device",
-        domain=lambda self: self._domain_quant(),
+        domain="[('location_id', '=', contract_partner_location_id)]",
         required=True,
+    )
+
+    contract_partner_location_id = fields.Many2one(
+        "stock.location",
+        related=("issue_id.contract_id.partner_id.commercial_partner_id"
+                 ".property_stock_customer"),
     )
 
     location_dest_id = fields.Many2one(
@@ -83,13 +85,6 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
                 'commown_devices.stock_location_devices_to_check').id)],
         required=True,
     )
-
-    def _domain_quant(self):
-        model = self.env.context.get("active_model")
-        if model == "project.issue":
-            issue = self.env[model].browse(self.env.context["active_id"])
-            return [('location_id', '=',
-                     issue.partner_id.property_stock_customer.id)]
 
     @api.multi
     def create_picking(self):
