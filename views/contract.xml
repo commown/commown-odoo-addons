@@ -18,12 +18,15 @@
             </tree>
           </field>
           <field name="picking_ids" string="Pickings">
-            <tree colors="red: state not in ('done', 'cancel');
-                          grey: state == 'cancel'">
+            <tree
+                colors="red: state not in ('done', 'cancel'); grey: state == 'cancel'"
+                default_order="date_done ASC, id ASC"
+                >
               <field name="name"/>
               <field name="location_id"/>
               <field name="location_dest_id"/>
               <field name="min_date"/>
+              <field name="date_done"/>
               <field name="state"/>
             </tree>
           </field>
