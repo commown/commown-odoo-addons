@@ -11,7 +11,10 @@ class ResPartner(models.Model):
         customers.
         """
 
-        if self.commercial_partner_id != self:
+        # Handle B2B: do not create a location for each employee
+        # Special case: our own employees!
+        if (self.commercial_partner_id != self
+                and self.commercial_partner_id.id != 1):
             return self.commercial_partner_id.set_customer_location()
 
         parent_location = self.env.ref('stock.stock_location_customers')

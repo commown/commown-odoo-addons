@@ -27,3 +27,13 @@ class ResPartnerLocationTC(HttpCase):
 
         self.assertEqual(location3, location1)
         self.assertEqual(location3, location2)
+
+    def test_set_customer_location_local_employee(self):
+        company = self.env["res.partner"].browse(1)
+        pro = self.env["res.partner"].search([
+            ("parent_id", "=", company.id),
+            ("type", "=", "contact"),
+        ], limit=1)
+
+        self.assertNotEqual(pro.set_customer_location(),
+                            company.set_customer_location())
