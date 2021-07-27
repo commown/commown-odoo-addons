@@ -95,9 +95,9 @@ msgid "Stock"
 msgstr "Stock"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_product_product_stockable_product_id
-#: model:ir.model.fields,field_description:commown_devices.field_product_template_stockable_product_id
-msgid "Stockable product"
+#: model:ir.model.fields,field_description:commown_devices.field_product_product_storable_product_id
+#: model:ir.model.fields,field_description:commown_devices.field_product_template_storable_product_id
+msgid "Storable product"
 msgstr "Produit stockable"
 
 #. module: commown_devices

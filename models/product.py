@@ -4,8 +4,8 @@ from odoo import models, fields
 class Product(models.Model):
     _inherit = "product.template"
 
-    stockable_product_id = fields.Many2one(
+    storable_product_id = fields.Many2one(
         'product.product',
-        string=u'Stockable product',
+        string=u'Storable product',
         domain='[("type", "=", "product")]',
     )

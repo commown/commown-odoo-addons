@@ -53,7 +53,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         self.adjust_stock(serial=u"my-fp3-2", location=loc_new)
         self.adjust_stock(serial=u"my-fp3-3", location=loc_rep)
 
-        product2 = self.stockable_product.copy()
+        product2 = self.storable_product.copy()
 
         defaults, possibilities = self.prepare_wizard(
             "outward", user_choices={"location_id": loc_new.id})
@@ -70,7 +70,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
              u"commown_devices.stock_location_fp3_repackaged"])
         self.assertEqual(
             possibilities["product_id"],
-            (self.stockable_product | product2).mapped("product_variant_id"))
+            (self.storable_product | product2).mapped("product_variant_id"))
         self.assertEqual(
             sorted(possibilities["quant_id"].mapped("lot_id.name")),
             [u"my-fp3-1", u"my-fp3-2"])

@@ -14,7 +14,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 self._invoice_line(1, 'Accessory: ##ACCESSORY##',
                                    self.get_default_tax()),
                 ])
-        self.stockable_product = self.env['product.template'].create({
+        self.storable_product = self.env['product.template'].create({
             'name': u'Fairphone 3', 'type': u'product', 'tracking': u'serial',
         })
         team = self.env.ref('sales_team.salesteam_website_sales')
@@ -22,7 +22,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             name='Fairphone as a Service',
             list_price=60., rental_price=30.,
             contract_template_id=contract_tmpl.id,
-            stockable_product_id=self.stockable_product.product_variant_id.id,
+            storable_product_id=self.storable_product.product_variant_id.id,
             followup_sales_team_id=team.id,
         )
 
@@ -38,7 +38,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
     def adjust_stock(self, product=None, qty=1., serial=u'serial-0',
                      location=None, date="2000-01-01"):
         if product is None:
-            product = self.stockable_product.product_variant_id
+            product = self.storable_product.product_variant_id
         lot = self.env['stock.production.lot'].create({
             'name': serial,
             'product_id': product.id,

@@ -78,7 +78,7 @@ class Contract(models.Model):
 
         for so_line in self.mapped(
                 "recurring_invoice_line_ids.sale_order_line_id"):
-            product = so_line.product_id.product_tmpl_id.stockable_product_id
+            product = so_line.product_id.product_tmpl_id.storable_product_id
             if product and product.tracking == "serial":
                 move_lines.append((0, 0, {
                     "name": product.name,

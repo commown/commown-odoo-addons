@@ -15,7 +15,7 @@ class ContractTC(DeviceAsAServiceTC):
         })
         accessory_usage = self._create_rental_product(
             name="Charger usage", list_price=2., rental_price=1.,
-            stockable_product_id=accessory_storable.product_variant_id.id,
+            storable_product_id=accessory_storable.product_variant_id.id,
             contract_template_id=False,
         )
         main_product = self.so.product_id
