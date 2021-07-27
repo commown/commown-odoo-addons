@@ -9,8 +9,12 @@ class ProjectIssue(models.Model):
         help=u"Device involved in present issue",
         comodel_name="stock.production.lot",
         default=lambda self: self._default_lot_id(),
-        domain=lambda self: self._domain_lot_id(),
+        domain="[('id', 'in', contract_lot_ids)]",
     )
+
+    contract_lot_ids = fields.One2many(
+        'stock.production.lot',
+        related='contract_id.lot_ids')
 
     def _contract(self):
         if not self.contract_id and "contract_id" in self.env.context:
@@ -28,13 +32,6 @@ class ProjectIssue(models.Model):
         else:
             stock = self.env["stock.production.lot"]
         return stock and stock[0]
-
-    def _domain_lot_id(self):
-        "Returns all the lots from the contract at the issue's creation date"
-        contract = self._contract()
-        if contract:
-            date = self.create_date or fields.Datetime.now()
-            return [("id", "in", contract.stock_at_date(date).ids)]
 
     def action_scrap_device(self):
         scrap_loc = self.env.ref("stock.stock_location_scrapped")

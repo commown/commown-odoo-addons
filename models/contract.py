@@ -26,19 +26,28 @@ class Contract(models.Model):
     quant_ids = fields.One2many(
         "stock.quant",
         string=u"Contract-related stock",
-        compute="_compute_quant_ids",
+        compute="_compute_quant_and_lot_ids",
+        store=False,
+        readonly=True,
+    )
+
+    lot_ids = fields.One2many(
+        "stock.production.lot",
+        string=u"Contract-related devices",
+        compute="_compute_quant_and_lot_ids",
         store=False,
         readonly=True,
     )
 
     @api.depends("picking_ids")
-    def _compute_quant_ids(self):
-        customer_loc = self.partner_id.property_stock_customer
+    def _compute_quant_and_lot_ids(self):
         for record in self:
-            self.quant_ids = self.env["stock.quant"].search([
+            customer_loc = record.partner_id.property_stock_customer
+            record.quant_ids = self.env["stock.quant"].search([
                 ("history_ids.picking_id.contract_id", "=", record.id),
                 ("location_id", "=", customer_loc.id)
             ], order="location_id desc")
+            record.lot_ids = record.stock_at_date()
 
     def send_all_picking(self):
         self.ensure_one()
@@ -164,9 +173,12 @@ class Contract(models.Model):
         return picking
 
     @api.multi
-    def stock_at_date(self, date):
+    def stock_at_date(self, date=None):
         "Return the lots at partner's location at the given date"
         self.ensure_one()
+
+        if date is None:
+            date = fields.Datetime.now()
 
         moves = self.env["stock.move"].search([
             ("picking_id.contract_id", "=", self.id),
