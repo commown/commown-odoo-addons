@@ -15,6 +15,14 @@ def _set_date(entity, value, attr_name):
     entity.env.cr.execute(sql, (str(value), entity.id))
 
 
+def do_new_transfer(picking, date):
+    picking.do_new_transfer()
+    for move in picking.move_lines:
+        _set_date(move, date, 'date')
+        for quant in move.quant_ids:
+            _set_date(quant, date, 'in_date')
+
+
 class Contract(models.Model):
     _inherit = "account.analytic.account"
 
@@ -164,11 +172,7 @@ class Contract(models.Model):
         pack_op.save()
 
         if do_transfer:
-            picking.do_new_transfer()
-            for move in picking.move_lines:
-                _set_date(move, date, 'date')
-                for quant in move.quant_ids:
-                    _set_date(quant, date, 'in_date')
+            do_new_transfer(picking, date)
 
         self.picking_ids |= picking
         return picking
@@ -184,6 +188,7 @@ class Contract(models.Model):
         moves = self.env["stock.move"].search([
             ("picking_id.contract_id", "=", self.id),
             ("date", "<=", date),
+            ("state", "=", "done"),
         ], order="date ASC")
 
         lot_ids = OrderedDict()
