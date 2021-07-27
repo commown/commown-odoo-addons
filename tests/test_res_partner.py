@@ -19,7 +19,9 @@ class ResPartnerLocationTC(HttpCase):
     def test_set_customer_location_pro(self):
         company = self.env.ref("base.res_partner_2")
         pro1, pro2 = self.env["res.partner"].search([
-            ("parent_id", "=", company.id)])[0:2]
+            ("parent_id", "=", company.id),
+            ("type", "=", "contact"),
+        ], limit=2)
 
         location1 = pro1.set_customer_location()
         location2 = pro2.set_customer_location()
