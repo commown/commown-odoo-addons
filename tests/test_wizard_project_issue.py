@@ -120,13 +120,14 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         defaults, possibilities = self.prepare_wizard(
             "inward", user_choices={
                 "location_id": loc_new.id,
-                "contract_partner_location_id": loc_partner.id})
+                "contract_quant_ids": self.issue.contract_id.quant_ids.ids,
+            })
 
         # Check defaults and domains
         self.assertEqual(defaults["issue_id"], self.issue.id)
         self.assertEqual(
             sorted(possibilities["quant_id"].mapped("lot_id.name")),
-            [u"init-fp3", u"my-fp3-1", u"my-fp3-2"])
+            [u"init-fp3"])
         self.assertEqual(
             possibilities["location_dest_id"].mapped("name"),
             [u"Fairphone 3/3+ to check/ diagnose"])
@@ -138,7 +139,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
         # Create the wizard and the picking
         vals, possibilities = self.prepare_wizard("inward", user_choices={
-            "contract_partner_location_id": loc_partner.id,
+            "contract_quant_ids": self.issue.contract_id.quant_ids.ids,
         })
         vals.update({k: v[0].id for k, v in possibilities.items()})
         wizard = self.env["project.issue.inward.picking.wizard"].create(vals)

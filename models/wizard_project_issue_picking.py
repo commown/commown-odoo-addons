@@ -67,14 +67,13 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
     quant_id = fields.Many2one(
         "stock.quant",
         string=u"Device",
-        domain="[('location_id', '=', contract_partner_location_id)]",
+        domain="[('id', 'in', contract_quant_ids)]",
         required=True,
     )
 
-    contract_partner_location_id = fields.Many2one(
-        "stock.location",
-        related=("issue_id.contract_id.partner_id.commercial_partner_id"
-                 ".property_stock_customer"),
+    contract_quant_ids = fields.One2many(
+        "stock.quant",
+        related=("issue_id.contract_id.quant_ids"),
     )
 
     location_dest_id = fields.Many2one(
