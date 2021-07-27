@@ -60,8 +60,8 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        self.issue_id.contract_id.send_device(
-            self.quant_id.lot_id, self.location_id, date=self.date)
+        return self.issue_id.contract_id.send_device(
+            self.quant_id, date=self.date)
 
 
 class ProjectIssueInwardPickingWizard(models.TransientModel):
@@ -93,5 +93,5 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        self.issue_id.contract_id.receive_device(
+        return self.issue_id.contract_id.receive_device(
             self.quant_id.lot_id, self.location_dest_id, date=self.date)

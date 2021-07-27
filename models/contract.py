@@ -94,15 +94,16 @@ class Contract(models.Model):
         return picking
 
     @api.multi
-    def send_device(self, lot, orig_location, date=None, do_transfer=False):
-        """ Create a picking from `orig_location` to partner's location.
+    def send_device(self, quant, date=None, do_transfer=False):
+        """ Create a picking of quant to partner's location.
         If given `date` is falsy (the default), it is set to now.
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
         dest_location = self.partner_id.set_customer_location()
-        return self._create_picking([lot], orig_location, dest_location,
-                                    date=date, do_transfer=do_transfer)
+        return self._create_picking(
+            [quant.lot_id], quant.location_id, dest_location, date=date,
+            do_transfer=do_transfer)
 
     @api.multi
     def receive_device(self, lot, dest_location, date=False, do_transfer=False):
