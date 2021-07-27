@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, _
 
 
 class ProjectIssue(models.Model):
@@ -35,3 +35,28 @@ class ProjectIssue(models.Model):
         if contract:
             date = self.create_date or fields.Datetime.now()
             return [("id", "in", contract.stock_at_date(date).ids)]
+
+    def action_scrap_device(self):
+        scrap_loc = self.env.ref("stock.stock_location_scrapped")
+
+        ctx = {
+            "default_product_id": self.lot_id.product_id.id,
+            "default_lot_id": self.lot_id.id,
+            "default_origin": self.contract_id.name,
+            "default_scrap_location_id": scrap_loc.id,
+            }
+
+        current_loc = self.env['stock.quant'].search([
+            ('lot_id', '=', self.lot_id.id),
+        ]).location_id
+        if current_loc:
+            ctx["default_location_id"] = current_loc[0].id
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "stock.scrap",
+            "name": _("Scrap device"),
+            "view_mode": u"form",
+            "view_type": u"form",
+            "context": ctx,
+        }
