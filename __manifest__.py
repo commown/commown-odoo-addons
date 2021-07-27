@@ -21,6 +21,7 @@
         'data/stock_location.xml',
         'views/contract.xml',
         'views/product.xml',
+        'views/project_issue.xml',
         'views/wizard_project_issue_picking.xml',
     ],
     'installable': True,
