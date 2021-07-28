@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-15 06:09+0000\n"
-"PO-Revision-Date: 2019-12-15 06:09+0000\n"
+"POT-Creation-Date: 2021-07-28 06:39+0000\n"
+"PO-Revision-Date: 2021-07-28 06:39+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -106,7 +106,7 @@ msgid "Project Issue"
 msgstr "Incident"
 
 #. module: commown_contractual_issue
-#: model:ir.ui.view,arch_db:commown_contractual_issue.account_analytic_contract_view_form
+#: model:ir.ui.view,arch_db:commown_contractual_issue.account_analytic_account_recurring_form_form
 msgid "Related issues"
 msgstr "Incidents liés"
 
@@ -130,3 +130,4 @@ msgstr "Vol"
 #: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_contractual_issues_tracking
 msgid "Used for contractual issue tracking"
 msgstr "Utilisé pour le suivi des incidents régis par contrat"
+
