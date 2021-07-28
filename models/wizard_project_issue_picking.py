@@ -16,7 +16,6 @@ class ProjectIssueAbstractPickingWizard(models.AbstractModel):
     )
 
 
-
 class ProjectIssueOutwardPickingWizard(models.TransientModel):
     _name = "project.issue.outward.picking.wizard"
     _inherit = "project.issue.abstract.picking.wizard"
