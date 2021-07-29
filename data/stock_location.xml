@@ -49,6 +49,12 @@
       <field name="location_id" ref="stock.stock_location_suppliers"/>
     </record>
 
+    <record id="stock_location_repairer" model="stock.location">
+      <field name="name">Repairer locations</field>
+      <field name="usage">view</field>
+      <field name="location_id" ref="stock.stock_location_locations_partner"/>
+    </record>
+
   </data>
 
 </odoo>
