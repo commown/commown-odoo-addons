@@ -1,6 +1,6 @@
 from .common import DeviceAsAServiceTC
 
-from odoo.addons.commown_devices.models.contract import do_new_transfer
+from ..models.common import do_new_transfer
 
 
 class ContractTC(DeviceAsAServiceTC):
