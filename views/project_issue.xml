@@ -9,7 +9,6 @@
       <xpath expr="//sheet//group[@name='contract']" position="after">
         <group name="device">
           <field name="lot_id"/>
-          <field name="contract_lot_ids" invisible="1"/>
         </group>
       </xpath>
     </field>

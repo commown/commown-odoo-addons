@@ -1,4 +1,4 @@
-from odoo import models, fields, _
+from odoo import models, fields, api, _
 
 
 class ProjectIssue(models.Model):
@@ -9,12 +9,15 @@ class ProjectIssue(models.Model):
         help=u"Device involved in present issue",
         comodel_name="stock.production.lot",
         default=lambda self: self._default_lot_id(),
-        domain="[('id', 'in', contract_lot_ids)]",
     )
 
-    contract_lot_ids = fields.One2many(
-        'stock.production.lot',
-        related='contract_id.lot_ids')
+    @api.onchange("contract_id")
+    def onchange_contract_id(self):
+        result = {}
+        if self.contract_id:
+            lots = self.contract_id.stock_at_date()
+            result["domain"] = {"lot_id": [('id', 'in', lots.ids)]}
+        return result
 
     def _contract(self):
         if not self.contract_id and "contract_id" in self.env.context:
