@@ -27,6 +27,9 @@ class ResPartnerLocationTC(HttpCase):
         location2 = pro2.set_customer_location()
         location3 = company.set_customer_location()
 
+        self.assertEqual(location1, pro1.property_stock_customer)
+        self.assertEqual(location2, pro2.property_stock_customer)
+        self.assertEqual(location3, company.property_stock_customer)
         self.assertEqual(location3, location1)
         self.assertEqual(location3, location2)
 

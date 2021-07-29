@@ -42,7 +42,7 @@ class Contract(models.Model):
     @api.depends("picking_ids")
     def _compute_quant_ids(self):
         for record in self:
-            customer_loc = record.partner_id.property_stock_customer
+            customer_loc = record.partner_id.set_customer_location()
             record.quant_ids = self.env["stock.quant"].search([
                 ("history_ids.picking_id.contract_id", "=", record.id),
                 ("location_id", "=", customer_loc.id)
