@@ -31,3 +31,28 @@ class ProjectTask(models.Model):
             lots = self.env["stock.quant"].search(domain).mapped("lot_id")
             result["domain"] = {"lot_id": [('id', 'in', lots.ids)]}
         return result
+
+    def action_scrap_device(self):
+        scrap_loc = self.env.ref("stock.stock_location_scrapped")
+
+        ctx = {
+            "default_product_id": self.lot_id.product_id.id,
+            "default_lot_id": self.lot_id.id,
+            "default_origin": self.name,
+            "default_scrap_location_id": scrap_loc.id,
+            }
+
+        current_loc = self.env['stock.quant'].search([
+            ('lot_id', '=', self.lot_id.id),
+        ]).location_id
+        if current_loc:
+            ctx["default_location_id"] = current_loc[0].id
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "stock.scrap",
+            "name": _("Scrap device"),
+            "view_mode": u"form",
+            "view_type": u"form",
+            "context": ctx,
+        }

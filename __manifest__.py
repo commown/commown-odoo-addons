@@ -19,6 +19,7 @@
     'data': [
         'data/action_crm_lead.xml',
         'data/action_project_issue.xml',
+        'data/action_project_task.xml',
         'data/stock_location.xml',
         'views/contract.xml',
         'views/product.xml',
@@ -26,6 +27,7 @@
         'views/project_project.xml',
         'views/project_task.xml',
         'views/wizard_project_issue_picking.xml',
+        'views/wizard_project_task_picking.xml',
     ],
     'installable': True,
 }
