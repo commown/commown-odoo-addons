@@ -62,7 +62,7 @@ def do_new_transfer(picking, date):
 
 
 def _set_date(entity, value, attr_name):
-    setattr(entity, attr_name, value)
+    setattr(entity.sudo(), attr_name, value)
     sql = 'UPDATE %s SET %s=%%s WHERE id=%%s' % (
         entity._name.replace('.', '_'), attr_name)
     entity.env.cr.execute(sql, (str(value), entity.id))
