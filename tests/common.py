@@ -26,7 +26,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             followup_sales_team_id=team.id,
         )
 
-        oline = self._oline(sold_product)
+        oline = self._oline(sold_product, product_uom_qty=3)
         self.so = self.env['sale.order'].create({
             'partner_id': partner.id,
             'partner_invoice_id': partner.id,
