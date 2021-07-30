@@ -54,8 +54,8 @@ class Contract(models.Model):
             "move_lines": move_lines,
         }
 
-        for so_line in self.mapped(
-                "recurring_invoice_line_ids.sale_order_line_id"):
+        for contract_line in self.recurring_invoice_line_ids:
+            so_line = contract_line.sale_order_line_id
             product = so_line.product_id.product_tmpl_id.storable_product_id
             if product and product.tracking == "serial":
                 move_lines.append((0, 0, {
@@ -64,7 +64,7 @@ class Contract(models.Model):
                     "location_id": orig_location.id,
                     "location_dest_id": dest_location.id,
                     "product_id": product.id,
-                    "product_uom_qty": so_line.product_uom_qty,
+                    "product_uom_qty": contract_line.quantity,
                     "product_uom": so_line.product_uom.id,
                 }))
 
