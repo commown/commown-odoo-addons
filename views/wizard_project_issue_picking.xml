@@ -33,7 +33,6 @@
         <sheet>
           <group>
             <field name="issue_id" invisible="1"/>
-            <field name="contract_quant_ids" invisible="1"/>
             <field name="date"/>
             <field name="quant_id"/>
             <field name="location_dest_id"/>

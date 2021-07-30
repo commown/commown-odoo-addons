@@ -66,13 +66,7 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
     quant_id = fields.Many2one(
         "stock.quant",
         string=u"Device",
-        domain="[('id', 'in', contract_quant_ids)]",
         required=True,
-    )
-
-    contract_quant_ids = fields.One2many(
-        "stock.quant",
-        related=("issue_id.contract_id.quant_ids"),
     )
 
     location_dest_id = fields.Many2one(
@@ -83,6 +77,16 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
                 'commown_devices.stock_location_devices_to_check').id)],
         required=True,
     )
+
+    @api.onchange("issue_id")
+    def onchange_issue_id(self):
+        if self.issue_id:
+            quants = self.issue_id.contract_id.quant_ids
+            return {
+                "domain": {
+                    "quant_id": [("id", "in", quants.ids)]
+                }
+            }
 
     @api.multi
     def create_picking(self):
