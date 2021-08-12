@@ -2,9 +2,13 @@
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import logging
 import uuid
 
 from odoo import fields, models, api, _
+
+
+_logger = logging.getLogger(__name__)
 
 
 def _format_discount(value):
@@ -181,6 +185,8 @@ class Contract(models.Model):
                     if date_end > max_date:
                         max_date = date_end
 
+        _logger.debug("Contract payment simulation until: %s...", max_date)
+
         inv_data = []
         last_amount = None
 
@@ -197,10 +203,16 @@ class Contract(models.Model):
             while fields.Date.from_string(self.recurring_next_date) <= max_date:
                 inv = self.recurring_create_invoice()
                 if last_amount != inv.amount_total:
+                    _logger.debug("> KEEP invoice %s (amount %s)",
+                                  inv.date_invoice, inv.amount_total)
                     last_amount = inv.amount_total
                     data = inv.read()[0]
                     data["invoice_line_ids"] = inv.invoice_line_ids.read()
                     inv_data.append(data)
+                else:
+                    _logger.debug("> SKIP invoice %s (amount %s)",
+                                  inv.date_invoice, inv.amount_total)
+
             return inv_data
         finally:
             self.env.cr.execute('ROLLBACK TO SAVEPOINT "%s"' % point_name)
