@@ -199,9 +199,11 @@ class Contract(models.Model):
         if getattr(self, 'is_auto_pay', False):
             self.is_auto_pay = False
 
+        last_date = fields.Date.from_string(self.recurring_next_date)
         try:
-            while fields.Date.from_string(self.recurring_next_date) <= max_date:
+            while last_date < max_date:
                 inv = self.recurring_create_invoice()
+                last_date = fields.Date.from_string(inv.date_invoice)
                 if last_amount != inv.amount_total:
                     _logger.debug("> KEEP invoice %s (amount %s)",
                                   inv.date_invoice, inv.amount_total)
