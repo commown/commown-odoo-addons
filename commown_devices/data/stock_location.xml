@@ -30,6 +30,13 @@
       <field name="location_id" ref="stock_location_available_for_rent"/>
     </record>
 
+    <record id="stock_location_headsets_repackaged" model="stock.location">
+      <field name="name">Repackaged headsets</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_available_for_rent"/>
+    </record>
+
     <record id="stock_location_devices_to_check" model="stock.location">
       <field name="name">Devices to check/ diagnose</field>
       <field name="usage">internal</field>
