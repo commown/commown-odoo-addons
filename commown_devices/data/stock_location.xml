@@ -16,6 +16,13 @@
       <field name="location_id" ref="stock_location_available_for_rent"/>
     </record>
 
+    <record id="stock_location_headsets_new" model="stock.location">
+      <field name="name">New headsets</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_available_for_rent"/>
+    </record>
+
     <record id="stock_location_fp3_repackaged" model="stock.location">
       <field name="name">Repackaged Fairphone 3</field>
       <field name="usage">internal</field>
@@ -30,15 +37,8 @@
       <field name="location_id" ref="stock.stock_location_stock"/>
     </record>
 
-    <record id="stock_location_fp3_to_check" model="stock.location">
-      <field name="name">Fairphone 3/3+ to check/ diagnose</field>
-      <field name="usage">internal</field>
-      <field name="partner_id">1</field>
-      <field name="location_id" ref="stock_location_devices_to_check"/>
-    </record>
-
-    <record id="stock_location_fp3_outsourced_repair" model="stock.location">
-      <field name="name">Fairphone 3/3+ waiting for an outsourced repair</field>
+    <record id="stock_location_outsourced_repair" model="stock.location">
+      <field name="name">Waiting for an outsourced repair</field>
       <field name="usage">internal</field>
       <field name="partner_id">1</field>
     </record>
