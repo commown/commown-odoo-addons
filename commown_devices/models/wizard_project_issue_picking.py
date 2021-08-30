@@ -97,7 +97,7 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
         "stock.location",
         string=u"Destination",
         domain=lambda self: [(
-            'location_id', '=', self.env.ref(
+            'id', '=', self.env.ref(
                 'commown_devices.stock_location_devices_to_check').id)],
         required=True,
     )
