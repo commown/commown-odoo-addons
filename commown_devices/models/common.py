@@ -35,7 +35,8 @@ def internal_picking(origin, lots, orig_location, dest_location,
     picking = env["stock.picking"].create(picking_data)
     picking.action_confirm()
     picking.action_assign()
-    assert picking.state == u"assigned", "Cannot assign any device"
+    assert picking.state == u"assigned", (
+        "Cannot assign any device: state keeps: %r" % picking.state)
 
     pack_op = picking.pack_operation_product_ids.ensure_one()
     pack_op.pack_lot_ids.unlink()
