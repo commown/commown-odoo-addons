@@ -14,8 +14,10 @@ class CrmLeadTC(DeviceAsAServiceTC):
         self.assertEqual(len(leads), 3)
         lead = leads[0]
         lead.send_email_on_delivery = False  # avoid setting-up email
-        self.adjust_stock()  # have 1 product in stock
-        picking = lead.contract_id.send_all_picking()
+        lot = self.adjust_stock()  # have 1 product in stock
+        quant = self.env["stock.quant"].search([("lot_id", "=", lot.id)])
+
+        picking = lead.contract_id.send_device(quant)
 
         self.assertEqual(picking.mapped('move_lines.product_qty'), [1.])
 

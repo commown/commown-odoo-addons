@@ -35,50 +35,6 @@ class Contract(models.Model):
                 ("location_id", "=", customer_loc.id)
             ], order="location_id desc")
 
-    def send_all_picking(self):
-        self.ensure_one()
-
-        ref = self.env.ref
-        picking_type = ref("stock.picking_type_internal")
-        orig_location = ref("commown_devices.stock_location_available_for_rent")
-
-        dest_location = self.partner_id.set_customer_location()
-
-        move_lines = []
-        picking_data = {
-            "move_type": "direct",
-            "picking_type_id": picking_type.id,
-            "location_id": orig_location.id,
-            "location_dest_id": dest_location.id,
-            "origin": self.name,
-            "move_lines": move_lines,
-        }
-
-        for contract_line in self.recurring_invoice_line_ids:
-            so_line = contract_line.sale_order_line_id
-            product = so_line.product_id.product_tmpl_id.storable_product_id
-            if product and product.tracking == "serial":
-                move_lines.append((0, 0, {
-                    "name": product.name,
-                    "picking_type_id": picking_type.id,
-                    "location_id": orig_location.id,
-                    "location_dest_id": dest_location.id,
-                    "product_id": product.id,
-                    "product_uom_qty": contract_line.quantity,
-                    "product_uom": so_line.product_uom.id,
-                }))
-
-        if not move_lines:
-            raise ValueError("No storable product found on contract %s"
-                             % self.name)
-
-        picking = self.env["stock.picking"].create(picking_data)
-        picking.action_confirm()
-        picking.action_assign()
-        self.picking_ids |= picking
-
-        return picking
-
     @api.multi
     def send_device(self, quant, date=None, do_transfer=False):
         """ Create a picking of quant to partner's location.

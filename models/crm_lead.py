@@ -14,14 +14,15 @@ class CrmLead(models.Model):
                   'Either cancel or validate one.')
             )
 
-        picking = contract.send_all_picking()
-        view = self.env.ref('stock.view_picking_form')
+        view = self.env.ref("commown_devices.wizard_crm_lead_picking_form")
         return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'stock.picking',
-            'res_id': picking.id,
-            'name': _('Initial picking'),
-            'views': [(view.id, 'form')],
+            "type": "ir.actions.act_window",
+            "src_model": "crm.lead",
+            "res_model": "crm.lead.picking.wizard",
+            "name": _("Send a device"),
+            "views": [(view.id, "form")],
+            "target": "new",
+            "context": {"default_lead_id": self.id},
         }
 
     @api.multi
