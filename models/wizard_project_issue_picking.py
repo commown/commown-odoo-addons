@@ -20,15 +20,6 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
     _name = "project.issue.outward.picking.wizard"
     _inherit = "project.issue.abstract.picking.wizard"
 
-    location_id = fields.Many2one(
-        "stock.location",
-        string=u"Location",
-        domain=lambda self: [(
-            'location_id', '=', self.env.ref(
-                'commown_devices.stock_location_available_for_rent').id)],
-        required=True,
-    )
-
     product_id = fields.Many2one(
         "product.product",
         string=u"Product",
@@ -37,11 +28,13 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
         default=lambda self: self._compute_default_product_id(),
     )
 
-    quant_id = fields.Many2one(
-        "stock.quant",
+    lot_id = fields.Many2one(
+        "stock.production.lot",
         string=u"Device",
-        domain=("[('product_id', '=', product_id),"
-                " ('location_id', '=', location_id)]"),
+        domain=lambda self: '''[
+            ("product_id", "=", product_id),
+            ("quant_ids.location_id", "child_of", %d)]''' % self.env.ref(
+                "commown_devices.stock_location_available_for_rent").id,
         required=True,
     )
 
@@ -56,7 +49,7 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
     @api.multi
     def create_picking(self):
         return self.issue_id.contract_id.send_device(
-            self.quant_id, date=self.date)
+            self.lot_id.quant_ids[0], date=self.date)
 
 
 class ProjectIssueInwardPickingWizard(models.TransientModel):
