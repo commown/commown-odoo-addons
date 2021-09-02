@@ -55,6 +55,10 @@ def internal_picking(origin, lots, orig_location, dest_location,
 
 def do_new_transfer(picking, date):
     picking.do_new_transfer()
+    _force_picking_date(picking, date)
+
+
+def _force_picking_date(picking, date):
     _set_date(picking, date, 'date_done')
     for move in picking.move_lines:
         _set_date(move, date, 'date')
