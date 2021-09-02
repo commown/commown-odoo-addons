@@ -10,10 +10,10 @@ class CrmLead(models.Model):
     def action_generate_picking(self):
         contract = self.contract_id
 
-        if contract.picking_ids.filtered(lambda p: p.state != 'cancel'):
+        if contract.picking_ids.filtered(lambda p: p.state == 'assigned'):
             raise UserError(
-                _('The contract has already non-canceled picking(s)!\n'
-                  'Either cancel or validate one.')
+                _('The contract has already assigned picking(s)!\n'
+                  'Either cancel, scrap or validate it.')
             )
 
         view = self.env.ref("commown_devices.wizard_crm_lead_picking_form")
