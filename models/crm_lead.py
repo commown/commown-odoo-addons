@@ -1,6 +1,8 @@
 from odoo import models, api, _
 from odoo.exceptions import UserError
 
+from .common import do_new_transfer
+
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
@@ -32,4 +34,4 @@ class CrmLead(models.Model):
         picking = self.contract_id.picking_ids.filtered(
             lambda p: p.state == 'assigned')
         if len(picking) == 1:
-            picking.do_new_transfer()
+            do_new_transfer(picking, self.delivery_date)
