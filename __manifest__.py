@@ -15,6 +15,7 @@
         'base_company_extension',  # required for legal_type (py3o)
         'sale_usability',  # required for sale.layout_category (py3o)
         'l10n_fr',   # required for siret (py3o)
+        'product_rental', # required for is_rental
         'scic',     # required for is_equity (py3o)
     ],
     'data': [
