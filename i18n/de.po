@@ -49,7 +49,7 @@ msgstr "Vertrag"
 #: code:addons/custom_report/i18n/account_invoice.py:12
 #, python-format
 msgid "Customer VAT number"
-msgstr "Kunde MwSt. Nummer"
+msgstr "USt.-ID"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/account_invoice.py:11
