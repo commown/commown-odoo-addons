@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="urban_mine_campaing" model="sale.promotion.rule">
+      <field name="name">Mine urbaine : campagne de test</field>
+      <field name="code">Mine Urbaine</field>
+      <field name="discount_amount">0.0</field>
+      <field name="multi_rule_strategy">exclusive</field>
+    </record>
+
+  </data>
+</odoo>
