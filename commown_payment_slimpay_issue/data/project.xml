@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Send an payment-issue related SMS... -->
+
+  <record id="action_send_payment_issue_sms" model="ir.actions.server">
+    <field name="name">[commown] Send a SMS for a payment issue</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+if record.partner_id.mobile or record.partner_id.phone:
+    template = env.ref('commown_payment_slimpay_issue.smspro_payment_issue')
+    record = record.with_context(custom_layout='commown_payment_slimpay_issue.message_nowrap_template')
+    record.message_post_with_template(template.id, message_type='comment')
+else:
+    log(u'Could not send SMS to %s (id %s): no phone number found' % (record.partner_id.name, record.partner_id.id))
+]]>
+    </field>
+  </record>
+
+  <!-- ... when a project issue lands in the stage where a warning
+       email is emitted -->
+  <record id="payment_issue_related_email_sent" model="base.automation">
+    <field name="name">[commown] Partner received a payment issue related email</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="trigger">on_write</field>
+    <field name="filter_pre_domain" eval="[(u'stage_id.id', '!=', ref('payment_slimpay_issue.stage_warn_partner_and_wait'))]"/>
+    <field name="filter_domain" eval="[(u'stage_id.id', '=', ref('payment_slimpay_issue.stage_warn_partner_and_wait'))]"/>
+    <field name="action_server_id" ref="action_send_payment_issue_sms"/>
+  </record>
+
+</odoo>
