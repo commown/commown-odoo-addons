@@ -1,0 +1,69 @@
+<odoo>
+
+  <record id="planned_mail_template_form" model="ir.ui.view">
+    <field name="name">Planned mail template form</field>
+    <field name="model" eval="'contract_emails.planned_mail_template'" />
+    <field name="arch" type="xml">
+      <form string="Planned mail template">
+        <group name="mail">
+          <field name="mail_template_id"/>
+          <field name="planned_send_date"/>
+          <field name="effective_send_time" readonly="1"/>
+        </group>
+        <group name="Document">
+          <field name="model_id"/>
+          <field name="res_id"/>
+          <field name="document" widget="reference"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="planned_mail_template_tree" model="ir.ui.view">
+    <field name="name">Planned mail template form tree</field>
+    <field name="model" eval="'contract_emails.planned_mail_template'" />
+    <field name="arch" type="xml">
+      <tree string="Planned emails">
+        <field name="mail_template_id"/>
+        <field name="planned_send_date"/>
+        <field name="effective_send_time"/>
+        <field name="model_id"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="search_planned_mail_template">
+    <field name="name">planned_mail_template.search</field>
+    <field name="model" eval="'contract_emails.planned_mail_template'" />
+    <field name="arch" type="xml">
+      <search string="Planned mail template Search">
+        <field name="mail_template_id" />
+        <field name="model_id" />
+        <filter
+            string="To be sent"
+            name="to_be_sent"
+            help="Planned mails not yet sent"
+            domain="[('effective_send_time', '=', False)]"/>
+        <filter
+            string="Already sent"
+            name="already_sent"
+            help="Planned mails already sent"
+            domain="[('effective_send_time', '!=', False)]"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_view_planned_mail_template" model="ir.actions.act_window">
+    <field name="name">Planned emails</field>
+    <field name="res_model">contract_emails.planned_mail_template</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="search_planned_mail_template"/>
+    <field name="context">{'search_default_to_be_sent': 1}</field>
+  </record>
+
+  <menuitem
+      name="Planned emails" id="menu_planned_mail_template"
+      parent="base.menu_email" action="action_view_planned_mail_template" />
+
+</odoo>

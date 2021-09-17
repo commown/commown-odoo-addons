@@ -1,0 +1,65 @@
+<odoo>
+
+  <record id="account_analytic_account_recurring_form_form" model="ir.ui.view">
+    <field name="name">Contract form</field>
+    <field name="model">account.analytic.account</field>
+    <field name="inherit_id"
+           ref="contract.account_analytic_account_recurring_form_form" />
+    <field name="arch" type="xml">
+
+      <xpath expr="//div[@name='button_box']" position="inside">
+        <button
+            string="Planned emails"
+            class="oe_stat_button" icon="fa-envelope"
+            type="object" name="button_open_planned_emails"/>
+      </xpath>
+
+    </field>
+  </record>
+
+  <record id="planned_mail_generator_form" model="ir.ui.view">
+    <field name="name">Planned mail generator form</field>
+    <field name="model" eval="'contract_emails.planned_mail_generator'" />
+    <field name="arch" type="xml">
+      <form string="Planned mail generator">
+        <group name="mail">
+          <field name="contract_id" invisible="1"/>
+          <field name="mail_template_id"/>
+          <field name="interval_number"/>
+          <field name="interval_type"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="planned_mail_generator_tree" model="ir.ui.view">
+    <field name="name">Planned mail template form tree</field>
+    <field name="model" eval="'contract_emails.planned_mail_generator'" />
+    <field name="arch" type="xml">
+      <tree string="Planned emails">
+        <field name="contract_id" invisible="1"/>
+        <field name="mail_template_id"/>
+        <field name="interval_number"/>
+        <field name="interval_type"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="account_analytic_contract_view_form" model="ir.ui.view">
+    <field name="name">Contract template</field>
+    <field name="model">account.analytic.contract</field>
+    <field name="inherit_id"
+           ref="contract.account_analytic_contract_view_form" />
+    <field name="arch" type="xml">
+
+      <xpath expr="//form" position="inside">
+        <group name="Planned emails" string="Planned emails">
+          <field name="planned_mail_gen_ids" nolabel="1"
+                 context="{'default_contract_id': id}"/>
+        </group>
+      </xpath>
+
+    </field>
+  </record>
+
+</odoo>
