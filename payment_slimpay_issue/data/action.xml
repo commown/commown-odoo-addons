@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <!-- Server action that moves a task to the "stage_retry_payment_and_wait" stage -->
+  <record id="action_move_task_to_payment_retrial" model="ir.actions.server">
+    <field name="name">Move task to the payment retry stage</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+record.update({'stage_id': env.ref('payment_slimpay_issue.stage_retry_payment_and_wait').id})
+]]>
+    </field>
+  </record>
+
+  <!-- Server action that retries the payment of an issue -->
+  <record id="action_retry_payment" model="ir.actions.server">
+    <field name="name">Retry payment</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+record._slimpay_payment_issue_retry_payment()
+]]>
+    </field>
+  </record>
+
+  <!-- Server action that moves a task to the "stage_issue_fixed" stage -->
+  <record id="action_move_task_to_fixed" model="ir.actions.server">
+    <field name="name">Move task to the fixed issue stage</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+record.update({'stage_id': env.ref('payment_slimpay_issue.stage_issue_fixed').id})
+]]>
+    </field>
+  </record>
+
+  <!-- Server action that sets the invoice next payment date -->
+  <record id="set_invoice_next_payment_date" model="ir.actions.server">
+    <field name="name">Set invoice next payment date</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+today = datetime.date.today()
+days = record._slimpay_payment_invoice_payment_next_date_days_delta()
+record.update({
+    'invoice_next_payment_date': today + datetime.timedelta(days=days),
+})
+]]>
+    </field>
+  </record>
+
+  <!-- Set invoice_next_payment_date when task enters the
+       stage_warn_partner_and_wait stage -->
+  <record id="set_invoice_next_date_when_entering_warn_stage" model="base.automation">
+    <field name="name">Set next payment date when entering warn partner and wait stage</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="trigger">on_write</field>
+    <field name="filter_pre_domain"
+           eval="[('stage_id', '!=', ref('stage_warn_partner_and_wait'))]"/>
+    <field name="filter_domain"
+           eval="[('stage_id', '=', ref('stage_warn_partner_and_wait'))]"/>
+    <field name="action_server_id"
+           eval="ref('set_invoice_next_payment_date')"/>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the invoice next date
+       of the task is passed of the specified date range -->
+  <record id="retry_payment_on_programed_date" model="base.automation">
+    <field name="name">Move to retry payment stage at invoice next payment date</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field name="filter_domain"
+           eval="[('stage_id', '=', ref('payment_slimpay_issue.stage_warn_partner_and_wait'))]"/>
+    <field name="trg_date_id" search="[('model', '=', 'project.task'), ('name', '=', 'invoice_next_payment_date')]"/>
+    <field name="trg_date_range">9</field>
+    <field name="trg_date_range_type">hour</field>
+    <field name="action_server_id"
+           eval="ref('action_move_task_to_payment_retrial')"/>
+  </record>
+
+  <!-- Automatic action triggering a payment retrial when an payment issue
+       enters the dedicated stage ('stage_retry_payment_and_wait') -->
+  <record id="retry_payment" model="base.automation">
+    <field name="name">Retry payment when entering the dedicated stage</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="trigger">on_write</field>
+    <field name="filter_pre_domain"
+           eval="[('stage_id', '!=', ref('stage_retry_payment_and_wait'))]"/>
+    <field name="filter_domain"
+           eval="[('stage_id', '=', ref('stage_retry_payment_and_wait'))]"/>
+    <field name="action_server_id"
+           eval="ref('action_retry_payment')"/>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the time spent
+       in the "stage_retry_payment_and_wait" stage was long enough to
+       declare the payment issue fixed -->
+  <record id="move_to_fixed_after_waiting_delay" model="base.automation">
+    <field name="name">Move task to fixed after waiting delay</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field name="filter_domain"
+           eval="[('stage_id', '=', ref('payment_slimpay_issue.stage_retry_payment_and_wait'))]"/>
+    <field name="trg_date_id" search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"/>
+    <field name="trg_date_range">8</field>
+    <field name="trg_date_range_type">day</field>
+    <field name="action_server_id"
+           eval="ref('action_move_task_to_fixed')"/>
+  </record>
+
+</odoo>
