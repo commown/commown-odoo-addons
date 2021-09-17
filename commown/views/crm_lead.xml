@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <!-- XXX used anyhow ? -->
+    <record model="ir.ui.view" id="res_partner_risk_form">
+      <field name="name">commown.lead.res.partner</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <form string="Lead Partner">
+          <group>
+            <field name="name"/>
+            <field name="street"/>
+            <field name="city"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_case_form_view_oppor">
+        <field name="name">commown.lead.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="commown_shipping.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='send_email_on_delivery']" position="before">
+                <field name="start_contract_on_delivery"/>
+          </xpath>
+        </field>
+    </record>
+
+  </data>
+
+</odoo>

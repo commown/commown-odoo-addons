@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="address" inherit_id="payment_slimpay_website_sale.address">
+    <xpath expr="//form//input[@name='company_name']/ancestor::div[1]" position="replace"></xpath>
+    <xpath expr="//form//input[@name='vat']/ancestor::div[1]" position="replace"></xpath>
+    <!-- Add zip as required: -->
+    <!-- * remove label-optional class from input -->
+    <!-- * add in field_required hidden input for the controller -->
+    <xpath expr="//form//input[@name='zip']/ancestor::div[1]" position="replace">
+      <div t-attf-class="form-group #{error.get('zip') and 'has-error' or ''} col-sm-4 div_zip">
+        <label class="control-label" for="zip">Zip Code</label>
+        <input type="text" name="zip" class="form-control" t-att-value="'zip' in checkout and checkout['zip']" />
+      </div>
+   </xpath>
+    <xpath expr="//form//input[@name='field_required']" position="replace">
+      <input type="hidden" name="field_required" t-att-value="'firstname,lastname,phone,zip,country_id'" />
+    </xpath>
+  </template>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="investment_followup_project" model="project.project">
+      <field name="name">Investments followup</field>
+      <field name="use_tasks">True</field>
+      <field name="use_issues">False</field>
+    </record>
+
+    <record id="investment_followup_start_stage" model="project.task.type">
+      <field name="name">Initial amount paid on website</field>
+      <field name="project_ids" eval="[(6,0,[ref('investment_followup_project')])]"/>
+    </record>
+
+  </data>
+</odoo>
