@@ -1,0 +1,298 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_devices
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-28 06:31+0000\n"
+"PO-Revision-Date: 2021-07-28 06:31+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Compte analytique"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_inward_picking_form
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_outward_picking_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_picking_contract_id
+msgid "Contract"
+msgstr "Contrat"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_account_analytic_account_lot_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_contract_lot_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_project_lot_ids
+msgid "Contract-related devices"
+msgstr "Appareils liés au contrat"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_account_analytic_account_quant_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_contract_quant_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_project_quant_ids
+msgid "Contract-related stock"
+msgstr "Stock lié au contrat"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_project_issue_abstract_picking_wizard_date
+#: model:ir.model.fields,help:commown_devices.field_project_issue_inward_picking_wizard_date
+#: model:ir.model.fields,help:commown_devices.field_project_issue_outward_picking_wizard_date
+msgid "Defaults to now - To be set only to force a date"
+msgstr "Valeur par défaut : maintenant - À ne remplir que pour forcer une date"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_location_dest_id
+msgid "Destination"
+msgstr "Destination"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_quant_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_quant_id
+msgid "Device"
+msgstr "Appareil"
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_project_issue_lot_id
+msgid "Device involved in present issue"
+msgstr "Appareil concerné"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.account_analytic_account_recurring_form_form
+msgid "Device moves"
+msgstr "Mouvements d'appareils"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_available_for_rent
+msgid "Devices available for rent"
+msgstr "Appareils disponibles à la location"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_devices_to_check
+msgid "Devices to check/ diagnose"
+msgstr "Appareils à diagnostiquer"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_abstract_picking_wizard_display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_to_check
+msgid "Fairphone 3/3+ to check/ diagnose"
+msgstr "Fairphone 3/3+ à diagnostiquer"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_outsourced_repair
+msgid "Fairphone 3/3+ waiting for an outsourced repair"
+msgstr "Fairphone 3/3+ à réparer en sous-traitance"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_abstract_picking_wizard_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/crm_lead.py:23
+#, python-format
+msgid "Initial picking"
+msgstr "Expédition initiale"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_lot_id
+msgid "Involved device"
+msgstr "Appareil concerné"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_abstract_picking_wizard_issue_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_issue_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_issue_id
+msgid "Issue"
+msgstr "Incident"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_abstract_picking_wizard___last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard___last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard___last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Piste/opportunité"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_location_id
+msgid "Location"
+msgstr "Lieu"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_new
+msgid "New Fairphone 3"
+msgstr "Fairphone 3/3+ neufs"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_inward_picking_form
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_outward_picking_form
+msgid "OK"
+msgstr "OK"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_res_partner
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_account_analytic_account_picking_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_project_picking_ids
+msgid "Pickings"
+msgstr "Expéditions"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_product_id
+msgid "Product"
+msgstr "Article"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_issue
+msgid "Project Issue"
+msgstr "Incident"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_inward_picking_form
+msgid "Receive a device"
+msgstr "Rapatrier un appareil"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_fp3_repackaged
+msgid "Repackaged Fairphone 3"
+msgstr "Fairphone 3/3+ reconditionnés"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/project_issue.py:55
+#, python-format
+msgid "Scrap device"
+msgstr "Mettre un appareil au rebut"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_outward_picking_form
+msgid "Send a device"
+msgstr "Envoyer un appareil"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product_storable_product_id
+#: model:ir.model.fields,field_description:commown_devices.field_product_template_storable_product_id
+msgid "Storable product"
+msgstr "Produit stockable"
+
+#. module: commown_devices
+#: model:stock.location,name:commown_devices.stock_location_supplier_scrap
+msgid "Supplier scrap location"
+msgstr "Emplacement rebut fournisseur"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/crm_lead.py:13
+#, python-format
+msgid "The contract has already non-canceled picking(s)!\n"
+"Either cancel or validate one."
+msgstr "Le contrat a déjà une expédition prévue !\n"
+"Annulez ou validez-la."
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_stock_picking
+msgid "Transfer"
+msgstr "Transfert"
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.action_generate_picking
+msgid "[commown] Generate picking"
+msgstr "[commown] Générer le mouvement d'appareils"
+
+#. module: commown_devices
+#: model:ir.actions.act_window,name:commown_devices.action_wizard_inward_project_issue_picking
+msgid "[commown] Receive a device"
+msgstr "[commown] Rapatrier un appareil"
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.action_scrap_device
+msgid "[commown] Scrap involved device"
+msgstr "[commown] Mettre au rebut l'appareil concerné"
+
+#. module: commown_devices
+#: model:ir.actions.act_window,name:commown_devices.action_wizard_outward_project_issue_picking
+msgid "[commown] Send a device"
+msgstr "[commown] Envoyer un appareil"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_abstract_picking_wizard_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_date
+msgid "date"
+msgstr "date"
+
+#. module: commown_devices
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_inward_picking_form
+#: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_outward_picking_form
+msgid "or"
+msgstr "ou"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_issue_abstract_picking_wizard
+msgid "project.issue.abstract.picking.wizard"
+msgstr "project.issue.abstract.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_issue_inward_picking_wizard
+msgid "project.issue.inward.picking.wizard"
+msgstr "project.issue.inward.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_issue_outward_picking_wizard
+msgid "project.issue.outward.picking.wizard"
+msgstr "project.issue.outward.picking.wizard"
+
