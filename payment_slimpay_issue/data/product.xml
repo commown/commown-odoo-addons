@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="management_fees_product" model="product.template"
+            forcecreate="false">
+      <field name="name">Slimpay reject management fees</field>
+      <field name="type">service</field>
+      <field name="list_price">4.17</field>
+      <field name="sale_ok">True</field>
+    </record>
+
+    <record id="bank_fees_product" model="product.template"
+            forcecreate="false">
+      <field name="name">Slimpay reject bank fees</field>
+      <field name="type">service</field>
+      <field name="list_price">5</field>
+      <field name="sale_ok">True</field>
+    </record>
+
+    <record id="bank_supplier_fees_product" model="product.template"
+            forcecreate="false">
+      <field name="name">Slimpay supplier fees</field>
+      <field name="type">service</field>
+      <field name="list_price">0</field>
+      <field name="sale_ok">False</field>
+    </record>
+
+  </data>
+</odoo>
