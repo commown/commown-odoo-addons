@@ -1,0 +1,55 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* scic
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-21 09:58+0000\n"
+"PO-Revision-Date: 2020-04-21 09:58+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: scic
+#: selection:product.template,equity_type:0
+msgid "Crowd equity"
+msgstr "Part sociale bénéficiaire"
+
+#. module: scic
+#: model:ir.model.fields,field_description:scic.field_product_product__equity_type
+#: model:ir.model.fields,field_description:scic.field_product_template__equity_type
+msgid "Equity type"
+msgstr "Type de part sociale"
+
+#. module: scic
+#: model:ir.model.fields,help:scic.field_product_product__equity_type
+#: model:ir.model.fields,help:scic.field_product_template__equity_type
+msgid "Equity type: crowd are limited to 1 per person"
+msgstr "Equity type: crowd are limited to 1 per person"
+
+#. module: scic
+#: selection:product.template,equity_type:0
+msgid "Investment"
+msgstr "Investment"
+
+#. module: scic
+#: model:ir.model.fields,field_description:scic.field_product_product__is_equity
+#: model:ir.model.fields,field_description:scic.field_product_template__is_equity
+msgid "Is equity product"
+msgstr "Is equity product"
+
+#. module: scic
+#: model:ir.model,name:scic.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: scic
+#: model:ir.model,name:scic.model_sale_order
+msgid "Sale Order"
+msgstr "Commande de vente"
+
