@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+    <record id="smspro_payment_issue" model="mail.template">
+      <field name="name">[commown] SMS impayé</field>
+      <field name="subject"><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
+      <field name="email_from">contact@commown.fr</field>
+      <field name="email_to">mail2sms@envoyersmspro.com</field>
+      <field name="model_id" ref="project_issue.model_project_issue"/>
+      <field name="lang">fr_FR</field>
+      <field name="auto_delete">True</field>
+      <field name="body_html"><![CDATA[
+<p>Contenu du SMS à rédiger</p>
+<p>Tout ce qui est derrière ces signes ----- n'apparaîtra pas !</p>
+]]></field>
+    </record>
+
+    <!-- Next template is used to send messages with only their content
+         (no header, footer and the like) -->
+    <record id="message_nowrap_template" model="mail.template">
+      <field name="name">[commown] Emballage minimal des messages</field>
+      <field name="subject">${object.subject}</field>
+      <field name="model_id" ref="mail.model_mail_message"/>
+      <field name="auto_delete">True</field>
+      <field name="body_html"><![CDATA[<div>${object.body | safe}</div>]]></field>
+    </record>
+
+  </data>
+
+</odoo>
