@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="issue-description-gs" model="ir.ui.view">
+      <field name="name">self-troubleshoot-issue-description-gs</field>
+      <field name="type">qweb</field>
+      <field name="key">commown_self_troubleshooting.issue-description-gs</field>
+      <field name="arch" type="xml">
+        <t t-name="self-troubleshoot-issue-description-gs">
+
+Bonjour,
+
+<t t-if="action=='ship'">
+Suite à l'auto-dépannage, il ressort que <t t-if="connection_solved=='no'">le casque doit être changé.</t><t t-if="branchement_solved=='no'"> le casque doit être changé.</t><t t-if="cable_sound=='yes'">le câble doit être changé.</t>
+
+L'adresse d'expédition est la suivante :
+<t t-esc="name"/>
+<t t-esc="u'\n'.join((street, street2)).strip()"/>
+<t t-esc="zipcode"/> <t t-esc="city"/>
+<t t-esc="country"/>
+
+Informations supplémentaires utiles à la livraison :
+Numéro de téléphone : <t t-esc="phone"/>
+Adresse de courriel : <t t-esc="email"/></t>
+
+<t t-elif="action=='inform'">
+Suite à l'auto-dépannage, il ressort que <t t-if="connection_solved=='yes'">le problème provenait d'un mauvais branchement des connecteurs USB-C et j'ai donc pu résoudre le problème. </t> <t t-if="branchement_solved=='yes'"> le problème provenait d'un mauvais branchement du câble jack et j'ai donc pu résoudre le problème.</t>
+    </t>
+<t t-if="more_info">
+J'ai porté à votre connaissance les informations complémentaires suivantes :
+----
+<t t-esc="more_info">
+----</t></t>
+        </t>
+      </field>
+    </record>
+
+  </data>
+
+</odoo>

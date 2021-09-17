@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="fp2-battery" model="ir.ui.view">
+      <field name="name">Self-troubleshoot an FP2 battery</field>
+      <field name="type">qweb</field>
+      <field name="key">website.self-troubleshoot-fp2-battery</field>
+      <field name="arch" type="xml">
+
+        <t t-name="website.self-troubleshoot-fp2-battery">
+          <t t-call="commown-self-troubleshoot.web-layout">
+            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Batterie</t>
+            <t t-set="head">
+              <script type="text/javascript">
+$(document).ready(function() {
+
+    const wizard = setUpWizard($('#smartwizard'));
+
+    $('#accu_battery').change(function () {
+         wizard.toggleStep(2, this.value==='sup');
+         wizard.toggleStep(3, this.value==='inf');
+         wizard.toggleStep(4, this.value==='inf');
+    });
+
+});
+              </script>
+            </t>
+
+            <!-- Variables à modifier ici -->
+            <t t-set="contract_name_like">FP2/</t>
+            <t t-set="tag_names">Appareil FP2,FP MOD batterie</t>
+            <t t-set="issue_title">FP2 - batterie</t>
+            <t t-set="issue_description_template">issue-description-fp2-battery</t>
+            <!-- Fin des variables à modifier -->
+
+            <div class="container">
+              <h1>Auto-dépannage : Fairphone 2</h1>
+              <h2>Ma batterie se décharge rapidement</h2>
+              <br/>
+              <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
+                    id="myForm" role="form">
+
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
+                <input type="hidden" name="tags" id="tags" t-att-value="tag_names"/>
+                <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
+
+                <div id="smartwizard">
+                  <ul>
+                    <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                    <li><a href="#step-1">Étape 1<br/><small>AccuBattery</small></a></li>
+                    <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Problème logiciel</small></a></li>
+                    <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                    <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
+                    <li><a href="#step-5">Étape 5<br/><small>Contacter un humain</small></a></li>
+                  </ul>
+
+                  <div>
+                    <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+
+                    <div id="step-1">
+                      <div class="clearfix">
+                        <h2>AccuBattery</h2>
+                        <p>Allez voir et effectuer le test  <a target="_blank" href="https://wiki.commown.coop/La-gestion-des-batteries">cette
+                      page de notre wiki</a> et répondez à la question
+                        ci-dessous :</p>
+                      </div>
+                      <div id="form-step-1" role="form" data-toggle="validator">
+                        <div class="form-group">
+                          <label for="accu_battery">Quel est l'état de votre batterie ?</label>
+                          <select class="form-control" required="required" id="accu_battery" name="accu_battery" data-required-error="Veuillez sélectionner l'état de votre batterie.">
+                            <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                            <option value="sup">Supérieure à 80%</option>
+                            <option value="inf">Inférieure à 80%</option>
+                          </select>
+                          <div class="help-block with-errors"/>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div id="step-2">
+                      <h2><i class="fas fa-pb-log"/> Problème logiciel </h2>
+                      <p>Dans ce cas, nous vous invitons à faire passer votre FP2 en mode "sans échec" afin de
+                      voir si le problème est dû à une application instable. </p>
+                      <p>Pour passer en mode sans échec :
+                        <ul>
+                          <li>Appuyez et maintenez le bouton ON / OFF. Une fenêtre contextuelle s'ouvre
+                            avec l'option <i>Éteindre</i>
+                          </li>
+                          <li>Dans cette fenêtre contextuelle, touchez et maintenez le bouton “Éteindre”
+                            pendant quelques secondes. Vous verrez une fenêtre contextuelle <i>Redémarrer en
+                              mode sans échec</i>. Appuyez sur OK
+                          </li>
+                          <li>Votre appareil redémarrera en mode <i>Sans échec</i>. Vous verrez les mots
+                            <i>Mode sécurisé</i> (ou <i>Safe Mode</i>) dans un champ de texte en bas.
+                          </li>
+                        </ul>
+                      </p>
+                      <p> Une fois dans ce mode, dîtes nous si vous rencontrez toujours les problèmes
+                        de décharge rapide dans la zone de texte ci-dessous. Une fois les informations
+                        envoyées, vous pourrez prendre contact avec l'un des techniciens de Commown.
+                      </p>
+
+                      <div id="form-step-2" role="form" data-toggle="validator">
+                        <div class="form-group">
+                          <label for="more_info_step_3">Ajoutez ici toute information que vous jugerez utile :</label>
+                          <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info"/>
+                        </div>
+
+                        <div class="form-group">
+                          <input type="hidden" name="stage_id"
+                                 t-att-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
+                          <button type="submit" class="btn btn-primary" name="action" value="pb_logiciel">Envoyer les informations</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">3</t>
+                      <t t-set="new_module">une nouvelle batterie</t>
+                    </t>
+
+                    <t t-call="commown_self_troubleshooting.step-confirm-change">
+                      <t t-set="step">4</t>
+                    </t>
+
+                    <t t-call="commown_self_troubleshooting.step-contact-human">
+                      <t t-set="step">5</t>
+                    </t>
+
+                  </div>
+
+                </div>
+              </form>
+            </div>
+
+          </t>
+        </t>
+
+      </field>
+    </record>
+
+  </data>
+
+</odoo>
