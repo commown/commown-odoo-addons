@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="portal_my_home_sale" inherit_id="website_portal_sale.portal_my_home_sale">
+
+    <xpath expr="//a[@href='/my/quotes']/ancestor::h3[1]" position="replace">
+      <!-- Do not write the block if user has no quote -->
+      <t t-if="quotation_count">
+        <h3 class="page-header">
+          <a href="/my/quotes">Your security deposits / Equities
+            <small class="ml8">
+              <span class='badge'><t t-esc="quotation_count"/></span>
+            </small>
+          </a>
+        </h3>
+      </t>
+    </xpath>
+
+    <!-- Do not write the block if user has no order -->
+    <xpath expr="//a[@href='/my/orders']/ancestor::h3[1]" position="replace">
+      <t t-if="order_count">$0</t>
+    </xpath>
+
+    <!-- Do not write the block if user has no invoice -->
+    <xpath expr="//a[@href='/my/invoices']/ancestor::h3[1]" position="replace">
+      <t t-if="invoice_count">$0</t>
+    </xpath>
+
+  </template>
+
+  <template id="orders_followup"
+            inherit_id="website_portal_sale.orders_followup">
+
+    <!-- Fix invoice link -->
+    <xpath expr="//t[@t-set='report_url']" position="attributes">
+      <attribute name="t-value">'/my/invoices/pdf/%s' % i.id</attribute>
+    </xpath>
+
+    <!-- Add a CGS section -->
+    <xpath expr="//strong[text()='Contact']/ancestor::div[@class='row'][1]"
+           position="after">
+
+      <t t-set="docs" t-value="[a for m in order.message_ids if m.subtype_id.get_xml_id().values() != ['mail.mt_note'] for a in m.attachment_ids]"/>
+      <div t-if="docs" class="row">
+        <hr/>
+        <div class="col-md-12">
+          <p>
+            <strong>Documents transmis par mail :</strong>
+            <ul>
+              <t t-foreach="docs" t-as="doc">
+                <t t-set="image_fname"
+                   t-value="'/web/static/src/img/mimetypes/' + (doc.mimetype=='application/pdf' and 'pdf.png' or 'document.png')"/>
+                <li>
+                  <a t-attf-href='/web/content/#{doc.id}?download=true'
+                     target="_blank">
+                    <img t-att-src="image_fname"/>
+                    <span><t t-esc="doc.name"/></span>
+                  </a>
+                </li>
+              </t>
+            </ul>
+          </p>
+        </div>
+      </div>
+
+    </xpath>
+
+  </template>
+
+</odoo>

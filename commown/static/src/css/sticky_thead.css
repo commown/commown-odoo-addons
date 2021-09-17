@@ -1,0 +1,18 @@
+/* Make list view table headers sticky.
+   Requires a *modern* browser (but does not hurt otherwise)
+   see https://www.caniuse.com/#feat=css-sticky */
+
+.o_view_manager_content .table-responsive {
+    overflow-x: initial;
+}
+
+.o_view_manager_content table.o_list_view {
+    /* circumvent border disappearing with older FF versions */
+    border-collapse: initial;
+}
+
+.o_view_manager_content table.o_list_view thead {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}

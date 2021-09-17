@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="email_send_invoice_from_contract" model="mail.template">
+      <field name="name">[commown] Envoi d'une facture générée par un contrat</field>
+      <field name="email_from">contact@commown.fr</field>
+      <field name="reply_to">contact@commown.fr</field>
+      <field name="subject">[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})</field>
+      <field name="partner_to">${object.partner_id.id}</field>
+      <field name="model_id" ref="account.model_account_invoice"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="report_template" ref="account.account_invoices"/>
+        <field name="report_name">Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>
+      <field name="lang">${object.partner_id.lang}</field>
+      <field name="body_html"><![CDATA[
+<p>Bonjour ${object.partner_id.firstname},</p>
+<br/>
+<p>Votre facture <strong>${object.number}</strong>
+% if object.origin:
+(référence : ${object.origin} )
+% endif
+d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre espace Commown.</p>
+
+<br><br>
+<div>
+  <center>
+    <a href="https://shop.commown.fr/my/invoices" style="background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;" title="">Accéder à mes factures</a>
+  </center>
+</div>
+
+<br><br>
+
+% if object.state=='paid':
+    <p>Cette facture est déjà payée.</p>
+% else:
+    <p>Veuillez effectuer le paiement dès que possible.</p>
+% endif
+
+<p>Merci,</p>
+
+<p>--</p>
+
+<div>
+  <div>L'équipe Commown<br></div>
+</div>
+]]></field>
+    </record>
+
+    <record id="mail_template_issue_reminder" model="mail.template">
+      <field name="name">[commown] SAV : relance email</field>
+      <field name="subject">Commown : votre demande d'assistance se languit de vous !</field>
+      <field name="model_id" ref="project.model_project_task"/>
+      <field name="body_html"><![CDATA[
+<div>
+  <p>Bonjour ${object.partner_id.firstname},</p>
+  <br>
+  <p>Pas de nouvelles, bonnes nouvelles&nbsp;?&nbsp;&nbsp;;-)</p>
+  <p>
+    En effet, nous faisons suite à nos précédents échanges
+    d’assistance et conseil, pour lesquels nous n’avons pas reçu
+    d’autres retours de votre part à ce jour.
+  </p>
+  <p>
+    C’est peut-être tout à fait normal, et nous supposons que
+    l’incident est bien résolu&nbsp;! Nous nous permettrons donc de
+    vous envoyer un questionnaire de satisfaction dans les prochains
+    jours.
+  </p>
+  <br>
+  <p>
+    Belle journée&nbsp;!
+  </p>
+  <br>
+  <p>L'équipe Commown qui reste à votre écoute.</p>
+  <br>
+  <p>
+    NB&nbsp;: Bien entendu, si ce n’est pas le cas, contactez-nous au plus
+    vite en répondant directement à ce message…
+  </p>
+</div>
+]]></field>
+    </record>
+
+    <record id="sms_template_issue_reminder" model="mail.template">
+      <field name="name">[commown] SAV : relance SMS</field>
+      <field name="subject"><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
+      <field name="email_from">contact@commown.fr</field>
+      <field name="email_to">mail2sms@envoyersmspro.com</field>
+      <field name="model_id" ref="project.model_project_task"/>
+      <field name="lang">fr_FR</field>
+      <field name="auto_delete">True</field>
+      <field name="body_html"><![CDATA[
+<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.</p>
+]]></field>
+    </record>
+
+  </data>
+
+</odoo>

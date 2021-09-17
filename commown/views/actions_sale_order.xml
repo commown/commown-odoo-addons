@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="action_add_to_support_groups" model="ir.actions.server">
+    <field name="name">[commown] Add buyer to product's support groups</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">
+for so_line in record.order_line:
+    for group in so_line.product_id.product_tmpl_id.support_group_ids:
+        group.add_users(record.partner_id.user_ids)
+    </field>
+  </record>
+
+  <record id="action_add_investor_management_task" model="ir.actions.server">
+    <field name="name">[commown] Add investor management task</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">10</field>
+    <field name="state">code</field>
+    <field name="code">
+project = env.ref('commown.investment_followup_project')
+
+HTML_ESCAPE_TABLE = {
+    "&amp;": "&amp;amp;",
+    '"': "&amp;quot;",
+    "'": "&amp;apos;",
+    "&gt;": "&amp;gt;",
+    "&lt;": "&amp;lt;",
+    }
+
+product_tmpl_ids = env['product.template'].search([
+    ('is_equity', '=', True),
+    ('equity_type', '=', 'invest')
+]).mapped('id')
+
+column = env.ref('commown.investment_followup_start_stage')
+
+description = []
+for line in record.order_line:
+    if line.product_id.product_tmpl_id.id in product_tmpl_ids:
+        description.append(u'&lt;p&gt;&lt;b&gt;N° de commande : &lt;/b&gt;%s&lt;/p&gt;' % ''.join(
+            HTML_ESCAPE_TABLE.get(c, c) for c in record.name))
+        description.append(u'&lt;p&gt;&lt;b&gt;Date de la commande : &lt;/b&gt;%s&lt;/p&gt;' % ''.join(
+            HTML_ESCAPE_TABLE.get(c, c) for c in record.date_order))
+        description.append(u'&lt;p&gt;&lt;b&gt;Produit choisi : &lt;/b&gt;%s&lt;/p&gt;' % ''.join(
+            HTML_ESCAPE_TABLE.get(c, c) for c in line.product_id.display_name))
+
+if description:
+    env['project.task'].create({
+        'project_id': project.id,
+        'name': line.order_partner_id.name,
+        'user_id': project.user_id.id,
+        'partner_id': line.order_partner_id.id,
+        'stage_id': column.id,
+        'description': '\n'.join(description),
+    })
+    </field>
+  </record>
+
+  <record id="action_add_followup_lead" model="ir.actions.server">
+    <field name="name">[commown] Add followup lead</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">20</field>
+    <field name="state">code</field>
+    <field name="code">
+title_template = u'[%(sale)s-%(count)02d] %(descr)s'
+
+try:  # compat w/o website_sale_coupons
+    coupons = record.used_coupons()
+except:
+    coupons = ()
+
+if coupons:
+    title_template += (
+        u' - COUPON: ' +
+        u', '.join(coupons.mapped('campaign_id.name')))
+ctx = {'sale': record.name, 'count': 0}
+
+for so_line in record.order_line:
+    product = so_line.product_id
+
+    team = product.followup_sales_team_id
+    if not team:
+        continue
+
+    stages = env['crm.stage'].search([('team_id', '=', team.id)],
+                                     order='sequence')
+    stage_id = stages[0].id if stages else False
+    for stage in stages:
+        if '[stage: start]' in stage.name:
+            stage_id = stage.id
+            break
+
+    ctx['descr'] = product.display_name
+
+    for _num in range(int(so_line.product_uom_qty)):
+        ctx['count'] += 1
+        lead = env['crm.lead'].create({
+            'name': title_template % ctx,
+            'partner_id': record.partner_id.id,
+            'type': 'opportunity',
+            'team_id': team.id,
+            'stage_id': stage_id,
+            'so_line_id': so_line.id,
+            })
+        # Override post-create behaviour that auto-assigns team_id
+        data = {'team_id': team.id}
+        if ctx['count'] == 1:
+            # shortcut from first opportunity to the sale
+            # (cannot have more than 1 opportunity related to a single sale)
+            data['order_ids'] = [(6, 0, record.ids)]
+        lead.update(data)
+    </field>
+  </record>
+
+  <record id="order_sent" model="base.automation">
+    <field name="name">[Commown] Sale done</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="sequence">1</field>
+    <field name="state">multi</field>
+    <field name="trigger">on_write</field>
+    <field name="filter_pre_domain">['|', ('state', '=', 'draft'), ('state', '=', 'sent')]</field>
+    <field name="filter_domain">[('state', '=', 'sale')]</field>
+    <field name="child_ids" eval="[(6,0,[ref('commown.action_add_to_support_groups'), ref('commown.action_add_investor_management_task'), ref('commown.action_add_followup_lead')])]"/>
+  </record>
+
+</odoo>
