@@ -1,0 +1,133 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_contractual_issue
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-28 06:39+0000\n"
+"PO-Revision-Date: 2021-07-28 06:39+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_contractual_issue
+#: model:ir.model,name:commown_contractual_issue.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Compte analytique"
+
+#. module: commown_contractual_issue
+#: selection:project.task,contractual_issue_type:0
+msgid "Breakage"
+msgstr "Casse"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_issue_commercial_partner_id
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_commercial_partner_id
+msgid "Commercial Entity"
+msgstr "Entité commerciale"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_issue_contract_id
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_contract_id
+msgid "Contract"
+msgstr "Contrat"
+
+#. module: commown_contractual_issue
+#: model:ir.ui.view,arch_db:commown_contractual_issue.edit_project
+msgid "Contracts"
+msgstr "Contrats"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_account_analytic_account_contractual_issue_ids
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_project_contractual_issue_ids
+#: model:ir.ui.view,arch_db:commown_contractual_issue.view_task_form2
+msgid "Contractual issues"
+msgstr "Incidents régis par contrat"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_project_contractual_issues_tracking
+msgid "Contractual_issues_tracking"
+msgstr "Suivi des incidents régis par contrat"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,help:commown_contractual_issue.field_project_task_contractual_issue_date
+msgid "Date when the contractual issue occurred"
+msgstr "Date de survenue de l'incident"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,help:commown_contractual_issue.field_project_task_penalty_exemption
+msgid "E.g.: customer paid, commercial initiative"
+msgstr "Exemples : paiement par le client, geste commercial"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_contractual_issue_date
+msgid "Issue date"
+msgstr "Date de l'incident"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_contractual_issue_type
+msgid "Issue type"
+msgstr "Type d'incident"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_project_require_contract
+msgid "Issues/ tasks require a contract"
+msgstr "Les tickets / tâches requièrent un contrat"
+
+#. module: commown_contractual_issue
+#: selection:project.task,contractual_issue_type:0
+msgid "Loss"
+msgstr "Perte"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_account_analytic_account_other_issue_ids
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_project_other_issue_ids
+msgid "Other issues"
+msgstr "Autres incidents"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_penalty_exemption
+msgid "Penalty exemption"
+msgstr "Exempté de pénalité"
+
+#. module: commown_contractual_issue
+#: model:ir.model,name:commown_contractual_issue.model_project_project
+msgid "Project"
+msgstr "Projet"
+
+#. module: commown_contractual_issue
+#: model:ir.model,name:commown_contractual_issue.model_project_issue
+msgid "Project Issue"
+msgstr "Incident"
+
+#. module: commown_contractual_issue
+#: model:ir.ui.view,arch_db:commown_contractual_issue.account_analytic_account_recurring_form_form
+msgid "Related issues"
+msgstr "Incidents liés"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_issue_require_contract
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_require_contract
+msgid "Requires a contract"
+msgstr "Requiert un contrat"
+
+#. module: commown_contractual_issue
+#: model:ir.model,name:commown_contractual_issue.model_project_task
+msgid "Task"
+msgstr "Tâche"
+
+#. module: commown_contractual_issue
+#: selection:project.task,contractual_issue_type:0
+msgid "Theft"
+msgstr "Vol"
+
+#. module: commown_contractual_issue
+#: model:ir.model.fields,field_description:commown_contractual_issue.field_project_task_contractual_issues_tracking
+msgid "Used for contractual issue tracking"
+msgstr "Utilisé pour le suivi des incidents régis par contrat"
+

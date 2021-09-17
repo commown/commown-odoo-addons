@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record model="ir.ui.view" id="view_task_form2">
+    <field name="name">project.task.form</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_form2"/>
+    <field name="arch" type="xml">
+      <!-- Move partner_id to the sheet and contract next to it -->
+      <xpath expr="//page[@name='extra_info']//field[@name='partner_id']" position="replace"></xpath>
+      <xpath expr="//sheet//group[1]" position="inside">
+        <group name="partner">
+          <field name="partner_id"/>
+        </group>
+        <group name="contract">
+          <field name="contract_id"
+                 context="{'form_view_ref': 'contract.account_analytic_account_recurring_form_form'}"
+                 attrs="{'required': [('require_contract', '=', True)], 'invisible': [('require_contract', '=', False)]}"
+                 options="{'no_create': True}"
+                 domain="[('partner_id', 'child_of', 'commercial_partner_id)]"/>
+          <field name="commercial_partner_id" invisible="True"/>
+          <field name="require_contract" invisible="True"/>
+          <field name="contractual_issues_tracking" invisible="True"/>
+        </group>
+      </xpath>
+      <xpath expr="//notebook//page[1]" position="before">
+        <page name="contractual_issues" string="Contractual issues" autofocus="autofocus"
+              attrs="{'invisible': [('contractual_issues_tracking', '=', False)]}">
+          <group>
+            <group>
+              <field name="contractual_issue_type"/>
+              <field name="contractual_issue_date"/>
+            </group>
+            <group>
+              <field name="penalty_exemption"/>
+            </group>
+          </group>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
