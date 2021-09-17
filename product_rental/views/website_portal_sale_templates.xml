@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="portal_my_invoices" inherit_id="website_portal_sale.portal_my_invoices">
+
+    <!-- Remove "Pay now" button for open invoices -->
+    <xpath expr="//a[contains(@t-attf-href, '/website_payment/pay')]"
+           position="replace">
+    </xpath>
+
+  </template>
+
+</odoo>
