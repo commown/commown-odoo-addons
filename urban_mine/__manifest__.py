@@ -1,0 +1,32 @@
+{
+    'name': 'Urban mine',
+    'category': 'Business',
+    'summary': 'Urban mine offer: people sell their device to the company',
+    'version': '10.0.1.0.3',
+    'description': 'Urban mine offer: people sell their device to the company',
+    'author': "Commown SCIC SAS",
+    'license': "AGPL-3",
+    'website': "https://commown.fr",
+    'depends': [
+        'commown_shipping',
+        'crm',
+        'l10n_fr',
+        'report_py3o',
+        'website_sale_coupon',
+        'website_form_builder',
+        'website_form_recaptcha',
+    ],
+    'external_dependencies': {
+    },
+    'data': [
+        'data/model.xml',
+        'data/product.xml',
+        'data/crm.xml',
+        'data/coupon.xml',
+        'data/report.xml',
+        'data/registration_page.xml',
+        'data/actions.xml',
+        'data/mail_templates.xml',
+    ],
+    'installable': True,
+}
