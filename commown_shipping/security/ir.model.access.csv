@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_commown_parcel_type_default,access_commown_parcel_type,model_commown_parcel_type,,1,0,0,0
+access_commown_parcel_type_manager,access_commown_parcel_type,model_commown_parcel_type,base.group_system,1,1,1,1
+access_commown_shipping_account,access_commown_shipping_account,model_commown_shipping_account,base.group_user,1,0,0,0

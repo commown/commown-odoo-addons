@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="delivery_email_example" model="mail.template">
+    <field name="name">Post-delivery email</field>
+    <field name="subject">Product delivered</field>
+    <field name="partner_to">${object.partner_id.id}</field>
+    <field name="model_id" ref="crm.model_crm_lead" />
+    <field
+      name="body_html"
+    ><![CDATA[
+name: ${object.name}
+code: ${object.env.context.get('postal_code', 'EMPTY_CODE')}
+]]></field>
+  </record>
+
+</odoo>
