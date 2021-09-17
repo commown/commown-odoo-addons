@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="unset_post_delivery_actions" model="ir.actions.server">
+    <field name="name">[commown] Unset post-delivery actions (mail send + contract start)</field>
+    <field name="model_id" ref="crm.model_crm_lead"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+record.update({
+    'start_contract_on_delivery': False,
+    'send_email_on_delivery': False,
+})
+]]>
+    </field>
+  </record>
+
+  <record id="lead_entered_unset_post_delivery_actions_stage" model="base.automation">
+    <field name="name">[commown] Lead entered "[unset-post-delivery]" stage</field>
+    <field name="model_id" ref="crm.model_crm_lead"/>
+    <field name="sequence">1</field>
+    <field name="trigger">on_create_or_write</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[unset-post-delivery-actions]')]</field>
+    <field name="action_server_id" ref = "commown_lineageos.unset_post_delivery_actions"/>
+  </record>
+
+  <record id="send_label" model="ir.actions.server">
+    <field name="name">[commown] LineageOS: send label by email</field>
+    <field name="model_id" ref="crm.model_crm_lead"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code"><![CDATA[
+label = record.parcel_labels('fp2-return-ins0', force_single=True)
+
+if record.user_id:
+    record = record.sudo(record.user_id)
+email_template = env.ref("commown_lineageos.email_commown_does_all_with_label").id
+
+record.with_context({'default_attachment_ids': (label.id,)}).message_post_with_template(email_template)
+]]>
+    </field>
+  </record>
+
+  <record id="lead_entered_send_label_stage" model="base.automation">
+    <field name="name">[commown] Lead entered "[send-label]" stage</field>
+    <field name="model_id" ref="crm.model_crm_lead"/>
+    <field name="sequence">1</field>
+    <field name="trigger">on_write</field>
+    <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[send-label]')]</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[send-label]')]</field>
+    <field name="action_server_id" ref="commown_lineageos.send_label"/>
+  </record>
+
+</odoo>
