@@ -1,0 +1,7 @@
+.attribute-show {
+  display: none;
+}
+
+.attribute-value-match.attribute-show {
+  display: block;
+}

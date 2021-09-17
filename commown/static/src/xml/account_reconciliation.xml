@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-extend="manual_reconciliation_move_line">
+      <t t-jquery=".cell_label" t-operation="append">
+        <t t-if="line.partner_name"> - <t t-esc="line.partner_name"/></t>
+      </t>
+    </t>
+</templates>

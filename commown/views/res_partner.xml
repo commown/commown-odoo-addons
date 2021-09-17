@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+    <record model="ir.ui.view" id="view_partner_form">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+          <xpath expr="//notebook/page[1]" position="attributes">
+            <attribute name="autofocus"></attribute>
+          </xpath>
+          <xpath expr="//notebook/page[1]" position="before">
+            <page name="partner_documents" string="Documents" autofocus="autofocus"
+                  attrs="{'invisible': [('is_company', '=', True)]}">
+              <group name="id_card1" >
+                <field name="id_card1" widget="binary" class="oe_inline"/>
+                <field name="id_card2" widget="binary" class="oe_inline"/>
+              </group>
+              <group name="proof_of_address">
+                <field name="proof_of_address" widget="binary" class="oe_inline"/>
+              </group>
+            </page>
+          </xpath>
+        </field>
+    </record>
+  </data>
+
+</odoo>

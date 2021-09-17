@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="payment" inherit_id="website_sale.payment">
+    <!-- Remove saved payment methods -->
+    <xpath expr="//div[@id='payment_method']//li[@t-if='tokens']" position="replace">
+    </xpath>
+  </template>
+
+  <template id="orders_followup_products_links"
+            inherit_id="website_sale.orders_followup_products_links">
+
+    <!-- Change link text to the product display name instead of the order
+         line name which contains the whole product description, and
+         move the latter to a fly-over icon -->
+    <xpath expr="//div[@id='product_name']" position="replace">
+
+      <div id="product_name" class="col-md-5">
+
+        <t t-if="not ol.product_id.website_published">
+          <span t-esc="ol.product_id.display_name"/>
+        </t>
+        <t t-else="">
+          <a t-if="ol.product_id.website_published"
+             t-att-href="ol.product_id.website_url">
+            <span t-esc="ol.product_id.display_name"/>
+          </a>
+        </t>
+        <div t-if="ol.product_id.is_rental" class="rent">
+          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('recurring_invoice_line_ids.sale_order_line_id', '=', ol.id), ('recurring_invoices', '=', True), ('date_start', '&lt;', '2030-01-01')])"/>
+          (loyer unitaire :
+          <span t-esc="ol.price_unit * ol.product_id.rental_price / (ol.product_id.list_price or 1)"
+                t-options="{'widget': 'monetary', 'display_currency': ol.order_id.pricelist_id.currency_id}"/>
+          <span t-field="ol.product_id.rental_frequency"/>
+          <span t-if="len(contracts)==1">; fin de la période d'engagement :</span>
+          <span t-elif="len(contracts)&gt;1">- fin des périodes d'engagement :</span>
+          <t t-foreach="contracts" t-as="contract">
+            <t t-if="contract_index&gt;0">-</t>
+            <span class="min-contract-end-date" t-field="contract.min_contract_end_date" t-options="{'widget': 'date'}"/></t>)
+        </div>
+        <p>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                  t-attf-data-target="#myModal{{ol.id}}">
+            Voir les détails
+          </button>
+        </p>
+
+        <!-- Modal -->
+        <div class="modal fade" t-attf-id="myModal{{ol.id}}"
+             tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document" style="width:80%">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                  <span aria-hidden="true">x</span>
+                </button>
+                <h4 class="modal-title">
+                  <t t-esc="ol.product_id.name"/>
+                </h4>
+              </div>
+              <div class="modal-body">
+                <t t-raw="ol.product_id.product_tmpl_id.website_description"/>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </xpath>
+
+  </template>
+
+  <template id="product_price_b2b" inherit_id="product_rental.product_price">
+    <!-- Remove deposit price: cannot use deposit price as product price in B2B
+         as sale drafts would use it which is not what we want. -->
+    <xpath expr="//*[contains(@class, 'deposit_price')]" position="replace">
+      <t t-if="not product.is_b2b()">$0</t>
+    </xpath>
+
+    <xpath expr="//*[contains(@class, 'min_contract_duration')]/span[1]" position="replace">
+      <t t-if="not product.is_b2b()">
+        <span>Commitment duration: </span>
+      </t>
+      <t t-else="">
+        <span>Commitment duration: from </span>
+      </t>
+    </xpath>
+
+    <xpath expr="//*[contains(@class, 'oe_rental_price')]" position="attributes">
+      <attribute name="t-esc">(product.is_b2b() and product.lst_price or product.website_price) * product.rental_price / (product.list_price or 1)</attribute>
+    </xpath>
+
+    <!-- Add attribute-value dependent show/ hide html functions -->
+    <xpath expr="div[@t-if='product.is_rental']" position="inside">
+      <script type="text/javascript"
+              src="/commown/static/src/js/website_sale.js"></script>
+      <!-- Example usage
+        <p class="bg-danger js-attribute-1-6 js-attribute-1-6-93 js-attribute-1-6-94 attribute-show" style="padding: 15px">
+            <b>Important :</b> Avant de valider, veuillez lire les spécificités de l’offre en bas de cette page.
+        </p>
+        -->
+    </xpath>
+
+  </template>
+
+  <template id="assets_frontend"
+            inherit_id="website.assets_frontend">
+    <xpath expr="." position="inside">
+      <link href="/commown/static/src/css/website_sale.css"
+            rel="stylesheet" type="text/css"/>
+    </xpath>
+  </template>
+
+  <template id="products_add_to_cart_group_sales" inherit_id="website_sale_cart_selectable.products_add_to_cart">
+    <xpath expr="//t[@t-if='len(product.product_variant_ids) == 1'] and product.website_btn_addtocart_published" position="attributes">
+      <attribute name="t-if">len(product.product_variant_ids) == 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
+    </xpath>
+    <xpath expr="//t[@t-if='len(product.product_variant_ids) &gt; 1'] and product.website_btn_addtocart_published" position="attributes">
+      <attribute name="t-if">len(product.product_variant_ids) &gt; 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
+    </xpath>
+  </template>
+
+  <template id="product_group_sales" inherit_id="website_sale_cart_selectable.product">
+    <xpath expr="//a[@id='add_to_cart']" position="after">
+      <t t-if="not product.website_btn_addtocart_published and env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids" class="text-muted">
+        <div>(viewed by sales only) - <span>Variant id: <span class="variant_id_placeholder"></span></span></div>
+        <script type="text/javascript" src="/commown/static/src/js/website_sale.js" />
+      </t>
+    </xpath>
+    <xpath expr="//a[@id='add_to_cart']" position="attributes">
+      <attribute name="t-if">product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids</attribute>
+    </xpath>
+  </template>
+
+</odoo>
