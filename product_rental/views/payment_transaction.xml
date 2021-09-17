@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--
+
+    WARNING: This automatic payment generation is badly designed:
+
+    - it does obviously not belong to this module
+    - it may simply be slimpay specific
+    - it should probably belong to a contract_auto_payment_slimpay
+      module that implement the auto payment as method override
+      (mind the website sale order confirmation probably creates the
+      payment as an example, but I'm unable to find out where).
+
+ -->
+
+<odoo>
+
+  <record id="action_contract_auto_account_payment" model="ir.actions.server">
+    <field name="name">[commown] Automatic account payment on contract driven transaction</field>
+    <field name="model_id" ref="payment.model_payment_transaction"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">
+<![CDATA[
+
+invoice = env['account.invoice'].search([('number', '=', record.reference)])
+
+if (invoice
+        and invoice.contract_id
+        and invoice.contract_id.payment_mode_id):
+
+    contract = invoice.contract_id
+
+    payment = env['account.payment'].create({
+        'company_id': 1,  # ourselves!
+        'partner_id': contract.partner_id.id,
+        'partner_type': 'customer',
+        'state': 'draft',
+        'payment_type': 'inbound',
+        'journal_id': contract.payment_mode_id.fixed_journal_id.id,
+        'payment_method_id': contract.payment_mode_id.payment_method_id.id,
+        'amount': record.amount,
+        'payment_transaction_id': record.id,
+        'invoice_ids': [(6, 0, [invoice.id])],
+    })
+
+    payment.post()
+
+]]>
+    </field>
+  </record>
+
+  <record id="payment_transaction_done" model="base.automation">
+    <field name="name">[commown] Payment transaction done</field>
+    <field name="model_id" ref="payment.model_payment_transaction"/>
+    <field name="sequence">1</field>
+    <field name="trigger">on_write</field>
+    <field name="filter_pre_domain">[('state', '!=', 'done')]</field>
+    <field name="filter_domain">[('state', '=', 'done')]</field>
+    <field
+        name="action_server_id"
+        eval="ref('product_rental.action_contract_auto_account_payment')"/>
+  </record>
+
+</odoo>
