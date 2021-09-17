@@ -1,0 +1,44 @@
+<odoo>
+  <data>
+
+    <template id="product_price_b2b" inherit_id="website_sale.product_price">
+      <xpath expr="//*[contains(@class, 'oe_price') and contains(@t-options, 'monetary')]" position="after">
+        <span t-if="product.is_b2b()">excl. taxes</span>
+      </xpath>
+    </template>
+
+    <!-- Replace description_sale by website_description_sale -->
+
+    <template id="product_b2b" inherit_id="website_sale.product">
+      <xpath expr="//hr[@t-if='product.description_sale']" position="attributes">
+        <attribute name="t-if">product.website_description_sale</attribute>
+      </xpath>
+      <xpath expr="//p[@t-field='product.description_sale']" position="attributes">
+        <attribute name="t-field">product.website_description_sale</attribute>
+      </xpath>
+      <xpath expr="//meta[@t-att-content='product.description_sale'][@property='og:description']" position="attributes">
+        <attribute name="t-att-content">product.website_description_sale</attribute>
+      </xpath>
+      <xpath expr="//meta[@t-att-content='product.description_sale'][@name='twitter:description']" position="attributes">
+        <attribute name="t-att-content">product.website_description_sale</attribute>
+      </xpath>
+    </template>
+
+    <template id="products_description_b2b" inherit_id="website_sale.products_description">
+      <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
+        <attribute name="t-field">product.website_description_sale</attribute>
+      </xpath>
+    </template>
+
+    <template id="suggested_products_list_b2b" inherit_id="website_sale.suggested_products_list">
+      <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
+        <attribute name="t-field">product.website_description_sale</attribute>
+      </xpath>
+    </template>
+
+    <!-- END Replace description_sale by website_description_sale -->
+
+
+
+  </data>
+</odoo>
