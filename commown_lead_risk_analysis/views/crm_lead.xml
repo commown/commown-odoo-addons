@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <record model="ir.ui.view" id="crm_case_form_view_oppor">
+        <field name="name">commown_lead_risk_analysis.lead.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+
+          <xpath expr="//div[@name='button_box']" position="inside">
+            <button
+                string="Sale Order"
+                class="oe_stat_button" icon="fa-shopping-basket"
+                type="object" name="button_open_sale_order"/>
+            <button
+                string="Contract"
+                class="oe_stat_button" icon="fa-file-text-o"
+                type="object" name="button_open_contract"
+                />
+          </xpath>
+
+          <xpath expr="//div[@class='oe_title']//h2[@class='o_row']" position="attributes">
+            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='priority']/ancestor::group[1]" position="attributes">
+            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
+          </xpath>
+
+          <xpath expr="//field[@name='phone']" position="attributes">
+            <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
+          </xpath>
+
+          <xpath expr="//notebook/page[1]" position="before">
+            <page name="before_call_risk_eval" string="Before call" autofocus="autofocus"
+                  attrs="{'invisible': [('used_for_risk_analysis', '=', False)]}">
+              <field name="used_for_risk_analysis" invisible="1"/>
+              <field name="web_searchurl"/>
+              <group>
+                <group name="email evaluation" >
+                  <field name="email_rating" widget="priority"/>
+                </group>
+                <group name="web evaluation">
+                  <field name="webid_unknown"/>
+                  <field name="webid_rating" widget="priority"
+                         attrs="{'invisible': [('webid_unknown', '=', True)]}"/>
+                </group>
+                <group>
+                  <field name="webid_notes"/>
+                </group>
+              </group>
+            </page>
+            <page name="communication_process" string="Communication process"
+                  attrs="{'invisible': [('used_for_risk_analysis', '=', False)]}">
+              <group>
+                <group name="normal_contacts" string="Normal contacts">
+                  <field name="sent_collective_email"/>
+                  <field name="first_phone_call"/>
+                  <field name="second_phone_call"/>
+                  <field name="email_boost"/>
+                </group>
+                <group name="conflicting_contacts" string="Conflicting contacts">
+                  <field name="third_phone_call"/>
+                  <field name="email_ultimatum"/>
+                  <field name="registered_mail_sent"/>
+                </group>
+              </group>
+            </page>
+            <page name="phone_call" string="Phone call"
+                  attrs="{'invisible': [('used_for_risk_analysis', '=', False)]}">
+              <group name="product_data" string="Initial product data">
+                <field name="orders_description" colspan="2" readonly="1"/>
+              </group>
+              <group name="personal_data" string="Initial personal data">
+                <group>
+                  <field readonly="1" name="contact_name"/>
+                  <field readonly="1" name="street"/>
+                  <field readonly="1" name="street2"/>
+                  <field readonly="1" name="mobile"/>
+                  <field readonly="1" name="partner_name" invisible="1"/>
+                  <field readonly="1" name="function" invisible="1"/>
+                  <field readonly="1" name="fax" invisible="1"/>
+                </group>
+                <group>
+                  <field readonly="1" name="zip" class="oe_inline"/>
+                  <field readonly="1" name="city"/>
+                  <field readonly="1" name="state_id" invisible="1"/>
+                  <field readonly="1" name="country_id"/>
+                </group>
+                <group>
+                  <field name="initial_data_notes" colspan="2"/>
+                </group>
+              </group>
+              <group string="Marketing">
+                <field name="campaign_id" />
+                <field name="medium_id" />
+                <field name="source_id" />
+              </group>
+              <group name="phonecall_validation" string="Phone call validation">
+                <group>
+                  <field name="identity_validated"/>
+                  <field name="mobile_validated"/>
+                  <field name="email_validated"/>
+                </group>
+                <group>
+                  <field name="billing_address_validated"/>
+                  <field name="delivery_address_validated"/>
+                  <field name="address_hesitation"/>
+                </group>
+              </group>
+              <group>
+                <group name="technicalities" string="Technicalities">
+                  <field name="technical_skills" widget="priority"/>
+                  <field name="questions"/>
+                </group>
+                <group name="global_feeling" string="Global feeling">
+                  <field name="global_feeling" widget="priority"/>
+                  <field name="comments"/>
+                </group>
+              </group>
+            </page>
+          </xpath>
+          <xpath expr="//notebook/page[@name='lead']" position="replace">
+          </xpath>
+        </field>
+    </record>
+
+  </data>
+
+</odoo>
