@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="fp3-screen-protection" model="ir.ui.view">
+      <field name="name">Self-troubleshoot an FP3 screen protection</field>
+      <field name="type">qweb</field>
+      <field name="key">website.self-troubleshoot-fp3-screen-protection</field>
+      <field name="arch" type="xml">
+
+        <t t-name="website.self-troubleshoot-fp3-screen-protection">
+          <t t-call="commown-self-troubleshoot.web-layout">
+            <t t-set="title">Commown - Auto-dépannage - Fairphone 3 : Je n'ai pas de protection d'écran</t>
+            <t t-set="head">
+              <script type="text/javascript">
+                $(document).ready(function() {
+
+                  const wizard = setUpWizard($('#smartwizard'));
+
+                 $('#type_problem').change(function () {
+                      wizard.toggleStep(2, this.value==='no');
+                      wizard.toggleStep(3, this.value==='no');
+                      wizard.toggleStep(4, this.value==='yes');
+                  });
+
+                  $('input[type="radio"][name="branchement_solved"]').change(function () {
+                    const isNo = this.value!=='yes';
+                    wizard.toggleStep(5, isNo);
+                    wizard.toggleStep(6, isNo);
+                    wizard.toggleStep(7, !isNo);
+                  });
+
+                  $('input[type="radio"][name="cable_sound"]').change(function () {
+                    const isNo = this.value!=='yes';
+                    wizard.toggleStep(3, isNo);
+                    wizard.toggleStep(5, !isNo);
+                    wizard.toggleStep(6, !isNo);
+                    wizard.toggleStep(7, isNo);
+                  });
+
+                  $('input[type="radio"][name="connection_solved"]').change(function () {
+                    const isNo = this.value!=='yes';
+                    wizard.toggleStep(5, isNo);
+                    wizard.toggleStep(6, isNo);
+                    wizard.toggleStep(7, !isNo);
+                  });
+
+                });
+              </script>
+            </t>
+
+            <!-- Variables à modifier ici -->
+            <t t-set="contract_name_like">GS/</t>
+            <t t-set="tag_names">Appareil FP3</t>
+            <t t-set="issue_title">FP3 - Protection d'écran</t>
+            <t t-set="issue_description_template">issue-description-fp3-screen-protection</t>
+            <!-- Fin des variables à modifier -->
+
+            <div class="container">
+              <h1>Auto-dépannage : Fairphone 3 </h1>
+              <h2> Je n'ai pas de protection écran</h2>
+              <br/>
+              <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
+                    id="myForm" role="form">
+
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
+                <input type="hidden" name="tags" id="tags" t-att-value="tag_names"/>
+                <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
+
+                <div id="smartwizard">
+                  <ul>
+                    <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                    <li><a href="#step-1">Étape 1<br/><small>Type de problème</small></a></li>
+                    <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Vérification</small></a></li>
+                    <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                    <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
+                    <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Problème résolu</small></a></li>
+                    <li><a href="#step-6">Étape 6<br/><small>Contacter un humain</small></a></li>
+                  </ul>
+
+                  <div>
+                    <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+
+                    <div id="step-1">
+                      <h2><i class="fas fa-cogs"/> Type de problème </h2>
+                      <div id="form-step-1" role="form" data-toggle="validator">
+                        <div class="form-group">
+		          <label for="type_problem">Quelle est votre situation ?</label>
+                          <select class="form-control" required="required" id="type_problem-ok" name="type_problem-ok" data-required-error="Veuillez sélectionner un élément de la liste ci-dessus.">
+                            <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                            <option value="yes">Ma protection d'écran se décolle</option>
+                            <option value="no">Je n'ai pas de protection d'écran</option>
+                          </select>
+                          <div class="help-block with-errors"/>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="step-2">
+                      <h2><i class="fas fa-airglass-slash"/> Verification </h2>
+                      <div id="form-step-2" role="form" data-toggle="validator">
+                        <div class="form-group">
+                          <p>Dans ce cas, il est probable qu'il soit présent mais qu'il ne soit pas visible. Je vous invite donc à vérifier si il n'est déjà pas poser </p>
+                          <label>Pouvez-vous nous confirmer que vous n'avez pas du tout de protection d'écran ? </label>
+                          <label class="radio-inline" for="airglass-yes">Oui</label>
+                          <input type="radio" name="cable-sound" id="airglass-yes" value="yes" required="required" data-required-error="Dites-nous si vous entendez du son."/>
+                          <label class="radio-inline" for="airglass-no">Non</label>
+                          <input type="radio" name="cable-sound" id="airglass-no" value="no" required="required"/>
+                          <div class="help-block with-errors"/>
+                        </div>
+                      </div>
+                    </div>
+
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">3</t>
+                      <t t-set="new_module">une protection d'écran</t>
+                    </t>
+
+                    <t t-call="commown_self_troubleshooting.step-confirm-change">
+                      <t t-set="step">4</t>
+                    </t>
+
+                    <t t-call="commown_self_troubleshooting.step-self-solved">
+                      <t t-set="step">5</t>
+                    </t>
+
+                    <t t-call="commown_self_troubleshooting.step-contact-human">
+                      <t t-set="step">6</t>
+                    </t>
+
+                  </div>
+
+                </div>
+              </form>
+            </div>
+
+          </t>
+        </t>
+
+      </field>
+    </record>
+
+  </data>
+
+</odoo>

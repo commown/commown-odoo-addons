@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="issue-description-fp2-micro" model="ir.ui.view">
+      <field name="name">self-troubleshoot-issue-description-fp2-micro</field>
+      <field name="type">qweb</field>
+      <field name="key">commown_self_troubleshooting.issue-description-fp2-micro</field>
+      <field name="arch" type="xml">
+        <t t-name="self-troubleshoot-issue-description-fp2-micro">
+Bonjour,
+<t t-if="action=='ship'">
+après avoir effectué un auto-dépannage, il ressort que le module micro de mon FP2 doit être changé.
+
+L'adresse d'expédition est la suivante :
+<t t-esc="name"/>
+<t t-esc="u'\n'.join((street, street2)).strip()"/>
+<t t-esc="zipcode"/> <t t-esc="city"/>
+<t t-esc="country"/>
+
+Informations supplémentaires utiles à la livraison :
+Numéro de téléphone : <t t-esc="phone"/>
+Adresse de courriel : <t t-esc="email"/></t>
+<t t-elif="action=='wait-simcard'">
+je vous informe que je vais tester avec une autre carte SIM.</t>
+<t t-if="mute_solved=='yes'">
+je vous informe que mon problème était lié à l'activation de la fonction "Couper micro" de mon FP2 et que j'ai pu le résoudre.</t>
+<t t-if="more_info">
+J'ai porté à votre connaissance les informations complémentaires suivantes :
+---
+<t t-esc="more_info"/>
+---</t>
+        </t>
+      </field>
+    </record>
+
+  </data>
+
+</odoo>
