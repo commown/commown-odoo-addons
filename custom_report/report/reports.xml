@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- invoice report -->
+  <record id="account.account_invoices" model="ir.actions.report.xml">
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="module">custom_report</field>
+    <field name="py3o_template_fallback">report/account_invoice.odt</field>
+  </record>
+
+  <record id="account.account_invoice_action_report_duplicate" model="ir.actions.report.xml">
+    <field name="report_type">py3o</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="module">custom_report</field>
+    <field name="py3o_template_fallback">report/account_invoice.odt</field>
+  </record>
+
+</odoo>
