@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo noupdate="1">
+
+  <record id="c_prod_0" model="product.product">
+    <field name="name">Smartphone rental</field>
+    <field name="type">service</field>
+    <field name="uom_id" ref="uom.product_uom_unit"/>
+  </record>
+
+  <record id="c_prod_1" model="product.product">
+    <field name="name">Accessory rental</field>
+    <field name="type">service</field>
+    <field name="uom_id" ref="uom.product_uom_unit"/>
+  </record>
+
+  <record id="contract_tmpl_basic" model="contract.template">
+    <field name="name">Basic contract</field>
+  </record>
+
+  <record id="cl_basic_0" model="contract.template.line">
+    <field name="name">1 month Fairphone premium</field>
+    <field name="contract_id" ref="contract_tmpl_basic"/>
+    <field name="product_id" ref="c_prod_0"/>
+    <field name="specific_price">25</field>
+    <field name="quantity">1</field>
+    <field name="recurring_rule_type">monthly</field>
+    <field name="recurring_interval">1</field>
+    <field name="commitment_duration">12</field>
+  </record>
+
+  <record id="cl_basic_1" model="contract.template.line">
+    <field name="name">1 month ##ACCESSORY##</field>
+    <field name="contract_id" ref="contract_tmpl_basic"/>
+    <field name="product_id" ref="c_prod_1"/>
+    <field name="quantity">1</field>
+    <field name="recurring_rule_type">monthly</field>
+    <field name="recurring_interval">1</field>
+    <field name="commitment_duration">12</field>
+  </record>
+
+  <record id="contract_tmpl_advanced" model="contract.template">
+    <field name="name">Advanced contract</field>
+  </record>
+
+  <record id="cl_adv_0" model="contract.template.line">
+    <field name="name">1 month of ##PRODUCT##</field>
+    <field name="contract_id" ref="contract_tmpl_advanced"/>
+    <field name="product_id" ref="c_prod_0"/>
+    <field name="specific_price">0</field>
+    <field name="quantity">1</field>
+    <field name="recurring_rule_type">monthly</field>
+    <field name="recurring_interval">1</field>
+    <field name="commitment_duration">12</field>
+  </record>
+
+  <record id="cl_adv_1" model="contract.template.line">
+    <field name="name">1 month of ##ACCESSORY##</field>
+    <field name="contract_id" ref="contract_tmpl_advanced"/>
+    <field name="product_id" ref="c_prod_1"/>
+    <field name="quantity">1</field>
+    <field name="recurring_rule_type">monthly</field>
+    <field name="recurring_interval">1</field>
+    <field name="commitment_duration">12</field>
+  </record>
+
+  <record id="prod_fp" model="product.product">
+    <field name="name">Fairphone</field>
+    <field name="type">service</field>
+    <field name="is_rental">true</field>
+    <field name="is_contract">true</field>
+    <field name="website_published">true</field>
+    <field name="list_price">60</field>
+    <field name="rental_price">30</field>
+    <field name="uom_id" ref="uom.product_uom_unit"/>
+    <field name="property_contract_template_id" ref="contract_tmpl_basic"/>
+  </record>
+
+  <record id="attr_cpu" model="product.attribute">
+    <field name="name">CPU</field>
+    <field name="type">select</field>
+  </record>
+
+  <record id="val_cpu_i5" model="product.attribute.value">
+    <field name="name">i5</field>
+    <field name="attribute_id" ref="attr_cpu"/>
+  </record>
+
+  <record id="val_cpu_i7" model="product.attribute.value">
+    <field name="name">i7</field>
+    <field name="attribute_id" ref="attr_cpu"/>
+  </record>
+
+  <record id="prod_pc" model="product.template">
+    <field name="name">PC</field>
+    <field name="type">service</field>
+    <field name="is_rental">true</field>
+    <field name="is_contract">true</field>
+    <field name="website_published">true</field>
+    <field name="list_price">130</field>
+    <field name="rental_price">65</field>
+    <field name="uom_id" ref="uom.product_uom_unit"/>
+    <field name="property_contract_template_id" ref="contract_tmpl_advanced"/>
+  </record>
+
+  <record id="pc_val_cpu" model="product.template.attribute.line">
+    <field name="attribute_id" ref="attr_cpu"/>
+    <field name="product_tmpl_id" ref="prod_pc"/>
+    <field name="value_ids" eval="[(6, 0, [ref('val_cpu_i5'), ref('val_cpu_i7')])]"/>
+  </record>
+
+  <record id="prod_pc_i5" model="product.product">
+    <field name="product_tmpl_id" ref="prod_pc"/>
+    <field name="attribute_value_ids" eval="[(6, 0, [ref('val_cpu_i5')])]"/>
+  </record>
+
+  <record id="prod_pc_i7" model="product.product">
+    <field name="product_tmpl_id" ref="prod_pc"/>
+    <field name="attribute_value_ids" eval="[(6, 0, [ref('val_cpu_i7')])]"/>
+  </record>
+
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+    <record model="ir.ui.view" id="product_template_form_view">
+        <field name="name">product.template.product.website.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale.product_template_form_view"/>
+        <field name="arch" type="xml">
+          <xpath expr="//field[@name='sale_ok']/ancestor::div[1]" position="before">
+            <div>
+              <field name="is_rental"/>
+              <label for="is_rental"/>
+            </div>
+          </xpath>
+          <xpath expr="//group[@name='group_standard_price']" position="after">
+            <group name="rental" attrs="{'invisible':[('is_rental','=',False)]}" >
+              <field name="is_deposit"/>
+              <field name="rental_price" widget="monetary" attrs="{'required': [('is_rental', '=', True)]}"/>
+              <field name="rental_frequency"/>
+            </group>
+          </xpath>
+        </field>
+    </record>
+  </data>
+
+</odoo>
