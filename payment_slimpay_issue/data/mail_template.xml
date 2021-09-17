@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <record id="mail_warn_user" model="mail.template">
+      <field name="name">Warn partner of a payment issue</field>
+      <field name="email_from">${object.user_id.company_id.email}</field>
+      <field name="subject">${object.project_id.company_id.name}: rejected payment</field>
+      <field name="model_id" ref="project_issue.model_project_issue"/>
+      <field name="partner_to" >${object.partner_id.id}</field>
+      <field name="lang" >${object.partner_id.lang}</field>
+      <field name="auto_delete" eval="False"/>
+      <field name="body_html"><![CDATA[
+<div style="background:#F0F0F0;color:#515166;padding:10px 0px;font-family:Arial,Helvetica,sans-serif;font-size:14px;">
+  <p>
+    <a href="/"><img src="/web/binary/company_logo" style="vertical-align:baseline;max-width:100px;"></a>
+  </p>
+  <br>
+  <p>Hello,</p>
+  <br>
+  <p>Your payment of invoice number ${object.invoice_id.number} has been
+    rejected${object.invoice_unpaid_count != 0 and object.invoice_unpaid_count != 1 and ' again' or ''}.
+  </p>
+  <p>Next attempt will occur in the coming days.
+    Please contact us quickly in case you think this new payment could be rejected too,
+    to avoid bank fees to all parties.
+  </p>
+  <br>
+  <p>Regards,<br>
+    The
+    <a href="${object.project_id.company_id.website}" style="color:#875A7B;">
+      ${object.project_id.company_id.name}
+    </a>
+    team.
+  </p>
+</div>
+]]>
+    </field>
+  </record>
+
+    <record id="mail_max_trial" model="mail.template">
+      <field name="name">Max Slimpay payment trials reached</field>
+      <field name="email_from">${object.user_id.company_id.email or '' | safe}</field>
+      <field name="subject">${object.user_id.company_id.name}: max payment trials reached</field>
+      <field name="model_id" ref="project_issue.model_project_issue"/>
+      <field name="partner_to" >${object.user_id.id}</field>
+      <field name="lang" >${object.partner_id.lang}</field>
+      <field name="auto_delete" eval="True"/>
+      <field name="body_html"><![CDATA[
+      <p>Max trial number reached for payment issue ${object.name} id ${object.id}.</p>
+      ]]>
+      </field>
+  </record>
+
+  </data>
+
+</odoo>
