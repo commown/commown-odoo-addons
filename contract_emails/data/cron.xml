@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="ir_cron_send_planned_emails" model="ir.cron">
+      <field name="name">Send planned emails</field>
+      <field name="model" eval="'contract_emails.planned_mail_template'"/>
+      <field eval="True" name="active"/>
+      <field name="user_id" ref="base.user_root"/>
+      <field name="interval_number">1</field>
+      <field name="interval_type">days</field>
+      <field name="numbercall">-1</field>
+      <field eval="'cron_send_planned_mails'" name="function"/>
+      <field eval="'()'" name="args"/>
+    </record>
+
+</odoo>
