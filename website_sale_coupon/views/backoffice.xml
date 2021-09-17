@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="coupon_campaign_form" model="ir.ui.view">
+      <field name="name">Coupon Campaign</field>
+      <field name="model">coupon.campaign</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <div class="oe_title">
+              <label for="name" string="Name" />
+              <h1>
+                <field name="name"/>
+              </h1>
+            </div>
+            <group>
+              <field name="description" />
+              <field name="date_start" />
+              <field name="date_end" />
+              <field name="seller_id" />
+              <field name="coupons_are_exclusive" />
+              <field name="target_product_tmpl_ids" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="coupon_campaign_tree" model="ir.ui.view">
+      <field name="name">Coupon Campaigns</field>
+      <field name="model">coupon.campaign</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="seller_id" />
+          <field name="used_coupons" />
+          <field name="emitted_coupons" />
+          <field name="date_start" />
+          <field name="date_end" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="coupon_coupon_form" model="ir.ui.view">
+      <field name="name">Coupon</field>
+      <field name="model">coupon.coupon</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="campaign_id" />
+              <field name="code" />
+              <!-- Maybe next field should not even be displayed
+                   It is for now as the module is not mature yet
+                   and this could help debugging -->
+              <field name="reserved_for_sale_id" readonly="1"/>
+              <field name="used_for_sale_id" readonly="1"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="coupon_coupon_tree" model="ir.ui.view">
+      <field name="name">Coupon</field>
+      <field name="model">coupon.coupon</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="campaign_id" />
+          <field name="code" />
+          <field name="used_for_sale_id" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="action_coupon_campaign" model="ir.actions.act_window">
+      <field name="name">Coupon campaigns</field>
+      <field name="res_model">coupon.campaign</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_id" ref="coupon_campaign_tree"/>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_coupon_coupon" model="ir.actions.act_window">
+      <field name="name">Create Coupon</field>
+      <field name="res_model">coupon.coupon</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_id" ref="coupon_coupon_tree"/>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Coupons" id="coupon_main"
+              parent="sales_team.menu_base_partner"/>
+      <menuitem name="Campaigns" id="coupon_campaign"
+                action="action_coupon_campaign"
+                parent="coupon_main"/>
+      <menuitem name="Coupons" id="coupon_coupon"
+                action="action_coupon_coupon"
+                parent="coupon_main"/>
+
+  </data>
+</odoo>
