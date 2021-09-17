@@ -1,0 +1,27 @@
+<odoo>
+  <data>
+
+    <record model="ir.ui.view" id="crm_team_view_form">
+      <field name="name">crm.team.form</field>
+      <field name="model">crm.team</field>
+      <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group[@name='right']" position="inside">
+          <field name="delivery_tracking"/>
+        </xpath>
+        <xpath expr="//notebook" position="inside">
+          <page name="shipping" string="Shipping">
+            <group>
+              <field name="shipping_account_id"/>
+            </group>
+            <group attrs="{'invisible': [('delivery_tracking', '=', False)]}">
+              <field name="default_perform_actions_on_delivery"/>
+              <field name="on_delivery_email_template_id"/>
+            </group>
+          </page>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>

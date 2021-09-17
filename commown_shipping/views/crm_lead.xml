@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+
+    <record model="ir.ui.view" id="crm_case_form_view_oppor">
+        <field name="name">commown_shipping.lead.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+          <xpath expr="//notebook/page/field[@name='description']/ancestor::page[1]"
+                 position="before">
+            <page name="delivery" string="Delivery followup"
+                  attrs="{'invisible': [('delivery_tracking', '=', False)]}">
+              <group>
+                <group>
+                  <field name="delivery_tracking" invisible="1"/>
+                  <field name="expedition_ref"/>
+                  <field name="expedition_date"/>
+                  <field name="delivery_date"/>
+                </group>
+                <group>
+                  <field readonly="1" name="expedition_status"/>
+                  <field readonly="1" name="expedition_status_fetch_date"/>
+                  <field readonly="1" name="expedition_urgency_mail_sent"/>
+                </group>
+              </group>
+              <group name="delivery_actions">
+                <field name="send_email_on_delivery"/>
+                <field name="on_delivery_email_template_id"
+                       attrs="{'invisible': [('send_email_on_delivery', '=', False)]}"/>
+              </group>
+            </page>
+          </xpath>
+        </field>
+    </record>
+
+  </data>
+
+</odoo>

@@ -1,0 +1,23 @@
+<odoo>
+  <data>
+
+    <record model="ir.ui.view" id="edit_project">
+      <field name="name">project.project.form</field>
+      <field name="model">project.project</field>
+      <field name="inherit_id" ref="project.edit_project"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group[@name='misc']" position="inside">
+          <group string="Shipping">
+            <field name="shipping_account_id"/>
+            <field name="delivery_tracking"/>
+            <field name="default_perform_actions_on_delivery"
+                   attrs="{'invisible': [('delivery_tracking', '=', False)]}"/>
+            <field name="on_delivery_email_template_id"
+                   attrs="{'invisible': [('delivery_tracking', '=', False)]}"/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>

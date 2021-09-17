@@ -1,0 +1,11 @@
+import keychain
+import parcel
+import shipping_mixin
+import delivery_mixin
+import crm_lead
+import project_issue
+import project_task
+import crm_team
+import project
+import product
+import res_partner

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+
+  <record id="delivery_tracking_crm_lead" model="ir.cron">
+    <field name="name">Delivery tracking: crm.lead</field>
+    <field name="active" eval="True"/>
+    <field name="user_id" ref="base.user_root"/>
+    <field name="interval_number">2</field>
+    <field name="interval_type">hours</field>
+    <field name="numbercall">-1</field>
+    <field name="model">crm.lead</field>
+    <field name="function">_cron_delivery_auto_track</field>
+    <field name="args">()</field>
+  </record>
+
+  <record id="delivery_tracking_project_issue" model="ir.cron">
+    <field name="name">Delivery tracking: project.issue</field>
+    <field name="active" eval="True"/>
+    <field name="user_id" ref="base.user_root"/>
+    <field name="interval_number">2</field>
+    <field name="interval_type">hours</field>
+    <field name="numbercall">-1</field>
+    <field name="model">project.issue</field>
+    <field name="function">_cron_delivery_auto_track</field>
+    <field name="args">()</field>
+  </record>
+
+  <record id="delivery_tracking_project_task" model="ir.cron">
+    <field name="name">Delivery tracking: project.task</field>
+    <field name="active" eval="True"/>
+    <field name="user_id" ref="base.user_root"/>
+    <field name="interval_number">2</field>
+    <field name="interval_type">hours</field>
+    <field name="numbercall">-1</field>
+    <field name="model">project.task</field>
+    <field name="function">_cron_delivery_auto_track</field>
+    <field name="args">()</field>
+  </record>
+
+</odoo>
