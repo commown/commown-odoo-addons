@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="issue-description-fp3-screen-protection" model="ir.ui.view">
+      <field name="name">self-troubleshoot-issue-description-fp3-screen-protection</field>
+      <field name="type">qweb</field>
+      <field name="key">commown_self_troubleshooting.issue-description-fp3-screen-protection</field>
+      <field name="arch" type="xml">
+        <t t-name="self-troubleshoot-issue-description-fp3-airglass">
+Bonjour,
+<t t-if="cable_sound=='yes'">
+après avoir effectué un auto-dépannage, il ressort que ma protection d'écran doit être changée.
+
+L'adresse d'expédition est la suivante :
+<t t-esc="name"/>
+<t t-esc="u'\n'.join((street, street2)).strip()"/>
+<t t-esc="zipcode"/> <t t-esc="city"/>
+<t t-esc="country"/>
+
+Informations supplémentaires utiles à la livraison :
+Numéro de téléphone : <t t-esc="phone"/>
+Adresse de courriel : <t t-esc="email"/></t>
+<t t-if="more_info">
+J'ai porté à votre connaissance les informations complémentaires suivantes :
+---
+<t t-esc="more_info"/>
+---</t>
+        </t>
+      </field>
+    </record>
+
+  </data>
+
+</odoo>
