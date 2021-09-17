@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record model="ir.ui.view" id="account_analytic_account_recurring_form_form">
+    <field name="name">Contract form</field>
+    <field name="model">account.analytic.account</field>
+    <field
+        name="inherit_id"
+        ref="commown_contractual_issue.account_analytic_account_recurring_form_form"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//notebook[@name='issue_related']" position="inside">
+        <page name="devices" string="Device moves">
+          <group>
+            <field name="quant_ids">
+              <tree>
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="location_id"/>
+                <field name="in_date"/>
+              </tree>
+            </field>
+            <field name="picking_ids">
+              <tree
+                  colors="red: state not in ('done', 'cancel'); grey: state == 'cancel'"
+                  default_order="date_done ASC, id ASC"
+                  >
+                <field name="name"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <field name="min_date"/>
+                <field name="date_done"/>
+                <field name="state"/>
+              </tree>
+            </field>
+          </group>
+        </page>
+
+      </xpath>
+
+    </field>
+  </record>
+
+</odoo>
