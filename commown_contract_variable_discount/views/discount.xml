@@ -1,0 +1,16 @@
+<odoo>
+
+  <record id="contract_template_discount_line" model="ir.ui.view">
+    <field name="name">Contract template discount line form</field>
+    <field name="model">contract.template.discount.line</field>
+    <field name="inherit_id"
+           ref="contract_variable_discount.contract_template_discount_line"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='condition']" position="after">
+        <field name="coupon_campaign_id"
+               attrs="{'invisible': [('condition', '!=', 'coupon_from_campaign')]}"/>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

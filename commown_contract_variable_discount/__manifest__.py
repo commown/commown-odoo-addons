@@ -14,6 +14,10 @@
         'commown_contractual_issue',
         'contract_variable_discount',
         'product_rental',
+        'website_sale_coupon',
     ],
     'installable': True,
+    'data': [
+        'views/discount.xml',
+    ],
 }
