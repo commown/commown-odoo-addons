@@ -149,12 +149,13 @@ class SlimpayTransaction(models.Model):
         _logger.debug('Found mandate reference: %s', mandate_ref)
         amount = round(self.amount, self.currency_id.decimal_places)
         try:
-            acquirer_reference = client.create_payment(
+            accepted, acquirer_reference = client.create_payment(
                 mandate_ref, amount, self.currency_id.name,
                 self._label(), out=self._is_out_transaction())
-            _logger.debug('Payment creation result: %s', acquirer_reference)
+            _logger.debug('Payment creation result: %s, %s',
+                          accepted, acquirer_reference)
         except ErrorMessage as exc:
             raise UserError(_(exc))
-        self.update({'state': 'done' if acquirer_reference else 'error',
+        self.update({'state': 'done' if accepted else 'error',
                      'acquirer_reference': acquirer_reference})
-        return bool(acquirer_reference)
+        return accepted
