@@ -404,6 +404,7 @@ class ProjectIssue(models.Model):
             issue.update({'stage_id': self.env.ref(
                 'payment_slimpay_issue.stage_max_trials_reached').id})
         else:
-            issue.update({'stage_id': self.env.ref(
-                'payment_slimpay_issue.stage_warn_partner_and_wait').id})
+            issue.with_context(lang=issue.partner_id.lang).update(
+                {'stage_id': self.env.ref(
+                    'payment_slimpay_issue.stage_warn_partner_and_wait').id})
         return issue
