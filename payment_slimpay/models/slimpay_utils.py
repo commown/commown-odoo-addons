@@ -158,8 +158,7 @@ class SlimpayClient(object):
             _logger.error(
                 'Invalid slimpay payment response for transaction:\n %r',
                 response)
-            return False
-        return response.get('state') == 'accepted' and response['reference']
+        return response.get('state') == 'accepted', response['reference']
 
     def get(self, url):
         """ Expose the raw coreapi `get` method """
