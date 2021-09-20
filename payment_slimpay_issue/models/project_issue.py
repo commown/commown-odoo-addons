@@ -308,7 +308,9 @@ class ProjectIssue(models.Model):
     @api.multi
     @job(default_channel=QUEUE_CHANNEL)
     def _slimpay_payment_issue_move_and_retry_payment(self):
-        " Use a job to rollback the stage change too in case of a crash "
+        """ Move slimpay payment issue to the retry-and-wait stage
+        Use a queued job to also rollback the stage change in case of a crash.
+        """
         self.stage_id = self.env.ref(
             'payment_slimpay_issue.stage_retry_payment_and_wait').id
 
