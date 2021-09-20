@@ -8,10 +8,9 @@ class ProjectTaskPickingWizard(models.Model):
     _name = "project.task.picking.wizard"
 
     destination_refs = (
-        "stock_location_fp3_outsourced_repair",
+        "stock_location_outsourced_repair",
         "stock_location_fp3_repackaged",
         "stock_location_devices_to_check",
-        "stock_location_fp3_to_check",
         "stock_location_repairer",
     )
 
