@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from odoo import _
 
 
@@ -28,3 +30,6 @@ def _i18n():
     _(u"Unit Price")
     _(u"Untaxed Amount")
     _(u"Your reference")
+    _(u"No discount in case of anticipated payment."
+      u" Delay penalty of 20% annual rate."
+      u" For professionals, fixed-price debt collection compensation in case of payment delay: 40€.")
