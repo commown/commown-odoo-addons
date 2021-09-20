@@ -7,30 +7,71 @@ class ProjectTask(models.Model):
     storable_product_id = fields.Many2one(
         string=u"Article",
         comodel_name="product.product",
-        domain="[('tracking', '=', 'serial')]",
+        domain=lambda self: self._compute_storable_product_domain(),
     )
 
     lot_id = fields.Many2one(
         string=u"Device",
         comodel_name="stock.production.lot",
+        domain=lambda self: self._compute_lot_domain(),
     )
 
     device_tracking = fields.Boolean(
         'Use for device tracking?',
         related='project_id.device_tracking')
 
-    @api.onchange("storable_product_id")
-    def onchange_storable_product(self):
-        result = {}
+    def _compute_storable_product_domain(self):
+        if not self.contract_id:
+            domain = [('tracking', '=', 'serial')]
+        else:
+            lots = self.contract_id.quant_ids.mapped("lot_id")
+            products = lots.mapped("product_id")
+            domain = [("id", "in", products.ids)]
+        return domain
+
+    def _compute_lot_domain(self):
+        if self.contract_id:
+            quants = self.contract_id.quant_ids
+        else:
+            quants = self.env["stock.quant"].search([
+                ("location_id", "child_of", self.env.ref(
+                    "commown_devices.stock_location_devices_to_check").id),
+            ])
+        domain = [("id", "in", quants.mapped("lot_id").ids)]
+
         if self.storable_product_id:
-            loc_check = self.env.ref(
-                "commown_devices.stock_location_devices_to_check")
-            domain = [("location_id", "child_of", loc_check.id)]
-            if self.storable_product_id:
-                domain.append(("product_id", "=", self.storable_product_id.id))
-            lots = self.env["stock.quant"].search(domain).mapped("lot_id")
-            result["domain"] = {"lot_id": [('id', 'in', lots.ids)]}
-        return result
+            domain.append(("product_id", "=", self.storable_product_id.id))
+
+        return domain
+
+    def _reset_field_target(self, field_name, domain):
+        value = getattr(self, field_name)
+        model = self.env[self._fields[field_name].comodel_name]
+        possible_values = model.search(domain)
+        if len(possible_values) == 1:
+            setattr(self, field_name, possible_values)
+        elif value and value not in possible_values:
+            setattr(self, field_name, False)
+
+    @api.onchange("contract_id", "storable_product_id")
+    def onchange_contract_or_product(self):
+        lot_domain = self._compute_lot_domain()
+        product_domain = self._compute_storable_product_domain()
+
+        self._reset_field_target("lot_id", lot_domain)
+        self._reset_field_target("storable_product_id", product_domain)
+
+        return {
+            "domain": {
+                "lot_id": lot_domain,
+                "storable_product_id": product_domain,
+            }
+        }
+
+    @api.onchange("lot_id")
+    def onchange_lot_id(self):
+        if self.lot_id:
+            self.storable_product_id = self.lot_id.product_id
 
     def action_scrap_device(self):
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
