@@ -33,3 +33,4 @@ def _i18n():
     _(u"No discount in case of anticipated payment."
       u" Delay penalty of 20% annual rate."
       u" For professionals, fixed-price debt collection compensation in case of payment delay: 40€.")
+    _(u"Company number / registry / VAT")

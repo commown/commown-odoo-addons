@@ -171,3 +171,8 @@ msgstr "Prix HT"
 msgid "Your reference"
 msgstr "Votre référence"
 
+#. module: custom_report
+#: code:addons/custom_report/i18n/account_invoice.py:33
+#, python-format
+msgid "Company number / registry / VAT"
+msgstr "SIREN / RCS / TVA"

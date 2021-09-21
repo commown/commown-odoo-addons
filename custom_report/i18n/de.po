@@ -171,3 +171,8 @@ msgstr "Rechnungsbetrag netto"
 msgid "Your reference"
 msgstr "Referenz"
 
+#. module: custom_report
+#: code:addons/custom_report/i18n/account_invoice.py:33
+#, python-format
+msgid "Company number / registry / VAT"
+msgstr "Handelsregisternummer / Registergericht / UST-ID Nr."
