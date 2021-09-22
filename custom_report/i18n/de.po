@@ -31,7 +31,7 @@ msgstr "Steuersatz"
 #: code:addons/custom_report/i18n/account_invoice.py:8
 #, python-format
 msgid "Certificate"
-msgstr "Nachweis"
+msgstr "Zertifikat"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/account_invoice.py:9
@@ -109,13 +109,13 @@ msgstr "Menge"
 #: code:addons/custom_report/i18n/account_invoice.py:21
 #, python-format
 msgid "Refund"
-msgstr "Gutschrift"
+msgstr "Guthaben"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/account_invoice.py:22
 #, python-format
 msgid "Refund date"
-msgstr "Gutschriftsdatum"
+msgstr "Guthabensdatum"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/account_invoice.py:23
