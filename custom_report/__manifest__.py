@@ -4,7 +4,7 @@
     'name': 'Commown Custom reports',
     'category': 'Custom',
     'summary': 'Custom reports',
-    'version': '10.0.1.1.0',
+    'version': '10.0.1.1.1',
     'description': """This module adds custom reports.""",
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
