@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-14 06:49+0000\n"
-"PO-Revision-Date: 2021-09-14 06:49+0000\n"
+"POT-Creation-Date: 2021-09-20 21:20+0000\n"
+"PO-Revision-Date: 2021-09-20 21:20+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,152 +16,163 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:6
+#: code:addons/custom_report/i18n/account_invoice.py:8
 #, python-format
 msgid "Amount"
 msgstr "Betrag"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:7
+#: code:addons/custom_report/i18n/account_invoice.py:9
 #, python-format
 msgid "Base"
 msgstr "Steuersatz"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:8
+#: code:addons/custom_report/i18n/account_invoice.py:10
 #, python-format
 msgid "Certificate"
-msgstr "Nachweis"
+msgstr "Zertifikat"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:9
+#: code:addons/custom_report/i18n/account_invoice.py:11
 #, python-format
 msgid "Certificate date"
 msgstr "Nachweisdatum"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:10
+#: code:addons/custom_report/i18n/account_invoice.py:12
 #, python-format
 msgid "Contract"
 msgstr "Vertrag"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:12
+#: code:addons/custom_report/i18n/account_invoice.py:14
 #, python-format
 msgid "Customer VAT number"
 msgstr "USt.-ID"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:11
+#: code:addons/custom_report/i18n/account_invoice.py:13
 #, python-format
 msgid "Customer number"
 msgstr "Kundennummer"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:13
+#: code:addons/custom_report/i18n/account_invoice.py:15
 #, python-format
 msgid "Deposit"
 msgstr "Kaution"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:14
+#: code:addons/custom_report/i18n/account_invoice.py:16
 #, python-format
 msgid "Description"
 msgstr "Bezeichnung"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:15
+#: code:addons/custom_report/i18n/account_invoice.py:17
 #, python-format
 msgid "Equity subscription"
 msgstr "Genossenschaftsanteil von Commown"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:16
+#: code:addons/custom_report/i18n/account_invoice.py:18
 #, python-format
 msgid "Invoice"
 msgstr "Rechnung"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:17
+#: code:addons/custom_report/i18n/account_invoice.py:19
 #, python-format
 msgid "Invoice date"
 msgstr "Rechnungsdatum"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:18
+#: code:addons/custom_report/i18n/account_invoice.py:20
 #, python-format
 msgid "Net total"
 msgstr "Rechnungsbetrag netto"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:19
+#: code:addons/custom_report/i18n/account_invoice.py:33
+#, python-format
+msgid "No discount in case of anticipated payment. Delay penalty of 20% annual rate. For professionals, fixed-price debt collection compensation in case of payment delay: 40€."
+msgstr "Kein Skonto bei vorzeitiger Zahlung. Verzugszinsen in Höhe von 20% pro Jahr. Für Gewerbetreibende: Inkassoentschädigung zum Festpreis bei Zahlungsverzug: 40€."
+
+#. module: custom_report
+#: code:addons/custom_report/i18n/account_invoice.py:21
 #, python-format
 msgid "Payment conditions"
 msgstr "Zahlungsbedingungen"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:20
+#: code:addons/custom_report/i18n/account_invoice.py:22
 #, python-format
 msgid "Quantity"
 msgstr "Menge"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:21
+#: code:addons/custom_report/i18n/account_invoice.py:23
 #, python-format
 msgid "Refund"
-msgstr "Gutschrift"
+msgstr "Guthaben"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:22
+#: code:addons/custom_report/i18n/account_invoice.py:24
 #, python-format
 msgid "Refund date"
-msgstr "Gutschriftsdatum"
+msgstr "Guthabensdatum"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:23
+#: code:addons/custom_report/i18n/account_invoice.py:25
 #, python-format
 msgid "Related invoice"
 msgstr "Verbundene Rechnung"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:24
+#: code:addons/custom_report/i18n/account_invoice.py:26
 #, python-format
 msgid "Sales contact"
 msgstr "Vertriebskontakt"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:25
+#: code:addons/custom_report/i18n/account_invoice.py:27
 #, python-format
 msgid "Sub-Total"
 msgstr "Teilsumme"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:26
+#: code:addons/custom_report/i18n/account_invoice.py:28
 #, python-format
 msgid "Tax"
 msgstr "Steuer"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:27
+#: code:addons/custom_report/i18n/account_invoice.py:29
 #, python-format
 msgid "Total"
 msgstr "Rechnungsbetrag"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:28
+#: code:addons/custom_report/i18n/account_invoice.py:30
 #, python-format
 msgid "Unit Price"
 msgstr "Einheitspreis"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:29
+#: code:addons/custom_report/i18n/account_invoice.py:31
 #, python-format
 msgid "Untaxed Amount"
 msgstr "Rechnungsbetrag netto"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/account_invoice.py:30
+#: code:addons/custom_report/i18n/account_invoice.py:32
 #, python-format
 msgid "Your reference"
 msgstr "Referenz"
 
+#. module: custom_report
+#: code:addons/custom_report/i18n/account_invoice.py:33
+#, python-format
+msgid "Company number / registry / VAT"
+msgstr "Handelsregisternummer / Registergericht / UST-ID Nr."
