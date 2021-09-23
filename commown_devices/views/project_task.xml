@@ -6,7 +6,7 @@
     <field name="model">project.task</field>
     <field name="inherit_id" ref="commown_contractual_issue.view_task_form2"/>
     <field name="arch" type="xml">
-      <xpath expr="//group[@name='contract']" position="before">
+      <xpath expr="//group[@name='partner_contract']" position="after">
         <group name="device" attrs="{'invisible': [('device_tracking', '=', False)]}">
           <field name="storable_product_id"/>
           <field name="lot_id"/>
