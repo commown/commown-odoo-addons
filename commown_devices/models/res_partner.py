@@ -10,10 +10,12 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     def set_customer_location(self):
-        """Set property_stock_customer to a dedicated location and return it
+        """Search for the oldest current partner's location and return it
+
+        TODO: rename me
 
         The dedicated location is a child of standard location for all
-        customers.
+        customers, with usage 'customer'.
         """
 
         if (self.commercial_partner_id != self
