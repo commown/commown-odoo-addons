@@ -16,6 +16,37 @@ class ProjectIssueAbstractPickingWizard(models.AbstractModel):
     )
 
 
+class ProjectIssueContractTransferWizard(models.Model):
+    _name = "project.issue.contract_transfer.wizard"
+    _inherit = "project.issue.abstract.picking.wizard"
+
+    contract_id = fields.Many2one(
+        "account.analytic.account",
+        string=u"Destination contract",
+        required=True,
+    )
+
+    @api.multi
+    def create_transfer(self):
+        lot = self.issue_id.lot_id
+        if not lot:
+            raise UserError(_("Can't move device: no device set on this issue!"))
+
+        transfer_location = self.env.ref(
+            "commown_devices.stock_location_contract_transfer")
+
+        dest = self.contract_id.partner_id.set_customer_location()
+
+        internal_picking(
+            u"Issue-%s" % self.issue_id.id, [lot], self.present_location(),
+            transfer_location, date=self.date, do_transfer=True)
+
+        internal_picking(
+            u"Issue-%s" % self.issue_id.id, [lot], transfer_location,
+            dest_location, date=self.date, do_transfer=True)
+
+
+
 class ProjectIssueOutwardPickingWizard(models.TransientModel):
     _name = "project.issue.outward.picking.wizard"
     _inherit = "project.issue.abstract.picking.wizard"

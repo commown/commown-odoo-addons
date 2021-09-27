@@ -1,5 +1,25 @@
 <odoo>
 
+  <record id="action_wizard_contract_transfer_project_issue_picking" model="ir.actions.act_window">
+    <field name="name">[commown] Transfer device to another contract</field>
+    <field name="src_model">project.issue</field>
+    <field name="res_model">project.issue.contract_transfer.wizard</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_issue_id': active_id}</field>
+  </record>
+
+  <record id="action_menu_wizard_contract_transfer_project_issue_picking" model="ir.values">
+    <field name="name">[commown] Transfer device to another contract</field>
+    <field name="model">project.issue</field>
+    <field name="key">action</field>
+    <field name="key2">client_action_multi</field>
+    <field
+        name="value"
+        eval="'ir.actions.act_window,' + str(ref('action_wizard_contract_transfer_project_issue_picking'))"/>
+  </record>
+
   <record id="action_wizard_outward_project_issue_picking" model="ir.actions.act_window">
     <field name="name">[commown] Send a device</field>
     <field name="src_model">project.issue</field>

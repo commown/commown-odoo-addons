@@ -56,6 +56,12 @@
       <field name="location_id" ref="stock.stock_location_locations_partner"/>
     </record>
 
+    <record id="stock_location_contract_transfer" model="stock.location">
+      <field name="name">Location for devices awaiting a contract transfer</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+    </record>
+
   </data>
 
 </odoo>
