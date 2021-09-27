@@ -35,15 +35,14 @@ class ProjectIssueContractTransferWizard(models.Model):
         transfer_location = self.env.ref(
             "commown_devices.stock_location_contract_transfer")
 
+        self.issue_id.contract_id.receive_device(
+            self.issue_id.lot_id, transfer_location, date=self.date,
+            do_transfer=True)
+
         dest = self.contract_id.partner_id.set_customer_location()
 
-        internal_picking(
-            u"Issue-%s" % self.issue_id.id, [lot], self.present_location(),
-            transfer_location, date=self.date, do_transfer=True)
-
-        internal_picking(
-            u"Issue-%s" % self.issue_id.id, [lot], transfer_location,
-            dest_location, date=self.date, do_transfer=True)
+        self.contract_id.send_device(
+            self.issue_id.lot_id.quant_ids[0], date=self.date, do_transfer=True)
 
 
 
