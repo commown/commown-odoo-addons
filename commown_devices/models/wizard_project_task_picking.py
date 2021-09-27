@@ -10,6 +10,7 @@ class ProjectTaskPickingWizard(models.Model):
     destination_refs = (
         "stock_location_outsourced_repair",
         "stock_location_fp3_repackaged",
+        "stock_location_headsets_repackaged",
         "stock_location_devices_to_check",
         "stock_location_repairer",
     )
