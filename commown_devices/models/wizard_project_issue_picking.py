@@ -24,6 +24,7 @@ class ProjectIssueContractTransferWizard(models.Model):
         "account.analytic.account",
         string=u"Destination contract",
         required=True,
+        domain=[("recurring_invoices", "=", True), ("date_end", "=", False)],
     )
 
     @api.multi
