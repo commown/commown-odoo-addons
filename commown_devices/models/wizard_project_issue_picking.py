@@ -87,18 +87,9 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
     _name = "project.issue.inward.picking.wizard"
     _inherit = "project.issue.abstract.picking.wizard"
 
-    quant_id = fields.Many2one(
-        "stock.quant",
+    lot_id = fields.Many2one(
+        "stock.production.lot",
         string=u"Device",
-        required=True,
-    )
-
-    location_dest_id = fields.Many2one(
-        "stock.location",
-        string=u"Destination",
-        domain=lambda self: [(
-            'id', '=', self.env.ref(
-                'commown_devices.stock_location_devices_to_check').id)],
         required=True,
     )
 
@@ -106,13 +97,17 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
     def onchange_issue_id(self):
         if self.issue_id:
             quants = self.issue_id.contract_id.quant_ids
+            if len(quants) == 1:
+                self.lot_id = quants.lot_id
             return {
                 "domain": {
-                    "quant_id": [("id", "in", quants.ids)]
+                    "lot_id": [("id", "in", quants.mapped("lot_id").ids)]
                 }
             }
 
     @api.multi
     def create_picking(self):
         return self.issue_id.contract_id.receive_device(
-            self.quant_id.lot_id, self.location_dest_id, date=self.date)
+            self.lot_id,
+            self.env.ref('commown_devices.stock_location_devices_to_check'),
+            date=self.date)
