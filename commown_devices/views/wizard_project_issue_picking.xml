@@ -31,7 +31,7 @@
           <group>
             <field name="issue_id" invisible="1"/>
             <field name="date"/>
-            <field name="quant_id"/>
+            <field name="lot_id"/>
           </group>
         </sheet>
         <footer>
