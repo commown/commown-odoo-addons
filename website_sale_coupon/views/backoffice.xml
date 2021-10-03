@@ -84,7 +84,7 @@
           <field name="campaign_id"/>
           <field name="used_for_sale_id"/>
           <filter string="Reserved"
-                  domain="[('reserved_for_sale_id','=',False)]"/>
+                  domain="[('reserved_for_sale_id','!=',False)]"/>
           <filter string="Unused"
                   domain="[('used_for_sale_id','=',False)]"/>
           <filter string="From coupon campaign"
