@@ -9,7 +9,8 @@ _logger = logging.getLogger(__name__)
 class WebsiteSaleCouponController(http.Controller):
 
     def _coupon_descr(self, coupon):
-        return {'code': coupon.code, 'descr': coupon.campaign_id.description}
+        return {'name':  coupon.display_name,
+                'descr': coupon.campaign_id.description}
 
     def _sale_coupons_descr(self, sale_order):
         return [self._coupon_descr(coupon)

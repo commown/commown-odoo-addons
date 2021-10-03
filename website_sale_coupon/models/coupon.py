@@ -106,3 +106,18 @@ class Coupon(models.Model):
     used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
     reserved_for_sale_id = fields.Many2one(
         'sale.order', string='Reserved for sale (admin info only)')
+    is_auto_coupon = fields.Boolean(
+        related="campaign_id.is_without_coupons",
+        readonly=True,
+    )
+
+    def name_get(self):
+        result = []
+        for record in self:
+            _id, name = super(Coupon, record).name_get()[0]
+            if record.is_auto_coupon:
+                name = record.campaign_id.name
+            else:
+                name = record.code
+            result.append((record.id, name))
+        return result
