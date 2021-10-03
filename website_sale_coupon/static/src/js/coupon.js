@@ -4,8 +4,10 @@ odoo.define('website_sale_coupon.coupon', function(require) {
     var ajax = require('web.ajax');
     var core = require('web.core');
     var qweb = core.qweb;
-    ajax.loadXML('/website_sale_coupon/static/src/xml/coupon_templates.xml',
-                 qweb);
+    var templates = ajax.loadXML(
+      '/website_sale_coupon/static/src/xml/coupon_templates.xml',
+      qweb
+    );
 
     function displayCoupons(coupons) {
         var $dl = $('<dl class="dl-horizontal"/>').appendTo(
@@ -13,16 +15,18 @@ odoo.define('website_sale_coupon.coupon', function(require) {
         );
         coupons.forEach(function(coupon) {
             $(qweb.render('coupon.used',
-                          {'code': coupon.code, 'descr': coupon.descr}))
+                          {'name': coupon.name, 'descr': coupon.descr}))
                 .appendTo($dl);
         });
     }
 
-    ajax.jsonRpc('/website_sale_coupon/reserved_coupons', 'call')
+    templates.done(function() {
+      ajax.jsonRpc('/website_sale_coupon/reserved_coupons', 'call')
         .done(function(result) {
             console.log('used_coupons success! result=%o', result);
             displayCoupons(result);
         });
+    });
 
     $(function() {  // wait for the form to be inserted in the DOM
 
