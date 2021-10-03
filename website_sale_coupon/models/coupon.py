@@ -12,7 +12,7 @@ class Campaign(models.Model):
         ('name_uniq', 'unique (name)', "Campaign already exists!"),
     ]
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, index=True)
     description = fields.Text('Description')
     date_start = fields.Date(
         'Validity start date', help='Leave empty to start now')
@@ -22,6 +22,11 @@ class Campaign(models.Model):
         'res.partner', string='Partner who sales the coupons', required=True)
     target_product_tmpl_ids = fields.Many2many(
         'product.template', string='Target products', help='(all if empty)')
+    is_without_coupons = fields.Boolean(
+        string='Is the campaign without coupons?',
+        help='If true, the campaign name is the code to be used by customers',
+        index=True,
+        default=False)
     coupon_ids = fields.One2many(
         'coupon.coupon', 'campaign_id', string='Coupons of the campaign',
         index=True)
