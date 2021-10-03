@@ -3,7 +3,7 @@
 <templates id="template" xml:space="preserve">
 
   <t t-name="coupon.used">
-    <dt><code><t t-esc="code"/></code></dt>
+    <dt><code><t t-esc="name"/></code></dt>
     <dd t-esc="descr"/>
   </t>
 
