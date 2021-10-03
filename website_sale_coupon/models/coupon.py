@@ -103,9 +103,16 @@ class Coupon(models.Model):
     code = fields.Char(
         string="Code", size=_coupon_code_size, index=True,
         default=_compute_default_code)
-    used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
+    used_for_sale_id = fields.Many2one(
+        'sale.order',
+        string='Used for sale',
+        index=True,
+    )
     reserved_for_sale_id = fields.Many2one(
-        'sale.order', string='Reserved for sale (admin info only)')
+        'sale.order',
+        string='Reserved for sale (admin info only)',
+        index=True,
+    )
     is_auto_coupon = fields.Boolean(
         related="campaign_id.is_without_coupons",
         readonly=True,
