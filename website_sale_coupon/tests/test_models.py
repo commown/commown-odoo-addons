@@ -112,7 +112,7 @@ class CouponSchemaTC(TransactionCase):
         coupon = self._create_coupon(code=u'TEST_USE')
         self.assertEqual(coupon.display_name, u"TEST_USE")
 
-        self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
+        self.assertEqual(so.reserve_coupon(u'TEST_use'), coupon)
         self.assertIn(coupon, so.reserved_coupons())
 
         so.confirm_coupons()
@@ -188,7 +188,7 @@ class CouponSchemaTC(TransactionCase):
         )
 
         so = self.sale_order()
-        coupon = so.reserve_coupon(u"No Coupon Test Campaign")
+        coupon = so.reserve_coupon(u"NO COUPON TEST CAMPAIGN")
         self.assertTrue(coupon and coupon.campaign_id == campaign)
         so.confirm_coupons()
         self.assertEqual(coupon.used_for_sale_id, so)
