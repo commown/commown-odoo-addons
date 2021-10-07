@@ -168,7 +168,7 @@ msgstr "Si coché, le code à utiliser par les clients est le nom de la campagne
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_is_without_coupons
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_is_auto_coupon
 msgid "Is the campaign without coupons?"
-msgstr "campagne avec code commun à tous les clients ?"
+msgstr "Code commun à tous les clients ?"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign___last_update
