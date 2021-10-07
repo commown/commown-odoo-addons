@@ -17,6 +17,7 @@ class CouponSchemaTC(TransactionCase):
     def _create_campaign(self, name=u'test', **kwargs):
         kwargs['name'] = name
         kwargs.setdefault('seller_id', self.seller.id)
+        kwargs.setdefault('is_without_coupons', False)
         return self.env['coupon.campaign'].create(kwargs)
 
     def _create_coupon(self, **kwargs):
@@ -109,6 +110,8 @@ class CouponSchemaTC(TransactionCase):
         self.assertIsNone(so.reserve_coupon(u'DUMMYCODE'))
 
         coupon = self._create_coupon(code=u'TEST_USE')
+        self.assertEqual(coupon.display_name, u"TEST_USE")
+
         self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
         self.assertIn(coupon, so.reserved_coupons())
 
@@ -177,3 +180,16 @@ class CouponSchemaTC(TransactionCase):
                           for c in (coupon1, coupon2, coupon3)
                           if c.used_for_sale_id],
                          [so.id])
+
+    def test_no_need_coupon_campaign(self):
+        campaign = self._create_campaign(
+            name=u"No Coupon Test Campaign",
+            is_without_coupons=True,
+        )
+
+        so = self.sale_order()
+        coupon = so.reserve_coupon(u"No Coupon Test Campaign")
+        self.assertTrue(coupon and coupon.campaign_id == campaign)
+        so.confirm_coupons()
+        self.assertEqual(coupon.used_for_sale_id, so)
+        self.assertEqual(coupon.display_name, u"No Coupon Test Campaign")

@@ -15,6 +15,7 @@
               </h1>
             </div>
             <group>
+              <field name="is_without_coupons"/>
               <field name="description" />
               <field name="date_start" />
               <field name="date_end" />
@@ -32,6 +33,7 @@
       <field name="model">coupon.campaign</field>
       <field name="arch" type="xml">
         <tree>
+          <field name="is_without_coupons"/>
           <field name="name" />
           <field name="seller_id" />
           <field name="used_coupons" />
@@ -51,11 +53,8 @@
             <group>
               <field name="campaign_id" />
               <field name="code" />
-              <!-- Maybe next field should not even be displayed
-                   It is for now as the module is not mature yet
-                   and this could help debugging -->
               <field name="reserved_for_sale_id" readonly="1"/>
-              <field name="used_for_sale_id" readonly="1"/>
+              <field name="used_for_sale_id"/>
             </group>
           </sheet>
         </form>
@@ -70,7 +69,29 @@
           <field name="campaign_id" />
           <field name="code" />
           <field name="used_for_sale_id" />
+          <field name="reserved_for_sale_id" />
+          <field name="is_auto_coupon" />
         </tree>
+      </field>
+    </record>
+
+    <record id="coupon_coupon_search" model="ir.ui.view">
+      <field name="name">Coupon search</field>
+      <field name="model">coupon.coupon</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="code"/>
+          <field name="campaign_id"/>
+          <field name="used_for_sale_id"/>
+          <filter string="Reserved"
+                  domain="[('reserved_for_sale_id','!=',False)]"/>
+          <filter string="Unused"
+                  domain="[('used_for_sale_id','=',False)]"/>
+          <filter string="From coupon campaign"
+                  domain="[('is_auto_coupon','=',False)]"/>
+          <filter string="From campaign without coupon"
+                  domain="[('is_auto_coupon','=',True)]"/>
+        </search>
       </field>
     </record>
 
@@ -94,12 +115,12 @@
 
     <menuitem name="Coupons" id="coupon_main"
               parent="sales_team.menu_base_partner"/>
-      <menuitem name="Campaigns" id="coupon_campaign"
-                action="action_coupon_campaign"
-                parent="coupon_main"/>
-      <menuitem name="Coupons" id="coupon_coupon"
-                action="action_coupon_coupon"
-                parent="coupon_main"/>
+    <menuitem name="Campaigns" id="coupon_campaign"
+              action="action_coupon_campaign"
+              parent="coupon_main"/>
+    <menuitem name="Coupons" id="coupon_coupon"
+              action="action_coupon_coupon"
+              parent="coupon_main"/>
 
   </data>
 </odoo>

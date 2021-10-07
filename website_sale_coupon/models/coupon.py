@@ -12,7 +12,7 @@ class Campaign(models.Model):
         ('name_uniq', 'unique (name)', "Campaign already exists!"),
     ]
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, index=True)
     description = fields.Text('Description')
     date_start = fields.Date(
         'Validity start date', help='Leave empty to start now')
@@ -22,6 +22,11 @@ class Campaign(models.Model):
         'res.partner', string='Partner who sales the coupons', required=True)
     target_product_tmpl_ids = fields.Many2many(
         'product.template', string='Target products', help='(all if empty)')
+    is_without_coupons = fields.Boolean(
+        string='Is the campaign without coupons?',
+        help='If true, the campaign name is the code to be used by customers',
+        index=True,
+        default=False)
     coupon_ids = fields.One2many(
         'coupon.coupon', 'campaign_id', string='Coupons of the campaign',
         index=True)
@@ -98,6 +103,28 @@ class Coupon(models.Model):
     code = fields.Char(
         string="Code", size=_coupon_code_size, index=True,
         default=_compute_default_code)
-    used_for_sale_id = fields.Many2one('sale.order', string='Used for sale')
+    used_for_sale_id = fields.Many2one(
+        'sale.order',
+        string='Used for sale',
+        index=True,
+    )
     reserved_for_sale_id = fields.Many2one(
-        'sale.order', string='Reserved for sale (admin info only)')
+        'sale.order',
+        string='Reserved for sale (admin info only)',
+        index=True,
+    )
+    is_auto_coupon = fields.Boolean(
+        related="campaign_id.is_without_coupons",
+        readonly=True,
+    )
+
+    def name_get(self):
+        result = []
+        for record in self:
+            _id, name = super(Coupon, record).name_get()[0]
+            if record.is_auto_coupon:
+                name = record.campaign_id.name
+            else:
+                name = record.code
+            result.append((record.id, name))
+        return result
