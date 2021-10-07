@@ -41,18 +41,23 @@ class CouponSaleOrder(models.Model):
         that is also unused and valid for current sale order.
         """
         self.ensure_one()
-        no_coupon_campaign = self.env['coupon.campaign'].search([
-            ('name', '=', code),
-            ('is_without_coupons', '=', True),
-        ])
+
         Coupon = self.env['coupon.coupon'].sudo()
+
+        no_coupon_campaign = self.env['coupon.campaign'].search([
+            ('name', 'ilike', code.upper()),
+            ('is_without_coupons', '=', True),
+        ]).filtered(lambda c: c.name.upper() == code.upper())
+
         if no_coupon_campaign:
             coupon = Coupon.create({
                 'campaign_id': no_coupon_campaign.id,
                 'code': Coupon._compute_default_code(),
             })
         else:
-            coupon = Coupon.search([('code', '=', code)])
+            # Automatically-generated coupon codes are uppercase
+            coupon = Coupon.search([('code', '=', code.upper())])
+
         if (coupon
                 and not coupon.used_for_sale_id
                 and self._check_exclusive_coupons(candidate=coupon)
