@@ -31,7 +31,7 @@ $(document).ready(function() {
             <!-- Variables à modifier ici -->
             <t t-set="contract_name_like">FP2/</t>
             <t t-set="tag_names">Appareil FP2,FP MOD batterie</t>
-            <t t-set="issue_title">FP2 - batterie</t>
+            <t t-set="issue_title">FP2 - Batterie</t>
             <t t-set="issue_description_template">issue-description-fp2-battery</t>
             <!-- Fin des variables à modifier -->
 
@@ -63,9 +63,9 @@ $(document).ready(function() {
                     <div id="step-1">
                       <div class="clearfix">
                         <h2>AccuBattery</h2>
-                        <p>Allez voir et effectuer le test  <a target="_blank" href="https://wiki.commown.coop/La-gestion-des-batteries">cette
-                      page de notre wiki</a> et répondez à la question
-                        ci-dessous :</p>
+                        <p>Avant de répondre, veuillez effectuer le test batterie sur notre  <a target="_blank" href="https://wiki.commown.coop/La-gestion-des-batteries"> wiki </a>,
+                        puis revenez sur l'auto-dépannage afin de nous indiquer votre réponse à la question ci-dessous !
+                        </p>
                       </div>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
