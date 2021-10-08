@@ -11,7 +11,7 @@
         <t t-name="self-troubleshoot-issue-description-fp2-batterie">
 Bonjour,
 <t t-if="action=='ship'">
-après avoir effectué un auto-dépannage, il ressort que ma batterie de mon FP2 doit être changée.
+après avoir effectué un auto-dépannage, il ressort que la batterie de mon FP2 doit être changée.
 
 L'adresse d'expédition est la suivante :
 <t t-esc="name"/>
