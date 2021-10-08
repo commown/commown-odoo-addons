@@ -24,7 +24,7 @@ Numéro de téléphone : <t t-esc="phone"/>
 Adresse de courriel : <t t-esc="email"/></t>
 <t t-elif="action=='wait-simcard'">
 je vous informe que je vais tester avec une autre carte SIM.</t>
-<t t-if="mute_solved=='yes'">
+<t t-if="mute-solved=='yes'">
 je vous informe que mon problème était lié à l'activation de la fonction "Couper micro" de mon FP2 et que j'ai pu le résoudre.</t>
 <t t-if="more_info">
 J'ai porté à votre connaissance les informations complémentaires suivantes :

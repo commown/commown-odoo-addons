@@ -17,7 +17,7 @@
 
                   const wizard = setUpWizard($('#smartwizard'));
 
-                  $('input[type="radio"][name="mute_solved"]').change(function () {
+                  $('input[type="radio"][name="mute-solved"]').change(function () {
                     const isNo = this.value!=='yes';
                     wizard.toggleStep(2, isNo);
                     wizard.toggleStep(3, isNo);
@@ -42,6 +42,7 @@
             <t t-set="tag_names">Appareil FP2,FP MOD micro</t>
             <t t-set="issue_title">FP2 - Micro</t>
             <t t-set="issue_description_template">issue-description-fp2-micro</t>
+            <t t-set="stage_long_term_followup" t-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
             <!-- Fin des variables à modifier -->
 
             <div class="container">
@@ -71,26 +72,29 @@
                     <t t-call="commown_self_troubleshooting.step-contract-choice"/>
 
                     <div id="step-1">
-                      <h2><i class="fas fa-microphone-slash"></i> Mode micro coupé</h2>
+                      <h2><i class="fas fa-microphone-slash"/> Mode micro coupé</h2>
                       <p> Tout d'abord, veuillez vérifier que vous n'avez pas activé le mode "micro coupé" ("mute" en anglais) lors des appels. Vous pouvez vérifier cela pendant un appel en jetant un oeil sur l'icône du micro.
                       </p>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label>Ce test a t-il permis de résoudre le problème ?</label>
                           <label class="radio-inline" for="mute-solved-yes">Oui</label>
-                          <input type="radio" name="mute_solved" id="mute-solved-yes" value="yes" required="required" data-required-error="Dites-nous si ce test a permis de régler le problème."/>
+                          <input type="radio" name="mute-solved" id="mute-solved-yes" value="yes" required="required" data-required-error="Dites-nous si ce test a permis de régler le problème."/>
                           <label class="radio-inline" for="mute-solved-no">Non</label>
-                          <input type="radio" name="mute_solved" id="mute-solved-no" value="no" required="required"/>
+                          <input type="radio" name="mute-solved" id="mute-solved-no" value="no" required="required"/>
                           <div class="help-block with-errors"/>
                         </div>
                       </div>
                     </div>
 
                     <div id="step-2">
-                      <h2><i class="fas fa-cogs"></i> Test de maintenance</h2>
-                      <p> Afin de voir si le problème provient bien du micro (et non d’un problème logiciel / réseau ou haut parleur), veuillez vous rendre dans le menu <i>Paramètres > Maintenance > Checkup > Primary Microphone > Start test</i>.</p>
+                      <h2><i class="fas fa-cogs"/> Test de maintenance</h2>
+                      <p> Afin de voir si le problème provient bien du micro (et non d’un problème logiciel / réseau ou haut parleur), veuillez vous rendre dans le menu <i>Paramètres &gt; Maintenance &gt; Checkup &gt; Primary Microphone &gt; Start test</i>.</p>
                       <p>Pendant le test, tenez le téléphone comme si vous appeliez, et parlez. Vous devez vous entendre en écho avec une demi-seconde de décalage. Si vous n’entendez rien ou que le son est mauvais, avec des grésillements par exemple, c’est que le micro est en panne et nous vous aiderons à le changer.</p>
                       <p>Veillez à faire le test en pinçant plus ou moins fortement le bas de votre téléphone (où se trouve justement le micro), car les faux contacts sont fréquents à cet endroit.</p>
+                      <br /> 
+                      <p><b>ATTENTION :</b> Sous les systèmes d'exploitation LineageOS et /e/OS, le menu "Maintenance" n'est pas installé par défaut, il faut l'installer manuellement. Nous vous invitons donc à suivre ce tutoriel : <a href="https://wiki.commown.coop/Installer-LineageOS-16-avec-les-Google-Apps-sur-le-Fairphone-2#Tests_de_maintenance_avec_Android_9"/></p>
+                      <br />
                       <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
 		          <label for="micro_model">Lors des tests, le micro est il :</label>
@@ -105,7 +109,7 @@
                     </div>
 
                     <div id="step-3">
-                      <h2><i class="fas fa-sim-card"></i> Test d'une autre carte SIM</h2>
+                      <h2><i class="fas fa-sim-card"/> Test d'une autre carte SIM</h2>
                       <p> Si le test de maintenance montre que le
                       micro principal est fonctionnel mais que
                       l'interlocuteur ne vous entend toujours pas,
@@ -131,8 +135,7 @@
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" name="stage_id"
-                                 t-att-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
+                          <input type="hidden" name="stage_id" t-att-value="stage_long_term_followup"/>
                           <button type="submit" class="btn btn-primary" name="action" value="wait-simcard">Envoyer les informations</button>
                         </div>
                       </div>
