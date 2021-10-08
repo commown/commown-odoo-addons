@@ -22,6 +22,16 @@ L'adresse d'expédition est la suivante :
 Informations supplémentaires utiles à la livraison :
 Numéro de téléphone : <t t-esc="phone"/>
 Adresse de courriel : <t t-esc="email"/></t>
+
+<t t-elif="action=='pb_logiciel'">
+Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
+</t>
+
+<t t-if="more_info">
+J'ai porté à votre connaissance les informations complémentaires suivantes :
+---
+<t t-esc="more_info"/>
+---</t>
         </t>
       </field>
     </record>
