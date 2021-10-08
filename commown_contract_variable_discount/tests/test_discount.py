@@ -53,6 +53,7 @@ class DiscountLineTC(TestContractBase):
             "start_reference": "min_contract_end_date",
             "start_value": 1,
             "start_unit": "months",
+            "end_type": "relative",
             "end_reference": "min_contract_end_date",
             "end_value": 4,
             "end_unit": "months",
