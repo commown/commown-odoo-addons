@@ -9,10 +9,10 @@ from odoo.addons.commown_contract_variable_discount.tests.common import (
     ContractSaleWithCouponTC)
 
 
-def ts_after(date, days=7):
+def ts_after(date, days=7, hour=9):
     "Generate a date in iso format from given odoo string date + given days"
     _date = Date.from_string(date)
-    return (datetime(_date.year, _date.month, _date.day, tzinfo=pytz.utc)
+    return (datetime(_date.year, _date.month, _date.day, hour, tzinfo=pytz.utc)
             + timedelta(days=days)).isoformat()
 
 
@@ -21,9 +21,9 @@ def ts_before(date, days=7):
     return ts_after(date, -days)
 
 
-class CooperativeCampignTC(ContractSaleWithCouponTC):
+class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
-    def invoice(self, optin, optout=None):
+    def invoice(self, optin, optout=None, mock_optin=False):
         """ Create an invoice from contract mocking the cooperative web service
         with give optin and optout dates generators.
         """
@@ -36,7 +36,20 @@ class CooperativeCampignTC(ContractSaleWithCouponTC):
         with requests_mock.Mocker() as rm:
             rm.get("/campaign/test-campaign/subscriptions/important-events/",
                    json=[{"events": events}])
-            return self.contract.recurring_create_invoice()
+            if mock_optin:
+                rm.post("/campaign/test-campaign/opt-in/", json={
+                    "id": 1, "campaign": {}, "member": {},
+                    "optin_ts": ts_after(self.contract.recurring_next_date, 0),
+                    "optout_ts": None,
+                })
+            invoice = self.contract.recurring_create_invoice()
+        reqs = rm.request_history
+        if mock_optin:
+            self.assertEqual(reqs[0].path, "/campaign/test-campaign/opt-in/")
+        self.assertEqual(
+            reqs[-1].path,
+            "/campaign/test-campaign/subscriptions/important-events/")
+        return invoice
 
     def test(self):
         # Force querying the cooperative web service:
@@ -49,7 +62,7 @@ class CooperativeCampignTC(ContractSaleWithCouponTC):
         # Perform the tests:
         before7 = partial(ts_before, days=7)
         before1 = partial(ts_before, days=1)
-        self.assertEqual(self.invoice(before1).amount_total, 6.9)
+        self.assertEqual(self.invoice(before1, mock_optin=True).amount_total, 6.9)
         self.assertEqual(self.invoice(before1, ts_after).amount_total, 6.9)
         self.assertEqual(self.invoice(before7, before1).amount_total, 34.5)
         self.assertEqual(self.invoice(ts_after).amount_total, 34.5)
