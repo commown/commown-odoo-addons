@@ -5,6 +5,7 @@ import urllib
 import logging
 from datetime import datetime
 
+import pytz
 import iso8601
 import phonenumbers
 import requests
@@ -38,7 +39,7 @@ def parse_ws_date(str_date):
     return _date.replace(tzinfo=None) - _date.utcoffset()
 
 
-def query_coop_ws(base_url, campaign_ref, customer_key, date):
+def coop_ws_query(base_url, campaign_ref, customer_key, date):
     "Query the cooperative web services to see if a subscription is active"
 
     _logger.info(u"Querying coop campaign %s, identifier %s on %s...",
@@ -65,6 +66,24 @@ def query_coop_ws(base_url, campaign_ref, customer_key, date):
         return True
 
 
+def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
+    "Query the cooperative web services to see if a subscription is active"
+
+    _logger.info(u"Insert optin at %s in coop campaign %s, identifier %s on %s...",
+                 date, campaign_ref, customer_key, base_url)
+
+    dt = datetime(date.year, date.month, date.day, hour=hour)
+    optin_ts = pytz.timezone(tz or 'GMT').localize(dt, is_dst=True).isoformat()
+
+    url = base_url + "/campaign/%s/opt-in/" % urllib.quote_plus(campaign_ref)
+    resp = requests.post(
+        url, json={"customer_key": customer_key, "optin_ts": optin_ts})
+    resp.raise_for_status()
+
+    resp_data = resp.json()
+    _logger.debug(u"Got web services response:\n %s", pformat(resp_data))
+
+
 class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     _inherit = "contract.template.abstract.discount.line"
 
@@ -77,7 +96,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         campaign = self.coupon_campaign_id
         if result and campaign.is_coop_campaign:
 
-            partner = contract_line.analytic_account_id.partner_id
+            contract = contract_line.analytic_account_id
+            partner = contract.partner_id
             identifier = partner_identifier(partner)
             if not identifier:
                 raise ValueError(
@@ -87,6 +107,13 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             url = self.env['ir.config_parameter'].get_param(
                 'commown_cooperative_campaign.base_url')
 
-            result = query_coop_ws(url, campaign.name, identifier, date)
+            emitted_invoices = self.env["account.invoice"].search([
+                ("contract_id", "=", contract.id),
+            ])
+            if len(emitted_invoices) == 1:
+                # Contract start invoice: optin to the cooperative campaign
+                coop_ws_optin(url, campaign.name, identifier, date, partner.tz)
+
+            result = coop_ws_query(url, campaign.name, identifier, date)
 
         return result
