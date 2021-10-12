@@ -67,7 +67,7 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date):
 
 
 def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
-    "Query the cooperative web services to see if a subscription is active"
+    "Query the cooperative web services to insert a new subscription"
 
     _logger.info(u"Insert optin at %s in coop campaign %s, identifier %s on %s...",
                  date, campaign_ref, customer_key, base_url)
