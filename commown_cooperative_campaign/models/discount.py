@@ -1,6 +1,7 @@
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import hashlib
 import urllib
 import logging
 from datetime import datetime
@@ -19,7 +20,7 @@ MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 _logger = logging.getLogger(__name__)
 
 
-def partner_identifier(partner):
+def partner_identifier(partner, campaign):
     country_code = partner.country_id.code
     if not country_code:
         raise ValueError(u"Partner '%s' has no country set" % partner.name)
@@ -28,9 +29,15 @@ def partner_identifier(partner):
         if phone_num:
             phone_obj = phonenumbers.parse(phone_num, country_code)
             if phonenumbers.number_type(phone_obj) == MOBILE_TYPE:
-                return phonenumbers.format_number(
+                phone = phonenumbers.format_number(
                     phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
                 ).replace(' ', '')
+                acc = partner.env["keychain.account"].search([
+                    ("technical_name", "=", campaign.name + "-salt"),
+                ]).ensure_one()
+                hash = hashlib.sha256()
+                hash.update(phone + acc._get_password())
+                return hash.hexdigest()
 
 
 def parse_ws_date(str_date):
@@ -98,7 +105,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
             contract = contract_line.analytic_account_id
             partner = contract.partner_id
-            identifier = partner_identifier(partner)
+            identifier = partner_identifier(partner, campaign)
             if not identifier:
                 raise ValueError(
                     u"Couldn't build a partner identifier for a coop campaign."
