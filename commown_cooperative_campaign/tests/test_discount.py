@@ -5,6 +5,9 @@ import pytz
 import requests_mock
 
 from odoo.fields import Date
+
+from odoo.addons.commown_cooperative_campaign.models.discount import (
+    partner_identifier)
 from odoo.addons.commown_contract_variable_discount.tests.common import (
     ContractSaleWithCouponTC)
 
@@ -32,6 +35,13 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         # This is required for partner "anon" identifier generation:
         self.so.partner_id.phone = u"0677889900"
         self.so.partner_id.country_id = self.env.ref("base.fr").id
+        self.env["keychain.account"].create({
+            "namespace": u"telecommown",
+            "name": u"Salt for partner identifiers",
+            "technical_name": self.campaign.name + u"-salt",
+            "clear_password": u"no-matter",
+        })
+        self.customer_key = partner_identifier(self.so.partner_id, self.campaign)
 
     def invoice(self, optin, optout=None, mock_optin=False):
         """ Create an invoice from contract mocking the cooperative web service
@@ -57,14 +67,14 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         if mock_optin:
             self.assertEqual(reqs[0].path, "/campaign/test-campaign/opt-in/")
             self.assertEqual(reqs[0].json(), {
-                u'customer_key': u'0677889900',
+                u'customer_key': self.customer_key,
                 u'optin_ts': ts_after(invoice.date_invoice, 0),
             })
 
         self.assertEqual(
             reqs[-1].path,
             "/campaign/test-campaign/subscriptions/important-events/")
-        self.assertEqual(reqs[-1].query, "customer_key=0677889900")
+        self.assertEqual(reqs[-1].query, u"customer_key=%s" % self.customer_key)
         return invoice
 
     def test_invoices(self):
@@ -91,6 +101,6 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         self.assertEqual(rm.request_history[0].path,
                          "/campaign/test-campaign/opt-out/")
         self.assertEqual(rm.request_history[0].json(), {
-            u'customer_key': u'0677889900',
+            u'customer_key': self.customer_key,
             u'optout_ts': ts_after(date_end, 0),
             })

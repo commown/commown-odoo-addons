@@ -46,7 +46,7 @@ class Contract(models.Model):
                         url = self.env['ir.config_parameter'].get_param(
                             'commown_cooperative_campaign.base_url')
                         partner = contract.partner_id
-                        identifier = partner_identifier(partner)
+                        identifier = partner_identifier(partner, campaign)
                         date_end = fields.Date.from_string(contract.date_end)
                         coop_ws_optout(url, campaign.name, identifier,
                                        date_end, partner.tz)
