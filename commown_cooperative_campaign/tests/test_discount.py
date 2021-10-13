@@ -54,10 +54,10 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             events.append({"type": "optout", "ts": optout(date)})
 
         with requests_mock.Mocker() as rm:
-            rm.get("/campaign/test-campaign/subscriptions/important-events/",
+            rm.get("/campaigns/test-campaign/subscriptions/important-events",
                    json=[{"events": events}])
             if mock_optin:
-                rm.post("/campaign/test-campaign/opt-in/", json={
+                rm.post("/campaigns/test-campaign/opt-in", json={
                     "id": 1, "campaign": {}, "member": {},
                     "optin_ts": ts_after(self.contract.recurring_next_date, 0),
                     "optout_ts": None,
@@ -65,7 +65,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             invoice = self.contract.recurring_create_invoice()
         reqs = rm.request_history
         if mock_optin:
-            self.assertEqual(reqs[0].path, "/campaign/test-campaign/opt-in/")
+            self.assertEqual(reqs[0].path, "/campaigns/test-campaign/opt-in")
             self.assertEqual(reqs[0].json(), {
                 u'customer_key': self.customer_key,
                 u'optin_ts': ts_after(invoice.date_invoice, 0),
@@ -73,7 +73,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
         self.assertEqual(
             reqs[-1].path,
-            "/campaign/test-campaign/subscriptions/important-events/")
+            "/campaigns/test-campaign/subscriptions/important-events")
         self.assertEqual(reqs[-1].query, u"customer_key=%s" % self.customer_key)
         return invoice
 
@@ -90,7 +90,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         date_end = Date.to_string(Date.from_string(inv.date_invoice)
                                   + timedelta(days=10))
         with requests_mock.Mocker() as rm:
-            rm.post("/campaign/test-campaign/opt-out/", json={
+            rm.post("/campaigns/test-campaign/opt-out", json={
                 "id": 1, "campaign": {}, "member": {},
                 "optin_ts": ts_before(inv.date_invoice, 0),
                 "optout_ts": ts_after(date_end, 0),
@@ -99,7 +99,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             self.contract.onchange_date_end()
 
         self.assertEqual(rm.request_history[0].path,
-                         "/campaign/test-campaign/opt-out/")
+                         "/campaigns/test-campaign/opt-out")
         self.assertEqual(rm.request_history[0].json(), {
             u'customer_key': self.customer_key,
             u'optout_ts': ts_after(date_end, 0),

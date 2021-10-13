@@ -49,10 +49,10 @@ def parse_ws_date(str_date):
 def coop_ws_query(base_url, campaign_ref, customer_key, date):
     "Query the cooperative web services to see if a subscription is active"
 
-    _logger.info(u"Querying coop campaign %s, identifier %s on %s...",
-                 campaign_ref, customer_key, base_url)
+    _logger.info(u"Querying %s, campaign %s, identifier %s (date %s)",
+                 base_url, campaign_ref, customer_key, date.isoformat())
 
-    url = (base_url + "/campaign/%s/subscriptions/important-events/"
+    url = (base_url + "/campaigns/%s/subscriptions/important-events"
            % urllib.quote_plus(campaign_ref))
     resp = requests.get(url, params={"customer_key": customer_key})
     resp.raise_for_status()
@@ -82,7 +82,7 @@ def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
     dt = datetime(date.year, date.month, date.day, hour=hour)
     optin_ts = pytz.timezone(tz or 'GMT').localize(dt, is_dst=True).isoformat()
 
-    url = base_url + "/campaign/%s/opt-in/" % urllib.quote_plus(campaign_ref)
+    url = base_url + "/campaigns/%s/opt-in" % urllib.quote_plus(campaign_ref)
     resp = requests.post(
         url, json={"customer_key": customer_key, "optin_ts": optin_ts})
     resp.raise_for_status()
