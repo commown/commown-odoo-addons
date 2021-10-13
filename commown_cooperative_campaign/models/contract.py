@@ -24,7 +24,7 @@ def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
     dt = datetime(date.year, date.month, date.day, hour=hour)
     optout_ts = pytz.timezone(tz or 'GMT').localize(dt, is_dst=True).isoformat()
 
-    url = base_url + "/campaign/%s/opt-out/" % urllib.quote_plus(campaign_ref)
+    url = base_url + "/campaigns/%s/opt-out" % urllib.quote_plus(campaign_ref)
     resp = requests.post(
         url, json={"customer_key": customer_key, "optout_ts": optout_ts})
     resp.raise_for_status()
