@@ -114,8 +114,14 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 ("contract_id", "=", contract.id),
             ])
             if len(emitted_invoices) == 1:
-                # Contract start invoice: optin to the cooperative campaign
-                coop_ws_optin(url, campaign.name, identifier, date, partner.tz)
+                try:
+                    # Contract start invoice: optin to the cooperative campaign
+                    coop_ws_optin(url, campaign.name, identifier, date, partner.tz)
+                except Exception as exc:
+                    import traceback as tb
+                    _logger.warning(
+                        u"optin crashed: is customer already registered?\n%s"
+                        % tb.format_exc(exc))
 
             result = coop_ws_query(url, campaign.name, identifier, date)
 
