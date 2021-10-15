@@ -115,14 +115,21 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 ("contract_id", "=", contract.id),
             ])
             if len(emitted_invoices) == 1:
+                # Contract start invoice: optin to the cooperative campaign
                 try:
-                    # Contract start invoice: optin to the cooperative campaign
                     coop_ws_optin(url, campaign.name, identifier, date, partner.tz)
-                except Exception as exc:
-                    import traceback as tb
-                    _logger.warning(
-                        u"optin crashed: is customer already registered?\n%s"
-                        % tb.format_exc(exc))
+                except requests.HTTPError as exc:
+                    # Try to handle double-optin nicely
+                    if exc.response.status_code == 422:
+                        json = exc.response.json()
+                        if json.get("detail", None) == 'Already opt-in':
+                            _logger.info(u"Double opt-in for %s (%d)"
+                                         % (partner.name, partner.id))
+                        else:
+                            _logger.error(u"Opt-in error json: %s" % json)
+                            raise
+                    else:
+                        raise
 
             result = coop_ws_query(url, campaign.name, identifier, date)
 
