@@ -46,7 +46,7 @@ def parse_ws_date(str_date):
     return _date.replace(tzinfo=None) - _date.utcoffset()
 
 
-def coop_ws_query(base_url, campaign_ref, customer_key, date):
+def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
     "Query the cooperative web services to see if a subscription is active"
 
     _logger.info(u"Querying %s, campaign %s, identifier %s (date %s)",
@@ -62,10 +62,10 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date):
     if subscriptions:
         events = {e["type"]: parse_ws_date(e["ts"])
                   for e in subscriptions[0]["events"]}
-        dt = datetime(date.year, date.month, date.day)
-        if "optin" not in events or events["optin"] > dt:
+        dt = datetime(date.year, date.month, date.day, hour=hour)
+        if "optin" not in events or events["optin"] >= dt:
             return False
-        if "optout" in events and events["optout"] <= dt:
+        if "optout" in events and events["optout"] < dt:
             return False
         return True
 
