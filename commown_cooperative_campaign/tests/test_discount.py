@@ -43,7 +43,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         })
         self.customer_key = partner_identifier(self.so.partner_id, self.campaign)
 
-    def invoice(self, optin, optout=None, mock_optin=False):
+    def invoice(self, optin, optout=None, mock_optin=False,
+                check_mock_calls=True):
         """ Create an invoice from contract mocking the cooperative web service
         with give optin and optout dates generators.
         """
@@ -63,18 +64,23 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                     "optout_ts": None,
                 })
             invoice = self.contract.recurring_create_invoice()
-        reqs = rm.request_history
-        if mock_optin:
-            self.assertEqual(reqs[0].path, "/campaigns/test-campaign/opt-in")
-            self.assertEqual(reqs[0].json(), {
-                u'customer_key': self.customer_key,
-                u'optin_ts': ts_after(invoice.date_invoice, 0),
-            })
 
-        self.assertEqual(
-            reqs[-1].path,
-            "/campaigns/test-campaign/subscriptions/important-events")
-        self.assertEqual(reqs[-1].query, u"customer_key=%s" % self.customer_key)
+        if check_mock_calls:
+            reqs = rm.request_history
+
+            if mock_optin:
+                self.assertEqual(reqs[0].path, "/campaigns/test-campaign/opt-in")
+                self.assertEqual(reqs[0].json(), {
+                    u'customer_key': self.customer_key,
+                    u'optin_ts': ts_after(invoice.date_invoice, 0),
+                })
+
+            self.assertEqual(
+                reqs[-1].path,
+                "/campaigns/test-campaign/subscriptions/important-events")
+            self.assertEqual(reqs[-1].query,
+                             u"customer_key=" + self.customer_key)
+
         return invoice
 
     def test_invoices(self):
@@ -84,6 +90,12 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         self.assertEqual(self.invoice(before1, ts_after).amount_total, 6.9)
         self.assertEqual(self.invoice(before7, before1).amount_total, 34.5)
         self.assertEqual(self.invoice(ts_after).amount_total, 34.5)
+
+    def test_invoice_no_identifier(self):
+        self.so.partner_id.phone = False
+        before1 = partial(ts_before, days=1)
+        self.assertEqual(
+            self.invoice(before1, check_mock_calls=False).amount_total, 34.5)
 
     def test_contract_end(self):
         inv = self.invoice(partial(ts_before, days=7), mock_optin=True)

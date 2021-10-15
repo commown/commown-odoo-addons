@@ -23,7 +23,7 @@ _logger = logging.getLogger(__name__)
 def partner_identifier(partner, campaign):
     country_code = partner.country_id.code
     if not country_code:
-        raise ValueError(u"Partner '%s' has no country set" % partner.name)
+        return None
 
     for phone_num in (partner.mobile, partner.phone):
         if phone_num:
@@ -103,9 +103,10 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             partner = contract.partner_id
             identifier = partner_identifier(partner, campaign)
             if not identifier:
-                raise ValueError(
+                _logger.warning(
                     u"Couldn't build a partner identifier for a coop campaign."
                     u" Partner is %s (id: %d)" % (partner.name, partner.id))
+                return False
 
             url = self.env['ir.config_parameter'].get_param(
                 'commown_cooperative_campaign.base_url')
