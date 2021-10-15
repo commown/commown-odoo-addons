@@ -2,6 +2,8 @@
 
 from __future__ import print_function
 
+import urllib
+
 import requests
 
 from odoo.fields import Date
@@ -167,3 +169,25 @@ def main(env, campaign_name, base_url=None, create_campaign=False,
                 env.cr.commit()
 
     return campaign
+
+
+def check_for_full_registered(env, campaign_name):
+    campaign = env["coupon.campaign"].search([('name', '=', campaign_name)])
+    base_url = (
+        env['ir.config_parameter'].get_param(
+            'commown_cooperative_campaign.base_url')
+        + '/campaigns/%s/subscriptions/important-events' % (
+            urllib.quote_plus(campaign_name))
+    )
+
+    sos = campaign.coupon_ids.mapped("used_for_sale_id")
+    for index, so in enumerate(sos):
+        if not index % 10:
+            print("%d / %d" % (index, len(sos)))
+        partner = so.partner_id
+        customer_key = partner_identifier(partner, campaign)
+        url = base_url + "?customer_key=%s" % urllib.quote_plus(customer_key)
+        resp = requests.get(url)
+        resp.raise_for_status()
+        if resp.json():
+            print(u"Double! %s / %s: %s" % (so.name, partner.name, url))
