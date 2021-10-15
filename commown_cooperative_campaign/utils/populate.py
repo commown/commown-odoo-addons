@@ -56,11 +56,11 @@ def handle_contract(base_url, contract, campaign, seen_keys=set()):
                             % contract.name)
     coupon.update({'used_for_sale_id': so.id, 'reserved_for_sale_id': False})
 
-    print(base_url,
-          campaign.name,
-          customer_key,
-          contract.date_start,
-          contract.partner_id.tz)
+    print(
+        (u" ".join([campaign.name, contract.name,
+                    contract.date_start, customer_key])
+         ).encode("utf-8")
+    )
 
     coop_ws_optin(base_url,
                   campaign.name,
