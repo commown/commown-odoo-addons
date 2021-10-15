@@ -1,7 +1,9 @@
 from functools import partial
 from datetime import datetime, timedelta
 
+import mock
 import pytz
+import requests
 import requests_mock
 
 from odoo.fields import Date
@@ -92,10 +94,48 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         self.assertEqual(self.invoice(ts_after).amount_total, 34.5)
 
     def test_invoice_no_identifier(self):
+        "Partners having no phone or country do not benefit from the discount"
         self.so.partner_id.phone = False
         before1 = partial(ts_before, days=1)
         self.assertEqual(
             self.invoice(before1, check_mock_calls=False).amount_total, 34.5)
+
+    def test_invoice_double_optin(self):
+        "Double-optin specific 422 error must not raise"
+        with requests_mock.Mocker() as rm:
+            response = mock.Mock(status_code=422,
+                                 json=lambda: {"detail": "Already opt-in"})
+            rm.post("/campaigns/test-campaign/opt-in",
+                    exc=requests.HTTPError(response=response))
+
+            rm.get("/campaigns/test-campaign/subscriptions/important-events",
+                   json=[{"events": [
+                       {"type": "optin",
+                        "ts": ts_before(self.contract.recurring_next_date)}
+                   ]}]
+            )
+
+            invoice = self.contract.recurring_create_invoice()
+
+        self.assertEqual(invoice.amount_total, 6.9)
+
+    def test_invoice_optin_error_any_422(self):
+        "422 HTTP errors other than double optin must raise"
+        with self.assertRaises(requests.HTTPError) as err:
+            with requests_mock.Mocker() as rm:
+                response = mock.Mock(status_code=422,
+                                     json=lambda: {"detail": "Unknown error"})
+                rm.post("/campaigns/test-campaign/opt-in",
+                        exc=requests.HTTPError(response=response))
+                self.contract.recurring_create_invoice()
+
+    def test_invoice_optin_error_timeout(self):
+        "All other HTTP errors must raise"
+        with self.assertRaises(requests.ConnectTimeout):
+            with requests_mock.Mocker() as rm:
+                rm.post("/campaigns/test-campaign/opt-in",
+                        exc=requests.ConnectTimeout)
+                self.contract.recurring_create_invoice()
 
     def test_contract_end(self):
         inv = self.invoice(partial(ts_before, days=7), mock_optin=True)
