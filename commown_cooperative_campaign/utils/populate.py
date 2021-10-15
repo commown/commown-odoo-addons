@@ -165,6 +165,9 @@ def main(env, campaign_name, base_url=None, create_campaign=False,
             except ContractError as exc:
                 print((u"*** %s" % exc).encode("utf-8"))
                 continue
+            except requests.HTTPError as exc:
+                print(contract.name.encode("utf-8") + " - " + str(exc))
+                continue
             else:
                 env.cr.commit()
 
@@ -180,7 +183,9 @@ def check_for_full_registered(env, campaign_name):
             urllib.quote_plus(campaign_name))
     )
 
-    sos = campaign.coupon_ids.mapped("used_for_sale_id")
+    sos = campaign.coupon_ids.mapped(
+        "used_for_sale_id").filtered(lambda so: so.state == "sale")
+
     for index, so in enumerate(sos):
         if not index % 10:
             print("%d / %d" % (index, len(sos)))

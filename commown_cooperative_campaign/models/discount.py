@@ -61,7 +61,7 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date):
     _logger.debug(u"Got web services response:\n %s", pformat(subscriptions))
     if not subscriptions:
         raise ValueError(u"No coop campaign '%s' subscription for key '%s'"
-                         % (campaign_ref, customer_key, subscriptions))
+                         % (campaign_ref, customer_key))
     else:
         events = {e["type"]: parse_ws_date(e["ts"])
                   for e in subscriptions[0]["events"]}
