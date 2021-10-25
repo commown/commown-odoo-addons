@@ -12,27 +12,26 @@
       <div id="coupons-placeholder">
         <strong>Coupons</strong>
       </div>
-    </xpath>
-
-    <xpath expr="//div[@id='right_column']" position="inside">
-      <h4>Coupon</h4>
-      <p>Have a code? Enter it and submit:</p>
-      <form id="coupon_input" action="#" method="post" class="mb32">
-        <input type="hidden" name="csrf_token"
-               t-att-value="request.csrf_token()" />
-        <div class="input-group">
-          <input name="coupon_code" class="form-control"
-                 type="text" placeholder="Your code..." />
-          <div class="input-group-btn">
-            <button type="submit" disabled="disabled" class="btn btn-default">
-              <span>Submit</span>
-              <i class="fa fa-spinner fa-spin"/>
-            </button>
+      <div id="coupon-form">
+        <p class="text-primary"><strong>Coupons</strong></p>
+        <p>Have a code? Enter it and submit:</p>
+        <form id="coupon_input" action="#" method="post" class="mb32">
+          <input type="hidden" name="csrf_token"
+                 t-att-value="request.csrf_token()" />
+          <div class="input-group">
+            <input name="coupon_code" class="form-control"
+                   type="text" placeholder="Your code..." />
+            <div class="input-group-btn">
+              <button type="submit" disabled="disabled" class="btn btn-warning">
+                <span>Submit</span>
+                <i class="fa fa-spinner fa-spin"/>
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
-      <script type="text/javascript"
-              src="/website_sale_coupon/static/src/js/coupon.js"></script>
+        </form>
+        <script type="text/javascript"
+                src="/website_sale_coupon/static/src/js/coupon.js"></script>
+      </div>
     </xpath>
 
   </template>
