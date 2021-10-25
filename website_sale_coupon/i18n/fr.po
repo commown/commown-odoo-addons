@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-03 20:15+0000\n"
-"PO-Revision-Date: 2021-10-03 20:15+0000\n"
+"POT-Creation-Date: 2021-10-25 14:06+0000\n"
+"PO-Revision-Date: 2021-10-25 14:06+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,9 +31,9 @@ msgstr "(tous si vide)"
 #. module: website_sale_coupon
 #: model:ir.ui.view,arch_db:website_sale_coupon.cart
 msgid "<span>Submit</span>\n"
-"              <i class=\"fa fa-spinner fa-spin\"/>"
-msgstr "<span>Valider</span>\n"
-"              <i class=\"fa fa-spinner fa-spin\"/>"
+"                <i class=\"fa fa-spinner fa-spin\"/>"
+msgstr "<span>Envoyer</span>\n"
+"                <i class=\"fa fa-spinner fa-spin\"/>"
 
 #. module: website_sale_coupon
 #: model:ir.ui.view,arch_db:website_sale_coupon.cart
@@ -41,7 +41,7 @@ msgstr "<span>Valider</span>\n"
 #: model:ir.ui.view,arch_db:website_sale_coupon.orders_followup
 #: model:ir.ui.view,arch_db:website_sale_coupon.payment
 msgid "<strong>Coupons</strong>"
-msgstr "<strong>Coupons</strong>"
+msgstr "<strong>Codes avantage / partenaire</strong>"
 
 #. module: website_sale_coupon
 #: sql_constraint:coupon.campaign:0
@@ -70,11 +70,6 @@ msgstr "Fermer"
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_code
 msgid "Code"
 msgstr "Code"
-
-#. module: website_sale_coupon
-#: model:ir.ui.view,arch_db:website_sale_coupon.cart
-msgid "Coupon"
-msgstr "Coupon"
 
 #. module: website_sale_coupon
 #: model:ir.actions.act_window,name:website_sale_coupon.action_coupon_campaign
@@ -150,7 +145,7 @@ msgstr "Campagne avec coupon"
 #. module: website_sale_coupon
 #: model:ir.ui.view,arch_db:website_sale_coupon.cart
 msgid "Have a code? Enter it and submit:"
-msgstr "Vous avez un code promotionnel ? Saisissez-le ci-dessous et validez :"
+msgstr "Vous avez un coupon ? Saisissez son code ci-dessous :"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_id
@@ -301,3 +296,4 @@ msgstr "coupon.coupon"
 #, python-format
 msgid "has just been applied to current order!"
 msgstr "a été appliqué avec succès à votre achat en cours !"
+
