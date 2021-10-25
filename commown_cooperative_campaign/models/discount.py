@@ -1,43 +1,18 @@
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import hashlib
 import urllib
 import logging
 from datetime import datetime
 
 import pytz
 import iso8601
-import phonenumbers
 import requests
 from pprint import pformat
 
 from odoo import models
 
-
-MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
-
 _logger = logging.getLogger(__name__)
-
-
-def partner_identifier(partner, campaign):
-    country_code = partner.country_id.code
-    if not country_code:
-        return None
-
-    for phone_num in (partner.mobile, partner.phone):
-        if phone_num:
-            phone_obj = phonenumbers.parse(phone_num, country_code)
-            if phonenumbers.number_type(phone_obj) == MOBILE_TYPE:
-                phone = phonenumbers.format_number(
-                    phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
-                ).replace(' ', '')
-                acc = partner.env["keychain.account"].search([
-                    ("technical_name", "=", campaign.name + "-salt"),
-                ]).ensure_one()
-                hash = hashlib.sha256()
-                hash.update(phone + acc._get_password())
-                return hash.hexdigest()
 
 
 def parse_ws_date(str_date):
@@ -101,7 +76,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
             contract = contract_line.analytic_account_id
             partner = contract.partner_id
-            identifier = partner_identifier(partner, campaign)
+            identifier = campaign.coop_partner_identifier(partner)
             if not identifier:
                 _logger.warning(
                     u"Couldn't build a partner identifier for a coop campaign."
@@ -117,7 +92,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             if len(emitted_invoices) == 1:
                 # Contract start invoice: optin to the cooperative campaign
                 try:
-                    coop_ws_optin(url, campaign.name, identifier, date, partner.tz)
+                    coop_ws_optin(url, campaign.name, identifier, date,
+                                  partner.tz)
                 except requests.HTTPError as exc:
                     # Try to handle double-optin nicely
                     if exc.response.status_code == 422:
