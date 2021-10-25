@@ -92,7 +92,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             if len(emitted_invoices) == 1:
                 # Contract start invoice: optin to the cooperative campaign
                 try:
-                    coop_ws_optin(url, campaign.name, identifier, date, partner.tz)
+                    coop_ws_optin(url, campaign.name, identifier, date,
+                                  partner.tz)
                 except requests.HTTPError as exc:
                     # Try to handle double-optin nicely
                     if exc.response.status_code == 422:
