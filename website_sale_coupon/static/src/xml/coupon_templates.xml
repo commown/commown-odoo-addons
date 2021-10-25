@@ -4,7 +4,7 @@
 
   <t t-name="coupon.used">
     <dt><code><t t-esc="name"/></code></dt>
-    <dd t-esc="descr"/>
+    <dd><t t-esc="descr"/></dd>
   </t>
 
   <t t-name="coupon.wrong">
