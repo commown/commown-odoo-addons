@@ -70,7 +70,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             reqs = rm.request_history
 
             if mock_optin:
-                self.assertEqual(reqs[0].path, "/campaigns/test-campaign/opt-in")
+                self.assertEqual(reqs[0].path,
+                                 "/campaigns/test-campaign/opt-in")
                 self.assertEqual(reqs[0].json(), {
                     u'customer_key': self.customer_key,
                     u'optin_ts': ts_after(invoice.date_invoice, 0),
@@ -87,7 +88,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
     def test_invoices(self):
         before7 = partial(ts_before, days=7)
         before1 = partial(ts_before, days=1)
-        self.assertEqual(self.invoice(before1, mock_optin=True).amount_total, 6.9)
+        self.assertEqual(self.invoice(before1, mock_optin=True).amount_total,
+                         6.9)
         self.assertEqual(self.invoice(before1, ts_after).amount_total, 6.9)
         self.assertEqual(self.invoice(before7, before1).amount_total, 34.5)
         self.assertEqual(self.invoice(ts_after).amount_total, 34.5)
@@ -107,12 +109,10 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             rm.post("/campaigns/test-campaign/opt-in",
                     exc=requests.HTTPError(response=response))
 
+            event = {"type": "optin",
+                     "ts": ts_before(self.contract.recurring_next_date)}
             rm.get("/campaigns/test-campaign/subscriptions/important-events",
-                   json=[{"events": [
-                       {"type": "optin",
-                        "ts": ts_before(self.contract.recurring_next_date)}
-                   ]}]
-            )
+                   json=[{"events": [event]}])
 
             invoice = self.contract.recurring_create_invoice()
 
@@ -120,7 +120,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
     def test_invoice_optin_error_any_422(self):
         "422 HTTP errors other than double optin must raise"
-        with self.assertRaises(requests.HTTPError) as err:
+        with self.assertRaises(requests.HTTPError):
             with requests_mock.Mocker() as rm:
                 response = mock.Mock(status_code=422,
                                      json=lambda: {"detail": "Unknown error"})
