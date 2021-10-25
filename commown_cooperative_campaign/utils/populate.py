@@ -9,7 +9,7 @@ import requests
 from odoo.fields import Date
 
 from odoo.addons.commown_cooperative_campaign.models.discount import (
-    partner_identifier, coop_ws_optin)
+    coop_ws_optin)
 
 
 class ContractError(Exception):
@@ -32,7 +32,7 @@ def handle_contract(base_url, contract, campaign, seen_keys=set()):
     if contract.partner_id.commercial_partner_id != contract.partner_id:
         raise ContractError(u"B2B - %s" % contract.name)
 
-    customer_key = partner_identifier(contract.partner_id, campaign)
+    customer_key = campaign.coop_partner_identifier(contract.partner_id)
     if not customer_key:
         raise ContractError(u"NOID - %s: %s" % (
             contract.name, contract.partner_id.name))
@@ -190,7 +190,7 @@ def check_for_full_registered(env, campaign_name):
         if not index % 10:
             print("%d / %d" % (index, len(sos)))
         partner = so.partner_id
-        customer_key = partner_identifier(partner, campaign)
+        customer_key = campaign.coop_partner_identifier(partner)
         url = base_url + "?customer_key=%s" % urllib.quote_plus(customer_key)
         resp = requests.get(url)
         resp.raise_for_status()

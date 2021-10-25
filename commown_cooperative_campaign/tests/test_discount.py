@@ -8,8 +8,6 @@ import requests_mock
 
 from odoo.fields import Date
 
-from odoo.addons.commown_cooperative_campaign.models.discount import (
-    partner_identifier)
 from odoo.addons.commown_contract_variable_discount.tests.common import (
     ContractSaleWithCouponTC)
 
@@ -43,7 +41,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             "technical_name": self.campaign.name + u"-salt",
             "clear_password": u"no-matter",
         })
-        self.customer_key = partner_identifier(self.so.partner_id, self.campaign)
+        self.customer_key = self.campaign.coop_partner_identifier(
+            self.so.partner_id)
 
     def invoice(self, optin, optout=None, mock_optin=False,
                 check_mock_calls=True):

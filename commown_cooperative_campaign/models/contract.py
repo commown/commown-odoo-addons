@@ -8,8 +8,6 @@ from pprint import pformat
 
 from odoo import models, fields, api
 
-from .discount import partner_identifier
-
 
 _logger = logging.getLogger(__file__)
 
@@ -46,7 +44,7 @@ class Contract(models.Model):
                         url = self.env['ir.config_parameter'].get_param(
                             'commown_cooperative_campaign.base_url')
                         partner = contract.partner_id
-                        identifier = partner_identifier(partner, campaign)
+                        identifier = campaign.coop_partner_identifier(partner)
                         date_end = fields.Date.from_string(contract.date_end)
                         coop_ws_optout(url, campaign.name, identifier,
                                        date_end, partner.tz)
