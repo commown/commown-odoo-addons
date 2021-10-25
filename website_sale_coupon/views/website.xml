@@ -64,7 +64,7 @@
           <dl class="dl-horizontal">
             <t t-foreach="coupons" t-as="coupon">
               <dt><code><t t-esc="coupon.display_name"/></code></dt>
-              <dd t-esc="coupon.campaign_id.description"/>
+              <dd><t t-esc="coupon.campaign_id.description"/></dd>
             </t>
           </dl>
         </div>
@@ -84,7 +84,7 @@
         <dl class="dl-horizontal">
           <t t-foreach="coupons" t-as="coupon">
             <dt><code><t t-esc="coupon.display_name"/></code></dt>
-            <dd t-esc="coupon.campaign_id.description"/>
+            <dd><t t-esc="coupon.campaign_id.description"/></dd>
           </t>
         </dl>
       </div>
