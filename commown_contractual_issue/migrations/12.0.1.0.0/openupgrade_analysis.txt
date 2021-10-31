@@ -1,0 +1,10 @@
+---Models in module 'commown_contractual_issue'---
+---Fields in module 'commown_contractual_issue'---
+commown_contractual_issue / account.analytic.account / contractual_issue_ids (one2many): DEL relation: project.task
+commown_contractual_issue / account.analytic.account / other_issue_ids (one2many)    : DEL relation: project.issue
+commown_contractual_issue / contract.contract        / issue_ids (one2many)          : NEW relation: project.task
+commown_contractual_issue / project.issue            / contract_id (many2one)        : DEL relation: account.analytic.account
+---XML records in module 'commown_contractual_issue'---
+NEW ir.ui.view: commown_contractual_issue.contract_contract_customer_form_view [renamed from website_sale module]
+DEL ir.ui.view: commown_contractual_issue.account_analytic_account_recurring_form_form [renamed to website_mass_mailing module]
+DEL ir.ui.view: commown_contractual_issue.project_issue_form_view [renamed to website_mass_mailing module]
