@@ -1,0 +1,6 @@
+---Models in module 'project_issue_last_partner_msg_date'---
+---Fields in module 'project_issue_last_partner_msg_date'---
+project_issue_last_partner_msg_date / project.task             / _order (False)                : NEW mode: modify
+project_issue_last_partner_msg_date / project.task             / last_partner_msg_date (datetime): NEW
+---XML records in module 'project_issue_last_partner_msg_date'---
+DEL ir.ui.view: project_issue_last_partner_msg_date.project_issue_kanban_view [renamed to account_asset_management module]
