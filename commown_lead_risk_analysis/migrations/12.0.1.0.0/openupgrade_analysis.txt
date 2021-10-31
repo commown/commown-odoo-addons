@@ -1,0 +1,7 @@
+---Models in module 'commown_lead_risk_analysis'---
+---Fields in module 'commown_lead_risk_analysis'---
+commown_lead_risk_analysis / crm.lead                 / contract_id (many2one)        : DEL relation: account.analytic.account
+commown_lead_risk_analysis / crm.lead                 / so_line_id (many2one)         : module is now 'commown_shipping' ('commown_lead_risk_analysis')
+commown_lead_risk_analysis / product.product          / followup_sales_team_id (many2one): module is now 'commown' ('commown_lead_risk_analysis')
+commown_lead_risk_analysis / product.template         / followup_sales_team_id (many2one): module is now 'commown' ('commown_lead_risk_analysis')
+---XML records in module 'commown_lead_risk_analysis'---
