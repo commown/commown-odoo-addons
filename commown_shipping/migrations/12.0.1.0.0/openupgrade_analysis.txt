@@ -1,0 +1,37 @@
+---Models in module 'commown_shipping'---
+new model commown.delivery.parent.mixin [abstract]
+new model commown.parcel.type
+new model commown.shipping_account
+new model commown.shipping.mixin [abstract]
+new model commown.shipping.parent.mixin [abstract]
+new model commown.track_delivery.mixin [abstract]
+---Fields in module 'commown_shipping'---
+commown_shipping / commown.parcel.type      / _order (False)                : NEW
+commown_shipping / commown.shipping_account / _order (False)                : NEW
+commown_shipping / commown.shipping_account / account (char)                : NEW required
+commown_shipping / commown.shipping_account / name (char)                   : NEW required
+commown_shipping / commown.shipping_account / server_env_defaults (serialized): NEW
+commown_shipping / crm.lead                 / so_line_id (many2one)         : previously in module commown_lead_risk_analysis
+commown_shipping / crm.team                 / shipping_account_id (many2one): relation is now 'commown.shipping_account' ('keychain.account') [nothing to do]
+commown_shipping / keychain.account         / namespace (False)             : DEL selection_keys: ['colissimo', 'telecommown'], mode: modify
+commown_shipping / project.issue            / delivery_date (date)          : DEL
+commown_shipping / project.issue            / expedition_date (date)        : DEL
+commown_shipping / project.issue            / expedition_ref (text)         : DEL
+commown_shipping / project.issue            / expedition_status (text)      : DEL
+commown_shipping / project.issue            / expedition_status_fetch_date (datetime): DEL
+commown_shipping / project.issue            / expedition_urgency_mail_sent (boolean): DEL
+commown_shipping / project.issue            / on_delivery_email_template_id (many2one): DEL relation: mail.template
+commown_shipping / project.issue            / send_email_on_delivery (boolean): DEL
+commown_shipping / project.project          / shipping_account_id (many2one): relation is now 'commown.shipping_account' ('keychain.account') [nothing to do]
+---XML records in module 'commown_shipping'---
+NEW commown.shipping_account: commown_shipping.colissimo-std-account (noupdate)
+NEW commown.shipping_account: commown_shipping.colissimo-support-account (noupdate)
+NEW ir.actions.server: commown_shipping.action_print_outward_fp2_label_task [renamed from commown module] (noupdate) (noupdate switched)
+NEW ir.actions.server: commown_shipping.action_print_return_fp2_label_task (noupdate)
+DEL ir.actions.server: commown_shipping.action_print_outward_fp2_label_issue [renamed to account module] (noupdate)
+DEL ir.actions.server: commown_shipping.action_print_return_fp2_label_issue [renamed to account module] (noupdate)
+DEL ir.cron: commown_shipping.delivery_tracking_project_issue [renamed to contract module] (noupdate)
+NEW ir.model.access: commown_shipping.access_commown_shipping_account [renamed from stock module]
+DEL ir.ui.view: commown_shipping.project_issue_form_view [renamed to sale module]
+DEL keychain.account: commown_shipping.colissimo-std-account (noupdate)
+DEL keychain.account: commown_shipping.colissimo-support-account (noupdate)
