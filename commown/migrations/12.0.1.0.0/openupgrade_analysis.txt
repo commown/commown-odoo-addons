@@ -1,0 +1,55 @@
+---Models in module 'commown'---
+new model mass.reconcile.simple.partner_commown [transient]
+---Fields in module 'commown'---
+commown      / account.analytic.account / transaction_label (text)      : DEL
+commown      / account.analytic.contract / transaction_label (text)      : DEL
+commown      / contract.contract        / transaction_label (text)      : NEW required, req_default: function, hasdefault
+commown      / contract.template        / transaction_label (text)      : NEW hasdefault
+commown      / product.product          / followup_sales_team_id (many2one): previously in module commown_lead_risk_analysis
+commown      / product.template         / followup_sales_team_id (many2one): previously in module commown_lead_risk_analysis
+commown      / res.lang                 / website_published (boolean)   : DEL
+commown      / res.partner              / country_id (False)            : NEW mode: modify, hasdefault
+---XML records in module 'commown'---
+DEL base.action.rule: commown.issue_put_in_reminder_email_stage
+DEL base.action.rule: commown.issue_reminder_delay_expired
+DEL base.action.rule: commown.issue_waiting_customer_for_too_long
+DEL base.action.rule: commown.mail_message_arrival_concerning_issue
+DEL base.action.rule: commown.manual_issue_waiting_for_too_long
+DEL base.action.rule: commown.order_sent
+NEW base.automation: commown.issue_put_in_reminder_email_stage
+NEW base.automation: commown.issue_reminder_delay_expired
+NEW base.automation: commown.issue_waiting_customer_for_too_long
+NEW base.automation: commown.mail_message_arrival_concerning_issue
+NEW base.automation: commown.manual_issue_waiting_for_too_long
+NEW base.automation: commown.order_sent
+NEW ir.actions.server: commown.action_add_followup_lead
+DEL ir.actions.server: commown.action_merge_utm_sources [renamed to sale module]
+DEL ir.actions.server: commown.action_remove_utm_sources [renamed to commown_shipping module]
+NEW ir.ui.view: commown.contract_contract_form_view
+NEW ir.ui.view: commown.contract_template_form_view
+DEL ir.ui.view: commown.account_analytic_account_recurring_form_form [renamed to sale module]
+DEL ir.ui.view: commown.account_analytic_contract_line_view_form [renamed to sale module]
+DEL ir.ui.view: commown.account_analytic_contract_view_form [renamed to sale module]
+DEL ir.ui.view: commown.account_analytic_invoice_line_view_form [renamed to sale module]
+DEL ir.ui.view: commown.assets_backend [renamed to sale module]
+DEL ir.ui.view: commown.assets_frontend [renamed to contract_payment_mode module]
+DEL ir.ui.view: commown.footer_custom [renamed to payment_slimpay_issue module]
+DEL ir.ui.view: commown.my_issues [renamed to sale module]
+DEL ir.ui.view: commown.my_issues_issue [renamed to sale module]
+DEL ir.ui.view: commown.orders_followup [renamed to contract_sale module]
+DEL ir.ui.view: commown.orders_followup_products_links [renamed to contract_payment_mode module]
+DEL ir.ui.view: commown.payment [renamed to website_payment module]
+DEL ir.ui.view: commown.portal_layout [renamed to sale module]
+DEL ir.ui.view: commown.portal_my_home_sale [renamed to contract_sale module]
+DEL ir.ui.view: commown.portal_partner_details [renamed to sale module]
+DEL ir.ui.view: commown.product [renamed to contract_sale module]
+DEL ir.ui.view: commown.product_group_sales [renamed to contract_sale module]
+DEL ir.ui.view: commown.product_price_b2b [renamed to contract_payment_mode module]
+DEL ir.ui.view: commown.product_template_form_view [renamed to sale module]
+DEL ir.ui.view: commown.products_add_to_cart_group_sales [renamed to contract_payment_mode module]
+DEL ir.ui.view: commown.products_categories [renamed to contract_sale module]
+DEL ir.ui.view: commown.res_lang_form [renamed to payment_slimpay_issue module]
+DEL ir.ui.view: commown.suggestion_cart [renamed to sale module]
+DEL ir.ui.view: commown.view_account_invoice_filter [renamed to sale module]
+DEL ir.ui.view: commown.view_contract_list [renamed to sale module]
+DEL product.public.category: commown.categ_de (noupdate)

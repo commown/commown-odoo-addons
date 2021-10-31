@@ -1,0 +1,5 @@
+---Models in module 'commown_payment_slimpay_issue'---
+---Fields in module 'commown_payment_slimpay_issue'---
+---XML records in module 'commown_payment_slimpay_issue'---
+DEL base.action.rule: commown_payment_slimpay_issue.payment_issue_related_email_sent
+NEW base.automation: commown_payment_slimpay_issue.payment_issue_related_email_sent
