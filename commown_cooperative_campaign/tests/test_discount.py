@@ -147,7 +147,6 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                 "optout_ts": ts_after(date_end, 0),
             })
             self.contract.update({'date_end': date_end})
-            self.contract.onchange_date_end()
 
         self.assertEqual(rm.request_history[0].path,
                          "/campaigns/test-campaign/opt-out")
