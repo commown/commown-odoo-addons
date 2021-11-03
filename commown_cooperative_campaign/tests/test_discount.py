@@ -146,8 +146,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                 "optin_ts": ts_before(inv.date_invoice, 0),
                 "optout_ts": ts_after(date_end, 0),
             })
-            self.contract.update({'date_end': date_end})
-            self.contract.onchange_date_end()
+            self.contract.with_context(
+                test_queue_job_no_delay=True).date_end = date_end
 
         self.assertEqual(rm.request_history[0].path,
                          "/campaigns/test-campaign/opt-out")
