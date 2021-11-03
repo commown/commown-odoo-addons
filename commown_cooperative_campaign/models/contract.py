@@ -34,8 +34,13 @@ def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
 class Contract(models.Model):
     _inherit = "account.analytic.account"
 
-    @api.onchange("date_end")
-    def onchange_date_end(self):
+    @api.multi
+    def write(self, values):
+        res = super(Contract, self).write(values)
+        if "date_end" not in values:
+            return res
+        else:
+            date_end = values["date_end"] or "2100-01-01"
         for contract in self:
             for contract_line in contract.recurring_invoice_line_ids:
                 for discount_line in contract_line._applicable_discount_lines():
@@ -45,6 +50,7 @@ class Contract(models.Model):
                             'commown_cooperative_campaign.base_url')
                         partner = contract.partner_id
                         identifier = campaign.coop_partner_identifier(partner)
-                        date_end = fields.Date.from_string(contract.date_end)
+                        date_end = fields.Date.from_string(date_end)
                         coop_ws_optout(url, campaign.name, identifier,
                                        date_end, partner.tz)
+        return res
