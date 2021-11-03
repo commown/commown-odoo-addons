@@ -7,6 +7,7 @@ import requests
 from pprint import pformat
 
 from odoo import models, fields, api
+from odoo.addons.queue_job.job import job
 
 
 _logger = logging.getLogger(__file__)
@@ -36,22 +37,26 @@ class Contract(models.Model):
     _inherit = "account.analytic.account"
 
     @api.multi
+    @job(default_channel="root")
+    def _coop_ws_optout(self, campaign):
+        self.ensure_one()
+        url = self.env['ir.config_parameter'].get_param(
+            'commown_cooperative_campaign.base_url')
+        identifier = campaign.coop_partner_identifier(self.partner_id)
+        date_end = fields.Date.from_string(self.date_end or "2100-01-01")
+        coop_ws_optout(url, campaign.name, identifier,
+                       date_end, self.partner_id.tz)
+
+    @api.multi
     def write(self, values):
+        "opt-out cooperative campaign(s) if any, when the contract ends"
         res = super(Contract, self).write(values)
         if "date_end" not in values:
             return res
-        else:
-            date_end = values["date_end"] or "2100-01-01"
         for contract in self:
             for contract_line in contract.recurring_invoice_line_ids:
                 for discount_line in contract_line._applicable_discount_lines():
                     campaign = discount_line.coupon_campaign_id
                     if campaign.is_coop_campaign:
-                        url = self.env['ir.config_parameter'].get_param(
-                            'commown_cooperative_campaign.base_url')
-                        partner = contract.partner_id
-                        identifier = campaign.coop_partner_identifier(partner)
-                        date_end = fields.Date.from_string(date_end)
-                        coop_ws_optout(url, campaign.name, identifier,
-                                       date_end, partner.tz)
+                        contract.with_delay()._coop_ws_optout(campaign)
         return res

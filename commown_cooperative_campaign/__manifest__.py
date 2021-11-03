@@ -16,6 +16,7 @@
     },
     'depends': [
         'commown_contract_variable_discount',
+        'queue_job',
         'keychain',
     ],
     'data': [
