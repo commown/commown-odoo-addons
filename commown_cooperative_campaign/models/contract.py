@@ -15,14 +15,15 @@ _logger = logging.getLogger(__file__)
 def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
     "Query the cooperative web services to cancel a subscription"
 
-    _logger.info(
-        u"Setting optout on %s in coop campaign %s, identifier %s on %s...",
-        date, campaign_ref, customer_key, base_url)
-
     dt = datetime(date.year, date.month, date.day, hour=hour)
     optout_ts = pytz.timezone(tz or 'GMT').localize(dt, is_dst=True).isoformat()
 
     url = base_url + "/campaigns/%s/opt-out" % urllib.quote_plus(campaign_ref)
+
+    _logger.info(
+        u"Setting optout on %s in coop campaign %s, identifier %s using %s...",
+        optout_ts, campaign_ref, customer_key, url)
+
     resp = requests.post(
         url, json={"customer_key": customer_key, "optout_ts": optout_ts})
     resp.raise_for_status()
