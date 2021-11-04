@@ -44,7 +44,9 @@
           <group name="general" string="General">
             <field name="name"/>
             <field name="condition"/>
-            <field name="replace_discount_line_id"/>
+            <field name="replace_discount_line_id_domain" invisible="1"/>
+            <field name="replace_discount_line_id"
+                   domain="replace_discount_line_id_domain"/>
           </group>
           <group name="amount" string="Amount">
             <field name="amount_value"/>

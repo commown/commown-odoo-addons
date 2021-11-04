@@ -1,6 +1,8 @@
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import json
+
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, _
@@ -204,11 +206,25 @@ class ContractDiscountLine(models.Model):
         copy=False,
     )
 
+    replace_discount_line_id_domain = fields.Char(
+        compute="_compute_replace_discount_line_id_domain",
+        readonly=True,
+        store=False,
+    )
+
+    @api.multi
+    @api.depends('contract_line_id.inherited_discount_line_ids')
+    def _compute_replace_discount_line_id_domain(self):
+        for rec in self:
+            ids = rec.contract_line_id.inherited_discount_line_ids.ids
+            rec.replace_discount_line_id_domain = json.dumps(
+                [('id', 'in', ids)]
+            )
+
     replace_discount_line_id = fields.Many2one(
         comodel_name="contract.template.discount.line",
         string=u"Replace discount line",
         help=(u"If a discount line is added here, it will no more apply"
               " but be replaced by current line"),
         required=False,
-        domain="[('id', 'in', contract_line_id.contract_template_line_id.discount_line_ids.ids)]",
     )

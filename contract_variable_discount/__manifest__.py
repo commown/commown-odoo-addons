@@ -10,6 +10,7 @@
     'website': "https://commown.coop",
     'depends': [
         'contract',
+        'web_domain_field',
     ],
     'data': [
         'data/report.xml',
