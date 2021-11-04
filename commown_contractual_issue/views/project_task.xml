@@ -17,7 +17,7 @@
                  context="{'form_view_ref': 'contract.account_analytic_account_recurring_form_form'}"
                  attrs="{'required': [('require_contract', '=', True)], 'invisible': [('require_contract', '=', False)]}"
                  options="{'no_create': True}"
-                 domain="[('partner_id', 'child_of', 'commercial_partner_id)]"/>
+                 domain="[('partner_id', 'child_of', commercial_partner_id)]"/>
           <field name="commercial_partner_id" invisible="True"/>
           <field name="require_contract" invisible="True"/>
           <field name="contractual_issues_tracking" invisible="True"/>
