@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data>
-
     <record id="fp2-camera" model="ir.ui.view">
       <field name="name">Self-troubleshoot an FP2 camera</field>
       <field name="type">qweb</field>
@@ -141,7 +139,5 @@ $(document).ready(function() {
         </t>
       </field>
     </record>
-
-  </data>
 
 </odoo>

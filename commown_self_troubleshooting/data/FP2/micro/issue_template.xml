@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data noupdate="1">
-
     <record id="issue-description-fp2-micro" model="ir.ui.view">
       <field name="name">self-troubleshoot-issue-description-fp2-micro</field>
       <field name="type">qweb</field>
@@ -34,7 +32,5 @@ J'ai porté à votre connaissance les informations complémentaires suivantes :
         </t>
       </field>
     </record>
-
-  </data>
 
 </odoo>

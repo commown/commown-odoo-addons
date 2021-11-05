@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data>
-
     <record id="fp2-battery" model="ir.ui.view">
       <field name="name">Self-troubleshoot an FP2 battery</field>
       <field name="type">qweb</field>
@@ -142,7 +140,5 @@ $(document).ready(function() {
 
       </field>
     </record>
-
-  </data>
 
 </odoo>
