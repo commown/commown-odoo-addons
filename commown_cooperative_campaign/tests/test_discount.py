@@ -155,3 +155,14 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             u'customer_key': self.customer_key,
             u'optout_ts': ts_after(date_end, 0),
             })
+
+        # Check that nothing crashes when partner has no customer_key
+        self.contract.partner_id.update({"phone": False, "mobile": False})
+        date_end = Date.to_string(Date.from_string(self.contract.date_end)
+                                  + timedelta(days=10))
+        with requests_mock.Mocker() as rm:
+            # Should never call the service
+            rm.post("/campaigns/test-campaign/opt-out",
+                    exc=Exception("Test failure: service should not be called"))
+            self.contract.with_context(
+                test_queue_job_no_delay=True).date_end = date_end
