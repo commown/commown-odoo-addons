@@ -7,7 +7,7 @@
     'category': 'Business',
     'description': ('Use telecommown web services to handle discounts'
                     ' from multi-partners cooperative campaigns'),
-    'version': '10.0.1.2.0',
+    'version': '10.0.1.2.1',
     'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
