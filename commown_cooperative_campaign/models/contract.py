@@ -38,14 +38,11 @@ class Contract(models.Model):
 
     @api.multi
     @job(default_channel="root")
-    def _coop_ws_optout(self, campaign):
+    def _coop_ws_optout(self, campaign, customer_key, date_end, tz):
         self.ensure_one()
         url = self.env['ir.config_parameter'].get_param(
             'commown_cooperative_campaign.base_url')
-        identifier = campaign.coop_partner_identifier(self.partner_id)
-        date_end = fields.Date.from_string(self.date_end or "2100-01-01")
-        coop_ws_optout(url, campaign.name, identifier,
-                       date_end, self.partner_id.tz)
+        coop_ws_optout(url, campaign.name, customer_key, date_end, tz)
 
     @api.multi
     def write(self, values):
@@ -58,5 +55,11 @@ class Contract(models.Model):
                 for discount_line in contract_line._applicable_discount_lines():
                     campaign = discount_line.coupon_campaign_id
                     if campaign.is_coop_campaign:
-                        contract.with_delay()._coop_ws_optout(campaign)
+                        partner_id = contract.partner_id
+                        key = campaign.coop_partner_identifier(partner_id)
+                        if key:
+                            date_end = fields.Date.from_string(
+                                contract.date_end or "2100-01-01")
+                            contract.with_delay()._coop_ws_optout(
+                                campaign, key, date_end, partner_id.tz)
         return res
