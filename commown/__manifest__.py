@@ -56,6 +56,7 @@
         'views/account_analytic_account.xml',
         'views/account_analytic_contract.xml',
         'views/actions_account_invoice.xml',
+        'views/actions_crm_lead.xml',
         'views/actions_sale_order.xml',
         'views/actions_utm_source.xml',
         'views/address_template.xml',
