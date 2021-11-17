@@ -1,0 +1,27 @@
+---Models in module 'payment_slimpay_issue'---
+---Fields in module 'payment_slimpay_issue'---
+payment_slimpay_issue / project.issue            / invoice_id (many2one)         : DEL relation: account.invoice
+payment_slimpay_issue / project.issue            / invoice_next_payment_date (date): DEL
+payment_slimpay_issue / project.issue            / invoice_unpaid_count (integer): DEL
+payment_slimpay_issue / project.issue            / slimpay_payment_label (text)  : DEL
+payment_slimpay_issue / project.task             / invoice_id (many2one)         : NEW relation: account.invoice
+payment_slimpay_issue / project.task             / invoice_next_payment_date (date): NEW
+payment_slimpay_issue / project.task             / invoice_unpaid_count (integer): NEW hasdefault
+payment_slimpay_issue / project.task             / slimpay_payment_label (text)  : NEW
+---XML records in module 'payment_slimpay_issue'---
+DEL base.action.rule: payment_slimpay_issue.move_to_fixed_after_waiting_delay
+DEL base.action.rule: payment_slimpay_issue.retry_payment
+DEL base.action.rule: payment_slimpay_issue.retry_payment_on_programed_date
+DEL base.action.rule: payment_slimpay_issue.set_invoice_next_date_when_entering_warn_stage
+NEW base.automation: payment_slimpay_issue.move_to_fixed_after_waiting_delay
+NEW base.automation: payment_slimpay_issue.retry_payment
+NEW base.automation: payment_slimpay_issue.retry_payment_on_programed_date
+NEW base.automation: payment_slimpay_issue.set_invoice_next_date_when_entering_warn_stage
+NEW ir.actions.server: payment_slimpay_issue.action_move_task_to_fixed
+NEW ir.actions.server: payment_slimpay_issue.action_move_task_to_payment_retrial
+DEL ir.actions.server: payment_slimpay_issue.action_move_issue_to_fixed [renamed to account module]
+DEL ir.actions.server: payment_slimpay_issue.action_move_issue_to_payment_retrial [renamed to website module]
+NEW ir.ui.view: payment_slimpay_issue.project_task_form_view [renamed from commown module]
+NEW ir.ui.view: payment_slimpay_issue.project_task_kanban_view [renamed from commown module]
+DEL ir.ui.view: payment_slimpay_issue.project_issue_form_view [renamed to contract module]
+DEL ir.ui.view: payment_slimpay_issue.project_issue_kanban_view [renamed to contract module]

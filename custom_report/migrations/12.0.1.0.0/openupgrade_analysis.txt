@@ -1,0 +1,7 @@
+---Models in module 'custom_report'---
+---Fields in module 'custom_report'---
+---XML records in module 'custom_report'---
+NEW ir.actions.report: account.account_invoices
+NEW ir.actions.report: account.account_invoices_without_payment
+DEL ir.actions.report.xml: account.account_invoice_action_report_duplicate
+DEL ir.actions.report.xml: account.account_invoices
