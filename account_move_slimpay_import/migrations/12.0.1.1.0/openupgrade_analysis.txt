@@ -1,0 +1,4 @@
+---Models in module 'account_move_slimpay_import'---
+---Fields in module 'account_move_slimpay_import'---
+---XML records in module 'account_move_slimpay_import'---
+---nothing has changed in this module--

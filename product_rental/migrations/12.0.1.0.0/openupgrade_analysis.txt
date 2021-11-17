@@ -1,0 +1,30 @@
+---Models in module 'product_rental'---
+---Fields in module 'product_rental'---
+product_rental / account.analytic.account / min_contract_duration (integer): DEL
+product_rental / account.analytic.contract / min_contract_duration (integer): DEL
+product_rental / account.analytic.contract / payment_mode_id (many2one)    : DEL relation: account.payment.mode
+product_rental / account.analytic.contract.line / sale_order_line_id (many2one) : DEL relation: sale.order.line
+product_rental / account.analytic.invoice.line / sale_order_line_id (many2one) : DEL relation: sale.order.line
+product_rental / contract.line            / commitment_duration (integer) : NEW
+product_rental / contract.line            / commitment_end_date (date)    : NEW isfunction: function, stored
+product_rental / contract.template        / payment_mode_id (many2one)    : NEW relation: account.payment.mode
+product_rental / contract.template.line   / commitment_duration (integer) : NEW
+product_rental / sale.order               / contract_count (integer)      : module is now 'product_contract' ('product_rental')
+---XML records in module 'product_rental'---
+DEL base.action.rule: product_rental.payment_transaction_done
+NEW base.automation: product_rental.payment_transaction_done
+NEW ir.ui.view: product_rental.cart_line_product_link
+NEW ir.ui.view: product_rental.cart_summary
+NEW ir.ui.view: product_rental.contract_contract_form_view
+NEW ir.ui.view: product_rental.contract_line_form_view
+NEW ir.ui.view: product_rental.contract_template_form_view
+NEW ir.ui.view: product_rental.contract_template_line_form_view
+NEW ir.ui.view: product_rental.portal_contract_page
+NEW ir.ui.view: product_rental.rental_sale_order_portal_content
+DEL ir.ui.view: product_rental.account_analytic_account_recurring_form_form [renamed to contract_variable_quantity module]
+DEL ir.ui.view: product_rental.account_analytic_contract_view_form [renamed to contract_variable_quantity module]
+DEL ir.ui.view: product_rental.cart_lines [renamed to contract_variable_quantity module]
+DEL ir.ui.view: product_rental.confirmation [renamed to payment_transfer module]
+DEL ir.ui.view: product_rental.payment [renamed to l10n_fr module]
+DEL ir.ui.view: product_rental.portal_my_invoices [renamed to payment_transfer module]
+DEL ir.ui.view: product_rental.view_order_form [renamed to contract_variable_quantity module]

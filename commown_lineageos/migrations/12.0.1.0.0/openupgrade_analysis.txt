@@ -1,0 +1,7 @@
+---Models in module 'commown_lineageos'---
+---Fields in module 'commown_lineageos'---
+---XML records in module 'commown_lineageos'---
+DEL base.action.rule: commown_lineageos.lead_entered_send_label_stage
+DEL base.action.rule: commown_lineageos.lead_entered_unset_post_delivery_actions_stage
+NEW base.automation: commown_lineageos.lead_entered_send_label_stage
+NEW base.automation: commown_lineageos.lead_entered_unset_post_delivery_actions_stage
