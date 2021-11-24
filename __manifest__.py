@@ -2,10 +2,10 @@
     'name': 'Website sale B2B',
     'category': 'Business',
     'summary': "Adapt website_sale module to mixed B2C/ B2B products",
-    'version': '10.0.1.0.0',
+    'version': '12.0.1.0.0',
     'description': ('Add a professional products category and display all'
                     ' products in it excl. taxes'),
-    'author': "Commown SCIC SAS",
+    'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.fr",
     'depends': [

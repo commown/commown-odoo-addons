@@ -16,12 +16,6 @@
       <xpath expr="//p[@t-field='product.description_sale']" position="attributes">
         <attribute name="t-field">product.website_description_sale</attribute>
       </xpath>
-      <xpath expr="//meta[@t-att-content='product.description_sale'][@property='og:description']" position="attributes">
-        <attribute name="t-att-content">product.website_description_sale</attribute>
-      </xpath>
-      <xpath expr="//meta[@t-att-content='product.description_sale'][@name='twitter:description']" position="attributes">
-        <attribute name="t-att-content">product.website_description_sale</attribute>
-      </xpath>
     </template>
 
     <template id="products_description_b2b" inherit_id="website_sale.products_description">
