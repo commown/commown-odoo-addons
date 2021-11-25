@@ -1,4 +1,3 @@
-# coding: utf-8
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -12,22 +11,22 @@ _logger = logging.getLogger(__name__)
 
 
 def _format_discount(value):
-    if isinstance(value, unicode):
+    if isinstance(value, str):
         return value
-    return u"%.2f %%" % value
+    return "%.2f %%" % value
 
 
 def _format_amount(value):
-    if isinstance(value, unicode):
+    if isinstance(value, str):
         return value
-    return u"%.2f €" % value
+    return "%.2f €" % value
 
 
 class ContractTemplateLine(models.Model):
     _inherit = "account.analytic.contract.line"
 
     discount_line_ids = fields.One2many(
-        string=u"Variable discount lines",
+        string="Variable discount lines",
         comodel_name="contract.template.discount.line",
         inverse_name="contract_template_line_id",
         cascade="delete",
@@ -47,22 +46,22 @@ class ContractLine(models.Model):
     _inherit = "account.analytic.invoice.line"
 
     contract_template_line_id = fields.Many2one(
-        string=u"Contract template line",
-        help=u"Contract template line which discount lines apply here",
+        string="Contract template line",
+        help="Contract template line which discount lines apply here",
         comodel_name="account.analytic.contract.line",
         domain=lambda self: self._domain_contract_template_line_id(),
     )
 
     inherited_discount_line_ids = fields.One2many(
-        string=u"Inherited discount lines",
-        help=u"Discount lines from the related contract model",
-        related=u"contract_template_line_id.discount_line_ids",
+        string="Inherited discount lines",
+        help="Discount lines from the related contract model",
+        related="contract_template_line_id.discount_line_ids",
         readonly=True,
     )
 
     specific_discount_line_ids = fields.One2many(
-        string=u"Specific discount lines",
-        help=u"These lines complete the contract template's, if any",
+        string="Specific discount lines",
+        help="These lines complete the contract template's, if any",
         comodel_name="contract.discount.line",
         inverse_name="contract_line_id",
         copy=True,
@@ -157,15 +156,14 @@ class Contract(models.Model):
         "Compute discount and append discount description to invoice line name"
         vals = super(Contract, self)._prepare_invoice_line(line, invoice_id)
 
-        date_invoice = fields.Date.from_string(
+        result = line.compute_discount(
             line.analytic_account_id.recurring_next_date)
-        result = line.compute_discount(date_invoice)
 
         vals["discount"] = result["total"]
         descriptions = result["descriptions"]
         if descriptions:
-            vals["name"] += u"\n" + (_("Applied discounts:\n- %s")
-                                     % u"\n- ".join(descriptions))
+            vals["name"] += "\n" + (_("Applied discounts:\n- %s")
+                                     % "\n- ".join(descriptions))
 
         return vals
 
@@ -173,7 +171,7 @@ class Contract(models.Model):
     def simulate_payments(self):
         self.ensure_one()
 
-        max_date = fields.Date.from_string(self.date_start)
+        max_date = self.date_start
 
         for contract_line in self.recurring_invoice_line_ids:
             for discount_line in contract_line._applicable_discount_lines():
@@ -199,11 +197,11 @@ class Contract(models.Model):
         if getattr(self, 'is_auto_pay', False):
             self.is_auto_pay = False
 
-        last_date = fields.Date.from_string(self.recurring_next_date)
+        last_date = self.recurring_next_date
         try:
             while last_date < max_date:
                 inv = self.recurring_create_invoice()
-                last_date = fields.Date.from_string(inv.date_invoice)
+                last_date = inv.date_invoice
                 if last_amount != inv.amount_total:
                     _logger.debug("> KEEP invoice %s (amount %s)",
                                   inv.date_invoice, inv.amount_total)
