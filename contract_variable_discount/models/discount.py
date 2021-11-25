@@ -11,28 +11,28 @@ from odoo.exceptions import ValidationError
 
 class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     _name = "contract.template.abstract.discount.line"
-    _description = u"Contract template variable discount line"
+    _description = "Contract template variable discount line"
 
     name = fields.Char(required=True, translate=True)
 
     condition = fields.Selection(
         [],
-        string=u"Condition of this discount applicability",
-        help=u"If empty: discount line always apply",
+        string="Condition of this discount applicability",
+        help="If empty: discount line always apply",
         required=False,
     )
 
     amount_type = fields.Selection(
-        [("fix", u"Fixed"),
-         ("percent", u"Percentage")],
-        string=u"Amount type",
+        [("fix", "Fixed"),
+         ("percent", "Percentage")],
+        string="Amount type",
         default="percent",
         required=True,
     )
 
     amount_value = fields.Float(
-        string=u"Amount value",
-        help=u"A positive amount indicates a price discount",
+        string="Amount value",
+        help="A positive amount indicates a price discount",
         required=True,
     )
 
@@ -40,32 +40,32 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         [("relative", "Relative"),
          ("absolute", "Absolute")],
         default="relative",
-        string=u"Start type",
+        string="Start type",
         required=True,
     )
 
     start_value = fields.Integer(
-        string=u"Value",
+        string="Value",
         default=0,
     )
 
-    start_date = fields.Date(string=u"Start date")
+    start_date = fields.Date(string="Start date")
 
     start_reference = fields.Selection(
         [("date_start", "Contract start date")],
         default="date_start",
-        string=u"Start reference date",
-        help=u"Date reference used to compute the discount start date",
+        string="Start reference date",
+        help="Date reference used to compute the discount start date",
         required=True,
     )
 
     start_unit = fields.Selection(
-        [("days", u"Days"),
-         ("weeks", u"Weeks"),
-         ("months", u"Months"),
-         ("years", u"Years")],
-        string=u"Units",
-        help=u"Units of the discount start difference with the reference date",
+        [("days", "Days"),
+         ("weeks", "Weeks"),
+         ("months", "Months"),
+         ("years", "Years")],
+        string="Units",
+        help="Units of the discount start difference with the reference date",
         default="months",
         required=True,
     )
@@ -75,31 +75,31 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
          ("relative", "Relative"),
          ("absolute", "Absolute")],
         default="empty",
-        string=u"End type",
+        string="End type",
         required=True,
     )
     end_value = fields.Integer(
-        string=u"Value",
-        help=u"No value means no end for this discount",
+        string="Value",
+        help="No value means no end for this discount",
     )
 
-    end_date = fields.Date(string=u"End date")
+    end_date = fields.Date(string="End date")
 
     end_reference = fields.Selection(
         [("date_start", "Contract start date")],
         default="date_start",
-        string=u"End reference date",
-        help=u"Date reference used to compute the discount end date",
+        string="End reference date",
+        help="Date reference used to compute the discount end date",
         required=True,
     )
 
     end_unit = fields.Selection(
-        [("days", u"Days"),
-         ("weeks", u"Weeks"),
-         ("months", u"Months"),
-         ("years", u"Years")],
-        string=u"Units",
-        help=u"Units of the discount end difference with the reference date",
+        [("days", "Days"),
+         ("weeks", "Weeks"),
+         ("months", "Months"),
+         ("years", "Years")],
+        string="Units",
+        help="Units of the discount end difference with the reference date",
         default="months",
         required=True,
     )
@@ -197,7 +197,7 @@ class ContractDiscountLine(models.Model):
 
     _name = "contract.discount.line"
     _inherit = "contract.template.abstract.discount.line"
-    _description = u"Contract discount line"
+    _description = "Contract discount line"
 
     contract_line_id = fields.Many2one(
         comodel_name="account.analytic.invoice.line",
@@ -223,8 +223,8 @@ class ContractDiscountLine(models.Model):
 
     replace_discount_line_id = fields.Many2one(
         comodel_name="contract.template.discount.line",
-        string=u"Replace discount line",
-        help=(u"If a discount line is added here, it will no more apply"
+        string="Replace discount line",
+        help=("If a discount line is added here, it will no more apply"
               " but be replaced by current line"),
         required=False,
     )

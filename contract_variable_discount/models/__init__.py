@@ -1,2 +1,2 @@
-import contract
-import discount
+from . import contract
+from . import discount

@@ -1,5 +1,3 @@
-# coding: utf-8
-
 from datetime import date
 
 import lxml.html
@@ -74,8 +72,8 @@ class ContractTC(TestContractBase):
                 raise ValueError(
                     'Expected inv date %s never reached' % discount_date)
 
-    def _discount_date(self, prefix=u"start", **kwargs):
-        kwargs.setdefault("name", u"Test discount")
+    def _discount_date(self, prefix="start", **kwargs):
+        kwargs.setdefault("name", "Test discount")
         kwargs.setdefault("amount_value", 1.)
         discount = self.cdiscount(**kwargs)
         return discount._compute_date(self.acct_line, prefix)
@@ -104,8 +102,8 @@ class ContractTC(TestContractBase):
 
     def test_discount_compute_0(self):
         self.set_cdiscounts(self.cdiscount(
-            name=u"Fix discount",
-            amount_type=u"fix",
+            name="Fix discount",
+            amount_type="fix",
             amount_value=2.,
         ))
         invoice = self.contract.recurring_create_invoice()
@@ -114,27 +112,27 @@ class ContractTC(TestContractBase):
     def _discounts_1(self):
         return (
             self.cdiscount(
-                name=u"Early adopter discount",
+                name="Early adopter discount",
                 amount_type="percent",
                 amount_value=5.,
             ) | self.cdiscount(
-                name=u"2 years loyalty",
+                name="2 years loyalty",
                 amount_type="percent",
                 amount_value=10.,
-                start_reference=u"date_start",
+                start_reference="date_start",
                 start_value=2,
-                start_unit=u"years",
-                end_type=u"relative",
-                end_reference=u"date_start",
+                start_unit="years",
+                end_type="relative",
+                end_reference="date_start",
                 end_value=3,
-                end_unit=u"years",
+                end_unit="years",
             ) | self.cdiscount(
-                name=u"More than 3 years loyalty",
+                name="More than 3 years loyalty",
                 amount_type="percent",
                 amount_value=20.,
-                start_reference=u"date_start",
+                start_reference="date_start",
                 start_value=3,
-                start_unit=u"years",
+                start_unit="years",
             )
         )
 
@@ -158,10 +156,10 @@ class ContractTC(TestContractBase):
         _vals["analytic_account_id"] = self.template.id
         ct_line = self.env['account.analytic.contract.line'].create(_vals)
 
-        self.tdiscount(ct_line, name=u"Fix discount",
-                       amount_value=2., amount_type=u"fix")
-        tdiscount2 = self.tdiscount(ct_line, name=u"5% discount",
-                                    amount_value=5., amount_type=u"percent")
+        self.tdiscount(ct_line, name="Fix discount",
+                       amount_value=2., amount_type="fix")
+        tdiscount2 = self.tdiscount(ct_line, name="5% discount",
+                                    amount_value=5., amount_type="percent")
 
         # Use this template as the model for self.contract:
         self.contract.recurring_invoice_line_ids.unlink()
@@ -173,34 +171,34 @@ class ContractTC(TestContractBase):
         # Check applied discounts
         inv = self.contract.recurring_create_invoice()
         self.assertEqual(inv.mapped("invoice_line_ids.name"),
-                         [u"Services from 02/29/2016 to 03/28/2016\n"
-                          u"Applied discounts:\n"
-                          u"- Fix discount\n"
-                          u"- 5% discount"])
+                         ["Services from 02/29/2016 to 03/28/2016\n"
+                          "Applied discounts:\n"
+                          "- Fix discount\n"
+                          "- 5% discount"])
 
         # Add an override for the 5% discount
         self.cdiscount(
             self.contract.recurring_invoice_line_ids,
-            name=u"10% discount", amount_type="percent", amount_value=10.,
+            name="10% discount", amount_type="percent", amount_value=10.,
             replace_discount_line_id=tdiscount2.id)
 
         # Check applied discounts
         inv = self.contract.recurring_create_invoice()
         self.assertEqual(inv.mapped("invoice_line_ids.name"),
-                         [u"Services from 03/29/2016 to 04/28/2016\n"
-                          u"Applied discounts:\n"
-                          u"- Fix discount\n"
-                          u"- 10% discount"])
+                         ["Services from 03/29/2016 to 04/28/2016\n"
+                          "Applied discounts:\n"
+                          "- Fix discount\n"
+                          "- 10% discount"])
 
     def test_condition_and_description(self):
         self.set_cdiscounts(self.cdiscount(
-            name=u"Fix discount after 1 month under condition",
-            condition=u"test",
+            name="Fix discount after 1 month under condition",
+            condition="test",
             amount_value=5.,
-            amount_type=u"percent",
-            start_reference=u"date_start",
+            amount_type="percent",
+            start_reference="date_start",
             start_value=1,
-            start_unit=u"months",
+            start_unit="months",
         ))
 
         with patch.object(TestConditionDiscountLine,
@@ -226,13 +224,13 @@ class ContractTC(TestContractBase):
         self.assertEqual(inv3.mapped("invoice_line_ids.discount"), [0.])
 
         self.assertEqual(inv1.mapped("invoice_line_ids.name"),
-                         [u"Services from 02/29/2016 to 03/28/2016"])
+                         ["Services from 02/29/2016 to 03/28/2016"])
         self.assertEqual(inv2.mapped("invoice_line_ids.name"),
-                         [u"Services from 03/29/2016 to 04/28/2016\n"
-                          u"Applied discounts:\n"
-                          u"- Fix discount after 1 month under condition"])
+                         ["Services from 03/29/2016 to 04/28/2016\n"
+                          "Applied discounts:\n"
+                          "- Fix discount after 1 month under condition"])
         self.assertEqual(inv3.mapped("invoice_line_ids.name"),
-                         [u"Services from 04/29/2016 to 05/28/2016"])
+                         ["Services from 04/29/2016 to 05/28/2016"])
 
     def test_simulate_payments(self):
         self.set_cdiscounts(self._discounts_1())
@@ -255,4 +253,4 @@ class ContractTC(TestContractBase):
         # Fourth contains discounts:
         self.assertEqual(
             [n.text_content() for n in doc.xpath("//tbody/tr/td[4]")],
-            [u"5.0 %", u"15.0 %", u"25.0 %"])
+            ["5.0 %", "15.0 %", "25.0 %"])
