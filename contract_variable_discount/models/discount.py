@@ -123,7 +123,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         else:
             raise ValidationError(
                 _("Invalid discount amount type '%s' for contract %s")
-                % (self.amount_type, contract_line.analytic_account_id.name))
+                % (self.amount_type, contract_line.contract_id.name))
         return discount
 
     def _compute_date(self, contract_line, date_attr_prefix):
@@ -141,7 +141,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             return fields.Date.from_string(
                 getattr(self, '%s_date' % date_attr_prefix))
 
-        contract = contract_line.analytic_account_id
+        contract = contract_line.contract_id
         cfields = contract.fields_get()
 
         reference = getattr(self, "%s_reference" % date_attr_prefix)
@@ -177,7 +177,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         if meth is None:
             raise ValidationError(
                 _("Invalid discount condition %s in contract %s")
-                % (self.condition, contract_line.analytic_account_id.name))
+                % (self.condition, contract_line.contract_id.name))
         return meth(contract_line, date_invoice)
 
 
@@ -186,7 +186,7 @@ class ContractTemplateDiscountLine(models.Model):
     _inherit = "contract.template.abstract.discount.line"
 
     contract_template_line_id = fields.Many2one(
-        comodel_name="account.analytic.contract.line",
+        comodel_name="contract.template.line",
         string="Contract template line",
         required=False,
         copy=False,
@@ -200,7 +200,7 @@ class ContractDiscountLine(models.Model):
     _description = "Contract discount line"
 
     contract_line_id = fields.Many2one(
-        comodel_name="account.analytic.invoice.line",
+        comodel_name="contract.line",
         string="Contract line",
         required=False,
         copy=False,
