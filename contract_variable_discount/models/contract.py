@@ -23,7 +23,7 @@ def _format_amount(value):
 
 
 class ContractTemplateLine(models.Model):
-    _inherit = "account.analytic.contract.line"
+    _inherit = "contract.template.line"
 
     discount_line_ids = fields.One2many(
         string="Variable discount lines",
@@ -43,12 +43,12 @@ class ContractTemplateLine(models.Model):
 
 
 class ContractLine(models.Model):
-    _inherit = "account.analytic.invoice.line"
+    _inherit = "contract.line"
 
     contract_template_line_id = fields.Many2one(
         string="Contract template line",
         help="Contract template line which discount lines apply here",
-        comodel_name="account.analytic.contract.line",
+        comodel_name="contract.template.line",
         domain=lambda self: self._domain_contract_template_line_id(),
     )
 
@@ -71,10 +71,26 @@ class ContractLine(models.Model):
         "Variable discount?", store=False, compute='_compute_variable_discount')
 
     def _domain_contract_template_line_id(self):
-        contract = self.analytic_account_id
-        if not contract and "analytic_account_id" in self.env.context:
-            contract = contract.browse(self.env.context["analytic_account_id"])
-        return [('analytic_account_id', '=', contract.contract_template_id.id)]
+        contract = self.contract_id
+        if not contract and "contract_id" in self.env.context:
+            contract = contract.browse(self.env.context["contract_id"])
+        return [('contract_id', '=', contract.contract_template_id.id)]
+
+    @api.model
+    def _prepare_invoice_line(self, invoice_id=False, invoice_values=False):
+        "Compute discount and append discount description to invoice line name"
+        vals = super(ContractLine, self)._prepare_invoice_line(
+            invoice_id, invoice_values)
+
+        result = self.compute_discount(invoice_values["date_invoice"])
+
+        vals["discount"] = result["total"]
+        descriptions = result["descriptions"]
+        if descriptions:
+            vals["name"] += "\n" + (_("Applied discounts:\n- %s")
+                                     % "\n- ".join(descriptions))
+
+        return vals
 
     @api.depends('contract_template_line_id.discount_line_ids',
                  'specific_discount_line_ids')
@@ -133,7 +149,7 @@ class ContractLine(models.Model):
 
 
 class Contract(models.Model):
-    _inherit = "account.analytic.account"
+    _inherit = "contract.contract"
     discount_date_units = {"days", "weeks", "months", "years"}
 
     @api.multi
@@ -145,27 +161,10 @@ class Contract(models.Model):
         discount lines.
         """
         new_lines = super(Contract, self)._convert_contract_lines(contract)
-        for (_0, _0, vals), contract_line in zip(
-                new_lines, contract.recurring_invoice_line_ids):
-            vals["contract_template_line_id"] = contract_line.id
-            vals.pop("discount_line_ids", None)
+        for contract_line, contract_template_line in zip(
+                new_lines, contract.contract_line_ids):
+            contract_line.contract_template_line_id = contract_template_line
         return new_lines
-
-    @api.model
-    def _prepare_invoice_line(self, line, invoice_id):
-        "Compute discount and append discount description to invoice line name"
-        vals = super(Contract, self)._prepare_invoice_line(line, invoice_id)
-
-        result = line.compute_discount(
-            line.analytic_account_id.recurring_next_date)
-
-        vals["discount"] = result["total"]
-        descriptions = result["descriptions"]
-        if descriptions:
-            vals["name"] += "\n" + (_("Applied discounts:\n- %s")
-                                     % "\n- ".join(descriptions))
-
-        return vals
 
     @api.multi
     def simulate_payments(self):
@@ -173,7 +172,7 @@ class Contract(models.Model):
 
         max_date = self.date_start
 
-        for contract_line in self.recurring_invoice_line_ids:
+        for contract_line in self.contract_line_ids:
             for discount_line in contract_line._applicable_discount_lines():
                 date_start = discount_line._compute_date(contract_line, "start")
                 if date_start > max_date:
