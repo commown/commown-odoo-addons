@@ -138,8 +138,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         if date_type == "empty":
             return None
         elif date_type == "absolute":
-            return fields.Date.from_string(
-                getattr(self, '%s_date' % date_attr_prefix))
+            return getattr(self, '%s_date' % date_attr_prefix)
 
         contract = contract_line.contract_id
         cfields = contract.fields_get()
@@ -159,8 +158,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         unit = getattr(self, "%s_unit" % date_attr_prefix)
         value = getattr(self, "%s_value" % date_attr_prefix)
 
-        return fields.Date.from_string(reference_date) + relativedelta(
-            **{unit: value})
+        return reference_date + relativedelta(**{unit: value})
 
     def _start_date_ok(self, contract_line, date_invoice):
         date_start = self._compute_date(contract_line, "start")
