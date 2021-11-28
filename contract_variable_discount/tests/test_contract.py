@@ -33,18 +33,23 @@ class ContractTC(TestContractBase):
         inst = model_cls._build_model(registry, cr)
         model = cls.env[model_cls._inherit].with_context(todo=[])
         model._prepare_setup()
-        model._setup_base(partial=False)
-        model._setup_fields(partial=False)
+        model._setup_base()
+        model._setup_fields()
         model._setup_complete()
         model._auto_init()
         model.init()
-        model._auto_end()
         return inst
 
     @classmethod
     def setUpClass(cls):
         super(ContractTC, cls).setUpClass()
         cls._init_test_model(TestConditionDiscountLine)
+        # Adjust dates to our test needs:
+        cls.contract.date_start = "2016-02-15"
+        cls.acct_line.update({
+            "date_start": "2016-02-15",
+            "recurring_next_date": "2016-02-29",
+        })
 
     def tdiscount(self, ct_line=None, **kwargs):
         kwargs.setdefault("contract_template_line_id", ct_line.id)
@@ -59,6 +64,7 @@ class ContractTC(TestContractBase):
 
     def check_cdiscounts(self, expected_discounts):
         for discount_date, expected_value in sorted(expected_discounts):
+            discount_date = fields.Date.from_string(discount_date)
             while self.contract.recurring_next_date <= discount_date:
                 invoice = self.contract.recurring_create_invoice()
                 if invoice.date_invoice == discount_date:
@@ -151,22 +157,29 @@ class ContractTC(TestContractBase):
     def test_discount_override(self):
         " Discounts on contract template are handled but can be overidden "
 
-        # Add a line with 2 discounts on contract template
-        _vals = self.line_vals.copy()
-        _vals["analytic_account_id"] = self.template.id
-        ct_line = self.env['account.analytic.contract.line'].create(_vals)
-
+        # Add a line with 2 discounts on a new contract template
+        _vals = self.line_template_vals.copy()
+        _vals["recurring_rule_type"] = "monthly"
+        template = self.env["contract.template"].create({
+            "name": "Test Contract Template",
+            "contract_line_ids": [
+                (0, 0, _vals),
+            ]
+        })
+        ct_line = template.contract_line_ids
         self.tdiscount(ct_line, name="Fix discount",
                        amount_value=2., amount_type="fix")
         tdiscount2 = self.tdiscount(ct_line, name="5% discount",
                                     amount_value=5., amount_type="percent")
 
         # Use this template as the model for self.contract:
-        self.contract.recurring_invoice_line_ids.unlink()
-        self.template.update({"recurring_interval": 1,
-                              "recurring_rule_type": "monthly"})
-        self.contract.contract_template_id = self.template
+        self.contract.contract_line_ids.update({"is_canceled": True})
+        self.contract.contract_line_ids.unlink()
+        self.contract.contract_template_id = template
         self.contract._onchange_contract_template_id()
+        self.contract.contract_line_ids.date_start = "2016-02-29"
+        self.contract.contract_line_ids._onchange_date_start()
+        self.contract._compute_date_end()  # Refresh contract start and end
 
         # Check applied discounts
         inv = self.contract.recurring_create_invoice()
@@ -178,7 +191,7 @@ class ContractTC(TestContractBase):
 
         # Add an override for the 5% discount
         self.cdiscount(
-            self.contract.recurring_invoice_line_ids,
+            self.contract.contract_line_ids,
             name="10% discount", amount_type="percent", amount_value=10.,
             replace_discount_line_id=tdiscount2.id)
 
@@ -224,7 +237,7 @@ class ContractTC(TestContractBase):
         self.assertEqual(inv3.mapped("invoice_line_ids.discount"), [0.])
 
         self.assertEqual(inv1.mapped("invoice_line_ids.name"),
-                         ["Services from 02/29/2016 to 03/28/2016"])
+                         ["Services from 02/15/2016 to 03/28/2016"])
         self.assertEqual(inv2.mapped("invoice_line_ids.name"),
                          ["Services from 03/29/2016 to 04/28/2016\n"
                           "Applied discounts:\n"
@@ -233,13 +246,15 @@ class ContractTC(TestContractBase):
                          ["Services from 04/29/2016 to 05/28/2016"])
 
     def test_simulate_payments(self):
+        contract = self.contract
         self.set_cdiscounts(self._discounts_1())
 
-        self.contract.recurring_next_date = self.contract.date_start
+        contract.recurring_next_date = contract.date_start
+        contract.contract_line_ids.recurring_next_date = contract.date_start
 
         report = self.env.ref(
             "contract_variable_discount.report_simulate_payments_html")
-        fragment = report.render({"docs": self.contract}, 'ir.qweb')
+        fragment = report.render({"docs": contract}, 'ir.qweb')
 
         html = ('<html><head><meta charset="utf-8"/></head>'
                 '<body>%s<//body></html>' % fragment)
@@ -253,4 +268,4 @@ class ContractTC(TestContractBase):
         # Fourth contains discounts:
         self.assertEqual(
             [n.text_content() for n in doc.xpath("//tbody/tr/td[4]")],
-            ["5.0 %", "15.0 %", "25.0 %"])
+            ["5.0 %", "15.0 %", "25.0 %"])

@@ -29,7 +29,7 @@
                   <td t-esc="inv['date_invoice'] if line_first else ''"/>
                   <td t-esc="line_index + 1"/>
                   <td><pre t-esc="line['name']" style="background-color: #fff; border:none;"/></td>
-                  <td><span t-esc="line['discount']"/> %</td>
+                  <td><span t-esc="line['discount']"/> %</td>
                   <td style="text-align: right"><span t-esc="line['price_subtotal']"/> <span t-esc="line['currency_id'][1]"/></td>
                 </tr>
               </t>
