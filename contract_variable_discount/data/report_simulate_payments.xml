@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="report_simulate_payments_html">
+
+    <t t-call-assets="web.assets_frontend"/>
+
+    <div class="container">
+    <t t-foreach="docs" t-as="c">
+
+      <t t-set="inv_data" t-value="c.simulate_payments()"/>
+
+      <t t-if="inv_data">
+        <table class="table table-bordered">
+          <thead>
+            <tr class="info">
+              <th>Date</th>
+              <th>Line n°</th>
+              <th>Invoice line description</th>
+              <th>Discount</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <t t-foreach="inv_data" t-as="inv">
+              <t t-foreach="inv['invoice_line_ids']" t-as="line">
+                <tr>
+                  <td t-esc="inv['date_invoice'] if line_first else ''"/>
+                  <td t-esc="line_index + 1"/>
+                  <td><pre t-esc="line['name']" style="background-color: #fff; border:none;"/></td>
+                  <td><span t-esc="line['discount']"/> %</td>
+                  <td style="text-align: right"><span t-esc="line['price_subtotal']"/> <span t-esc="line['currency_id'][1]"/></td>
+                </tr>
+              </t>
+              <tr>
+                <td style="text-align: right" colspan="4">Taxes</td>
+                <td style="text-align: right"><span t-esc="inv['amount_tax']"/> <span t-esc="inv['currency_id'][1]"/></td>
+              </tr>
+              <tr class="active">
+                <td style="text-align: right" colspan="4">Total</td>
+                <td style="text-align: right"><span t-esc="inv['amount_total']"/> <span t-esc="inv['currency_id'][1]"/></td>
+              </tr>
+            </t>
+
+          </tbody>
+        </table>
+      </t>
+
+      <t t-else="">
+        <p>No simulation data</p>
+      </t>
+
+    </t>
+    </div>
+
+  </template>
+
+</odoo>

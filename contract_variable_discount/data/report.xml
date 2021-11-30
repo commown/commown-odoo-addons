@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <report
+      id="simulate_payments_html"
+      model="contract.contract"
+      name="contract_variable_discount.report_simulate_payments_html"
+      string="Simulate payments"
+      report_type="qweb-html"
+      file="contract_variable_discount.report_simulate_payments_html"
+      />
+
+</odoo>

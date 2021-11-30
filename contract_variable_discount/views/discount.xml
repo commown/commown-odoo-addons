@@ -1,0 +1,76 @@
+<odoo>
+
+  <record id="contract_template_discount_line" model="ir.ui.view">
+    <field name="name">Contract template discount line form</field>
+    <field name="model">contract.template.discount.line</field>
+    <field name="arch" type="xml">
+      <form string="Contract template discount line">
+        <group>
+          <group name="general" string="General">
+            <field name="name"/>
+            <field name="condition"/>
+          </group>
+          <group name="amount" string="Amount">
+            <field name="amount_value"/>
+            <field name="amount_type"/>
+          </group>
+        </group>
+        <group>
+          <group name="start" string="Start date">
+            <field name="start_type"/>
+            <field name="start_date" attrs="{'invisible': [('start_type', '!=', 'absolute')]}"/>
+            <field name="start_reference" attrs="{'invisible': [('start_type', '!=', 'relative')]}"/>
+            <field name="start_value" attrs="{'invisible': [('start_type', '!=', 'relative')], 'required': [('start_type', '=', 'relative')]}"/>
+            <field name="start_unit" attrs="{'invisible': [('start_type', '!=', 'relative')]}"/>
+          </group>
+          <group name="end" string="End date">
+            <field name="end_type"/>
+            <field name="end_date" attrs="{'invisible': [('end_type', '!=', 'absolute')]}"/>
+            <field name="end_reference" attrs="{'invisible': [('end_type', '!=', 'relative')]}"/>
+            <field name="end_value" attrs="{'invisible': [('end_type', '!=', 'relative')], 'required': [('end_type', '=', 'relative')]}"/>
+            <field name="end_unit" attrs="{'invisible': [('end_type', '!=', 'relative')]}"/>
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="contract_discount_line" model="ir.ui.view">
+    <field name="name">Contract discount line form</field>
+    <field name="model">contract.discount.line</field>
+    <field name="arch" type="xml">
+      <form string="Contract discount line">
+        <group>
+          <group name="general" string="General">
+            <field name="name"/>
+            <field name="condition"/>
+            <field name="replace_discount_line_id_domain" invisible="1"/>
+            <field name="replace_discount_line_id"
+                   domain="replace_discount_line_id_domain"/>
+          </group>
+          <group name="amount" string="Amount">
+            <field name="amount_value"/>
+            <field name="amount_type"/>
+          </group>
+        </group>
+        <group>
+          <group name="start" string="Start date">
+            <field name="start_type"/>
+            <field name="start_date" attrs="{'invisible': [('start_type', '!=', 'absolute')]}"/>
+            <field name="start_reference" attrs="{'invisible': [('start_type', '!=', 'relative')]}"/>
+            <field name="start_value" attrs="{'invisible': [('start_type', '!=', 'relative')], 'required': [('start_type', '=', 'relative')]}"/>
+            <field name="start_unit" attrs="{'invisible': [('start_type', '!=', 'relative')]}"/>
+          </group>
+          <group name="end" string="End date">
+            <field name="end_type"/>
+            <field name="end_date" attrs="{'invisible': [('end_type', '!=', 'absolute')]}"/>
+            <field name="end_reference" attrs="{'invisible': [('end_type', '!=', 'relative')]}"/>
+            <field name="end_value" attrs="{'invisible': [('end_type', '!=', 'relative')], 'required': [('end_type', '=', 'relative')]}"/>
+            <field name="end_unit" attrs="{'invisible': [('end_type', '!=', 'relative')]}"/>
+          </group>
+        </group>
+      </form>
+    </field>
+  </record>
+
+</odoo>

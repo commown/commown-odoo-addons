@@ -1,0 +1,50 @@
+<odoo>
+
+  <record id="contract_contract_form_view" model="ir.ui.view">
+    <field name="name">Contract form</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_form_view"/>
+    <field name="arch" type="xml">
+      <!-- Remove editable on tree: a big form is needed to edit discount formula -->
+      <xpath expr="//field[@name='contract_line_ids']/tree"
+             position="attributes">
+        <attribute name="editable"></attribute>
+      </xpath>
+
+      <xpath expr="//field[@name='contract_line_ids']"
+             position="attributes">
+        <attribute name="context">{"contract_id": active_id}</attribute>
+      </xpath>
+
+      <!-- Insert `variable_discount` before `discount` -->
+      <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='discount']"
+             position="before">
+        <field name="specific_discount_line_ids"/>
+        <field name="contract_template_line_id"/>
+        <field name="variable_discount"/>
+      </xpath>
+
+      <!-- Do not show discount if `variable_discount` is True -->
+      <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='discount']"
+             position="attributes">
+        <attribute name="attrs">{'invisible': [('variable_discount', '=', True)]}</attribute>
+      </xpath>
+
+    </field>
+  </record>
+
+  <record id="contract_line_form_view" model="ir.ui.view">
+    <field name="name">contract.line form view (in contract_variable_discount)</field>
+    <field name="model">contract.line</field>
+    <field name="inherit_id" ref="contract.contract_line_form_view"/>
+    <field name="arch" type="xml">
+      <group name="note_invoicing_mode" position="before">
+        <group name="Variable discount">
+          <field name="specific_discount_line_ids"/>
+          <field name="contract_template_line_id" invisible="1"/>
+        </group>
+      </group>
+    </field>
+  </record>
+
+</odoo>
