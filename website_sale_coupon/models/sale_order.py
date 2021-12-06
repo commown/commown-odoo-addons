@@ -26,7 +26,7 @@ class CouponSaleOrder(models.Model):
                         'Found non-orphan exclusive coupon in order %s.'
                         ' Using one arbitrary exclusive coupon.', order.id)
                     coupons = coupons.filtered(
-                        'campaign_id.coupons_are_exclusive')[0]
+                        lambda c: not c.campaign_id.can_cumulate)[0]
             for coupon in coupons:
                 if not coupon.used_for_sale_id:
                     if coupon.campaign_id.is_valid(order):
@@ -87,6 +87,6 @@ class CouponSaleOrder(models.Model):
         if candidate is not None:
             coupons += candidate
         if (len(coupons) > 1 and
-                coupons.filtered('campaign_id.coupons_are_exclusive')):
+                coupons.filtered(lambda c: not c.campaign_id.can_cumulate)):
             return False
         return True

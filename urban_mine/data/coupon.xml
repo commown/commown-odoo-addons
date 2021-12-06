@@ -6,7 +6,7 @@
       <field name="name">Mine urbaine : campagne de test</field>
       <field name="description">Vous avez la première mensualité offerte grâce à votre code !</field>
       <field name="seller_id" ref="base.main_partner"/>
-      <field name="coupons_are_exclusive">True</field>
+      <field name="can_cumulate">False</field>
     </record>
 
   </data>

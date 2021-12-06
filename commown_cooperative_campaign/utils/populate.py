@@ -86,7 +86,7 @@ def new_campaign(env, base_url, campaign_name):
         "name": campaign_name,
         "is_coop_campaign": True,
         "is_without_coupons": True,
-        "coupons_are_exclusive": False,
+        "can_cumulate": True,
         "seller_id": 1,
     })
 
