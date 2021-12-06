@@ -36,7 +36,9 @@ class Campaign(models.Model):
     used_coupons = fields.Integer(
         'Used coupons',
         compute='_compute_used_coupons', store=False, compute_sudo=True)
-    coupons_are_exclusive = fields.Boolean(required=True, default=True)
+    can_cumulate = fields.Boolean(
+        'Can cumulate with *other* campaigns', required=True, default=True,
+        help=u"If checked, coupons can be cumulated with another campaign's")
 
     @api.constrains('date_start', 'date_end')
     def _check_dates(self):

@@ -90,9 +90,9 @@ msgid "Coupons"
 msgstr "Coupons"
 
 #. module: website_sale_coupon
-#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_coupons_are_exclusive
-msgid "Coupons are exclusive"
-msgstr "Les coupons ne sont pas cumulables"
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_can_cumulate
+msgid "Can cumulate with *other* campaigns"
+msgstr "Peut se cumuler avec d'_autres_ campagnes"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_coupon_ids

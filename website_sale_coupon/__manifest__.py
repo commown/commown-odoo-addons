@@ -6,7 +6,7 @@
         ' Coupons are secret codes that customers can get (paid or for free)'
         ' to get an advantage when they buy a product on the online shop.'
     ),
-    'version': '10.0.2.1.0',
+    'version': '10.0.3.0.0',
     'description': (
         'This module is intended to manage promotion campaigns.\n'
         'These promotion campaigns have optional start and end validity dates.'
