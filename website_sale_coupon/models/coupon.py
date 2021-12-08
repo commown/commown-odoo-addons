@@ -39,6 +39,9 @@ class Campaign(models.Model):
     can_cumulate = fields.Boolean(
         'Can cumulate with *other* campaigns', required=True, default=True,
         help=u"If checked, coupons can be cumulated with another campaign's")
+    can_auto_cumulate = fields.Boolean(
+        'Can use more than one coupon by sale', required=True, default=False,
+        help=u"If checked, coupons of the same campaign can be cumulated")
 
     @api.constrains('date_start', 'date_end')
     def _check_dates(self):
