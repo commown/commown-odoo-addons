@@ -60,8 +60,10 @@ odoo.define('website_sale_coupon.coupon', function(require) {
                         $(qweb.render('coupon.valid', {'code': code}))
                             .appendTo($('body')).modal();
                     } else {
-                        $(qweb.render('coupon.wrong', {'code': code}))
-                            .appendTo($('body')).modal();
+                        $(qweb.render(
+                          'coupon.wrong',
+                          {'code': code, 'reason': result["reason"]}
+                        )).appendTo($('body')).modal();
                     }
                 })
 

@@ -1,5 +1,7 @@
 import logging
 
+from ..models.sale_order import CouponError
+
 from odoo import http
 from odoo.http import request
 
@@ -20,10 +22,14 @@ class WebsiteSaleCouponController(http.Controller):
                 auth='public', website=True)
     def reserve_coupon(self, code):
         so = request.website.sale_get_order()
-        coupon = so.reserve_coupon(code)
-        if coupon is not None:
+        try:
+            coupon = so.reserve_coupon(code)
+        except CouponError as exc:
+            return {'success': False, 'reason': unicode(exc)}
+        if coupon:
             return {'success': True, 'coupons': self._sale_coupons_descr(so)}
-        return {'success': False}
+        else:
+            return {'success': False}
 
     @http.route('/website_sale_coupon/reserved_coupons', type='json',
                 auth='public', website=True)

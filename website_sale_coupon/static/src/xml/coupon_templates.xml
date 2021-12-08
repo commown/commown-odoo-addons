@@ -16,7 +16,8 @@
             <h4 class="modal-title">Wrong coupon</h4>
           </div>
           <div class="modal-body">
-            This coupon code is not valid. Please check your input and try again.
+            <p t-if="reason"><t t-esc="reason"/></p>
+            <p t-else="">This coupon is not valid. Please check your input and try again.</p>
           </div>
           <div class="modal-footer">
             <a href="#" class="btn btn-link btn-xs" data-dismiss="modal">Close</a>
