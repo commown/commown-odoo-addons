@@ -21,6 +21,7 @@
               <field name="date_end" />
               <field name="seller_id" />
               <field name="can_cumulate" />
+              <field name="can_auto_cumulate" />
               <field name="target_product_tmpl_ids" />
             </group>
           </sheet>
