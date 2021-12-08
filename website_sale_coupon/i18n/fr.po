@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-25 14:06+0000\n"
-"PO-Revision-Date: 2021-10-25 14:06+0000\n"
+"POT-Creation-Date: 2021-12-08 08:40+0000\n"
+"PO-Revision-Date: 2021-12-08 08:40+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 #. module: website_sale_coupon
 #. openerp-web
 #: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:15
-#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:34
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:35
 #, python-format
 msgid "&times;"
 msgstr "&times;"
@@ -32,8 +32,8 @@ msgstr "(tous si vide)"
 #: model:ir.ui.view,arch_db:website_sale_coupon.cart
 msgid "<span>Submit</span>\n"
 "                <i class=\"fa fa-spinner fa-spin\"/>"
-msgstr "<span>Envoyer</span>\n"
-"                <i class=\"fa fa-spinner fa-spin\"/>"
+msgstr "<span>Valider</span>\n"
+"              <i class=\"fa fa-spinner fa-spin\"/>"
 
 #. module: website_sale_coupon
 #: model:ir.ui.view,arch_db:website_sale_coupon.cart
@@ -59,9 +59,31 @@ msgid "Campaigns"
 msgstr "Campagnes"
 
 #. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_can_cumulate
+msgid "Can cumulate with *other* campaigns"
+msgstr "Peut se cumuler avec d'_autres_ campagnes"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_can_auto_cumulate
+msgid "Can use more than one coupon by sale"
+msgstr "Plusieurs coupons utilisables simultanément"
+
+#. module: website_sale_coupon
+#: code:addons/website_sale_coupon/models/sale_order.py:109
+#, python-format
+msgid "Cannot cumulate those coupons: %s"
+msgstr "Ces coupons ne sont pas cumulables : %s"
+
+#. module: website_sale_coupon
+#: code:addons/website_sale_coupon/models/sale_order.py:100
+#, python-format
+msgid "Cannot use more than one %s coupon"
+msgstr "On ne peut pas utiliser plus d'un coupon %s"
+
+#. module: website_sale_coupon
 #. openerp-web
-#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:22
-#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:42
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:23
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:43
 #, python-format
 msgid "Close"
 msgstr "Fermer"
@@ -78,7 +100,7 @@ msgstr "Campagnes de coupons"
 
 #. module: website_sale_coupon
 #. openerp-web
-#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:37
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:38
 #, python-format
 msgid "Coupon number"
 msgstr "Le coupon numéro"
@@ -88,11 +110,6 @@ msgstr "Le coupon numéro"
 #: model:ir.ui.menu,name:website_sale_coupon.coupon_main
 msgid "Coupons"
 msgstr "Coupons"
-
-#. module: website_sale_coupon
-#: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_can_cumulate
-msgid "Can cumulate with *other* campaigns"
-msgstr "Peut se cumuler avec d'_autres_ campagnes"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_coupon_ids
@@ -154,6 +171,16 @@ msgid "ID"
 msgstr "ID"
 
 #. module: website_sale_coupon
+#: model:ir.model.fields,help:website_sale_coupon.field_coupon_campaign_can_cumulate
+msgid "If checked, coupons can be cumulated with another campaign's"
+msgstr "Si coché, les coupons peuvent être cumulés avec une autre campagne"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,help:website_sale_coupon.field_coupon_campaign_can_auto_cumulate
+msgid "If checked, coupons of the same campaign can be cumulated"
+msgstr "Si coché, les coupons de cette campagne peuvent être cumulés entre eux"
+
+#. module: website_sale_coupon
 #: model:ir.model.fields,help:website_sale_coupon.field_coupon_campaign_is_without_coupons
 #: model:ir.model.fields,help:website_sale_coupon.field_coupon_coupon_is_auto_coupon
 msgid "If true, the campaign name is the code to be used by customers"
@@ -207,7 +234,7 @@ msgstr "Partenaire qui vend les coupons"
 #. module: website_sale_coupon
 #: model:ir.ui.view,arch_db:website_sale_coupon.coupon_coupon_search
 msgid "Reserved"
-msgstr "Réservés"
+msgstr "réservé"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_reserved_for_sale_id
@@ -231,10 +258,10 @@ msgstr "Ce coupon est déjà utilisé !"
 
 #. module: website_sale_coupon
 #. openerp-web
-#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:18
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:20
 #, python-format
-msgid "This coupon code is not valid. Please check your input and try again."
-msgstr "Ce coupon n'est pas valide ici. Veuillez vérifier votre saisie et essayer de nouveau."
+msgid "This coupon is not valid. Please check your input and try again."
+msgstr "Ce code coupon n'est pas valable. Veuillez vérifier votre frappe et ré-essayer."
 
 #. module: website_sale_coupon
 #: model:ir.ui.view,arch_db:website_sale_coupon.coupon_coupon_search
@@ -249,11 +276,11 @@ msgstr "Coupons utilisés"
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_used_for_sale_id
 msgid "Used for sale"
-msgstr "Utilisé pour la commande"
+msgstr "Utilisé pour la vente"
 
 #. module: website_sale_coupon
 #. openerp-web
-#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:35
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:36
 #, python-format
 msgid "Valid coupon"
 msgstr "Coupon valide"
@@ -292,7 +319,7 @@ msgstr "coupon.coupon"
 
 #. module: website_sale_coupon
 #. openerp-web
-#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:38
+#: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:39
 #, python-format
 msgid "has just been applied to current order!"
 msgstr "a été appliqué avec succès à votre achat en cours !"
