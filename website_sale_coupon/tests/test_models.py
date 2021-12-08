@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from ..models.sale_order import CouponError
+
 from odoo import fields
 from odoo.exceptions import ValidationError, AccessError
 from odoo.tests.common import TransactionCase, at_install, post_install
@@ -26,6 +28,13 @@ class CouponSchemaTC(TransactionCase):
 
     def sale_order(self):
         return self.env['sale.order'].search([])[0]  # chosen SO doesn't matter
+
+    def assertCannotCumulate(self, so, coupon_name,
+                             expected_msg=u'Cannot cumulate those coupons'):
+        with self.assertRaises(CouponError) as err:
+            so.reserve_coupon(coupon_name)
+        self.assertTrue(err.exception.args[0].startswith(expected_msg),
+                        err.exception.args[0])
 
     def test_campaign_unique_name(self):
         with self.assertRaises(Exception) as err:
@@ -145,7 +154,7 @@ class CouponSchemaTC(TransactionCase):
         so_line.product_uom_qty = 0
         so.confirm_coupons()
         self.assertFalse(coupon.used_for_sale_id)
-        self.assertFalse(coupon.reserved_for_sale_id)
+        coupon.reserved_for_sale_id = False
 
         # ... although confirmation works when coupon is valid
         so_line.product_uom_qty = 1
@@ -153,32 +162,37 @@ class CouponSchemaTC(TransactionCase):
         so.confirm_coupons()
         self.assertEqual(coupon.used_for_sale_id.id, so.id)
 
-    def test_cannot_cumulate(self):
+    def test_cumulation_rules(self):
         so = self.sale_order()
-        self.campaign.can_cumulate = False
 
-        coupon1 = self._create_coupon(code=u'TEST1')
-        self.assertEqual(so.reserve_coupon(u'TEST1'), coupon1)
+        campaign1 = self._create_campaign(
+            "campaign1", can_cumulate=False, can_auto_cumulate=False)
+        campaign2 = self._create_campaign(
+            "campaign2", can_cumulate=False, can_auto_cumulate=False)
 
-        coupon2 = self._create_coupon(code=u'TEST2')
-        self.assertIsNone(so.reserve_coupon(u'TEST2'))
+        coupon11 = self._create_coupon(code=u"TEST11", campaign_id=campaign1.id)
+        coupon12 = self._create_coupon(code=u"TEST12", campaign_id=campaign1.id)
+        coupon21 = self._create_coupon(code=u"TEST21", campaign_id=campaign2.id)
+        coupon22 = self._create_coupon(code=u"TEST22", campaign_id=campaign2.id)
 
-        self.campaign.can_cumulate = True
-        self.assertEqual(so.reserve_coupon(u'TEST2'), coupon2)
+        self.assertEqual(so.reserve_coupon(u"TEST11"), coupon11)
+        self.assertCannotCumulate(so, u"TEST21")
+        self.assertCannotCumulate(so, u"TEST12", "Cannot use more than one")
 
-        campaign2 = self._create_campaign('campaign2', can_cumulate=False)
-        coupon3 = self._create_coupon(code=u'TEST3', campaign_id=campaign2.id)
-        self.assertIsNone(so.reserve_coupon(u'TEST3'))
-
+        # TEST11 is reserved for so, then:
         campaign2.can_cumulate = True
-        self.assertEqual(so.reserve_coupon(u'TEST3'), coupon3)
+        self.assertCannotCumulate(so, u"TEST12", "Cannot use more than one")
+        self.assertEqual(so.reserve_coupon(u"TEST21"), coupon21)
+        self.assertCannotCumulate(so, u"TEST22", "Cannot use more than one")
 
-        campaign2.can_cumulate = False
+        # TEST11 and TEST21 are reserved for so, then:
+        campaign2.can_auto_cumulate = True
+        self.assertCannotCumulate(so, u"TEST12", "Cannot use more than one")
+        self.assertEqual(so.reserve_coupon(u"TEST22"), coupon22)
+
+        # Final check:
         so.confirm_coupons()
-        self.assertEqual([c.used_for_sale_id.id
-                          for c in (coupon1, coupon2, coupon3)
-                          if c.used_for_sale_id],
-                         [so.id])
+        self.assertEqual(so.used_coupons(), coupon11 | coupon21 | coupon22)
 
     def test_no_need_coupon_campaign(self):
         campaign = self._create_campaign(
