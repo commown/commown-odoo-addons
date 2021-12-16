@@ -28,6 +28,10 @@
               </button>
             </div>
           </div>
+          <p class="text-muted">
+            Cumulative coupons: submit them one after another.
+            To reinitialize the coupons, empty your basket.
+          </p>
         </form>
         <script type="text/javascript"
                 src="/website_sale_coupon/static/src/js/coupon.js"></script>
