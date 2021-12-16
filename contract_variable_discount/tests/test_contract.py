@@ -171,10 +171,15 @@ class ContractTC(TestContractBase):
         self.contract._onchange_contract_template_id()
 
         # Check applied discounts
+        self.env["ir.translation"].load_module_terms(
+            ["contract_variable_discount"],
+            ["fr_FR"],
+        )
+        self.contract.partner_id.lang = u'fr_FR'
         inv = self.contract.recurring_create_invoice()
         self.assertEqual(inv.mapped("invoice_line_ids.name"),
-                         [u"Services from 02/29/2016 to 03/28/2016\n"
-                          u"Applied discounts:\n"
+                         [u"Services from 29/02/2016 to 28/03/2016\n"
+                          u"Remises appliquées :\n"
                           u"- Fix discount\n"
                           u"- 5% discount"])
 
@@ -187,8 +192,8 @@ class ContractTC(TestContractBase):
         # Check applied discounts
         inv = self.contract.recurring_create_invoice()
         self.assertEqual(inv.mapped("invoice_line_ids.name"),
-                         [u"Services from 03/29/2016 to 04/28/2016\n"
-                          u"Applied discounts:\n"
+                         [u"Services from 29/03/2016 to 28/04/2016\n"
+                          u"Remises appliquées :\n"
                           u"- Fix discount\n"
                           u"- 10% discount"])
 
