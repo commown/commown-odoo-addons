@@ -8,6 +8,19 @@ from odoo import models, fields, api
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 
 
+def mobile_phone(partner, restrict_to_country_code=None):
+    country_code = partner.country_id.code
+    if country_code and (restrict_to_country_code is None
+                         or country_code == restrict_to_country_code):
+        for phone_num in (partner.mobile, partner.phone):
+            if phone_num:
+                phone_obj = phonenumbers.parse(phone_num, country_code)
+                if phonenumbers.number_type(phone_obj) == MOBILE_TYPE:
+                    return phonenumbers.format_number(
+                        phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
+                    ).replace(' ', '')
+
+
 class Campaign(models.Model):
     _inherit = "coupon.campaign"
 
@@ -30,20 +43,11 @@ class Campaign(models.Model):
         if not self.is_coop_campaign:
             return None
 
-        country_code = partner.country_id.code
-        if not country_code:
-            return None
-
-        for phone_num in (partner.mobile, partner.phone):
-            if phone_num:
-                phone_obj = phonenumbers.parse(phone_num, country_code)
-                if phonenumbers.number_type(phone_obj) == MOBILE_TYPE:
-                    phone = phonenumbers.format_number(
-                        phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
-                    ).replace(' ', '')
-                    acc = partner.env["keychain.account"].search([
-                        ("technical_name", "=", self.name + "-salt"),
-                    ]).ensure_one()
-                    hash = hashlib.sha256()
-                    hash.update(phone + acc._get_password())
-                    return hash.hexdigest()
+        phone = mobile_phone(partner, u"FR")
+        if phone is not None:
+            acc = self.env["keychain.account"].search([
+                ("technical_name", "=", self.name + "-salt"),
+            ]).ensure_one()
+            hash = hashlib.sha256()
+            hash.update(phone + acc._get_password())
+            return hash.hexdigest()
