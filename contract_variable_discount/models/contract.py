@@ -164,6 +164,10 @@ class Contract(models.Model):
         vals["discount"] = result["total"]
         descriptions = result["descriptions"]
         if descriptions:
+            # See odoo/tools/translate.py: GettextAlias._get_lang
+            if not hasattr(self, "localcontext"):
+                self.localcontext = {}
+            self.localcontext["lang"] = self.partner_id.lang
             vals["name"] += u"\n" + (_("Applied discounts:\n- %s")
                                      % u"\n- ".join(descriptions))
 
