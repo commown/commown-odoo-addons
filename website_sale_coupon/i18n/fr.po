@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-08 08:40+0000\n"
-"PO-Revision-Date: 2021-12-08 08:40+0000\n"
+"POT-Creation-Date: 2021-12-16 18:25+0000\n"
+"PO-Revision-Date: 2021-12-16 18:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -132,6 +132,13 @@ msgstr "Créé par"
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon_create_date
 msgid "Created on"
 msgstr "Créé le"
+
+#. module: website_sale_coupon
+#: model:ir.ui.view,arch_db:website_sale_coupon.cart
+msgid "Cumulative coupons: submit them one after another.\n"
+"            To reinitialize the coupons, empty your basket."
+msgstr "Coupons cumulables : validez-les chacun leur tour !\n"
+"             Pour réinitialiser les coupons, il suffit de vider votre panier."
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign_description
