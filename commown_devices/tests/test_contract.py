@@ -6,7 +6,8 @@ from ..models.common import do_new_transfer
 class ContractTC(DeviceAsAServiceTC):
 
     def test_stock_at_date(self):
-        loc_check = self.env.ref("commown_devices.stock_location_fp3_to_check")
+        loc_check = self.env.ref(
+            "commown_devices.stock_location_devices_to_check")
 
         lot1 = self.adjust_stock(serial=u"my-fp3-1")
         quant1 = self.env["stock.quant"].search([("lot_id", "=", lot1.id)])
