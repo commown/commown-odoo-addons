@@ -58,9 +58,11 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         defaults, possibilities = self.prepare_wizard(
             "outward", user_choices={"location_id": loc_new.id})
 
-        # Check defaults of issue_id, date, product_id
+        # Check defaults of issue_id, date, product_tmpl_id, variant_id
         self.assertEqual(defaults["issue_id"], self.issue.id)
-        self.assertEqual(defaults["product_id"],
+        self.assertEqual(defaults["product_tmpl_id"],
+                         self.issue.lot_id.product_id.product_tmpl_id.id)
+        self.assertEqual(defaults["variant_id"],
                          self.issue.lot_id.product_id.id)
 
         # Check domains of location_id, product_id, quant_id
@@ -69,7 +71,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
             [u"commown_devices.stock_location_fp3_new",
              u"commown_devices.stock_location_fp3_repackaged"])
         self.assertEqual(
-            possibilities["product_id"],
+            possibilities["variant_id"],
             (self.storable_product | product2).mapped("product_variant_id"))
         self.assertEqual(
             sorted(possibilities["quant_id"].mapped("lot_id.name")),
@@ -90,7 +92,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         # Create the wizard and the picking
         vals, possibilities = self.prepare_wizard("outward", user_choices={
             "location_id": loc_new.id,
-            "product_id": self.issue.lot_id.product_id.id,
+            "variant_id": self.issue.lot_id.product_id.id,
         })
         vals.update({k: v[0].id for k, v in possibilities.items()})
         wizard = self.env["project.issue.outward.picking.wizard"].create(vals)
@@ -147,7 +149,8 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         self.assertEqual(picking.state, u"assigned")
         self.assertEqual(picking.move_type, u"direct")
 
-        loc_check = self.env.ref("commown_devices.stock_location_fp3_to_check")
+        loc_check = self.env.ref(
+            "commown_devices.stock_location_devices_to_check")
         move = picking.move_lines
         self.assertEqual(len(move), 1)
         self.assertEqual(move.location_id, loc_partner)
