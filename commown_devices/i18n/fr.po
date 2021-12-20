@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0-20171209\n"
+"Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-28 22:22+0000\n"
-"PO-Revision-Date: 2021-09-28 22:22+0000\n"
+"POT-Creation-Date: 2021-12-20 22:31+0000\n"
+"PO-Revision-Date: 2021-12-20 22:31+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -74,6 +74,11 @@ msgstr "Créé par"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_picking_wizard_create_date
 msgid "Created on"
 msgstr "Créé le"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard_date
+msgid "Date"
+msgstr "Date"
 
 #. module: commown_devices
 #: model:ir.model.fields,help:commown_devices.field_crm_lead_picking_wizard_date
@@ -245,8 +250,8 @@ msgid "Pickings"
 msgstr "Expéditions"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard_product_id
-#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_product_id
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard_product_tmpl_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_product_tmpl_id
 msgid "Product"
 msgstr "Article"
 
@@ -328,7 +333,7 @@ msgstr "Le contrat est déjà associé à une expédition au moins !\n"
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_picking
 msgid "Transfer"
-msgstr "Expédition"
+msgstr "Transfert"
 
 #. module: commown_devices
 #: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_contract_transfer_form
@@ -340,6 +345,12 @@ msgstr "Changer l'appareil de contrat"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_device_tracking
 msgid "Use for device tracking?"
 msgstr "Suivi des appareils ?"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard_variant_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_issue_outward_picking_wizard_variant_id
+msgid "Variant"
+msgstr "Variante"
 
 #. module: commown_devices
 #: model:stock.location,name:commown_devices.stock_location_outsourced_repair
@@ -383,7 +394,6 @@ msgid "crm.lead.picking.wizard"
 msgstr "crm.lead.picking.wizard"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_issue_abstract_picking_wizard_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_issue_contract_transfer_wizard_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_issue_inward_picking_wizard_date
@@ -425,3 +435,4 @@ msgstr "project.issue.outward.picking.wizard"
 #: model:ir.model,name:commown_devices.model_project_task_picking_wizard
 msgid "project.task.picking.wizard"
 msgstr "project.task.picking.wizard"
+
