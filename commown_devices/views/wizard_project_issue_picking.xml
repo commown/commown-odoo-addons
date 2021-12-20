@@ -9,7 +9,8 @@
           <group>
             <field name="issue_id" invisible="1"/>
             <field name="date"/>
-            <field name="product_id" options="{'no_create': True}"/>
+            <field name="product_tmpl_id" options="{'no_create': True}"/>
+            <field name="variant_id" options="{'no_create': True}"/>
             <field name="lot_id" options="{'no_create': True}"/>
           </group>
         </sheet>
