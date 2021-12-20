@@ -5,7 +5,7 @@ class Product(models.Model):
     _inherit = "product.template"
 
     storable_product_id = fields.Many2one(
-        'product.product',
+        'product.template',
         string=u'Storable product',
         domain='[("type", "=", "product")]',
     )
