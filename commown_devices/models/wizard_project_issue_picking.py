@@ -51,31 +51,45 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
     _name = "project.issue.outward.picking.wizard"
     _inherit = "project.issue.abstract.picking.wizard"
 
-    product_id = fields.Many2one(
-        "product.product",
+    product_tmpl_id = fields.Many2one(
+        "product.template",
         string=u"Product",
         domain="[('tracking', '=', 'serial')]",
         required=True,
-        default=lambda self: self._compute_default_product_id(),
+        default=lambda self: self._compute_default_product_tmpl_id(),
+    )
+
+    variant_id = fields.Many2one(
+        "product.product",
+        string=u"Variant",
+        domain=("[('tracking', '=', 'serial'),"
+                " ('product_tmpl_id', '=', product_tmpl_id)]"),
+        required=True,
+        default=lambda self: self._compute_default_variant_id(),
     )
 
     lot_id = fields.Many2one(
         "stock.production.lot",
         string=u"Device",
         domain=lambda self: '''[
-            ("product_id", "=", product_id),
+            ("product_id", "=", variant_id),
             ("quant_ids.location_id", "child_of", %d)]''' % self.env.ref(
                 "commown_devices.stock_location_available_for_rent").id,
         required=True,
     )
 
-    def _compute_default_product_id(self):
+    def _get_issue(self):
         if not self.issue_id and "default_issue_id" in self.env.context:
-            issue = self.env["project.issue"].browse(
+            return self.env["project.issue"].browse(
                 self.env.context["default_issue_id"])
         else:
-            issue = self.issue
-        return issue.lot_id.product_id
+            return self.issue
+
+    def _compute_default_product_tmpl_id(self):
+        return self._get_issue().lot_id.product_id.product_tmpl_id
+
+    def _compute_default_variant_id(self):
+        return self._get_issue().lot_id.product_id
 
     @api.multi
     def create_picking(self):
