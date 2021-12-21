@@ -40,12 +40,16 @@ def internal_picking(origin, lots, orig_location, dest_location,
 
     pack_op = picking.pack_operation_product_ids.ensure_one()
     pack_op.pack_lot_ids.unlink()
-    pack_op.write({'pack_lot_ids': [
-        (0, 0, {'lot_id': lot.id,
-                'lot_name': lot.name,
-                'qty': lot.product_qty}
-         ) for lot in lots
-    ]})
+    pack_op.write({
+        'pack_lot_ids': [
+            (0, 0, {'lot_id': lot.id,
+                    'lot_name': lot.name,
+                    'qty': lot.product_qty}
+             ) for lot in lots
+        ],
+        'location_id': orig_location.id,
+        'location_dest_id': dest_location.id,
+    })
     pack_op.save()
 
     if do_transfer:
