@@ -6,7 +6,7 @@
 {
     'name': 'Commown devices',
     'category': 'stock',
-    'version': '10.0.2.0.0',
+    'version': '10.0.2.0.1',
     'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
