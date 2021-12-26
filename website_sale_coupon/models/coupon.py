@@ -7,6 +7,7 @@ from odoo import models, fields, api
 
 class Campaign(models.Model):
     _name = 'coupon.campaign'
+    _description = 'A coupon campaign that describes the coupon benefits'
 
     _sql_constraints = [
         ('name_uniq', 'unique (name)', "Campaign already exists!"),
@@ -90,6 +91,7 @@ class Campaign(models.Model):
 
 class Coupon(models.Model):
     _name = 'coupon.coupon'
+    _description = 'A coupon that customers can associate to their shop order'
 
     _sql_constraints = [
         ('code_uniq', 'unique (code)', "This coupon code is already used!"),
