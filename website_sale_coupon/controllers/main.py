@@ -25,7 +25,7 @@ class WebsiteSaleCouponController(http.Controller):
         try:
             coupon = so.reserve_coupon(code)
         except CouponError as exc:
-            return {'success': False, 'reason': unicode(exc)}
+            return {'success': False, 'reason': str(exc)}
         if coupon:
             return {'success': True, 'coupons': self._sale_coupons_descr(so)}
         else:
