@@ -1,1 +1,1 @@
-import test_discount
+from . import test_discount

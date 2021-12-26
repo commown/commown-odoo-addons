@@ -1,1 +1,1 @@
-import discount
+from . import discount
