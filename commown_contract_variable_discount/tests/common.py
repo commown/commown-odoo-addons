@@ -8,7 +8,7 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
         partner = self.env.ref('portal.demo_user0_res_partner')
 
         self.campaign = self.env['coupon.campaign'].create({
-            "name": u"test-campaign",
+            "name": "test-campaign",
             "seller_id": 1,
         })
 
@@ -19,8 +19,8 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
         iline = contract_tmpl.recurring_invoice_line_ids[0]
 
         self.env['contract.template.discount.line'].create({
-            "name": u"Test coupon discount: 80% first 3 months!",
-            "amount_value": 80., "amount_type": u"percent",
+            "name": "Test coupon discount: 80% first 3 months!",
+            "amount_value": 80., "amount_type": "percent",
             "start_reference": "date_start",
             "end_reference": "date_start",
             "start_type": "relative", "start_value": 0, "start_unit": "months",
@@ -40,7 +40,7 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
         })
 
         self.coupon = self.env['coupon.coupon'].create({
-            "code": u"TEST-CODE",
+            "code": "TEST-CODE",
             "campaign_id": self.campaign.id,
             "used_for_sale_id": self.so.id,
         })
