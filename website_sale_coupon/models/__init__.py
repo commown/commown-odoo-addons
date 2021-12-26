@@ -1,2 +1,2 @@
-import coupon
-import sale_order
+from . import coupon
+from . import sale_order

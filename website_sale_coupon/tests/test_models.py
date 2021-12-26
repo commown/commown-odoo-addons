@@ -16,7 +16,7 @@ class CouponSchemaTC(TransactionCase):
         self.seller = self.env.ref('base.res_partner_2')
         self.campaign = self._create_campaign()
 
-    def _create_campaign(self, name=u'test', **kwargs):
+    def _create_campaign(self, name='test', **kwargs):
         kwargs['name'] = name
         kwargs.setdefault('seller_id', self.seller.id)
         kwargs.setdefault('is_without_coupons', False)
@@ -30,7 +30,7 @@ class CouponSchemaTC(TransactionCase):
         return self.env['sale.order'].search([])[0]  # chosen SO doesn't matter
 
     def assertCannotCumulate(self, so, coupon_name,
-                             expected_msg=u'Cannot cumulate those coupons'):
+                             expected_msg='Cannot cumulate those coupons'):
         with self.assertRaises(CouponError) as err:
             so.reserve_coupon(coupon_name)
         self.assertTrue(err.exception.args[0].startswith(expected_msg),
@@ -38,13 +38,13 @@ class CouponSchemaTC(TransactionCase):
 
     def test_campaign_unique_name(self):
         with self.assertRaises(Exception) as err:
-            self._create_campaign(name=u'test')
+            self._create_campaign(name='test')
         self.assertIn('coupon_campaign_name_uniq', str(err.exception))
 
     def test_coupon_unique_code(self):
-        self._create_coupon(code=u'TEST')
+        self._create_coupon(code='TEST')
         with self.assertRaises(Exception) as err:
-            self._create_coupon(code=u'TEST')
+            self._create_coupon(code='TEST')
         self.assertIn('coupon_coupon_code_uniq', str(err.exception))
 
     def test_campaign_dates_check_1(self):
@@ -116,12 +116,12 @@ class CouponSchemaTC(TransactionCase):
     def test_reserve_and_confirm_coupon(self):
         so = self.sale_order()
 
-        self.assertIsNone(so.reserve_coupon(u'DUMMYCODE'))
+        self.assertIsNone(so.reserve_coupon('DUMMYCODE'))
 
-        coupon = self._create_coupon(code=u'TEST_USE')
-        self.assertEqual(coupon.display_name, u"TEST_USE")
+        coupon = self._create_coupon(code='TEST_USE')
+        self.assertEqual(coupon.display_name, "TEST_USE")
 
-        self.assertEqual(so.reserve_coupon(u'TEST_use'), coupon)
+        self.assertEqual(so.reserve_coupon('TEST_use'), coupon)
         self.assertIn(coupon, so.reserved_coupons())
 
         so.confirm_coupons()
@@ -147,10 +147,10 @@ class CouponSchemaTC(TransactionCase):
         so_product = so_line.product_id.product_tmpl_id
         self.campaign.target_product_tmpl_ids |= so_product
 
-        coupon = self._create_coupon(code=u'TEST_USE')
+        coupon = self._create_coupon(code='TEST_USE')
 
         # Check cannot confirm if coupon is no more valid
-        self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
+        self.assertEqual(so.reserve_coupon('TEST_USE'), coupon)
         so_line.product_uom_qty = 0
         so.confirm_coupons()
         self.assertFalse(coupon.used_for_sale_id)
@@ -158,7 +158,7 @@ class CouponSchemaTC(TransactionCase):
 
         # ... although confirmation works when coupon is valid
         so_line.product_uom_qty = 1
-        self.assertEqual(so.reserve_coupon(u'TEST_USE'), coupon)
+        self.assertEqual(so.reserve_coupon('TEST_USE'), coupon)
         so.confirm_coupons()
         self.assertEqual(coupon.used_for_sale_id.id, so.id)
 
@@ -170,25 +170,25 @@ class CouponSchemaTC(TransactionCase):
         campaign2 = self._create_campaign(
             "campaign2", can_cumulate=False, can_auto_cumulate=False)
 
-        coupon11 = self._create_coupon(code=u"TEST11", campaign_id=campaign1.id)
-        coupon12 = self._create_coupon(code=u"TEST12", campaign_id=campaign1.id)
-        coupon21 = self._create_coupon(code=u"TEST21", campaign_id=campaign2.id)
-        coupon22 = self._create_coupon(code=u"TEST22", campaign_id=campaign2.id)
+        coupon11 = self._create_coupon(code="TEST11", campaign_id=campaign1.id)
+        coupon12 = self._create_coupon(code="TEST12", campaign_id=campaign1.id)
+        coupon21 = self._create_coupon(code="TEST21", campaign_id=campaign2.id)
+        coupon22 = self._create_coupon(code="TEST22", campaign_id=campaign2.id)
 
-        self.assertEqual(so.reserve_coupon(u"TEST11"), coupon11)
-        self.assertCannotCumulate(so, u"TEST21")
-        self.assertCannotCumulate(so, u"TEST12", "Cannot use more than one")
+        self.assertEqual(so.reserve_coupon("TEST11"), coupon11)
+        self.assertCannotCumulate(so, "TEST21")
+        self.assertCannotCumulate(so, "TEST12", "Cannot use more than one")
 
         # TEST11 is reserved for so, then:
         campaign2.can_cumulate = True
-        self.assertCannotCumulate(so, u"TEST12", "Cannot use more than one")
-        self.assertEqual(so.reserve_coupon(u"TEST21"), coupon21)
-        self.assertCannotCumulate(so, u"TEST22", "Cannot use more than one")
+        self.assertCannotCumulate(so, "TEST12", "Cannot use more than one")
+        self.assertEqual(so.reserve_coupon("TEST21"), coupon21)
+        self.assertCannotCumulate(so, "TEST22", "Cannot use more than one")
 
         # TEST11 and TEST21 are reserved for so, then:
         campaign2.can_auto_cumulate = True
-        self.assertCannotCumulate(so, u"TEST12", "Cannot use more than one")
-        self.assertEqual(so.reserve_coupon(u"TEST22"), coupon22)
+        self.assertCannotCumulate(so, "TEST12", "Cannot use more than one")
+        self.assertEqual(so.reserve_coupon("TEST22"), coupon22)
 
         # Final check:
         so.confirm_coupons()
@@ -196,13 +196,13 @@ class CouponSchemaTC(TransactionCase):
 
     def test_no_need_coupon_campaign(self):
         campaign = self._create_campaign(
-            name=u"No Coupon Test Campaign",
+            name="No Coupon Test Campaign",
             is_without_coupons=True,
         )
 
         so = self.sale_order()
-        coupon = so.reserve_coupon(u"NO COUPON TEST CAMPAIGN")
+        coupon = so.reserve_coupon("NO COUPON TEST CAMPAIGN")
         self.assertTrue(coupon and coupon.campaign_id == campaign)
         so.confirm_coupons()
         self.assertEqual(coupon.used_for_sale_id, so)
-        self.assertEqual(coupon.display_name, u"No Coupon Test Campaign")
+        self.assertEqual(coupon.display_name, "No Coupon Test Campaign")

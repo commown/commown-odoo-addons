@@ -97,7 +97,7 @@ class CouponSaleOrder(models.Model):
             campaign = coupon.campaign_id
             if not campaign.can_auto_cumulate:
                 if campaign in seen_non_auto_cumulative_campaign:
-                    raise CouponError(_(u"Cannot use more than one %s coupon")
+                    raise CouponError(_("Cannot use more than one %s coupon")
                                       % campaign.name)
                 seen_non_auto_cumulative_campaign.add(campaign)
 
@@ -106,6 +106,6 @@ class CouponSaleOrder(models.Model):
             lambda c: not c.campaign_id.can_cumulate)
         if len(non_cumulable_coupons) > 1:
             raise CouponError(
-                _(u"Cannot cumulate those coupons: %s")
-                % u", ".join(non_cumulable_coupons.mapped("code")))
+                _("Cannot cumulate those coupons: %s")
+                % ", ".join(non_cumulable_coupons.mapped("code")))
         return True

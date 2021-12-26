@@ -38,10 +38,10 @@ class Campaign(models.Model):
         compute='_compute_used_coupons', store=False, compute_sudo=True)
     can_cumulate = fields.Boolean(
         'Can cumulate with *other* campaigns', required=True, default=True,
-        help=u"If checked, coupons can be cumulated with another campaign's")
+        help="If checked, coupons can be cumulated with another campaign's")
     can_auto_cumulate = fields.Boolean(
         'Can use more than one coupon by sale', required=True, default=False,
-        help=u"If checked, coupons of the same campaign can be cumulated")
+        help="If checked, coupons of the same campaign can be cumulated")
 
     @api.constrains('date_start', 'date_end')
     def _check_dates(self):
