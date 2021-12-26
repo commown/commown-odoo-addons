@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_coupon_campaign_default,access_coupon_campaign,model_coupon_campaign,,0,0,0,0
+access_coupon_campaign_sale_manager,access_coupon_campaign,model_coupon_campaign,sales_team.group_sale_manager,1,1,1,1
+access_coupon_coupon_default,access_coupon_coupon,model_coupon_coupon,,0,0,0,0
+access_coupon_coupon_sale_manager,access_coupon_coupon,model_coupon_coupon,sales_team.group_sale_manager,1,1,1,1
