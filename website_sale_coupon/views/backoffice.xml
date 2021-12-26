@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="coupon_campaign_form" model="ir.ui.view">
+      <field name="name">Coupon Campaign</field>
+      <field name="model">coupon.campaign</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <div class="oe_title">
+              <label for="name" string="Name"/>
+              <h1>
+                <field name="name"/>
+              </h1>
+            </div>
+            <group name="general">
+              <field name="is_without_coupons"/>
+              <field name="description"/>
+              <field name="seller_id"/>
+            </group>
+            <group name="dates">
+                <group>
+                  <field name="date_start"/>
+                </group>
+                <group>
+                  <field name="date_end"/>
+                </group>
+            </group>
+            <group name="cumulation_rules">
+                <group>
+                  <field name="can_cumulate"/>
+                </group>
+                <group>
+                  <field name="can_auto_cumulate"/>
+                </group>
+            </group>
+            <group>
+              <field name="target_product_tmpl_ids"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="coupon_campaign_tree" model="ir.ui.view">
+      <field name="name">Coupon Campaigns</field>
+      <field name="model">coupon.campaign</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="is_without_coupons"/>
+          <field name="name" />
+          <field name="seller_id" />
+          <field name="used_coupons" />
+          <field name="emitted_coupons" />
+          <field name="date_start" />
+          <field name="date_end" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="coupon_coupon_form" model="ir.ui.view">
+      <field name="name">Coupon</field>
+      <field name="model">coupon.coupon</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="campaign_id" />
+              <field name="code" />
+              <field name="reserved_for_sale_id" readonly="1"/>
+              <field name="used_for_sale_id"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="coupon_coupon_tree" model="ir.ui.view">
+      <field name="name">Coupon</field>
+      <field name="model">coupon.coupon</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="campaign_id" />
+          <field name="code" />
+          <field name="used_for_sale_id" />
+          <field name="reserved_for_sale_id" />
+          <field name="is_auto_coupon" />
+        </tree>
+      </field>
+    </record>
+
+    <record id="coupon_coupon_search" model="ir.ui.view">
+      <field name="name">Coupon search</field>
+      <field name="model">coupon.coupon</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="code"/>
+          <field name="campaign_id"/>
+          <field name="used_for_sale_id"/>
+          <filter name="reserved"
+                  string="Reserved"
+                  domain="[('reserved_for_sale_id','!=',False)]"/>
+          <filter name="unused"
+                  string="Unused"
+                  domain="[('used_for_sale_id','=',False)]"/>
+          <filter name="from_coupon_campaign"
+                  string="From coupon campaign"
+                  domain="[('is_auto_coupon','=',False)]"/>
+          <filter name="from_campaign_without_coupon"
+                  string="From campaign without coupon"
+                  domain="[('is_auto_coupon','=',True)]"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="action_coupon_campaign" model="ir.actions.act_window">
+      <field name="name">Coupon campaigns</field>
+      <field name="res_model">coupon.campaign</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_id" ref="coupon_campaign_tree"/>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_coupon_coupon" model="ir.actions.act_window">
+      <field name="name">Create Coupon</field>
+      <field name="res_model">coupon.coupon</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_id" ref="coupon_coupon_tree"/>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Coupons" id="coupon_main"
+              parent="website.menu_website_configuration"
+              groups="sales_team.group_sale_salesman"
+              sequence="10"/>
+    <menuitem name="Campaigns" id="coupon_campaign"
+              action="action_coupon_campaign"
+              parent="coupon_main"/>
+    <menuitem name="Coupons" id="coupon_coupon"
+              action="action_coupon_coupon"
+              parent="coupon_main"/>
+
+  </data>
+</odoo>
