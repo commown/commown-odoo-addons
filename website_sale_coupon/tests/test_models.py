@@ -86,8 +86,8 @@ class CouponSchemaTC(TransactionCase):
                               'date_end': '2018-02-01'})
         so = self.sale_order()
         self.assertFalse(self.campaign.is_valid(so))
-        future = datetime.now().date() + timedelta(days=30)
-        self.campaign.date_end = future.strftime(fields.DATE_FORMAT)
+        self.campaign.date_end = datetime.now().date() + timedelta(days=30)
+        self.assertTrue(self.campaign.is_valid(so))
 
     def test_validity_product_and_qty(self):
         # Check valid when all products are eligible

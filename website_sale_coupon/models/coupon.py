@@ -69,7 +69,7 @@ class Campaign(models.Model):
         self.ensure_one()
 
         # Check dates
-        today = datetime.now().date().strftime(fields.DATE_FORMAT)
+        today = datetime.now().date()
         if self.date_start and self.date_start > today:
             return False
         if self.date_end and self.date_end < today:
