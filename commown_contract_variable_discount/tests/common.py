@@ -5,7 +5,7 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
 
     def setUp(self):
         super(ContractSaleWithCouponTC, self).setUp()
-        partner = self.env.ref('portal.demo_user0_res_partner')
+        partner = self.env.ref('base.res_partner_3')
 
         self.campaign = self.env['coupon.campaign'].create({
             "name": "test-campaign",
@@ -13,10 +13,10 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
         })
 
         contract_tmpl = self._create_rental_contract_tmpl(
-            1, recurring_invoice_line_ids=[
-                self._invoice_line(1, 'PC rental', specific_price=30.)])
+            1, contract_line_ids=[
+                self._contract_line(1, 'PC rental', specific_price=30.)])
 
-        iline = contract_tmpl.recurring_invoice_line_ids[0]
+        iline = contract_tmpl.contract_line_ids[0]
 
         self.env['contract.template.discount.line'].create({
             "name": "Test coupon discount: 80% first 3 months!",
@@ -32,7 +32,7 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
 
         product = self._create_rental_product(
             name='Fairphone Premium', list_price=60., rental_price=30.,
-            contract_template_id=contract_tmpl.id)
+            property_contract_template_id=contract_tmpl.id)
 
         self.so = self.env['sale.order'].create({
             'partner_id': partner.id,
@@ -47,6 +47,6 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
 
         self.so.action_confirm()
 
-        self.contract = self.env['account.analytic.account'].search([
+        self.contract = self.env['contract.contract'].search([
             ('name', 'ilike', '%' + self.so.name + '%'),
         ]).ensure_one()
