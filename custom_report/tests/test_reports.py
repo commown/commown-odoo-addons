@@ -2,8 +2,8 @@ import re
 
 import lxml.html
 
-from odoo.tests.common import at_install, post_install
-from odoo.addons.commown.tests import common
+from odoo.tests.common import at_install, post_install, TransactionCase
+
 
 
 def _product_descriptions(invoice_doc):
@@ -13,18 +13,18 @@ def _product_descriptions(invoice_doc):
 
 @at_install(False)
 @post_install(True)
-class InvoiceReportTC(common.MockedEmptySessionTC):
+class InvoiceReportTC(TransactionCase):
 
     def setUp(self):
         super(InvoiceReportTC, self).setUp()
-        self.b2c_partner = self.env.ref('portal.demo_user0_res_partner')
-        self.b2b_partner = self.partner = self.env.ref('base.res_partner_2')
+        self.b2c_partner = self.env.ref('base.res_partner_3')
+        self.b2b_partner = self.partner = self.env.ref(
+            'base.res_partner_address_1')
 
         deposit_account = self.env.ref('l10n_fr.1_pcg_2751')
 
         categ_deposit = self.env['product.category'].create({
             'name': 'Deposits',
-            'type': 'normal',
             'property_account_income_categ_id': deposit_account,
             'property_account_expense_categ_id': deposit_account,
         })
@@ -44,9 +44,9 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
         })
 
         # Hack: reuse pdf report as an html one, to ease parsing
-        report_xml = self.env['py3o.report']._get_report_from_name(
+        self.report = self.env['ir.actions.report']._get_report_from_name(
             'account.report_invoice')
-        report_xml.py3o_filetype = 'html'
+        self.report.py3o_filetype = 'html'
 
     def sale(self, partner, products):
         olines = []
@@ -72,14 +72,12 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
         if is_refund:
             inv.type = 'out_refund'
         if contract:
-            inv.contract_id = contract.id
-            inv.invoice_line_ids.update({'account_analytic_id': contract.id})
+            inv.invoice_line_ids.update({'contract_line_id': contract.id})
         inv.action_invoice_open()
         return inv
 
     def html_invoice(self, inv, debug_fpath=None):
-        html = self.env['py3o.report'].get_pdf(inv.mapped('id'),
-                                               'account.report_invoice')
+        html = self.report.render(inv.ids)[0]
         if debug_fpath:
             with open(debug_fpath, 'wb') as fobj:
                 fobj.write(html)
