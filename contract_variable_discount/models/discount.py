@@ -140,20 +140,21 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         elif date_type == "absolute":
             return getattr(self, '%s_date' % date_attr_prefix)
 
-        contract = contract_line.contract_id
-        cfields = contract.fields_get()
+        cfields = contract_line.fields_get()
 
         reference = getattr(self, "%s_reference" % date_attr_prefix)
         if reference not in cfields or cfields[reference]["type"] != "date":
             raise ValidationError(
-                _("Incorrect reference '%s' in discount date of contract %s")
-                % (reference, contract.name))
+                _("Incorrect reference '%s' in discount date of contract %s"
+                  " line id %d")
+                % (reference, contract_line.contract_id.name, contract_line.id))
 
-        reference_date = getattr(contract, reference)
+        reference_date = getattr(contract_line, reference)
         if not reference_date:
             raise ValidationError(
-                _("Incorrect reference date value for '%s' of contract %s")
-                % (reference, contract.name))
+                _("Incorrect reference date value for '%s' of contract %s"
+                  " line id %d")
+                % (reference, contract_line.contract_id.name, contract_line.id))
 
         unit = getattr(self, "%s_unit" % date_attr_prefix)
         value = getattr(self, "%s_value" % date_attr_prefix)

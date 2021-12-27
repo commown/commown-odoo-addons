@@ -45,11 +45,11 @@ class ContractTC(TestContractBase):
         super(ContractTC, cls).setUpClass()
         cls._init_test_model(TestConditionDiscountLine)
         # Adjust dates to our test needs:
-        cls.contract.date_start = "2016-02-15"
         cls.acct_line.update({
             "date_start": "2016-02-15",
             "recurring_next_date": "2016-02-29",
         })
+        cls.contract._compute_date_end()
 
     def tdiscount(self, ct_line=None, **kwargs):
         kwargs.setdefault("contract_template_line_id", ct_line.id)
