@@ -25,16 +25,16 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     start_reference = fields.Selection(
-        selection_add=[("min_contract_end_date", "Min contract end date")]
+        selection_add=[("commitment_end_date", "Commitment end date")]
     )
 
     end_reference = fields.Selection(
-        selection_add=[("min_contract_end_date", "Min contract end date")]
+        selection_add=[("commitment_end_date", "Commitment end date")]
     )
 
     def _compute_condition_no_issue_to_date(self, line, date):
         return not [
-            t for t in line.analytic_account_id.contractual_issue_ids
+            t for t in line.contract_id.issue_ids
             if (not t.penalty_exemption
                 and fields.Date.from_string(t.contractual_issue_date) < date)
         ]
