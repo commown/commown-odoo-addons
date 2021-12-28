@@ -92,7 +92,7 @@
                       <p> Afin de voir si le problème provient bien du micro (et non d’un problème logiciel / réseau ou haut parleur), veuillez vous rendre dans le menu <i>Paramètres &gt; Maintenance &gt; Checkup &gt; Primary Microphone &gt; Start test</i>.</p>
                       <p>Pendant le test, tenez le téléphone comme si vous appeliez, et parlez. Vous devez vous entendre en écho avec une demi-seconde de décalage. Si vous n’entendez rien ou que le son est mauvais, avec des grésillements par exemple, c’est que le micro est en panne et nous vous aiderons à le changer.</p>
                       <p>Veillez à faire le test en pinçant plus ou moins fortement le bas de votre téléphone (où se trouve justement le micro), car les faux contacts sont fréquents à cet endroit.</p>
-                      <br /> 
+                      <br />
                       <p><b>ATTENTION :</b> Sous les systèmes d'exploitation LineageOS et /e/OS, le menu "Maintenance" n'est pas installé par défaut, il faut l'installer manuellement. Nous vous invitons donc à suivre ce tutoriel : <a href="https://wiki.commown.coop/Installer-LineageOS-16-avec-les-Google-Apps-sur-le-Fairphone-2#Tests_de_maintenance_avec_Android_9"/></p>
                       <br />
                       <div id="form-step-2" role="form" data-toggle="validator">
@@ -130,7 +130,7 @@
                       </p>
                       <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label for="more_info_step_3">Ajoutez ici toute information que vous jugerez utile :</label>
+                          <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utile :</label>
                           <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info"/>
                         </div>
 

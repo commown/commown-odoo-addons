@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data noupdate="1">
+  <data>
 
     <template id="commown-signature">
         <p>
@@ -213,7 +213,7 @@
 
         <p>Une demande d'assistance va être créée automatiquement
         lorsque vous aurez soumis ce formulaire. Vous pourrez y
-        accéder à tout moment depuis votre espace personnel, via la
+        accéder à tout moment depuis <a href=" https://shop.commown.coop/my/issues" target="_blank">votre espace personnel</a>, via la
         section <i>Mes demandes d'assistance</i> pour en suivre
         l'avancement et en consulter l'historique.
         </p>
@@ -225,7 +225,7 @@
           <t t-raw="tool_form or ''"/>
 
           <div class="form-group">
-            <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toute information que vous jugerez utile :</label>
+            <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toutes les informations que vous jugerez utile :</label>
             <textarea class="form-control" rows="3" t-attf-id="more_info_step_{{ step }}" name="more_info"/>
           </div>
 
