@@ -5,7 +5,7 @@ class ProjectTask(models.Model):
     _inherit = 'project.task'
 
     contract_id = fields.Many2one(
-        'account.analytic.account', string='Contract')
+        'contract.contract', string='Contract')
     commercial_partner_id = fields.Many2one(
         'res.partner', related='partner_id.commercial_partner_id')
     contractual_issue_type = fields.Selection(
