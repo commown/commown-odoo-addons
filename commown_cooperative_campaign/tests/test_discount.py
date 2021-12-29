@@ -30,17 +30,14 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         super(CooperativeCampaignTC, self).setUp()
 
         # Force querying the cooperative web service:
-        self.campaign.is_coop_campaign = True
+        self.campaign.update({
+            "is_coop_campaign": True,
+            "cooperative_salt": "no matter",
+        })
 
         # This is required for partner "anon" identifier generation:
         self.so.partner_id.phone = "0677889900"
         self.so.partner_id.country_id = self.env.ref("base.fr").id
-        self.env["keychain.account"].create({
-            "namespace": "telecommown",
-            "name": "Salt for partner identifiers",
-            "technical_name": self.campaign.name + "-salt",
-            "clear_password": "no-matter",
-        })
         self.customer_key = self.campaign.coop_partner_identifier(
             self.so.partner_id)
 
