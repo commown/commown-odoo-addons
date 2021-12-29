@@ -1,8 +1,4 @@
-# coding: utf-8
-
-from __future__ import print_function
-
-import urllib
+import urllib.parse
 
 import requests
 
@@ -30,14 +26,14 @@ def handle_by_name(env, contract_name, campaign_name):
 def handle_contract(base_url, contract, campaign, seen_keys=set()):
 
     if contract.partner_id.commercial_partner_id != contract.partner_id:
-        raise ContractError(u"B2B - %s" % contract.name)
+        raise ContractError("B2B - %s" % contract.name)
 
     customer_key = campaign.coop_partner_identifier(contract.partner_id)
     if not customer_key:
-        raise ContractError(u"NOID - %s: %s" % (
+        raise ContractError("NOID - %s: %s" % (
             contract.name, contract.partner_id.name))
     if customer_key in seen_keys:
-        raise ContractError(u"SK - %s key already seen" % contract.name)
+        raise ContractError("SK - %s key already seen" % contract.name)
 
     # Create a coupon
     so = contract.mapped(
@@ -45,22 +41,22 @@ def handle_contract(base_url, contract, campaign, seen_keys=set()):
     )
 
     if len(so) != 1:
-        raise ContractError(u"ERR - %s: %d sale(s) attached" % (
+        raise ContractError("ERR - %s: %d sale(s) attached" % (
             contract.name, len(so)))
 
     if campaign in so.reserved_coupons().mapped("campaign_id"):
         seen_keys.add(customer_key)
-        raise ContractError(u"DONE - %s has already a coupon" % contract.name)
+        raise ContractError("DONE - %s has already a coupon" % contract.name)
 
     coupon = so.reserve_coupon(campaign.name)
     if not coupon:
-        raise ContractError(u"NOCOUPON - %s : could not reserve a coupon"
+        raise ContractError("NOCOUPON - %s : could not reserve a coupon"
                             % contract.name)
     coupon.update({'used_for_sale_id': so.id, 'reserved_for_sale_id': False})
 
     print(
-        (u" ".join([campaign.name, contract.name,
-                    contract.date_start, customer_key])
+        (" ".join([campaign.name, contract.name,
+                   contract.date_start, customer_key])
          ).encode("utf-8")
     )
 
@@ -77,7 +73,7 @@ def new_campaign(env, base_url, campaign_name):
 
     orig_kc = env.ref("commown_cooperative_campaign.telecommown2021-salt")
     orig_kc.copy({
-        "name": u"Salt of %s" % campaign_name,
+        "name": "Salt of %s" % campaign_name,
         "technical_name": campaign_name + "-salt",
         "clear_password": orig_kc._get_password(),
     })
@@ -125,25 +121,25 @@ def main(env, campaign_name, base_url=None, create_campaign=False,
         ctdl_model = env["contract.template.discount.line"]
         for ct in contract_templates:
             for ctl in ct.recurring_invoice_line_ids:
-                if u"#START#" in ctl.name:  # no ##PRODUCT## in old contracts
+                if "#START#" in ctl.name:  # no ##PRODUCT## in old contracts
                     if campaign not in ctl.mapped(
                             "discount_line_ids.coupon_campaign_id"):
                         ctl.discount_line_ids |= ctdl_model.create({
                             "contract_template_line_id": ctl.id,
                             "coupon_campaign_id": campaign.id,
                             "name": campaign_name,
-                            "condition": u"coupon_from_campaign",
-                            "amount_type": u"fix",
+                            "condition": "coupon_from_campaign",
+                            "amount_type": "fix",
                             "amount_value": 1.5,
-                            "start_type": u"absolute",
+                            "start_type": "absolute",
                             "start_date": "2021-10-18",
-                            "end_type": u"absolute",
+                            "end_type": "absolute",
                             "end_date": "2022-12-31",
                         })
                     break
             else:
                 raise ValueError(
-                    u"Could not add reduction to contract model %s" % ct.name)
+                    "Could not add reduction to contract model %s" % ct.name)
             env.cr.commit()
 
     if register_contracts:
@@ -163,7 +159,7 @@ def main(env, campaign_name, base_url=None, create_campaign=False,
                 with env.cr.savepoint():
                     handle_contract(base_url, contract, campaign, seen_keys)
             except ContractError as exc:
-                print((u"*** %s" % exc).encode("utf-8"))
+                print(("*** %s" % exc).encode("utf-8"))
                 continue
             except requests.HTTPError as exc:
                 print(contract.name.encode("utf-8") + " - " + str(exc))
@@ -180,7 +176,7 @@ def check_for_full_registered(env, campaign_name):
         env['ir.config_parameter'].get_param(
             'commown_cooperative_campaign.base_url')
         + '/campaigns/%s/subscriptions/important-events' % (
-            urllib.quote_plus(campaign_name))
+            urllib.parse.quote_plus(campaign_name))
     )
 
     sos = campaign.coupon_ids.mapped(
@@ -191,8 +187,9 @@ def check_for_full_registered(env, campaign_name):
             print("%d / %d" % (index, len(sos)))
         partner = so.partner_id
         customer_key = campaign.coop_partner_identifier(partner)
-        url = base_url + "?customer_key=%s" % urllib.quote_plus(customer_key)
+        url = base_url + ("?customer_key=%s"
+                          % urllib.parse.quote_plus(customer_key))
         resp = requests.get(url)
         resp.raise_for_status()
         if resp.json():
-            print(u"Double! %s / %s: %s" % (so.name, partner.name, url))
+            print("Double! %s / %s: %s" % (so.name, partner.name, url))

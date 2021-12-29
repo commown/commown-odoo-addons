@@ -1,5 +1,5 @@
 import logging
-import urllib
+import urllib.parse
 from datetime import datetime
 
 import pytz
@@ -19,10 +19,10 @@ def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
     dt = datetime(date.year, date.month, date.day, hour=hour)
     optout_ts = pytz.timezone(tz or 'GMT').localize(dt, is_dst=True).isoformat()
 
-    url = base_url + "/campaigns/%s/opt-out" % urllib.quote_plus(campaign_ref)
+    url = base_url + "/campaigns/%s/opt-out" % urllib.parse.quote_plus(campaign_ref)
 
     _logger.info(
-        u"Setting optout on %s in coop campaign %s, identifier %s using %s...",
+        "Setting optout on %s in coop campaign %s, identifier %s using %s...",
         optout_ts, campaign_ref, customer_key, url)
 
     resp = requests.post(
@@ -30,7 +30,7 @@ def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
     resp.raise_for_status()
 
     resp_data = resp.json()
-    _logger.debug(u"Got web services response:\n %s", pformat(resp_data))
+    _logger.debug("Got web services response:\n %s", pformat(resp_data))
 
 
 class Contract(models.Model):
