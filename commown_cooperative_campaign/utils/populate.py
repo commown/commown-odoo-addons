@@ -13,7 +13,7 @@ class ContractError(Exception):
 
 
 def handle_by_name(env, contract_name, campaign_name):
-    base_url = env['ir.config_parameter'].get_param(
+    base_url = env['ir.config_parameter'].sudo().get_param(
         'commown_cooperative_campaign.base_url')
     contract = env["account.analytic.account"].search(
         [("name", "=", "SO07491-01")]).ensure_one()
@@ -101,7 +101,7 @@ def main(env, campaign_name, base_url=None, create_campaign=False,
          add_contract_reduction=False, register_contracts=False):
 
     if base_url is None:
-        base_url = env['ir.config_parameter'].get_param(
+        base_url = env['ir.config_parameter'].sudo().get_param(
             'commown_cooperative_campaign.base_url')
 
     if create_campaign:
