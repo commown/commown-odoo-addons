@@ -1,7 +1,7 @@
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import urllib
+import urllib.parse
 import logging
 from datetime import datetime
 
@@ -24,16 +24,16 @@ def parse_ws_date(str_date):
 def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
     "Query the cooperative web services to see if a subscription is active"
 
-    _logger.info(u"Querying %s, campaign %s, identifier %s (date %s)",
+    _logger.info("Querying %s, campaign %s, identifier %s (date %s)",
                  base_url, campaign_ref, customer_key, date.isoformat())
 
     url = (base_url + "/campaigns/%s/subscriptions/important-events"
-           % urllib.quote_plus(campaign_ref))
+           % urllib.parse.quote_plus(campaign_ref))
     resp = requests.get(url, params={"customer_key": customer_key})
     resp.raise_for_status()
 
     subscriptions = resp.json()
-    _logger.debug(u"Got web services response:\n %s", pformat(subscriptions))
+    _logger.debug("Got web services response:\n %s", pformat(subscriptions))
     if subscriptions:
         events = {e["type"]: parse_ws_date(e["ts"])
                   for e in subscriptions[0]["events"]}
@@ -48,18 +48,18 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
 def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
     "Query the cooperative web services to insert a new subscription"
 
-    _logger.info(u"Optin %s: %s on %s...", campaign_ref, customer_key, date)
+    _logger.info("Optin %s: %s on %s...", campaign_ref, customer_key, date)
 
     dt = datetime(date.year, date.month, date.day, hour=hour)
     optin_ts = pytz.timezone(tz or 'GMT').localize(dt, is_dst=True).isoformat()
 
-    url = base_url + "/campaigns/%s/opt-in" % urllib.quote_plus(campaign_ref)
+    url = base_url + "/campaigns/%s/opt-in" % urllib.parse.quote_plus(campaign_ref)
     resp = requests.post(
         url, json={"customer_key": customer_key, "optin_ts": optin_ts})
     resp.raise_for_status()
 
     resp_data = resp.json()
-    _logger.debug(u"Got web services response:\n %s", pformat(resp_data))
+    _logger.debug("Got web services response:\n %s", pformat(resp_data))
 
 
 class ContractTemplateAbstractDiscountLine(models.AbstractModel):
@@ -79,8 +79,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             identifier = campaign.coop_partner_identifier(partner)
             if not identifier:
                 _logger.warning(
-                    u"Couldn't build a partner identifier for a coop campaign."
-                    u" Partner is %s (id: %d)" % (partner.name, partner.id))
+                    "Couldn't build a partner identifier for a coop campaign."
+                    " Partner is %s (id: %d)" % (partner.name, partner.id))
                 return False
 
             url = self.env['ir.config_parameter'].get_param(
@@ -99,10 +99,10 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                     if exc.response.status_code == 422:
                         json = exc.response.json()
                         if json.get("detail", None) == 'Already opt-in':
-                            _logger.info(u"Double opt-in for %s (%d)"
+                            _logger.info("Double opt-in for %s (%d)"
                                          % (partner.name, partner.id))
                         else:
-                            _logger.error(u"Opt-in error json: %s" % json)
+                            _logger.error("Opt-in error json: %s" % json)
                             raise
                     else:
                         raise
