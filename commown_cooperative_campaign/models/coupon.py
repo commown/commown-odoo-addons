@@ -18,6 +18,11 @@ class Campaign(models.Model):
         index=True,
         default=False)
 
+    cooperative_salt = fields.Char(
+        invisible=True,
+        copy=False,
+        help="Salt used to create a cooperative identifier from partner data")
+
     @api.multi
     def coop_partner_identifier(self, partner):
         """ Returns given partner's identifier for current cooperative campaign
@@ -41,9 +46,6 @@ class Campaign(models.Model):
                     phone = phonenumbers.format_number(
                         phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
                     ).replace(' ', '')
-                    acc = partner.env["keychain.account"].search([
-                        ("technical_name", "=", self.name + "-salt"),
-                    ]).ensure_one()
                     hash = hashlib.sha256()
-                    hash.update(phone + acc._get_password())
+                    hash.update(phone + self.cooperative_salt)
                     return hash.hexdigest()

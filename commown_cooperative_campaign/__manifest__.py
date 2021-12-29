@@ -17,11 +17,9 @@
     'depends': [
         'commown_contract_variable_discount',
         'queue_job',
-        'keychain',
     ],
     'data': [
         'data/ir_config_parameter.xml',
-        'data/keychain_accounts.xml',
         'views/coupon.xml',
     ],
     'installable': True,
