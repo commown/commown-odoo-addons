@@ -15,7 +15,7 @@ class ContractError(Exception):
 def handle_by_name(env, contract_name, campaign_name):
     base_url = env['ir.config_parameter'].sudo().get_param(
         'commown_cooperative_campaign.base_url')
-    contract = env["account.analytic.account"].search(
+    contract = env["contract.contract"].search(
         [("name", "=", "SO07491-01")]).ensure_one()
     campaign = env["coupon.campaign"].search(
         [("name", "=", campaign_name)]).ensure_one()
@@ -113,7 +113,7 @@ def main(env, campaign_name, base_url=None, create_campaign=False,
             ("is_without_coupons", "=", True),
         ]).ensure_one()
 
-    contract_templates = env["account.analytic.contract"].search([
+    contract_templates = env["contract.template"].search([
         ("name", "like", "/B2C/"),
     ])
 
@@ -143,7 +143,7 @@ def main(env, campaign_name, base_url=None, create_campaign=False,
             env.cr.commit()
 
     if register_contracts:
-        contracts = env["account.analytic.account"].search([
+        contracts = env["contract.contract"].search([
             ("recurring_invoices", "=", True),
             ("date_end", "=", False),
             ("date_start", "<", "TODAY"),
