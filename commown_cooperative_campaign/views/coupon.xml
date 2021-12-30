@@ -1,0 +1,18 @@
+<odoo>
+
+  <record id="coupon_campaign_form" model="ir.ui.view">
+    <field name="name">Coupon Campaign form</field>
+    <field name="model">coupon.campaign</field>
+    <field name="inherit_id" ref="website_sale_coupon.coupon_campaign_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='is_without_coupons']" position="before">
+        <field name="is_coop_campaign"/>
+        <field name="cooperative_salt"
+               attributes="{'invisible': [('is_coop_campaign', '=', False)]}"
+               groups="sales_team.group_sale_manager"
+               />
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
