@@ -14,8 +14,7 @@ from odoo.addons.commown_contract_variable_discount.tests.common import (
 
 def ts_after(date, days=7, hour=9):
     "Generate a date in iso format from given odoo string date + given days"
-    _date = Date.from_string(date)
-    return (datetime(_date.year, _date.month, _date.day, hour, tzinfo=pytz.utc)
+    return (datetime(date.year, date.month, date.day, hour, tzinfo=pytz.utc)
             + timedelta(days=days)).isoformat()
 
 
@@ -135,8 +134,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
     def test_contract_end(self):
         inv = self.invoice(partial(ts_before, days=7), mock_optin=True)
-        date_end = Date.to_string(Date.from_string(inv.date_invoice)
-                                  + timedelta(days=10))
+        date_end = inv.date_invoice + timedelta(days=10)
         with requests_mock.Mocker() as rm:
             rm.post("/campaigns/test-campaign/opt-out", json={
                 "id": 1, "campaign": {}, "member": {},

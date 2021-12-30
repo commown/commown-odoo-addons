@@ -47,5 +47,5 @@ class Campaign(models.Model):
                         phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
                     ).replace(' ', '')
                     hash = hashlib.sha256()
-                    hash.update(phone + self.cooperative_salt)
+                    hash.update((phone + self.cooperative_salt).encode('utf-8'))
                     return hash.hexdigest()

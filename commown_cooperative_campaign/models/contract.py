@@ -34,7 +34,7 @@ def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
 
 
 class Contract(models.Model):
-    _inherit = "account.analytic.account"
+    _inherit = "contract.contract"
 
     @api.multi
     @job(default_channel="root")
@@ -51,7 +51,7 @@ class Contract(models.Model):
         if "date_end" not in values:
             return res
         for contract in self:
-            for contract_line in contract.recurring_invoice_line_ids:
+            for contract_line in contract.contract_line_ids:
                 for discount_line in contract_line._applicable_discount_lines():
                     campaign = discount_line.coupon_campaign_id
                     if campaign.is_coop_campaign:
