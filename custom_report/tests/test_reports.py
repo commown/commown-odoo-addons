@@ -107,7 +107,7 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
                          ['Invoice %s' % inv.display_name.strip()])
 
     def test_b2c_from_contract(self):
-        contract = self.env['account.analytic.account'].create({
+        contract = self.env['contract.contract'].create({
             'name': 'Test Contract',
             'partner_id': self.b2c_partner.id,
             'pricelist_id': self.b2c_partner.property_product_pricelist.id,

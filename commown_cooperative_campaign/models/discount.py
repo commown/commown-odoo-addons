@@ -74,7 +74,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         campaign = self.coupon_campaign_id
         if result and campaign.is_coop_campaign:
 
-            contract = contract_line.analytic_account_id
+            contract = contract_line.contract_id
             partner = contract.partner_id
             identifier = campaign.coop_partner_identifier(partner)
             if not identifier:
@@ -87,7 +87,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 'commown_cooperative_campaign.base_url')
 
             emitted_invoices = self.env["account.invoice"].search([
-                ("contract_id", "=", contract.id),
+                ("invoice_line_ids.contract_line_id.contract_id", "=",
+                 contract.id),
             ])
             if len(emitted_invoices) == 1:
                 # Contract start invoice: optin to the cooperative campaign
