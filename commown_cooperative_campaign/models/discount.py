@@ -90,7 +90,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 ("invoice_line_ids.contract_line_id.contract_id", "=",
                  contract.id),
             ])
-            if len(emitted_invoices) == 1:
+            if len(emitted_invoices) == 0:
                 # Contract start invoice: optin to the cooperative campaign
                 try:
                     coop_ws_optin(url, campaign.name, identifier, date,
