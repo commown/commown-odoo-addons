@@ -72,7 +72,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                     'customer_key': self.customer_key,
                     'optin_ts': ts_after(invoice.date_invoice, 0),
                 })
-
+            else:
+                self.assertEqual(len(reqs), 1)
             self.assertEqual(
                 reqs[-1].path,
                 "/campaigns/test-campaign/subscriptions/important-events")
