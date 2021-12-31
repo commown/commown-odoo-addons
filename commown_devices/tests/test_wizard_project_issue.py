@@ -36,6 +36,13 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         choices = defaults.copy()
         if user_choices is not None:
             choices.update(user_choices)
+            specs = wizard_model._onchange_spec()
+            updates = wizard_model.onchange(
+                choices, user_choices.keys(), specs).get("value", {})
+            for name, val in updates.iteritems():
+                if isinstance(val, tuple):
+                    updates[name] = val[0]
+            choices.update(updates)
         for name, field in fields.items():
             if field.get("domain", None):
                 domain = field["domain"]
@@ -49,14 +56,18 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
         loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
         loc_rep = self.env.ref("commown_devices.stock_location_fp3_repackaged")
+
         self.adjust_stock(serial=u"my-fp3-1", location=loc_new)
         self.adjust_stock(serial=u"my-fp3-2", location=loc_new)
         self.adjust_stock(serial=u"my-fp3-3", location=loc_rep)
 
         product2 = self.storable_product.copy()
+        self.adjust_stock(serial=u"my-p2-1", location=loc_new,
+                          product=product2.product_variant_id)
+        self.adjust_stock(serial=u"my-p2-2", location=loc_new,
+                          product=product2.product_variant_id)
 
-        defaults, possibilities = self.prepare_wizard(
-            "outward", user_choices={"location_id": loc_new.id})
+        defaults, possibilities = self.prepare_wizard("outward")
 
         # Check defaults of issue_id, date, product_tmpl_id, variant_id
         self.assertEqual(defaults["issue_id"], self.issue.id)
@@ -66,23 +77,21 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
                          self.issue.lot_id.product_id.id)
 
         # Check domains of location_id, product_id, quant_id
-        self.assertEqual(
-            sorted(possibilities["location_id"].get_xml_id().values()),
-            [u"commown_devices.stock_location_fp3_new",
-             u"commown_devices.stock_location_fp3_repackaged"])
-        self.assertEqual(
-            possibilities["variant_id"],
-            (self.storable_product | product2).mapped("product_variant_id"))
-        self.assertEqual(
-            sorted(possibilities["quant_id"].mapped("lot_id.name")),
-            [u"my-fp3-1", u"my-fp3-2"])
+        self.assertEqual(sorted(possibilities["product_tmpl_id"]),
+                         [self.storable_product, product2])
+        self.assertEqual(possibilities["variant_id"],
+                         self.storable_product.product_variant_id)
+        self.assertEqual(sorted(possibilities["lot_id"].mapped("name")),
+                         [u"my-fp3-1", u"my-fp3-2", u"my-fp3-3"])
 
         # Check with another user choice for location_id
         defaults, possibilities = self.prepare_wizard(
-            "outward", user_choices={"location_id": loc_rep.id})
+            "outward", user_choices={"product_tmpl_id": product2.id})
 
-        self.assertEqual(
-            possibilities["quant_id"].mapped("lot_id.name"), [u"my-fp3-3"])
+        self.assertEqual(possibilities["variant_id"],
+                         product2.product_variant_id)
+        self.assertEqual(sorted(possibilities["lot_id"].mapped("name")),
+                         [u"my-p2-1", u"my-p2-2"])
 
     def test_create_outward_picking(self):
         # Test setup
