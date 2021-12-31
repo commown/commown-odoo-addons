@@ -33,6 +33,8 @@ def handle_contract(base_url, contract, campaign, seen_keys=set()):
         raise ContractError(u"B2B - %s" % contract.name)
 
     customer_key = campaign.coop_partner_identifier(contract.partner_id)
+    # Not a good idea: one day this partner could set a phone number
+    # but will never benefit the offer
     if not customer_key:
         raise ContractError(u"NOID - %s: %s" % (
             contract.name, contract.partner_id.name))
