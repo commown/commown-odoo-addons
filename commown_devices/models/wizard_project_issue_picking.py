@@ -91,6 +91,14 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
     def _compute_default_variant_id(self):
         return self._get_issue().lot_id.product_id
 
+    @api.onchange("product_tmpl_id")
+    def onchange_product_tmpl_id(self):
+        if self.product_tmpl_id:
+            if len(self.product_tmpl_id.product_variant_ids) == 1:
+                self.variant_id = self.product_tmpl_id.product_variant_id
+            else:
+                self.variant_id = False
+
     @api.multi
     def create_picking(self):
         return self.issue_id.contract_id.send_device(
