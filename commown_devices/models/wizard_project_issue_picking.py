@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
 
 
 class ProjectIssueAbstractPickingWizard(models.AbstractModel):
@@ -31,7 +32,8 @@ class ProjectIssueContractTransferWizard(models.Model):
     def create_transfer(self):
         lot = self.issue_id.lot_id
         if not lot:
-            raise UserError(_("Can't move device: no device set on this issue!"))
+            raise UserError(
+                _("Can't move device: no device set on this issue!"))
 
         transfer_location = self.env.ref(
             "commown_devices.stock_location_contract_transfer")
@@ -40,11 +42,8 @@ class ProjectIssueContractTransferWizard(models.Model):
             self.issue_id.lot_id, transfer_location, date=self.date,
             do_transfer=True)
 
-        dest = self.contract_id.partner_id.set_customer_location()
-
         self.contract_id.send_device(
             self.issue_id.lot_id.quant_ids[0], date=self.date, do_transfer=True)
-
 
 
 class ProjectIssueOutwardPickingWizard(models.TransientModel):
