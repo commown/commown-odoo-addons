@@ -33,7 +33,7 @@ class ResPartner(models.Model):
         if not location:
             _logger.debug(u"Partner %d (%s) has no customer location yet,"
                           " creating one", self.id, self.name)
-            location = self.env['stock.location'].create({
+            location = self.env['stock.location'].sudo().create({
                 'name': self.name,
                 'usage': 'customer',
                 'partner_id': self.id,
