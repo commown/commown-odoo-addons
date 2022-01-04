@@ -6,12 +6,13 @@ from odoo.tests.common import HttpCase, at_install, post_install
 class ResPartnerLocationTC(HttpCase):
 
     def test_set_customer_location_individual(self):
+        employee = self.env.ref("base.user_demo")
         individual = self.env.ref("portal.demo_user0_res_partner")
         loc_customer = self.env.ref('stock.stock_location_customers')
         assert individual.property_stock_customer == loc_customer, (
             'test prerequisite failed')
 
-        location = individual.set_customer_location()
+        location = individual.sudo(employee.id).set_customer_location()
         self.assertNotEqual(location, loc_customer)
         self.assertIn(individual.name, location.name)
         self.assertEqual(location, individual.set_customer_location())
