@@ -40,7 +40,7 @@ class Contract(models.Model):
     @job(default_channel="root")
     def _coop_ws_optout(self, campaign, customer_key, date_end, tz):
         self.ensure_one()
-        url = self.env['ir.config_parameter'].get_param(
+        url = self.env['ir.config_parameter'].sudo().get_param(
             'commown_cooperative_campaign.base_url')
         coop_ws_optout(url, campaign.name, customer_key, date_end, tz)
 
