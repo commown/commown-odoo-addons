@@ -37,6 +37,20 @@
       <field name="location_id" ref="stock_location_available_for_rent"/>
     </record>
 
+    <record id="stock_location_crosscall_new" model="stock.location">
+      <field name="name">New Croscall smartphone and tablets</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_available_for_rent"/>
+    </record>
+
+    <record id="stock_location_crosscall_repackaged" model="stock.location">
+      <field name="name">Repackaged Croscall smartphone and tablets</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_available_for_rent"/>
+    </record>
+
     <record id="stock_location_fp3_repackaged" model="stock.location">
       <field name="name">Repackaged Fairphone 3</field>
       <field name="usage">internal</field>
