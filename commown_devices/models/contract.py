@@ -42,7 +42,7 @@ class Contract(models.Model):
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
-        dest_location = self.partner_id.set_customer_location()
+        dest_location = self.partner_id.get_or_create_customer_location()
         return self._create_picking(
             [quant.lot_id], quant.location_id, dest_location, date=date,
             do_transfer=do_transfer)
@@ -55,7 +55,7 @@ class Contract(models.Model):
         at the previous date.
         """
 
-        orig_location = self.partner_id.set_customer_location()
+        orig_location = self.partner_id.get_or_create_customer_location()
         return self._create_picking([lot], orig_location, dest_location,
                                     date=date, do_transfer=do_transfer)
 
@@ -83,7 +83,7 @@ class Contract(models.Model):
         ], order="date ASC")
 
         lot_ids = OrderedDict()
-        partner_loc = self.partner_id.set_customer_location()
+        partner_loc = self.partner_id.get_or_create_customer_location()
         for m in moves:
             for l in m.mapped("lot_ids"):
                 lot_ids.setdefault(l.id, 0)

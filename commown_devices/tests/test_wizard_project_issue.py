@@ -7,7 +7,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
     def setUp(self):
         super(WizardProjectIssuePickingTC, self).setUp()
-        self.assertTrue(self.so.partner_id.set_customer_location())
+        self.assertTrue(self.so.partner_id.get_or_create_customer_location())
 
         lot = self.adjust_stock(serial=u"init-fp3")
         self.send_device(u"init-fp3", date="2000-01-02")
@@ -126,7 +126,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         move = picking.move_lines
         self.assertEqual(len(move), 1)
         self.assertEqual(move.location_id, loc_new)
-        self.assertEqual(move.location_dest_id, partner.set_customer_location())
+        self.assertEqual(move.location_dest_id, partner.get_or_create_customer_location())
         self.assertEqual(picking.move_lines.mapped("lot_ids.name"), [u"my-fp3"])
 
     def test_inward_ui(self):
@@ -164,7 +164,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         move = picking.move_lines
         self.assertEqual(len(move), 1)
         self.assertEqual(move.location_id,
-                         self.so.partner_id.set_customer_location())
+                         self.so.partner_id.get_or_create_customer_location())
         self.assertEqual(move.location_dest_id, loc_check)
         self.assertEqual(picking.move_lines.mapped("lot_ids.name"),
                          [u"init-fp3"])
