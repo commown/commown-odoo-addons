@@ -7,6 +7,7 @@ import project_project
 import project_task
 import res_partner
 import stock_production_lot
+import stock_quant
 import wizard_crm_lead_picking
 import wizard_project_issue_picking
 import wizard_project_task_picking

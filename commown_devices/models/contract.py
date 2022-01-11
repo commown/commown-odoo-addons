@@ -19,21 +19,30 @@ class Contract(models.Model):
         string=u"Pickings")
 
     quant_ids = fields.One2many(
-        "stock.quant",
+        "stock.quant", "contract_id",
         string=u"Contract-related stock",
         compute="_compute_quant_ids",
-        store=False,
+        compute_sudo=True,  # as quant.contract_id is not writable
+        store=True,
         readonly=True,
     )
 
-    @api.depends("picking_ids")
+    quant_nb = fields.Integer(
+        "Device number",
+        compute="_compute_quant_ids",
+        compute_sudo=True,  # for consistency with quant_ids
+        default=0,
+        store=True,
+        index=True,
+    )
+
+    @api.depends("picking_ids.state")
     def _compute_quant_ids(self):
-        for record in self:
-            customer_loc = record.partner_id.set_customer_location()
-            record.quant_ids = self.env["stock.quant"].search([
-                ("history_ids.picking_id.contract_id", "=", record.id),
-                ("location_id", "=", customer_loc.id)
-            ], order="location_id desc")
+        for record in self.filtered("recurring_invoices"):
+            loc = record.partner_id.get_customer_location()
+            record.quant_ids = record.picking_ids.mapped(
+                "move_lines.quant_ids").filtered(lambda q: q.location_id == loc)
+            record.quant_nb = len(record.quant_ids)
 
     @api.multi
     def send_device(self, quant, date=None, do_transfer=False):
