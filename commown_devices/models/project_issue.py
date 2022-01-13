@@ -9,32 +9,35 @@ class ProjectIssue(models.Model):
         help=u"Device involved in present issue",
         comodel_name="stock.production.lot",
         default=lambda self: self._default_lot_id(),
+        domain=lambda self: self._domain_lot_id(),
     )
 
-    @api.onchange("contract_id")
-    def onchange_contract_id(self):
-        result = {}
-        if self.contract_id:
-            lots = self.contract_id.stock_at_date()
-            result["domain"] = {"lot_id": [('id', 'in', lots.ids)]}
-        return result
-
-    def _contract(self):
-        if not self.contract_id and "contract_id" in self.env.context:
-            return self.env["account.analytic.account"].browse(
-                self.env.context["contract_id"])
-        else:
-            return self.contract_id
-
     def _default_lot_id(self):
-        "Returns the first lot_id found from contract quant_ids at present date"
-        contract = self._contract()
-        if contract:
-            date = self.create_date or fields.Datetime.now()
-            stock = contract.stock_at_date(date)
-        else:
-            stock = self.env["stock.production.lot"]
-        return stock and stock[0]
+        domain = self._domain_lot_id()
+        if domain:
+            if self.env["stock.production.lot"].search_count(domain) == 1:
+                return self.env["stock.production.lot"].search(domain)
+
+    def _domain_lot_id(self):
+        domain = []
+        if self.contract_id:
+            domain.append(
+                ("id", "in", self.contract_id.mapped("quant_ids.lot_id").ids))
+        return domain
+
+    @api.onchange("contract_id")
+    def onchange_contract_id_set_lot_id(self):
+        # Protect against onchange loop
+        if self.lot_id not in self.contract_id.mapped("quant_ids.lot_id"):
+            self.lot_id = self._default_lot_id() or False
+        return {"domain": {"lot_id": self._domain_lot_id()}}
+
+    @api.onchange("lot_id")
+    def onchange_lot_id_set_contract(self):
+        if self.lot_id and not self.contract_id:
+            contracts = self.lot_id.mapped("quant_ids.contract_id")
+            if len(contracts) == 1:
+                self.contract_id = contracts.id
 
     def action_scrap_device(self):
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
