@@ -128,7 +128,7 @@ msgstr "Nb appareils"
 #. module: commown_devices
 #: model:ir.ui.view,arch_db:commown_devices.edit_project
 msgid "Devices"
-msgstr "Devices"
+msgstr "Appareils"
 
 #. module: commown_devices
 #: model:stock.location,name:commown_devices.stock_location_available_for_rent
