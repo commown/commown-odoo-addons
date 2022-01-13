@@ -16,7 +16,7 @@ class SelfHelp(http.Controller):
 
     def _description(self, **post):
         assert post['issue-description-template'].startswith(
-            "commown_self_troubleshooting.issue-description-")
+            "issue-description-")
         return self.ref(post['issue-description-template']).render(post)
 
     def _tag_ids(self, **post):
