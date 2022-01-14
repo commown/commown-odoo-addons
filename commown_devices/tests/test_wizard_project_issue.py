@@ -126,7 +126,8 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
         move = picking.move_lines
         self.assertEqual(len(move), 1)
         self.assertEqual(move.location_id, loc_new)
-        self.assertEqual(move.location_dest_id, partner.get_or_create_customer_location())
+        self.assertEqual(move.location_dest_id,
+                         partner.get_or_create_customer_location())
         self.assertEqual(picking.move_lines.mapped("lot_ids.name"), [u"my-fp3"])
 
     def test_inward_ui(self):
