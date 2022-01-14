@@ -117,14 +117,10 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
     @api.onchange("issue_id")
     def onchange_issue_id(self):
         if self.issue_id:
-            quants = self.issue_id.contract_id.quant_ids
-            if len(quants) == 1:
-                self.lot_id = quants.lot_id
-            return {
-                "domain": {
-                    "lot_id": [("id", "in", quants.mapped("lot_id").ids)]
-                }
-            }
+            lots = self.issue_id.contract_id.quant_ids.mapped("lot_id")
+            if len(lots) == 1:
+                self.lot_id = lots.id
+            return {"domain": {"lot_id": [("id", "in", lots.ids)]}}
 
     @api.multi
     def create_picking(self):
