@@ -52,7 +52,7 @@
     ],
 
     'external_dependencies': {
-        'python': ['magic'],
+        'python': ['python-magic'],
         'bin': ['rsvg-convert'],
     },
 
