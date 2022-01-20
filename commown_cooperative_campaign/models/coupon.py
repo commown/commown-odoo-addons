@@ -1,11 +1,6 @@
-import hashlib
-
-import phonenumbers
-
 from odoo import models, fields, api
 
-
-MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
+from .ws_utils import phone_to_coop_id
 
 
 class Campaign(models.Model):
@@ -30,20 +25,9 @@ class Campaign(models.Model):
         if not self.is_coop_campaign:
             return None
 
-        country_code = partner.country_id.code
-        if not country_code:
-            return None
+        acc = self.env["keychain.account"].search([
+            ("technical_name", "=", self.name + "-salt"),
+        ]).ensure_one()
 
-        for phone_num in (partner.mobile, partner.phone):
-            if phone_num:
-                phone_obj = phonenumbers.parse(phone_num, country_code)
-                if phonenumbers.number_type(phone_obj) == MOBILE_TYPE:
-                    phone = phonenumbers.format_number(
-                        phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
-                    ).replace(' ', '')
-                    acc = partner.env["keychain.account"].search([
-                        ("technical_name", "=", self.name + "-salt"),
-                    ]).ensure_one()
-                    hash = hashlib.sha256()
-                    hash.update(phone + acc._get_password())
-                    return hash.hexdigest()
+        return phone_to_coop_id(acc._get_password(), partner.country_id.code,
+                                partner.mobile, partner.phone)
