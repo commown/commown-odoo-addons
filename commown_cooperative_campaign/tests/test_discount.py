@@ -47,7 +47,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
     def invoice(self, optin, optout=None, mock_optin=False,
                 check_mock_calls=True):
         """ Create an invoice from contract mocking the cooperative web service
-        with give optin and optout dates generators.
+        with given optin and optout dates generators.
         """
         date = self.contract.recurring_next_date
 
@@ -88,11 +88,15 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
     def test_invoices(self):
         before7 = partial(ts_before, days=7)
         before1 = partial(ts_before, days=1)
-        self.assertEqual(self.invoice(before1, mock_optin=True).amount_total,
-                         6.9)
-        self.assertEqual(self.invoice(before1, ts_after).amount_total, 6.9)
-        self.assertEqual(self.invoice(before7, before1).amount_total, 34.5)
-        self.assertEqual(self.invoice(ts_after).amount_total, 34.5)
+
+        self.assertEqual(
+            self.invoice(before1, mock_optin=True).amount_total, 6.9)
+        self.assertEqual(
+            self.invoice(before1, ts_after, mock_optin=True).amount_total, 6.9)
+        self.assertEqual(
+            self.invoice(before7, before1, mock_optin=True).amount_total, 34.5)
+        self.assertEqual(
+            self.invoice(ts_after, mock_optin=True).amount_total, 34.5)
 
     def test_invoice_no_identifier(self):
         "Partners having no phone or country do not benefit from the discount"
