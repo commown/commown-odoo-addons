@@ -15,6 +15,9 @@ from odoo.addons.commown_cooperative_campaign.models.ws_utils import (
 )
 
 
+TC2021_ID = 36
+
+
 def telecoop_phone(partner):
 
     MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
@@ -79,7 +82,29 @@ def has_coupon(contract):
     ])
 
 
-def activate_old_partners(env, debug=True):
+
+def reactivate_subscribed_partners(env, debug=True):
+
+    tc2021 = env["coupon.campaign"].browse(TC2021_ID)
+    base_url = telecommown_base_url(env)
+    optin_date = datetime.date(2022, 1, 1)
+
+    inv_lines = env["account.invoice.line"].search([
+        ("name", "like", tc2021.name),
+    ])
+    partners = inv_lines.mapped("invoice_id.partner_id")
+    assert set(inv_lines.mapped("invoice_id.contract_id.date_end")) == {False}
+
+    for partner in partners:
+        key = tc2021.coop_partner_identifier(partner)
+        with json_exc(False):
+            print(u"opt-in partner %d: %s" % (partner.id, partner.name))
+            if not debug:
+                coop_ws_optin(base_url, tc2021.name, key, optin_date,
+                              partner.tz, hour=0)
+
+
+def activate_asking_partners(env, debug=True):
     """1. vérifier droit à la réduction : contract actif avec coupon
 
     2. dans ce cas il a sûrement déjà une souscription TeleCommown2021 en BDD
@@ -114,7 +139,6 @@ def activate_old_partners(env, debug=True):
     """
 
     TC_STAGE_ID = 323
-    TC2021_ID = 36
 
     leads = env["crm.lead"].search([("stage_id", "=", TC_STAGE_ID)])
     tc2021 = env["coupon.campaign"].browse(TC2021_ID)
@@ -147,6 +171,7 @@ def activate_old_partners(env, debug=True):
 
     for lead in leads:
         partner = lead.partner_id
+        print()
 
         # Must have a key
         key = tc2021.coop_partner_identifier(partner)
@@ -197,7 +222,7 @@ def activate_old_partners(env, debug=True):
                 for line in last_invoice.invoice_line_ids)
             ):
             cline = contract.recurring_invoice_line_ids[0]
-            print(u"Contract %s does benefit from %s. Modifying line %s"
+            print(u"Contract %s did not benefit from %s. Modifying line %s"
                   % (contract.name, tc2021.name, cline.name))
             if not debug:
                 create_discount(cline)
