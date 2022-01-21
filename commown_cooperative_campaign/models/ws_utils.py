@@ -38,11 +38,11 @@ def parse_ws_date(str_date):
     return _date.replace(tzinfo=None) - _date.utcoffset()
 
 
-def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
+def coop_ws_query(base_url, campaign_ref, customer_key):
     "Query the cooperative web services to see if a subscription is active"
 
-    _logger.info(u"Querying %s, campaign %s, identifier %s (date %s)",
-                 base_url, campaign_ref, customer_key, date.isoformat())
+    _logger.info(u"Querying %s, campaign %s, identifier %s",
+                 base_url, campaign_ref, customer_key)
 
     url = (base_url + "/campaigns/%s/subscriptions/important-events"
            % urllib.quote_plus(campaign_ref))
@@ -51,6 +51,10 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
 
     subscriptions = resp.json()
     _logger.debug(u"Got web services response:\n %s", pformat(subscriptions))
+    return subscriptions
+
+
+def coop_ws_valid_subscriptions(subscriptions, date, hour=12):
     if subscriptions:
         events = {e["type"]: parse_ws_date(e["ts"])
                   for e in subscriptions[0]["events"]}

@@ -7,7 +7,7 @@ import requests
 
 from odoo import models
 
-from .ws_utils import coop_ws_query, coop_ws_optin
+from .ws_utils import coop_ws_query, coop_ws_optin, coop_ws_valid_subscriptions
 
 
 _logger = logging.getLogger(__name__)
@@ -55,6 +55,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 else:
                     raise
 
-            result = coop_ws_query(url, campaign.name, identifier, date)
+            subscriptions = coop_ws_query(url, campaign.name, identifier)
+            result = coop_ws_valid_subscriptions(subscriptions, date)
 
         return result

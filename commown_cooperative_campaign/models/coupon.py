@@ -1,6 +1,43 @@
-from odoo import models, fields, api
+import datetime
 
-from .ws_utils import phone_to_coop_id
+from odoo import models, fields, api, _
+from odoo.exceptions import UserError
+
+from .ws_utils import (phone_to_coop_id, coop_ws_query,
+                       coop_ws_valid_subscriptions)
+
+
+class Coupon(models.Model):
+    _inherit = "coupon.coupon"
+
+    @api.multi
+    def action_coop_campaign_optin_status(self):
+        self.ensure_one()
+
+        campaign = self.campaign_id
+        if not campaign.is_coop_campaign:
+            raise UserError(_("Not a cooperative campaign!"))
+
+        partner = self.used_for_sale_id.partner_id
+        key = campaign.coop_partner_identifier(partner)
+
+        if not key:
+            raise UserError(_("Partner (%s) has no valid key.") % partner.name)
+
+        base_url = self.env['ir.config_parameter'].get_param(
+            'commown_cooperative_campaign.base_url')
+
+        subscriptions = coop_ws_query(base_url, campaign.name, key)
+        is_valid = coop_ws_valid_subscriptions(
+            subscriptions, datetime.datetime.today())
+
+        response = _("Subscription status for %(partner)s is:"
+                     " %(result)s\n\n%(details)s")
+        raise UserError(response % {
+            "partner": partner.name,
+            "result": _("subscribed") if is_valid else _("not subscribed"),
+            "details": subscriptions,
+        })
 
 
 class Campaign(models.Model):
