@@ -50,7 +50,7 @@ class Coupon(models.Model):
             response.append(_("Key: %(key)s"))
             ctx.update({
                 "key": key,
-                "result": _("subscribed"),
+                "result": _("not subscribed"),
             })
 
         raise UserError(u"\n--\n".join(response) % ctx)
