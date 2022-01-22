@@ -9,8 +9,7 @@ from . import ws_utils
 class Coupon(models.Model):
     _inherit = "coupon.coupon"
 
-    @api.multi
-    def action_coop_campaign_optin_status(self):
+    def _action_coop_prerequisites(self):
         self.ensure_one()
 
         campaign = self.campaign_id
@@ -22,21 +21,48 @@ class Coupon(models.Model):
 
         if not key:
             raise UserError(_("Partner (%s) has no valid key.") % partner.name)
+        return partner, key
 
-        base_url = self.env['ir.config_parameter'].get_param(
-            'commown_cooperative_campaign.base_url')
+    @api.multi
+    def action_coop_campaign_optin_status(self):
+        partner, key = self._action_coop_prerequisites()
+        campaign = self.campaign_id
+        base_url = ws_utils.coop_ws_base_url(self.env)
+
+        response = [_("Subscription status for %(partner)s is: %(result)s")]
+        ctx = {"partner": partner.name}
 
         subscriptions = ws_utils.coop_ws_query(base_url, campaign.name, key)
         is_valid = ws_utils.coop_ws_valid_subscriptions(
             subscriptions, datetime.datetime.today())
 
-        response = _("Subscription status for %(partner)s is:"
-                     " %(result)s\n\n%(details)s")
-        raise UserError(response % {
-            "partner": partner.name,
-            "result": _("subscribed") if is_valid else _("not subscribed"),
-            "details": subscriptions,
-        })
+        if is_valid:
+            response.append(u"%(details)s")
+            lang = self.env["res.lang"].search([("code", "=", self.env.lang)])
+            ctx.update({
+                "details": ws_utils.coop_human_readable_subscriptions(
+                    subscriptions, lang.date_format + " " + lang.time_format),
+                "result": _("subscribed"),
+            })
+
+        else:
+            response.append(_("Key: %(key)s"))
+            ctx.update({
+                "key": key,
+                "result": _("subscribed"),
+            })
+
+        raise UserError(u"\n--\n".join(response) % ctx)
+
+    @api.multi
+    def action_coop_campaign_optin_now(self):
+        partner, key = self._action_coop_prerequisites()
+        campaign = self.campaign_id
+        base_url = ws_utils.coop_ws_base_url(self.env)
+
+        date = datetime.datetime.today()
+        ws_utils.coop_ws_optin(base_url, campaign.name, key, date, partner.tz)
+        raise UserError(_("Single-side manual optin ok"))
 
 
 class Campaign(models.Model):

@@ -20,6 +20,7 @@
         'keychain',
     ],
     'data': [
+        'data/action_coupon.xml',
         'data/ir_config_parameter.xml',
         'data/keychain_accounts.xml',
         'views/coupon.xml',
