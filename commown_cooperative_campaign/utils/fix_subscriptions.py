@@ -81,7 +81,6 @@ def has_coupon(contract):
     ])
 
 
-
 def reactivate_subscribed_partners(env, debug=True):
 
     tc2021 = env["coupon.campaign"].browse(TC2021_ID)
@@ -144,7 +143,6 @@ def activate_asking_partners(env, debug=True):
 
     base_url = telecommown_base_url(env)
     min_optin_date = datetime.date(2022, 1, 1)
-    today = datetime.date.today()
 
     def create_discount(cline):
         next_inv_date = fields.Date.from_string(
@@ -218,8 +216,7 @@ def activate_asking_partners(env, debug=True):
         if (fields.Date.from_string(last_invoice.date_invoice) >= optin_date
             and not any(
                 tc2021.name in line.name
-                for line in last_invoice.invoice_line_ids)
-            ):
+                for line in last_invoice.invoice_line_ids)):
             cline = contract.recurring_invoice_line_ids[0]
             print(u"Contract %s did not benefit from %s. Modifying line %s"
                   % (contract.name, tc2021.name, cline.name))
