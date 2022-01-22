@@ -7,7 +7,7 @@ import requests
 
 from odoo import models
 
-from .ws_utils import coop_ws_query, coop_ws_optin, coop_ws_valid_subscriptions
+from . import ws_utils
 
 
 _logger = logging.getLogger(__name__)
@@ -27,21 +27,20 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
             contract = contract_line.analytic_account_id
             partner = contract.partner_id
-            identifier = campaign.coop_partner_identifier(partner)
-            if not identifier:
+            key = campaign.coop_partner_identifier(partner)
+            if not key:
                 _logger.warning(
                     u"Couldn't build a partner identifier for a coop campaign."
                     u" Partner is %s (id: %d)" % (partner.name, partner.id))
                 return False
 
-            url = self.env['ir.config_parameter'].get_param(
-                'commown_cooperative_campaign.base_url')
+            url = ws_utils.coop_ws_base_url(self.env)
 
             # Each contract invoice starts by optin, to allow easy joining
             # of customers when they ask
             try:
-                coop_ws_optin(url, campaign.name, identifier, date,
-                              partner.tz)
+                ws_utils.coop_ws_optin(
+                    url, campaign.name, key, date, partner.tz)
             except requests.HTTPError as exc:
                 # Try to handle double-optin nicely
                 if exc.response.status_code == 422:
@@ -55,7 +54,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 else:
                     raise
 
-            subscriptions = coop_ws_query(url, campaign.name, identifier)
-            result = coop_ws_valid_subscriptions(subscriptions, date)
+            subscriptions = ws_utils.coop_ws_query(url, campaign.name, key)
+            result = ws_utils.coop_ws_valid_subscriptions(subscriptions, date)
 
         return result

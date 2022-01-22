@@ -3,8 +3,7 @@ import datetime
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-from .ws_utils import (phone_to_coop_id, coop_ws_query,
-                       coop_ws_valid_subscriptions)
+from . import ws_utils
 
 
 class Coupon(models.Model):
@@ -27,8 +26,8 @@ class Coupon(models.Model):
         base_url = self.env['ir.config_parameter'].get_param(
             'commown_cooperative_campaign.base_url')
 
-        subscriptions = coop_ws_query(base_url, campaign.name, key)
-        is_valid = coop_ws_valid_subscriptions(
+        subscriptions = ws_utils.coop_ws_query(base_url, campaign.name, key)
+        is_valid = ws_utils.coop_ws_valid_subscriptions(
             subscriptions, datetime.datetime.today())
 
         response = _("Subscription status for %(partner)s is:"
@@ -66,5 +65,6 @@ class Campaign(models.Model):
             ("technical_name", "=", self.name + "-salt"),
         ]).ensure_one()
 
-        return phone_to_coop_id(acc._get_password(), partner.country_id.code,
-                                partner.mobile, partner.phone)
+        return ws_utils.phone_to_coop_id(
+            acc._get_password(), partner.country_id.code,
+            partner.mobile, partner.phone)

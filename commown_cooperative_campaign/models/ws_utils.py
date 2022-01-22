@@ -14,6 +14,11 @@ _logger = logging.getLogger(__name__)
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 
 
+def coop_ws_base_url(env):
+    return env['ir.config_parameter'].get_param(
+        'commown_cooperative_campaign.base_url')
+
+
 def phone_to_coop_id(salt, country_code, *phone_nums):
 
     if not country_code:
