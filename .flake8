@@ -1,0 +1,6 @@
+[flake8]
+exclude = .git
+max-line-length = 80
+
+per-file-ignores =
+    __init__.py:F401
