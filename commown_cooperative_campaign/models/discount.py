@@ -54,7 +54,9 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 else:
                     raise
 
-            subscriptions = ws_utils.coop_ws_query(url, campaign.name, key)
-            result = ws_utils.coop_ws_valid_subscriptions(subscriptions, date)
+            subscriptions = ws_utils.coop_ws_important_events(
+                url, campaign.name, key)
+            result = subscriptions and ws_utils.coop_ws_valid_events(
+                subscriptions[0]["events"], date)
 
         return result

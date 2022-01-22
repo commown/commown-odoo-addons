@@ -32,9 +32,10 @@ class Coupon(models.Model):
         response = [_("Subscription status for %(partner)s is: %(result)s")]
         ctx = {"partner": partner.name}
 
-        subscriptions = ws_utils.coop_ws_query(base_url, campaign.name, key)
-        is_valid = ws_utils.coop_ws_valid_subscriptions(
-            subscriptions, datetime.datetime.today())
+        subscriptions = ws_utils.coop_ws_important_events(
+            base_url, campaign.name, key)
+        is_valid = subscriptions and ws_utils.coop_ws_valid_events(
+            subscriptions[0]["events"], datetime.datetime.today())
 
         if is_valid:
             response.append(u"%(details)s")
