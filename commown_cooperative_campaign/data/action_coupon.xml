@@ -25,7 +25,7 @@
       <field name="model_id" ref="model_coupon_coupon"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
-      <field name="code">record.action_coop_campaign_optin_now()</field>
+      <field name="code">action = record.action_coop_campaign_optin_now()</field>
     </record>
 
     <record id="action_menu_coop_campaign_optin_now" model="ir.values">

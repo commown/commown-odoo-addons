@@ -64,13 +64,17 @@ class Coupon(models.Model):
 
     @api.multi
     def action_coop_campaign_optin_now(self):
-        partner, key = self._action_coop_prerequisites()
-        campaign = self.campaign_id
-        base_url = ws_utils.coop_ws_base_url(self.env)
-
-        date = datetime.datetime.today()
-        ws_utils.coop_ws_optin(base_url, campaign.name, key, date, partner.tz)
-        raise UserError(_("Single-side manual optin ok"))
+        view = self.env.ref("commown_cooperative_campaign."
+                            "wizard_late_optin_form")
+        return {
+            "type": "ir.actions.act_window",
+            "src_model": "coupon.coupon",
+            "res_model": "coupon.late.optin.wizard",
+            "name": _("Cooperative campaign late optin"),
+            "views": [(view.id, "form")],
+            "target": "new",
+            "context": {"default_coupon_id": self.id},
+        }
 
 
 class Campaign(models.Model):
