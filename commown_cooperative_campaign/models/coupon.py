@@ -29,29 +29,36 @@ class Coupon(models.Model):
         campaign = self.campaign_id
         base_url = ws_utils.coop_ws_base_url(self.env)
 
-        response = [_("Subscription status for %(partner)s is: %(result)s")]
+        response = [
+            _("Subscription status for %(partner)s is: %(result)s"),
+            u"%(details)s",
+        ]
         ctx = {"partner": partner.name}
+        lang = self.env["res.lang"].search([("code", "=", self.env.lang)])
 
         subscriptions = ws_utils.coop_ws_important_events(
             base_url, campaign.name, key)
+
         is_valid = subscriptions and ws_utils.coop_ws_valid_events(
             subscriptions[0]["events"], datetime.datetime.today())
 
         if is_valid:
-            response.append(u"%(details)s")
-            lang = self.env["res.lang"].search([("code", "=", self.env.lang)])
             ctx.update({
-                "details": ws_utils.coop_human_readable_subscriptions(
+                "details": ws_utils.coop_human_readable_important_events(
                     subscriptions, lang.date_format + " " + lang.time_format),
-                "result": _("subscribed"),
+                "result": _("fully subscribed"),
             })
 
         else:
-            response.append(_("Key: %(key)s"))
+            # Has incomplete subscriptions?
+            subscriptions = ws_utils.coop_ws_subscriptions(
+                base_url, campaign.name, key)
             ctx.update({
-                "key": key,
-                "result": _("not subscribed"),
+                "details": ws_utils.coop_human_readable_subscriptions(
+                    subscriptions, lang.date_format + " " + lang.time_format),
+                "result": _("not fully subscribed"),
             })
+            response.append(_("Key: %(key)s") % {"key": key})
 
         raise UserError(u"\n--\n".join(response) % ctx)
 
