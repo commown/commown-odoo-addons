@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import contextlib
 import datetime
+import logging
 
 import phonenumbers
 import requests
@@ -13,6 +14,7 @@ from odoo import fields
 from odoo.addons.commown_cooperative_campaign.models import ws_utils
 
 
+_logger = logging.getLogger(__file__)
 TC2021_ID = 36
 
 
@@ -79,6 +81,45 @@ def has_coupon(contract):
         ("used_for_sale_id", "in", sales.ids),
         ("campaign_id.name", "=", "TeleCommown2021")
     ])
+
+
+def check_once_applied_is_forever(env):
+    tc2021 = env["coupon.campaign"].browse(TC2021_ID)
+    base_url = telecommown_base_url(env)
+    now = datetime.datetime.now()
+
+    inv_lines = env["account.invoice.line"].search([
+        ("name", "like", tc2021.name),
+    ])
+
+    partner_contracts = {il.partner_id: il.invoice_id.contract_id
+                         for il in inv_lines}
+
+    for partner, contract in partner_contracts.items():
+        # print(partner.name)
+        key = tc2021.coop_partner_identifier(partner)
+        resp = ws_utils.coop_ws_important_events(base_url, tc2021.name, key)
+        if not resp:
+            lang = env["res.lang"].search([("code", "=", partner.lang)])
+            subscriptions = ws_utils.coop_ws_subscriptions(
+                base_url, tc2021.name, key)
+            details = ws_utils.coop_human_readable_subscriptions(
+                subscriptions, lang.date_format + " " + lang.time_format),
+            _logger.error(
+                u"INCOMPLETE SUBSCRIPTION (next invoice: %s):\n"
+                u"%s;%s\n"
+                u"Details:\n%s\n"
+                u"Key:%s\n",
+                contract.recurring_next_date,
+                partner.name, partner.mobile or partner.phone,
+                u"\n".join(details),
+                key,
+            )
+            continue
+        events = {e["type"]: ws_utils.parse_ws_date(e["ts"])
+                  for e in resp[0]["events"]}
+        assert events["optin"] <= now
+        assert events["optout"] > now + datetime.timedelta(days=100)
 
 
 def reactivate_subscribed_partners(env, debug=True):
