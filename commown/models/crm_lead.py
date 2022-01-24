@@ -17,7 +17,7 @@ class CrmLead(models.Model):
         super(CrmLead, self).delivery_perform_actions()
         for record in self.filtered('start_contract_on_delivery'):
             contract = record.contract_id
-            contract.update({
+            contract.sudo().update({
                 'date_start': record.delivery_date,
                 'is_auto_pay': True,
             })
