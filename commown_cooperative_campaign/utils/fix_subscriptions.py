@@ -10,9 +10,7 @@ import requests
 
 from odoo import fields
 
-from odoo.addons.commown_cooperative_campaign.models.ws_utils import (
-    coop_ws_optin, coop_ws_optout, phone_to_coop_id
-)
+from odoo.addons.commown_cooperative_campaign.models import ws_utils
 
 
 TC2021_ID = 36
@@ -42,9 +40,9 @@ def replace_subscription(campaign, old_key, new_key, date=None,
     if date is None:
         date = datetime.date.today()
 
-    base_url = telecommown_base_url(campaign.env)
-    coop_ws_optout(base_url, campaign.name, old_key, date, tz)
-    coop_ws_optin(base_url, campaign.name, new_key, date, tz)
+    base_url = ws_utils.coop_ws_base_url(campaign.env)
+    ws_utils.coop_ws_optout(base_url, campaign.name, old_key, date, tz)
+    ws_utils.coop_ws_optin(base_url, campaign.name, new_key, date, tz)
 
 
 def change_phonenumber(campaign, old_phone, partner):
@@ -52,8 +50,9 @@ def change_phonenumber(campaign, old_phone, partner):
     acc = env["keychain.account"].search([
         ("technical_name", "=", campaign.name + "-salt"),
     ]).ensure_one()
-    old_key = phone_to_coop_id(acc._get_password(), partner.country_id.code,
-                               partner.mobile, partner.phone)
+    old_key = ws_utils.phone_to_coop_id(
+        acc._get_password(), partner.country_id.code,
+        partner.mobile, partner.phone)
     new_key = campaign.coop_partner_identifier(partner)
     if not new_key:
         raise ValueError(u"Cannot build new identifier for %s" % partner.name)
@@ -82,7 +81,6 @@ def has_coupon(contract):
     ])
 
 
-
 def reactivate_subscribed_partners(env, debug=True):
 
     tc2021 = env["coupon.campaign"].browse(TC2021_ID)
@@ -100,8 +98,8 @@ def reactivate_subscribed_partners(env, debug=True):
         with json_exc(False):
             print(u"opt-in partner %d: %s" % (partner.id, partner.name))
             if not debug:
-                coop_ws_optin(base_url, tc2021.name, key, optin_date,
-                              partner.tz, hour=0)
+                ws_utils.coop_ws_optin(base_url, tc2021.name, key, optin_date,
+                                       partner.tz, hour=0)
 
 
 def activate_asking_partners(env, debug=True):
@@ -145,7 +143,6 @@ def activate_asking_partners(env, debug=True):
 
     base_url = telecommown_base_url(env)
     min_optin_date = datetime.date(2022, 1, 1)
-    today = datetime.date.today()
 
     def create_discount(cline):
         next_inv_date = fields.Date.from_string(
@@ -210,8 +207,8 @@ def activate_asking_partners(env, debug=True):
                              telecoop_phone(partner),
                              optin_date.isoformat()]))
             if not debug:
-                coop_ws_optin(base_url, tc2021.name, key, optin_date,
-                              partner.tz, hour=0)
+                ws_utils.coop_ws_optin(base_url, tc2021.name, key, optin_date,
+                                       partner.tz, hour=0)
 
         last_invoice = env["account.invoice"].search([
             ("contract_id", "=", contract.id),
@@ -219,8 +216,7 @@ def activate_asking_partners(env, debug=True):
         if (fields.Date.from_string(last_invoice.date_invoice) >= optin_date
             and not any(
                 tc2021.name in line.name
-                for line in last_invoice.invoice_line_ids)
-            ):
+                for line in last_invoice.invoice_line_ids)):
             cline = contract.recurring_invoice_line_ids[0]
             print(u"Contract %s did not benefit from %s. Modifying line %s"
                   % (contract.name, tc2021.name, cline.name))

@@ -3,7 +3,7 @@ import logging
 from odoo import models, fields, api
 from odoo.addons.queue_job.job import job
 
-from .ws_utils import coop_ws_optout
+from . import ws_utils
 
 
 _logger = logging.getLogger(__file__)
@@ -16,9 +16,8 @@ class Contract(models.Model):
     @job(default_channel="root")
     def _coop_ws_optout(self, campaign, customer_key, date_end, tz):
         self.ensure_one()
-        url = self.env['ir.config_parameter'].sudo().get_param(
-            'commown_cooperative_campaign.base_url')
-        coop_ws_optout(url, campaign.name, customer_key, date_end, tz)
+        url = ws_utils.coop_ws_base_url(self.env)
+        ws_utils.coop_ws_optout(url, campaign.name, customer_key, date_end, tz)
 
     @api.multi
     def write(self, values):

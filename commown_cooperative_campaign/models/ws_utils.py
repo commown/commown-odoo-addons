@@ -9,9 +9,16 @@ import iso8601
 import phonenumbers
 import requests
 
+from odoo import _
+
 
 _logger = logging.getLogger(__name__)
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
+
+
+def coop_ws_base_url(env):
+    return env['ir.config_parameter'].get_param(
+        'commown_cooperative_campaign.base_url')
 
 
 def phone_to_coop_id(salt, country_code, *phone_nums):
@@ -38,11 +45,15 @@ def parse_ws_date(str_date):
     return _date.replace(tzinfo=None) - _date.utcoffset()
 
 
-def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
+def format_ws_date(str_date, dt_format):
+    return parse_ws_date(str_date).strftime(dt_format)
+
+
+def coop_ws_important_events(base_url, campaign_ref, customer_key):
     "Query the cooperative web services to see if a subscription is active"
 
-    _logger.info(u"Querying %s, campaign %s, identifier %s (date %s)",
-                 base_url, campaign_ref, customer_key, date.isoformat())
+    _logger.info(u"Querying %s, campaign %s, identifier %s",
+                 base_url, campaign_ref, customer_key)
 
     url = (base_url + "/campaigns/%s/subscriptions/important-events"
            % urllib.quote_plus(campaign_ref))
@@ -51,15 +62,84 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
 
     subscriptions = resp.json()
     _logger.debug(u"Got web services response:\n %s", pformat(subscriptions))
+    return subscriptions
+
+
+def coop_ws_valid_events(events, date, hour=12):
+    events = {e["type"]: parse_ws_date(e["ts"]) for e in events}
+    dt = datetime(date.year, date.month, date.day, hour=hour)
+    if "optin" not in events or events["optin"] >= dt:
+        return False
+    if "optout" in events and events["optout"] < dt:
+        return False
+    return True
+
+
+def _hr_optin_out(optin_ts, optout_ts, dt_format):
+    result = format_ws_date(optin_ts, dt_format)
+    if optout_ts:
+        result += format_ws_date(optout_ts, dt_format)
+    return result
+
+
+def _hr_details(subscription_details, dt_format):
+    result = []
+    for member, details in subscription_details.items():
+        if "optin_ts" not in details:
+            result.append(_("not subscribed"))
+        else:
+            _optinout = _hr_optin_out(details["optin_ts"], details["optout_ts"],
+                                      dt_format)
+            result.append((u"- %s: %s" % (member, _optinout)))
+    return u"\n".join(result)
+
+
+def coop_human_readable_important_events(events, dt_format):
+    if not events:
+        return _("No important subscription events")
+
+    result = "" if len(events) == 1 else _("%d subscription events:\n")
+
+    for num, event in enumerate(events):
+        if num:
+            result += u"\n\n"
+        ctx = {
+            "key": event["customer_key"],
+            "validity": u" >> ".join(
+                sorted(format_ws_date(e["ts"], dt_format)
+                       for e in event["events"])),
+            "details": _hr_details(event["details"], dt_format),
+        }
+        result += _("Validity: %(validity)s\n"
+                    "--\n"
+                    "Key: %(key)s\n"
+                    "--\n"
+                    "Details:\n%(details)s\n"
+                    ) % ctx
+    return result
+
+
+def coop_human_readable_subscriptions(subscriptions, dt_format):
+    if not subscriptions:
+        return _("No subscription at all (to any partner)")
+
+    result = []
+
+    for i, sub in enumerate(subscriptions):
+        member = sub["member"]["login"]
+        if not i:
+            missing = sorted(m["login"] for m in sub["campaign"]["members"]
+                             if m["login"] != member)
+        result.append(_("Subscription to %(member)s: %(optinout)s") % {
+            "member": member,
+            "optinout": _hr_optin_out(
+                sub["optin_ts"], sub["optout_ts"], dt_format),
+        })
+
     if subscriptions:
-        events = {e["type"]: parse_ws_date(e["ts"])
-                  for e in subscriptions[0]["events"]}
-        dt = datetime(date.year, date.month, date.day, hour=hour)
-        if "optin" not in events or events["optin"] >= dt:
-            return False
-        if "optout" in events and events["optout"] < dt:
-            return False
-        return True
+        result.append(_("No subscription to %s.") % u",".join(missing))
+
+    return u"\n".join(result)
 
 
 def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
@@ -97,3 +177,19 @@ def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
 
     resp_data = resp.json()
     _logger.debug(u"Got web services response:\n %s", pformat(resp_data))
+
+
+def coop_ws_subscriptions(base_url, campaign_ref, customer_key):
+    "Query the cooperative web services to list customer subscriptions"
+
+    _logger.debug(u"Querying details %s, campaign %s, identifier %s",
+                  base_url, campaign_ref, customer_key)
+
+    url = (base_url + "/campaign/%s/subscriptions"
+           % urllib.quote_plus(campaign_ref))
+    resp = requests.get(url, params={"customer_key": customer_key})
+    resp.raise_for_status()
+
+    subscriptions = resp.json()
+    _logger.debug(u"Got web services response:\n %s", pformat(subscriptions))
+    return subscriptions

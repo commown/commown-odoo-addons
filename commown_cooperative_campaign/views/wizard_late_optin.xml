@@ -1,0 +1,23 @@
+<odoo>
+
+  <record id="wizard_late_optin_form" model="ir.ui.view">
+    <field name="name">[commown] Cooperative campaign late optin form</field>
+    <field name="model">coupon.late.optin.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Cooperative campaign late optin">
+        <sheet>
+          <group>
+            <field name="coupon_id" invisible="1"/>
+            <field name="date"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="late_optin" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>
