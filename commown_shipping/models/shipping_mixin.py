@@ -144,7 +144,7 @@ class CommownShippingMixin(models.AbstractModel):
                      }
             domain = [(k, '=', v) for k, v in attrs.items()]
             for att in self.env['ir.attachment'].search(domain):
-                att.unlink()
+                att.sudo().unlink()
             attrs.update({
                 'mimetype': u'application/pdf',
                 'datas': data,
@@ -152,7 +152,7 @@ class CommownShippingMixin(models.AbstractModel):
                 'public': False,
                 'type': 'binary',
                 })
-            return self.env['ir.attachment'].create(attrs)
+            return self.env['ir.attachment'].sudo().create(attrs)
 
         finally:
             for p in (fpath, result_path):
