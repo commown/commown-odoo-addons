@@ -225,13 +225,12 @@
           <t t-raw="tool_form or ''"/>
 
           <div class="form-group">
-            <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toutes les informations que vous jugerez utile :</label>
+            <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toute information que vous jugerez utile :</label>
             <textarea class="form-control" rows="3" t-attf-id="more_info_step_{{ step }}" name="more_info"/>
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id"
-                   t-att-value="env.ref('commown_self_troubleshooting.stage_pending').id"/>
+            <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_pending').id"/>
             <button type="submit" class="btn btn-primary" name="action" value="ship">Confirmer ma demande</button>
           </div>
         </div>
