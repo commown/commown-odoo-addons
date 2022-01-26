@@ -9,58 +9,16 @@
       <field name="location_id" eval="ref('stock.stock_location_stock')"/>
     </record>
 
-    <record id="stock_location_fp3_new" model="stock.location">
-      <field name="name">New Fairphone 3</field>
-      <field name="usage">internal</field>
+    <record id="stock_location_new_devices" model="stock.location">
+      <field name="name">New devices</field>
+      <field name="usage">view</field>
       <field name="partner_id">1</field>
       <field name="location_id" ref="stock_location_available_for_rent"/>
     </record>
 
-    <record id="stock_location_headsets_new" model="stock.location">
-      <field name="name">New headsets</field>
-      <field name="usage">internal</field>
-      <field name="partner_id">1</field>
-      <field name="location_id" ref="stock_location_available_for_rent"/>
-    </record>
-
-    <record id="stock_location_why_computers_new" model="stock.location">
-      <field name="name">New Why computers</field>
-      <field name="usage">internal</field>
-      <field name="partner_id">1</field>
-      <field name="location_id" ref="stock_location_available_for_rent"/>
-    </record>
-
-    <record id="stock_location_why_computers_repackaged" model="stock.location">
-      <field name="name">Repackaged Why computers</field>
-      <field name="usage">internal</field>
-      <field name="partner_id">1</field>
-      <field name="location_id" ref="stock_location_available_for_rent"/>
-    </record>
-
-    <record id="stock_location_crosscall_new" model="stock.location">
-      <field name="name">New Croscall smartphone and tablets</field>
-      <field name="usage">internal</field>
-      <field name="partner_id">1</field>
-      <field name="location_id" ref="stock_location_available_for_rent"/>
-    </record>
-
-    <record id="stock_location_crosscall_repackaged" model="stock.location">
-      <field name="name">Repackaged Croscall smartphone and tablets</field>
-      <field name="usage">internal</field>
-      <field name="partner_id">1</field>
-      <field name="location_id" ref="stock_location_available_for_rent"/>
-    </record>
-
-    <record id="stock_location_fp3_repackaged" model="stock.location">
-      <field name="name">Repackaged Fairphone 3</field>
-      <field name="usage">internal</field>
-      <field name="partner_id">1</field>
-      <field name="location_id" ref="stock_location_available_for_rent"/>
-    </record>
-
-    <record id="stock_location_headsets_repackaged" model="stock.location">
-      <field name="name">Repackaged headsets</field>
-      <field name="usage">internal</field>
+    <record id="stock_location_repackaged_devices" model="stock.location">
+      <field name="name">Repackaged devices</field>
+      <field name="usage">view</field>
       <field name="partner_id">1</field>
       <field name="location_id" ref="stock_location_available_for_rent"/>
     </record>
