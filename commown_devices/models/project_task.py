@@ -30,17 +30,23 @@ class ProjectTask(models.Model):
         return domain
 
     def _compute_lot_domain(self):
+        product = self.storable_product_id
         if self.contract_id:
             quants = self.contract_id.quant_ids
         else:
-            quants = self.env["stock.quant"].search([
-                ("location_id", "child_of", self.env.ref(
-                    "commown_devices.stock_location_devices_to_check").id),
-            ])
+            qdom = ["|",
+                    ("location_id", "child_of", self.env.ref(
+                        "commown_devices.stock_location_devices_to_check").id),
+                    ("location_id", "child_of", self.env.ref(
+                        "commown_devices.stock_location_new_devices").id),
+                    ]
+            if product:
+                qdom.append(("lot_id.product_id", "=", product.id))
+            quants = self.env["stock.quant"].search(qdom)
         domain = [("id", "in", quants.mapped("lot_id").ids)]
 
-        if self.storable_product_id:
-            domain.append(("product_id", "=", self.storable_product_id.id))
+        if product:
+            domain.append(("product_id", "=", product.id))
 
         return domain
 
