@@ -35,6 +35,14 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         })
         self.so.action_confirm()
 
+        self.location_fp3_new = self.env["stock.location"].create({
+            "name": u"New FP3 devices",
+            "usage": u"internal",
+            "partner_id": 1,
+            "location_id": self.env.ref("commown_devices"
+                                        ".stock_location_new_devices").id,
+        })
+
     def adjust_stock(self, product=None, qty=1., serial=u'serial-0',
                      location=None, date="2000-01-01"):
         if product is None:
@@ -43,8 +51,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             'name': serial,
             'product_id': product.id,
         })
-        location = location or self.env.ref(
-            'commown_devices.stock_location_fp3_new')
+        location = location or self.location_fp3_new
 
         old_quants = self.env["stock.quant"].search([])
         product_qty = self.env['stock.change.product.qty'].create({
