@@ -243,8 +243,7 @@
 
         <t t-set="tool_intro">
           <p>Vous aurez besoin d’un tout petit tournevis cruciforme,
-          de taille #0 (voir <a target="_blank"
-          href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici</a>).
+          de taille #0 (voir <a target="_blank" href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici</a>).
           Nous pouvons vous en prêter un à nous retourner ensuite avec
           le module en panne.
           </p>
@@ -254,13 +253,10 @@
           <div class="form-group">
             <p>Avez-vous besoin d'un tournevis ?</p>
             <label class="radio-inline" for="screwdriver-yes">Oui</label>
-            <input type="radio" name="screwdriver" id="screwdriver-yes"
-                   value="yes" required="required"
-                   data-required-error="Dites-nous si vous avez besoin d'un tournevis."></input>
+            <input type="radio" name="screwdriver" id="screwdriver-yes" value="yes" required="required" data-required-error="Dites-nous si vous avez besoin d'un tournevis."/>
             <label class="radio-inline" for="screwdriver-no">Non</label>
-            <input type="radio" name="screwdriver" id="screwdriver-no"
-                   value="no" required="required"></input>
-            <div class="help-block with-errors"></div>
+            <input type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required"/>
+            <div class="help-block with-errors"/>
           </div>
         </t>
 
