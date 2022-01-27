@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 10:40+0000\n"
-"PO-Revision-Date: 2022-01-27 10:40+0000\n"
+"POT-Creation-Date: 2022-01-27 11:45+0000\n"
+"PO-Revision-Date: 2022-01-27 11:45+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -48,6 +48,7 @@ msgstr "Annuler"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_stock_picking_contract_id
+#: model:ir.model.fields,field_description:commown_devices.field_stock_quant_contract_id
 msgid "Contract"
 msgstr "Contrat"
 
@@ -117,6 +118,12 @@ msgstr "Appareil concerné"
 #: model:ir.ui.view,arch_db:commown_devices.account_analytic_account_recurring_form_form
 msgid "Device moves"
 msgstr "Mouvements d'appareils"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_account_analytic_account_quant_nb
+#: model:ir.model.fields,field_description:commown_devices.field_project_project_quant_nb
+msgid "Device number"
+msgstr "Nb appareils"
 
 #. module: commown_devices
 #: model:ir.ui.view,arch_db:commown_devices.edit_project
@@ -264,6 +271,11 @@ msgstr "Projet"
 #: model:ir.model,name:commown_devices.model_project_issue
 msgid "Project Issue"
 msgstr "Incident"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_stock_quant
+msgid "Quants"
+msgstr "Quants"
 
 #. module: commown_devices
 #: model:ir.ui.view,arch_db:commown_devices.wizard_project_issue_inward_picking_form
