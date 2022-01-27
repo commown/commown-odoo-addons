@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-20 22:31+0000\n"
-"PO-Revision-Date: 2021-12-20 22:31+0000\n"
+"POT-Creation-Date: 2022-01-27 10:40+0000\n"
+"PO-Revision-Date: 2022-01-27 10:40+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,13 +26,13 @@ msgid "Article"
 msgstr "Article"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_issue_picking.py:34
+#: code:addons/commown_devices/models/wizard_project_issue_picking.py:36
 #, python-format
 msgid "Can't move device: no device set on this issue!"
 msgstr "Mouvement impossible : aucun appareil n'est paramétré sur cet incident !"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:71
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:70
 #, python-format
 msgid "Can't move device: no device set on this task!"
 msgstr "Mouvement impossible : aucun appareil n'est paramétré sur cette tâche !"
@@ -197,7 +197,7 @@ msgstr "Dernière mise à jour le"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard_lead_id
 msgid "Lead"
-msgstr "Opportunité"
+msgstr "Piste"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_crm_lead
@@ -220,14 +220,9 @@ msgid "Move involved device"
 msgstr "Déplacer l'appareil concerné"
 
 #. module: commown_devices
-#: model:stock.location,name:commown_devices.stock_location_fp3_new
-msgid "New Fairphone 3"
-msgstr "Fairphone 3/3+ neufs"
-
-#. module: commown_devices
-#: model:stock.location,name:commown_devices.stock_location_headsets_new
-msgid "New headsets"
-msgstr "Casques audios neufs"
+#: model:stock.location,name:commown_devices.stock_location_new_devices
+msgid "New devices"
+msgstr "Appareils neufs"
 
 #. module: commown_devices
 #: model:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
@@ -276,14 +271,9 @@ msgid "Receive a device"
 msgstr "Rapatrier un appareil"
 
 #. module: commown_devices
-#: model:stock.location,name:commown_devices.stock_location_fp3_repackaged
-msgid "Repackaged Fairphone 3"
-msgstr "Fairphone 3/3+ reconditionnés"
-
-#. module: commown_devices
-#: model:stock.location,name:commown_devices.stock_location_headsets_repackaged
-msgid "Repackaged headsets"
-msgstr "Casques audios reconditionnés"
+#: model:stock.location,name:commown_devices.stock_location_repackaged_devices
+msgid "Repackaged devices"
+msgstr "Appareils reconditionnés"
 
 #. module: commown_devices
 #: model:stock.location,name:commown_devices.stock_location_repairer
@@ -292,7 +282,7 @@ msgstr "Réparateurs"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/project_issue.py:58
-#: code:addons/commown_devices/models/project_task.py:95
+#: code:addons/commown_devices/models/project_task.py:101
 #, python-format
 msgid "Scrap device"
 msgstr "Mettre un appareil au rebut"
