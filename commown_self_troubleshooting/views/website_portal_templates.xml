@@ -103,7 +103,7 @@
       <field name="arch" type="xml">
 
         <t name="Web layout for self troubleshooting pages"
-           t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
+          t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
         <html t-att="html_data or {}">
           <head>
             <meta charset="utf-8"/>
@@ -123,18 +123,18 @@
             </script>
 
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
+              href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
+              href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
+              href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/fontawesome-5.13.0/css/all.min.css"/>
+              href="/commown_self_troubleshooting/static/src/fontawesome-5.13.0/css/all.min.css"/>
 
-            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"/>
+            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"/>
+            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"/>
+            <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"/>
 
             <t t-raw="head or ''"/>
 
@@ -146,6 +146,7 @@
 
         </html>
         </t>
+
       </field>
     </record>
 
