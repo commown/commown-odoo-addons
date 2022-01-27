@@ -163,10 +163,9 @@
     </template>
 
     <template id="step-contact-human">
-      <t t-set="contracts"
-         t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
+      <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])"/>
       <div t-attf-id="step-{{ step }}">
-        <h2><i class="fas fa-hands-helping"></i> Contacter un humain</h2> <p>Vous pouvez ici
+        <h2><i class="fas fa-hands-helping"/> Contacter un humain</h2> <p>Vous pouvez ici
         directement créer une demande d'assistance à
         notre intention en expliquant au mieux le souci
         que vous rencontrez ci-dessous.</p>
@@ -189,13 +188,11 @@
 
           <div class="form-group">
             <label t-attf-for="more_info_step_{{ step }}">En quoi pouvons-nous vous aider ?</label>
-            <textarea class="form-control" rows="3" required="required"
-                      t-attf-id="more_info_step_{{ step }}" name="more_info"/>
+            <textarea class="form-control" rows="3" required="required" t-attf-id="more_info_step_{{ step }}" name="more_info"/>
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id"
-                   t-att-value="env.ref('commown_self_troubleshooting.stage_received').id"/>
+            <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_received').id"/>
             <button type="submit" class="btn btn-primary" name="action" value="contact">Envoyer les informations</button>
           </div>
 
