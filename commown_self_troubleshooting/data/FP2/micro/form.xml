@@ -15,7 +15,7 @@
 
                   const wizard = setUpWizard($('#smartwizard'));
 
-                  $('input[type="radio"][name="mute-solved"]').change(function () {
+                  $('input[type="radio"][name="mute_solved"]').change(function () {
                     const isNo = this.value!=='yes';
                     wizard.toggleStep(2, isNo);
                     wizard.toggleStep(3, isNo);
@@ -76,10 +76,10 @@
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label>Ce test a t-il permis de résoudre le problème ?</label>
-                          <label class="radio-inline" for="mute-solved-yes">Oui</label>
-                          <input type="radio" name="mute-solved" id="mute-solved-yes" value="yes" required="required" data-required-error="Dites-nous si ce test a permis de régler le problème."/>
-                          <label class="radio-inline" for="mute-solved-no">Non</label>
-                          <input type="radio" name="mute-solved" id="mute-solved-no" value="no" required="required"/>
+                          <label class="radio-inline" for="mute_solved-yes">Oui</label>
+                          <input type="radio" name="mute_solved" id="mute_solved-yes" value="yes" required="required" data-required-error="Dites-nous si ce test a permis de régler le problème."/>
+                          <label class="radio-inline" for="mute_solved-no">Non</label>
+                          <input type="radio" name="mute_solved" id="mute_solved-no" value="no" required="required"/>
                           <div class="help-block with-errors"/>
                         </div>
                       </div>
