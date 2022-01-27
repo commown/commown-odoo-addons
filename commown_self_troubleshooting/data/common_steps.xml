@@ -11,31 +11,27 @@
     </template>
 
     <template id="step-contract-choice">
-      <t t-set="contracts"
-         t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
+      <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id),
+        ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])"/>
       <div id="step-0">
         <div class="clearfix">
           <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png"
-               alt="Logo de commown" />
+            alt="Logo de commown"/>
           <h2>Appareil concerné</h2>
         </div>
         <p>Choisissez ci-dessous le contrat dont l'appareil en panne fait l'objet.</p>
         <div id="form-step-0" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="device_contract">Contrat de votre appareil :</label>
-            <select class="form-control" required="required"
-                    id="device_contract" name="device_contract"
-                    data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
+            <select class="form-control" required="required" id="device_contract" name="device_contract"
+              data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
               <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
               <t t-foreach="contracts" t-as="c">
                 <t t-set="date" t-value="c.date_start.split('-')"/>
-                <option
-                    t-att-value="c.id"
-                    t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"
-                    />
+                <option t-att-value="c.id" t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"/>
               </t>
             </select>
-            <div class="help-block with-errors"></div>
+            <div class="help-block with-errors"/>
           </div>
         </div>
       </div>
