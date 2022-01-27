@@ -66,8 +66,8 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
     def test_outward_ui(self):
 
-        loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
-        loc_rep = self.env.ref("commown_devices.stock_location_fp3_repackaged")
+        loc_new = self.location_fp3_new
+        loc_rep = loc_new.copy({"name": u"Repackaged FP3 devices"})
 
         self.adjust_stock(serial=u"my-fp3-1", location=loc_new)
         self.adjust_stock(serial=u"my-fp3-2", location=loc_new)
@@ -107,7 +107,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
     def test_outward_picking(self):
         # Test setup
-        loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
+        loc_new = self.location_fp3_new
         self.adjust_stock(serial=u"my-fp3", location=loc_new)
 
         # Create the wizard and the picking
@@ -131,7 +131,7 @@ class WizardProjectIssuePickingTC(DeviceAsAServiceTC):
 
     def test_inward_ui(self):
         # Test setup: 2 devices at the customer's location, 1 somewhere else
-        loc_new = self.env.ref("commown_devices.stock_location_fp3_new")
+        loc_new = self.location_fp3_new
         self.adjust_stock(serial=u"my-fp3-1", location=loc_new)
         self.send_device(u"my-fp3-1")
         self.adjust_stock(serial=u"my-fp3-2", location=loc_new)
