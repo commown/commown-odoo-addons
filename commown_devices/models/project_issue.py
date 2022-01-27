@@ -23,10 +23,18 @@ class ProjectIssue(models.Model):
         if self.contract_id:
             domain.append(
                 ("id", "in", self.contract_id.mapped("quant_ids.lot_id").ids))
+        elif self.partner_id:
+            contracts = self.env["account.analytic.account"].search([
+                ("partner_id.commercial_partner_id", "=",
+                 self.partner_id.commercial_partner_id.id),
+                ("recurring_invoices", "=", True),
+            ])
+            domain.append(
+                ("id", "in", contracts.mapped("quant_ids.lot_id").ids))
         return domain
 
-    @api.onchange("contract_id")
-    def onchange_contract_id_set_lot_id(self):
+    @api.onchange("partner_id", "contract_id")
+    def onchange_partner_id_or_contract_id_set_lot_id(self):
         # Protect against onchange loop
         if self.lot_id not in self.contract_id.mapped("quant_ids.lot_id"):
             self.lot_id = self._default_lot_id() or False
