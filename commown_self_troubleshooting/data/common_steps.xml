@@ -129,7 +129,7 @@
 
     <template id="step-self-solved">
       <div t-attf-id="step-{{ step }}">
-        <h2><i class="far fa-thumbs-up" aria-hidden="true"></i> Problème résolu</h2>
+        <h2><i class="far fa-thumbs-up" aria-hidden="true"/> Problème résolu</h2>
         <p>Vous avez réussi à résoudre le problème, bravo !</p>
         <p>Nous espérons que cet outil vous a été utile pour y parvenir.</p>
         <p>Dans le but de nous aider à améliorer continuellement le service aux
@@ -144,13 +144,12 @@
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
           <div class="form-group">
-            <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toutes les informations que vous jugerez utile :</label>
+            <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toute information que vous jugerez utile :</label>
             <textarea class="form-control" rows="3" t-attf-id="more_info_step_{{ step }}" name="more_info"/>
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id"
-                   t-att-value="env.ref('commown_self_troubleshooting.stage_solved').id"/>
+            <input type="hidden" name="stage_id"/>
             <button type="submit" class="btn btn-primary" name="action" value="inform">Envoyer les informations</button>
           </div>
 
