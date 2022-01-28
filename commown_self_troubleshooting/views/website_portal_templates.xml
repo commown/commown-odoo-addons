@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data noupdate="1">
-
     <template id="web_layout" inherit_id="web.layout">
       <xpath expr="//link[@rel='shortcut icon']" position="after">
         <style>
@@ -24,18 +22,46 @@
         <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('date_end', '=', False)])"/>
         <t t-set="contract_types" t-value="set(c.contract_template_id.name.split(u'/', 1)[0] for c in contracts)"/>
 
+        <h3 class="page-header">Assistance support</h3>
+
+        <div>
+          <div class="list-group">
+            <a target="_blank" class="list-group-item">
+             <b>Prochainement</b> : Ouvrir une nouvelle demande d'assistance
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="list-group">
+            <a target="_blank" class="list-group-item">
+             <b>Prochainement</b> : J'ai une demande concernant la gestion de mon contrat
+            </a>
+          </div>
+        </div>
+
         <h3 t-if="contract_types" class="page-header">Self troubleshooting</h3>
 
         <div t-if="'FP2' in contract_types">
           <h4 class="page-header">Fairphone 2</h4>
           <div class="list-group">
-            <a target="_blank" class="list-group-item"
-               t-attf-href="/page/self-troubleshoot-fp2-camera">
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp2-camera">
               Ma caméra principale fonctionne mal ou plus du tout
             </a>
-            <a target="_blank" class="list-group-item"
-               t-attf-href="/page/self-troubleshoot-fp2-micro">
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp2-micro">
               Mon interlocuteur ne m'entend pas
+            </a>
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp2-battery">
+                Ma batterie se décharge rapidement
+            </a>
+          </div>
+        </div>
+
+        <div t-if="'FP3' in contract_types">
+          <h4 class="page-header">Fairphone 3</h4>
+          <div class="list-group">
+            <a target="_blank" class="list-group-item">
+              <b> Prochainement </b> : Plus rien ne s'affiche à l'écran
             </a>
           </div>
         </div>
@@ -61,7 +87,7 @@
       <field name="arch" type="xml">
 
         <t name="Web layout for self troubleshooting pages"
-           t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
+          t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
         <html t-att="html_data or {}">
           <head>
             <meta charset="utf-8"/>
@@ -81,18 +107,18 @@
             </script>
 
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
+              href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
+              href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
+              href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/fontawesome-5.13.0/css/all.min.css"/>
+              href="/commown_self_troubleshooting/static/src/fontawesome-5.13.0/css/all.min.css"/>
 
-            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
+            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"/>
+            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"/>
+            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"/>
+            <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"/>
 
             <t t-raw="head or ''"/>
 
@@ -104,8 +130,8 @@
 
         </html>
         </t>
+
       </field>
     </record>
 
-  </data>
 </odoo>

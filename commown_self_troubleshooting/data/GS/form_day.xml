@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data noupdate="1">
-
     <record id="gs-day" model="ir.ui.view">
       <field name="name">Self-troubleshoot a GS Day</field>
       <field name="type">qweb</field>
@@ -188,7 +186,5 @@
         </t>
       </field>
     </record>
-
-  </data>
 
 </odoo>

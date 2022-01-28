@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data noupdate="1">
+  <data>
 
     <template id="commown-signature">
         <p>
@@ -11,31 +11,27 @@
     </template>
 
     <template id="step-contract-choice">
-      <t t-set="contracts"
-         t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
+      <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id),
+        ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])"/>
       <div id="step-0">
         <div class="clearfix">
           <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png"
-               alt="Logo de commown" />
+            alt="Logo de commown"/>
           <h2>Appareil concerné</h2>
         </div>
         <p>Choisissez ci-dessous le contrat dont l'appareil en panne fait l'objet.</p>
         <div id="form-step-0" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="device_contract">Contrat de votre appareil :</label>
-            <select class="form-control" required="required"
-                    id="device_contract" name="device_contract"
-                    data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
+            <select class="form-control" required="required" id="device_contract" name="device_contract"
+              data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
               <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
               <t t-foreach="contracts" t-as="c">
                 <t t-set="date" t-value="c.date_start.split('-')"/>
-                <option
-                    t-att-value="c.id"
-                    t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"
-                    />
+                <option t-att-value="c.id" t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"/>
               </t>
             </select>
-            <div class="help-block with-errors"></div>
+            <div class="help-block with-errors"/>
           </div>
         </div>
       </div>
@@ -44,11 +40,10 @@
     <template id="step-ship-module">
       <t t-set="partner" t-value="env.user.partner_id"/>
       <t t-set="delivery" t-value="partner.colissimo_delivery_data()"/>
-      <t t-set="_countries"
-         t-value="env['res.country'].search([('code', 'in', ('FR', 'BE', delivery['countryCode']))])"/>
+      <t t-set="_countries" t-value="env['res.country'].search([('code', 'in', ('FR', 'BE', delivery['countryCode']))])"/>
       <t t-set="countries" t-value="[(c.code, c.name) for c in _countries]"/>
       <div t-attf-id="step-{{ step }}">
-        <h2><i class="fas fa-shipping-fast"></i> Informations d'expédition</h2>
+        <h2><i class="fas fa-shipping-fast"/> Informations d'expédition</h2>
         <p>Nous allons vous envoyer <t t-esc="new_module"/> pour
         résoudre le problème. Veuillez vérifier attentivement
         les informations d'expédition ci-dessous, et les
@@ -59,47 +54,37 @@
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
           <div class="form-group">
-            <label for="name"><i class="fas fa-id-card" aria-hidden="true"></i> Nom complet</label>
-            <input class="form-control" name="name" id="name" required="required"
-                   t-att-value="delivery['firstName'] + ' ' + delivery['lastName']"
-                   data-required-error="Saisissez un nom pour la livraison."/>
+            <label for="name"><i class="fas fa-id-card" aria-hidden="true"/> Nom complet</label>
+            <input class="form-control" name="name" id="name" required="required" t-att-value="delivery['firstName'] + ' ' + delivery['lastName']" data-required-error="Saisissez un nom pour la livraison."/>
             <div class="help-block with-errors"/>
           </div>
 
           <div class="form-group">
-            <label for="street"><i class="fas fa-home"></i> Rue - 1ère ligne</label>
-            <input class="form-control" name="street" id="street" maxlength="35" required="required"
-                   t-att-value="delivery.get('line1') or delivery.get('line2', '')"
-                   data-required-error="Saisissez le numéro et nom de la rue pour la livraison."/>
+            <label for="street"><i class="fas fa-home"/> Rue - 1ère ligne</label>
+            <input class="form-control" name="street" id="street" maxlength="35" required="required" t-att-value="delivery.get('line1') or delivery.get('line2', '')" data-required-error="Saisissez le numéro et nom de la rue pour la livraison."/>
             <div class="help-block with-errors"/>
           </div>
 
           <div class="form-group">
-            <label for="street2"><i class="fas fa-home"></i> Rue - 2ème ligne (si nécessaire)</label>
-            <input class="form-control" name="street2" id="street2" maxlength="35"
-                   t-att-value="delivery.get('line2', '') if delivery.get('line1') else ''"/>
+            <label for="street2"><i class="fas fa-home"/> Rue - 2ème ligne (si nécessaire)</label>
+            <input class="form-control" name="street2" id="street2" maxlength="35" t-att-value="delivery.get('line2', '') if delivery.get('line1') else ''"/>
             <div class="help-block with-errors"/>
           </div>
 
           <div class="row">
             <div class="col-xs-4 form-group">
-              <label for="zipcode"><i class="fas fa-map-marker-alt"></i> C. Postal</label>
-              <input class="form-control" name="zipcode" id="zipcode" required="required"
-                     t-att-value="delivery['zipCode']"
-                     data-required-error="Saisissez un code postal pour la livraison."/>
+              <label for="zipcode"><i class="fas fa-map-marker-alt"/> C. Postal</label>
+              <input class="form-control" name="zipcode" id="zipcode" required="required" t-att-value="delivery['zipCode']" data-required-error="Saisissez un code postal pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
             <div class="col-xs-4 form-group">
-              <label for="city"><i class="fas fa-map-marker-alt"></i> Ville</label>
-              <input class="form-control" name="city" id="city" required="required"
-                     t-att-value="delivery['city']"
-                     data-required-error="Saisissez une ville pour la livraison."/>
+              <label for="city"><i class="fas fa-map-marker-alt"/> Ville</label>
+              <input class="form-control" name="city" id="city" required="required" t-att-value="delivery['city']" data-required-error="Saisissez une ville pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
             <div class="col-xs-4 form-group">
-              <label for="country"><i class="fas fa-map-marker-alt"></i> Pays</label>
-              <select class="form-control" id="country" name="country" required="required"
-                      data-required-error="Saisissez un pays pour la livraison.">
+              <label for="country"><i class="fas fa-map-marker-alt"/> Pays</label>
+              <select class="form-control" id="country" name="country" required="required" data-required-error="Saisissez un pays pour la livraison.">
                 <t t-foreach="countries" t-as="c">
                   <option t-att-selected="1 if c[0]==delivery['countryCode'] else None" t-att-value="c[1]">
                     <t t-esc="c[1]"/>
@@ -112,17 +97,13 @@
 
           <div class="row">
             <div class="col-xs-6 form-group">
-              <label for="phone"><i class="fas fa-phone-alt"></i> N° de mobile</label>
-              <input class="form-control" name="phone" id="phone" type="tel" required="required"
-                     t-att-value="delivery.get('phoneNumber') or delivery.get('mobileNumber', '')"
-                     data-required-error="Saisissez un numéro de téléphone pour la livraison."/>
+              <label for="phone"><i class="fas fa-phone-alt"/> N° de mobile</label>
+              <input class="form-control" name="phone" id="phone" type="tel" required="required" t-att-value="delivery.get('phoneNumber') or delivery.get('mobileNumber', '')" data-required-error="Saisissez un numéro de téléphone pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
             <div class="col-xs-6 form-group">
-              <label for="email"><i class="fas fa-envelope"></i> Adresse email</label>
-              <input class="form-control" name="email" id="email" type="email" required="required"
-                     t-att-value="delivery['email']"
-                     data-required-error="Saisissez une adresse email pour la livraison."/>
+              <label for="email"><i class="fas fa-envelope"/> Adresse email</label>
+              <input class="form-control" name="email" id="email" type="email" required="required" t-att-value="delivery['email']" data-required-error="Saisissez une adresse email pour la livraison."/>
               <div class="help-block with-errors"/>
             </div>
           </div>
@@ -133,7 +114,7 @@
 
     <template id="step-self-solved">
       <div t-attf-id="step-{{ step }}">
-        <h2><i class="far fa-thumbs-up" aria-hidden="true"></i> Problème résolu</h2>
+        <h2><i class="far fa-thumbs-up" aria-hidden="true"/> Problème résolu</h2>
         <p>Vous avez réussi à résoudre le problème, bravo !</p>
         <p>Nous espérons que cet outil vous a été utile pour y parvenir.</p>
         <p>Dans le but de nous aider à améliorer continuellement le service aux
@@ -153,8 +134,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id"
-                   t-att-value="env.ref('commown_self_troubleshooting.stage_solved').id"/>
+            <input type="hidden" name="stage_id"/>
             <button type="submit" class="btn btn-primary" name="action" value="inform">Envoyer les informations</button>
           </div>
 
@@ -163,10 +143,9 @@
     </template>
 
     <template id="step-contact-human">
-      <t t-set="contracts"
-         t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
+      <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])"/>
       <div t-attf-id="step-{{ step }}">
-        <h2><i class="fas fa-hands-helping"></i> Contacter un humain</h2> <p>Vous pouvez ici
+        <h2><i class="fas fa-hands-helping"/> Contacter un humain</h2> <p>Vous pouvez ici
         directement créer une demande d'assistance à
         notre intention en expliquant au mieux le souci
         que vous rencontrez ci-dessous.</p>
@@ -189,13 +168,11 @@
 
           <div class="form-group">
             <label t-attf-for="more_info_step_{{ step }}">En quoi pouvons-nous vous aider ?</label>
-            <textarea class="form-control" rows="3" required="required"
-                      t-attf-id="more_info_step_{{ step }}" name="more_info"/>
+            <textarea class="form-control" rows="3" required="required" t-attf-id="more_info_step_{{ step }}" name="more_info"/>
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id"
-                   t-att-value="env.ref('commown_self_troubleshooting.stage_received').id"/>
+            <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_received').id"/>
             <button type="submit" class="btn btn-primary" name="action" value="contact">Envoyer les informations</button>
           </div>
 
@@ -213,7 +190,7 @@
 
         <p>Une demande d'assistance va être créée automatiquement
         lorsque vous aurez soumis ce formulaire. Vous pourrez y
-        accéder à tout moment depuis votre espace personnel, via la
+        accéder à tout moment depuis <a href=" https://shop.commown.coop/my/issues" target="_blank">votre espace personnel</a>, via la
         section <i>Mes demandes d'assistance</i> pour en suivre
         l'avancement et en consulter l'historique.
         </p>
@@ -230,8 +207,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id"
-                   t-att-value="env.ref('commown_self_troubleshooting.stage_pending').id"/>
+            <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_pending').id"/>
             <button type="submit" class="btn btn-primary" name="action" value="ship">Confirmer ma demande</button>
           </div>
         </div>
@@ -244,8 +220,7 @@
 
         <t t-set="tool_intro">
           <p>Vous aurez besoin d’un tout petit tournevis cruciforme,
-          de taille #0 (voir <a target="_blank"
-          href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici</a>).
+          de taille #0 (voir <a target="_blank" href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici</a>).
           Nous pouvons vous en prêter un à nous retourner ensuite avec
           le module en panne.
           </p>
@@ -255,13 +230,10 @@
           <div class="form-group">
             <p>Avez-vous besoin d'un tournevis ?</p>
             <label class="radio-inline" for="screwdriver-yes">Oui</label>
-            <input type="radio" name="screwdriver" id="screwdriver-yes"
-                   value="yes" required="required"
-                   data-required-error="Dites-nous si vous avez besoin d'un tournevis."></input>
+            <input type="radio" name="screwdriver" id="screwdriver-yes" value="yes" required="required" data-required-error="Dites-nous si vous avez besoin d'un tournevis."/>
             <label class="radio-inline" for="screwdriver-no">Non</label>
-            <input type="radio" name="screwdriver" id="screwdriver-no"
-                   value="no" required="required"></input>
-            <div class="help-block with-errors"></div>
+            <input type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required"/>
+            <div class="help-block with-errors"/>
           </div>
         </t>
 
