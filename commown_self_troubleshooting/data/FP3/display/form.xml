@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="fp3-display" model="ir.ui.view">
+    <field name="name">Self-troubleshoot a broken FP3 display</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-fp3-display</field>
+    <field name="arch" type="xml">
+      <t t-name="website.self-troubleshoot-fp3-display">
+        <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-set="title">Commown - Auto-dépannage - Fairphone 3 : Écran</t>
+          <t t-set="head">
+            <script type="text/javascript">
+              $(document).ready(function() {
+
+                const wizard = setUpWizard($('#smartwizard'));
+
+                $('#type_contrat').change(function () {
+                   wizard.toggleStep(3, this.value==='yes');
+                   wizard.toggleStep(7, this.value==='no');
+                });
+              });
+            </script>
+          </t>
+
+          <!-- Variables à modifier ici -->
+          <t t-set="contract_name_like">FP3/</t>
+          <t t-set="tag_names">FP MOD ecran</t>
+          <t t-set="issue_title">FP3 - Écran </t>
+          <t t-set="issue_description_template">issue-description-fp3-display</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="container">
+            <h1>Auto-dépannage : Fairphone 3</h1>
+            <h2>Plus rien ne s'affiche à l'écran</h2>
+            <br/>
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
+              <input type="hidden" name="tags" id="tags" t-att-value="tag_names"/>
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
+
+              <div id="smartwizard">
+                <ul>
+                  <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                  <li><a href="#step-1">Étape 1<br/><small>Type de contrat</small></a></li>
+                  <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Nettoyage des contacts</small></a></li>
+                  <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Expédition</small></a></li>
+                  <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Confirmation</small></a></li>
+                  <li disabled="disabled"><a href="#step-6">Étape 6<br/><small>Problème résolu</small></a></li>
+                  <li disabled="disabled"><a href="#step-7">Étape 7<br/><small>Commown manipule</small></a></li>
+                </ul>
+
+                <div>
+                  <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+
+                  <div id="step-1">
+                    <div class="clearfix">
+                      <h2>Type de contrat</h2>
+                      <br />
+                    </div>
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="type_contrat">Pouvez-vous nous dire quelle option vous avez choisi ? </label>
+                        <select class="form-control" required="required" id="type_contrat" name="type_contrat" data-required-error="Veuillez sélectionner le type de contrat">
+                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                          <option value="yes">Commown manipule les modules en cas de panne</option>
+                          <option value="no">Je manipule les modules en cas de panne</option>
+                        </select>
+                        <div class="help-block with-errors"/>
+                      </div>
+                    </div>
+
+                  </div>
+
+                    <div id="step-3">
+                      <h2><i class="fas fa-pb-log"/> Nettoyage des contacts </h2>
+                      <br />
+                      <p> La cause la plus fréquente de tels symptômes est l'état des contacts entre le corps de l'appareil et l'écran : c’est un défaut connu et dû à un problème sur une chaîne de fabrication au démarrage du Fairphone 3, qui a été résolu depuis mais malheureusement certains de nos Fairphone 3 achetés tout au début en souffrent visiblement encore. Il faudrait donc démonter l'écran et nettoyer les contacts.
+                      <br />
+                      <p>Pour démonter et remonter l’écran, nous vous invitons à visualiser la vidéo ci-dessous :</p>
+                      <br />
+                      <iframe width="460" height="215" src="https://www.youtube.com/embed/hG6OVPTnrK4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                      <br />
+                      <br />
+                      Passez un coup de chiffon microfibre propre sur les contacts. Le contact entre le corps et l'écran se fait par les petites plaques métalliques vers le centre du corps à côté de l'emplacement de la batterie. Côté écran, des petit pins métalliques se trouvent en face de ces plaques et viennent se poser dessus.
+                      Il faut vérifier que les pins de l'écran sortent bien tous et qu'il n'y a pas de poussières ou de traces sur les plaques du corps.
+                      </p>
+                      <div id="form-step-1" role="form" data-toggle="validator">
+                          <div class="form-group">
+                            <label>Le problème est-il résolu ?</label>
+                            <br />
+                            <br />
+                            <label class="radio-inline" for="net_contact-yes">Oui</label>
+                            <input type="radio" name="net_contact" id="net_contact-yes" value="yes" required="required" data-required-error="Dites-nous si ce démontage a permis de régler le problème."/>
+                            <label class="radio-inline" for="net_contact-no">Non</label>
+                            <input type="radio" name="net_contact" id="net_contact-no" value="no" required="required"/>
+                            <div class="help-block with-errors"/>
+                          </div>
+                        </div>
+                      </div>
+
+                  <t t-call="commown_self_troubleshooting.step-ship-module">
+                    <t t-set="step">4</t>
+                    <t t-set="new_module">un nouvelle écran</t>
+                  </t>
+
+                  <t t-call="commown_self_troubleshooting.step-confirm-change">
+                    <t t-set="step">5</t>
+                  </t>
+
+                  <t t-call="commown_self_troubleshooting.step-self-solved">
+                    <t t-set="step">6</t>
+                  </t>
+
+                  <div id="step-7">
+                    <h2><i class="fas fa-pb-log"/>Commown manipule en cas de panne</h2>
+                    <br />
+                    <div id="form-step-7" role="form" data-toggle="validator">
+                       <div class="form-group">
+                           <textarea id="more_info_step_2" class="form-control" name="more_info"  rows="5" cols="33" required="required"></textarea>
+                       <div class="form-group">
+                      </div>
+                      </div>
+                   </div>
+                 </div>
+
+                </div>
+
+              </div>
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+</odoo>
