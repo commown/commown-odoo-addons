@@ -515,7 +515,7 @@ class ProjectTC(TransactionCase):
         txs = self._invoice_txs(self.invoice)
         self.assertEqual(len(txs), 3)
         self.assertEqual((txs[1], txs[2]), (tx1, tx0))
-        tx2 = txs[0]
+        txs[0]
         payins = self._action_calls(act, 'create-payins')
         self.assertEqual(len(payins), 1)
         self.assertEqual(payins[0][1]['params']['label'], 'dummy label')

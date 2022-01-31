@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 
 from ..models.sale_order import CouponError
 
-from odoo import fields
 from odoo.exceptions import ValidationError, AccessError
 from odoo.tests.common import TransactionCase, at_install, post_install
 

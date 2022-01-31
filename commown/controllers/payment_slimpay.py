@@ -1,7 +1,4 @@
-import logging
 
-from odoo import http
-from odoo.http import request
 
 # from odoo.addons.website_sale_payment_slimpay.controllers.main \
 #     import SlimpayControllerWebsiteSale
