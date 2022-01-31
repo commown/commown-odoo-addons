@@ -51,7 +51,7 @@ class ResPartner(models.Model):
 
         parent_location = self.env.ref('stock.stock_location_customers')
 
-        _logger.debug(u"Partner %d (%s) has no customer location yet,"
+        _logger.debug("Partner %d (%s) has no customer location yet,"
                       " creating one", self.id, self.name)
         return self.env['stock.location'].sudo().create({
             'name': self.name,

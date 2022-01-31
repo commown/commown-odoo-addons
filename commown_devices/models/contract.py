@@ -16,11 +16,11 @@ class Contract(models.Model):
     picking_ids = fields.One2many(
         "stock.picking",
         "contract_id",
-        string=u"Pickings")
+        string="Pickings")
 
     quant_ids = fields.One2many(
         "stock.quant", "contract_id",
-        string=u"Contract-related stock",
+        string="Contract-related stock",
         compute="_compute_quant_ids",
         compute_sudo=True,  # as quant.contract_id is not writable
         store=True,
@@ -94,10 +94,10 @@ class Contract(models.Model):
         lot_ids = OrderedDict()
         partner_loc = self.partner_id.get_or_create_customer_location()
         for m in moves:
-            for l in m.mapped("lot_ids"):
-                lot_ids.setdefault(l.id, 0)
-                lot_ids[l.id] += m.location_dest_id == partner_loc and 1 or -1
+            for lot in m.mapped("lot_ids"):
+                lot_ids.setdefault(lot.id, 0)
+                lot_ids[lot.id] += m.location_dest_id == partner_loc and 1 or -1
 
         return self.env["stock.production.lot"].browse([
-            l_id for (l_id, total) in lot_ids.items() if total > 0
+            l_id for (l_id, total) in list(lot_ids.items()) if total > 0
         ])

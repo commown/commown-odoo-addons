@@ -6,6 +6,6 @@ class Product(models.Model):
 
     storable_product_id = fields.Many2one(
         'product.template',
-        string=u'Storable product',
+        string='Storable product',
         domain='[("type", "=", "product")]',
     )
