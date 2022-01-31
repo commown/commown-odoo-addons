@@ -123,7 +123,7 @@ class Contract(models.Model):
                     for contract in self:
                         for pmt in contract._get_planned_emails():
                             if pmt.planned_send_date >= values["date_end"]:
-                                pmt.unlink()
+                                pmt.sudo().unlink()
                 else:
                     # date_end is set later: regenerate planned emails between
                     # the old and new end dates

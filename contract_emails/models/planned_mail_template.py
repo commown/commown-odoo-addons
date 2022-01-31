@@ -99,7 +99,7 @@ class PlannedMailTemplateObject(models.AbstractModel):
             after = date.today()
         self.ensure_one()
         if unlink_first:
-            self._get_planned_emails().unlink()
+            self._get_planned_emails().sudo().unlink()
         self.planned_email_generators().generate_planned_mail_templates(
             self, before=before, after=after)
 
@@ -129,5 +129,5 @@ class PlannedMailTemplateObject(models.AbstractModel):
     @api.multi
     def unlink(self):
         "Cascade delete related planned emails"
-        self._get_planned_emails().unlink()
+        self._get_planned_emails().sudo().unlink()
         super(PlannedMailTemplateObject, self).unlink()
