@@ -27,13 +27,13 @@ repos:
   #       entry: found forbidden files; remove them
   #       language: fail
   #       files: "\\.rej$"
-  # - repo: https://github.com/oca/maintainer-tools
-  #   rev: ab1d7f6
-  #   hooks:
-  #     # update the NOT INSTALLABLE ADDONS section above
-  #     - id: oca-update-pre-commit-excluded-addons
-  #     - id: oca-fix-manifest-website
-  #       args: ["https://github.com/commown/commown-odoo-addons"]
+  - repo: https://github.com/oca/maintainer-tools
+    rev: ab1d7f6
+    hooks:
+      # update the NOT INSTALLABLE ADDONS section above
+      - id: oca-update-pre-commit-excluded-addons
+      - id: oca-fix-manifest-website
+        args: ["https://github.com/commown/commown-odoo-addons"]
   # - repo: https://github.com/myint/autoflake
   #   rev: v1.4
   #   hooks:

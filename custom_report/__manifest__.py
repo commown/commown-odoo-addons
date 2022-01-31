@@ -12,7 +12,7 @@
     """,
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://github.com/commown/commown-odoo-addons",
     'depends': [
         'report_py3o',
         'account_usability',  # needed for account_invoice.has_discount (py3o)

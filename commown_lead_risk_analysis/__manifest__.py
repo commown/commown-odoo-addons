@@ -6,7 +6,7 @@
     'description': 'Risk analysis data storage for Commown leads',
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.coop",
+    'website': "https://github.com/commown/commown-odoo-addons",
     'depends': [
         'crm',
     ],

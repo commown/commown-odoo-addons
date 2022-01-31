@@ -9,7 +9,7 @@
     'version': '12.0.1.0.0',
     'author': "Commown SCIC",
     'license': "AGPL-3",
-    'website': "https://commown.coop",
+    'website': "https://github.com/commown/commown-odoo-addons",
     'depends': [
         'commown_contractual_issue',
         'contract_variable_discount',

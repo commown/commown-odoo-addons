@@ -8,7 +8,7 @@
     "summary": "Import Slimpay payment reports",
     "version": "12.0.1.1.0",
     "category": "Finance",
-    "website": "https://commown.fr",
+    "website": "https://github.com/commown/commown-odoo-addons",
     'author': "Commown,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,

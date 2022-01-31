@@ -6,7 +6,7 @@
     'description': "Commown SCIC business application",
     'author': "Commown SCIC",
     'license': "AGPL-3",
-    'website': "https://commown.coop",
+    'website': "https://github.com/commown/commown-odoo-addons",
     'depends': [
         # Commown modules
         'account_loan',

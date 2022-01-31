@@ -14,7 +14,7 @@
     """,
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://github.com/commown/commown-odoo-addons",
     'depends': [
         'website_sale',
     ],

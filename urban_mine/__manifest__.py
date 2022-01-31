@@ -8,7 +8,7 @@
     'description': 'Urban mine offer: people sell their device to the company',
     'author': 'Commown SCIC SAS',
     'license': 'AGPL-3',
-    'website': 'https://commown.fr',
+    'website': 'https://github.com/commown/commown-odoo-addons',
     'depends': [
         'commown_shipping',
         'l10n_fr',

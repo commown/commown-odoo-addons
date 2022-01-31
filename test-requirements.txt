@@ -10,6 +10,9 @@ git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_p
 # https://github.com/OCA/account-invoicing/pull/1090
 git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_auto_pay#subdirectory=setup/account_invoice_merge_auto_pay
 
+# https://github.com/OCA/account-invoicing/pull/1090
+git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_auto_pay#subdirectory=setup/account_invoice_merge_auto_pay
+
 # https://github.com/OCA/e-commerce/pull/610
 git+https://github.com/fcayre/e-commerce@12-mig-website_sale_affiliate#subdirectory=setup/website_sale_affiliate
 

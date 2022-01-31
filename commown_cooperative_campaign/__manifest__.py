@@ -10,7 +10,7 @@
     'version': '12.0.1.2.1',
     'author': "Commown SCIC",
     'license': "AGPL-3",
-    'website': "https://commown.coop",
+    'website': "https://github.com/commown/commown-odoo-addons",
     'external_dependencies': {
         'python': ['requests', 'phonenumbers', 'iso8601']
     },

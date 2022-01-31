@@ -7,7 +7,7 @@
                     ' products in it excl. taxes'),
     'author': "Commown SCIC",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://github.com/commown/commown-odoo-addons",
     'depends': [
         'website_sale',
     ],

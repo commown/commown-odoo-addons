@@ -6,7 +6,7 @@
     "description": """Rental products have a fixed deposit and recurring price, displayed on the product page""",
     "author": "Commown SCIC SAS",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "base_automation",
         "contract_payment_auto",
