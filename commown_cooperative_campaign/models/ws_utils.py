@@ -17,7 +17,7 @@ MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 
 
 def coop_ws_base_url(env):
-    return env['ir.config_parameter'].get_param(
+    return env['ir.config_parameter'].sudo().get_param(
         'commown_cooperative_campaign.base_url')
 
 
