@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Contract(models.Model):
-    _inherit = "account.analytic.account"
+    _inherit = "contract.contract"
 
     picking_ids = fields.One2many(
         "stock.picking",
@@ -38,7 +38,7 @@ class Contract(models.Model):
 
     @api.depends("picking_ids.state")
     def _compute_quant_ids(self):
-        for record in self.filtered("recurring_invoices"):
+        for record in self:
             loc = record.partner_id.get_customer_location()
             record.quant_ids = record.picking_ids.mapped(
                 "move_lines.quant_ids").filtered(lambda q: q.location_id == loc)
