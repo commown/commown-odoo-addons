@@ -8,7 +8,7 @@
     <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
     <field name="arch" type="xml">
       <xpath expr="//group[@name='main']" position="after">
-        <group string="Related issues">
+        <group name="related_issues" string="Related issues">
           <field name="issue_ids" readonly="1">
             <tree default_order="project_id, penalty_exemption, contractual_issue_date desc, contractual_issue_type, stage_id, name">
               <field name="project_id"/>
