@@ -15,7 +15,7 @@ git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_p
 git+https://github.com/fcayre/e-commerce@12-mig-website_sale_affiliate#subdirectory=setup/website_sale_affiliate
 
 # https://github.com/OCA/e-commerce/pull/611
-git+https://github.com/fcayre/e-commerce@12-mig-website_sale_affiliate_product_restriction#subdirectory=setup/website_sale_affiliate_product_restriction
+git+https://github.com/fcayre/e-commerce@12-add-website_sale_affiliate_product_restriction#subdirectory=setup/website_sale_affiliate_product_restriction
 
 # https://github.com/OCA/e-commerce/pull/612
 git+https://github.com/fcayre/e-commerce@12-add-website_sale_affiliate_portal#subdirectory=setup/website_sale_affiliate_portal
