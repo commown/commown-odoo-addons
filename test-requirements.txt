@@ -1,1 +1,20 @@
+# Python libraries
 # python-magic
+
+# https://github.com/OCA/account-invoicing/pull/1087
+git+https://github.com/fcayre/account-invoicing@12.0-add-account_invoice_merge_auto#subdirectory=setup/account_invoice_merge_auto
+
+# https://github.com/OCA/account-invoicing/pull/1090
+git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_auto_pay#subdirectory=setup/account_invoice_merge_auto
+
+# https://github.com/OCA/e-commerce/pull/610
+git+https://github.com/fcayre/e-commerce@12-mig-website_sale_affiliate#subdirectory=setup/website_sale_affiliate
+
+# https://github.com/OCA/e-commerce/pull/612
+git+https://github.com/fcayre/e-commerce@12-add-website_sale_affiliate_portal#subdirectory=setup/website_sale_affiliate_portal
+
+# https://github.com/OCA/sale-workflow/pull/1891
+git+https://github.com/fcayre/sale-workflow@12-ADD-sale_product_email#subdirectory=setup/sale_product_email
+
+# https://github.com/OCA/project/pull/890
+git+https://github.com/fcayre/project@12-ADD-project_rating_nps#subdirectory=setup/project_rating_nps
