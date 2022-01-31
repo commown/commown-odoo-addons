@@ -6,4 +6,4 @@ class StockQuant(models.Model):
 
     contract_id = fields.Many2one(
         'account.analytic.account',
-        string=u'Contract')
+        string='Contract')

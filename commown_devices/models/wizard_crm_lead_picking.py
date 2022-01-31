@@ -6,18 +6,18 @@ class CrmLeadPickingWizard(models.TransientModel):
 
     lead_id = fields.Many2one(
         "crm.lead",
-        string=u"Lead",
+        string="Lead",
         required=True,
     )
 
     date = fields.Datetime(
-        string=u"Date",
-        help=u"Defaults to now - To be set only to force a date",
+        string="Date",
+        help="Defaults to now - To be set only to force a date",
     )
 
     product_tmpl_id = fields.Many2one(
         "product.template",
-        string=u"Product",
+        string="Product",
         domain="[('tracking', '=', 'serial')]",
         required=True,
         default=lambda self: self._compute_default_product_tmpl_id(),
@@ -25,7 +25,7 @@ class CrmLeadPickingWizard(models.TransientModel):
 
     variant_id = fields.Many2one(
         "product.product",
-        string=u"Variant",
+        string="Variant",
         domain=("[('tracking', '=', 'serial'),"
                 " ('product_tmpl_id', '=', product_tmpl_id)]"),
         required=True,
@@ -33,7 +33,7 @@ class CrmLeadPickingWizard(models.TransientModel):
 
     lot_id = fields.Many2one(
         "stock.production.lot",
-        string=u"Device",
+        string="Device",
         domain=lambda self: '''[
             ("product_id", "=", variant_id),
             ("quant_ids.location_id", "child_of", %d)]''' % self.env.ref(
