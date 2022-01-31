@@ -33,7 +33,7 @@ jobs:
       - name: Install addons and dependencies
         run: oca_install_addons
         env:
-          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos
+          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting
       # - name: Check licenses
       #   run: manifestoo -d . check-licenses
       # - name: Check development status
@@ -41,9 +41,9 @@ jobs:
       - name: Initialize test db
         run: oca_init_test_database
         env:
-          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos
+          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting
       - name: Run tests
         run: oca_run_tests
         env:
-          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos
+          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting
       - uses: codecov/codecov-action@v1
