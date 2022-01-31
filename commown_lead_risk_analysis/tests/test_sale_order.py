@@ -16,9 +16,9 @@ class SaleOrderTC(RentalSaleOrderTC):
         contract_tmpl1 = self._create_rental_contract_tmpl(
             1, contract_line_ids=[
                 self._contract_line(1, "1 month Fairphone premium", tax,
-                                   specific_price=25.),
+                                    specific_price=25.),
                 self._contract_line(2, "1 month ##ACCESSORY##", tax),
-                ])
+            ])
         product1 = self._create_rental_product(
             name="Fairphone Premium", list_price=60., rental_price=30.,
             followup_sales_team_id=self.team1.id,
