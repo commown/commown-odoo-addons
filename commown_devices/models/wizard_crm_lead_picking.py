@@ -49,7 +49,7 @@ class CrmLeadPickingWizard(models.TransientModel):
         else:
             lead = self.lead_id
         possible_products = lead.contract_id.mapped(
-            "recurring_invoice_line_ids.sale_order_line_id"
+            "contract_line_ids.sale_order_line_id"
             ".product_id.product_tmpl_id.storable_product_id")
         return possible_products and possible_products[0]
 
