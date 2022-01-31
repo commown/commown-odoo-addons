@@ -36,7 +36,7 @@ class SelfHelp(http.Controller):
         partner = env.user.partner_id
         post = request.params.copy()
 
-        issue_data = {
+        task_data = {
             'name': post['self-troubleshoot-type'],
             'contract_id': int(post['device_contract']),
             'partner_id': partner.id,
@@ -45,16 +45,16 @@ class SelfHelp(http.Controller):
             'tag_ids': [(6, 0, self._tag_ids(**post))],
         }
         if post.get('stage_id', None):
-            issue_data['stage_id'] = int(post['stage_id'])
-        issue = env['project.issue'].sudo().create(issue_data)
+            task_data['stage_id'] = int(post['stage_id'])
+        task = env['project.task'].sudo().create(task_data)
 
         env['mail.followers'].create({
-            'res_model': issue._name,
-            'res_id': issue.id,
+            'res_model': task._name,
+            'res_id': task.id,
             'partner_id': partner.id,
             'subtype_ids': [(6, 0, [
                 env.ref('mail.mt_comment').id,
-                env.ref('rating_project_issue.mt_issue_rating').id,
+                env.ref('project.mt_task_rating').id,
             ])],
         })
-        return request.redirect('/my/issues/%d' % issue.id)
+        return request.redirect('/my/tasks/%d' % task.id)
