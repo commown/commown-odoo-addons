@@ -33,7 +33,7 @@ jobs:
       - name: Install addons and dependencies
         run: oca_install_addons
         env:
-          EXCLUDE: commown,product_rental,commown_contract_variable_discount,custom_report
+          EXCLUDE: commown,product_rental,commown_contract_variable_discount,custom_report,commown-cooperative-campaign
       - name: Check licenses
         run: manifestoo -d . check-licenses
       - name: Check development status
