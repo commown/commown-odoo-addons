@@ -29,3 +29,4 @@ git+https://github.com/fcayre/sale-workflow@12-ADD-sale_product_email#subdirecto
 
 # https://github.com/OCA/project/pull/890
 git+https://github.com/fcayre/project@12-ADD-project_rating_nps#subdirectory=setup/project_rating_nps
+
