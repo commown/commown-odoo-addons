@@ -111,7 +111,6 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
             'name': 'Test Contract',
             'partner_id': self.b2c_partner.id,
             'pricelist_id': self.b2c_partner.property_product_pricelist.id,
-            'recurring_invoices': False,
         })
         so = self.sale(self.b2c_partner, [self.std_product])
         inv = self.open_invoice(so, contract=contract)
