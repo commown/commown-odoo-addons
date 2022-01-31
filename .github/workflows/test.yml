@@ -36,8 +36,8 @@ jobs:
           EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine
       # - name: Check licenses
       #   run: manifestoo -d . check-licenses
-      - name: Check development status
-        run: manifestoo -d . check-dev-status --default-dev-status=Beta
+      # - name: Check development status
+      #   run: manifestoo -d . check-dev-status --default-dev-status=Beta
       - name: Initialize test db
         run: oca_init_test_database
         env:
