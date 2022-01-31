@@ -7,13 +7,13 @@ class ProjectIssueAbstractPickingWizard(models.AbstractModel):
 
     issue_id = fields.Many2one(
         "project.issue",
-        string=u"Issue",
+        string="Issue",
         required=True,
     )
 
     date = fields.Datetime(
-        string=u"date",
-        help=u"Defaults to now - To be set only to force a date",
+        string="date",
+        help="Defaults to now - To be set only to force a date",
     )
 
 
@@ -23,7 +23,7 @@ class ProjectIssueContractTransferWizard(models.Model):
 
     contract_id = fields.Many2one(
         "account.analytic.account",
-        string=u"Destination contract",
+        string="Destination contract",
         required=True,
         domain=[("recurring_invoices", "=", True), ("date_end", "=", False)],
     )
@@ -52,7 +52,7 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
 
     product_tmpl_id = fields.Many2one(
         "product.template",
-        string=u"Product",
+        string="Product",
         domain="[('tracking', '=', 'serial')]",
         required=True,
         default=lambda self: self._compute_default_product_tmpl_id(),
@@ -60,7 +60,7 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
 
     variant_id = fields.Many2one(
         "product.product",
-        string=u"Variant",
+        string="Variant",
         domain=("[('tracking', '=', 'serial'),"
                 " ('product_tmpl_id', '=', product_tmpl_id)]"),
         required=True,
@@ -69,7 +69,7 @@ class ProjectIssueOutwardPickingWizard(models.TransientModel):
 
     lot_id = fields.Many2one(
         "stock.production.lot",
-        string=u"Device",
+        string="Device",
         domain=lambda self: '''[
             ("product_id", "=", variant_id),
             ("quant_ids.location_id", "child_of", %d)]''' % self.env.ref(
@@ -110,7 +110,7 @@ class ProjectIssueInwardPickingWizard(models.TransientModel):
 
     lot_id = fields.Many2one(
         "stock.production.lot",
-        string=u"Device",
+        string="Device",
         required=True,
     )
 

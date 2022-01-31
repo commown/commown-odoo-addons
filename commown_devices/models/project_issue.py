@@ -5,8 +5,8 @@ class ProjectIssue(models.Model):
     _inherit = "project.issue"
 
     lot_id = fields.Many2one(
-        string=u"Involved device",
-        help=u"Device involved in present issue",
+        string="Involved device",
+        help="Device involved in present issue",
         comodel_name="stock.production.lot",
         default=lambda self: self._default_lot_id(),
         domain=lambda self: self._domain_lot_id(),
@@ -67,7 +67,7 @@ class ProjectIssue(models.Model):
             "type": "ir.actions.act_window",
             "res_model": "stock.scrap",
             "name": _("Scrap device"),
-            "view_mode": u"form",
-            "view_type": u"form",
+            "view_mode": "form",
+            "view_type": "form",
             "context": ctx,
         }

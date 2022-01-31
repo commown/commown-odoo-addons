@@ -1,13 +1,13 @@
-import contract
-import crm_lead
-import picking
-import product
-import project_issue
-import project_project
-import project_task
-import res_partner
-import stock_production_lot
-import stock_quant
-import wizard_crm_lead_picking
-import wizard_project_issue_picking
-import wizard_project_task_picking
+from . import contract
+from . import crm_lead
+from . import picking
+from . import product
+from . import project_issue
+from . import project_project
+from . import project_task
+from . import res_partner
+from . import stock_production_lot
+from . import stock_quant
+from . import wizard_crm_lead_picking
+from . import wizard_project_issue_picking
+from . import wizard_project_task_picking

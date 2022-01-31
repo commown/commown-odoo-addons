@@ -15,7 +15,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                                    self.get_default_tax()),
                 ])
         self.storable_product = self.env['product.template'].create({
-            'name': u'Fairphone 3', 'type': u'product', 'tracking': u'serial',
+            'name': 'Fairphone 3', 'type': 'product', 'tracking': 'serial',
         })
         team = self.env.ref('sales_team.salesteam_website_sales')
         sold_product = self._create_rental_product(
@@ -36,14 +36,14 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         self.so.action_confirm()
 
         self.location_fp3_new = self.env["stock.location"].create({
-            "name": u"New FP3 devices",
-            "usage": u"internal",
+            "name": "New FP3 devices",
+            "usage": "internal",
             "partner_id": 1,
             "location_id": self.env.ref("commown_devices"
                                         ".stock_location_new_devices").id,
         })
 
-    def adjust_stock(self, product=None, qty=1., serial=u'serial-0',
+    def adjust_stock(self, product=None, qty=1., serial='serial-0',
                      location=None, date="2000-01-01"):
         if product is None:
             product = self.storable_product.product_variant_id

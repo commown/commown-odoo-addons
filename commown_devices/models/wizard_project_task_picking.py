@@ -16,19 +16,19 @@ class ProjectTaskPickingWizard(models.Model):
 
     task_id = fields.Many2one(
         "project.task",
-        string=u"Task",
+        string="Task",
         required=True,
     )
 
     location_dest_id = fields.Many2one(
         "stock.location",
-        string=u"Destination",
+        string="Destination",
         required=True,
     )
 
     date = fields.Datetime(
-        string=u"date",
-        help=u"Defaults to now - To be set only to force a date",
+        string="date",
+        help="Defaults to now - To be set only to force a date",
     )
 
     def present_location(self):
@@ -70,5 +70,5 @@ class ProjectTaskPickingWizard(models.Model):
             raise UserError(_("Can't move device: no device set on this task!"))
 
         return internal_picking(
-            u"Task-%s" % self.task_id.id, [lot], self.present_location(),
+            "Task-%s" % self.task_id.id, [lot], self.present_location(),
             self.location_dest_id, date=self.date, do_transfer=True)

@@ -9,10 +9,10 @@ class ContractTC(DeviceAsAServiceTC):
         loc_check = self.env.ref(
             "commown_devices.stock_location_devices_to_check")
 
-        lot1 = self.adjust_stock(serial=u"my-fp3-1")
+        lot1 = self.adjust_stock(serial="my-fp3-1")
         quant1 = self.env["stock.quant"].search([("lot_id", "=", lot1.id)])
 
-        lot2 = self.adjust_stock(serial=u"my-fp3-2")
+        lot2 = self.adjust_stock(serial="my-fp3-2")
         quant2 = self.env["stock.quant"].search([("lot_id", "=", lot2.id)])
 
         contract = self.so.order_line[0].contract_id
