@@ -4,6 +4,9 @@
 # https://github.com/OCA/account-invoicing/pull/1087
 git+https://github.com/fcayre/account-invoicing@12.0-add-account_invoice_merge_auto#subdirectory=setup/account_invoice_merge_auto
 
+# https://github.com/OCA/account-invoicing/pull/1089
+git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_payment#subdirectory=setup/account_invoice_merge_payment
+
 # https://github.com/OCA/account-invoicing/pull/1090
 git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_auto_pay#subdirectory=setup/account_invoice_merge_auto_pay
 
