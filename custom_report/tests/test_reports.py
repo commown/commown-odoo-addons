@@ -67,6 +67,16 @@ class InvoiceReportTC(common.MockedEmptySessionTC):
         so.action_confirm()
         return so
 
+    def open_invoice(self, so, is_refund=False, contract=None):
+        inv = self.env['account.invoice'].browse(so.action_invoice_create())
+        if is_refund:
+            inv.type = 'out_refund'
+        if contract:
+            inv.contract_id = contract.id
+            inv.invoice_line_ids.update({'account_analytic_id': contract.id})
+        inv.action_invoice_open()
+        return inv
+
     def html_invoice(self, inv, debug_fpath=None):
         html = self.env['py3o.report'].get_pdf(inv.mapped('id'),
                                                'account.report_invoice')
