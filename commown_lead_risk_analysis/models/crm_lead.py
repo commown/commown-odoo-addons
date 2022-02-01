@@ -41,6 +41,9 @@ GLOBAL_FEELING = [
 class CommownCrmLead(models.Model):
     _inherit = 'crm.lead'
 
+    so_line_id = fields.Many2one('sale.order.line', _('Sale order line'))
+    contract_id = fields.Many2one('contract.contract', _('Contract'))
+
     email_rating = fields.Selection(
         EMAIL_RATINGS, string='Email Rating',
         default=EMAIL_RATINGS[0][0])
@@ -140,3 +143,28 @@ class CommownCrmLead(models.Model):
                 "<a target='_blank' href='%s'>%s</a>"
                 % (cgi.escape(url, quote=True),
                    cgi.escape(_('Web search link'), quote=True)))
+
+    def button_open_sale_order(self):
+        self.ensure_one()
+        order_id = self.so_line_id.mapped('order_id').id
+        if order_id:
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'sale.order',
+                'name': _('Sale Order'),
+                'views': [(False, 'form')],
+                'res_id': order_id,
+            }
+
+    def button_open_contract(self):
+        contract = self.contract_id
+        if contract:
+            vid = self.env.ref('contract.contract_contract_customer_form_view')
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'contract.contract',
+                'res_id': contract.id,
+                'name': _('Related contracts'),
+                'context': {'is_contract': 1},
+                'views': [(vid, 'form')],
+            }

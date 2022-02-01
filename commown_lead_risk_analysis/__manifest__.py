@@ -9,6 +9,8 @@
     'website': "https://commown.coop",
     'depends': [
         'crm',
+        'partner_firstname',
+        'product_rental',
     ],
     'data': [
         'views/crm_team.xml',
