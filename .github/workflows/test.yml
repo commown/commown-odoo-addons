@@ -1,0 +1,49 @@
+name: test Odoo addons
+
+on:
+  pull_request:
+    branches:
+      - "12.0*"
+  push:
+    branches:
+      - "12.0*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - container: ghcr.io/oca/oca-ci/py3.6-odoo12.0:latest
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: odoo
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Install addons and dependencies
+        run: oca_install_addons
+        env:
+          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting
+      # - name: Check licenses
+      #   run: manifestoo -d . check-licenses
+      # - name: Check development status
+      #   run: manifestoo -d . check-dev-status --default-dev-status=Beta
+      - name: Initialize test db
+        run: oca_init_test_database
+        env:
+          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting
+      - name: Run tests
+        run: oca_run_tests
+        env:
+          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting
+      - uses: codecov/codecov-action@v1
