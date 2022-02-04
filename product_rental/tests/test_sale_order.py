@@ -28,8 +28,8 @@ class SaleOrderTC(RentalSaleOrderTC):
         so = self.create_sale_order(partner, tax)
         so.action_confirm()
         contracts = self.env['contract.contract'].search([
-            ('name', 'ilike', '%' + so.name + '%'),
-            ])
+            ("contract_line_ids.sale_order_line_id.order_id", "=", so.id),
+        ])
         lines = contracts.mapped('contract_line_ids')
         self.assertEqual(set(lines.mapped('date_start')), {date(2030, 1, 1)})
         self.assertEqual(set(lines.mapped('commitment_duration')), {12})
