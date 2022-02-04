@@ -11,12 +11,6 @@ class ProductRentalSaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.multi
-    def has_rental(self):
-        _logger.warning('has_rental is now obsolete, please use is_contract')
-        self.ensure_one()
-        return self.is_contract
-
-    @api.multi
     def contractual_documents(self):
         self.ensure_one()
         rcts = self.mapped(
@@ -126,8 +120,7 @@ class ProductRentalSaleOrder(models.Model):
             ).property_contract_template_id
             contract = self._create_rental_contract(ctemplate, count)
             contracts |= contract
-
             clines = order_line_model._product_rental_create_contract_line(
                 contract, contract_descr)
-            clines.update({'contract_id': contract.id})
+
         return contracts
