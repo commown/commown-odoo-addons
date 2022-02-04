@@ -165,6 +165,5 @@ class CommownCrmLead(models.Model):
                 'res_model': 'contract.contract',
                 'res_id': contract.id,
                 'name': _('Related contracts'),
-                'context': {'is_contract': 1},
                 'views': [(vid, 'form')],
             }
