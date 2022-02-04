@@ -12,7 +12,7 @@
     'depends': [
         'commown_contractual_issue',
         'commown_shipping',
-        'product_rental',
+        'commown_lead_risk_analysis',
         'stock',
     ],
     'data': [
