@@ -9,10 +9,9 @@
       <field name="inherit_id" ref="stock.view_template_property_form"/>
       <field name="arch" type="xml">
 
-        <xpath expr="//group[@name='stock_property']" position="before">
-          <group name="storable_product">
-            <field name="storable_product_id"/>
-          </group>
+        <xpath expr="//field[@name='list_price']" position="before">
+          <field name="storable_product_id"
+                 attrs="{'invisible': [('type', '!=', 'service')]}"/>
         </xpath>
 
       </field>
