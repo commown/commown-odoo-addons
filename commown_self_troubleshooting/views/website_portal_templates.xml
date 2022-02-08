@@ -60,9 +60,12 @@
         <div t-if="'FP3' in contract_types">
           <h4 class="page-header">Fairphone 3</h4>
           <div class="list-group">
-            <a target="_blank" class="list-group-item">
-              <b> Prochainement </b> : Plus rien ne s'affiche à l'écran
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp3-display">
+              J'ai un problème d'affichage
             </a>
+            <span class="list-group-item">
+              <b> Prochainement </b> : Mon écran (ou sa protection) est fissuré
+            </span>
           </div>
         </div>
 
