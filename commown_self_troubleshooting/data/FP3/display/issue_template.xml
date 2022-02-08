@@ -9,7 +9,10 @@
     <t t-name="self-troubleshoot-issue-description-fp3-display">
 Bonjour,
 <t t-if="action=='ship'">
-après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé.
+<t t-if="type_contrat=='me'">
+après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé.</t>
+<t t-else="">
+mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)</t>
 
 L'adresse d'expédition est la suivante :
 <t t-esc="name"/>
