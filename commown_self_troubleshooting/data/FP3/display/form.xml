@@ -38,7 +38,7 @@
 
           <div class="container">
             <h1>Auto-dépannage : Fairphone 3</h1>
-            <h2>Plus rien ne s'affiche à l'écran</h2>
+            <h2>Mon écran ne fonctionne plus</h2>
             <br/>
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
@@ -50,11 +50,12 @@
               <div id="smartwizard">
                 <ul>
                   <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
-                  <li><a href="#step-1">Étape 1<br/><small>Type de contrat</small></a></li>
+                  <li><a href="#step-1">Étape 1<br/><small>Option lors de la souscription</small></a></li>
                   <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Nettoyage des contacts</small></a></li>
                   <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
                   <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
                   <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Problème résolu</small></a></li>
+                  <li><a href="#step-6">Étape 6<br/><small>Contacter un humain</small></a></li>
                 </ul>
 
                 <div>
@@ -62,12 +63,24 @@
 
                   <div id="step-1">
                     <div class="clearfix">
-                      <h2>Type de contrat</h2>
+                      <h2>Option lors de la souscription</h2>
                       <br />
+                      <p>Lors de votre souscription, vous avez choisi l'une des deux options
+                        <i>Commown manipule les modules en cas de panne</i> ou
+                        <i>Je manipule les modules en cas de panne</i>.
+                      </p>
+                      <p>
+                        Vous retrouverez cette information dans votre commande <a target="_blank" href="/my/orders">ici</a>.
+                      </p>
+                      <p class="text-muted">
+                        NB : Même en ayant choisi l'option
+                        <i>Commown manipule les modules en cas de panne</i>
+                        vous pouvez toujours effectuer vous-même la réparation en sélectionnant l'autre option ci-dessous.
+                      </p>
                     </div>
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label for="type_contrat">Pouvez-vous nous dire quelle option vous avez choisi ? </label>
+                        <label for="type_contrat">Option choisie lors de votre souscription</label>
                         <select class="form-control" required="required" id="type_contrat" name="type_contrat" data-required-error="Veuillez sélectionner le type de contrat">
                           <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
                           <option value="commown">Commown manipule les modules en cas de panne</option>
@@ -82,7 +95,8 @@
                     <div id="step-2">
                       <h2><i class="fas fa-pb-log"/> Nettoyage des contacts </h2>
                       <br />
-                      <p> La cause la plus fréquente de tels symptômes est l'état des contacts entre le corps de l'appareil et l'écran : c’est un défaut connu et dû à un problème sur une chaîne de fabrication au démarrage du Fairphone 3, qui a été résolu depuis mais malheureusement certains de nos Fairphone 3 achetés tout au début en souffrent visiblement encore. Il faudrait donc démonter l'écran et nettoyer les contacts.
+                      <p> La cause la plus fréquente des problèmes d'écran est l'état des contacts entre le corps de l'appareil et l'écran.
+                          Il faut donc démonter l'écran et nettoyer les contacts.
                       <br />
                       <p>Pour démonter et remonter l’écran, nous vous invitons à visualiser la vidéo ci-dessous :</p>
                       <br />
@@ -117,6 +131,10 @@
 
                   <t t-call="commown_self_troubleshooting.step-self-solved">
                     <t t-set="step">5</t>
+                  </t>
+
+                  <t t-call="commown_self_troubleshooting.step-contact-human">
+                    <t t-set="step">6</t>
                   </t>
 
                 </div>
