@@ -3,6 +3,7 @@ from odoo import models, fields, api
 
 class CrmLeadPickingWizard(models.TransientModel):
     _name = "crm.lead.picking.wizard"
+    _description = "Create a picking from a lead"
 
     lead_id = fields.Many2one(
         "crm.lead",
