@@ -5,17 +5,19 @@ from ..models.common import do_new_transfer
 
 class ContractTC(DeviceAsAServiceTC):
 
-    def test_stock_at_date(self):
+    def test_stock(self):
         loc_check = self.env.ref(
             "commown_devices.stock_location_devices_to_check")
 
         lot1 = self.adjust_stock(serial="my-fp3-1")
-        quant1 = self.env["stock.quant"].search([("lot_id", "=", lot1.id)])
+        quant1 = lot1.quant_ids.filtered(lambda q: q.quantity > 0)
 
         lot2 = self.adjust_stock(serial="my-fp3-2")
-        quant2 = self.env["stock.quant"].search([("lot_id", "=", lot2.id)])
+        quant2 = lot2.quant_ids.filtered(lambda q: q.quantity > 0)
 
-        contract = self.so.order_line[0].contract_id
+        contract = self.env["contract.contract"].search([
+            ("contract_line_ids.sale_order_line_id.order_id", "=", self.so.id),
+        ])[0]
 
         contract.send_device(quant1, "2021-07-01 17:00:00", do_transfer=True)
         contract.send_device(quant2, "2021-07-14", do_transfer=True)

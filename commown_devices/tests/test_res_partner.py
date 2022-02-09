@@ -7,7 +7,7 @@ class ResPartnerLocationTC(HttpCase):
 
     def test_customer_location_individual(self):
         employee = self.env.ref("base.user_demo")
-        individual = self.env.ref("portal.demo_user0_res_partner")
+        individual = self.env.ref("base.partner_demo_portal")
         loc_customer = self.env.ref('stock.stock_location_customers')
         assert individual.property_stock_customer == loc_customer, (
             'test prerequisite failed')
