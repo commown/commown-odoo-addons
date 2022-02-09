@@ -63,5 +63,6 @@ class CrmLeadPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        return self.lead_id.contract_id.send_device(
-            self.lot_id.quant_ids[0], date=self.date)
+        quant = self.lot_id.quant_ids.filtered(
+            lambda q: q.quantity > 0).ensure_one()
+        return self.lead_id.contract_id.send_device(quant, date=self.date)
