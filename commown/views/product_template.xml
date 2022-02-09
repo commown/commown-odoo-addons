@@ -15,12 +15,6 @@
           </group>
         </xpath>
 
-        <xpath expr="//page[@name='sales']" position="inside">
-          <group name="followup">
-            <field name="followup_sales_team_id"/>
-          </group>
-        </xpath>
-
         <xpath expr="//page[@name='website']" position="inside">
             <group name="website">
               <field name="website_description"/>

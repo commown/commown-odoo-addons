@@ -13,8 +13,9 @@
         'product_rental',
     ],
     'data': [
-        'views/crm_team.xml',
         'views/crm_lead.xml',
+        'views/crm_team.xml',
+        'views/product_template.xml',
     ],
     'installable': True,
 }
