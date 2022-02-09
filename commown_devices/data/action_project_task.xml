@@ -8,16 +8,7 @@
     <field name="view_mode">form</field>
     <field name="target">new</field>
     <field name="context">{'default_task_id': active_id}</field>
-  </record>
-
-  <record id="action_menu_wizard_project_task_picking" model="ir.values">
-    <field name="name">[commown] Open the Move involved device action</field>
-    <field name="model">project.task</field>
-    <field name="key">action</field>
-    <field name="key2">client_action_multi</field>
-    <field
-        name="value"
-        eval="'ir.actions.act_window,' + str(ref('action_wizard_project_task_picking'))"/>
+    <field name="binding_model_id" ref="project.model_project_task" />
   </record>
 
   <record id="action_scrap_task_device" model="ir.actions.server">
@@ -26,17 +17,7 @@
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code">action = record.action_scrap_device()</field>
-  </record>
-
-  <record id="action_menu_scrap_task_device" model="ir.values">
-    <field name="name">[commown] Scrap involved device</field>
-    <field name="key2">client_action_multi</field>
-    <field
-        name="value"
-        eval="'ir.actions.server,' + str(ref('action_scrap_task_device'))">
-    </field>
-    <field name="key">action</field>
-    <field name="model">project.task</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
   </record>
 
 </odoo>
