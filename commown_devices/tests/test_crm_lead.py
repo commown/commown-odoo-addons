@@ -15,13 +15,11 @@ class CrmLeadTC(DeviceAsAServiceTC):
         lead = leads[0]
         lead.send_email_on_delivery = False  # avoid setting-up email
         lot = self.adjust_stock()  # have 1 product in stock
-        quant = self.env["stock.quant"].search([("lot_id", "=", lot.id)])
+        quant = lot.quant_ids.filtered(lambda q: q.quantity > 0).ensure_one()
 
         picking = lead.contract_id.send_device(quant)
 
         self.assertEqual(picking.mapped('move_lines.product_qty'), [1.])
-
-        picking.pack_operation_ids.pack_lot_ids.do_plus()
         self.assertEqual(picking.state, 'assigned')
 
         # Set delivery date to trigger the actions and check picking is now done
