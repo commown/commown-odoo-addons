@@ -159,12 +159,10 @@ class CommownCrmLead(models.Model):
     def button_open_contract(self):
         contract = self.contract_id
         if contract:
-            vid = self.env.ref('contract.contract_contract_customer_form_view')
             return {
                 'type': 'ir.actions.act_window',
                 'res_model': 'contract.contract',
                 'res_id': contract.id,
-                'name': _('Related contracts'),
-                'context': {'is_contract': 1},
-                'views': [(vid, 'form')],
+                'name': _('Related contract'),
+                'views': [(False, 'form')],
             }
