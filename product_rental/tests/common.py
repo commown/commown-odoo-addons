@@ -102,7 +102,10 @@ class RentalSaleOrderTC(SavepointCase):
         kwargs.setdefault('type', 'service')
         kwargs.setdefault('taxes_id', False)
         kwargs['is_contract'] = bool(kwargs['property_contract_template_id'])
-        return self.env['product.product'].create(kwargs)
+        result = self.env['product.product'].create(kwargs)
+        # Otherwise is_contract may be wrong (in one of commown_devices tests):
+        result.env.cache.invalidate()
+        return result
 
     def _create_rental_contract_tmpl(self, num, **kwargs):
         kwargs.setdefault('name', 'Test Contract Template %d' % num)
