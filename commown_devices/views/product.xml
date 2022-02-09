@@ -9,8 +9,10 @@
       <field name="inherit_id" ref="stock.view_template_property_form"/>
       <field name="arch" type="xml">
 
-        <xpath expr="//field[@name='property_stock_procurement']" position="before">
-          <field name="storable_product_id"/>
+        <xpath expr="//group[@name='stock_property']" position="before">
+          <group name="storable_product">
+            <field name="storable_product_id"/>
+          </group>
         </xpath>
 
       </field>
