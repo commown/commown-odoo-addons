@@ -33,8 +33,8 @@ class ProjectTaskPickingWizard(models.Model):
     )
 
     def present_location(self):
-        return self.env["stock.quant"].search([
-            ("lot_id", "=", self.task_id.lot_id.id)]).location_id
+        return self.task_id.lot_id.quant_ids.filtered(
+            lambda q: q.quantity > 0).location_id
 
     def _possible_dest_locations(self):
         """ Possible destinations: all listed the `destination_ref` attribute

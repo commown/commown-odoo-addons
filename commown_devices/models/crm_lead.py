@@ -1,3 +1,5 @@
+import datetime
+
 from odoo import models, api, _
 from odoo.exceptions import UserError
 
@@ -6,6 +8,7 @@ from .common import do_new_transfer
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
+    delivery_time = datetime.time(9, 0)
 
     def action_generate_picking(self):
         contract = self.contract_id
@@ -34,4 +37,7 @@ class CrmLead(models.Model):
         picking = self.contract_id.picking_ids.filtered(
             lambda p: p.state == 'assigned')
         if len(picking) == 1:
-            do_new_transfer(picking, self.delivery_date)
+            # time doesn't really matter for now; ideally
+            # deliver_date would become delivery_datetime:
+            do_new_transfer(picking, datetime.datetime.combine(
+                self.delivery_date, self.delivery_time))

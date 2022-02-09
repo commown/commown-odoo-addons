@@ -8,21 +8,21 @@ def internal_picking(origin, lots, orig_location, dest_location,
 
     date = date or fields.Datetime.now()
 
-    move_lines = []
-    picking_data = {
+    picking = env["stock.picking"].create({
         "move_type": "direct",
         "picking_type_id": picking_type.id,
         "location_id": orig_location.id,
         "location_dest_id": dest_location.id,
-        "min_date": date,
+        "date": date,
         "date_done": date,
         "origin": origin,
-        "move_lines": move_lines,
-    }
+    })
 
+    moves = {}
     for lot in lots:
-        move_lines.append((0, 0, {
+        moves[lot] = env["stock.move"].create({
             "name": lot.product_id.name,
+            "picking_id": picking.id,
             "picking_type_id": picking_type.id,
             "location_id": orig_location.id,
             "location_dest_id": dest_location.id,
@@ -30,27 +30,17 @@ def internal_picking(origin, lots, orig_location, dest_location,
             "product_uom_qty": lot.product_qty,
             "product_uom": lot.product_uom_id.id,
             "date": date,
-        }))
+        })
 
-    picking = env["stock.picking"].create(picking_data)
+    assert picking.move_lines
     picking.action_confirm()
     picking.action_assign()
     assert picking.state == "assigned", (
         "Cannot assign any device: state keeps: %r" % picking.state)
 
-    pack_op = picking.pack_operation_product_ids.ensure_one()
-    pack_op.pack_lot_ids.unlink()
-    pack_op.write({
-        'pack_lot_ids': [
-            (0, 0, {'lot_id': lot.id,
-                    'lot_name': lot.name,
-                    'qty': lot.product_qty}
-             ) for lot in lots
-        ],
-        'location_id': orig_location.id,
-        'location_dest_id': dest_location.id,
-    })
-    pack_op.save()
+    for lot, move in moves.items():
+        move.quantity_done = move.product_uom_qty
+        move.move_line_ids.update({"lot_id": lot.id})
 
     if do_transfer:
         do_new_transfer(picking, date)
@@ -59,16 +49,20 @@ def internal_picking(origin, lots, orig_location, dest_location,
 
 
 def do_new_transfer(picking, date):
-    picking.do_new_transfer()
+    picking.button_validate()
     _force_picking_date(picking, date)
 
 
 def _force_picking_date(picking, date):
     _set_date(picking, date, 'date_done')
+    loc = picking.location_dest_id
     for move in picking.move_lines:
         _set_date(move, date, 'date')
-        for quant in move.quant_ids:
-            _set_date(quant, date, 'in_date')
+    for move_line in picking.move_line_ids:
+        _set_date(move_line, date, 'date')
+        for quant in move_line.lot_id.quant_ids:
+            if quant.quantity > 0 and quant.location_id == loc:
+                _set_date(quant, date, 'in_date')
 
 
 def _set_date(entity, value, attr_name):

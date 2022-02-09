@@ -41,7 +41,8 @@ class Contract(models.Model):
         for record in self:
             loc = record.partner_id.get_customer_location()
             record.quant_ids = record.picking_ids.mapped(
-                "move_lines.quant_ids").filtered(lambda q: q.location_id == loc)
+                "move_line_ids.lot_id.quant_ids").filtered(
+                    lambda q: q.quantity > 0 and q.location_id == loc)
             record.quant_nb = len(record.quant_ids)
 
     @api.multi
@@ -85,7 +86,7 @@ class Contract(models.Model):
         if date is None:
             date = fields.Datetime.now()
 
-        moves = self.env["stock.move"].search([
+        move_lines = self.env["stock.move.line"].search([
             ("picking_id.contract_id", "=", self.id),
             ("date", "<=", date),
             ("state", "=", "done"),
@@ -93,10 +94,10 @@ class Contract(models.Model):
 
         lot_ids = OrderedDict()
         partner_loc = self.partner_id.get_or_create_customer_location()
-        for m in moves:
-            for lot in m.mapped("lot_ids"):
-                lot_ids.setdefault(lot.id, 0)
-                lot_ids[lot.id] += m.location_dest_id == partner_loc and 1 or -1
+        for m in move_lines:
+            lot = m.lot_id
+            lot_ids.setdefault(lot.id, 0)
+            lot_ids[lot.id] += m.location_dest_id == partner_loc and 1 or -1
 
         return self.env["stock.production.lot"].browse([
             l_id for (l_id, total) in list(lot_ids.items()) if total > 0
