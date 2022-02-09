@@ -6,6 +6,7 @@ from .common import internal_picking
 
 class ProjectTaskPickingWizard(models.Model):
     _name = "project.task.picking.wizard"
+    _description = "Create a picking from a task"
 
     destination_refs = (
         "stock_location_outsourced_repair",
