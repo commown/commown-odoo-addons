@@ -63,9 +63,9 @@
             <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp3-display">
               Mon écran ne fonctionne plus
             </a>
-            <span class="list-group-item">
-              <b> Prochainement </b> : Mon écran (ou sa protection) est fissuré
-            </span>
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp3-screen-protection">
+              Mon écran (ou sa protection) est fissuré
+            </a>
           </div>
         </div>
 

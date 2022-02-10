@@ -9,7 +9,7 @@
     <t t-name="self-troubleshoot-issue-description-fp3-airglass">
 Bonjour,
 <t t-if="cable_sound=='yes'">
-après avoir effectué un auto-dépannage, il ressort que ma protection d'écran doit être changée.
+après avoir effectué un auto-dépannage, il ressort qu'un écran de protection doit m'être envoyé.
 
 L'adresse d'expédition est la suivante :
 <t t-esc="name"/>
