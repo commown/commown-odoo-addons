@@ -40,3 +40,9 @@ class Contract(models.Model):
                 record.commitment_end_date = record.date_start +  delta(
                     record.commitment_period_type,
                     record.commitment_period_number)
+
+    @api.model
+    def of_sale(self, sale):
+        return self.search([
+            ("contract_line_ids.sale_order_line_id.order_id", "=", sale.id),
+        ])
