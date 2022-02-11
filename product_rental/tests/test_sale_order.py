@@ -27,9 +27,7 @@ class SaleOrderTC(RentalSaleOrderTC):
     def generate_contract_invoices(self, partner=None, tax=None):
         so = self.create_sale_order(partner, tax)
         so.action_confirm()
-        contracts = self.env['contract.contract'].search([
-            ("contract_line_ids.sale_order_line_id.order_id", "=", so.id),
-        ])
+        contracts = self.env['contract.contract'].of_sale(so.id)
         lines = contracts.mapped('contract_line_ids')
         self.assertEqual(set(lines.mapped('date_start')), {date(2030, 1, 1)})
         self.assertEqual(set(lines.mapped('commitment_duration')), {12})

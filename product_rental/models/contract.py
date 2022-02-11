@@ -82,3 +82,9 @@ class Contract(models.Model):
     def _inverse_date_start(self):
         for contract in self:
             contract.main_contract_line_id.date_start = contract.date_start
+
+    @api.model
+    def of_sale(self, sale):
+        return self.search([
+            ("contract_line_ids.sale_order_line_id.order_id", "=", sale.id),
+        ])
