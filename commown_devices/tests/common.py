@@ -127,8 +127,11 @@ class WizardPickingTC(DeviceAsAServiceTC):
         for name, field in fields.items():
             domain = domains[name]
             if isinstance(domain, str):
+                context = choices.copy()
+                # Remove builtins from eval context: "id" can be used in domains
+                context["__builtins__"] = {}
                 try:
-                    domain = eval(domain, choices.copy())
+                    domain = eval(domain, context)
                 except:
                     domain = None
             if domain is None:
