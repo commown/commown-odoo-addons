@@ -27,11 +27,7 @@ class SaleOrder(models.Model):
         return stage
 
     def related_contracts(self):
-        return self.env['contract.contract'].search([
-            ('contract_line_ids.sale_order_line_id.order_id',
-             '=',
-             self.id),
-        ])
+        return self.env['contract.contract'].of_sale(self)
 
     def _create_lead(self, name, team, so_line, **kwargs):
         data = {
