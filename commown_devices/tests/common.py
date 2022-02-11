@@ -88,53 +88,50 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         ])
         contract.send_device(quant, date, True)
 
-
-class WizardPickingTC(DeviceAsAServiceTC):
-
-    def prepare_wizard(self, entity, entity_field, user_choices=None):
-        wizard_name = "%s.picking.wizard" % entity._name
-        wizard_model = self.env[wizard_name].with_context({
-            "default_%s" % entity_field: entity.id,
-            "active_model": entity._name,
-            "active_id": entity.id,
-            "active_ids": entity.ids,
+    def prepare_ui(self, created_model_name, related_entity, relation_field,
+                   user_choices=None):
+        created_model = self.env[created_model_name].with_context({
+            "default_%s" % relation_field: related_entity.id,
+            "active_model": related_entity._name,
+            "active_id": related_entity.id,
+            "active_ids": related_entity.ids,
         })
 
         # Get default values
-        fields = wizard_model.fields_get()
-        defaults = wizard_model.default_get(fields.keys())
-        choices = defaults.copy()
+        fields = created_model.fields_get()
+        defaults = created_model.default_get(fields.keys())
+        values = defaults.copy()
         if user_choices is None:
             user_choices = {}
-        choices.update(user_choices)
+        values.update(user_choices)
 
         # Execute onchange methods
-        domains = {name: field.get("domain", None)
-                   for name, field in fields.items()}
-        specs = wizard_model._onchange_spec()
-        result = wizard_model.onchange(
-            choices, list(user_choices.keys()), specs)
+        specs = created_model._onchange_spec()
+        result = created_model.onchange(
+            values, list(user_choices.keys()), specs)
         updates = result.get("value", {})
         for name, val in updates.items():
             if isinstance(val, tuple):
                 updates[name] = val[0]
-        choices.update(updates)
+        values.update(updates)
 
         # Apply domain restrictions
+        domains = {name: field.get("domain", None)
+                   for name, field in fields.items()}
         for name, domain in result.get("domain", {}).items():
             domains[name] = domain
         possible_values = {}
         for name, field in fields.items():
             domain = domains[name]
             if isinstance(domain, str):
-                context = choices.copy()
+                context = values.copy()
                 # Remove builtins from eval context: "id" can be used in domains
                 context["__builtins__"] = {}
                 try:
                     domain = eval(domain, context)
                 except:
-                    domain = None
+                    domain = []
             if domain is None:
                 continue
             possible_values[name] = self.env[field["relation"]].search(domain)
-        return defaults, possible_values
+        return values, possible_values
