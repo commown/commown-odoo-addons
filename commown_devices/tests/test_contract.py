@@ -15,9 +15,7 @@ class ContractTC(DeviceAsAServiceTC):
         lot2 = self.adjust_stock(serial="my-fp3-2")
         quant2 = lot2.quant_ids.filtered(lambda q: q.quantity > 0)
 
-        contract = self.env["contract.contract"].search([
-            ("contract_line_ids.sale_order_line_id.order_id", "=", self.so.id),
-        ])[0]
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
 
         contract.send_device(quant1, "2021-07-01 17:00:00", do_transfer=True)
         contract.send_device(quant2, "2021-07-14", do_transfer=True)

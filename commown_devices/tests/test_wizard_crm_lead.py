@@ -1,7 +1,12 @@
-from .common import WizardPickingTC
+from .common import DeviceAsAServiceTC
 
 
-class WizardCrmLeadPickingTC(WizardPickingTC):
+class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
+
+    def prepare_wizard(self, related_entity, relation_field, user_choices=None):
+        wizard_name = "%s.picking.wizard" % related_entity._name
+        return self.prepare_ui(wizard_name, related_entity, relation_field,
+                               user_choices=user_choices)
 
     def get_lead(self):
         return self.env["crm.lead"].search([
