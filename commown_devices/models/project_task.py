@@ -34,6 +34,16 @@ class ProjectTask(models.Model):
 
         if self.contract_id:
             quants = self.contract_id.quant_ids
+
+        elif self.partner_id:
+            quants = self.env["contract.contract"].search([
+                ("partner_id.commercial_partner_id", "=",
+                 self.partner_id.commercial_partner_id.id),
+            ]).mapped('quant_ids')
+            if product:
+                quants = quants.filtered(
+                    lambda q: q.lot_id.product_id == product.id)
+
         else:
             qdom = [("quantity", ">", 0),
                     "|",
@@ -45,6 +55,7 @@ class ProjectTask(models.Model):
             if product:
                 qdom.append(("lot_id.product_id", "=", product.id))
             quants = self.env["stock.quant"].search(qdom)
+
         domain = [("id", "in", quants.mapped("lot_id").ids)]
 
         if product:
@@ -60,6 +71,14 @@ class ProjectTask(models.Model):
             setattr(self, field_name, possible_values)
         elif value and value not in possible_values:
             setattr(self, field_name, False)
+
+    @api.onchange("partner_id")
+    def onchange_partner_id_set_lot_id(self):
+        "if contract_id could not be guessed, restrict lot_id at best"
+        if not self.contract_id:  # otherwise another onchange will do the job
+            lot_domain = self._compute_lot_domain()
+            self._reset_field_target("lot_id", lot_domain)
+            return {"domain": {"lot_id": lot_domain}}
 
     @api.onchange("contract_id", "storable_product_id")
     def onchange_contract_or_product(self):
@@ -80,6 +99,11 @@ class ProjectTask(models.Model):
     def onchange_lot_id(self):
         if self.lot_id:
             self.storable_product_id = self.lot_id.product_id
+            if not self.contract_id:
+                contracts = self.lot_id.mapped("quant_ids").filtered(
+                    lambda q: q.quantity > 0).mapped("contract_id")
+                if len(contracts) == 1:
+                    self.contract_id = contracts.id
 
     def action_scrap_device(self):
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
