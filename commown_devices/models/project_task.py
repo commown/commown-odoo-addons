@@ -31,10 +31,12 @@ class ProjectTask(models.Model):
 
     def _compute_lot_domain(self):
         product = self.storable_product_id
+
         if self.contract_id:
             quants = self.contract_id.quant_ids
         else:
-            qdom = ["|",
+            qdom = [("quantity", ">", 0),
+                    "|",
                     ("location_id", "child_of", self.env.ref(
                         "commown_devices.stock_location_devices_to_check").id),
                     ("location_id", "child_of", self.env.ref(
@@ -91,6 +93,7 @@ class ProjectTask(models.Model):
 
         current_loc = self.env['stock.quant'].search([
             ('lot_id', '=', self.lot_id.id),
+            ('quantity', '>', 0),
         ]).location_id
         if current_loc:
             ctx["default_location_id"] = current_loc[0].id
