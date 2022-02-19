@@ -8,7 +8,7 @@ class ProjectTask(models.Model):
         'contract.contract',
         string='Contract',
         default=lambda self: self._default_contract(),
-        domain=lambda self: self._domain_contract(),
+        domain="[('partner_id.commercial_partner_id', '=', commercial_partner_id)]",
     )
     commercial_partner_id = fields.Many2one(
         'res.partner', related='partner_id.commercial_partner_id')
@@ -30,16 +30,11 @@ class ProjectTask(models.Model):
         related='project_id.require_contract')
 
     def _default_contract(self):
-        domain = self._domain_contract()
-        if self.env["contract.contract"].search_count(domain) == 1:
-            return self.env["contract.contract"].search(domain)
-
-    def _domain_contract(self):
-        domain = []
-        if self.partner_id:
-            domain.append(("partner_id.commercial_partner_id", "=",
-                           self.partner_id.commercial_partner_id.id))
-        return domain
+        if self.commercial_partner_id:
+            domain = [('partner_id.commercial_partner_id', '=',
+                       self.commercial_partner_id.id)]
+            if self.env["contract.contract"].search_count(domain) == 1:
+                return self.env["contract.contract"].search(domain)
 
     @api.onchange("partner_id")
     def onchange_partner_id_set_contract(self):
@@ -47,7 +42,6 @@ class ProjectTask(models.Model):
         if (self.contract_id.partner_id.commercial_partner_id !=
                 self.partner_id.commercial_partner_id):
             self.contract_id = self._default_contract() or False
-        return {"domain": {"contract_id": self._domain_contract()}}
 
     @api.onchange("contract_id")
     def onchange_contract_id_set_partner(self):
