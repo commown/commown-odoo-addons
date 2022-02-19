@@ -52,7 +52,7 @@ class ProjectTask(models.Model):
                     ("location_id", "child_of", self.env.ref(
                         "commown_devices.stock_location_new_devices").id),
                     ]
-            if product:
+            if product:  # optimize the request a bit
                 qdom.append(("lot_id.product_id", "=", product.id))
             quants = self.env["stock.quant"].search(qdom)
 
