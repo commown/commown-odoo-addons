@@ -43,7 +43,9 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.project.update({"device_tracking": True, "require_contract": True})
 
         # Set partner only
-        values, choices = self.get_ui(partner_id=partner.id)
+        values, choices = self.get_ui(
+            partner_id=partner.id,
+            commercial_partner_id=partner.commercial_partner_id.id)
 
         # > check values
         self.assertEqual(values.get("project_id"), self.project.id)
