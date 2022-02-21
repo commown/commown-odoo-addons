@@ -64,13 +64,22 @@ class ProjectTask(models.Model):
         return domain
 
     def _reset_field_target(self, field_name, domain):
-        value = getattr(self, field_name)
+        """ Set value of `field_name` according to its `domain` and actual value
+
+        Perform a search of the possible values from `domain` and:
+        - if there is a single possible value, use it to set the field
+        - otherwise, if the actual value isn't one of them, reset the field
+        - otherwise do nothing (and let the actual value)
+        """
+
         model = self.env[self._fields[field_name].comodel_name]
         possible_values = model.search(domain)
         if len(possible_values) == 1:
             setattr(self, field_name, possible_values)
-        elif value and value not in possible_values:
-            setattr(self, field_name, False)
+        else:
+            value = getattr(self, field_name)
+            if value and value not in possible_values:
+                setattr(self, field_name, False)
 
     @api.onchange("partner_id")
     def onchange_partner_id_set_lot_id(self):
