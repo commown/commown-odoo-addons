@@ -24,12 +24,18 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self._create_and_send_device("fp4", None)
         self._create_and_send_device("cc1", self.c1, cc)
         self._create_and_send_device("cc2", None)
+        self._create_and_send_device("cc3", self.c3, cc, do_transfer=False)
 
-    def _create_and_send_device(self, serial, contract, product=None):
+        # Create a unused product
+        self.storable_product.copy({"name": "unused product"})
+
+
+    def _create_and_send_device(self, serial, contract, product=None,
+                                do_transfer=True):
         lot = self.adjust_stock(product, serial=serial)
         if contract is not None:
             quant = lot.quant_ids.filtered(lambda q: q.quantity > 0)
-            contract.send_device(quant.ensure_one(), do_transfer=True)
+            contract.send_device(quant.ensure_one(), do_transfer=do_transfer)
 
     def get_ui(self, **user_choices):
         return self.prepare_ui("project.task", self.project, "project_id",
@@ -58,7 +64,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(choices["contract_id"], self.c1 | self.c2 | self.c3)
         self.assertEqual(choices["storable_product_id"], product1 | product2)
         lot_names = set(choices["lot_id"].mapped("name"))
-        self.assertEqual(lot_names, {"fp1", "fp2", "fp3", "cc1"})
+        self.assertEqual(lot_names, {"fp1", "fp2", "fp3", "cc1", "cc3"})
 
         # Set contract only (contract 1: two device choice)
         values, choices = self.get_ui(contract_id=self.c1.id)
