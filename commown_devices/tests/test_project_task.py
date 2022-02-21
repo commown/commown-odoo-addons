@@ -41,12 +41,12 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         return self.prepare_ui("project.task", self.project, "project_id",
                                user_choices=user_choices)
 
-    def test_ui_with_contract_and_device(self):
+    def test_ui_help_desk(self):
+        self.project.update({"device_tracking": True, "require_contract": True})
+
         partner = self.so.partner_id
         product1 = self.storable_product.product_variant_ids[0]
         product2 = self.storable_product2.product_variant_ids[0]
-
-        self.project.update({"device_tracking": True, "require_contract": True})
 
         # Set partner only
         values, choices = self.get_ui(
@@ -106,3 +106,42 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(choices["contract_id"], self.c1 | self.c2 | self.c3)
         self.assertEqual(choices["storable_product_id"], product1 | product2)
         self.assertEqual(choices["lot_id"].mapped("name"), ["cc1"])
+
+    def test_ui_repair(self):
+        self.project.update({"device_tracking": True, "require_contract": False})
+
+        product = self.storable_product.product_variant_ids[0]
+        product2 = self.storable_product2.product_variant_ids[0]
+
+        # Set product only
+        values, choices = self.get_ui(storable_product_id=product.id)
+
+        # > check values
+        self.assertEqual(values.get("project_id"), self.project.id)
+        self.assertFalse(values.get("partner_id"))
+        self.assertEqual(values.get("storable_product_id"), product.id)
+        self.assertFalse(values.get("contract_id"))
+        self.assertFalse(values.get("lot_id"))
+
+        # > check domains
+        self.assertEqual(set(choices["storable_product_id"].mapped("name")),
+                         {'Core-X4', 'Fairphone 3', 'unused product'})
+        lot_names = set(choices["lot_id"].mapped("name"))
+        self.assertEqual(lot_names, {"fp4", "cc2"})
+
+        # Set lot_id only
+        lot = self.env["stock.production.lot"].search([("name", "=", "cc2")])
+        values, choices = self.get_ui(lot_id=lot.id)
+
+        # > check values
+        self.assertEqual(values.get("project_id"), self.project.id)
+        self.assertFalse(values.get("partner_id"))
+        self.assertFalse(values.get("contract_id"))
+        self.assertEqual(values.get("storable_product_id"), lot.product_id.id)
+        self.assertEqual(values.get("lot_id"), lot.id)
+
+        # > check domains
+        self.assertEqual(set(choices["storable_product_id"].mapped("name")),
+                         {'Core-X4', 'Fairphone 3', 'unused product'})
+        lot_names = set(choices["lot_id"].mapped("name"))
+        self.assertEqual(lot_names, {"fp4", "cc2"})
