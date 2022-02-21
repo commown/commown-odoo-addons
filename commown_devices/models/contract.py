@@ -39,6 +39,8 @@ class Contract(models.Model):
     @api.depends("picking_ids.state")
     def _compute_quant_ids(self):
         for record in self:
+            if not record.partner_id:
+                continue
             loc = record.partner_id.get_customer_location()
             record.quant_ids = record.picking_ids.mapped(
                 "move_line_ids.lot_id.quant_ids").filtered(
