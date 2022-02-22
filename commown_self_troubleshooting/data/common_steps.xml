@@ -37,6 +37,46 @@
       </div>
     </template>
 
+    <template id="step-manipulation-option">
+      <div t-attf-id="step-{{ step }}">
+        <div class="clearfix">
+          <h2>Option lors de la souscription</h2>
+          <br />
+          <p>Lors de votre souscription, vous avez choisi l'une des deux options
+            <i>Commown manipule les modules en cas de panne</i> ou
+            <i>Je manipule les modules en cas de panne</i>.
+          </p>
+          <p>
+            Vous retrouverez cette information dans votre commande <a target="_blank" href="/my/orders">ici</a>.
+          </p>
+          <p class="text-danger">
+            Même en ayant souscrit l'option
+            <i>Commown manipule les modules en cas de panne</i>
+            vous pouvez effectuer vous-même la réparation en sélectionnant l'autre option ci-dessous.
+            Cela permet d'éviter l'envoi d'un autre appareil et vous fait
+            gagner beaucoup de temps (pas de transfert de données et applications
+            d'un téléphone à l'autre).
+          </p>
+          <p>
+          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces, 
+          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
+          </p>
+        </div>
+        <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
+          <div class="form-group">
+            <label for="type_contrat">Option choisie lors de votre souscription</label>
+            <select class="form-control" required="required" id="type_contrat" name="type_contrat" data-required-error="Veuillez sélectionner le type de contrat">
+              <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+              <option value="commown">Commown manipule les modules en cas de panne</option>
+              <option value="me">Je manipule les modules en cas de panne</option>
+            </select>
+            <div class="help-block with-errors"/>
+          </div>
+        </div>
+
+      </div>
+    </template>
+
     <template id="step-ship-module">
       <t t-set="partner" t-value="env.user.partner_id"/>
       <t t-set="delivery" t-value="partner.colissimo_delivery_data()"/>
