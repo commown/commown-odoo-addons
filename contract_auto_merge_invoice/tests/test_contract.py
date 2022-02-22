@@ -8,7 +8,5 @@ from odoo.tests.common import at_install, post_install
 class ContractTC(TestContractBase):
 
     def test_auto_merge_invoice(self):
-        # TODO, FIXME
-        return
         invoice = self.contract.recurring_create_invoice()
         self.assertTrue(invoice.auto_merge)
