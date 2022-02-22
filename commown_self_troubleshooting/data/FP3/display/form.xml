@@ -72,10 +72,17 @@
                       <p>
                         Vous retrouverez cette information dans votre commande <a target="_blank" href="/my/orders">ici</a>.
                       </p>
-                      <p class="text-muted">
-                        NB : Même en ayant choisi l'option
+                      <p class="text-danger">
+                        Même en ayant souscrit l'option
                         <i>Commown manipule les modules en cas de panne</i>
-                        vous pouvez toujours effectuer vous-même la réparation en sélectionnant l'autre option ci-dessous.
+                        vous pouvez effectuer vous-même la réparation en sélectionnant l'autre option ci-dessous.
+                        Cela permet d'éviter l'envoi d'un autre appareil et vous fait
+                        gagner beaucoup de temps (pas de transfert de données et applications
+                        d'un téléphone à l'autre).
+                      </p>
+                      <p>
+                      NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces, 
+                      le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
                       </p>
                     </div>
                     <div id="form-step-1" role="form" data-toggle="validator">
