@@ -39,7 +39,7 @@
           </div>
         </div>
 
-        <div t-if="'FP3' in contract_types">
+        <div t-if="'FP3' in contract_types or 'FP3+' in contract_types">
           <h4 class="page-header">Fairphone 3</h4>
           <div class="list-group">
             <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp3-display">

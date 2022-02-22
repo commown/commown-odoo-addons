@@ -32,7 +32,7 @@
         </t>
 
         <!-- Variables à modifier ici -->
-        <t t-set="contract_name_like">FP3/</t>
+        <t t-set="contract_name_like">FP3</t>
         <t t-set="tag_names">Appareil FP3</t>
         <t t-set="issue_title">FP3 - Changement d'écran et/ou vitre de protection)</t>
         <t t-set="issue_description_template">issue-description-fp3-screen</t>

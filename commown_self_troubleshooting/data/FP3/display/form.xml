@@ -30,7 +30,7 @@
           </t>
 
           <!-- Variables à modifier ici -->
-          <t t-set="contract_name_like">FP3/</t>
+          <t t-set="contract_name_like">FP3</t>
           <t t-set="tag_names">FP MOD ecran</t>
           <t t-set="issue_title">FP3 - Écran </t>
           <t t-set="issue_description_template">issue-description-fp3-display</t>
