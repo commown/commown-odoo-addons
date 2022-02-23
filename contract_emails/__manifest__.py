@@ -1,5 +1,5 @@
 # coding: utf-8
-# Copyright (C) 2020 - Today: Commown (https://commown.coop)
+# Copyright (C) 2022: Commown (https://commown.coop)
 # @author: Florent Cayré
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -18,7 +18,6 @@
         "data/cron.xml",
         "security/ir.model.access.csv",
         "views/contract.xml",
-        "views/planned_mail_template.xml",
     ],
     "installable": True,
     "application": False,
