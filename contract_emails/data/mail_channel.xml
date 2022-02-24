@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+
+    <record id="channel" model="mail.channel">
+      <field name="name">Contract-related customer messages channel</field>
+      <field name="email_send">False</field>
+      <field name="alias_contact">everyone</field>
+      <field name="public">private</field>
+    </record>
+
+</odoo>
