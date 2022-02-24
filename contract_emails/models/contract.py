@@ -49,31 +49,75 @@ class ContractTemplatePlannedMailGenerator(models.Model):
               " when the email will be sent"),
     )
 
-    def compute_send_date(self, contract):
-        self.ensure_one()
-        return (fields.Date.from_string(contract.date_start)
-                + contract.get_relative_delta(
-                    self.interval_type, self.interval_number))
+    max_delay_days = fields.Integer(
+        string="Max email delay (in days)",
+        help=("Once this delay after the intended send date is expired,"
+              " the email is not sent"),
+        default=30,
+    )
 
-    def generate_planned_mail_templates(self, contract, before, after):
-        """ Generate planned mails for given contract, which send date is
-        strictly before the `before` date and after or equal to the `after`
-        date.
+    send_date_offset_days = fields.Integer(
+        string="Send date in days after contract start",
+        compute="_compute_send_date_offset_days",
+        store=True,
+    )
+
+    @api.depends("interval_type", "interval_number")
+    def _compute_send_date_offset_days(self):
+        today = date.today()
+        for record in self:
+            dt = self.env["account.analytic.account"].get_relative_delta(
+                record.interval_type, record.interval_number)
+            record.send_date_offset_days = (today + dt - today).days
+
+    @api.model
+    def cron_send_planned_mails(self):
+        """ Mails to be sent today:
+        - contract_start + related_offset >= today
+        - not already sent
         """
-        if not contract.date_start:
-            return
-        create = self.env['contract_emails.planned_mail_template'].create
-        for gen in self:
-            planned_send_date = gen.compute_send_date(contract)
-            if before is not None and planned_send_date >= before:
-                continue
-            if after is not None and planned_send_date <= after:
-                continue
-            create({
-                "mail_template_id": gen.mail_template_id.id,
-                "planned_send_date": planned_send_date,
-                "res_id": contract.id,
-            })
+        self.env.cr.execute("""
+            SELECT C.id, PMG.id
+              FROM account_analytic_account C
+              JOIN account_analytic_contract CT ON (C.contract_template_id=CT.id)
+              JOIN contract_emails_planned_mail_generator PMG ON (CT.id=PMG.contract_id)
+             WHERE C.date_start + PMG.send_date_offset_days <= CURRENT_DATE
+               AND CURRENT_DATE - PMG.max_delay_days < C.date_start + PMG.send_date_offset_days
+               AND C.date_end IS NULL
+               AND C.recurring_invoices
+               AND NOT EXISTS(SELECT 1
+                                FROM contract_emails_planned_mail_sent PMS
+                               WHERE PMS.contract_id=C.id
+                                 AND PMS.planned_mail_generator_id=PMG.id)
+             ORDER BY C.id, PMG.send_date_offset_days
+        """)
+        result = self.env.cr.fetchall()
+        channel = self.env.ref("contract_emails.channel")
+        subtype = self.env.ref("mail.mt_comment")
+        for contract_id, planned_mail_generator_id in result:
+            contract = self.env["account.analytic.account"].browse(contract_id)
+            pmg = self.env["contract_emails.planned_mail_generator"].browse(
+                planned_mail_generator_id)
+            pmg.send_planned_mail(contract)
+            if not any(f.channel_id.id == channel.id
+                       for f in contract.message_follower_ids):
+                self.env['mail.followers'].create({
+                    'channel_id': channel.id,
+                    'partner_id': False,
+                    'res_id': contract.id,
+                    'res_model': contract._name,
+                    'subtype_ids': [(6, 0, subtype.ids)]
+                })
+
+    @api.multi
+    def send_planned_mail(self, contract):
+        self.ensure_one()
+        contract.message_post_with_template(self.mail_template_id.id)
+        self.env["contract_emails.planned_mail_sent"].create({
+            "send_date": fields.Datetime.now(),
+            "contract_id": contract.id,
+            "planned_mail_generator_id": self.id,
+        })
 
 
 class ContractTemplate(models.Model):
@@ -86,50 +130,27 @@ class ContractTemplate(models.Model):
     )
 
 
-class Contract(models.Model):
-    _name = "account.analytic.account"
-    _inherit = [
-        "account.analytic.account",
-        "contract_emails.planned_mail_template_object",
+class ContractSentPlannedEmail(models.Model):
+    _name = "contract_emails.planned_mail_sent"
+    _sql_constraints = [
+        ('uniq_contract_and_mail_gen',
+         'UNIQUE (contract_id, planned_mail_generator_id)',
+         'Planned mail cannot be send twice for the same contract.'),
     ]
 
-    def planned_email_generators(self):
-        return self.mapped('contract_template_id.planned_mail_gen_ids')
+    contract_id = fields.Many2one(
+        "account.analytic.account",
+        String="Contract",
+        required=True,
+    )
 
-    @api.model
-    def create(self, values):
-        values.pop('planned_mail_gen_ids', None)  # XXX
-        contract = super(Contract, self).create(values)
-        contract._generate_planned_emails()
-        return contract
+    planned_mail_generator_id = fields.Many2one(
+        "contract_emails.planned_mail_generator",
+        String="Planned mail generator",
+        required=True,
+    )
 
-    @api.multi
-    def write(self, values):
-        old_date_end = self.date_end
-        res = super(Contract, self).write(values)
-        if "date_start" in values or "contract_template_id" in values:
-            for contract in self:
-                contract._generate_planned_emails(unlink_first=True)
-        if "date_end" in values:
-            if not values["date_end"]:
-                # date_end is unset: regenerate emails after old end date
-                after = fields.Date.from_string(old_date_end)
-                for contract in self:
-                    contract._generate_planned_emails(after=after)
-            else:
-                if not old_date_end or values["date_end"] < old_date_end:
-                    # date_end is set from unset or set sooner: remove planned
-                    # emails to be sent after the new end date
-                    for contract in self:
-                        for pmt in contract._get_planned_emails():
-                            if pmt.planned_send_date >= values["date_end"]:
-                                pmt.sudo().unlink()
-                else:
-                    # date_end is set later: regenerate planned emails between
-                    # the old and new end dates
-                    for contract in self:
-                        before = fields.Date.from_string(values["date_end"])
-                        after = fields.Date.from_string(old_date_end)
-                        contract._generate_planned_emails(
-                            before=before, after=after)
-        return res
+    send_date = fields.Datetime(
+        String="Date the planned email was sent",
+        required=True,
+    )
