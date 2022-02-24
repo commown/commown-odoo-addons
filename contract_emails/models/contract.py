@@ -92,11 +92,22 @@ class ContractTemplatePlannedMailGenerator(models.Model):
              ORDER BY C.id, PMG.send_date_offset_days
         """)
         result = self.env.cr.fetchall()
+        channel = self.env.ref("contract_emails.channel")
+        subtype = self.env.ref("mail.mt_comment")
         for contract_id, planned_mail_generator_id in result:
             contract = self.env["account.analytic.account"].browse(contract_id)
             pmg = self.env["contract_emails.planned_mail_generator"].browse(
                 planned_mail_generator_id)
             pmg.send_planned_mail(contract)
+            if not any(f.channel_id.id == channel.id
+                       for f in contract.message_follower_ids):
+                self.env['mail.followers'].create({
+                    'channel_id': channel.id,
+                    'partner_id': False,
+                    'res_id': contract.id,
+                    'res_model': contract._name,
+                    'subtype_ids': [(6, 0, subtype.ids)]
+                })
 
     @api.multi
     def send_planned_mail(self, contract):

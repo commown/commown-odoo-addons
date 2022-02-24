@@ -43,6 +43,7 @@ class ContractTemplateMailGenerator(TestContractBase):
     def test_cron(self):
         "Emails planned in the past must be sent"
         pmt_model = self.env["contract_emails.planned_mail_generator"]
+        channel = self.env.ref("contract_emails.channel")
 
         self.create_gen(0, text=u"Mail at contract start", max_delay_days=10)
         self.create_gen(6, text=u"Mail after 6 days", max_delay_days=10)
@@ -54,6 +55,12 @@ class ContractTemplateMailGenerator(TestContractBase):
         c3 = self.create_contract(today - timedelta(days=30))
         c4 = self.create_contract(today - timedelta(days=30),
                                   date_end=fields.Date.to_string(today))
+
+        # Check channel is not already listening to contract
+        self.assertFalse(c1.message_follower_ids.mapped('channel_id'))
+        self.assertFalse(c2.message_follower_ids.mapped('channel_id'))
+        self.assertFalse(c3.message_follower_ids.mapped('channel_id'))
+        self.assertFalse(c4.message_follower_ids.mapped('channel_id'))
 
         pmt_model.cron_send_planned_mails()
 
@@ -74,9 +81,17 @@ class ContractTemplateMailGenerator(TestContractBase):
             ["<p>Mail after 25 days</p>"])  # Other mails are too old
         self.assertFalse(c4_mails)
 
+        # Channel must follow the contracts from which an email was sent
+        self.assertEqual(c1.message_follower_ids.mapped('channel_id'), channel)
+        self.assertEqual(c2.message_follower_ids.mapped('channel_id'), channel)
+        self.assertEqual(c3.message_follower_ids.mapped('channel_id'), channel)
+        self.assertFalse(c4.message_follower_ids.mapped('channel_id'))
+
         # Check messages are not sent again and again
         pmt_model.cron_send_planned_mails()
 
         self.assertEqual(c1.message_ids.filtered(is_mail), c1_mails)
         self.assertEqual(c2.message_ids.filtered(is_mail), c2_mails)
         self.assertEqual(c3.message_ids.filtered(is_mail), c3_mails)
+
+        self.assertFalse(c4.message_follower_ids.mapped('channel_id'))
