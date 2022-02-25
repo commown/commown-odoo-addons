@@ -130,6 +130,19 @@ class ContractTemplate(models.Model):
     )
 
 
+class Contract(models.Model):
+    _inherit = "account.analytic.account"
+
+    @api.model
+    def create(self, values):
+        """ Do not update planned_mail_gen_ids inexisting field
+
+        This is due to the stupid inheritance in the 10.0 contract module.
+        """
+        values.pop('planned_mail_gen_ids', None)
+        return super(Contract, self).create(values)
+
+
 class ContractSentPlannedEmail(models.Model):
     _name = "contract_emails.planned_mail_sent"
     _sql_constraints = [
