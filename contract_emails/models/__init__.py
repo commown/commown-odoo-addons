@@ -1,1 +1,1 @@
-import contract
+from . import contract

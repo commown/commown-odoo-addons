@@ -8,15 +8,14 @@ _logger = logging.getLogger(__name__)
 
 
 class ContractTemplatePlannedMailGenerator(models.Model):
-    """Class that defines on a contract model what mail template to send
-    and how to compute the planned send date from the contract start
-    date.
-    """
     _name = "contract_emails.planned_mail_generator"
+    _description = ("Defines on a contract model what mail template to send"
+                    " and how to compute the planned send date from the"
+                    " contract start date.")
 
     contract_id = fields.Many2one(
-        "account.analytic.contract",
-        string=u"Contract template",
+        "contract.template",
+        string="Contract template",
         required=True,
         ondelete="cascade",
     )
@@ -25,7 +24,7 @@ class ContractTemplatePlannedMailGenerator(models.Model):
         "mail.template",
         string="Email to send",
         required=True,
-        domain="[('model', '=', 'account.analytic.account')]",
+        domain="[('model', '=', 'contract.contract')]",
         ondelete="restrict",
     )
 
@@ -66,7 +65,7 @@ class ContractTemplatePlannedMailGenerator(models.Model):
     def _compute_send_date_offset_days(self):
         today = date.today()
         for record in self:
-            dt = self.env["account.analytic.account"].get_relative_delta(
+            dt = self.env["contract.line"].get_relative_delta(
                 record.interval_type, record.interval_number)
             record.send_date_offset_days = (today + dt - today).days
 
@@ -78,13 +77,12 @@ class ContractTemplatePlannedMailGenerator(models.Model):
         """
         self.env.cr.execute("""
             SELECT C.id, PMG.id
-              FROM account_analytic_account C
-              JOIN account_analytic_contract CT ON (C.contract_template_id=CT.id)
+              FROM contract_contract C
+              JOIN contract_template CT ON (C.contract_template_id=CT.id)
               JOIN contract_emails_planned_mail_generator PMG ON (CT.id=PMG.contract_id)
              WHERE C.date_start + PMG.send_date_offset_days <= CURRENT_DATE
                AND CURRENT_DATE - PMG.max_delay_days < C.date_start + PMG.send_date_offset_days
                AND C.date_end IS NULL
-               AND C.recurring_invoices
                AND NOT EXISTS(SELECT 1
                                 FROM contract_emails_planned_mail_sent PMS
                                WHERE PMS.contract_id=C.id
@@ -95,7 +93,7 @@ class ContractTemplatePlannedMailGenerator(models.Model):
         channel = self.env.ref("contract_emails.channel")
         subtype = self.env.ref("mail.mt_comment")
         for contract_id, planned_mail_generator_id in result:
-            contract = self.env["account.analytic.account"].browse(contract_id)
+            contract = self.env["contract.contract"].browse(contract_id)
             pmg = self.env["contract_emails.planned_mail_generator"].browse(
                 planned_mail_generator_id)
             pmg.send_planned_mail(contract)
@@ -121,17 +119,17 @@ class ContractTemplatePlannedMailGenerator(models.Model):
 
 
 class ContractTemplate(models.Model):
-    _inherit = "account.analytic.contract"
+    _inherit = "contract.template"
 
     planned_mail_gen_ids = fields.One2many(
-        string=u"Planned emails",
-        comodel_name=u"contract_emails.planned_mail_generator",
+        string="Planned emails",
+        comodel_name="contract_emails.planned_mail_generator",
         inverse_name='contract_id',
     )
 
 
 class Contract(models.Model):
-    _inherit = "account.analytic.account"
+    _inherit = "contract.contract"
 
     @api.model
     def create(self, values):
@@ -145,6 +143,9 @@ class Contract(models.Model):
 
 class ContractSentPlannedEmail(models.Model):
     _name = "contract_emails.planned_mail_sent"
+    _description = ("Keeps track of the planned mails sent from a contract"
+                    " to avoid sending them more than once")
+
     _sql_constraints = [
         ('uniq_contract_and_mail_gen',
          'UNIQUE (contract_id, planned_mail_generator_id)',
@@ -152,7 +153,7 @@ class ContractSentPlannedEmail(models.Model):
     ]
 
     contract_id = fields.Many2one(
-        "account.analytic.account",
+        "contract.contract",
         String="Contract",
         required=True,
     )
