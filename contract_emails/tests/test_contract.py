@@ -5,7 +5,7 @@ from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
 def is_mail(message):
-    return message.subtype_id.get_xml_id().values()[0] == "mail.mt_comment"
+    return list(message.subtype_id.get_xml_id().values())[0] == "mail.mt_comment"
 
 
 def get_model(object):
@@ -19,18 +19,23 @@ class ContractTemplateMailGenerator(TestContractBase):
             "model_id": kwargs.get("model_id", get_model(self.contract).id),
             "name": kwargs.get("name", "Test template name"),
             "subject": kwargs.get("subject", "${object.name}"),
-            "body_html": kwargs.get("body_html", u"Test body"),
+            "body_html": kwargs.get("body_html", "Test body"),
             "user_signature": False,
         })
 
-    def create_contract(self, date, template=None, **kwargs):
-        date = fields.Date.to_string(date)
-        kwargs["recurring_next_date"] = date
-        kwargs["contract_template_id"] = (template or self.template).id
-        kwargs["date_start"] = date
-        return self.contract.copy(kwargs)
+    def create_contract(self, date_start, date_end=None, **kwargs):
+        kwargs.setdefault("contract_template_id", self.template.id)
+        contract = self.contract.copy(kwargs)
+        contract.contract_line_ids.update({
+            "recurring_next_date": date_start,
+            "date_start": date_start,
+        })
+        contract.date_start = date_start
+        if date_end:
+            contract.date_end = date_end
+        return contract
 
-    def create_gen(self, interval_number, text=u"Test body", **kwargs):
+    def create_gen(self, interval_number, text="Test body", **kwargs):
         values = {
             "contract_id": self.template.id,
             "mail_template_id": self.create_mt(body_html=text).id,
@@ -45,16 +50,15 @@ class ContractTemplateMailGenerator(TestContractBase):
         pmt_model = self.env["contract_emails.planned_mail_generator"]
         channel = self.env.ref("contract_emails.channel")
 
-        self.create_gen(0, text=u"Mail at contract start", max_delay_days=10)
-        self.create_gen(6, text=u"Mail after 6 days", max_delay_days=10)
-        g3 = self.create_gen(25, text=u"Mail after 25 days", max_delay_days=10)
+        self.create_gen(0, text="Mail at contract start", max_delay_days=10)
+        self.create_gen(6, text="Mail after 6 days", max_delay_days=10)
+        g3 = self.create_gen(25, text="Mail after 25 days", max_delay_days=10)
 
         today = date.today()
         c1 = self.create_contract(today)
         c2 = self.create_contract(today - timedelta(days=7))
         c3 = self.create_contract(today - timedelta(days=30))
-        c4 = self.create_contract(today - timedelta(days=30),
-                                  date_end=fields.Date.to_string(today))
+        c4 = self.create_contract(today - timedelta(days=30), date_end=today)
 
         # Check channel is not already listening to contract
         self.assertFalse(c1.message_follower_ids.mapped('channel_id'))
