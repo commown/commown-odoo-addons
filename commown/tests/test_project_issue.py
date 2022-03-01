@@ -206,3 +206,15 @@ class ProjectIssueTC(TransactionCase):
 
         self.assertTrue(
             self.issue.slimpay_payment_issue_process_automatically())
+
+    def test_move_issue_after_return_delay_expiry(self):
+        """ After 14 days spent in the reminder stage, crontab should
+        automatically move the issue into the 'pending' stage. """
+
+        self.issue.update({'stage_id': self.stage_waiting_return.id})
+        self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
+
+        self.reset_actions_last_run()
+        self.env['base.action.rule']._check()  # method called by crontab
+
+        self.assertEqual(self.issue.stage_id, self.stage_pending)
