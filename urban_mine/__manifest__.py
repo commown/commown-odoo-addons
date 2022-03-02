@@ -28,5 +28,5 @@
         'data/mail_templates.xml',
         'data/coupon.xml',
     ],
-    'installable': True,
+    'installable': False,
 }
