@@ -12,11 +12,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: ${{ matrix.container }}
+    name: ${{ matrix.name }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - container: ghcr.io/oca/oca-ci/py3.6-odoo12.0:latest
+          - name: test with odoo/odoo 12.0
+            container: ghcr.io/oca/oca-ci/py3.6-odoo12.0:latest
+            # TODO: FIXME : errors when running test.
+            exclude: "commown_shipping,payment_slimpay_issue"
+
     services:
       postgres:
         image: postgres:9.6
@@ -26,24 +31,37 @@ jobs:
           POSTGRES_DB: odoo
         ports:
           - 5432:5432
+    env:
+      EXCLUDE: "${{ matrix.exclude }}"
     steps:
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
+      # TODO: FIXME : errors when installing dependencies.
+      - name: Remove 'commown' because it depends on 'account_invoice_merge_auto_pay'
+        run: rm -r commown
+      - name: Remove 'custom_report' because it depends on 'account_usability'
+        run: rm -r custom_report
+      - name: Remove 'product_rental' because it depends on 'contract_payment_auto'
+        run: rm -r product_rental
+      - name: Remove 'commown_contract_variable_discount' because it depends on 'product_rental'
+        run: rm -r commown_contract_variable_discount
+      - name: Remove 'commown_lead_risk_analysis' because it depends on 'product_rental'
+        run: rm -r commown_lead_risk_analysis
+      - name: Remove 'commown_cooperative_campaign' because it depends on 'commown_contract_variable_discount'
+        run: rm -r commown_cooperative_campaign
+
+      - name: Install Debian librairies
+        run: apt-get install pdftk texlive-extra-utils texlive-latex-recommended -y
+
       - name: Install addons and dependencies
         run: oca_install_addons
-        env:
-          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting,commown_lead_risk_analysis
       # - name: Check licenses
       #   run: manifestoo -d . check-licenses
       # - name: Check development status
       #   run: manifestoo -d . check-dev-status --default-dev-status=Beta
       - name: Initialize test db
         run: oca_init_test_database
-        env:
-          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting,commown_lead_risk_analysis
       - name: Run tests
         run: oca_run_tests
-        env:
-          EXCLUDE: commown_cooperative_campaign,payment_slimpay_dump_restore_utils,commown_payment_slimpay_issue,payment_slimpay_issue,commown,product_rental,commown_contract_variable_discount,custom_report,website_sale_promotion_rule,urban_mine,commown_shipping,commown_lineageos,commown_self_troubleshooting,commown_lead_risk_analysis
       - uses: codecov/codecov-action@v1

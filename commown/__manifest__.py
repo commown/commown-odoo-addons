@@ -24,7 +24,7 @@
         'product_rental',
         'project_rating_nps',
         'sale_product_email',
-        'urban_mine',
+        # 'urban_mine',
         'custom_report',
         'website_sale_affiliate_portal',
         # 'website_sale_b2b',
