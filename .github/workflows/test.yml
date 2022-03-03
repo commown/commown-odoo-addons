@@ -42,14 +42,6 @@ jobs:
         run: rm -r commown
       - name: Remove 'custom_report' because it depends on 'account_usability'
         run: rm -r custom_report
-      - name: Remove 'product_rental' because it depends on 'contract_payment_auto'
-        run: rm -r product_rental
-      - name: Remove 'commown_contract_variable_discount' because it depends on 'product_rental'
-        run: rm -r commown_contract_variable_discount
-      - name: Remove 'commown_lead_risk_analysis' because it depends on 'product_rental'
-        run: rm -r commown_lead_risk_analysis
-      - name: Remove 'commown_cooperative_campaign' because it depends on 'commown_contract_variable_discount'
-        run: rm -r commown_cooperative_campaign
 
       - name: Install Debian librairies
         run: apt-get install pdftk texlive-extra-utils texlive-latex-recommended -y

@@ -1,3 +1,8 @@
+requests-mock
+
+# https://github.com/OCA/contract/pull/798 (12.0 port of contract_payment_auto)
+git+https://github.com/fcayre/contract@12.0-mig-contract_payment_auto-fix#subdirectory=setup/contract_payment_auto
+
 # https://github.com/OCA/account-invoicing/pull/1087
 git+https://github.com/fcayre/account-invoicing@12.0-add-account_invoice_merge_auto#subdirectory=setup/account_invoice_merge_auto
 
@@ -5,8 +10,7 @@ git+https://github.com/fcayre/account-invoicing@12.0-add-account_invoice_merge_a
 git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_payment#subdirectory=setup/account_invoice_merge_payment
 
 # https://github.com/OCA/account-invoicing/pull/1090
-# ERROR : depends on contract_payment_auto
-# git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_auto_pay#subdirectory=setup/account_invoice_merge_auto_pay
+git+https://github.com/fcayre/account-invoicing@12.0-mig-account_invoice_merge_auto_pay#subdirectory=setup/account_invoice_merge_auto_pay
 
 # https://github.com/OCA/account-payment/pull/457
 git+https://github.com/fcayre/account-payment@12.0_add_payment_slimpay#subdirectory=setup/account_payment_slimpay
