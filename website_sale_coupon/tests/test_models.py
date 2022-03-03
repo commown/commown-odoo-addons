@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from ..models.sale_order import CouponError
 
 from odoo import fields
+from odoo.tools import mute_logger
 from odoo.exceptions import ValidationError, AccessError
 from odoo.tests.common import TransactionCase, at_install, post_install
 
@@ -36,11 +37,13 @@ class CouponSchemaTC(TransactionCase):
         self.assertTrue(err.exception.args[0].startswith(expected_msg),
                         err.exception.args[0])
 
+    @mute_logger("odoo.sql_db")
     def test_campaign_unique_name(self):
         with self.assertRaises(Exception) as err:
             self._create_campaign(name='test')
         self.assertIn('coupon_campaign_name_uniq', str(err.exception))
 
+    @mute_logger("odoo.sql_db")
     def test_coupon_unique_code(self):
         self._create_coupon(code='TEST')
         with self.assertRaises(Exception) as err:
