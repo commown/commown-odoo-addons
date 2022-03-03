@@ -50,6 +50,8 @@ jobs:
         run: rm -r commown_lead_risk_analysis
       - name: Remove 'commown_cooperative_campaign' because it depends on 'commown_contract_variable_discount'
         run: rm -r commown_cooperative_campaign
+      - name: Remove 'commown_devices' because it depends on 'commown_lead_risk_analysis'
+        run: rm -r commown_devices
 
       - name: Install Debian librairies
         run: apt-get install pdftk texlive-extra-utils texlive-latex-recommended -y
