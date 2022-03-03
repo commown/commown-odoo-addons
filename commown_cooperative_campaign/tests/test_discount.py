@@ -7,6 +7,7 @@ import requests
 import requests_mock
 
 from odoo.fields import Date
+from odoo.tools import mute_logger
 
 from odoo.addons.commown_contract_variable_discount.tests.common import (
     ContractSaleWithCouponTC)
@@ -115,6 +116,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
         self.assertEqual(invoice.amount_total, 6.9)
 
+    @mute_logger("odoo.addons.commown_cooperative_campaign.models.discount")
     def test_invoice_optin_error_any_422(self):
         "422 HTTP errors other than double optin must raise"
         with self.assertRaises(requests.HTTPError):
