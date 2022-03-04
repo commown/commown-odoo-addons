@@ -42,10 +42,9 @@ class DiscountLineTC(TestContractBase):
         self.assertEqual(inv2.mapped("invoice_line_ids.discount"), [0.])
 
     def test_commitment_end_date(self):
-        self.contract.contract_line_ids.update({
-            "commitment_duration": 2,
-            "recurring_rule_type": "monthly",
-            "recurring_interval": 1,
+        self.contract.update({
+            "commitment_period_number": 2,
+            "commitment_period_type": "monthly",
         })
 
         self.env['contract.discount.line'].create({
@@ -62,9 +61,7 @@ class DiscountLineTC(TestContractBase):
             "contract_line_id": self.acct_line.id,
         })
 
-        self.assertEqual(
-            self.contract.mapped("contract_line_ids.commitment_end_date"),
-            [date(2018, 3, 1)])
+        self.assertEqual(self.contract.commitment_end_date, date(2018, 3, 1))
 
         expected = [(date(2018, 1, 15), 0.), (date(2018, 2, 15), 0.),
                     (date(2018, 3, 15), 0.), (date(2018, 4, 15), 5.),
