@@ -106,6 +106,8 @@ class RentalSaleOrderTC(SavepointCase):
 
     def _create_rental_contract_tmpl(self, num, **kwargs):
         kwargs.setdefault('name', 'Test Contract Template %d' % num)
+        kwargs.setdefault('commitment_period_number', 12)
+        kwargs.setdefault('commitment_period_type', 'monthly')
         return self.env['contract.template'].create(kwargs)
 
     def _oline(self, product, **kwargs):
@@ -130,5 +132,4 @@ class RentalSaleOrderTC(SavepointCase):
         kwargs.setdefault('quantity', 1)
         kwargs.setdefault('recurring_rule_type', 'monthly')
         kwargs.setdefault('recurring_interval', 1)
-        kwargs.setdefault('commitment_duration', 12)
         return (0, 0, kwargs)

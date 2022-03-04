@@ -21,30 +21,25 @@
     <xpath expr="//div[@t-if='contract.user_id']" position="replace"></xpath>
     <xpath expr="//section[hasclass('s_timeline')]" position="replace"></xpath>
 
-    <!-- Add start date and commitment duration to details table -->
-    <xpath
-        expr="//table[@id='sales_order_table']//th[@name='th_recurring_interval']"
-        position="after">
-      <th name="th_rental_start_date" class="text-right">Rental start date</th>
-      <th name="th_commitment_duration" class="text-right">Commitment duration</th>
-    </xpath>
+    <!-- Add start date and commitment to general information -->
+    <xpath expr="//div[@t-if='contract.date_end']" position="before">
 
-    <xpath
-        expr="//table[@id='sales_order_table']//td[@name='td_recurring_interval']"
-        position="after">
-      <td name="td_rental_start_date" class="text-right">
-        <span t-field="line.date_start"/>
-      </td>
-      <td name="td_commitment_duration" class="text-right">
-        <span t-field="line.commitment_duration"/>
-        <t t-if="line.recurring_rule_type=='daily'">Day(s)</t>
-        <t t-if="line.recurring_rule_type=='weekly'">Week(s)</t>
-        <t t-if="line.recurring_rule_type=='monthly'">Month(s)</t>
-        <t t-if="line.recurring_rule_type=='monthlylastday'">Month(s) last day</t>
-        <t t-if="line.recurring_rule_type=='quarterly'">Quarter(s)</t>
-        <t t-if="line.recurring_rule_type=='semesterly'">Semester(s)</t>
-        <t t-if="line.recurring_rule_type=='yearly'">Year(s)</t>
-      </td>
+      <div t-if="contract.date_end" class="row mb-2 mb-sm-1">
+        <div class="col-12 col-sm-4">
+          <strong>Commitment end date</strong>
+        </div>
+        <div class="col-12 col-sm-8">
+          <span t-field="contract.commitment_period_number"/>
+          <t t-if="contract.recurring_rule_type=='daily'">Day(s)</t>
+          <t t-if="contract.recurring_rule_type=='weekly'">Week(s)</t>
+          <t t-if="contract.recurring_rule_type=='monthly'">Month(s)</t>
+          <t t-if="contract.recurring_rule_type=='monthlylastday'">Month(s) last day</t>
+          <t t-if="contract.recurring_rule_type=='quarterly'">Quarter(s)</t>
+          <t t-if="contract.recurring_rule_type=='semesterly'">Semester(s)</t>
+          <t t-if="contract.recurring_rule_type=='yearly'">Year(s)</t>
+          (<span t-field="contract.commitment_end_date" t-options='{"widget": "date"}'/>)
+        </div>
+      </div>
     </xpath>
 
   </template>
@@ -60,9 +55,8 @@
             <span>lease payments</span>
           </b>
         </p>
-        <t t-set="recurring_rule_type" t-value="main_contract_line.recurring_rule_type"/>
-        <p t-if="main_contract_line.commitment_duration > 0">
-          <b class="main_contract_line.commitment_duration"><span>Commitment duration: </span><span t-esc="main_contract_line.commitment_duration"/> <span t-esc="recurring_rule_type"/></b>
+        <p t-if="commitment_period['number'] > 0">
+          <b class="commitment"><span>Commitment duration: </span><span t-esc="commitment_period['number']"/> <span t-esc="commitment_period['type']"/></b>
         </p>
         <h4 class="oe_price_h4 css_editable_mode_hidden">
           <b class="oe_rental_price" style="white-space: nowrap;"

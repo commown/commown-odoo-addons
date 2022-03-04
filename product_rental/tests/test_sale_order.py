@@ -32,7 +32,6 @@ class SaleOrderTC(RentalSaleOrderTC):
             ])
         lines = contracts.mapped('contract_line_ids')
         self.assertEqual(set(lines.mapped('date_start')), {date(2030, 1, 1)})
-        self.assertEqual(set(lines.mapped('commitment_duration')), {12})
         return contracts._recurring_create_invoice()
 
     def test_rental_contract_creation_without_fpos(self):

@@ -16,6 +16,8 @@
 
   <record id="contract_tmpl_basic" model="contract.template">
     <field name="name">Basic contract</field>
+    <field name="commitment_period_number">12</field>
+    <field name="commitment_period_type">monthly</field>
   </record>
 
   <record id="cl_basic_0" model="contract.template.line">
@@ -26,7 +28,6 @@
     <field name="quantity">1</field>
     <field name="recurring_rule_type">monthly</field>
     <field name="recurring_interval">1</field>
-    <field name="commitment_duration">12</field>
   </record>
 
   <record id="cl_basic_1" model="contract.template.line">
@@ -36,11 +37,12 @@
     <field name="quantity">1</field>
     <field name="recurring_rule_type">monthly</field>
     <field name="recurring_interval">1</field>
-    <field name="commitment_duration">12</field>
   </record>
 
   <record id="contract_tmpl_advanced" model="contract.template">
     <field name="name">Advanced contract</field>
+    <field name="commitment_period_number">12</field>
+    <field name="commitment_period_type">monthly</field>
   </record>
 
   <record id="cl_adv_0" model="contract.template.line">
@@ -51,7 +53,6 @@
     <field name="quantity">1</field>
     <field name="recurring_rule_type">monthly</field>
     <field name="recurring_interval">1</field>
-    <field name="commitment_duration">12</field>
   </record>
 
   <record id="cl_adv_1" model="contract.template.line">
@@ -61,7 +62,6 @@
     <field name="quantity">1</field>
     <field name="recurring_rule_type">monthly</field>
     <field name="recurring_interval">1</field>
-    <field name="commitment_duration">12</field>
   </record>
 
   <record id="prod_fp" model="product.product">

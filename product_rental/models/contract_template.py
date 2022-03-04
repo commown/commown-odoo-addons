@@ -4,6 +4,28 @@ from odoo import fields, models, api
 class ContractTemplate(models.Model):
     _inherit = 'contract.template'
 
+    commitment_period_number = fields.Integer(
+        string='Commitment period number',
+        help='Commitment duration in number of periods',
+        default=0,
+        required=True,
+    )
+
+    commitment_period_type = fields.Selection(
+        [
+            ('daily', 'Day(s)'),
+            ('weekly', 'Week(s)'),
+            ('monthly', 'Month(s)'),
+            ('monthlylastday', 'Month(s) last day'),
+            ('quarterly', 'Quarter(s)'),
+            ('semesterly', 'Semester(s)'),
+            ('yearly', 'Year(s)'),
+        ],
+        default='monthly',
+        string='Commitment period type',
+        required=True,
+    )
+
     payment_mode_id = fields.Many2one(
         'account.payment.mode', string='Payment Mode',
         domain=[('payment_type', '=', 'inbound')],
