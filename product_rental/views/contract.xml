@@ -11,8 +11,11 @@
         <field name="payment_mode_id" />
       </xpath>
 
-      <xpath expr="//group[@name='group_invoice_lines']//tree" position="inside">
-        <field name="commitment_duration" />
+      <xpath expr="//group[@name='group_main']" position="inside">
+        <group name="commitment">
+          <field name="commitment_period_number" />
+          <field name="commitment_period_type" />
+        </group>
       </xpath>
 
       <xpath expr="//group[@name='group_legend']" position="inside">
@@ -20,19 +23,6 @@
         <p> <strong>##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name</p>
       </xpath>
 
-    </field>
-  </record>
-
-  <record id="contract_template_line_form_view" model="ir.ui.view">
-    <field name="name">contract.template.line form view (in product_rental)</field>
-    <field name="model">contract.template.line</field>
-    <field name="inherit_id" ref="contract.contract_template_line_form_view"/>
-    <field name="arch" type="xml">
-      <xpath expr="//group[@name='recurrence_info']" position="after">
-        <group name="commitment">
-          <field name="commitment_duration" />
-        </group>
-      </xpath>
     </field>
   </record>
 
@@ -44,29 +34,25 @@
 
       <xpath expr="//field[@name='recurring_next_date']" position="before">
         <field name="date_start" />
-        <field name="min_contract_duration" />
-        <field name="min_contract_end_date" />
-      </xpath>
-
-      <xpath
-          expr="//field[@name='contract_line_ids']//tree//field[@name='date_end']"
-          position="after">
-        <field name="commitment_duration" />
-        <field name="commitment_end_date" readonly="1"/>
+        <field name="commitment_period_number" />
+        <field name="commitment_period_type" />
       </xpath>
 
     </field>
   </record>
 
-  <record id="contract_line_form_view" model="ir.ui.view">
-    <field name="name">contract.line form view (in product_rental)</field>
-    <field name="model">contract.line</field>
-    <field name="inherit_id" ref="contract.contract_line_form_view"/>
+  <record id="contract_contract_tree_view" model="ir.ui.view">
+    <field name="name">contract.contract tree view (in product_rental)</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_tree_view" />
     <field name="arch" type="xml">
-      <xpath expr="//group[@name='recurrence_info']" position="after">
-        <group name="commitment">
-          <field name="commitment_duration" />
-        </group>
+      <xpath expr="//field[@name='code']" position="replace"></xpath>
+      <xpath expr="//field[@name='journal_id']" position="replace"></xpath>
+      <xpath expr="//tree" position="inside">
+        <field name="date_start"/>
+        <field name="recurring_next_date"/>
+        <field name="commitment_end_date"/>
+        <field name="date_end"/>
       </xpath>
     </field>
   </record>
