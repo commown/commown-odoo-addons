@@ -47,6 +47,5 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
 
         self.so.action_confirm()
 
-        self.contract = self.env['contract.contract'].search([
-            ('name', 'ilike', '%' + self.so.name + '%'),
-        ]).ensure_one()
+        self.contract = self.env['contract.contract'].of_sale(self.so)
+        self.contract.ensure_one()
