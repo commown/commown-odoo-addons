@@ -102,6 +102,7 @@ class ProductRentalSaleOrderLine(models.Model):
             contract_line._onchange_date_start()
             contract_lines |= contract_line
 
+        contract._compute_date_end()
         return contract_lines
 
 
