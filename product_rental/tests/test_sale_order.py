@@ -27,9 +27,7 @@ class SaleOrderTC(RentalSaleOrderTC):
     def generate_contract_invoices(self, partner=None, tax=None):
         so = self.create_sale_order(partner, tax)
         so.action_confirm()
-        contracts = self.env['contract.contract'].search([
-            ('name', 'ilike', '%' + so.name + '%'),
-            ])
+        contracts = self.env['contract.contract'].of_sale(so)
         lines = contracts.mapped('contract_line_ids')
         self.assertEqual(set(lines.mapped('date_start')), {date(2030, 1, 1)})
         return contracts._recurring_create_invoice()

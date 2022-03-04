@@ -93,7 +93,7 @@ def set_contract_for_invoice_merge_autopay(contract):
     mecanism to pay all the partner's draft invoices at once using a
     merged invoice if necessary.
     """
-    assert contract.is_auto_pay and contract.recurring_invoices
+    assert contract.is_auto_pay
     contract.is_auto_pay = False
     partner = contract.partner_id
 

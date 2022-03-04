@@ -1,0 +1,26 @@
+<odoo>
+
+  <record id="wizard_crm_lead_picking_form" model="ir.ui.view">
+    <field name="name">[commown] Crm lead picking creation form view</field>
+    <field name="model">crm.lead.picking.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Send a device">
+        <sheet>
+          <group>
+            <field name="lead_id" invisible="1"/>
+            <field name="date"/>
+            <field name="product_tmpl_id" options="{'no_create': True}"/>
+            <field name="variant_id" options="{'no_create': True}"/>
+            <field name="lot_id" options="{'no_create': True}"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="create_picking" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>

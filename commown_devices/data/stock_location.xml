@@ -1,0 +1,60 @@
+<odoo>
+
+  <data>
+
+    <record id="stock_location_available_for_rent" model="stock.location">
+      <field name="name">Devices available for rent</field>
+      <field name="usage">view</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" eval="ref('stock.stock_location_stock')"/>
+    </record>
+
+    <record id="stock_location_new_devices" model="stock.location">
+      <field name="name">New devices</field>
+      <field name="usage">view</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_available_for_rent"/>
+    </record>
+
+    <record id="stock_location_repackaged_devices" model="stock.location">
+      <field name="name">Repackaged devices</field>
+      <field name="usage">view</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_available_for_rent"/>
+    </record>
+
+    <record id="stock_location_devices_to_check" model="stock.location">
+      <field name="name">Devices to check/ diagnose</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock.stock_location_stock"/>
+    </record>
+
+    <record id="stock_location_outsourced_repair" model="stock.location">
+      <field name="name">Waiting for an outsourced repair</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+    </record>
+
+    <record id="stock_location_supplier_scrap" model="stock.location">
+      <field name="name">Supplier scrap location</field>
+      <field name="usage">inventory</field>
+      <field name="scrap_location">True</field>
+      <field name="location_id" ref="stock.stock_location_suppliers"/>
+    </record>
+
+    <record id="stock_location_repairer" model="stock.location">
+      <field name="name">Repairer locations</field>
+      <field name="usage">view</field>
+      <field name="location_id" ref="stock.stock_location_locations_partner"/>
+    </record>
+
+    <record id="stock_location_contract_transfer" model="stock.location">
+      <field name="name">Location for devices awaiting a contract transfer</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+    </record>
+
+  </data>
+
+</odoo>

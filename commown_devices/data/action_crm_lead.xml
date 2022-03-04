@@ -1,0 +1,16 @@
+<odoo>
+
+  <data>
+
+    <record id="action_generate_picking" model="ir.actions.server">
+      <field name="name">[commown] Generate picking</field>
+      <field name="model_id" ref="model_crm_lead"/>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code">action = record.action_generate_picking()</field>
+      <field name="binding_model_id" ref="model_crm_lead" />
+    </record>
+
+  </data>
+
+</odoo>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="view_contract_list" model="ir.ui.view">
+    <field name="name">Commown devices Contract list</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_tree_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='partner_id']" position="after">
+        <field name="quant_nb"/>
+      </xpath>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="contract_contract_customer_form_view">
+    <field name="name">Contract customer form</field>
+    <field name="model">contract.contract</field>
+    <field
+        name="inherit_id"
+        ref="commown_contractual_issue.contract_contract_customer_form_view"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//group[@name='main']" position="inside">
+        <group name="devices" string="Device moves">
+          <field name="quant_ids">
+            <tree>
+              <field name="product_id"/>
+              <field name="lot_id"/>
+              <field name="location_id"/>
+              <field name="in_date"/>
+            </tree>
+          </field>
+          <field name="picking_ids">
+            <tree
+                colors="red: state not in ('done', 'cancel'); grey: state == 'cancel'"
+                default_order="date_done ASC, id ASC"
+                >
+              <field name="name"/>
+              <field name="location_id"/>
+              <field name="location_dest_id"/>
+              <field name="date"/>
+              <field name="date_done"/>
+              <field name="state"/>
+            </tree>
+          </field>
+        </group>
+
+      </xpath>
+
+    </field>
+  </record>
+
+</odoo>
