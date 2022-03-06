@@ -8,7 +8,7 @@
     'version': '12.0.1.0.0',
     'author': "Commown SCIC",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://commown.coop",
     'depends': [
         'account_payment_slimpay',
     ],
