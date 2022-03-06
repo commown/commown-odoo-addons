@@ -1,4 +1,4 @@
-# Copyright 2020 Commown SCIC SAS (https://commown.fr)
+# Copyright 2022-today Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Custom reports',
@@ -10,7 +10,7 @@
     ==============
     This module adds custom reports.
     """,
-    'author': "Commown SCIC SAS",
+    'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
     'depends': [
