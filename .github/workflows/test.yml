@@ -40,11 +40,9 @@ jobs:
       # TODO: FIXME : errors when installing dependencies.
       - name: Remove 'commown' because it depends on 'account_invoice_merge_auto_pay'
         run: rm -r commown
-      - name: Remove 'custom_report' because it depends on 'account_usability'
-        run: rm -r custom_report
 
       - name: Install Debian librairies
-        run: apt-get install pdftk texlive-extra-utils texlive-latex-recommended -y
+        run: apt-get install pdftk texlive-extra-utils texlive-latex-recommended libreoffice -y
 
       - name: Install addons and dependencies
         run: oca_install_addons

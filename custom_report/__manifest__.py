@@ -22,6 +22,9 @@
         'sale_usability',  # required for sale.layout_category (py3o)
         'scic',     # required for is_equity (py3o)
     ],
+    'external_dependencies': {
+        'python': ['py3o.template', 'py3o.formats'],
+    },
     'data': [
         'report/report.xml',
     ],
