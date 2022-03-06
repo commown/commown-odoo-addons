@@ -7,7 +7,7 @@
                     ' products in it excl. taxes'),
     'author': "Commown SCIC",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://commown.coop",
     'depends': [
         'website_sale',
     ],

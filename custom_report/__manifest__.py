@@ -12,7 +12,7 @@
     """,
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://commown.coop",
     'depends': [
         'report_py3o',
         'account_usability',  # needed for account_invoice.has_discount (py3o)
