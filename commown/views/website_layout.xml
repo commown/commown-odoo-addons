@@ -9,7 +9,7 @@
         }
       </style>
 
-      <script type="text/javascript" src="/commown/static/src/tarteaucitron/tarteaucitron.js"></script>
+      <script type="text/javascript" src="/commown/static/lib/tarteaucitron/tarteaucitron.js"></script>
 
       <script type="text/javascript">
           tarteaucitron.init({
