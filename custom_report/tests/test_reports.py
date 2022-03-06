@@ -17,7 +17,7 @@ class InvoiceReportTC(TransactionCase):
 
     def setUp(self):
         super(InvoiceReportTC, self).setUp()
-        self.b2c_partner = self.env.ref('base.res_partner_3')
+        self.b2c_partner = self.env.ref('base.partner_demo_portal')
         self.b2b_partner = self.partner = self.env.ref(
             'base.res_partner_address_1')
 
@@ -72,7 +72,9 @@ class InvoiceReportTC(TransactionCase):
         if is_refund:
             inv.type = 'out_refund'
         if contract:
-            inv.invoice_line_ids.update({'contract_line_id': contract.id})
+            inv.invoice_line_ids.update({
+                'contract_line_id': contract.contract_line_ids[0].id,
+            })
         inv.action_invoice_open()
         return inv
 
@@ -109,10 +111,14 @@ class InvoiceReportTC(TransactionCase):
             'name': 'Test Contract',
             'partner_id': self.b2c_partner.id,
             'pricelist_id': self.b2c_partner.property_product_pricelist.id,
+            'contract_line_ids': [(0, 0, {
+                "name": "line 1",
+                "product_id": self.std_product.id,
+            })],
         })
         so = self.sale(self.b2c_partner, [self.std_product])
         inv = self.open_invoice(so, contract=contract)
-        doc = self.html_invoice(inv, '/tmp/toto.html')
+        doc = self.html_invoice(inv)
         self.assertEqual(doc.xpath('//h1/text()'),
                          ['Invoice %s' % inv.display_name.strip()])
         first_inv_line_descr = doc.xpath(
