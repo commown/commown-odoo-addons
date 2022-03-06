@@ -14,7 +14,7 @@
     """,
     'author': "Commown SCIC SAS",
     'license': "AGPL-3",
-    'website': "https://commown.fr",
+    'website': "https://commown.coop",
     'depends': [
         'website_sale',
     ],
