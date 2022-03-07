@@ -82,7 +82,7 @@ class CouponConditionTC(ContractSaleWithCouponTC):
         create_invoice = self.contract.recurring_create_invoice
 
         # Default tax is 15%
-        self.assertEqual(create_invoice().amount_total, 6.9)
-        self.assertEqual(create_invoice().amount_total, 6.9)
-        self.assertEqual(create_invoice().amount_total, 6.9)
-        self.assertEqual(create_invoice().amount_total, 34.5)
+        self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 30.0)

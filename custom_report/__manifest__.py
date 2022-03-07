@@ -1,4 +1,4 @@
-# Copyright 2020 Commown SCIC SAS (https://commown.fr)
+# Copyright 2022-today Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Custom reports',
@@ -10,17 +10,21 @@
     ==============
     This module adds custom reports.
     """,
-    'author': "Commown SCIC SAS",
+    'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
     'depends': [
-        'report_py3o',
         'account_usability',  # needed for account_invoice.has_discount (py3o)
         'base_company_extension',  # required for legal_type (py3o)
-        'sale_usability',  # required for sale.layout_category (py3o)
         'l10n_fr',   # required for siret (py3o)
+        'product_rental',
+        'report_py3o',
+        'sale_usability',  # required for sale.layout_category (py3o)
         'scic',     # required for is_equity (py3o)
     ],
+    'external_dependencies': {
+        'python': ['py3o.template', 'py3o.formats'],
+    },
     'data': [
         'report/report.xml',
     ],

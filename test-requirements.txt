@@ -29,3 +29,9 @@ git+https://github.com/fcayre/sale-workflow@12-ADD-sale_product_email#subdirecto
 
 # https://github.com/OCA/project/pull/890
 git+https://github.com/fcayre/project@12-ADD-project_rating_nps#subdirectory=setup/project_rating_nps
+
+# Akretion does not add setuptools files to their repos
+git+https://github.com/fcayre/odoo-usability@12.0-fix-account_usability-and-make-pip-installable#subdirectory=setup/base_usability
+git+https://github.com/fcayre/odoo-usability@12.0-fix-account_usability-and-make-pip-installable#subdirectory=setup/account_usability
+git+https://github.com/fcayre/odoo-usability@12.0-fix-account_usability-and-make-pip-installable#subdirectory=setup/base_company_extension
+git+https://github.com/fcayre/odoo-usability@12.0-fix-account_usability-and-make-pip-installable#subdirectory=setup/sale_usability
