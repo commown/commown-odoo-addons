@@ -18,7 +18,7 @@
     </xpath>
 
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
-      <t t-set="user_channels" t-value="[c for c in user.partner_id.channel_ids if c.channel_type=='channel']"/>    
+      <t t-set="user_channels" t-value="[c for c in user.partner_id.channel_ids if c.channel_type=='channel']"/>
       <div t-if="user_channels">
         <h3 class="page-header">Contact us</h3>
         <div class="list-group">
