@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    
+
 <!-- invoice report -->
 <record id="account.account_invoices" model="ir.actions.report">
     <field name="report_type">py3o</field>
