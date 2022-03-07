@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2018 Commown (https://commown.fr).
 # @author Florent Cayré <florent@commown.fr>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
