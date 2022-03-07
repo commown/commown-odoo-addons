@@ -86,18 +86,18 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
     def test_invoices(self):
         before7 = partial(ts_before, days=7)
         before1 = partial(ts_before, days=1)
-        self.assertEqual(self.invoice(before1, mock_optin=True).amount_total,
-                         6.9)
-        self.assertEqual(self.invoice(before1, ts_after).amount_total, 6.9)
-        self.assertEqual(self.invoice(before7, before1).amount_total, 34.5)
-        self.assertEqual(self.invoice(ts_after).amount_total, 34.5)
+        self.assertEqual(self.invoice(before1, mock_optin=True).amount_untaxed,
+                         6.0)
+        self.assertEqual(self.invoice(before1, ts_after).amount_untaxed, 6.0)
+        self.assertEqual(self.invoice(before7, before1).amount_untaxed, 30.0)
+        self.assertEqual(self.invoice(ts_after).amount_untaxed, 30.0)
 
     def test_invoice_no_identifier(self):
         "Partners having no phone or country do not benefit from the discount"
         self.so.partner_id.phone = False
         before1 = partial(ts_before, days=1)
         self.assertEqual(
-            self.invoice(before1, check_mock_calls=False).amount_total, 34.5)
+            self.invoice(before1, check_mock_calls=False).amount_untaxed, 30.0)
 
     def test_invoice_double_optin(self):
         "Double-optin specific 422 error must not raise"
@@ -114,7 +114,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
             invoice = self.contract.recurring_create_invoice()
 
-        self.assertEqual(invoice.amount_total, 6.9)
+        self.assertEqual(invoice.amount_untaxed, 6.0)
 
     @mute_logger("odoo.addons.commown_cooperative_campaign.models.discount")
     def test_invoice_optin_error_any_422(self):
