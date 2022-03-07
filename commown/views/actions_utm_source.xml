@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <record id="action_merge_utm_sources" model="ir.actions.server">
+    <field name="name">[commown] Merge sources</field>
+    <field name="model_id" ref="utm.model_utm_source"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">records.action_merge()</field>
+  </record>
+
+  <record id="action_remove_utm_sources" model="ir.actions.server">
+    <field name="name">[commown] Remove sources</field>
+    <field name="model_id" ref="utm.model_utm_source"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">records.action_remove()</field>
+  </record>
+
+</odoo>

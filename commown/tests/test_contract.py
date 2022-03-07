@@ -11,7 +11,7 @@ class ContractPaymentTC(TestContractBase):
 
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
+        super(ContractPaymentTC, cls).setUpClass()
         slimpay = cls.env['payment.acquirer'].search(
             [('provider', '=', 'slimpay')]).ensure_one()
         payment_token = cls.env['payment.token'].create({
@@ -21,20 +21,17 @@ class ContractPaymentTC(TestContractBase):
             'acquirer_id': slimpay.id,
             'acquirer_ref': 'Slimpay mandate ref',
         })
-        cls.contract.update({
-            'payment_token_id': payment_token.id,
-            'is_auto_pay': True,
-        })
+        cls.contract.payment_token_id = payment_token
 
     def setUp(self):
-        super().setUp()
-        client_patcher = patch('odoo.addons.account_payment_slimpay.models.'
+        super(ContractPaymentTC, self).setUp()
+        client_patcher = patch('odoo.addons.payment_slimpay.models.'
                                'slimpay_utils.get_client')
         client_patcher.start()
         self.addCleanup(client_patcher.stop)
 
     def test_default_payin_label(self):
-        with patch('odoo.addons.account_payment_slimpay.models.'
+        with patch('odoo.addons.payment_slimpay.models.'
                    'slimpay_utils.SlimpayClient.create_payment') as pay:
             invoice = self.contract.recurring_create_invoice()
             label = pay.call_args[0][-1]
@@ -42,11 +39,15 @@ class ContractPaymentTC(TestContractBase):
 
     def test_custom_payin_label(self):
         self.contract.write({
-            'transaction_label': 'Invoice #INV# - #DATE#',
+            'transaction_label': 'Invoice #START# - #END# (#INV#)',
+            'recurring_invoicing_type': 'pre-paid',
             'recurring_next_date': '2018-02-15',
+            'recurring_rule_type': 'monthly',
         })
-        with patch('odoo.addons.account_payment_slimpay.models.'
+        with patch('odoo.addons.payment_slimpay.models.'
                    'slimpay_utils.SlimpayClient.create_payment') as pay:
             invoice = self.contract.recurring_create_invoice()
             label = pay.call_args[0][-1]
-            self.assertEqual(label, 'Invoice %s - 02/15/2018' % invoice.number)
+            expected_label = ('Invoice 02/15/2018 - 03/14/2018 (%s)'
+                              % invoice.number)
+            self.assertEqual(label, expected_label)

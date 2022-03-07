@@ -51,7 +51,7 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
     <record id="mail_template_issue_reminder" model="mail.template">
       <field name="name">[commown] SAV : relance email</field>
       <field name="subject">Commown : votre demande d'assistance se languit de vous !</field>
-      <field name="model_id" ref="project.model_project_task"/>
+      <field name="model_id" ref="project_issue.model_project_issue"/>
       <field name="body_html"><![CDATA[
 <div>
   <p>Bonjour ${object.partner_id.firstname},</p>
@@ -86,13 +86,26 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
     <record id="sms_template_issue_reminder" model="mail.template">
       <field name="name">[commown] SAV : relance SMS</field>
       <field name="subject"><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
-      <field name="email_from">contact@commown.fr</field>
+      <field name="email_from">contact@commown.coop</field>
       <field name="email_to">mail2sms@envoyersmspro.com</field>
-      <field name="model_id" ref="project.model_project_task"/>
-      <field name="lang">fr_FR</field>
+      <field name="model_id" ref="project_issue.model_project_issue"/>
+      <field name="lang">False</field>
       <field name="auto_delete">True</field>
       <field name="body_html"><![CDATA[
 <p>Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.</p>
+]]></field>
+    </record>
+
+    <record id="sms_template_lead_doc_reminder" model="mail.template">
+      <field name="name">[commown] SMS relance doc</field>
+      <field name="subject"><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
+      <field name="email_from">contact@commown.coop</field>
+      <field name="email_to">mail2sms@envoyersmspro.com</field>
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="lang">False</field>
+      <field name="auto_delete">True</field>
+      <field name="body_html"><![CDATA[
+Rappel finalisation de votre commande : Pensez à mettre vos documents en ligne svp !
 ]]></field>
     </record>
 
