@@ -9,6 +9,7 @@
     'license': "AGPL-3",
     'website': "https://commown.coop",
     'depends': [
+        'product_rental',
         'website_sale',
     ],
     'external_dependencies': {
