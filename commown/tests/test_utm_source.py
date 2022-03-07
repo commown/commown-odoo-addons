@@ -9,7 +9,7 @@ class UtmSourceTC(TransactionCase):
     def test_action_merge(self):
         ref = self.env.ref
         source1 = ref("utm.utm_source_search_engine")
-        source2 = source1.copy({"name": u"test"})
+        source2 = source1.copy({"name": "test"})
         lead = ref("crm.crm_case_1")
         lead.source_id = source2.id
 
@@ -20,7 +20,7 @@ class UtmSourceTC(TransactionCase):
     def test_action_remove(self):
         ref = self.env.ref
         source1 = ref("utm.utm_source_search_engine")
-        source2 = source1.copy({"name": u"test"})
+        source2 = source1.copy({"name": "test"})
 
         with self.assertRaises(UserError):
             source1.action_remove()

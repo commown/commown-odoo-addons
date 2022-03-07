@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="contract_contract_form_view"
+          model="ir.ui.view">
+    <field name="name">Commown contract</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id"
+           ref="contract_payment_auto.contract_contract_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//group[@name='group_auto_pay']" position="after">
+        <group name="group_transaction"
+               attrs="{'invisible': [('is_auto_pay', '=', False)]}"
+               >
+          <group>
+            <field name="transaction_label"/>
+          </group>
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

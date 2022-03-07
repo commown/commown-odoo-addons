@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 
 
 def fast_to_dt(string_date):
-    return datetime(*map(int, string_date.split('-')))
+    return datetime(*list(map(int, string_date.split('-'))))
 
 
 class CommownMassReconcileSimplePartner(models.TransientModel):

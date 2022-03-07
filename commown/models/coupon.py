@@ -84,9 +84,9 @@ class Campaign(models.Model):
         settings, data = self._generate_svg()
 
         if self.env.context.get('skip_conversion', False):
-            mime, name = u'image/svg+xml', u'labels.svg'
+            mime, name = 'image/svg+xml', 'labels.svg'
         else:
-            mime, name = u'application/pdf', u'labels.pdf'
+            mime, name = 'application/pdf', 'labels.pdf'
             data = convert_svg_to_pdf(data, settings)
 
         attachment = self.env['ir.attachment'].create({

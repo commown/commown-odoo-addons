@@ -5,6 +5,7 @@
     <field name="model_id" ref="crm.model_crm_lead"/>
     <field name="sequence">5</field>
     <field name="state">code</field>
+    <field name="binding_model_id" ref="crm.model_crm_lead"/>
     <field name="code"><![CDATA[
 template = env.ref('commown.sms_template_lead_doc_reminder')
 record = record.with_context({
@@ -26,16 +27,6 @@ for data in _data:
 
 ]]>
     </field>
-  </record>
-
-  <record id="action_menu_crm_lead_send_sms_doc_reminder" model="ir.values">
-    <field name="name">[commown] Envoyer le SMS de relance doc</field>
-    <field name="model">crm.lead</field>
-    <field name="key">action</field>
-    <field name="key2">client_action_multi</field>
-    <field
-        name="value"
-        eval="'ir.actions.server,' + str(ref('action_crm_lead_send_sms_doc_reminder'))"/>
   </record>
 
 </odoo>

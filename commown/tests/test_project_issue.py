@@ -17,33 +17,33 @@ class ProjectIssueTC(TransactionCase):
         # crashes)
         self.stage_pending = self.project.type_ids[0]
         self.stage_pending.update({
-            'name': u'Working on it [after-sale: pending]',
+            'name': 'Working on it [after-sale: pending]',
             'mail_template_id': False})
         self.stage_wait = self.project.type_ids[1]
         self.stage_wait.update({
-            'name': u'Wait [after-sale: waiting-customer]',
+            'name': 'Wait [after-sale: waiting-customer]',
             'mail_template_id': False})
         self.stage_reminder = self.project.type_ids[2]
         self.stage_reminder.update({
-            'name': u'Remind email [after-sale: reminder-email]',
+            'name': 'Remind email [after-sale: reminder-email]',
             'mail_template_id': False})
         self.stage_end_ok = self.project.type_ids[3]
         self.stage_end_ok.update({
-            'name': u'Solved [after-sale: end-ok]',
+            'name': 'Solved [after-sale: end-ok]',
             'mail_template_id': False})
         self.stage_manual = self.stage_pending.copy({
-            'name': u'Solved [after-sale: manual]',
+            'name': 'Solved [after-sale: manual]',
             'mail_template_id': False})[0]
 
         self.partner = self.env.ref('portal.demo_user0_res_partner')
-        self.partner.update({'firstname': u'Flo', 'phone': u'0000000000'})
+        self.partner.update({'firstname': 'Flo', 'phone': '0000000000'})
 
         self.issue = self.env['project.issue'].create({
-            'name': u'Commown test',
+            'name': 'Commown test',
             'project_id': self.project.id,
             'stage_id': self.stage_pending.id,
             'partner_id': self.partner.id,
-            'user_id': self.env.ref(u'base.user_demo').id,
+            'user_id': self.env.ref('base.user_demo').id,
         })
 
     def reset_actions_last_run(self):
@@ -58,13 +58,13 @@ class ProjectIssueTC(TransactionCase):
         self.assertEqual(message.subtype_id, self.env.ref('mail.mt_comment'))
         self.assertEqual(
             message.subject,
-            u"Commown : votre demande d'assistance se languit de vous !")
+            "Commown : votre demande d'assistance se languit de vous !")
         self.assertEqual(message.author_id,
-                         self.env.ref(u'base.user_demo').partner_id)
+                         self.env.ref('base.user_demo').partner_id)
 
     def assertIsReminderSMS(self, message):
         self.assertEqual(message.subtype_id, self.env.ref('mail.mt_comment'))
-        self.assertIn(u'ignorez ce SMS', message.body)
+        self.assertIn('ignorez ce SMS', message.body)
 
     def assertIsStageChangeMessage(self, message):
         self.assertEqual(message.subtype_id,
@@ -85,7 +85,7 @@ class ProjectIssueTC(TransactionCase):
         sms = self.issue.message_ids[1]
         self.assertIsReminderSMS(sms)
         self.assertEqual(sms.mapped('notification_ids.res_partner_id.email'),
-                         [u'mail2sms@envoyersmspro.com'])
+                         ['mail2sms@envoyersmspro.com'])
         self.assertIsReminderEmail(self.issue.message_ids[2])
 
     def test_send_reminder_no_sms(self):
@@ -123,10 +123,10 @@ class ProjectIssueTC(TransactionCase):
     def _send_partner_email(self, author_id=None):
         self.env['mail.message'].create({
             'author_id': author_id or self.issue.partner_id.id,
-            'subject': u'Test subject',
-            'body': u"<p>Test body</p>",
-            'message_type': u'comment',
-            'model': u'project.issue',
+            'subject': 'Test subject',
+            'body': "<p>Test body</p>",
+            'message_type': 'comment',
+            'model': 'project.issue',
             'res_id': self.issue.id,
             'subtype_id': self.env.ref('mail.mt_comment').id,
         })

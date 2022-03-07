@@ -57,6 +57,6 @@ class SaleOrder(models.Model):
         coupons = self.used_coupons()
         if coupons:
             title += (
-                u' - COUPON: ' +
-                u', '.join(coupons.mapped('campaign_id.name')))
+                ' - COUPON: ' +
+                ', '.join(coupons.mapped('campaign_id.name')))
         return title
