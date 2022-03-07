@@ -81,17 +81,17 @@
             </script>
 
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/bootstrap_3.4.1/bootstrap.min.css"/>
+                  href="/commown_self_troubleshooting/static/lib/bootstrap_3.4.1/bootstrap.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard.min.css"/>
+                  href="/commown_self_troubleshooting/static/lib/smartwizard/css/smart_wizard.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
+                  href="/commown_self_troubleshooting/static/lib/smartwizard/css/smart_wizard_theme_arrows.min.css"/>
             <link rel="stylesheet" type="text/css"
-                  href="/commown_self_troubleshooting/static/src/fontawesome-5.13.0/css/all.min.css"/>
+                  href="/commown_self_troubleshooting/static/lib/fontawesome-5.13.0/css/all.min.css"/>
 
-            <script src="/commown_self_troubleshooting/static/src/jquery-3.3.1.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/smartwizard/js/jquery.smartWizard.js"></script>
+            <script src="/commown_self_troubleshooting/static/lib/jquery-3.3.1.min.js"></script>
+            <script src="/commown_self_troubleshooting/static/lib/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
+            <script src="/commown_self_troubleshooting/static/lib/smartwizard/js/jquery.smartWizard.js"></script>
             <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
 
             <t t-raw="head or ''"/>
