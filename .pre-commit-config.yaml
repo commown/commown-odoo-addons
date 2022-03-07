@@ -83,7 +83,7 @@ repos:
       - id: debug-statements
       - id: fix-encoding-pragma
         args: ["--remove"]
-  #     - id: check-case-conflict
+      - id: check-case-conflict
   #     - id: check-docstring-first
   #     - id: check-executables-have-shebangs
   #     - id: check-merge-conflict
