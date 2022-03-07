@@ -2,7 +2,7 @@
 <odoo>
 
   <!-- Add information about missing documents on user details -->
-  <template id="portal_layout" inherit_id="website_portal.portal_layout">
+  <template id="portal_layout" inherit_id="portal.portal_layout">
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]/div[1]" position="after">
       <div>
         <t t-set="no_card" t-value="(not user.partner_id.id_card1 and not user.partner_id.id_card2)" />
@@ -34,7 +34,7 @@
 
   </template>
 
-  <template id="portal_partner_details" inherit_id="website_portal.details">
+  <template id="portal_my_details" inherit_id="portal.portal_my_details">
 
     <!-- Replace name by firstname + lastname -->
     <xpath expr="//form" position="attributes">
@@ -43,11 +43,11 @@
 
     <!-- Replace name by firstname + lastname -->
     <xpath expr="//form//input[@name='name']/ancestor::div[1]" position="replace">
-      <div t-attf-class="form-group #{error.get('firstname') and 'has-error' or ''} col-lg-6">
+      <div t-attf-class="form-group #{error.get('firstname') and 'o_has_error' or ''} col-lg-6">
         <label class="control-label" for="firstname">First name</label>
         <input type="text" name="firstname" class="form-control" t-att-value="firstname or partner.firstname" />
       </div>
-      <div t-attf-class="form-group #{error.get('lastname') and 'has-error' or ''} col-lg-6">
+      <div t-attf-class="form-group #{error.get('lastname') and 'o_has_error' or ''} col-lg-6">
         <label class="control-label" for="lastname">Last name</label>
         <input type="text" name="lastname" class="form-control" t-att-value="lastname or partner.lastname" />
       </div>

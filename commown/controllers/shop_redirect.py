@@ -1,5 +1,5 @@
 import logging
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from odoo.http import request, route
 

@@ -9,21 +9,21 @@ class CrmLeadTC(TransactionCase):
         super(CrmLeadTC, self).setUp()
         self.team = self.env.ref('sales_team.salesteam_website_sales')
         self.team.default_perform_actions_on_delivery = True
-        self.lead = self._add_lead(name=u'[SO99999-01] TEST',
+        self.lead = self._add_lead(name='[SO99999-01] TEST',
                                    send_email_on_delivery=False)
 
     def _add_lead(self, **kwargs):
-        kwargs.setdefault('name', u'TEST')
+        kwargs.setdefault('name', 'TEST')
         kwargs.setdefault('team_id', self.team.id)
         kwargs.setdefault('partner_id',
                           self.env.ref('portal.demo_user0_res_partner').id)
-        kwargs.setdefault('type', u'opportunity')
+        kwargs.setdefault('type', 'opportunity')
         return self.env['crm.lead'].create(kwargs)
 
     def _link_lead_to_contract(self):
         "Create a contract link to the lead by its (sale order like) name"
         return self.env['account.analytic.account'].create({
-            'name': u'SO99999-01',
+            'name': 'SO99999-01',
             'recurring_invoices': True,
             'is_auto_pay': False,
             'date_start': '2030-01-01',
