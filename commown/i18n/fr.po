@@ -231,7 +231,12 @@ msgid "Access Groups"
 msgstr "Groupes d'accès"
 
 #. module: commown
-#: model:ir.model,name:commown.model_contract_contract
+#: model:project.task.type,name:commown.investment_followup_start_stage
+msgid "Acompte 10% Reçu"
+msgstr "Acompte 10% Reçu Web"
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_analytic_account
 msgid "Analytic Account"
 msgstr "Compte analytique"
 
@@ -332,8 +337,15 @@ msgid "Invoice"
 msgstr "Facture"
 
 #. module: commown
-#: model:ir.model.fields,help:commown.field_contract_contract_transaction_label
-#: model:ir.model.fields,help:commown.field_contract_template_transaction_label
+#: model:project.task.type,description:commown.investment_followup_start_stage
+msgid "La carte se crée ici lorsqu'un investisseur fait une commande en ligne de 10%.\n"
+"Dès qu'il a mis en ligne sa pièce d'identité on passe la carte dans la colonne suivante pour demander le solde (mail auto)."
+msgstr "La carte se crée ici lorsqu'un investisseur fait une commande en ligne de 10%.\n"
+"Dès qu'il a mis en ligne sa pièce d'identité on passe la carte dans la colonne suivante pour demander le solde (mail auto)."
+
+#. module: commown
+#: model:ir.model.fields,help:commown.field_account_analytic_account_transaction_label
+#: model:ir.model.fields,help:commown.field_account_analytic_contract_transaction_label
 #: model:ir.model.fields,help:commown.field_project_project_transaction_label
 msgid "Label to be used for the bank payment. Possible markers: #START#, #END#, #INV# (invoice number)"
 msgstr "Libellé du paiement bancaire. Marqueurs utilisables : #START#, #END#, #INV# (numéro de facture)"
@@ -415,8 +427,8 @@ msgid "Payment Transaction"
 msgstr "Transaction"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_contract_contract_transaction_label
-#: model:ir.model.fields,field_description:commown.field_contract_template_transaction_label
+#: model:ir.model.fields,field_description:commown.field_account_analytic_account_transaction_label
+#: model:ir.model.fields,field_description:commown.field_account_analytic_contract_transaction_label
 #: model:ir.model.fields,field_description:commown.field_project_project_transaction_label
 msgid "Payment label"
 msgstr "Libellé bancaire"
@@ -572,12 +584,7 @@ msgid "[commown] Send a reminder email concerning an issue"
 msgstr "[commown] Envoyer un courriel de rappel concernant un ticket"
 
 #. module: commown
-#: model:ir.actions.server,name:commown.action_start_contract
-msgid "[commown] Start contract"
-msgstr "[commown] Démarrer le contrat"
-
-#. module: commown
-#: model:ir.model,name:commown.model_contract_template
+#: model:ir.model,name:commown.model_account_analytic_contract
 msgid "account.analytic.contract"
 msgstr "contrat"
 

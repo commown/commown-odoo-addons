@@ -27,7 +27,7 @@
           </a>
         </t>
         <div t-if="ol.product_id.is_rental" class="rent">
-          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('recurring_invoice_line_ids.sale_order_line_id', '=', ol.id), ('recurring_invoices', '=', True), ('date_start', '&lt;', '2030-01-01')])"/>
+          <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('recurring_invoice_line_ids.sale_order_line_id', '=', ol.id), ('recurring_invoices', '=', True), ('date_start', '&lt;', '2030-01-01')])"/>
           (loyer unitaire :
           <span t-esc="ol.price_unit * ol.product_id.rental_price / (ol.product_id.list_price or 1)"
                 t-options="{'widget': 'monetary', 'display_currency': ol.order_id.pricelist_id.currency_id}"/>
@@ -36,7 +36,7 @@
           <span t-elif="len(contracts)&gt;1">- fin des périodes d'engagement :</span>
           <t t-foreach="contracts" t-as="contract">
             <t t-if="contract_index&gt;0">-</t>
-            <span class="commitment-end-date" t-field="contract.commitment_end_date" t-options="{'widget': 'date'}"/></t>)
+            <span class="min-contract-end-date" t-field="contract.min_contract_end_date" t-options="{'widget': 'date'}"/></t>)
         </div>
         <p>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
@@ -85,7 +85,7 @@
       <t t-if="not product.is_b2b()">$0</t>
     </xpath>
 
-    <xpath expr="//*[contains(@class, 'commitment_period_number')]/span[1]" position="replace">
+    <xpath expr="//*[contains(@class, 'min_contract_duration')]/span[1]" position="replace">
       <t t-if="not product.is_b2b()">
         <span>Commitment duration: </span>
       </t>
@@ -139,5 +139,48 @@
       <attribute name="t-if">product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids</attribute>
     </xpath>
   </template>
+
+  <!-- Language related hacks START -->
+
+  <template id="products_categories" inherit_id="website_sale.products_categories">
+    <xpath expr="//div[@id='products_grid_before']/ul[hasclass('nav')]/li[1]" position="attributes">
+      <attribute name="t-if">request.lang == 'fr_FR'</attribute>
+    </xpath>
+    <xpath expr="//t[@t-call='website_sale.categories_recursive']" position="attributes">
+      <attribute name="t-if">(request.lang == 'fr_FR' and c != env.ref('commown.categ_de')) or request.env.user.has_group('website.group_website_publisher')</attribute>
+    </xpath>
+  </template>
+
+  <template id="product" inherit_id="website_sale_b2b.product_b2b">
+    <xpath expr="//t[@t-call='website.layout']/*[1]" position="before">
+      <t t-set="display_product"
+         t-value="request.env.user.has_group('website.group_website_publisher') or request.lang == 'fr_FR' or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"/>
+    </xpath>
+    <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
+    </xpath>
+
+    <xpath expr="//hr[@t-if='product.website_description_sale']" position="attributes">
+      <attribute name="t-if">product.website_description_sale and display_product</attribute>
+    </xpath>
+    <xpath expr="//p[@t-field='product.website_description_sale']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
+    </xpath>
+    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@property='og:description']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
+    </xpath>
+    <xpath expr="//meta[@t-att-content='product.website_description_sale'][@name='twitter:description']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
+    </xpath>
+
+    <xpath expr="//div[@id='product_details']" position="inside">
+      <div t-if="not display_product"><b>Product is not available for the moment</b></div>
+    </xpath>
+    <xpath expr="//div[@t-field='product.website_description']" position="attributes">
+      <attribute name="t-if">display_product</attribute>
+    </xpath>
+  </template>
+
+  <!-- Language related hacks END -->
 
 </odoo>
