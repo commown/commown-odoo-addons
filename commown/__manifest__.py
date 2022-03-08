@@ -64,7 +64,7 @@
         'views/address_template.xml',
         'views/auth_signup.xml',
         'views/product_template.xml',
-        'views/project_issue.xml',
+        'views/project_task.xml',
         'views/website_portal_templates.xml',
         'views/website_sale_templates.xml',
         'views/website_site_portal_sale_templates.xml',
