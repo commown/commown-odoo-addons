@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 
 
 def fast_to_dt(string_date):
-    return datetime(*map(int, string_date.split('-')))
+    return datetime(*list(map(int, string_date.split('-'))))
 
 
 class CommownMassReconcileSimplePartner(models.TransientModel):
@@ -46,10 +46,14 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
                 _logger.info('Reconcile progress: %s/%s', count, len(lines))
             for i in range(count + 1, len(lines)):
                 if lines[count][self._key_field] != lines[i][self._key_field]:
+                    _logger.info('Stop searching - %d trial(s)'
+                                 ' (key field changed)', i - count)
                     break
                 if max_reconcile_days_gap is not None:
                     gap = (fast_to_dt(lines[i]['date_maturity']) - date_1).days
                     if gap > max_reconcile_days_gap:
+                        _logger.info('Stop searching - %d trial(s)'
+                                     ' (date gap reached)', i - count)
                         break
                 check = False
                 if lines[count]['credit'] > 0 and lines[i]['debit'] > 0:
@@ -67,12 +71,15 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
                     allow_partial=False
                     )
                 if reconciled:
-                    _logger.info('Reconcile success: %s <-> %s',
-                                 lines[i]['id'], lines[count]['id'])
+                    _logger.info('Reconcile success: %s <-> %s - %d trial(s)',
+                                 lines[i]['id'], lines[count]['id'], i - count)
                     res += [credit_line['id'], debit_line['id']]
                     del lines[i]
                     success_count += 1
                     break
+            else:
+                _logger.info('Tried all %d lines but no match found',
+                             len(lines) - count)
             count += 1
         return res
 

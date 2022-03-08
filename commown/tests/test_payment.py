@@ -19,7 +19,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         request_mock.configure_mock(session={})
         self.fake_session = request_mock.session
 
-        super().setUp()
+        super(PaymentTC, self).setUp()
         self.so = self.create_sale_order()
 
         self.setup_mocks()
@@ -27,9 +27,9 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
 
     def test_token_replaced(self):
         "Partner payment_token_id must be the last token created for a web sale"
+        # Assign an "old" token to the web partner:
         self.slimpay.journal_id = self.env["account.journal"].search([
             ("type", "=", "bank")], limit=1).id
-        # Assign an "old" token to the web partner:
         partner = self.so.partner_id
         old_token = self.env['payment.token'].create({
             'name': 'Test Token',
@@ -43,6 +43,12 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         # Simulate a website sale:
         tx = self.so._create_payment_transaction({
             'acquirer_id': self.slimpay.id,
+            'type': 'form',
+            'amount': self.so.amount_total,
+            'currency_id': self.so.pricelist_id.currency_id.id,
+            'partner_id': partner.id,
+            'partner_country_id': partner.country_id.id,
+            'reference': self.so.name,
         })
         self.fake_get.return_value = {
             'reference': tx.reference, 'state': 'closed.completed',

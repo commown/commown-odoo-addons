@@ -1,12 +1,15 @@
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
+from odoo.tests.common import at_install, post_install
+
 from .common import MockedEmptySessionMixin
 
 
+@at_install(False)
+@post_install(True)
 class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
 
     def setUp(self):
         super(SaleOrderTC, self).setUp()
-
         partner = self.env.ref('base.partner_demo_portal')
         self.user = partner.user_ids
         self.so = self.create_sale_order(partner)
@@ -16,21 +19,22 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
         self.g3 = self.env['res.groups'].create({'name': 'computer'})
 
         def p_by_name(name):
-            pts = self.so.mapped('order_line.product_id.product_tmpl_id')
-            return pts.filtered(lambda p: p.name == name).ensure_one()
+            return self.env['product.product'].search([
+                ('name', '=', name),
+                ('id', 'in', self.so.mapped("order_line.product_id").ids),
+            ]).ensure_one()
 
-        p1 = p_by_name(u'Fairphone Premium')
-        p2 = p_by_name(u'PC')
-        p1.support_group_ids |= self.g1 + self.g2
-        p2.support_group_ids |= self.g3
+        p1 = p_by_name('Fairphone Premium')
+        p2 = p_by_name('PC')
+        p1.product_tmpl_id.support_group_ids |= self.g1 + self.g2
+        p2.product_tmpl_id.support_group_ids |= self.g3
         p1.followup_sales_team_id = self._create_sales_team(1).id
         p2.followup_sales_team_id = self._create_sales_team(3).id
 
-        _investment_project = self.env.ref(
-            'commown.investment_followup_project')
-        self.env['project.task.type'].create({
+        _investment_project = self.env.ref('commown.investment_followup_project')
+        _stage = self.env['project.task.type'].create({
             'sequence': 1,
-            'name': u'investment received',
+            'name': 'investment received',
             'project_ids': [(6, 0, (_investment_project.id,))],
         })
 
@@ -41,7 +45,7 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
         for n in range(4):
             self.env['crm.stage'].create({
                 'team_id': team.id,
-                'name': u'test %d' % n if n != 1 else u'test [stage: start]'})
+                'name': 'test %d' % n if n != 1 else 'test [stage: start]'})
         return team
 
     def test_add_to_support_groups_action(self):
@@ -72,37 +76,12 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
         self.assertIn(self.g2, self.user.groups_id)
         self.assertIn(self.g3, self.user.groups_id)
 
-    def test_add_followup_card_without_coupon(self):
-        """ Buying a rental product must add a rental followup card """
-
-        # Trigger the automatic action
-        self.so.action_confirm()
-
-        # Check effects
-        partner = self.so.partner_id
-        products = [l.product_id for l in self.so.order_line]
-        leads = self.env['crm.lead'].search([
-            ('partner_id', '=', partner.id),
-            ('name', 'ilike', '%' + self.so.name + '%'),
-        ])
-        self.assertEqual(len(leads), 3)
-        self.assertEqual(
-            sorted(l.name.split(' ', 1)[0] for l in leads),
-            ["[%s-%02d]" % (self.so.name, i) for i in range(1, 4)])
-        self.assertEqual(sorted(l.so_line_id.product_id.name for l in leads),
-                         ['Fairphone Premium', 'PC', 'PC'])
-        self.assertEqual(set([l.team_id for l in leads]),
-                         set([p.followup_sales_team_id
-                              for p in products if p.followup_sales_team_id]))
-        self.assertTrue(all('coupon' not in name.lower()
-                            for name in leads.mapped('name')))
-
     def test_add_followup_card_name_with_coupon(self):
         """ Followup card name must indicate sale coupons were used if any """
 
         # Simulate the usage of a coupon in the sale:
         campaign = self.env['coupon.campaign'].create({
-            'name': u'Test campaign',
+            'name': 'Test campaign 40% reduction',  # % used deliberately here
             'seller_id': self.env.ref('base.res_partner_1').id,
         })
         self.env['coupon.coupon'].create({
@@ -121,7 +100,7 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
         ])
         self.assertEqual(len(leads), 3)
         self.assertTrue(
-            all(u'COUPON: %s' % campaign.name in name
+            all('COUPON: %s' % campaign.name in name
                 for name in leads.mapped('name')))
 
     def test_add_receivable_account(self):
@@ -156,4 +135,4 @@ class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
 
         self.so.action_confirm()
 
-        self.assertEquals(partner.property_account_receivable_id, account)
+        self.assertEqual(partner.property_account_receivable_id, account)
