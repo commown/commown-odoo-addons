@@ -35,6 +35,7 @@
         'account_mass_reconcile',
         'auth_signup',
         'base_action_rule',
+        'contract_variable_quantity',
         'crm',
         'mass_mailing',
         'mass_mailing_partner',
