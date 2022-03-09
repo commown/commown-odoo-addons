@@ -15,25 +15,26 @@ class ProjectIssueTC(TransactionCase):
         # conventions and remove email model as they are buggy for
         # issues (their template model is task instead, which leads to
         # crashes)
-        self.stage_pending = self.project.type_ids[0]
-        self.stage_pending.update({
+        self.stage_pending = self.env["project.task.type"].create({
             'name': u'Working on it [after-sale: pending]',
-            'mail_template_id': False})
-        self.stage_wait = self.project.type_ids[1]
-        self.stage_wait.update({
+        })
+        self.stage_pending.project_ids |= self.project
+
+        self.stage_wait = self.stage_pending.copy({
             'name': u'Wait [after-sale: waiting-customer]',
-            'mail_template_id': False})
-        self.stage_reminder = self.project.type_ids[2]
-        self.stage_reminder.update({
+        })
+        self.stage_reminder = self.stage_pending.copy({
             'name': u'Remind email [after-sale: reminder-email]',
-            'mail_template_id': False})
-        self.stage_end_ok = self.project.type_ids[3]
-        self.stage_end_ok.update({
+        })
+        self.stage_end_ok = self.stage_pending.copy({
             'name': u'Solved [after-sale: end-ok]',
-            'mail_template_id': False})
+        })
         self.stage_manual = self.stage_pending.copy({
             'name': u'Solved [after-sale: manual]',
-            'mail_template_id': False})[0]
+        })
+        self.stage_waiting_return = self.stage_pending.copy({
+            'name': u'Solved [after-sale: waiting-return]',
+        })
 
         self.partner = self.env.ref('portal.demo_user0_res_partner')
         self.partner.update({'firstname': u'Flo', 'phone': u'0000000000'})
