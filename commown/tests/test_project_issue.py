@@ -15,25 +15,26 @@ class ProjectIssueTC(TransactionCase):
         # conventions and remove email model as they are buggy for
         # issues (their template model is task instead, which leads to
         # crashes)
-        self.stage_pending = self.project.type_ids[0]
-        self.stage_pending.update({
+        self.stage_pending = self.env["project.task.type"].create({
             'name': u'Working on it [after-sale: pending]',
-            'mail_template_id': False})
-        self.stage_wait = self.project.type_ids[1]
-        self.stage_wait.update({
+        })
+        self.stage_pending.project_ids |= self.project
+
+        self.stage_wait = self.stage_pending.copy({
             'name': u'Wait [after-sale: waiting-customer]',
-            'mail_template_id': False})
-        self.stage_reminder = self.project.type_ids[2]
-        self.stage_reminder.update({
+        })
+        self.stage_reminder = self.stage_pending.copy({
             'name': u'Remind email [after-sale: reminder-email]',
-            'mail_template_id': False})
-        self.stage_end_ok = self.project.type_ids[3]
-        self.stage_end_ok.update({
+        })
+        self.stage_end_ok = self.stage_pending.copy({
             'name': u'Solved [after-sale: end-ok]',
-            'mail_template_id': False})
+        })
         self.stage_manual = self.stage_pending.copy({
             'name': u'Solved [after-sale: manual]',
-            'mail_template_id': False})[0]
+        })
+        self.stage_waiting_return = self.stage_pending.copy({
+            'name': u'Solved [after-sale: waiting-return]',
+        })
 
         self.partner = self.env.ref('portal.demo_user0_res_partner')
         self.partner.update({'firstname': u'Flo', 'phone': u'0000000000'})
@@ -205,3 +206,15 @@ class ProjectIssueTC(TransactionCase):
 
         self.assertTrue(
             self.issue.slimpay_payment_issue_process_automatically())
+
+    def test_move_issue_after_return_delay_expiry(self):
+        """ After 14 days spent in the reminder stage, crontab should
+        automatically move the issue into the 'pending' stage. """
+
+        self.issue.update({'stage_id': self.stage_waiting_return.id})
+        self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
+
+        self.reset_actions_last_run()
+        self.env['base.action.rule']._check()  # method called by crontab
+
+        self.assertEqual(self.issue.stage_id, self.stage_pending)
