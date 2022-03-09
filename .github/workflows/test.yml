@@ -39,7 +39,7 @@ jobs:
           persist-credentials: false
 
       - name: Install Debian librairies
-        run: apt-get install pdftk texlive-extra-utils texlive-latex-recommended libreoffice -y
+        run: apt-get update -y && apt install pdftk texlive-extra-utils texlive-latex-recommended libreoffice -y
 
       - name: Install addons and dependencies
         run: oca_install_addons
