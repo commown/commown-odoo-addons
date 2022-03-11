@@ -17,7 +17,7 @@ def _product_descriptions(invoice_doc):
 class InvoiceReportTC(MockedEmptySessionMixin, TransactionCase):
 
     def setUp(self):
-        super(InvoiceReportTC, self).setUp()
+        super().setUp()
         self.b2c_partner = self.env.ref('base.partner_demo_portal')
         self.b2b_partner = self.partner = self.env.ref(
             'base.res_partner_address_1')
