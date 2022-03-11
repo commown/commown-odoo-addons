@@ -1,12 +1,10 @@
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 from odoo.tests.common import at_install, post_install
 
-from .common import MockedEmptySessionMixin
-
 
 @at_install(False)
 @post_install(True)
-class SaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderTC):
+class SaleOrderTC(RentalSaleOrderTC):
 
     def setUp(self):
         super(SaleOrderTC, self).setUp()
