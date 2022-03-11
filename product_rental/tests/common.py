@@ -5,14 +5,6 @@ from odoo.tests.common import SavepointCase
 
 class MockedEmptySessionMixin(object):
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.env = cls.env(context=dict(
-            cls.env.context,
-            test_queue_job_no_delay=True,  # contract_queue_job uses jobs
-        ))
-
     def setUp(self):
         request_patcher = patch('odoo.addons.website_sale_affiliate'
                                 '.models.sale_affiliate_request.request')
@@ -22,6 +14,11 @@ class MockedEmptySessionMixin(object):
         self.addCleanup(request_patcher.stop)
 
         super(MockedEmptySessionMixin, self).setUp()
+
+        self.env = self.env(context=dict(
+            self.env.context,
+            test_queue_job_no_delay=True,  # contract_queue_job uses jobs
+        ))
 
 
 class RentalSaleOrderTC(MockedEmptySessionMixin, SavepointCase):
