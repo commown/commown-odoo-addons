@@ -24,6 +24,9 @@ git+https://github.com/fcayre/e-commerce@12-add-website_sale_affiliate_product_r
 # https://github.com/OCA/e-commerce/pull/612
 git+https://github.com/fcayre/e-commerce@12-add-website_sale_affiliate_portal#subdirectory=setup/website_sale_affiliate_portal
 
+# https://github.com/OCA/e-commerce/pull/620
+git+https://github.com/fcayre/e-commerce@12.0_add_website_sale_payment_slimpay#subdirectory=setup/website_sale_payment_slimpay
+
 # https://github.com/OCA/sale-workflow/pull/1891
 git+https://github.com/fcayre/sale-workflow@12-ADD-sale_product_email#subdirectory=setup/sale_product_email
 

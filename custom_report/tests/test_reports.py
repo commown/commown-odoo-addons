@@ -4,6 +4,7 @@ import lxml.html
 
 from odoo.tests.common import at_install, post_install, TransactionCase
 
+from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 
 
 def _product_descriptions(invoice_doc):
@@ -13,10 +14,10 @@ def _product_descriptions(invoice_doc):
 
 @at_install(False)
 @post_install(True)
-class InvoiceReportTC(TransactionCase):
+class InvoiceReportTC(MockedEmptySessionMixin, TransactionCase):
 
     def setUp(self):
-        super(InvoiceReportTC, self).setUp()
+        super().setUp()
         self.b2c_partner = self.env.ref('base.partner_demo_portal')
         self.b2b_partner = self.partner = self.env.ref(
             'base.res_partner_address_1')

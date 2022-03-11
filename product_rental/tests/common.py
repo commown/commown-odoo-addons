@@ -1,7 +1,27 @@
+from mock import patch
+
 from odoo.tests.common import SavepointCase
 
 
-class RentalSaleOrderTC(SavepointCase):
+class MockedEmptySessionMixin(object):
+
+    def setUp(self):
+        request_patcher = patch('odoo.addons.website_sale_affiliate'
+                                '.models.sale_affiliate_request.request')
+        self.request_mock = request_patcher.start()
+        self.request_mock.configure_mock(session={})
+        self.fake_session = self.request_mock.session
+        self.addCleanup(request_patcher.stop)
+
+        super(MockedEmptySessionMixin, self).setUp()
+
+        self.env = self.env(context=dict(
+            self.env.context,
+            test_queue_job_no_delay=True,  # contract_queue_job uses jobs
+        ))
+
+
+class RentalSaleOrderTC(MockedEmptySessionMixin, SavepointCase):
 
     def get_default_tax(self, amount=20.0):
         return self.env['account.tax'].create({

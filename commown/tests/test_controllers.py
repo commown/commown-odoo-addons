@@ -1,30 +1,29 @@
-import requests
+from urllib.parse import urlparse
 
-from odoo.tests.common import HttpCase, at_install, post_install, HOST, PORT
+from werkzeug.test import Client
+from werkzeug.wrappers import BaseResponse
 
-from .common import MockedEmptySessionMixin
+from odoo.service import wsgi_server
+
+from odoo.tests.common import HttpCase, at_install, post_install
 
 
 @at_install(False)
 @post_install(True)
-class ControllerTC(MockedEmptySessionMixin, HttpCase):
+class ControllerTC(HttpCase):
+
+    def setUp(self):
+        super().setUp()
+        self.test_client = Client(wsgi_server.application, BaseResponse)
+        self.test_client.get('/web/session/logout')
 
     def check_redirect(self, path, expected_path):
-        # Required by the affiliate request creation
-        self.request_mock.httprequest.headers.environ = {
-            'REMOTE_ADDR': '127.0.0.1',
-            'HTTP_USER_AGENT': 'test',
-            'HTTP_ACCEPT_LANGUAGE': 'fr',
-        }
+        resp = self.test_client.get('/shop/redirect?' + path,
+                                    follow_redirects=False)
 
-        url = 'http://%s:%s' % (HOST, PORT)
-        resp = requests.get(
-            url + '/shop/redirect?' + path,
-            headers={'Cookie': 'session_id=%s' % self.session_id})
+        self.assertEqual(resp.status_code, 302)
 
-        self.assertTrue(resp.history and resp.history[0].is_redirect)
-        self.assertEqual(resp.history[0].headers['Location'],
-                         url + expected_path)
+        self.assertEqual(urlparse(resp.headers["Location"]).path, expected_path)
 
     def test_shop_redirect_ok(self):
         self.check_redirect('aff_ref=1&redirect=/test/a', '/test/a')

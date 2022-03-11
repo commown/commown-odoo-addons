@@ -30,7 +30,16 @@ class SaleOrderTC(RentalSaleOrderTC):
         contracts = self.env['contract.contract'].of_sale(so)
         lines = contracts.mapped('contract_line_ids')
         self.assertEqual(set(lines.mapped('date_start')), {date(2030, 1, 1)})
-        return contracts._recurring_create_invoice()
+        # Do not use _recurring_create_invoice return value here as
+        # contract_queue_job (installed in the CI) returns an empty invoice set
+        # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
+        #  /models/contract_contract.py#L21)
+        contracts._recurring_create_invoice()
+        invoices = self.env["account.invoice"].search([
+            ('invoice_line_ids.contract_line_id.contract_id', 'in',
+             contracts.ids),
+        ])
+        return invoices
 
     def test_rental_contract_creation_without_fpos(self):
         """Contracts generated from rental sales have specific characteristics
@@ -40,9 +49,9 @@ class SaleOrderTC(RentalSaleOrderTC):
         specific tax (see sale.order.line `compute_rental_price` method doc)
 
         """
-        i1, i2, i3, i4, i5 = invs = self.generate_contract_invoices(
-            tax=self.new_tax(20.0))
-        c1, c2, c3, c4, c5 = invs.mapped(
+        tax = self.new_tax(20.0)
+        i5, i4, i3, i2, i1 = invs = self.generate_contract_invoices(tax=tax)
+        c5, c4, c3, c2, c1 = invs.mapped(
             'invoice_line_ids.contract_line_id.contract_id')
 
         self.assert_rounded_equals(i1.amount_total, 26.50)
@@ -117,9 +126,9 @@ class SaleOrderTC(RentalSaleOrderTC):
             ],
         })
 
-        i1, i2, i3, i4, i5 = invs = self.generate_contract_invoices(
+        i5, i4, i3, i2, i1 = invs = self.generate_contract_invoices(
             partner, tax_src)
-        c1, c2, c3, c4, c5 = invs.mapped(
+        c5, c4, c3, c2, c1 = invs.mapped(
             'invoice_line_ids.contract_line_id.contract_id')
 
         self.assert_rounded_equals(i1.amount_total, 26.50)

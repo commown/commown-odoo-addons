@@ -37,12 +37,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
-      # TODO: FIXME : errors when installing dependencies.
-      - name: Remove 'commown' because it depends on 'account_invoice_merge_auto_pay'
-        run: rm -r commown
 
       - name: Install Debian librairies
-        run: apt-get install pdftk texlive-extra-utils texlive-latex-recommended libreoffice -y
+        run: apt-get update -y && apt install pdftk texlive-extra-utils texlive-latex-recommended libreoffice libmagic1 librsvg2-bin -y
 
       - name: Install addons and dependencies
         run: oca_install_addons
