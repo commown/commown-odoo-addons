@@ -15,6 +15,8 @@
     'depends': [
         'project',
         'commown_shipping',
+        'contract',
+        'web',
     ],
     'data': [
         'data/FP2/camera/form.xml',

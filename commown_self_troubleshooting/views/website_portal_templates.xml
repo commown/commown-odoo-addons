@@ -19,7 +19,7 @@
 
       <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
 
-        <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('date_end', '=', False)])"/>
+        <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('date_end', '=', False), ('contract_template_id', '!=', False)])"/>
         <t t-set="contract_types" t-value="set(c.contract_template_id.name.split(u'/', 1)[0] for c in contracts)"/>
 
         <h3 t-if="contract_types" class="page-header">Self troubleshooting</h3>
