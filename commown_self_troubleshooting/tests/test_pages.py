@@ -1,6 +1,7 @@
 import datetime
+import traceback as tb
 
-import lxml.html
+from lxml import html, etree
 
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
@@ -13,6 +14,12 @@ from odoo.tests.common import HttpCase, at_install, post_install
 def ts_link_names(doc, strip="/page/self-troubleshoot-"):
     hrefs = doc.xpath("//a[starts-with(@href, '%s')]/@href" % strip)
     return set(href[len(strip):] for href in hrefs)
+
+
+def is_ts_page_ref(ref_instance):
+    ref = ref_instance.env.ref
+    doc = etree.fromstring(ref(ref_instance.complete_name).arch)
+    return bool(doc.xpath("//form"))
 
 
 @at_install(False)
@@ -56,9 +63,9 @@ class PagesTC(HttpCase):
         response = self.test_client.get(
             path, query_string=data, follow_redirects=True)
         self.assertEqual(response.status_code, 200, path)
-        return lxml.html.fromstring(response.data)
+        return html.fromstring(response.data)
 
-    def create_contract(self, template, ended=False, in_commitment=True):
+    def create_contract(self, template, ended=False, in_commitment=True, **kw):
         attrs = {
             "name": u"Test contract",
             "recurring_invoices": True,
@@ -73,6 +80,9 @@ class PagesTC(HttpCase):
                 datetime.date.today() + datetime.timedelta(days=80)).isoformat()
         else:
             attrs["min_contract_end_date"] = attrs["date_start"]
+
+        attrs.update(kw)
+
         with self.registry.cursor() as test_cursor:
             env = self.env(test_cursor)
             return env["account.analytic.account"].create(attrs)
@@ -87,8 +97,22 @@ class PagesTC(HttpCase):
                 ("model", "=", "ir.ui.view"),
                 ("module", "=", "commown_self_troubleshooting"),
                 ("name", "=like", arg + "%"),
-            ]).mapped("name"))
+            ]).filtered(is_ts_page_ref).mapped("name"))
         return ids
+
+    def _contract_options(self, doc):
+        "Find and return the contract id options found in given page html doc"
+        xpath = "//div[@id='step-0']//select[@id='device_contract']//option"
+        return [o.get("value") for o in doc.xpath(xpath)
+                if o.get("disabled", None) != "disabled"]
+
+    def _contract_name_like(self, page_name):
+        """ Find and return the contract_name_like variable value from the qweb
+        arch of given self troubleshooting page xmlid (without the module part).
+        """
+        tmpl = self.env.ref("commown_self_troubleshooting.%s" % page_name)
+        return etree.fromstring(tmpl.arch).xpath(
+            "//t[@t-set='contract_name_like']/text()")[0]
 
     def test_portal_no_contract(self):
         "Portal home must not crash if user has a no or not-templated contracts"
@@ -106,3 +130,27 @@ class PagesTC(HttpCase):
         self.create_contract(self._create_ct("FP3+/B2B"))
         doc = self.get_page('/my/home')
         self.assertEquals(ts_link_names(doc), self._ts_page_ids('fp2', 'fp3'))
+
+    def test_pages_load_without_errors(self):
+        "All pages should be generated without an error"
+
+        # We create a contract to appear on each page, to check the contract
+        # choice selector does not crash
+        contract_created = {}
+
+        for page_name in sorted(self._ts_page_ids("")):
+            ct_name =  self._contract_name_like(page_name) + "/B2C"
+
+            if ct_name not in contract_created:
+                contract_created[ct_name] = self.create_contract(
+                    self._create_ct(ct_name))
+
+            try:
+                doc = self.get_page('/page/self-troubleshoot-%s' % page_name)
+            except Exception as exc:
+                self.fail("Error loading %s:\n%s"
+                          % (page_name, tb.format_exc(exc)))
+
+            self.assertEqual(self._contract_options(doc),
+                             [str(contract_created[ct_name].id)],
+                             "Wrong contract choice list in page '%s'" % page_name)
