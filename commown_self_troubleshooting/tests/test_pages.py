@@ -1,4 +1,4 @@
-import datetime
+from datetime import date, timedelta
 import traceback as tb
 
 from lxml import html, etree
@@ -77,7 +77,7 @@ class PagesTC(HttpCase):
             attrs["date_end"] = "2022-01-01"
         if in_commitment:
             attrs["min_contract_end_date"] = (
-                datetime.date.today() + datetime.timedelta(days=80)).isoformat()
+                date.today() + timedelta(days=80)).isoformat()
         else:
             attrs["min_contract_end_date"] = attrs["date_start"]
 
@@ -103,7 +103,7 @@ class PagesTC(HttpCase):
     def _contract_options(self, doc):
         "Find and return the contract id options found in given page html doc"
         xpath = "//div[@id='step-0']//select[@id='device_contract']//option"
-        return [o.get("value") for o in doc.xpath(xpath)
+        return [int(o.get("value")) for o in doc.xpath(xpath)
                 if o.get("disabled", None) != "disabled"]
 
     def _contract_name_like(self, page_name):
@@ -131,6 +131,19 @@ class PagesTC(HttpCase):
         doc = self.get_page('/my/home')
         self.assertEquals(ts_link_names(doc), self._ts_page_ids('fp2', 'fp3'))
 
+    def test_page_contract_options(self):
+        ct = self._create_ct("FP2/B2C")
+        future_date = (date.today() + timedelta(days=60)).isoformat()
+
+        c1 = self.create_contract(ct)
+        c2 = self.create_contract(ct)
+        self.create_contract(ct, ended=True)
+        c4 = self.create_contract(ct, in_commitment=False)
+        c5 = self.create_contract(ct, date_end=future_date)
+
+        doc = self.get_page('/page/self-troubleshoot-fp2-battery')
+        self.assertEquals(self._contract_options(doc), (c1 | c2 | c4 | c5).ids)
+
     def test_pages_load_without_errors(self):
         "All pages should be generated without an error"
 
@@ -152,5 +165,5 @@ class PagesTC(HttpCase):
                           % (page_name, tb.format_exc(exc)))
 
             self.assertEqual(self._contract_options(doc),
-                             [str(contract_created[ct_name].id)],
+                             [contract_created[ct_name].id],
                              "Wrong contract choice list in page '%s'" % page_name)

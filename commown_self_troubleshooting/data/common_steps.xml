@@ -12,7 +12,7 @@
 
     <template id="step-contract-choice">
       <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id),
-        ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])"/>
+        ('contract_template_id.name', 'like', contract_name_like), '|', ('date_end', '=', False), ('date_end', '&gt;', datetime.date.today().isoformat())])"/>
       <div id="step-0">
         <div class="clearfix">
           <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png"
