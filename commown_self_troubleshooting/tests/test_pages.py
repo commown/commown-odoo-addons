@@ -11,6 +11,10 @@ from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase, at_install, post_install
 
 
+def value2int(lxml_element):
+    return int(lxml_element.get("value"))
+
+
 def ts_link_names(doc, strip="/page/self-troubleshoot-"):
     hrefs = doc.xpath("//a[starts-with(@href, '%s')]/@href" % strip)
     return set(href[len(strip):] for href in hrefs)
@@ -100,11 +104,12 @@ class PagesTC(HttpCase):
             ]).filtered(is_ts_page_ref).mapped("name"))
         return ids
 
-    def _contract_options(self, doc):
+    def _contract_options(self, doc, apply_transform=None):
         "Find and return the contract id options found in given page html doc"
         xpath = "//div[@id='step-0']//select[@id='device_contract']//option"
-        return [int(o.get("value")) for o in doc.xpath(xpath)
-                if o.get("disabled", None) != "disabled"]
+        apply_transform = apply_transform or (lambda o: o)
+        return set(apply_transform(o) for o in doc.xpath(xpath)
+                   if o.get("disabled", None) != "disabled")
 
     def _contract_name_like(self, page_name):
         """ Find and return the contract_name_like variable value from the qweb
@@ -142,7 +147,8 @@ class PagesTC(HttpCase):
         c5 = self.create_contract(ct, date_end=future_date)
 
         doc = self.get_page('/page/self-troubleshoot-fp2-battery')
-        self.assertEquals(self._contract_options(doc), (c1 | c2 | c4 | c5).ids)
+        self.assertEquals(self._contract_options(doc, value2int),
+                          set((c1 | c2 | c4 | c5).ids))
 
     def test_pages_load_without_errors(self):
         "All pages should be generated without an error"
@@ -164,6 +170,7 @@ class PagesTC(HttpCase):
                 self.fail("Error loading %s:\n%s"
                           % (page_name, tb.format_exc(exc)))
 
-            self.assertEqual(self._contract_options(doc),
-                             [contract_created[ct_name].id],
-                             "Wrong contract choice list in page '%s'" % page_name)
+            self.assertEqual(
+                self._contract_options(doc, value2int),
+                {contract_created[ct_name].id},
+                "Wrong contract choice list in page '%s'" % page_name)
