@@ -122,6 +122,7 @@ next_stage_marker = {
     'reminder-email': 'end-ok',
     'manual': 'pending',
     'sending-pieces-ongoing': 'pending',
+    'waiting-pieces-return' : 'pending',
 }
 for orig, dest in next_stage_marker.items():
     if '[after-sale: %s]' % orig in (record.stage_id.name or ''):
@@ -219,6 +220,20 @@ if record.model == 'project.issue' and record.message_type in ('email', 'comment
     <field name="sequence">1</field>
     <field name="kind">on_time</field>
     <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: sending-pieces-ongoing]')]</field>
+    <field name="trg_date_id" search="[('model', '=', 'project.issue'), ('name', '=', 'date_last_stage_update')]"/>
+    <field name="trg_date_range">14</field>
+    <field name="trg_date_range_type">day</field>
+    <field name="server_action_ids" eval="[(6,0,[ref('commown.action_move_issue_to_stop_waiting_stage')])]"/>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       delay waiting for the customer to return the hardware back -->
+  <record id="issue_waiting_return_delay_expired" model="base.action.rule">
+    <field name="name">[commown] Delay waiting for the customer to return the hardware back expired</field>
+    <field name="model_id" ref="project_issue.model_project_issue"/>
+    <field name="sequence">1</field>
+    <field name="kind">on_time</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: waiting-pieces-return]')]</field>
     <field name="trg_date_id" search="[('model', '=', 'project.issue'), ('name', '=', 'date_last_stage_update')]"/>
     <field name="trg_date_range">14</field>
     <field name="trg_date_range_type">day</field>

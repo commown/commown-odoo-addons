@@ -35,6 +35,9 @@ class ProjectIssueTC(TransactionCase):
         self.stage_sending_pieces_ongoing = self.stage_pending.copy({
             'name': u'Solved [after-sale: sending-pieces-ongoing]',
         })
+        self.stage_waiting_pieces_return = self.stage_pending.copy({
+            'name': u'Solved [after-sale: waiting-pieces-return]',
+        })
 
         self.partner = self.env.ref('portal.demo_user0_res_partner')
         self.partner.update({'firstname': u'Flo', 'phone': u'0000000000'})
@@ -212,6 +215,18 @@ class ProjectIssueTC(TransactionCase):
         automatically move the issue into the 'pending' stage. """
 
         self.issue.update({'stage_id': self.stage_sending_pieces_ongoing.id})
+        self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
+
+        self.reset_actions_last_run()
+        self.env['base.action.rule']._check()  # method called by crontab
+
+        self.assertEqual(self.issue.stage_id, self.stage_pending)
+
+    def test_move_issue_after_waiting_pieces_expired(self):
+        """ After 14 days spent in the reminder stage, crontab should
+        automatically move the issue into the 'pending' stage. """
+
+        self.issue.update({'stage_id': self.stage_waiting_pieces_return.id})
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
         self.reset_actions_last_run()
