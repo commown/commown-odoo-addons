@@ -32,8 +32,8 @@ class ProjectIssueTC(TransactionCase):
         self.stage_manual = self.stage_pending.copy({
             'name': u'Solved [after-sale: manual]',
         })
-        self.stage_waiting_return = self.stage_pending.copy({
-            'name': u'Solved [after-sale: waiting-return]',
+        self.stage_sending_pieces_ongoing = self.stage_pending.copy({
+            'name': u'Solved [after-sale: sending-pieces-ongoing]',
         })
 
         self.partner = self.env.ref('portal.demo_user0_res_partner')
@@ -207,11 +207,11 @@ class ProjectIssueTC(TransactionCase):
         self.assertTrue(
             self.issue.slimpay_payment_issue_process_automatically())
 
-    def test_move_issue_after_return_delay_expiry(self):
+    def test_move_issue_after_sending_pieces_ongoing_too_long(self):
         """ After 14 days spent in the reminder stage, crontab should
         automatically move the issue into the 'pending' stage. """
 
-        self.issue.update({'stage_id': self.stage_waiting_return.id})
+        self.issue.update({'stage_id': self.stage_sending_pieces_ongoing.id})
         self.issue.update({'date_last_stage_update': '2019-01-01 00:00:00'})
 
         self.reset_actions_last_run()
