@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 10.0-20171209\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 14:08+0000\n"
-"PO-Revision-Date: 2021-02-17 14:08+0000\n"
+"POT-Creation-Date: 2022-03-24 08:29+0000\n"
+"PO-Revision-Date: 2022-03-24 08:29+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -146,7 +146,7 @@ msgstr "Date de récupération du statut"
 #: model:ir.model.fields,field_description:commown_shipping.field_project_issue_expedition_urgency_mail_sent
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task_expedition_urgency_mail_sent
 msgid "Expedition urgency mail send"
-msgstr "Courriel au client pour une récupération urgente"
+msgstr "Mail au client pour une récupération urgente"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin_id
@@ -192,11 +192,6 @@ msgid "Lead/Opportunity"
 msgstr "Piste/opportunité"
 
 #. module: commown_shipping
-#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_so_line_id
-msgid "Ligne de commande"
-msgstr "Ligne de commande"
-
-#. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_parcel_type
 msgid "Parcel description"
 msgstr "Description colis"
@@ -223,6 +218,13 @@ msgid "Parcel type"
 msgstr "Type de colis"
 
 #. module: commown_shipping
+#: model:ir.actions.act_window,name:commown_shipping.action_view_parcel_types
+#: model:ir.ui.menu,name:commown_shipping.menu_planned_mail_template
+#: model:ir.ui.view,arch_db:commown_shipping.parcel_types_tree
+msgid "Parcel types"
+msgstr "Types de colis"
+
+#. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_res_partner
 msgid "Partner"
 msgstr "Partenaire"
@@ -246,6 +248,11 @@ msgstr "Incident"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type_is_return
 msgid "Return parcel"
 msgstr "Colis retour"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_so_line_id
+msgid "Sale order line"
+msgstr "Ligne de vente"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_crm_team
