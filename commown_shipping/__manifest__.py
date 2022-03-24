@@ -27,6 +27,7 @@
         'data/keychain_accounts.xml',
         'views/crm_team.xml',
         'views/crm_lead.xml',
+        'views/parcels.xml',
         'views/product.xml',
         'views/project_issue.xml',
         'views/project_project.xml',

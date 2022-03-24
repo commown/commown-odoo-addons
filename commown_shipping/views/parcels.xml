@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="parcel_types_tree" model="ir.ui.view">
+    <field name="name">Parcel types form tree</field>
+    <field name="model" eval="'commown.parcel.type'" />
+    <field name="arch" type="xml">
+      <tree string="Parcel types" editable="bottom">
+        <field name="name"/>
+        <field name="technical_name"/>
+        <field name="weight"/>
+        <field name="insurance_value"/>
+        <field name="is_return"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_view_parcel_types" model="ir.actions.act_window">
+    <field name="name">Parcel types</field>
+    <field name="res_model">commown.parcel.type</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem
+      name="Parcel types" id="menu_planned_mail_template"
+      parent="base.menu_custom" action="action_view_parcel_types" />
+
+</odoo>
