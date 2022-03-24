@@ -22,7 +22,7 @@ class ProjectTask(models.Model):
 
     def _compute_storable_product_domain(self):
         if not self.contract_id:
-            domain = [('tracking', '=', 'serial')]
+            domain = [('type', '=', 'product')]
         else:
             lots = self.contract_id.quant_ids.mapped("lot_id")
             products = lots.mapped("product_id")
