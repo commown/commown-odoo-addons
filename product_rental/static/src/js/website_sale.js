@@ -10,7 +10,8 @@ var ratio = parseFloat($rental_price.data('rental-ratio'));
 sAnimations.registry.WebsiteSale.include({
     _onChangeCombination: function (ev, $parent, combination){
         this._super.apply(this, arguments);
-        $rental_price.html(this._priceToStr(combination.price /= ratio));
+        let price = this._priceToStr(combination.price /= ratio);
+        $rental_price.find(".oe_currency_value").html(price);
     }
 });
 
