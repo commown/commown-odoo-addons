@@ -18,6 +18,7 @@
     "external_dependencies": {},
     "data": [
         "views/contract.xml",
+        "views/portal_contract.xml",
         "views/payment_transaction.xml",
         "views/product_template.xml",
         "views/website_sale_templates.xml",
