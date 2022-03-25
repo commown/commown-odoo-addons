@@ -44,7 +44,6 @@
         'sale_management',
         'web_m2x_options',
         'website_sale_cart_selectable',
-        'website_sale_hide_price',
         'website_sale_require_login',
     ],
 
