@@ -15,6 +15,15 @@
 
   </template>
 
+  <!-- From website_sale_hide_price: prices on product list is always wrong
+       for rental products, as they correspond to the initial payment which
+       is usually a deposit..
+       So we remove them (not on single product page however ). -->
+  <template id="products_item" inherit_id="website_sale.products_item">
+    <xpath expr="//div[@itemprop='offers']" position="replace">
+    </xpath>
+  </template>
+
   <template id="portal_contract_page" inherit_id="contract.portal_contract_page">
 
     <!-- Remove sections we do not want to display -->
