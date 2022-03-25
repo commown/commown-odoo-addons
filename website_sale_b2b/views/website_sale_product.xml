@@ -8,7 +8,7 @@
 
       <!-- Remove deposit price: cannot use deposit price as product price in B2B
            as sale drafts would use it which is not what we want. -->
-      <xpath expr="//*[hasclass('deposit_price')]" position="replace">
+      <xpath expr="//*[hasclass('initial_deposit_title')]" position="replace">
         <t t-if="not product.is_b2b()">$0</t>
       </xpath>
 
