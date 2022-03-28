@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <template id="payment" inherit_id="website_sale.payment">
-    <!-- Remove saved payment methods -->
-    <xpath expr="//div[@id='payment_method']" position="replace">
-    </xpath>
-  </template>
-
   <template id="orders_followup_products_links"
             inherit_id="website_sale.sale_order_portal_content_inherit_website_sale">
 

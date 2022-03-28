@@ -1,3 +1,10 @@
+/* Hide payment methods */
+#payment_method h3, #payment_method .card {
+  display: none;
+}
+
+/* Attribute value related hacks */
+
 .attribute-show {
   display: none;
 }
@@ -5,6 +12,8 @@
 .attribute-value-match.attribute-show {
   display: block;
 }
+
+/* Language-related hacks */
 
 .lang {
   display: none;
