@@ -21,8 +21,8 @@
         ref="commown_contractual_issue.contract_contract_customer_form_view"/>
     <field name="arch" type="xml">
 
-      <xpath expr="//group[@name='main']" position="inside">
-        <group name="devices" string="Device moves">
+      <xpath expr="//notebook" position="inside">
+        <page name="devices" string="Devices">
           <field name="quant_ids">
             <tree>
               <field name="product_id"/>
@@ -44,7 +44,7 @@
               <field name="state"/>
             </tree>
           </field>
-        </group>
+        </page>
 
       </xpath>
 
