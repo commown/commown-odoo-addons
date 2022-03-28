@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-26 07:57+0000\n"
-"PO-Revision-Date: 2019-06-26 07:57+0000\n"
+"POT-Creation-Date: 2022-03-28 13:00+0000\n"
+"PO-Revision-Date: 2022-03-28 13:00+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,16 +16,49 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
+msgid "<span>Commitment duration: </span>"
+msgstr "<span>Durée d'engagement : </span>"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
+msgid "<span>Commitment duration: from </span>"
+msgstr "Durée d'engagement : à partir de "
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
+msgid "<span>excl. taxes</span>"
+msgstr "<span>HT</span>"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,help:website_sale_b2b.field_product_product__website_description_sale
+#: model:ir.model.fields,help:website_sale_b2b.field_product_template__website_description_sale
+msgid "A description of the Product that you want to communicate to your online customers."
+msgstr "Description de l'article pour le magasin en ligne"
+
+#. module: website_sale_b2b
+#: model:ir.model,name:website_sale_b2b.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: website_sale_b2b
 #: model:product.public.category,name:website_sale_b2b.b2b_website_root_categ
 msgid "Products for professionals"
-msgstr "Pour les professionnels"
+msgstr "Articles pour les entreprises"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_product_product__website_description_sale
+#: model:ir.model.fields,field_description:website_sale_b2b.field_product_template__website_description_sale
+msgid "Sale description for the website"
+msgstr "Description pour le magasin en ligne"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_template_form_view
+msgid "Website"
+msgstr "Site Web"
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_public_category
 msgid "Website Product Category"
 msgstr "Catégorie d'articles du site Web"
 
-#. module: website_sale_b2b
-#: model:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
-msgid "excl. taxes"
-msgstr "HT"
