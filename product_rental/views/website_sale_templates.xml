@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+  <template id="assets_frontend" inherit_id="website.assets_frontend">
+    <xpath expr="." position="inside">
+      <link href="/product_rental/static/src/css/website_sale.css" rel="stylesheet" type="text/css"/>
+    </xpath>
+  </template>
+
   <!-- Sale order initial payment of rental product may be deposits: write it on portal -->
   <template
       id="rental_sale_order_portal_content"
@@ -15,46 +21,27 @@
 
   </template>
 
-  <template id="portal_contract_page" inherit_id="contract.portal_contract_page">
-
-    <!-- Remove sections we do not want to display -->
-    <xpath expr="//div[@t-if='contract.user_id']" position="replace"></xpath>
-    <xpath expr="//section[hasclass('s_timeline')]" position="replace"></xpath>
-
-    <!-- Add start date and commitment to general information -->
-    <xpath expr="//div[@t-if='contract.date_end']" position="before">
-
-      <div t-if="contract.date_end" class="row mb-2 mb-sm-1">
-        <div class="col-12 col-sm-4">
-          <strong>Commitment end date</strong>
-        </div>
-        <div class="col-12 col-sm-8">
-          <span t-field="contract.commitment_period_number"/>
-          <t t-if="contract.recurring_rule_type=='daily'">Day(s)</t>
-          <t t-if="contract.recurring_rule_type=='weekly'">Week(s)</t>
-          <t t-if="contract.recurring_rule_type=='monthly'">Month(s)</t>
-          <t t-if="contract.recurring_rule_type=='monthlylastday'">Month(s) last day</t>
-          <t t-if="contract.recurring_rule_type=='quarterly'">Quarter(s)</t>
-          <t t-if="contract.recurring_rule_type=='semesterly'">Semester(s)</t>
-          <t t-if="contract.recurring_rule_type=='yearly'">Year(s)</t>
-          (<span t-field="contract.commitment_end_date" t-options='{"widget": "date"}'/>)
-        </div>
-      </div>
+  <!-- From website_sale_hide_price: prices on product list is always wrong
+       for rental products, as they correspond to the initial payment which
+       is usually a deposit..
+       So we remove them (not on single product page however ). -->
+  <template id="products_item" inherit_id="website_sale.products_item">
+    <xpath expr="//div[@itemprop='offers']" position="replace">
     </xpath>
-
   </template>
 
   <template id="product_price" inherit_id="website_sale.product_price">
 
-    <xpath expr="div" position="before">
+    <xpath expr="//*[hasclass('oe_price')]//ancestor::div" position="attributes">
+      <attribute name="t-att-class" separator=" " add="product.is_rental and product.is_deposit and 'is_deposit'"/>
+    </xpath>
+
+    <xpath expr="//*[hasclass('oe_price')]//ancestor::h4//*[1]" position="before">
+      <b class="initial_deposit_title" t-if="product.is_rental and product.is_deposit">Initial deposit:</b>
+    </xpath>
+
+    <xpath expr="div" position="after">
       <div t-if="product.is_rental" class="product_price mt16">
-        <p>
-          <b t-if="product.is_deposit" class="deposit_price">
-            <span>Initial deposit: </span>
-            <span t-esc="'%g' % rental_price_ratio"/>
-            <span>lease payments</span>
-          </b>
-        </p>
         <p t-if="commitment_period['number'] > 0">
           <b class="commitment"><span>Commitment duration: </span><span t-esc="commitment_period['number']"/> <span t-esc="commitment_period['type']"/></b>
         </p>
@@ -65,10 +52,6 @@
         </h4>
         <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"/>
       </div>
-    </xpath>
-
-    <xpath expr="//h4//span[1]" position="before">
-      <b t-if="product.is_rental and product.is_deposit" class="deposit_price">Initial deposit:</b>
     </xpath>
 
   </template>
