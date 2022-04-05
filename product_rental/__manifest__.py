@@ -9,7 +9,7 @@
     'website': "https://commown.coop",
     'depends': ['website_sale', 'document', 'base_action_rule',
                 'contract_payment_auto', 'contract_payment_mode',
-                'product_contract',
+                'product_contract', 'ir_attachment_lang',
     ],
     'external_dependencies': {},
     'data': [

@@ -47,6 +47,7 @@ class ProductRentalSaleOrder(models.Model):
         return self.env['ir.attachment'].search([
             ('res_model', '=', 'account.analytic.contract'),
             ('res_id', 'in', rcts.ids),
+            ('lang', '=', self.partner_id.lang),
         ])
 
     @api.multi
