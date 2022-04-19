@@ -173,3 +173,42 @@ class SaleOrderTC(RentalSaleOrderTC):
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['FP2'],
         })
+
+
+class SaleOrderAttachmentsTC(RentalSaleOrderTC):
+
+    def setUp(self):
+        super(SaleOrderAttachmentsTC, self).setUp()
+        self.partner = self.env.ref('portal.demo_user0_res_partner')
+        self.env['res.lang'].load_lang("fr_FR")
+        self.env['res.lang'].pool.cache.clear()
+        self.so = self.create_sale_order(self.partner)
+        ct = self.so.mapped("order_line.product_id.contract_template_id")[0]
+        self.create_attachment("doc1_fr.txt", "fr_FR", ct)
+        self.create_attachment("doc2_fr.txt", "fr_FR", ct)
+        self.create_attachment("doc1_en.txt", "en_US", ct)
+
+    def create_attachment(self, name, lang, target_obj):
+        return self.env['ir.attachment'].create({
+            "name": name,
+            "type": "binary",
+            "datas": "toto",
+            "res_model": target_obj._name,
+            "res_id": target_obj.id,
+            "lang": lang,
+        })
+
+    def check_sale_quotation_send_emails(self, lang):
+        self.partner.lang = lang
+        self.so.force_quotation_send()
+        return sorted(self.so.message_ids[0].attachment_ids.mapped("name"))
+
+    def test_sale_quotation_send_emails_fr(self):
+        self.assertEqual(
+            self.check_sale_quotation_send_emails("fr_FR"),
+            ["%s_draft.pdf" % self.so.name, "doc1_fr.txt", "doc2_fr.txt"])
+
+    def test_sale_quotation_send_emails_en(self):
+        self.assertEqual(
+            self.check_sale_quotation_send_emails("en_US"),
+            ["%s_draft.pdf" % self.so.name, "doc1_en.txt"])
