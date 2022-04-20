@@ -3,8 +3,6 @@
 
 import logging
 
-import requests
-
 from odoo import models
 
 from . import ws_utils
@@ -38,22 +36,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
             # Each contract invoice starts by optin, to allow easy joining
             # of customers when they ask
-            try:
-                ws_utils.coop_ws_optin(
-                    url, campaign.name, key, date, partner.tz)
-            except requests.HTTPError as exc:
-                # Try to handle double-optin nicely
-                if exc.response.status_code == 422:
-                    json = exc.response.json()
-                    if json.get("detail", None) == 'Already opt-in':
-                        _logger.info(u"Double opt-in for %s (%d)"
-                                     % (partner.name, partner.id))
-                    else:
-                        _logger.error(u"Opt-in error json: %s" % json)
-                        raise
-                else:
-                    raise
-
+            ws_utils.coop_ws_optin(
+                url, campaign.name, key, date, partner.tz)
             subscriptions = ws_utils.coop_ws_important_events(
                 url, campaign.name, key)
             result = subscriptions and ws_utils.coop_ws_valid_events(

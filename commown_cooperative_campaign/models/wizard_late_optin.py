@@ -26,4 +26,5 @@ class LateOptinWizard(models.TransientModel):
         base_url = ws_utils.coop_ws_base_url(self.env)
 
         date = fields.Date.from_string(self.date)
-        ws_utils.coop_ws_optin(base_url, campaign.name, key, date, partner.tz)
+        ws_utils.coop_ws_optin(base_url, campaign.name, key, date, partner.tz,
+                               silent_double_optin=False)
