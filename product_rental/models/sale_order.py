@@ -42,13 +42,28 @@ class ProductRentalSaleOrder(models.Model):
 
     @api.multi
     def contractual_documents(self):
+        """ Return the contractual docs of the products' contract template
+
+        These are the docs attached to the contract template filtered according
+        to the partner's language, if set (otherwise they are all returned):
+        - docs without a language set are returned
+        - docs with the same language as the partner are returned
+        """
         self.ensure_one()
         rcts = self.mapped('order_line.product_id.contract_template_id')
-        return self.env['ir.attachment'].search([
+        domain = [
             ('res_model', '=', 'account.analytic.contract'),
             ('res_id', 'in', rcts.ids),
-            ('lang', '=', self.partner_id.lang),
-        ])
+        ]
+        if self.partner_id.lang:
+            _logger.debug(
+                "Partner %s (%d) lang is %s. Restricting contractual documents"
+                " to those without a language set or set to the partner's.",
+                self.partner_id.name, self.partner_id.id, self.partner_id.lang)
+            domain.extend([
+                '|', ('lang', '=', False), ('lang', '=', self.partner_id.lang),
+            ])
+        return self.env['ir.attachment'].search(domain)
 
     @api.multi
     def action_quotation_send(self):

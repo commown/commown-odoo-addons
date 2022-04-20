@@ -187,6 +187,7 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
         self.create_attachment("doc1_fr.txt", "fr_FR", ct)
         self.create_attachment("doc2_fr.txt", "fr_FR", ct)
         self.create_attachment("doc1_en.txt", "en_US", ct)
+        self.create_attachment("doc_no_lang.txt", False, ct)
 
     def create_attachment(self, name, lang, target_obj):
         return self.env['ir.attachment'].create({
@@ -206,9 +207,16 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
     def test_sale_quotation_send_emails_fr(self):
         self.assertEqual(
             self.check_sale_quotation_send_emails("fr_FR"),
-            ["%s_draft.pdf" % self.so.name, "doc1_fr.txt", "doc2_fr.txt"])
+            ["%s_draft.pdf" % self.so.name,
+             "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"])
 
     def test_sale_quotation_send_emails_en(self):
         self.assertEqual(
             self.check_sale_quotation_send_emails("en_US"),
-            ["%s_draft.pdf" % self.so.name, "doc1_en.txt"])
+            ["%s_draft.pdf" % self.so.name, "doc1_en.txt", "doc_no_lang.txt"])
+
+    def test_sale_quotation_send_emails_no_lang(self):
+        self.assertEqual(
+            self.check_sale_quotation_send_emails(False),
+            ["%s_draft.pdf" % self.so.name,
+             "doc1_en.txt", "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"])
