@@ -159,7 +159,9 @@ def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9,
         json = resp.json()
         if json.get("detail", None) == 'Already opt-in':
             _logger.info(u"Double opt-in for %s", customer_key)
-            if not silent_double_optin:
+            if silent_double_optin:
+                return
+            else:
                 raise UserError(_("Already opt-in (may not be visible"
                                   " if before the campaign start)"))
         else:
