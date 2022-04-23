@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<t t-name="self-troubleshoot-issue-description-support-request">
+Bonjour,
+<t t-if="action=='support-request'">
+Nous avons bien pris en compte votre demande que voici :
+
+Niveau d'urgence :
+<t t-esc="urgence"/>
+<t t-if="urgence=='élevé'">
+  <a class="o_priority_star fa fa-star-o" href="#" data-value="1" title="Élevé"></a>
+  </t>
+<t t-if="urgence=='normale'">
+  <a class="o_priority_star fa fa-star-o" href="#" data-value="2" title="normale"></a>
+  </t>
+_________________________
+
+<t t-esc="more_info"/>
+</t>
+        </t>

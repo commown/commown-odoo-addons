@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data noupdate="1">
+  <data>
 
     <record id="support_project" model="project.project">
       <field name="name">Support</field>
+      <field name="use_tasks">False</field>
+      <field name="use_issues">True</field>
     </record>
 
     <record id="stage_pending" model="project.task.type">
       <field name="name">Pending</field>
-      <field name="project_ids" eval="[(6,0,[ref('support_project')])]"/>
     </record>
 
     <record id="stage_received" model="project.task.type">
       <field name="name">Received</field>
-      <field name="project_ids" eval="[(6,0,[ref('support_project')])]"/>
     </record>
 
     <record id="stage_solved" model="project.task.type">
       <field name="name">Solved</field>
-      <field name="project_ids" eval="[(6,0,[ref('support_project')])]"/>
     </record>
 
     <record id="stage_long_term_followup" model="project.task.type">
       <field name="name">Long term followup</field>
-      <field name="project_ids" eval="[(6,0,[ref('support_project')])]"/>
     </record>
 
   </data>

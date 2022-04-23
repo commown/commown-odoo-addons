@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data noupdate="1">
-
     <template id="web_layout" inherit_id="web.layout">
       <xpath expr="//link[@rel='shortcut icon']" position="after">
         <style>
@@ -29,13 +27,26 @@
         <div t-if="'FP2' in contract_types">
           <h4 class="page-header">Fairphone 2</h4>
           <div class="list-group">
-            <a target="_blank" class="list-group-item"
-               t-attf-href="/page/self-troubleshoot-fp2-camera">
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp2-camera">
               Ma caméra principale fonctionne mal ou plus du tout
             </a>
-            <a target="_blank" class="list-group-item"
-               t-attf-href="/page/self-troubleshoot-fp2-micro">
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp2-micro">
               Mon interlocuteur ne m'entend pas
+            </a>
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp2-battery">
+                Ma batterie se décharge rapidement
+            </a>
+          </div>
+        </div>
+
+        <div t-if="'FP3' in contract_types or 'FP3+' in contract_types">
+          <h4 class="page-header">Fairphone 3</h4>
+          <div class="list-group">
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp3-display">
+              Mon écran ne fonctionne plus
+            </a>
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp3-screen">
+              Mon écran (ou sa protection) est fissuré
             </a>
           </div>
         </div>
@@ -61,7 +72,7 @@
       <field name="arch" type="xml">
 
         <t name="Web layout for self troubleshooting pages"
-           t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
+          t-name="commown-self-troubleshoot.web-layout">&lt;!DOCTYPE html&gt;
         <html t-att="html_data or {}">
           <head>
             <meta charset="utf-8"/>
@@ -104,8 +115,8 @@
 
         </html>
         </t>
+
       </field>
     </record>
 
-  </data>
 </odoo>
