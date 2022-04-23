@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data noupdate="1">
-
     <record id="fp2-camera" model="ir.ui.view">
       <field name="name">Self-troubleshoot an FP2 camera</field>
       <field name="type">qweb</field>
@@ -43,9 +41,8 @@ $(document).ready(function() {
             <div class="container">
               <h1>Auto-dépannage : Fairphone 2</h1>
               <h2>Ma caméra principale fonctionne mal ou plus du tout</h2>
-              <br />
-              <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
-                    id="myForm" role="form">
+              <br/>
+              <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
@@ -54,8 +51,8 @@ $(document).ready(function() {
 
                 <div id="smartwizard">
                   <ul>
-                    <li><a href="#step-0">Contexte<br /><small>Appareil concerné</small></a></li>
-                    <li><a href="#step-1">Étape 1<br /><small>Modèle de la caméra</small></a></li>
+                    <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                    <li><a href="#step-1">Étape 1<br/><small>Modèle de la caméra</small></a></li>
                     <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Resserrage des vis</small></a></li>
                     <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
                     <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
@@ -69,7 +66,7 @@ $(document).ready(function() {
                     <div id="step-1">
                       <div class="clearfix">
                         <img class="pull-left" src="/commown_self_troubleshooting/static/images/FP2/camera/fp2_camera_front.jpg"
-                             alt="Logo de commown" />
+                             alt="Photo du module caméra frontale du Fairphone 2"/>
                         <h2>Modèle de la caméra</h2>
                         <p>Allez voir <a target="_blank" href="https://wiki.commown.coop/Reconnaître-la-version-de-votre-caméra">cette
                       page de notre wiki</a> et répondez à la question
@@ -93,7 +90,8 @@ $(document).ready(function() {
                     <div id="step-2">
                       <h2>Resserrage des vis</h2>
                       <img src="/commown_self_troubleshooting/static/images/FP2/camera/fp2_screws.jpg"
-                           alt="Éclaté d'un Fairphone 2 avec ses vis" style="display: block; margin: auto;"/>
+                           alt="Éclaté d'un Fairphone 2 avec ses vis"
+                           style="display: block; margin: auto;"/>
                       <p>Avec ce modèle de caméra, le cas le plus fréquent de
                       dysfonctionnement est celui d'un faux contact. Essayez
                       de resserrer les vis de la caméra grace
@@ -141,7 +139,5 @@ $(document).ready(function() {
         </t>
       </field>
     </record>
-
-  </data>
 
 </odoo>

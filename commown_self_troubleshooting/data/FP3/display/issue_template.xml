@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="issue-description-fp3-display" model="ir.ui.view">
+  <field name="name">self-troubleshoot-issue-description-fp3-display</field>
+  <field name="type">qweb</field>
+  <field name="key">commown_self_troubleshooting.issue-description-fp3-display</field>
+  <field name="arch" type="xml">
+    <t t-name="self-troubleshoot-issue-description-fp3-display">
+Bonjour,
+<t t-if="action=='ship'">
+<t t-if="type_contrat=='me'">
+après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé.</t>
+<t t-else="">
+mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)</t>
+
+L'adresse d'expédition est la suivante :
+<t t-esc="name"/>
+<t t-esc="u'\n'.join((street, street2)).strip()"/>
+<t t-esc="zipcode"/> <t t-esc="city"/>
+<t t-esc="country"/>
+
+Informations supplémentaires utiles à la livraison :
+Numéro de téléphone : <t t-esc="phone"/>
+Adresse de courriel : <t t-esc="email"/></t>
+
+<t t-elif="action=='inform'">
+Suite à l'auto-dépannage, le nettoyage des contacts a permis de résoudre le problème !</t>
+
+<t t-if="more_info">
+J'ai porté à votre connaissance les informations complémentaires suivantes :
+----
+<t t-esc="more_info">
+----</t></t>
+      </t>
+  </field>
+</record>
+
+</odoo>

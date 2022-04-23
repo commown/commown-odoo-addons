@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data noupdate="1">
-
     <record id="issue-description-fp2-battery" model="ir.ui.view">
       <field name="name">self-troubleshoot-issue-description-fp2-battery</field>
       <field name="type">qweb</field>
@@ -22,10 +20,18 @@ L'adresse d'expédition est la suivante :
 Informations supplémentaires utiles à la livraison :
 Numéro de téléphone : <t t-esc="phone"/>
 Adresse de courriel : <t t-esc="email"/></t>
+
+<t t-elif="action=='pb_logiciel'">
+Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
+</t>
+
+<t t-if="more_info">
+J'ai porté à votre connaissance les informations complémentaires suivantes :
+---
+<t t-esc="more_info"/>
+---</t>
         </t>
       </field>
     </record>
-
-  </data>
 
 </odoo>
