@@ -122,4 +122,10 @@
     </field>
   </record>
 
+    <record id="fp3-display-page" model="website.page">
+      <field name="website_published">True</field>
+      <field name="url">/page/self-troubleshoot-fp3-display</field>
+      <field name="view_id" ref="fp3-display"/>
+    </record>
+
 </odoo>

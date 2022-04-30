@@ -12,7 +12,7 @@
 
     <template id="step-contract-choice">
       <t t-set="contracts"
-         t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
+         t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), '|', ('date_end', '=', False), ('date_end', '&gt;', datetime.date.today())])"/>
       <div id="step-0">
         <div class="clearfix">
           <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png"
@@ -27,8 +27,9 @@
               data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
               <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
               <t t-foreach="contracts" t-as="c">
-                <t t-set="date" t-value="c.date_start.split('-')"/>
-                <option t-att-value="c.id" t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"/>
+                <t t-set="_date" t-value="c.date_start"/>
+                <option t-att-value="c.id"
+                        t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, _date.year, _date.month, _date.day)"/>
               </t>
             </select>
             <div class="help-block with-errors"/>
@@ -58,7 +59,7 @@
             d'un téléphone à l'autre).
           </p>
           <p>
-          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces, 
+          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,
           le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
           </p>
         </div>
@@ -184,7 +185,7 @@
 
     <template id="step-contact-human">
       <t t-set="contracts"
-         t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])" />
+         t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), '|', ('date_end', '=', False), ('date_end', '&gt;', datetime.date.today())])"/>
       <div t-attf-id="step-{{ step }}">
         <h2><i class="fas fa-hands-helping"/> Contacter un humain</h2> <p>Vous pouvez ici
         directement créer une demande d'assistance à
@@ -200,8 +201,9 @@
             <select class="form-control" id="device_contract" name="device_contract" required="required">
               <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
               <t t-foreach="contracts" t-as="c">
-                <t t-set="date" t-value="c.date_start.split('-')"/>
-                <option t-att-value="c.id" t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, date[2], date[1], date[0])"/>
+                <t t-set="_date" t-value="c.date_start"/>
+                <option t-att-value="c.id"
+                        t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, _date.year, _date.month, _date.day)"/>
               </t>
             </select>
             <div class="help-block with-errors"/>

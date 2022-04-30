@@ -167,4 +167,10 @@
       </field>
     </record>
 
+    <record id="fp2-micro-page" model="website.page">
+      <field name="website_published">True</field>
+      <field name="url">/page/self-troubleshoot-fp2-micro</field>
+      <field name="view_id" ref="fp2-micro"/>
+    </record>
+
 </odoo>

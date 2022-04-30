@@ -50,7 +50,8 @@
 
                     <div id="step-1">
                       <div class="clearfix">
-                        <t t-set="contracts" t-value="env['account.analytic.account'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), ('date_end', '=', False)])"/>
+                        <t t-set="contracts"
+                           t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), '|', ('date_end', '=', False), ('date_end', '&gt;', datetime.date.today())])"/>
                         <h2> Type de demande </h2>
                         <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
