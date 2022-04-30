@@ -140,4 +140,10 @@ $(document).ready(function() {
       </field>
     </record>
 
+    <record id="fp2-camera-page" model="website.page">
+      <field name="website_published">True</field>
+      <field name="url">/page/self-troubleshoot-fp2-camera</field>
+      <field name="view_id" ref="fp2-camera"/>
+    </record>
+
 </odoo>

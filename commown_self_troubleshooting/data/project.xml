@@ -4,8 +4,6 @@
 
     <record id="support_project" model="project.project">
       <field name="name">Support</field>
-      <field name="use_tasks">False</field>
-      <field name="use_issues">True</field>
     </record>
 
     <record id="stage_pending" model="project.task.type">

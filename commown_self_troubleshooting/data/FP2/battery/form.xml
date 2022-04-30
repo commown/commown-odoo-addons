@@ -141,4 +141,10 @@ $(document).ready(function() {
       </field>
     </record>
 
+    <record id="fp2-battery-page" model="website.page">
+      <field name="website_published">True</field>
+      <field name="url">/page/self-troubleshoot-fp2-battery</field>
+      <field name="view_id" ref="fp2-battery"/>
+    </record>
+
 </odoo>
