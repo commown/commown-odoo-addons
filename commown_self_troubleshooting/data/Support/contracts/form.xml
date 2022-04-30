@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<t t-name="website.self-troubleshoot-contract-request">
+          <t t-call="commown-self-troubleshoot.web-layout">
+            <t t-set="title">Commown - Demande concernant mon contrat</t>
+            <t t-set="head">
+              <script type="text/javascript">
+              $(document).ready(function() {
+
+                const wizard = setUpWizard($('#smartwizard'));
+
+                $('#contract_request').change(function () {
+                  wizard.toggleStep(2, this.value==='other');
+                  wizard.toggleStep(3, this.value==='res');
+                  wizard.toggleStep(2, this.value!='other');
+                  wizard.toggleStep(3, this.value!='res');
+                });
+
+              });
+            </script>
+
+            </t>
+
+            <!-- Variables à modifier ici -->
+            <t t-set="contract_name_like"></t>
+            <t t-set="tag_names">Demande contrat </t>
+            <t t-set="issue_title"> Demande contrat </t>
+            <t t-set="issue_description_template">issue-description-contract-request</t>
+            <!-- Fin des variables à modifier -->
+
+            <div class="container">
+              <h1>Je souhaite faire une demande concernant la gestion de mon contrat</h1>
+              <br/>
+              <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
+                <input type="hidden" name="tags" id="tags" t-att-value="tag_names"/>
+                <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
+
+                <div id="smartwizard">
+                  <ul>
+                    <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                    <li disabled="disabled"><a href="#step-1">Étape 1<br/><small>Le type de demande concernant le contrat</small></a></li>
+                    <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>J’ai une demande concernant mon contrat</small></a></li>
+                    <li><a href="#step-3">Étape 3<br/><small>J’envisage de résilier mon contrat</small></a></li>
+                  </ul>
+
+                  <div>
+                    <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+
+                    <div id="step-1">
+                      <div class="clearfix">
+                        <t t-set="contracts"
+                           t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), '|', ('date_end', '=', False), ('date_end', '&gt;', datetime.date.today())])"/>
+                        <h2> Type de demande </h2>
+                        <div id="form-step-1" role="form" data-toggle="validator">
+                        <div class="form-group">
+                          <br />
+                          <p> Pour vous aider au mieux, nous avons besoin de savoir sur quel sujet porte votre demande. </p>
+                          <p> Pour ce faire, nous vous invitons à sélectionner ci-dessous, le type de votre demande puis de cliquer sur "suivant".</p>
+                          <br />
+                          <label for="contract_request">Que souhaitez-vous faire ?</label>
+                          <select class="form-control" required="required" id="contract_request" data-required-error="Veuillez sélectionner le type de votre demande">
+                            <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                            <option value="other">Je souhaite faire une demande concernant mon contrat</option>
+                            <option value="res">Je souhaite envisager une résiliation de mon contrat</option>
+                          </select>
+                          <div class="help-block with-errors"/>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+
+                    <div id="step-2">
+                      <div class="clearfix">
+                        <h2> Demande sur mon contrat </h2>
+                        <br />
+                        <p> Dans le champs de texte ci-dessous, veuillez rédiger votre demande. </p>
+                        <p> Dès sa réception, un spécialiste reviendra vers vous afin d'y répondre !</p>
+                        <br />
+                        <div id="form-step-2" role="form" data-toggle="validator">
+                         <div class="form-group">
+                             <textarea id="more_info" class="form-control" name="more_info"  rows="5" cols="33" required="required"></textarea>
+                             <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_received').id"/>
+                             <br />
+                       <button type="submit" class="btn btn-primary" name="action" value="contract-request">Envoyer les informations</button>
+                        </div>
+                      </div>
+                    </div>
+               </div>
+
+                    <div id="step-3">
+                      <div class="clearfix">
+                        <h2> Demande de résiliation </h2>
+                        <br />
+                        <p> Dans le champs de texte ci-dessous, dévrivez nous les raisons qui vous poussent à résilier votre contrat actuel. </p>
+                        <br />
+                        <div id="form-step-3" role="form" data-toggle="validator">
+                         <div class="form-group">
+                             <textarea id="more_info" class="form-control" name="more_info"  rows="5" cols="33" required="required"></textarea>
+                             <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_received').id"/>
+                             <br />
+                       <button type="submit" class="btn btn-primary" name="action" value="contract-request">Envoyer les informations</button>
+                        </div>
+                      </div>
+                    </div>
+               </div>
+
+           </div>
+
+         </div>
+       </form>
+     </div>
+
+   </t>
+ </t>

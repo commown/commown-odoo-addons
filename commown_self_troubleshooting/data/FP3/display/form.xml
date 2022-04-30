@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="fp3-display" model="ir.ui.view">
+    <field name="name">Self-troubleshoot a broken FP3 display</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-fp3-display</field>
+    <field name="arch" type="xml">
+      <t t-name="website.self-troubleshoot-fp3-display">
+        <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-set="title">Commown - Auto-dépannage - Fairphone 3 : Écran</t>
+          <t t-set="head">
+            <script type="text/javascript">
+              $(document).ready(function() {
+
+                const wizard = setUpWizard($('#smartwizard'));
+
+                $('#type_contrat').change(function () {
+                   wizard.toggleStep(2, this.value==='me');
+                   wizard.toggleStep(5, this.value==='me');
+                });
+
+                $('input[type=radio][name=net_contact]').change(function () {
+                   wizard.toggleStep(3, this.value==='not_solved');
+                   wizard.toggleStep(4, this.value==='not_solved');
+                   wizard.toggleStep(5, this.value==='solved');
+                });
+              });
+            </script>
+          </t>
+
+          <!-- Variables à modifier ici -->
+          <t t-set="contract_name_like">FP3</t>
+          <t t-set="tag_names">FP MOD ecran</t>
+          <t t-set="issue_title">FP3 - Écran </t>
+          <t t-set="issue_description_template">issue-description-fp3-display</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="container">
+            <h1>Auto-dépannage : Fairphone 3</h1>
+            <h2>Mon écran ne fonctionne plus</h2>
+            <br/>
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
+              <input type="hidden" name="tags" id="tags" t-att-value="tag_names"/>
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
+
+              <div id="smartwizard">
+                <ul>
+                  <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                  <li><a href="#step-1">Étape 1<br/><small>Option lors de la souscription</small></a></li>
+                  <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Nettoyage des contacts</small></a></li>
+                  <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                  <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
+                  <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Problème résolu</small></a></li>
+                  <li><a href="#step-6">Étape 6<br/><small>Contacter un humain</small></a></li>
+                </ul>
+
+                <div>
+                  <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+
+                  <t t-call="commown_self_troubleshooting.step-manipulation-option">
+                    <t t-set="step">1</t>
+                  </t>
+
+                    <div id="step-2">
+                      <h2><i class="fas fa-pb-log"/> Nettoyage des contacts </h2>
+                      <br />
+                      <p> La cause la plus fréquente des problèmes d'écran est l'état des contacts entre le corps de l'appareil et l'écran.
+                          Il faut donc démonter l'écran et nettoyer les contacts.
+                      <br />
+                      <p>Pour démonter et remonter l’écran, nous vous invitons à visualiser la vidéo ci-dessous :</p>
+                      <br />
+                      <iframe width="460" height="215" src="https://www.youtube.com/embed/hG6OVPTnrK4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                      <br />
+                      <br />
+                      Passez un coup de chiffon microfibre propre sur les contacts. Le contact entre le corps et l'écran se fait par les petites plaques métalliques vers le centre du corps à côté de l'emplacement de la batterie. Côté écran, des petit pins métalliques se trouvent en face de ces plaques et viennent se poser dessus.
+                      Il faut vérifier que les pins de l'écran sortent bien tous et qu'il n'y a pas de poussières ou de traces sur les plaques du corps.
+                      </p>
+                      <div id="form-step-2" role="form" data-toggle="validator">
+                          <div class="form-group">
+                            <label>Le problème est-il résolu ?</label>
+                            <br />
+                            <br />
+                            <label class="radio-inline" for="net_contact-yes">Oui</label>
+                            <input type="radio" name="net_contact" id="net_contact-yes" value="solved" required="required" data-required-error="Dites-nous si ce démontage a permis de régler le problème."/>
+                            <label class="radio-inline" for="net_contact-no">Non</label>
+                            <input type="radio" name="net_contact" id="net_contact-no" value="not_solved" required="required"/>
+                            <div class="help-block with-errors"/>
+                          </div>
+                        </div>
+                      </div>
+
+                  <t t-call="commown_self_troubleshooting.step-ship-module">
+                    <t t-set="step">3</t>
+                    <t t-set="new_module">un nouvel écran</t>
+                  </t>
+
+                  <t t-call="commown_self_troubleshooting.step-confirm-change">
+                    <t t-set="step">4</t>
+                  </t>
+
+                  <t t-call="commown_self_troubleshooting.step-self-solved">
+                    <t t-set="step">5</t>
+                  </t>
+
+                  <t t-call="commown_self_troubleshooting.step-contact-human">
+                    <t t-set="step">6</t>
+                  </t>
+
+                </div>
+
+              </div>
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+    <record id="fp3-display-page" model="website.page">
+      <field name="website_published">True</field>
+      <field name="url">/page/self-troubleshoot-fp3-display</field>
+      <field name="view_id" ref="fp3-display"/>
+    </record>
+
+</odoo>
