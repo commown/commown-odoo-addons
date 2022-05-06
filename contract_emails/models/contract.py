@@ -3,6 +3,7 @@ from datetime import date
 
 from odoo import api, fields, models, _
 
+from odoo.addons.contract.models.abstract_contract import ContractAbstractContract
 
 _logger = logging.getLogger(__name__)
 
@@ -131,14 +132,7 @@ class ContractTemplate(models.Model):
 class Contract(models.Model):
     _inherit = "contract.contract"
 
-    @api.model
-    def create(self, values):
-        """ Do not update planned_mail_gen_ids inexisting field
-
-        This is due to the stupid inheritance in the 10.0 contract module.
-        """
-        values.pop('planned_mail_gen_ids', None)
-        return super(Contract, self).create(values)
+    NO_SYNC = ContractAbstractContract.NO_SYNC + ['planned_mail_gen_ids']
 
 
 class ContractSentPlannedEmail(models.Model):
