@@ -60,3 +60,12 @@ class Contract(models.Model):
             _logger.debug('Bank label for invoice %s: %s', invoice.number, label)
             self = self.with_context(slimpay_payin_label=label)
         return super()._pay_invoice(invoice)
+
+    def amount(self):
+        """Compute the sum of contract line price that have no formula or a
+        formula marked with '[DE]' (for 'commitment duration' in french).
+        """
+        self.ensure_one()
+        return sum(self.contract_line_ids.filtered(lambda l: (
+            l.qty_type != 'variable' or u'[DE]' in l.qty_formula_id.name
+        )).mapped('price_subtotal'))
