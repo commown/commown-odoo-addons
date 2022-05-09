@@ -14,7 +14,7 @@
         "partner_firstname",
         "project",
         "queue_job",
-        "server_environment_data_encryption",
+        "server_environment",
     ],
     "external_dependencies": {"bin": ["pdfjam", "pdftk"]},
     "data": [
