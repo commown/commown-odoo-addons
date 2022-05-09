@@ -5,3 +5,4 @@ py3o.formats
 py3o.template
 python-magic
 requests
+requests_toolbelt
