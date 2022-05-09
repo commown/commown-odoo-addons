@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-03 14:23+0000\n"
-"PO-Revision-Date: 2021-02-03 14:23+0000\n"
+"POT-Creation-Date: 2022-05-09 22:04+0000\n"
+"PO-Revision-Date: 2022-05-09 22:04+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,19 +26,9 @@ msgid "<span>Commitment duration: </span>"
 msgstr "<span>Durée d'engagement : </span>"
 
 #. module: product_rental
-#: model_terms:ir.ui.view,arch_db:product_rental.product_price
-msgid "<span>Initial deposit: </span>"
-msgstr "<span>Dépôt de garantie à régler à la commande : </span>"
-
-#. module: product_rental
-#: model_terms:ir.ui.view,arch_db:product_rental.product_price
-msgid "<span>lease payments</span>"
-msgstr "<span>loyers</span>"
-
-#. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.cart_line_product_link
 msgid "<strong> - Deposit</strong>"
-msgstr ""
+msgstr "<strong> - Dépôt de garantie</strong>"
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_template_form_view
@@ -51,40 +41,37 @@ msgid "<strong>##PRODUCT##</strong> (in the description): mark the rental produc
 msgstr "<strong>##PRODUCT##</strong> (dans la description) : marque la ligne du produit de location principal ; le marqueur sera remplacé par le nom du produit vendu"
 
 #. module: product_rental
-#: model:product.product,name:product_rental.c_prod_1
-#: model:product.template,name:product_rental.c_prod_1_product_template
-msgid "Accessory rental"
-msgstr "Location d'un accessoire"
-
-#. module: product_rental
-#: model:product.attribute,name:product_rental.attr_cpu
-msgid "CPU"
-msgstr "CPU"
-
-#. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_contract_line__commitment_duration
-#: model:ir.model.fields,field_description:product_rental.field_contract_template__commitment_duration
-#: model:ir.model.fields,field_description:product_rental.field_contract_template_line__commitment_duration
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
-msgid "Commitment duration"
-msgstr "Durée d'engagement"
+msgid "<strong>Commitment end date</strong>"
+msgstr "<strong>Fin de la période d'engagement</strong>"
 
 #. module: product_rental
-#: model:ir.model.fields,help:product_rental.field_contract_line__commitment_duration
-#: model:ir.model.fields,help:product_rental.field_contract_template__commitment_duration
-#: model:ir.model.fields,help:product_rental.field_contract_template_line__commitment_duration
-msgid "Commitment duration in recurring interval unit"
-msgstr "Durée d'engagement dans la même unité de temps que la facturation"
+#: model:ir.model.fields,help:product_rental.field_contract_contract__commitment_period_number
+#: model:ir.model.fields,help:product_rental.field_contract_template__commitment_period_number
+msgid "Commitment duration in number of periods"
+msgstr "Durée d'engagement (nombre de périodes)"
 
 #. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_contract_line__commitment_end_date
+#: model:ir.model.fields,field_description:product_rental.field_contract_contract__commitment_end_date
 msgid "Commitment end date"
-msgstr "Date de fin d'engagement"
+msgstr "Fin de la période d'engagement"
 
 #. module: product_rental
-#: model:ir.model,name:product_rental.model_contract_line
-msgid "Contract Line"
-msgstr "Ligne de contrat"
+#: model:ir.model.fields,field_description:product_rental.field_contract_contract__commitment_period_number
+#: model:ir.model.fields,field_description:product_rental.field_contract_template__commitment_period_number
+msgid "Commitment period number"
+msgstr "Durée d'engagement (nombre de périodes)"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_contract_contract__commitment_period_type
+#: model:ir.model.fields,field_description:product_rental.field_contract_template__commitment_period_type
+msgid "Commitment period type"
+msgstr "Durée d'engagement (type de périodes)"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_contract_contract
+msgid "Contract"
+msgstr "Contrat"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_contract_template
@@ -92,16 +79,13 @@ msgid "Contract Template"
 msgstr "Modèle de contrat"
 
 #. module: product_rental
-#: model:ir.model,name:product_rental.model_contract_template_line
-msgid "Contract Template Line"
-msgstr "Ligne de modèles de contrat"
-
-#. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Daily"
 msgstr "par jour"
 
 #. module: product_rental
+#: selection:contract.contract,commitment_period_type:0
+#: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Day(s)"
 msgstr "Jour(s)"
@@ -110,12 +94,6 @@ msgstr "Jour(s)"
 #: model_terms:ir.ui.view,arch_db:product_rental.cart_summary
 msgid "Deposit"
 msgstr "Dépôt de garantie"
-
-#. module: product_rental
-#: model:product.product,name:product_rental.prod_fp
-#: model:product.template,name:product_rental.prod_fp_product_template
-msgid "Fairphone"
-msgstr "Fairphone"
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_product_product__rental_frequency
@@ -141,11 +119,15 @@ msgid "Is rental product"
 msgstr "Location"
 
 #. module: product_rental
+#: selection:contract.contract,commitment_period_type:0
+#: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Month(s)"
 msgstr "Mois"
 
 #. module: product_rental
+#: selection:contract.contract,commitment_period_type:0
+#: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Month(s) last day"
 msgstr "Dernier jour du mois"
@@ -154,13 +136,6 @@ msgstr "Dernier jour du mois"
 #: selection:product.template,rental_frequency:0
 msgid "Monthly"
 msgstr "par mois"
-
-#. module: product_rental
-#: model:product.product,name:product_rental.prod_pc_i5
-#: model:product.product,name:product_rental.prod_pc_i7
-#: model:product.template,name:product_rental.prod_pc
-msgid "PC"
-msgstr "PC"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_template__payment_mode_id
@@ -173,6 +148,8 @@ msgid "Product Template"
 msgstr "Modèle d'article"
 
 #. module: product_rental
+#: selection:contract.contract,commitment_period_type:0
+#: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Quarter(s)"
 msgstr "Trimestre(s)"
@@ -190,14 +167,9 @@ msgid "Rental price"
 msgstr "Tarif de la location"
 
 #. module: product_rental
-#: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
-msgid "Rental start date"
-msgstr "Date de début de la location"
-
-#. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order
 msgid "Sale Order"
-msgstr "Bon de commande"
+msgstr "Commande"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order_line
@@ -205,30 +177,15 @@ msgid "Sales Order Line"
 msgstr "Ligne de bons de commande"
 
 #. module: product_rental
+#: selection:contract.contract,commitment_period_type:0
+#: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Semester(s)"
 msgstr "Semestre(s)"
 
 #. module: product_rental
-#: model:product.product,name:product_rental.c_prod_0
-#: model:product.template,name:product_rental.c_prod_0_product_template
-msgid "Smartphone rental"
-msgstr "Location d'un smartphone"
-
-#. module: product_rental
-#: model:product.product,uom_name:product_rental.c_prod_0
-#: model:product.product,uom_name:product_rental.c_prod_1
-#: model:product.product,uom_name:product_rental.prod_fp
-#: model:product.product,uom_name:product_rental.prod_pc_i5
-#: model:product.product,uom_name:product_rental.prod_pc_i7
-#: model:product.template,uom_name:product_rental.c_prod_0_product_template
-#: model:product.template,uom_name:product_rental.c_prod_1_product_template
-#: model:product.template,uom_name:product_rental.prod_fp_product_template
-#: model:product.template,uom_name:product_rental.prod_pc
-msgid "Unit(s)"
-msgstr "Unités"
-
-#. module: product_rental
+#: selection:contract.contract,commitment_period_type:0
+#: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Week(s)"
 msgstr "Semaine(s)"
@@ -239,6 +196,8 @@ msgid "Weekly"
 msgstr "par semaine"
 
 #. module: product_rental
+#: selection:contract.contract,commitment_period_type:0
+#: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Year(s)"
 msgstr "Année(s)"
@@ -254,25 +213,3 @@ msgstr "par an"
 msgid "[commown] Payment transaction done"
 msgstr "[commown] Paiement d'une transaction effectué"
 
-#. module: product_rental
-#: model:product.attribute.value,name:product_rental.val_cpu_i5
-msgid "i5"
-msgstr "i5"
-
-#. module: product_rental
-#: model:product.attribute.value,name:product_rental.val_cpu_i7
-msgid "i7"
-msgstr "i7"
-
-#. module: product_rental
-#: model:product.product,weight_uom_name:product_rental.c_prod_0
-#: model:product.product,weight_uom_name:product_rental.c_prod_1
-#: model:product.product,weight_uom_name:product_rental.prod_fp
-#: model:product.product,weight_uom_name:product_rental.prod_pc_i5
-#: model:product.product,weight_uom_name:product_rental.prod_pc_i7
-#: model:product.template,weight_uom_name:product_rental.c_prod_0_product_template
-#: model:product.template,weight_uom_name:product_rental.c_prod_1_product_template
-#: model:product.template,weight_uom_name:product_rental.prod_fp_product_template
-#: model:product.template,weight_uom_name:product_rental.prod_pc
-msgid "kg"
-msgstr "kg"
