@@ -281,7 +281,8 @@ class CrmLeadDeliveryTrackingTC(TransactionCase):
     def setUp(self):
         super(CrmLeadDeliveryTrackingTC, self).setUp()
 
-        account = self.env.ref("commown_shipping.colissimo-std-account")
+        account = self.env.ref(
+            "commown_shipping.shipping-account-colissimo-std-account")
         self.team = self.env.ref("sales_team.salesteam_website_sales")
         mt_id = self.env.ref("commown_shipping.delivery_email_example").id
         self.team.update(
