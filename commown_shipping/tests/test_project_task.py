@@ -1,19 +1,19 @@
-import mock
-import requests
-from odoo.tests.common import at_install, post_install
+import requests_mock
 
 from .common import BaseShippingTC, pdf_page_num
 
 
-@at_install(False)
-@post_install(True)
 class ProjectTaskTC(BaseShippingTC):
+
     def setUp(self):
         super(ProjectTaskTC, self).setUp()
         self.task = self.env.ref("project.project_task_1")
         self.task.project_id.shipping_account_id = self.shipping_account.id
 
-    def test_print_parcel_actions(self):
+    @requests_mock.Mocker()
+    def test_print_parcel_actions(self, mocker):
+
+        self.mock_colissimo_ok(mocker)
 
         orig_task = self.task.with_context(mail_notrack=True)
 
@@ -24,10 +24,9 @@ class ProjectTaskTC(BaseShippingTC):
         ref = self.env.ref
         act_out = ref("commown_shipping.action_print_outward_fp2_label_task")
 
-        with mock.patch.object(requests, "post", return_value=self.fake_resp):
-            download_action = act_out.with_context(
-                {"active_model": tasks._name, "active_ids": tasks.ids}
-            ).run()
+        download_action = act_out.with_context(
+            {"active_model": tasks._name, "active_ids": tasks.ids}
+        ).run()
 
         all_labels = self._attachment_from_download_action(download_action)
         self.assertEqual(all_labels.name, self.parcel_type.name + ".pdf")
@@ -36,10 +35,9 @@ class ProjectTaskTC(BaseShippingTC):
         act_ret = ref("commown_shipping.action_print_return_fp2_label_task")
 
         task = orig_task.copy({"name": "[Test single]"})
-        with mock.patch.object(requests, "post", return_value=self.fake_resp):
-            download_action = act_ret.with_context(
-                {"active_model": tasks._name, "active_id": task.ids}
-            ).run()
+        download_action = act_ret.with_context(
+            {"active_model": tasks._name, "active_id": task.ids}
+        ).run()
 
         label = self._attachment_from_download_action(download_action)
 

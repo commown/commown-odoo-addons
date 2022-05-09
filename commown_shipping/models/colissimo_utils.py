@@ -200,7 +200,7 @@ def parse_multipart(data, boundary):
 def parse_response(resp):
     ctype_main, ctype_details = parse_header(resp.headers["Content-Type"])
     if ctype_main == "multipart/mixed":
-        return parse_multipart(resp.content, ctype_details["boundary"])
+        return parse_multipart(resp.text, ctype_details["boundary"])
     elif ctype_main == "application/json":
         return resp.json(), None
     return None, None
