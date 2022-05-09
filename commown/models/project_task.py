@@ -1,6 +1,6 @@
 import logging
 
-from odoo import models
+from odoo import models, fields
 
 
 _logger = logging.getLogger(__file__)
@@ -8,6 +8,12 @@ _logger = logging.getLogger(__file__)
 
 class ProjectTask(models.Model):
     _inherit = 'project.task'
+
+    priority = fields.Selection(
+        selection_add=[
+            ("2", "High"),
+        ],
+    )
 
     def slimpay_payment_issue_process_automatically(self):
         """ Handle a payment issue automatically only when it comes from a
