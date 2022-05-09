@@ -20,4 +20,16 @@
     </field>
   </record>
 
+  <record id="contract_contract_tree_view" model="ir.ui.view">
+    <field name="name">contract.contract tree view (in commown)</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_tree_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='name']" position="attributes">
+        <attribute name="name">display_name</attribute>
+      </xpath>
+      <xpath expr="//field[@name='payment_mode_id']" position="replace"></xpath>
+    </field>
+  </record>
+
 </odoo>
