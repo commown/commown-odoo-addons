@@ -16,7 +16,10 @@
         "queue_job",
         "server_environment",
     ],
-    "external_dependencies": {"bin": ["pdfjam", "pdftk"]},
+    "external_dependencies": {
+        "bin": ["pdfjam", "pdftk"],
+        "python": ["requests_toolbelt"],
+    },
     "data": [
         "data/actions.xml",
         "data/cron.xml",
