@@ -1,10 +1,9 @@
 import json
 import logging
 import re
-from base64 import b64decode
 from cgi import parse_header
 from datetime import datetime
-from email.parser import Parser
+from requests_toolbelt.multipart import decoder
 
 import phonenumbers
 import requests
@@ -171,36 +170,24 @@ def shipping_data(
     }
 
 
-def parse_multipart(data, boundary):
-    # Build a fake email to use email module's multipart parser
-    headers = [
-        "From: contact@commown.fr",
-        "To: contact@commown.fr",
-        "Subject: colissimo",
-        "MIME-Version: 1.0",
-        "Content-Type: multipart/mixed; ",
-        '\tboundary="%s"' % boundary,
-        "",
-        "",
-    ]
-    msg = Parser().parsestr("\r\n".join(headers) + data)
+def parse_multipart(http_resp):
+
+    multipart_data = decoder.MultipartDecoder.from_response(http_resp)
 
     meta_data, label_data = None, None
-    for part in msg.walk():
-        ctype = part.get_content_type()
-        if ctype.startswith("application/json"):
-            meta_data = json.loads(part.get_payload())
-        elif ctype.startswith("application/octet-stream"):
-            label_data = part.get_payload()
-            if part["Content-Transfer-Encoding"] == "base64":
-                label_data = b64decode(label_data)
+    for part in multipart_data.parts:
+        ctype = part.headers[b"Content-Type"]
+        if ctype.startswith(b"application/json"):
+            meta_data = json.loads(part.text)
+        elif ctype.startswith(b"application/octet-stream"):
+            label_data = part.content
     return meta_data, label_data
 
 
 def parse_response(resp):
-    ctype_main, ctype_details = parse_header(resp.headers["Content-Type"])
+    ctype_main, _ctype_details = parse_header(resp.headers["Content-Type"])
     if ctype_main == "multipart/mixed":
-        return parse_multipart(resp.content, ctype_details["boundary"])
+        return parse_multipart(resp)
     elif ctype_main == "application/json":
         return resp.json(), None
     return None, None

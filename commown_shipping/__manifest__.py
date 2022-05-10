@@ -14,9 +14,12 @@
         "partner_firstname",
         "project",
         "queue_job",
-        "server_environment_data_encryption",
+        "server_environment",
     ],
-    "external_dependencies": {"bin": ["pdfjam", "pdftk"]},
+    "external_dependencies": {
+        "bin": ["pdfjam", "pdftk"],
+        "python": ["requests_toolbelt"],
+    },
     "data": [
         "data/actions.xml",
         "data/cron.xml",

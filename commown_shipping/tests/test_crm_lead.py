@@ -1,20 +1,20 @@
 from datetime import date, timedelta
 
-import requests
 from mock import patch
-from odoo.addons.commown_shipping.models.colissimo_utils import shipping_data
-from odoo.addons.commown_shipping.models.delivery_mixin import \
-    CommownTrackDeliveryMixin as DeliveryMixin
-from odoo.addons.queue_job.job import Job
-from odoo.exceptions import UserError
-from odoo.tests.common import TransactionCase, at_install, post_install
+import requests_mock
 
+from odoo.exceptions import UserError
+from odoo.tests.common import TransactionCase
+
+from odoo.addons.queue_job.job import Job
+
+from ..models.colissimo_utils import shipping_data
+from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
 from .common import BaseShippingTC, pdf_page_num
 
 
-@at_install(False)
-@post_install(True)
 class CrmLeadShippingTC(BaseShippingTC):
+
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
 
@@ -90,7 +90,8 @@ class CrmLeadShippingTC(BaseShippingTC):
     def _print_outward_labels(self, leads):
         act = self.env.ref("commown_shipping.action_print_outward_label_lead")
 
-        with patch.object(requests, "post", return_value=self.fake_resp):
+        with requests_mock.Mocker() as mocker:
+            self.mock_colissimo_ok(mocker)
             return act.with_context(
                 {"active_model": leads._name, "active_ids": leads.ids}
             ).run()
@@ -125,16 +126,18 @@ class CrmLeadShippingTC(BaseShippingTC):
         )
         self.assertEqual(data["letter"]["addressee"]["address"]["firstName"], "")
 
-    def test_create_parcel_label(self):
+    @requests_mock.Mocker()
+    def test_create_parcel_label(self, mocker):
         lead = self.lead
 
-        with patch.object(requests, "post", return_value=self.fake_resp):
-            lead._create_parcel_label(
-                self.parcel_type,
-                self.shipping_account,
-                lead.partner_id,
-                lead.get_label_ref(),
-            )
+        self.mock_colissimo_ok(mocker)
+
+        lead._create_parcel_label(
+            self.parcel_type,
+            self.shipping_account,
+            lead.partner_id,
+            lead.get_label_ref(),
+        )
 
         self.assertEqual(lead.expedition_ref, "6X0000000000")
         self.assertEqual(lead.expedition_date, date.today())
@@ -159,9 +162,8 @@ class CrmLeadShippingTC(BaseShippingTC):
         self.assertEqual(pdf_page_num(all_labels), 2)
 
 
-@at_install(False)
-@post_install(True)
 class CrmLeadDeliveryTC(TransactionCase):
+
     def setUp(self):
         super(CrmLeadDeliveryTC, self).setUp()
         team = self.env.ref("sales_team.salesteam_website_sales")
@@ -275,13 +277,13 @@ def _status(code, label="test label", _date=None):
     return {"code": code, "label": label, "date": _date or date.today().isoformat()}
 
 
-@at_install(False)
-@post_install(True)
 class CrmLeadDeliveryTrackingTC(TransactionCase):
+
     def setUp(self):
         super(CrmLeadDeliveryTrackingTC, self).setUp()
 
-        account = self.env.ref("commown_shipping.colissimo-std-account")
+        account = self.env.ref(
+            "commown_shipping.shipping-account-colissimo-std-account")
         self.team = self.env.ref("sales_team.salesteam_website_sales")
         mt_id = self.env.ref("commown_shipping.delivery_email_example").id
         self.team.update(

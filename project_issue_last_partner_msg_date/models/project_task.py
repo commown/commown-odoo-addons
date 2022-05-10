@@ -7,6 +7,7 @@ class ProjectTask(models.Model):
 
     last_partner_msg_date = fields.Datetime('Last partner message date')
 
+    @api.model
     def create(self, values):
         "Set last_partner_msg_date to utcnow by default"
         task = super().create(values)
@@ -22,8 +23,8 @@ class ProjectTask(models.Model):
         """
         msg = super().message_post(*args, **kwargs)
         date = self.last_partner_msg_date or self.create_date
-        if (msg.create_date > date and
-                msg.author_id == self.partner_id and
-                msg.message_type in ('email', 'comment')):
+        if (msg.create_date > date
+                and msg.author_id == self.partner_id
+                and msg.message_type in ('email', 'comment')):
             self.last_partner_msg_date = msg.create_date
         return msg

@@ -2,11 +2,7 @@ from odoo.addons.contract.tests.test_contract import TestContractBase
 
 from mock import patch
 
-from odoo.tests.common import at_install, post_install
 
-
-@at_install(False)
-@post_install(True)
 class ContractPaymentTC(TestContractBase):
 
     @classmethod
@@ -48,3 +44,31 @@ class ContractPaymentTC(TestContractBase):
             expected_label = ('Invoice 01/15/2018 - 02/14/2018 (%s)'
                               % invoice.number)
             self.assertEqual(label, expected_label)
+
+    def test_amount(self):
+        "Contract amount does not take "
+
+        self.assertEqual(self.contract.amount(), 50.)
+
+        formula1 = self.env["contract.line.qty.formula"].create({
+            "name": "[DE] Valid",
+            "code": "result = 0.2  # does not matter here",
+        })
+        self.contract.contract_line_ids.update({
+            'qty_type': 'variable',  # [DE] important here
+            'qty_formula_id': formula1,
+        })
+
+        self.assertEqual(self.contract.amount(), 50.)
+
+        formula2 = self.env["contract.line.qty.formula"].create({
+            "name": "Invalid",
+            "code": "result = 0.2  # does not matter here",
+        })
+
+        self.contract.contract_line_ids.update({
+            'qty_type': 'variable',
+            'qty_formula_id': formula2,
+        })
+
+        self.assertEqual(self.contract.amount(), 0.)
