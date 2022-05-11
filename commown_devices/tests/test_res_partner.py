@@ -15,6 +15,7 @@ class ResPartnerLocationTC(HttpCase):
         location = individual.sudo(
             employee.id).get_or_create_customer_location()
         self.assertNotEqual(location, loc_customer)
+        self.assertEqual(location.usage, "internal")
         self.assertIn(individual.name, location.name)
         self.assertEqual(location, individual.get_or_create_customer_location())
 
@@ -33,6 +34,7 @@ class ResPartnerLocationTC(HttpCase):
         self.assertEqual(location3, location2)
 
         self.assertEqual(location1.partner_id, company)
+        self.assertEqual(location1.usage, "internal")
 
     def test_customer_location_local_employee(self):
         company = self.env["res.partner"].browse(1)
