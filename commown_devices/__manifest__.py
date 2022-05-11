@@ -25,7 +25,6 @@
         'views/project_task.xml',
         'views/wizard_crm_lead_picking.xml',
         'views/wizard_project_task_picking.xml',
-        'security/ir.model.access.csv',
     ],
     'installable': True,
 }
