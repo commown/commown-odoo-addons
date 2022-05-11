@@ -7,6 +7,8 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         super().setUp()
 
         self.project = self.env["project.project"].create({"name": "Test"})
+        self.task = self.env["project.task"].create({
+            "name": "test", "project_id": self.project.id})  # for wizard tests
 
         self.partner2 = self.so.partner_id.copy({"name": "test partner2"})
         self.so2 = self.so.copy({"partner_id": self.partner2.id})
@@ -144,3 +146,56 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
                          {'Core-X4', 'Fairphone 3', 'unused product'})
         lot_names = set(choices["lot_id"].mapped("name"))
         self.assertEqual(lot_names, {"cc2", "cc3"})
+
+    def test_wizard_outward_with_task_only(self):
+        values, possible_values = self.prepare_ui(
+            "project.task.outward.picking.wizard", self.task, "task_id")
+
+        self.assertEqual(values["task_id"], self.task.id)
+
+        self.assertEqual(
+            sorted(possible_values["product_tmpl_id"].mapped("name")),
+            ["Core-X4", "Fairphone 3", "unused product"])
+        self.assertEqual(
+            sorted(possible_values["lot_id"].mapped("name")),
+            ["cc2", "cc3", "fp4"])
+
+    def test_wizard_outward_with_product_tmpl(self):
+
+        values, possible_values = self.prepare_ui(
+            "project.task.outward.picking.wizard", self.task, "task_id",
+            {"product_tmpl_id": self.storable_product.id})
+
+        self.assertEqual(values["task_id"], self.task.id)
+        self.assertEqual(values["product_tmpl_id"], self.storable_product.id)
+
+        self.assertEqual(
+            sorted(possible_values["product_tmpl_id"].mapped("name")),
+            ["Core-X4", "Fairphone 3", "unused product"])
+        self.assertEqual(
+            possible_values["variant_id"],
+            self.storable_product.product_variant_ids)
+        self.assertEqual(
+            sorted(possible_values["lot_id"].mapped("name")),
+            ["fp4"])
+
+    def test_wizard_outward_with_product_variant(self):
+
+        variant = self.storable_product.product_variant_ids[0]
+        values, possible_values = self.prepare_ui(
+            "project.task.outward.picking.wizard", self.task, "task_id",
+            {"variant_id": variant.id})
+
+        self.assertEqual(values["task_id"], self.task.id)
+        self.assertEqual(values["product_tmpl_id"], self.storable_product.id)
+        self.assertEqual(values["variant_id"], variant.id)
+
+        self.assertEqual(
+            sorted(possible_values["product_tmpl_id"].mapped("name")),
+            ["Core-X4", "Fairphone 3", "unused product"])
+        self.assertEqual(
+            possible_values["variant_id"],
+            self.storable_product.product_variant_ids)
+        self.assertEqual(
+            sorted(possible_values["lot_id"].mapped("name")),
+            ["fp4"])
