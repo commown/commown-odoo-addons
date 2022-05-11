@@ -23,7 +23,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self._create_and_send_device("fp3", self.c3)
         self._create_and_send_device("fp4", None)
         self._create_and_send_device("cc1", self.c1, cc)
-        self._create_and_send_device("cc2", None)
+        self._create_and_send_device("cc2", None, cc)
         self._create_and_send_device("cc3", self.c3, cc, do_transfer=False)
 
         # Create a unused product
@@ -37,7 +37,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             quant = lot.quant_ids.filtered(lambda q: q.quantity > 0)
             contract.send_device(quant.ensure_one(), do_transfer=do_transfer)
 
-    def get_ui(self, **user_choices):
+    def get_form(self, **user_choices):
         return self.prepare_ui("project.task", self.project, "project_id",
                                user_choices=user_choices)
 
@@ -49,7 +49,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         product2 = self.storable_product2.product_variant_ids[0]
 
         # Set partner only
-        values, choices = self.get_ui(
+        values, choices = self.get_form(
             partner_id=partner.id,
             commercial_partner_id=partner.commercial_partner_id.id)
 
@@ -67,7 +67,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(lot_names, {"fp1", "fp2", "fp3", "cc1", "cc3"})
 
         # Set contract only (contract 1: two device choice)
-        values, choices = self.get_ui(contract_id=self.c1.id)
+        values, choices = self.get_form(contract_id=self.c1.id)
 
         # > check values
         self.assertEqual(values.get("project_id"), self.project.id)
@@ -83,7 +83,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(set(choices["lot_id"].mapped("name")), {"fp1", "cc1"})
 
         # Set contract only (contract 2: single device choice)
-        values, choices = self.get_ui(contract_id=self.c2.id)
+        values, choices = self.get_form(contract_id=self.c2.id)
 
         # > check values
         self.assertEqual(values.get("storable_product_id"), product1.id)
@@ -92,7 +92,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         # Set lot_id only
         lot = self.env["stock.production.lot"].search([("name", "=", "cc1")])
-        values, choices = self.get_ui(lot_id=lot.id)
+        values, choices = self.get_form(lot_id=lot.id)
 
         # > check values
         self.assertEqual(values.get("project_id"), self.project.id)
@@ -109,12 +109,13 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
     def test_ui_repair(self):
         self.project.update({"device_tracking": True, "require_contract": False})
+        self._create_and_send_device("fp5", None)
 
         product = self.storable_product.product_variant_ids[0]
         product2 = self.storable_product2.product_variant_ids[0]
 
         # Set product only
-        values, choices = self.get_ui(storable_product_id=product.id)
+        values, choices = self.get_form(storable_product_id=product.id)
 
         # > check values
         self.assertEqual(values.get("project_id"), self.project.id)
@@ -127,11 +128,11 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(set(choices["storable_product_id"].mapped("name")),
                          {'Core-X4', 'Fairphone 3', 'unused product'})
         lot_names = set(choices["lot_id"].mapped("name"))
-        self.assertEqual(lot_names, {"fp4", "cc2"})
+        self.assertEqual(lot_names, {"fp4", "fp5"})
 
         # Set lot_id only
         lot = self.env["stock.production.lot"].search([("name", "=", "cc2")])
-        values, choices = self.get_ui(lot_id=lot.id)
+        values, choices = self.get_form(lot_id=lot.id)
 
         # > check values
         self.assertEqual(values.get("project_id"), self.project.id)
@@ -144,4 +145,4 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(set(choices["storable_product_id"].mapped("name")),
                          {'Core-X4', 'Fairphone 3', 'unused product'})
         lot_names = set(choices["lot_id"].mapped("name"))
-        self.assertEqual(lot_names, {"fp4", "cc2"})
+        self.assertEqual(lot_names, {"cc2", "cc3"})
