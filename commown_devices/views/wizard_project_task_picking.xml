@@ -2,7 +2,7 @@
 
   <record id="wizard_project_task_picking_form" model="ir.ui.view">
     <field name="name">[commown] Project task picking creation form view</field>
-    <field name="model">project.task.picking.wizard</field>
+    <field name="model">project.task.involved_device_picking.wizard</field>
     <field name="arch" type="xml">
       <form string="Move involved device">
         <sheet>

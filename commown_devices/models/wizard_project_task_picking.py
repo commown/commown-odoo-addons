@@ -4,9 +4,26 @@ from odoo.exceptions import UserError
 from .common import internal_picking
 
 
-class ProjectTaskPickingWizard(models.Model):
-    _name = "project.task.picking.wizard"
-    _description = "Create a picking from a task"
+class ProjectTaskAbstractPickingWizard(models.AbstractModel):
+    _name = "project.task.abstract.picking.wizard"
+    _description = "Abstract model to create a picking from a task"
+
+    task_id = fields.Many2one(
+        "project.task",
+        string="Task",
+        required=True,
+    )
+
+    date = fields.Datetime(
+        string=u"date",
+        help=u"Defaults to now - To be set only to force a date",
+    )
+
+
+class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
+    _name = "project.task.involved_device_picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+    _description = "Create a picking of the device attached to a task"
 
     destination_refs = (
         "stock_location_outsourced_repair",
@@ -15,21 +32,10 @@ class ProjectTaskPickingWizard(models.Model):
         "stock_location_repairer",
     )
 
-    task_id = fields.Many2one(
-        "project.task",
-        string="Task",
-        required=True,
-    )
-
     location_dest_id = fields.Many2one(
         "stock.location",
         string="Destination",
         required=True,
-    )
-
-    date = fields.Datetime(
-        string="date",
-        help="Defaults to now - To be set only to force a date",
     )
 
     def present_location(self):
