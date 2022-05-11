@@ -133,7 +133,7 @@ class ProjectTask(models.Model):
             "default_lot_id": self.lot_id.id,
             "default_origin": "Task-%s" % self.id,
             "default_scrap_location_id": scrap_loc.id,
-            }
+        }
 
         current_loc = self.env['stock.quant'].search([
             ('lot_id', '=', self.lot_id.id),
