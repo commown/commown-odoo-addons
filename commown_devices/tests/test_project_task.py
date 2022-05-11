@@ -212,3 +212,20 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.assertEqual(sorted(possible_values["lot_id"].mapped("name")),
                          ['cc1', 'fp1'])
+
+    def test_wizard_contract_transfer(self):
+        self.task.update({
+            "contract_id": self.c1.id,
+            "lot_id": self.c1.quant_ids[0].lot_id,
+        })
+        self.assertIn(self.task.lot_id, self.c1.mapped("quant_ids.lot_id"))
+        self.assertNotIn(self.task.lot_id, self.c2.mapped("quant_ids.lot_id"))
+
+        wizard = self.env["project.task.contract_transfer.wizard"].create({
+            "task_id": self.task.id,
+            "contract_id": self.c2.id,
+        })
+        wizard.create_transfer()
+
+        self.assertNotIn(self.task.lot_id, self.c1.mapped("quant_ids.lot_id"))
+        self.assertIn(self.task.lot_id, self.c2.mapped("quant_ids.lot_id"))

@@ -42,4 +42,15 @@
     <field name="binding_model_id" ref="project.model_project_task" />
   </record>
 
+  <record id="action_wizard_project_task_contract_transfer" model="ir.actions.act_window">
+    <field name="name">[commown] RES: Transfer involved device to another contract</field>
+    <field name="src_model">project.task</field>
+    <field name="res_model">project.task.contract_transfer.wizard</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
 </odoo>
