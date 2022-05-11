@@ -196,3 +196,32 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
             self.lot_id,
             self.env.ref('commown_devices.stock_location_devices_to_check'),
             date=self.date)
+
+
+class ProjectTaskContractTransferWizard(models.TransientModel):
+    _name = "project.task.contract_transfer.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    contract_id = fields.Many2one(
+        "contract.contract",
+        string=u"Destination contract",
+        required=True,
+        domain=[("date_end", "=", False)],
+    )
+
+    @api.multi
+    def create_transfer(self):
+        lot = self.task_id.lot_id
+
+        if not lot:
+            raise UserError(_("Can't move device: no device set on this task!"))
+
+        transfer_location = self.env.ref(
+            "commown_devices.stock_location_contract_transfer")
+
+        self.task_id.contract_id.receive_device(
+            self.task_id.lot_id, transfer_location, date=self.date,
+            do_transfer=True)
+
+        quant = self.task_id.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
+        self.contract_id.send_device(quant, date=self.date, do_transfer=True)
