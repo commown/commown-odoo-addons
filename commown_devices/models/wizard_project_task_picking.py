@@ -170,3 +170,29 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
     def create_picking(self):
         quant = self.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
         return self.task_id.contract_id.send_device(quant, date=self.date)
+
+
+class ProjectTaskInwardPickingWizard(models.TransientModel):
+    _name = "project.task.inward.picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    lot_id = fields.Many2one(
+        "stock.production.lot",
+        string=u"Device",
+        required=True,
+    )
+
+    @api.onchange("task_id")
+    def onchange_task_id(self):
+        if self.task_id:
+            lots = self.task_id.contract_id.quant_ids.mapped("lot_id")
+            if len(lots) == 1:
+                self.lot_id = lots.id
+            return {"domain": {"lot_id": [("id", "in", lots.ids)]}}
+
+    @api.multi
+    def create_picking(self):
+        return self.task_id.contract_id.receive_device(
+            self.lot_id,
+            self.env.ref('commown_devices.stock_location_devices_to_check'),
+            date=self.date)

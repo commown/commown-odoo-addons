@@ -199,3 +199,16 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(
             sorted(possible_values["lot_id"].mapped("name")),
             ["fp4"])
+
+    def test_wizard_inward(self):
+
+        self.task.contract_id = self.c1
+
+        values, possible_values = self.prepare_ui(
+            "project.task.inward.picking.wizard", self.task, "task_id")
+
+        self.assertEqual(values["task_id"], self.task.id)
+        self.assertFalse(values.get("lot_id"))
+
+        self.assertEqual(sorted(possible_values["lot_id"].mapped("name")),
+                         ['cc1', 'fp1'])
