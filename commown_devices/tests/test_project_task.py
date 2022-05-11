@@ -29,7 +29,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         # Create a unused product
         self.storable_product.copy({"name": "unused product"})
 
-
     def _create_and_send_device(self, serial, contract, product=None,
                                 do_transfer=True):
         lot = self.adjust_stock(product, serial=serial)
@@ -112,7 +111,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self._create_and_send_device("fp5", None)
 
         product = self.storable_product.product_variant_ids[0]
-        product2 = self.storable_product2.product_variant_ids[0]
 
         # Set product only
         values, choices = self.get_form(storable_product_id=product.id)

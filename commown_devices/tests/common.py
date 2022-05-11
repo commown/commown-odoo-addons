@@ -12,7 +12,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             1, contract_line_ids=[
                 self._contract_line(1, '1 month Fairphone premium', tax),
                 self._contract_line(1, 'Accessory: ##ACCESSORY##', tax),
-                ])
+            ]
+        )
         self.storable_product = self.env['product.template'].create({
             'name': 'Fairphone 3', 'type': 'product', 'tracking': 'serial',
         })
@@ -129,7 +130,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 context["__builtins__"] = {}
                 try:
                     domain = eval(domain, context)
-                except:
+                except:  # noqa: E722
                     domain = []
             if domain is None:
                 continue
