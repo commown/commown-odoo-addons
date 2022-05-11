@@ -35,10 +35,12 @@ class CrmLeadPickingWizard(models.TransientModel):
     lot_id = fields.Many2one(
         "stock.production.lot",
         string="Device",
-        domain=lambda self: '''[
-            ("product_id", "=", variant_id),
-            ("quant_ids.location_id", "child_of", %d)]''' % self.env.ref(
-                "commown_devices.stock_location_available_for_rent").id,
+        domain=lambda self: (
+            '[("product_id", "=", variant_id),'
+            ' ("quant_ids.location_id", "child_of", %d)]'
+            % self.env.ref(
+                "commown_devices.stock_location_available_for_rent").id
+        ),
         required=True,
     )
 

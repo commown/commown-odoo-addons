@@ -30,7 +30,7 @@ class ResPartner(models.Model):
 
         return self.env["stock.location"].search([
             ("partner_id", "=", self.id),
-            ("usage", "=", "customer"),
+            ("usage", "=", "internal"),
             ("location_id", "=", parent_location.id),
         ], order="id ASC", limit=1)
 
@@ -55,7 +55,7 @@ class ResPartner(models.Model):
                       " creating one", self.id, self.name)
         return self.env['stock.location'].sudo().create({
             'name': self.name,
-            'usage': 'customer',
+            'usage': 'internal',
             'partner_id': self.id,
             'location_id': parent_location.id,
         })

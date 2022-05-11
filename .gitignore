@@ -1,1 +1,2 @@
-.env
+*/tests/.env
+*/tests/odoo.conf

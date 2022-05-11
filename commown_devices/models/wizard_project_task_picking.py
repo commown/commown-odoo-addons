@@ -4,9 +4,26 @@ from odoo.exceptions import UserError
 from .common import internal_picking
 
 
-class ProjectTaskPickingWizard(models.Model):
-    _name = "project.task.picking.wizard"
-    _description = "Create a picking from a task"
+class ProjectTaskAbstractPickingWizard(models.AbstractModel):
+    _name = "project.task.abstract.picking.wizard"
+    _description = "Abstract model to create a picking from a task"
+
+    task_id = fields.Many2one(
+        "project.task",
+        string="Task",
+        required=True,
+    )
+
+    date = fields.Datetime(
+        string=u"date",
+        help=u"Defaults to now - To be set only to force a date",
+    )
+
+
+class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
+    _name = "project.task.involved_device_picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+    _description = "Create a picking of the device attached to a task"
 
     destination_refs = (
         "stock_location_outsourced_repair",
@@ -15,21 +32,10 @@ class ProjectTaskPickingWizard(models.Model):
         "stock_location_repairer",
     )
 
-    task_id = fields.Many2one(
-        "project.task",
-        string="Task",
-        required=True,
-    )
-
     location_dest_id = fields.Many2one(
         "stock.location",
         string="Destination",
         required=True,
-    )
-
-    date = fields.Datetime(
-        string="date",
-        help="Defaults to now - To be set only to force a date",
     )
 
     def present_location(self):
@@ -73,3 +79,149 @@ class ProjectTaskPickingWizard(models.Model):
         return internal_picking(
             "Task-%s" % self.task_id.id, [lot], self.present_location(),
             self.location_dest_id, date=self.date, do_transfer=True)
+
+
+class ProjectTaskOutwardPickingWizard(models.TransientModel):
+    _name = "project.task.outward.picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    product_tmpl_id = fields.Many2one(
+        "product.template",
+        string=u"Product",
+        domain="[('tracking', '=', 'serial')]",
+        required=True,
+        default=lambda self: self._compute_default_product_tmpl_id(),
+    )
+
+    variant_id = fields.Many2one(
+        "product.product",
+        string=u"Variant",
+        domain=("[('tracking', '=', 'serial'),"
+                " ('product_tmpl_id', '=', product_tmpl_id)]"),
+        required=True,
+        default=lambda self: self._compute_default_variant_id(),
+    )
+
+    lot_id = fields.Many2one(
+        "stock.production.lot",
+        string=u"Device",
+        domain=lambda self: self._domain_lot_id(),
+        required=True,
+    )
+
+    def _get_task(self):
+        if not self.task_id and "default_task_id" in self.env.context:
+            return self.env["project.task"].browse(
+                self.env.context["default_task_id"])
+        else:
+            return self.task
+
+    def _compute_default_product_tmpl_id(self):
+        return self._get_task().lot_id.product_id.product_tmpl_id
+
+    def _compute_default_variant_id(self):
+        return self._get_task().lot_id.product_id
+
+    def _domain_lot_id(self):
+        quant_domain = [
+            ("quantity", ">", 0),
+            ("location_id", "child_of", self.env.ref(
+                "commown_devices.stock_location_available_for_rent").id),
+        ]
+        if self.product_tmpl_id:
+            quant_domain.append(
+                ("product_tmpl_id", "=", self.product_tmpl_id.id))
+        if self.variant_id:
+            quant_domain.append(("product_id", "=", self.variant_id.id))
+        quants = self.env["stock.quant"].search(quant_domain)
+        return [("id", "in", quants.mapped("lot_id").ids)]
+
+    @api.onchange("product_tmpl_id")
+    def onchange_product_tmpl_id(self):
+        domain = {}
+        if self.product_tmpl_id:
+            variants = self.product_tmpl_id.product_variant_ids
+            if variants:
+                domain["variant_id"] = [("id", "in", variants.ids)]
+            if len(variants) == 1:
+                self.variant_id = self.product_tmpl_id.product_variant_id
+            elif self.variant_id not in variants:
+                self.variant_id = False
+
+        lots = self.env["stock.production.lot"].search(self._domain_lot_id())
+        domain["lot_id"] = [("id", "in", lots.ids)]
+        return {"domain": domain}
+
+    @api.onchange("variant_id")
+    def onchange_variant_id(self):
+        if (self.variant_id
+                and self.product_tmpl_id != self.variant_id.product_tmpl_id):
+            self.product_tmpl_id = self.variant_id.product_tmpl_id
+
+        lots = self.env["stock.production.lot"].search(self._domain_lot_id())
+        return {"domain": {"lot_id": [("id", "in", lots.ids)]}}
+
+    @api.onchange("lot_id")
+    def onchange_lot_id(self):
+        if self.lot_id:
+            self.variant_id = self.lot_id.product_id
+
+    @api.multi
+    def create_picking(self):
+        quant = self.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
+        return self.task_id.contract_id.send_device(quant, date=self.date)
+
+
+class ProjectTaskInwardPickingWizard(models.TransientModel):
+    _name = "project.task.inward.picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    lot_id = fields.Many2one(
+        "stock.production.lot",
+        string=u"Device",
+        required=True,
+    )
+
+    @api.onchange("task_id")
+    def onchange_task_id(self):
+        if self.task_id:
+            lots = self.task_id.contract_id.quant_ids.mapped("lot_id")
+            if len(lots) == 1:
+                self.lot_id = lots.id
+            return {"domain": {"lot_id": [("id", "in", lots.ids)]}}
+
+    @api.multi
+    def create_picking(self):
+        return self.task_id.contract_id.receive_device(
+            self.lot_id,
+            self.env.ref('commown_devices.stock_location_devices_to_check'),
+            date=self.date)
+
+
+class ProjectTaskContractTransferWizard(models.TransientModel):
+    _name = "project.task.contract_transfer.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    contract_id = fields.Many2one(
+        "contract.contract",
+        string=u"Destination contract",
+        required=True,
+        domain=[("date_end", "=", False)],
+    )
+
+    @api.multi
+    def create_transfer(self):
+        lot = self.task_id.lot_id
+
+        if not lot:
+            raise UserError(_("Can't move device: no device set on this task!"))
+
+        transfer_location = self.env.ref(
+            "commown_devices.stock_location_contract_transfer")
+
+        self.task_id.contract_id.receive_device(
+            self.task_id.lot_id, transfer_location, date=self.date,
+            do_transfer=True)
+
+        quant = self.task_id.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
+        self.contract_id.send_device(quant, date=self.date, do_transfer=True)

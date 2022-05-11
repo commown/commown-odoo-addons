@@ -2,7 +2,7 @@
 
   <record id="wizard_project_task_picking_form" model="ir.ui.view">
     <field name="name">[commown] Project task picking creation form view</field>
-    <field name="model">project.task.picking.wizard</field>
+    <field name="model">project.task.involved_device_picking.wizard</field>
     <field name="arch" type="xml">
       <form string="Move involved device">
         <sheet>
@@ -14,6 +14,71 @@
         </sheet>
         <footer>
           <button name="create_picking" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="wizard_project_task_outward_picking_form" model="ir.ui.view">
+    <field name="name">[commown] Project task outward picking creation form view</field>
+    <field name="model">project.task.outward.picking.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Send a device">
+        <sheet>
+          <group>
+            <field name="task_id" invisible="1"/>
+            <field name="date"/>
+            <field name="product_tmpl_id" options="{'no_create': True}"/>
+            <field name="variant_id" options="{'no_create': True}"/>
+            <field name="lot_id" options="{'no_create': True}"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="create_picking" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="wizard_project_task_inward_picking_form" model="ir.ui.view">
+    <field name="name">[commown] Project task inward picking creation form view</field>
+    <field name="model">project.task.inward.picking.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Receive a device">
+        <sheet>
+          <group>
+            <field name="task_id" invisible="1"/>
+            <field name="date"/>
+            <field name="lot_id"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="create_picking" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="wizard_project_task_contract_transfer_form" model="ir.ui.view">
+    <field name="name">[commown] Project task contract transfer creation form view</field>
+    <field name="model">project.task.contract_transfer.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Transfer device to new contract">
+        <sheet>
+          <group>
+            <field name="task_id" invisible="1"/>
+            <field name="contract_id"/>
+            <field name="date"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="create_transfer" string="OK" class="btn-primary" type="object"/>
           or
           <button string="Cancel" class="btn-default" special="cancel"/>
         </footer>
