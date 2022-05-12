@@ -38,6 +38,10 @@
         <field name="commitment_period_type" />
       </xpath>
 
+      <xpath expr="//field[@name='date_end']" position="after">
+        <field name="commitment_end_date" />
+      </xpath>
+
     </field>
   </record>
 
