@@ -37,7 +37,7 @@ class Contract(models.Model):
         delta = self.env["contract.line"].get_relative_delta
         for record in self:
             if record.date_start:
-                record.commitment_end_date = record.date_start +  delta(
+                record.commitment_end_date = record.date_start + delta(
                     record.commitment_period_type,
                     record.commitment_period_number)
 
