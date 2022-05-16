@@ -68,7 +68,7 @@
                     <br/><span t-field="res_company.zip"/> <span t-field="res_company.city"/>
                   </p>
                   <p>
-                    <em>Commown est Société Coopérative d'Intérêt Collectif basée sur une Société par Actions Simplifiée</em>
+                    <em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société par Actions Simplifiée</em>
                   </p>
                   <p><em>SIREN 828 811 489</em></p>
                 </div>
