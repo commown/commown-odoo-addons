@@ -30,7 +30,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         p2.followup_sales_team_id = self._create_sales_team(3).id
 
         _investment_project = self.env.ref('commown.investment_followup_project')
-        _stage = self.env['project.task.type'].create({
+        self.env['project.task.type'].create({
             'sequence': 1,
             'name': 'investment received',
             'project_ids': [(6, 0, (_investment_project.id,))],

@@ -100,4 +100,4 @@ class Campaign(models.Model):
             "type": "ir.actions.act_url",
             "url": attachment.website_url + '&download=1',
             "target": "new",
-            }
+        }

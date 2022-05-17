@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, models
 
 
 class AccountBankStatement(models.Model):
