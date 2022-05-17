@@ -15,9 +15,9 @@ class SimpleReconciliationTC(TransactionCase):
             {'id': 2, 'partner_id': 7, 'date_maturity': '2018-01-10',
              'credit': 2, 'debit': 0},
             {'id': 3, 'partner_id': 7, 'date_maturity': '2018-01-11',
-             'credit': 0,  'debit': 2},
+             'credit': 0, 'debit': 2},
             {'id': 4, 'partner_id': 7, 'date_maturity': '2018-01-21',
-             'credit': 0,  'debit': 2},
+             'credit': 0, 'debit': 2},
         ]
 
     def test_without_max_reconcile_days_gap(self):

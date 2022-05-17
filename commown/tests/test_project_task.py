@@ -186,7 +186,7 @@ class ProjectTaskTC(TransactionCase):
     def test_payment_task_process_automatically(self):
         inv = self.env['account.invoice'].search([]).filtered(
             lambda i: i.invoice_line_ids and not any(
-                l.contract_line_id for l in i.invoice_line_ids))[0]
+                line.contract_line_id for line in i.invoice_line_ids))[0]
         self.task.invoice_id = inv.id
         iline = inv.invoice_line_ids[0]
 
