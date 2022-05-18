@@ -39,15 +39,15 @@ class CustomerPortal(CustomerPortal):
             error_message.append(exc.msg)
         return error, error_message
 
-    @http.route(['/my/account'])
-    def details(self, redirect=None, **post):
+    @http.route()
+    def account(self, redirect=None, **post):
         if post:
             partner = http.request.env.user.partner_id
             _logger.debug('details posted: %s', post)
             for field in partner.auto_widget_binary_fields:
-                if field in post:
+                if post.get(field):
                     if not post[field].filename:
                         post[field] = False
                     else:
                         post[field] = b64encode(post[field].read())
-        return super(CustomerPortal, self).details(redirect=redirect, **post)
+        return super(CustomerPortal, self).account(redirect=redirect, **post)
