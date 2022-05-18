@@ -5,8 +5,8 @@
   <template id="portal_layout" inherit_id="portal.portal_layout">
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]/div[1]" position="after">
       <div>
-        <t t-set="no_card" t-value="(not user.partner_id.id_card1 and not user.partner_id.id_card2)" />
-        <t t-set="no_poa" t-value="not user.partner_id.proof_of_address" />
+        <t t-set="no_card" t-value="(not user_id.partner_id.id_card1 and not user_id.partner_id.id_card2)" />
+        <t t-set="no_poa" t-value="not user_id.partner_id.proof_of_address" />
         <i class="fa fa-copy"/> <span>ID card</span> <i
             t-attf-class="fa #{no_card and 'fa-exclamation-triangle' or 'fa-check' }"
             t-attf-style="#{no_card and 'color:red' or ''}" />
@@ -18,11 +18,11 @@
     </xpath>
 
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
-      <t t-set="user_channels" t-value="[c for c in user.partner_id.channel_ids if c.channel_type=='channel']"/>
+      <t t-set="user_channels" t-value="[c for c in user_id.partner_id.channel_ids if c.channel_type=='channel']"/>
       <div t-if="user_channels">
         <h3 class="page-header">Contact us</h3>
         <div class="list-group">
-          <t t-set="action_id" t-value="env.ref('mail.mail_channel_action_client_chat').id"/>
+          <t t-set="action_id" t-value="env.ref('mail.action_discuss').id"/>
           <t t-foreach="user_channels" t-as="channel" t-attr-href="">
             <a class="list-group-item" t-attf-href="/web#action=#{action_id}&amp;active_id=#{channel.id}">
               Channel <t t-esc="channel.name"/>
@@ -43,13 +43,19 @@
 
     <!-- Replace name by firstname + lastname -->
     <xpath expr="//form//input[@name='name']/ancestor::div[1]" position="replace">
-      <div t-attf-class="form-group #{error.get('firstname') and 'o_has_error' or ''} col-lg-6">
-        <label class="control-label" for="firstname">First name</label>
-        <input type="text" name="firstname" class="form-control" t-att-value="firstname or partner.firstname" />
+      <div t-attf-class="form-group #{error.get('firstname') and 'o_has_error' or ''} col-xl-6">
+        <label class="col-form-label" for="firstname">First name</label>
+        <input type="text"
+               name="firstname"
+               t-attf-class="form-control #{error.get('firstname') and 'is-invalid' or ''}"
+               t-att-value="firstname or partner.firstname" />
       </div>
-      <div t-attf-class="form-group #{error.get('lastname') and 'o_has_error' or ''} col-lg-6">
-        <label class="control-label" for="lastname">Last name</label>
-        <input type="text" name="lastname" class="form-control" t-att-value="lastname or partner.lastname" />
+      <div t-attf-class="form-group #{error.get('lastname') and 'o_has_error' or ''} col-xl-6">
+        <label class="col-form-label" for="lastname">Last name</label>
+        <input type="text"
+               name="lastname"
+               t-attf-class="form-control #{error.get('lastname') and 'is-invalid' or ''}"
+               t-att-value="lastname or partner.lastname" />
       </div>
     </xpath>
 
