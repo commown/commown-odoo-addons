@@ -32,7 +32,6 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
             'max_reconcile_lines', self.default_max_reconcile_lines)
         _logger.info('max_reconcile_lines is %s', max_reconcile_lines)
 
-
         if self._key_field is None:
             raise ValueError("_key_field has to be defined")
         count = 0
@@ -68,8 +67,7 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
                     continue
                 reconciled, dummy = self._reconcile_lines(
                     [credit_line, debit_line],
-                    allow_partial=False
-                    )
+                    allow_partial=False)
                 if reconciled:
                     _logger.info('Reconcile success: %s <-> %s - %d trial(s)',
                                  lines[i]['id'], lines[count]['id'], i - count)

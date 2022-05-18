@@ -4,13 +4,14 @@
   <!-- Add information about missing documents on user details -->
   <template id="portal_layout" inherit_id="portal.portal_layout">
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]/div[1]" position="after">
-      <div>
-        <t t-set="no_card" t-value="(not user.partner_id.id_card1 and not user.partner_id.id_card2)" />
-        <t t-set="no_poa" t-value="not user.partner_id.proof_of_address" />
-        <i class="fa fa-copy"/> <span>ID card</span> <i
+      <div class="mt-2">
+        <t t-set="no_card" t-value="(not user_id.partner_id.id_card1 and not user_id.partner_id.id_card2)" />
+        <t t-set="no_poa" t-value="not user_id.partner_id.proof_of_address" />
+        <i class="fa fa-copy fa-fw"/><span class="ml-2">ID card</span> <i
             t-attf-class="fa #{no_card and 'fa-exclamation-triangle' or 'fa-check' }"
             t-attf-style="#{no_card and 'color:red' or ''}" />
-        <br/>     <span>Proof of address</span> <i
+        <br/>
+        <i class="fa fa-copy fa-fw"/><span class="ml-2">Proof of address</span> <i
             t-attf-class="fa #{no_poa and 'fa-exclamation-triangle' or 'fa-check' }"
             t-attf-style="#{no_poa and 'color:red' or ''}"
             />
@@ -18,11 +19,12 @@
     </xpath>
 
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
-      <t t-set="user_channels" t-value="[c for c in user.partner_id.channel_ids if c.channel_type=='channel']"/>
-      <div t-if="user_channels">
-        <h3 class="page-header">Contact us</h3>
-        <div class="list-group">
-          <t t-set="action_id" t-value="env.ref('mail.mail_channel_action_client_chat').id"/>
+      <t t-set="user_channels" t-value="[c for c in user_id.partner_id.channel_ids if c.channel_type=='channel']"/>
+      <div class="mt-4" t-if="user_channels">
+        <h4>Contact us</h4>
+        <hr class="mt-1 mb-0"/>
+          <div class="list-group">
+          <t t-set="action_id" t-value="env.ref('mail.action_discuss').id"/>
           <t t-foreach="user_channels" t-as="channel" t-attr-href="">
             <a class="list-group-item" t-attf-href="/web#action=#{action_id}&amp;active_id=#{channel.id}">
               Channel <t t-esc="channel.name"/>
@@ -43,13 +45,19 @@
 
     <!-- Replace name by firstname + lastname -->
     <xpath expr="//form//input[@name='name']/ancestor::div[1]" position="replace">
-      <div t-attf-class="form-group #{error.get('firstname') and 'o_has_error' or ''} col-lg-6">
-        <label class="control-label" for="firstname">First name</label>
-        <input type="text" name="firstname" class="form-control" t-att-value="firstname or partner.firstname" />
+      <div t-attf-class="form-group #{error.get('firstname') and 'o_has_error' or ''} col-xl-6">
+        <label class="col-form-label" for="firstname">First name</label>
+        <input type="text"
+               name="firstname"
+               t-attf-class="form-control #{error.get('firstname') and 'is-invalid' or ''}"
+               t-att-value="firstname or partner.firstname" />
       </div>
-      <div t-attf-class="form-group #{error.get('lastname') and 'o_has_error' or ''} col-lg-6">
-        <label class="control-label" for="lastname">Last name</label>
-        <input type="text" name="lastname" class="form-control" t-att-value="lastname or partner.lastname" />
+      <div t-attf-class="form-group #{error.get('lastname') and 'o_has_error' or ''} col-xl-6">
+        <label class="col-form-label" for="lastname">Last name</label>
+        <input type="text"
+               name="lastname"
+               t-attf-class="form-control #{error.get('lastname') and 'is-invalid' or ''}"
+               t-att-value="lastname or partner.lastname" />
       </div>
     </xpath>
 
@@ -64,7 +72,7 @@
     <!-- Add ID card and proof of address before address -->
     <xpath expr="//form//select[@name='country_id']/ancestor::div[1]" position="after">
 
-      <h1 class="col-lg-12">Documents</h1>
+      <h3 class="col-lg-12">Documents</h3>
 
       <t t-foreach="['id_card1', 'id_card2', 'proof_of_address']" t-as="field">
         <t t-set="label" t-value="partner._fields[field].get_description(env)['string']" />
@@ -72,11 +80,16 @@
           <label class="control-label" t-attf-for="#{field}" t-esc="label" />
           <t t-if="partner[field]">
             <button class="cwn_bin_field_btn pull-right btn btn-sm btn-warning fa fa-trash"
+                    title="Trash document"
+                    t-attf-data-title-next-click="Undo"
                     t-attf-style="#{absent and 'display:none'}" />
+            <button class="cwn_bin_field_btn pull-right btn btn-sm btn-warning fa fa-undo"
+                    title="Undo removal"
+                    style="display:none" />
           </t>
            <a t-if="partner[field]" download="" class="btn btn-sm btn-info pull-right"
               t-attf-href="/web/image?model=res.partner&amp;download=true&amp;field=#{field}&amp;id=#{partner.id}">
-             <i class="fa fa-eye" />
+             <i title="Download document" class="fa fa-download" />
           </a>
           <input t-if="not partner[field]" type="file" t-attf-name="#{field}" />
           <input t-else="" type="file" t-attf-name="#{field}" disabled="disabled"/>
@@ -87,8 +100,8 @@
         $(function() {
           $('button.cwn_bin_field_btn').click(function(ev) {
             ev.preventDefault();
-            $(this).toggleClass('fa-trash').toggleClass('fa-undo');
             var $div = $(this).closest('div');
+            $div.find('button.cwn_bin_field_btn').toggle();
             $div.find('a[download]').toggle();
             var $input = $div.find('input');
             $input.prop('disabled', !$input.prop('disabled'))
