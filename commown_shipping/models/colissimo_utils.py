@@ -126,8 +126,13 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     if deposit_date is None:
         deposit_date = datetime.today()
 
-    if any(p.country_id and p.country_id.code != 'FR'
-           for p in (sender, recipient)):
+    if is_return:
+        sender, recipient = recipient, sender
+
+    sender_data = delivery_data(sender)
+    recipient_data = delivery_data(recipient)
+
+    if any(d["countryCode"] != 'FR' for d in (sender_data, recipient_data)):
         # Colissimo Export/ Return International
         product_code = 'COLI' if not is_return else 'CORI'
     else:
@@ -143,9 +148,6 @@ def shipping_data(sender, recipient, order_number, commercial_name,
     parcel = {'weight': weight,
               'insuranceValue': int(insurance_value * 100)}
 
-    if is_return:
-        sender, recipient = recipient, sender
-
     return {
         'outputFormat': {
             'x': 0,
@@ -158,11 +160,11 @@ def shipping_data(sender, recipient, order_number, commercial_name,
             'parcel': parcel,
             'sender': {
                 'senderParcelRef': order_number,     # visible on the label
-                'address': delivery_data(sender),
+                'address': sender_data,
             },
             'addressee': {
                 'addresseeParcelRef': order_number,  # visible on the label
-                'address': delivery_data(recipient),
+                'address': recipient_data,
             }
         }
     }
