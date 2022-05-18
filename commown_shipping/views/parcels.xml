@@ -11,6 +11,7 @@
         <field name="weight"/>
         <field name="insurance_value"/>
         <field name="is_return"/>
+        <field name="sender"/>
       </tree>
     </field>
   </record>
