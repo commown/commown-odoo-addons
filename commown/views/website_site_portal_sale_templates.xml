@@ -7,7 +7,7 @@
     <!-- Add a CGS section -->
     <xpath expr="//div[@id='quote_content']" position="after">
 
-      <t t-set="docs" t-value="[a for m in order.message_ids if m.subtype_id.get_xml_id().values() != ['mail.mt_note'] for a in m.attachment_ids]"/>
+      <t t-set="docs" t-value="[a for m in sale_order.message_ids if m.subtype_id.get_xml_id().values() != ['mail.mt_note'] for a in m.attachment_ids]"/>
       <div t-if="docs" class="row">
         <hr/>
         <div class="col-md-12">
