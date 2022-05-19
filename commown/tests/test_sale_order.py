@@ -29,13 +29,6 @@ class SaleOrderTC(RentalSaleOrderTC):
         p1.followup_sales_team_id = self._create_sales_team(1).id
         p2.followup_sales_team_id = self._create_sales_team(3).id
 
-        _investment_project = self.env.ref('commown.investment_followup_project')
-        self.env['project.task.type'].create({
-            'sequence': 1,
-            'name': 'investment received',
-            'project_ids': [(6, 0, (_investment_project.id,))],
-        })
-
     def _create_sales_team(self, num, **kwargs):
         kwargs.setdefault('name', 'Test team%d' % num)
         kwargs.setdefault('use_leads', True)
@@ -134,3 +127,21 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.so.action_confirm()
 
         self.assertEqual(partner.property_account_receivable_id, account)
+
+    def test_investment_followup_card_creation(self):
+        equity = self.env["product.product"].create({
+            "name": "Investment test product",
+            "is_equity": True,
+            "equity_type": "invest",
+            "list_price": 60.,
+        })
+        self.so.update({"order_line": [self._oline(equity)]})
+
+        project = self.env.ref('commown.investment_followup_project')
+        self.assertFalse(project.task_count)
+
+        self.so.action_confirm()
+
+        self.assertEqual(project.task_count, 1)
+        self.assertIn(self.so.name, project.task_ids.description)
+        self.assertIn("Investment test product", project.task_ids.description)
