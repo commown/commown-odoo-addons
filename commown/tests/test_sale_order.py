@@ -39,20 +39,6 @@ class SaleOrderTC(RentalSaleOrderTC):
                 'name': 'test %d' % n if n != 1 else 'test [stage: start]'})
         return team
 
-    def test_add_to_support_groups_action(self):
-        """ Add to support group action on a sale order must add the buyer to
-        the sale's support groups.
-        """
-        # Check test prerequisites
-        self.assertFalse(self.user.groups_id & (self.g1 | self.g2))
-        # Run the action
-        context = {'active_model': 'sale.order', 'active_id': self.so.id}
-        action = self.env.ref('commown.action_add_to_support_groups')
-        action.with_context(context).run()
-        # Check action effects
-        self.assertIn(self.g1, self.user.groups_id)
-        self.assertIn(self.g2, self.user.groups_id)
-
     def test_add_to_product_support_group(self):
         """ Buying a product must add buyer to product's support groups """
 
@@ -60,7 +46,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertFalse(self.user.groups_id & (self.g1 | self.g2 | self.g3))
 
         # Trigger the automatic action
-        self.so.write({'state': 'sale'})
+        self.so.action_confirm()
 
         # Check effects
         self.assertIn(self.g1, self.user.groups_id)
