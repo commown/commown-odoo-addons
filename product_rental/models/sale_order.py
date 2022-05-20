@@ -99,10 +99,7 @@ class ProductRentalSaleOrder(models.Model):
     def _create_rental_contract(self, contract_template, num):
         self.ensure_one()
         values = self._prepare_contract_value(contract_template)
-        values.update({
-            'is_auto_pay': False,
-            'name': "%s-%02d" % (self.name, num),
-        })
+        values['name'] = "%s-%02d" % (self.name, num)
         contract = self.env['contract.contract'].create(values)
         contract._onchange_contract_template_id()
         contract._onchange_contract_type()
