@@ -16,11 +16,9 @@ class CrmLead(models.Model):
     def delivery_perform_actions(self):
         super(CrmLead, self).delivery_perform_actions()
         for record in self.filtered('start_contract_on_delivery'):
-            contract = record.contract_id
-            contract.sudo().update({
-                'date_start': record.delivery_date,
-                'is_auto_pay': True,
-            })
-            # Perform date coherency check after delivery date update
-            # as date_start is always before recurring_next_date here:
-            contract.update({'recurring_next_date': record.delivery_date})
+            contract = record.contract_id.sudo()
+            contract.is_auto_pay = True
+            for cline in contract.contract_line_ids:
+                cline.date_start = record.delivery_date
+                cline._onchange_date_start()
+            contract._compute_date_end()
