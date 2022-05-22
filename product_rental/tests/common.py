@@ -23,7 +23,7 @@ class MockedEmptySessionMixin(object):
         ))
 
 
-class RentalSaleOrderTC(MockedEmptySessionMixin, SavepointCase):
+class RentalSaleOrderMixin():
 
     def get_default_tax(self, amount=20.0):
         return self.env['account.tax'].create({
@@ -34,12 +34,13 @@ class RentalSaleOrderTC(MockedEmptySessionMixin, SavepointCase):
             'type_tax_use': 'sale',
         })
 
-    def create_sale_order(self, partner=None, tax=None):
+    def create_sale_order(self, partner=None, tax=None, env=None):
         """Given tax (defaults to company's default) is used for contract
         products.
         """
+        env = env or self.env
         if partner is None:
-            partner = self.env.ref('base.res_partner_3')
+            partner = env.ref('base.res_partner_3')
         if tax is None:
             tax = self.get_default_tax()
         # Main rental products (with a rental contract template)
@@ -110,7 +111,7 @@ class RentalSaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         product1.accessory_product_ids |= a1
         product2.accessory_product_ids |= a2 + a3 + a4
 
-        return self.env['sale.order'].create({
+        return env['sale.order'].create({
             'partner_id': partner.id,
             'partner_invoice_id': partner.id,
             'partner_shipping_id': partner.id,
@@ -175,3 +176,9 @@ class RentalSaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         kwargs.setdefault('recurring_rule_type', 'monthly')
         kwargs.setdefault('recurring_interval', 1)
         return (0, 0, kwargs)
+
+
+class RentalSaleOrderTC(MockedEmptySessionMixin,
+                        RentalSaleOrderMixin,
+                        SavepointCase):
+    pass
