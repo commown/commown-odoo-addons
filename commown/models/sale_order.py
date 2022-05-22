@@ -1,4 +1,6 @@
-from odoo import models, api
+import html
+
+from odoo import models, api, _
 
 
 class SaleOrder(models.Model):
@@ -35,8 +37,7 @@ class SaleOrder(models.Model):
             })
         return account
 
-    @api.multi
-    def action_confirm(self):
+    def _create_receivable_account(self):
         """Add a dedicated receivable account to new customers. Use the ext_id
         in config parameter `commown.default_customer_receivable_tax`
         as a default tax for this account.
@@ -48,6 +49,50 @@ class SaleOrder(models.Model):
             new_account = self._get_or_create_receivable_account(account_code)
             partner.update({'property_account_receivable_id': new_account.id})
 
+    def _create_investment_followup_task(self):
+        product_tmpl_ids = self.env['product.template'].search([
+            ('is_equity', '=', True), ('equity_type', '=', 'invest')]).ids
+
+        line_tmpl = _(
+            '<p><b>Sale number:</b> {sale_name}</p>'
+            '<p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p>'
+            '<p><b>Product:</b> {product_name}</p>'
+        )
+
+        description = []
+        for line in self.order_line:
+            if line.product_id.product_tmpl_id.id in product_tmpl_ids:
+                description.append(
+                    line_tmpl.format(
+                        sale_name=html.escape(self.name),
+                        date=self.date_order,
+                        product_name=html.escape(line.product_id.display_name),
+                    )
+                )
+
+        if description:
+            ref = self.env.ref
+            project = ref('commown.investment_followup_project')
+            self.env['project.task'].create({
+                'project_id': project.id,
+                'name': line.order_partner_id.name,
+                'user_id': project.user_id.id,
+                'partner_id': line.order_partner_id.id,
+                'stage_id': ref('commown.investment_followup_start_stage').id,
+                'description': '\n'.join(description),
+            })
+
+    def _add_buyer_to_support_group(self):
+        for group in self.mapped(
+                "order_line.product_id.product_tmpl_id.support_group_ids"):
+            group.add_users(self.partner_id.user_ids)
+
+    @api.multi
+    def action_confirm(self):
+        self.ensure_one()
+        self._create_receivable_account()
+        self._create_investment_followup_task()
+        self._add_buyer_to_support_group()
         return super(SaleOrder, self).action_confirm()
 
     def risk_analysis_lead_title(

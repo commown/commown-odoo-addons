@@ -29,13 +29,6 @@ class SaleOrderTC(RentalSaleOrderTC):
         p1.followup_sales_team_id = self._create_sales_team(1).id
         p2.followup_sales_team_id = self._create_sales_team(3).id
 
-        _investment_project = self.env.ref('commown.investment_followup_project')
-        self.env['project.task.type'].create({
-            'sequence': 1,
-            'name': 'investment received',
-            'project_ids': [(6, 0, (_investment_project.id,))],
-        })
-
     def _create_sales_team(self, num, **kwargs):
         kwargs.setdefault('name', 'Test team%d' % num)
         kwargs.setdefault('use_leads', True)
@@ -46,20 +39,6 @@ class SaleOrderTC(RentalSaleOrderTC):
                 'name': 'test %d' % n if n != 1 else 'test [stage: start]'})
         return team
 
-    def test_add_to_support_groups_action(self):
-        """ Add to support group action on a sale order must add the buyer to
-        the sale's support groups.
-        """
-        # Check test prerequisites
-        self.assertFalse(self.user.groups_id & (self.g1 | self.g2))
-        # Run the action
-        context = {'active_model': 'sale.order', 'active_id': self.so.id}
-        action = self.env.ref('commown.action_add_to_support_groups')
-        action.with_context(context).run()
-        # Check action effects
-        self.assertIn(self.g1, self.user.groups_id)
-        self.assertIn(self.g2, self.user.groups_id)
-
     def test_add_to_product_support_group(self):
         """ Buying a product must add buyer to product's support groups """
 
@@ -67,7 +46,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertFalse(self.user.groups_id & (self.g1 | self.g2 | self.g3))
 
         # Trigger the automatic action
-        self.so.write({'state': 'sale'})
+        self.so.action_confirm()
 
         # Check effects
         self.assertIn(self.g1, self.user.groups_id)
@@ -134,3 +113,21 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.so.action_confirm()
 
         self.assertEqual(partner.property_account_receivable_id, account)
+
+    def test_investment_followup_card_creation(self):
+        equity = self.env["product.product"].create({
+            "name": "Investment test product",
+            "is_equity": True,
+            "equity_type": "invest",
+            "list_price": 60.,
+        })
+        self.so.update({"order_line": [self._oline(equity)]})
+
+        project = self.env.ref('commown.investment_followup_project')
+        self.assertFalse(project.task_count)
+
+        self.so.action_confirm()
+
+        self.assertEqual(project.task_count, 1)
+        self.assertIn(self.so.name, project.task_ids.description)
+        self.assertIn("Investment test product", project.task_ids.description)
