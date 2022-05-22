@@ -112,4 +112,12 @@
     </xpath>
   </template>
 
+  <template id="portal_my_invoices" inherit_id="account.portal_my_invoices">
+
+    <xpath expr="//a[@t-att-href='invoice.get_portal_url()']" position="attributes">
+      <attribute name="t-att-href">invoice.get_portal_url(report_type="pdf", download=True)</attribute>
+    </xpath>
+
+  </template>
+
 </odoo>
