@@ -20,7 +20,7 @@ jobs:
           - name: test with odoo/odoo 12.0
             container: ghcr.io/oca/oca-ci/py3.6-odoo12.0:latest
             # TODO: FIXME : errors when running test.
-            exclude: "commown_shipping,payment_slimpay_issue"
+            exclude: "payment_slimpay_issue"
 
     services:
       postgres:
