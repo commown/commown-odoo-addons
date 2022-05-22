@@ -1,4 +1,4 @@
-from datetime import date
+from odoo.addons.product_rental.models.sale_order_line import NO_DATE
 
 from .common import RentalSaleOrderTC
 
@@ -29,7 +29,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         so.action_confirm()
         contracts = self.env['contract.contract'].of_sale(so)
         lines = contracts.mapped('contract_line_ids')
-        self.assertEqual(set(lines.mapped('date_start')), {date(2030, 1, 1)})
+        self.assertEqual(set(lines.mapped('date_start')), {NO_DATE})
         # Do not use _recurring_create_invoice return value here as
         # contract_queue_job (installed in the CI) returns an empty invoice set
         # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job

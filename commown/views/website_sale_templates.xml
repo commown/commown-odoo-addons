@@ -21,7 +21,7 @@
           </a>
         </t>
         <div t-if="line.product_id.is_rental" class="rent">
--          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([(contract_line_ids.sale_order_line_id', '=', line.id), ('date_start', '&lt;', '2030-01-01')])"/>
+-          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id), ('date_start', '&lt;', '2030-01-01')])"/>
           (loyer unitaire :
           <span t-esc="line.price_unit * line.product_id.rental_price / (line.product_id.list_price or 1)"
                 t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>

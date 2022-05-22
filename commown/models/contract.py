@@ -69,3 +69,23 @@ class Contract(models.Model):
         return sum(self.contract_line_ids.filtered(lambda l: (
             l.qty_type != 'variable' or u'[DE]' in l.qty_formula_id.name
         )).mapped('price_subtotal'))
+
+    @api.model
+    def _default_invoice_mail_template_id(self):
+        "Inactivate default invoice_mail_template_id"
+        return False
+
+    @api.model
+    def _default_pay_retry_mail_template_id(self):
+        "Inactivate default pay_retry_mail_template_id"
+        return False
+
+    @api.model
+    def _default_pay_fail_mail_template_id(self):
+        "Inactivate default pay_fail_mail_template_id"
+        return False
+
+    @api.model
+    def _default_auto_pay_retries(self):
+        "Disable auto_pay_retries"
+        return 0
