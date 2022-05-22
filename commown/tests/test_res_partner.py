@@ -9,6 +9,9 @@ from werkzeug.wrappers import BaseResponse
 from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase, get_db_name, HOST, PORT
 
+from odoo.addons.product_rental.tests.common import (
+    RentalSaleOrderMixin, MockedEmptySessionMixin)
+
 
 HERE = (Path(__file__) / "..").resolve()
 
@@ -17,7 +20,9 @@ def _csrf_token(page):
     return page.xpath("string(//input[@name='csrf_token']/@value)")
 
 
-class ResPartnerResetPasswordTC(HttpCase):
+class ResPartnerResetPasswordTC(RentalSaleOrderMixin,
+                                MockedEmptySessionMixin,
+                                HttpCase):
 
     def setUp(self):
         super(ResPartnerResetPasswordTC, self).setUp()
@@ -108,3 +113,42 @@ class ResPartnerResetPasswordTC(HttpCase):
             env = self.env(test_cursor)
             partner = env["res.partner"].browse(self.partner.id)
             self.assertTrue(partner.id_card1)
+
+    def test_portal_invoices(self):
+        user = self.partner.user_ids.ensure_one()
+        werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
+        test_client = Client(wsgi_server.application, BaseResponse)
+
+        login_form = self.get_form(test_client, "/web/login/", db=get_db_name())
+        login_form.update({
+            "login": user.login,
+            "password": "portal",
+            "redirect": "/my/account",
+        })
+        response = test_client.post(
+            "/web/login/", data=login_form, environ_base=werkzeug_environ)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("/my/account", str(response.data))
+
+        # Test without any invoice and check resulting page
+        doc = self.get_page(test_client, "/my/invoices")
+        self.assertTrue(doc.xpath("//p[text()='There are currently no"
+                                  " invoices and payments for your account.']"))
+
+        # Add some invoices and check resulting invoice links
+        with self.registry.cursor() as test_cursor:
+            env = self.env(test_cursor)
+            partner = env["res.partner"].browse(self.partner.id)
+            invs = self.generate_contract_invoices(partner)
+            self.assertTrue(len(invs) > 2)
+            invs[0].action_invoice_open()
+            invs[2].action_invoice_open()
+        doc = self.get_page(test_client, "/my/invoices")
+        hrefs = doc.xpath("//*[hasclass('o_portal_my_doc_table')]//a/@href")
+        self.assertTrue(
+            set([href.split('?', 1)[0] for href in hrefs]),
+            {'/my/invoices/%d' % inv.id for inv in (invs[0], invs[2])})
+        self.assertTrue(all("report_type=pdf" in href for href in hrefs))
+
+        resp = test_client.get(hrefs[0])
+        self.assertEqual(resp.headers["Content-Type"], 'application/pdf')
