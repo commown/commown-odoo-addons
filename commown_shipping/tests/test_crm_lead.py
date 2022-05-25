@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+import resource
 
 from mock import patch
 import requests_mock
@@ -152,6 +153,8 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         self.assertEqualFakeLabel(att)
 
     def test_print_parcel_action(self):
+        resource.setrlimit(resource.RLIMIT_AS, (resource.RLIM_INFINITY,
+                                                resource.RLIM_INFINITY))
         leads = self.env["crm.lead"]
         for num in range(5):
             leads += self.lead.copy({"name": "[SO%05d] Test lead" % num})
