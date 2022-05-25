@@ -7,13 +7,14 @@ from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.queue_job.job import Job
+from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 
 from ..models.colissimo_utils import shipping_data
 from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
 from .common import BaseShippingTC, pdf_page_num
 
 
-class CrmLeadShippingTC(BaseShippingTC):
+class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
 
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
