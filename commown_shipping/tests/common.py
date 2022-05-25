@@ -1,11 +1,10 @@
 import json
 import os.path as osp
 from base64 import b64decode
-from email import encoders
-from email.mime.base import MIMEBase
-from email.mime.multipart import MIMEMultipart
 from io import BytesIO
 from urllib.parse import urlparse
+
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from odoo.tests.common import TransactionCase
 
@@ -22,23 +21,14 @@ def pdf_page_num(ir_attachment):
 
 
 def colissimo_resp_ok(json_data, pdf_data):
-    msg = MIMEMultipart()
-
-    json_part = MIMEBase("application", "json")
-    json_part.set_payload(json.dumps(json_data))
-    msg.attach(json_part)
-
-    pdf_part = MIMEBase("application", "octet-stream")
-    pdf_part.set_payload(pdf_data)
-    encoders.encode_base64(pdf_part)
-    msg.attach(pdf_part)
-
-    msg_text = msg.as_string()
-    boundary = msg.get_boundary()
-    headers = {"Content-Type": 'multipart/mixed; boundary="%s"' % boundary}
-    part_marker = "--" + boundary
-    content = part_marker + msg_text.split(part_marker, 1)[1]
-    return headers, content
+    enc = MultipartEncoder(fields={
+        'field1': ('file1', json_data, 'application/json'),
+        'field2': ('file2', pdf_data, 'application/octet-stream'),
+    })
+    return (
+        {"Content-Type": "multipart/mixed; boundary=%s" % enc.boundary_value},
+        enc.to_string(),
+    )
 
 
 class BaseShippingTC(TransactionCase):
@@ -59,8 +49,9 @@ class BaseShippingTC(TransactionCase):
 
     def mock_colissimo_ok(self, mocker):
         fake_meta_data = {"labelResponse": {"parcelNumber": "6X0000000000"}}
-        headers, text = colissimo_resp_ok(fake_meta_data, self.fake_label_data)
-        mocker.post(BASE_URL + '/generateLabel', text=text, headers=headers)
+        headers, body = colissimo_resp_ok(
+            json.dumps(fake_meta_data).encode("utf-8"), self.fake_label_data)
+        mocker.post(BASE_URL + '/generateLabel', content=body, headers=headers)
 
     def assertEqualFakeLabel(self, ir_attachment):
         self.assertEqual(b64decode(ir_attachment.datas), self.fake_label_data)

@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+import resource
 
 from mock import patch
 import requests_mock
@@ -7,13 +8,14 @@ from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.queue_job.job import Job
+from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 
 from ..models.colissimo_utils import shipping_data
 from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
 from .common import BaseShippingTC, pdf_page_num
 
 
-class CrmLeadShippingTC(BaseShippingTC):
+class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
 
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
@@ -151,6 +153,8 @@ class CrmLeadShippingTC(BaseShippingTC):
         self.assertEqualFakeLabel(att)
 
     def test_print_parcel_action(self):
+        resource.setrlimit(resource.RLIMIT_AS, (resource.RLIM_INFINITY,
+                                                resource.RLIM_INFINITY))
         leads = self.env["crm.lead"]
         for num in range(5):
             leads += self.lead.copy({"name": "[SO%05d] Test lead" % num})

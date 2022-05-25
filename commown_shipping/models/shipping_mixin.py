@@ -2,8 +2,9 @@ import json
 import logging
 import os
 import re
+import sys
 from base64 import b64encode
-from subprocess import CalledProcessError, run
+from subprocess import CalledProcessError, run as _run
 from tempfile import gettempdir, mktemp
 
 from odoo import api, fields, models
@@ -15,6 +16,16 @@ from .colissimo_utils import AddressTooLong, ColissimoError
 REF_FROM_NAME_RE = re.compile(r".*\[(?P<ref>[^\]]+)\].*")
 
 _logger = logging.getLogger(__name__)
+
+
+# 3.6 compat for subprocess.run (3.6 is used by the CI)
+if tuple(sys.version_info)[:2] < (3, 7):
+    # subprocess.run as no capture_output kwarg, so drop it
+    def run(*args, **kwargs):
+        kwargs.pop("capture_output")
+        return _run(*args, **kwargs)
+else:
+    run = _run
 
 
 def _ref_from_name(name):
