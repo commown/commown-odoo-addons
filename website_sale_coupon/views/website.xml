@@ -53,6 +53,24 @@
     </xpath>
   </template>
 
+  <!-- Display the coupons on the order followup page -->
+  <template id="sale_order_portal_content" inherit_id="sale.sale_order_portal_content">
+    <xpath expr="//div[@id='informations']/.." position="inside">
+      <t t-set="coupons" t-value="sale_order.used_coupons()"/>
+      <section t-if="coupons" id="coupons" class="mt-5">
+        <h3>Coupons</h3>
+        <hr class="mt-0 mb-1"/>
+        <dl>
+          <t t-foreach="coupons" t-as="coupon">
+            <dt><code><t t-esc="coupon.display_name"/></code></dt>
+            <dd><t t-esc="coupon.campaign_id.description"/></dd>
+          </t>
+        </dl>
+      </section>
+
+    </xpath>
+  </template>
+
   <!-- Display the coupons on the order confirmation page -->
   <template id="confirmation"
             inherit_id="website_sale.confirmation">
@@ -61,7 +79,7 @@
       <t t-set="coupons" t-value="order.used_coupons()"/>
       <div t-if="coupons">
         <h3><strong>Coupons</strong></h3>
-        <dl class="dl-horizontal">
+        <dl>
           <t t-foreach="coupons" t-as="coupon">
             <dt><code><t t-esc="coupon.display_name"/></code></dt>
             <dd><t t-esc="coupon.campaign_id.description"/></dd>
