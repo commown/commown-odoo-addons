@@ -10,7 +10,7 @@ odoo.define('website_sale_coupon.coupon', function(require) {
     );
 
     function displayCoupons(coupons) {
-        var $dl = $('<dl class="dl-horizontal"/>').appendTo(
+        var $dl = $('<dl/>').appendTo(
             $('#coupons-placeholder').empty()
         );
         coupons.forEach(function(coupon) {
