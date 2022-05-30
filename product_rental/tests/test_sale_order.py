@@ -1,5 +1,3 @@
-from odoo.addons.product_rental.models.sale_order_line import NO_DATE
-
 from .common import RentalSaleOrderTC
 
 
@@ -23,23 +21,6 @@ class SaleOrderTC(RentalSaleOrderTC):
             'type_tax_use': 'sale',
         })
         return tax
-
-    def generate_contract_invoices(self, partner=None, tax=None):
-        so = self.create_sale_order(partner, tax)
-        so.action_confirm()
-        contracts = self.env['contract.contract'].of_sale(so)
-        lines = contracts.mapped('contract_line_ids')
-        self.assertEqual(set(lines.mapped('date_start')), {NO_DATE})
-        # Do not use _recurring_create_invoice return value here as
-        # contract_queue_job (installed in the CI) returns an empty invoice set
-        # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
-        #  /models/contract_contract.py#L21)
-        contracts._recurring_create_invoice()
-        invoices = self.env["account.invoice"].search([
-            ('invoice_line_ids.contract_line_id.contract_id', 'in',
-             contracts.ids),
-        ])
-        return invoices
 
     def test_rental_contract_creation_without_fpos(self):
         """Contracts generated from rental sales have specific characteristics
@@ -184,3 +165,52 @@ class SaleOrderTC(RentalSaleOrderTC):
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['FP2'],
         })
+
+
+class SaleOrderAttachmentsTC(RentalSaleOrderTC):
+
+    def setUp(self):
+        super(SaleOrderAttachmentsTC, self).setUp()
+        self.partner = self.env.ref('base.res_partner_3')
+        self.env['res.lang'].load_lang("fr_FR")
+        self.env['res.lang'].pool.cache.clear()
+        self.so = self.create_sale_order(self.partner)
+        ct = self.so.mapped(
+            "order_line.product_id.property_contract_template_id")[0]
+        self.create_attachment("doc1_fr.txt", "fr_FR", ct)
+        self.create_attachment("doc2_fr.txt", "fr_FR", ct)
+        self.create_attachment("doc1_en.txt", "en_US", ct)
+        self.create_attachment("doc_no_lang.txt", False, ct)
+        # Remove report from default template to make it possible to add ours:
+        self.env.ref("sale.email_template_edi_sale").report_template = False
+
+    def create_attachment(self, name, lang, target_obj):
+        return self.env['ir.attachment'].create({
+            "name": name,
+            "type": "binary",
+            "datas": "toto",
+            "res_model": target_obj._name,
+            "res_id": target_obj.id,
+            "lang": lang,
+        })
+
+    def check_sale_quotation_send_emails(self, lang):
+        self.partner.lang = lang
+        self.so.force_quotation_send()
+        return sorted(self.so.message_ids[0].attachment_ids.mapped("name"))
+
+    def test_sale_quotation_send_emails_fr(self):
+        """ break /usr/lib/python3/dist-packages/odoo/models.py:1148 """
+        self.assertEqual(
+            self.check_sale_quotation_send_emails("fr_FR"),
+            ["doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"])
+
+    def test_sale_quotation_send_emails_en(self):
+        self.assertEqual(
+            self.check_sale_quotation_send_emails("en_US"),
+            ["doc1_en.txt", "doc_no_lang.txt"])
+
+    def test_sale_quotation_send_emails_no_lang(self):
+        self.assertEqual(
+            self.check_sale_quotation_send_emails(False),
+            ["doc1_en.txt", "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"])
