@@ -1,5 +1,3 @@
-from odoo.addons.product_rental.models.sale_order_line import NO_DATE
-
 from .common import RentalSaleOrderTC
 
 
@@ -23,23 +21,6 @@ class SaleOrderTC(RentalSaleOrderTC):
             'type_tax_use': 'sale',
         })
         return tax
-
-    def generate_contract_invoices(self, partner=None, tax=None):
-        so = self.create_sale_order(partner, tax)
-        so.action_confirm()
-        contracts = self.env['contract.contract'].of_sale(so)
-        lines = contracts.mapped('contract_line_ids')
-        self.assertEqual(set(lines.mapped('date_start')), {NO_DATE})
-        # Do not use _recurring_create_invoice return value here as
-        # contract_queue_job (installed in the CI) returns an empty invoice set
-        # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
-        #  /models/contract_contract.py#L21)
-        contracts._recurring_create_invoice()
-        invoices = self.env["account.invoice"].search([
-            ('invoice_line_ids.contract_line_id.contract_id', 'in',
-             contracts.ids),
-        ])
-        return invoices
 
     def test_rental_contract_creation_without_fpos(self):
         """Contracts generated from rental sales have specific characteristics
