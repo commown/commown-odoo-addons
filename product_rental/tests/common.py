@@ -2,6 +2,8 @@ from mock import patch
 
 from odoo.tests.common import SavepointCase
 
+from ..models.sale_order_line import NO_DATE
+
 
 class MockedEmptySessionMixin(object):
 
@@ -115,6 +117,23 @@ class RentalSaleOrderTC(MockedEmptySessionMixin, SavepointCase):
             'order_line': [oline_p1, oline_p2, oline_p3, oline_p4,
                            oline_a1, oline_a2, oline_a3, oline_a4],
         })
+
+    def generate_contract_invoices(self, partner=None, tax=None):
+        so = self.create_sale_order(partner, tax)
+        so.action_confirm()
+        contracts = self.env['contract.contract'].of_sale(so)
+        lines = contracts.mapped('contract_line_ids')
+        self.assertEqual(set(lines.mapped('date_start')), {NO_DATE})
+        # Do not use _recurring_create_invoice return value here as
+        # contract_queue_job (installed in the CI) returns an empty invoice set
+        # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
+        #  /models/contract_contract.py#L21)
+        contracts._recurring_create_invoice()
+        invoices = self.env["account.invoice"].search([
+            ('invoice_line_ids.contract_line_id.contract_id', 'in',
+             contracts.ids),
+        ])
+        return invoices
 
     def _create_rental_product(self, name, **kwargs):
         kwargs['name'] = name
