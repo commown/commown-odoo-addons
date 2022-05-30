@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-18 07:15+0000\n"
-"PO-Revision-Date: 2022-05-18 07:15+0000\n"
+"POT-Creation-Date: 2022-05-30 09:16+0000\n"
+"PO-Revision-Date: 2022-05-30 09:16+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -184,7 +184,7 @@ msgstr "<b>Article indisponible pour le moment</b>"
 msgid "<br/>\n"
 "        <i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Proof of address</span>"
 msgstr "<br/>\n"
-"        <i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Proof of address</span>"
+"        <i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Justificatif de domicile</span>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -209,7 +209,7 @@ msgstr "<font style=\"font-size: 14px;\">              identifiants
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
 msgid "<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">ID card</span>"
-msgstr "<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">ID card</span>"
+msgstr "<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Carte d'identité</span>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
@@ -217,9 +217,10 @@ msgid "<i title=\"Download document\" class=\"fa fa-download\"/>"
 msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.orders_followup
-msgid "<strong>Documents transmis par mail :</strong>"
-msgstr "<strong>Documents transmis par mail :</strong>"
+#: code:addons/commown/models/sale_order.py:56
+#, python-format
+msgid "<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
+msgstr "<p><b>N° de commande :</b> {sale_name}</p><p><b>Date de la commande :</b> {date.day}-{date.month}-{date.year}</p><p><b>Article :</b> {product_name}</p>"
 
 #. module: commown
 #: model:ir.model,name:commown.model_coupon_campaign
@@ -362,6 +363,11 @@ msgstr "Nom affiché"
 #: model_terms:ir.ui.view,arch_db:commown.view_partner_form
 msgid "Documents"
 msgstr "Documents"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.sale_order_portal_content
+msgid "Documents sent by email"
+msgstr "Documents envoyés par courrier électronique"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -619,11 +625,6 @@ msgid "Si vous n'avez pas déjà déposé une copie de votre pièce d'identité 
 msgstr "Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans votre espace Commown, ce sera l'occasion."
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
-msgid "Undo removal"
-msgstr "Annuler la suppression"
-
-#. module: commown
 #: model:ir.model.fields,field_description:commown.field_product_product__support_group_ids
 #: model:ir.model.fields,field_description:commown.field_product_template__support_group_ids
 msgid "Support groups"
@@ -671,6 +672,11 @@ msgstr "Supprimer le document"
 #: model:ir.model,name:commown.model_utm_source
 msgid "UTM Source"
 msgstr "Source UTM"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+msgid "Undo removal"
+msgstr "Annuler la suppression"
 
 #. module: commown
 #: model:product.template,uom_name:commown.sepa_mandate
@@ -738,16 +744,6 @@ msgstr "[Commown] Commande effectuée"
 #: model:ir.actions.server,name:commown.mail_message_arrival_concerning_issue_ir_actions_server
 msgid "[commown] A email concerning an issue just arrived"
 msgstr "[commown] Un email concernant un incident support vient d'arriver"
-
-#. module: commown
-#: model:ir.actions.server,name:commown.action_add_to_support_groups
-msgid "[commown] Add buyer to product's support groups"
-msgstr "[commown] Ajouter l'acheteur aux groupes de support de l'article"
-
-#. module: commown
-#: model:ir.actions.server,name:commown.action_add_investor_management_task
-msgid "[commown] Add investor management task"
-msgstr "[commown] Ajouter une tâche de gestion d'un investissement"
 
 #. module: commown
 #: model:base.automation,name:commown.issue_reminder_delay_expired
