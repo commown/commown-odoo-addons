@@ -1,35 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <template id="orders_followup"
-            inherit_id="sale.sale_order_portal_template">
+  <template id="sale_order_portal_content" inherit_id="sale.sale_order_portal_content">
 
-    <!-- Add a CGS section -->
-    <xpath expr="//div[@id='quote_content']" position="after">
+    <!-- Replace the terms section by the documents sent by email -->
+    <xpath expr="//section[@id='terms']" position="replace">
 
       <t t-set="docs" t-value="[a for m in sale_order.message_ids if m.subtype_id.get_xml_id().values() != ['mail.mt_note'] for a in m.attachment_ids]"/>
-      <div t-if="docs" class="row">
-        <hr/>
-        <div class="col-md-12">
-          <p>
-            <strong>Documents transmis par mail :</strong>
-            <ul>
-              <t t-foreach="docs" t-as="doc">
-                <t t-set="image_fname"
-                   t-value="'/web/static/src/img/mimetypes/' + (doc.mimetype=='application/pdf' and 'pdf.png' or 'document.png')"/>
-                <li>
-                  <a t-attf-href='/web/content/#{doc.id}?download=true'
-                     target="_blank">
-                    <img t-att-src="image_fname"/>
-                    <span><t t-esc="doc.name"/></span>
-                  </a>
-                </li>
-              </t>
-            </ul>
-          </p>
-        </div>
-      </div>
+      <section t-if="docs" id="sent_docs" class="mt-5">
+        <h3>Documents sent by email</h3>
+        <hr class="mt-0 mb-1"/>
+        <ul style="list-style-type: none; padding-left: 0">
+          <t t-foreach="docs" t-as="doc">
+            <t t-set="image_fname"
+               t-value="'/web/static/src/img/mimetypes/' + (doc.mimetype=='application/pdf' and 'pdf.svg' or 'document.svg')"/>
+            <li>
+              <a t-attf-href='/web/content/#{doc.id}?download=true'
+                 target="_blank">
+                <img t-att-src="image_fname"/>
+                <span><t t-esc="doc.name"/></span>
+              </a>
+            </li>
+          </t>
+        </ul>
+      </section>
 
+    </xpath>
+
+  </template>
+
+  <template id="orders_followup" inherit_id="sale.sale_order_portal_template">
+
+    <!-- Remove sidebar -->
+    <xpath expr="//t[@t-call='portal.portal_record_sidebar']" position="replace">
+    </xpath>
+
+    <!-- Remove communication section -->
+    <xpath expr="//div[@id='sale_order_communication']" position="replace">
     </xpath>
 
   </template>
