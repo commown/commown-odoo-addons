@@ -12,6 +12,7 @@
         "contract_payment_auto",
         "contract_payment_mode",
         "document",
+        "ir_attachment_lang",
         "product_contract",
         "website_sale",
     ],
