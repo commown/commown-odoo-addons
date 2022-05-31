@@ -1,19 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<!-- invoice report -->
-<record id="account.account_invoices" model="ir.actions.report">
+  <!-- invoice report -->
+  <record id="account.account_invoices" model="ir.actions.report">
+    <field name="name">[commown] Print invoice</field>
+    <field name="type">ir.actions.report</field>
+    <field name="model">account.invoice</field>
     <field name="report_type">py3o</field>
+    <field name="report_name">account.report_invoice</field>
     <field name="module">custom_report</field>
-    <field name="py3o_template_fallback">report/account_invoice.odt</field>
     <field name="py3o_filetype">pdf</field>
-</record>
+    <field name="py3o_template_fallback">report/account_invoice.odt</field>
+    <field name="attachment_use">True</field>
+    <field name="attachment">"Commown%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
+    <field name="print_report_name">"Commown%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
+    <field name="binding_model_id" ref="account.model_account_invoice" />
+    <field name="binding_type">report</field>
+  </record>
 
-<record id="account.account_invoices_without_payment" model="ir.actions.report">
+  <record id="account.account_invoices_without_payment" model="ir.actions.report">
+    <field name="name">[commown] Print invoice duplicata</field>
+    <field name="type">ir.actions.report</field>
+    <field name="model">account.invoice</field>
     <field name="report_type">py3o</field>
+    <field name="report_name">account.account_invoice_report_duplicate_main</field>
     <field name="module">custom_report</field>
-    <field name="py3o_template_fallback">report/account_invoice.odt</field>
     <field name="py3o_filetype">pdf</field>
-</record>
+    <field name="py3o_template_fallback">report/account_invoice.odt</field>
+    <field name="binding_model_id" ref="account.model_account_invoice" />
+    <field name="binding_type">report</field>
+  </record>
+
+  <!-- sale order -->
+  <record id="sale.action_report_saleorder" model="ir.actions.report">
+    <field name="name">[commown] Print sale order</field>
+    <field name="type">ir.actions.report</field>
+    <field name="model">sale.order</field>
+    <field name="report_type">py3o</field>
+    <field name="report_name">sale.report_saleorder</field>
+    <field name="module">custom_report</field>
+    <field name="py3o_filetype">pdf</field>
+    <field name="py3o_template_fallback">report/sale_order.odt</field>
+    <field name="attachment_use">True</field>
+    <field name="attachment">"Commown_%(type)s%(id)s.pdf" % {'type': {'draft': 'DRAFT-DEV', 'sent': 'DEV', 'sale': 'CMD', 'done': 'LOCKED-CMD', 'cancel': 'CANCELLED-CMD'}.get(object.state, ''), 'id': object.id}</field>
+    <field name="print_report_name">"Commown_%(type)s%(id)s.pdf" % {'type': {'draft': 'DRAFT-DEV', 'sent': 'DEV', 'sale': 'CMD', 'done': 'LOCKED-CMD', 'cancel': 'CANCELLED-CMD'}.get(object.state, ''), 'id': object.id}</field>
+    <field name="binding_model_id" ref="sale.model_sale_order" />
+    <field name="binding_type">report</field>
+  </record>
 
 </odoo>
