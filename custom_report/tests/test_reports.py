@@ -12,9 +12,17 @@ def _product_descriptions(invoice_doc):
             if descr.strip()]
 
 
+def _html_report(report, obj, debug_fpath=None):
+    html = report.render(obj.ids)[0]
+    if debug_fpath:
+        with open(debug_fpath, 'wb') as fobj:
+            fobj.write(html)
+    return lxml.html.fromstring(html)
+
+
 @at_install(False)
 @post_install(True)
-class InvoiceReportTC(MockedEmptySessionMixin, TransactionCase):
+class ReportTC(MockedEmptySessionMixin, TransactionCase):
 
     def setUp(self):
         super().setUp()
@@ -45,9 +53,12 @@ class InvoiceReportTC(MockedEmptySessionMixin, TransactionCase):
         })
 
         # Hack: reuse pdf report as an html one, to ease parsing
-        self.report = self.env['ir.actions.report']._get_report_from_name(
-            'account.report_invoice')
-        self.report.py3o_filetype = 'html'
+        self.inv_report = self.env['ir.actions.report']._get_report_from_name(
+            'account.report_invoice').ensure_one()
+        self.inv_report.py3o_filetype = 'html'
+        self.sale_report = self.env['ir.actions.report']._get_report_from_name(
+            'sale.report_saleorder').ensure_one()
+        self.sale_report.py3o_filetype = 'html'
 
     def sale(self, partner, products):
         olines = []
@@ -80,11 +91,10 @@ class InvoiceReportTC(MockedEmptySessionMixin, TransactionCase):
         return inv
 
     def html_invoice(self, inv, debug_fpath=None):
-        html = self.report.render(inv.ids)[0]
-        if debug_fpath:
-            with open(debug_fpath, 'wb') as fobj:
-                fobj.write(html)
-        return lxml.html.fromstring(html)
+        return _html_report(self.inv_report, inv, debug_fpath=debug_fpath)
+
+    def html_sale(self, sale, debug_fpath=None):
+        return _html_report(self.sale_report, sale, debug_fpath=debug_fpath)
 
     def test_b2c_deposit(self):
         inv = self.open_invoice(
@@ -174,3 +184,9 @@ class InvoiceReportTC(MockedEmptySessionMixin, TransactionCase):
 
         self.assertEqual(_product_descriptions(doc2),
                          [self.std_product.name])  # 1 product line only
+
+    def test_sale(self):
+        " Check sale orders print with no error "
+        so = self.sale(self.b2c_partner,
+                       [self.std_product, self.equity_product])
+        self.html_sale(so)
