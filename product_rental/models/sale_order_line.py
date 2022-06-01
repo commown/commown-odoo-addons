@@ -38,7 +38,7 @@ def _gen_contract_lines(so_line, contract, rental_products):
                         'name': line.name.replace(marker, product.name),
                         'specific_price': so_line.compute_rental_price(
                             line.product_id.taxes_id),
-                        'quantity': quantity,
+                        'quantity': quantity * line.quantity,
                         'sale_order_line_id': so_line.id,
                     })
                     yield line_copy
