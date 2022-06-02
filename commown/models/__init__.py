@@ -10,6 +10,7 @@ from . import payment
 from . import product_template
 from . import project_task
 from . import project_task_type
+from . import reconciliation_widget
 from . import res_groups
 from . import res_lang
 from . import res_partner
