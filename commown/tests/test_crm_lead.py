@@ -24,7 +24,6 @@ class CrmLeadTC(RentalSaleOrderTC):
         lead = self._create_ra_leads()[0]
 
         self.assertTrue(lead.send_email_on_delivery)
-        self.assertTrue(lead.start_contract_on_delivery)
 
     def test_default_no_action_on_delivery(self):
         team = self.so.team_id
@@ -33,7 +32,6 @@ class CrmLeadTC(RentalSaleOrderTC):
         lead = self._create_ra_leads()[0]
 
         self.assertFalse(lead.send_email_on_delivery)
-        self.assertFalse(lead.start_contract_on_delivery)
 
     def _create_ra_leads(self):
         """ Confirm the sale and return the its just-created risk-analysis leads
@@ -45,7 +43,7 @@ class CrmLeadTC(RentalSaleOrderTC):
             ("contract_id", "!=", False),
         ])
 
-    def test_actions_on_delivery_start_contract(self):
+    def test_actions_on_delivery_set_contract_start_date(self):
         lead = self._create_ra_leads()[0]
         contract = lead.contract_id
         lead.send_email_on_delivery = False  # avoid setting-up email template
@@ -57,21 +55,6 @@ class CrmLeadTC(RentalSaleOrderTC):
         # Simulate delivery
         lead.delivery_date = date(2018, 1, 1)
 
-        # Check results: contract started
-        self.assertTrue(contract.is_auto_pay)
+        # Check results: contract started but is_auto_pay unchanged
         self.assertEqual(contract.date_start, date(2018, 1, 1))
-
-    def test_actions_on_delivery_no_start_contract(self):
-
-        lead = self._create_ra_leads()[0]
-        contract = lead.contract_id
-        lead.send_email_on_delivery = False  # avoid setting-up email template
-
-        lead.start_contract_on_delivery = False
-
-        # Simulate delivery
-        lead.delivery_date = date(2018, 1, 1)
-
-        # Check results: contract not started
         self.assertFalse(contract.is_auto_pay)
-        self.assertEqual(contract.date_start, NO_DATE)

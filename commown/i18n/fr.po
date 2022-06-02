@@ -268,11 +268,6 @@ msgid "Analytic tags"
 msgstr "Étiquettes analytiques"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_crm_lead__start_contract_on_delivery
-msgid "Automatic contract start on delivery"
-msgstr "Démarrage automatique du contrat à la livraison"
-
-#. module: commown
 #: model:ir.model,name:commown.model_account_bank_statement
 msgid "Bank Statement"
 msgstr "Relevé bancaire"
