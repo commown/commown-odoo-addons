@@ -22,11 +22,6 @@ msgid "Address too long for \"%s\""
 msgstr "Adresse de \"%s\" trop longue"
 
 #. module: commown_shipping
-#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_start_contract_on_delivery
-msgid "Automatic contract start on delivery"
-msgstr "Démarrage automatique du contrat à la livraison"
-
-#. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin_send_email_on_delivery
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead_send_email_on_delivery
 #: model:ir.model.fields,field_description:commown_shipping.field_project_issue_send_email_on_delivery
