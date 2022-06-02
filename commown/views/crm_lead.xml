@@ -18,17 +18,6 @@
       </field>
     </record>
 
-    <record model="ir.ui.view" id="crm_case_form_view_oppor">
-        <field name="name">commown.lead.form.opportunity</field>
-        <field name="model">crm.lead</field>
-        <field name="inherit_id" ref="commown_shipping.crm_case_form_view_oppor"/>
-        <field name="arch" type="xml">
-          <xpath expr="//field[@name='send_email_on_delivery']" position="before">
-                <field name="start_contract_on_delivery"/>
-          </xpath>
-        </field>
-    </record>
-
   </data>
 
 </odoo>
