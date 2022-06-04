@@ -24,11 +24,18 @@
 
   <!-- Edit task page on portal -->
   <template id="portal_my_task" inherit_id="project.portal_my_task">
+
     <xpath expr="//span[@t-field='task.stage_id.name']" position="attributes">
       <!-- Prefer portal stage name over administrative stage name -->
       <attribute name="t-field"></attribute>
       <attribute name="t-esc">task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
     </xpath>
+
+    <xpath expr="//*[@t-field='task.user_id']" position="attributes">
+      <!-- Do not expose our support people name and email -->
+      <attribute name="t-options">{"widget": "contact", "fields": ["name"]}</attribute>
+    </xpath>
+
   </template>
 
   <!-- Server action that sends the reminder email

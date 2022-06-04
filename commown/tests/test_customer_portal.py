@@ -30,7 +30,8 @@ class CustomerPortalTC(RentalSaleOrderMixin,
         "Return an lxml doc obtained from the html at given url path"
         response = test_client.get(
             path, query_string=data, follow_redirects=True)
-        self.assertEqual(response.status_code, 200, path)
+        self.assertEqual(response.status_code, 200,
+                         " - ".join((path, response.status)))
         return html.fromstring(response.data)
 
     def get_form(self, test_client, path, **data):
@@ -88,7 +89,7 @@ class CustomerPortalTC(RentalSaleOrderMixin,
             partner = env["res.partner"].browse(self.partner.id)
             self.assertTrue(partner.id_card1)
 
-    def test_portal_invoices(self):
+    def test_invoices(self):
 
         test_client = self.portal_client()
 
@@ -125,7 +126,7 @@ class CustomerPortalTC(RentalSaleOrderMixin,
             "lang": lang,
         })
 
-    def test_portal_order_page(self):
+    def test_order_page(self):
 
         test_client = self.portal_client()
 
@@ -164,3 +165,19 @@ class CustomerPortalTC(RentalSaleOrderMixin,
             sorted(doc.xpath("//section[@id='sent_docs']//li//a//span/text()")),
             ["doc 1", "doc 2"])
         self.assertFalse(doc.xpath("//div[@id='sale_order_communication']"))
+
+    def test_task_page(self):
+
+        test_client = self.portal_client()
+
+        with self.registry.cursor() as test_cursor:
+            env = self.env(test_cursor)
+            task = env.ref("project.project_task_1")
+            # Test pre-condition
+            self.assertIn(self.partner,
+                          task.mapped("message_follower_ids.partner_id"))
+
+        doc = self.get_page(test_client, "/my/task/%d" % task.id)
+        self.assertEqual(doc.xpath("//*[text()='Assigned to']/.."
+                                   "//span[@itemprop]/@itemprop"),
+                         ["name"])
