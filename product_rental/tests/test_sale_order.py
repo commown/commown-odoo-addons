@@ -44,6 +44,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'quantity': [1, 1],
             'sale_order_line_id.product_id.name': [
                 'Fairphone Premium', 'headset'],
+            'analytic_account_id.name': [c1.name],
+            'analytic_account_id.partner_id': c1.partner_id,
         })
 
         self.assert_rounded_equals(i2.amount_total, 87.90)
@@ -57,6 +59,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'quantity': [1, 1, 1, 1],
             'sale_order_line_id.product_id.name': [
                 'PC', 'screen', 'keyboard', 'keyboard deluxe'],
+            'analytic_account_id.name': [c2.name],
+            'analytic_account_id.partner_id': c2.partner_id,
         })
 
         self.assert_rounded_equals(i3.amount_total, 75.0)
@@ -67,6 +71,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'price_unit': [60.0, 15.0],
             'quantity': [1, 1],
             'sale_order_line_id.product_id.name': [u'PC', u'screen'],
+            'analytic_account_id.name': [c3.name],
+            'analytic_account_id.partner_id': c3.partner_id,
         })
 
         self.assert_rounded_equals(i4.amount_total, 10.0)
@@ -77,6 +83,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'price_unit': [10.0],
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['GS Headset'],
+            'analytic_account_id.name': [c4.name],
+            'analytic_account_id.partner_id': c4.partner_id,
         })
 
         self.assert_rounded_equals(i5.amount_total, 20.0)
@@ -87,6 +95,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'price_unit': [20.0],
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['FP2'],
+            'analytic_account_id.name': [c5.name],
+            'analytic_account_id.partner_id': c5.partner_id,
         })
 
     def test_rental_contract_creation_with_fpos(self):

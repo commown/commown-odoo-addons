@@ -110,6 +110,16 @@ class ProductRentalSaleOrder(models.Model):
 
         return contract_descrs
 
+    def _add_analytic_account(self, contract):
+        """ Create an analytic account with the same name and partner as the
+        given contract and attach it to its lines.
+        """
+        aa = self.env["account.analytic.account"].create({
+            "name": contract.name,
+            "partner_id": contract.partner_id.id,
+        })
+        contract.contract_line_ids.update({"analytic_account_id": aa.id})
+
     @api.multi
     def _create_rental_contract(self, contract_template, num):
         self.ensure_one()
@@ -134,5 +144,6 @@ class ProductRentalSaleOrder(models.Model):
             contracts |= contract
             clines = order_line_model._product_rental_create_contract_line(
                 contract, contract_descr)
+            self._add_analytic_account(contract)
 
         return contracts
