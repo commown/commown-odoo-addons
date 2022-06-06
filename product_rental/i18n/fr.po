@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-09 22:04+0000\n"
-"PO-Revision-Date: 2022-05-09 22:04+0000\n"
+"POT-Creation-Date: 2022-06-06 21:31+0000\n"
+"PO-Revision-Date: 2022-06-06 21:31+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "<strong> - Dépôt de garantie</strong>"
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_template_form_view
 msgid "<strong>##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name"
-msgstr ""
+msgstr "<strong>##ACCESSORY##</strong> (dans la description) : marque la ligne modèle pour les accessoires ; le marqueur sera remplacé par le nom de chacun des accessoires"
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_template_form_view
@@ -79,6 +79,13 @@ msgid "Contract Template"
 msgstr "Modèle de contrat"
 
 #. module: product_rental
+#: code:addons/product_rental/models/contract.py:57
+#: model_terms:ir.ui.view,arch_db:product_rental.contract_contract_form_view
+#, python-format
+msgid "Cost/Revenue"
+msgstr "Coûts / Revenus"
+
+#. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Daily"
 msgstr "par jour"
@@ -117,6 +124,11 @@ msgstr "Paiement initial = dépôt de garantie ?"
 #: model:ir.model.fields,field_description:product_rental.field_product_template__is_rental
 msgid "Is rental product"
 msgstr "Location"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_mail_message
+msgid "Message"
+msgstr "Message"
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
