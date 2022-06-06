@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, _
 
 
 class Contract(models.Model):
@@ -46,3 +46,20 @@ class Contract(models.Model):
         return self.search([
             ("contract_line_ids.sale_order_line_id.order_id", "=", sale.id),
         ])
+
+    @api.multi
+    def action_show_analytic_lines(self):
+        self.ensure_one()
+        account = self.mapped("contract_line_ids.analytic_account_id").filtered(
+            lambda acc: acc.name == self.name)
+        if account:
+            return {
+                "name": _("Cost/Revenue"),
+                "type": "ir.actions.act_window",
+                "res_model": "account.analytic.line",
+                "view_mode": "tree,form,graph,pivot",
+                "domain": "[('account_id', '=', %d)]" % account.id,
+                "target": "current",
+            }
+        else:
+            return False

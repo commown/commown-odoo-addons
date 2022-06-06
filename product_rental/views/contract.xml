@@ -32,6 +32,12 @@
     <field name="inherit_id" ref="contract.contract_contract_form_view" />
     <field name="arch" type="xml">
 
+      <xpath expr="//*[hasclass('oe_button_box')]" position="inside">
+        <button type="object" name="action_show_analytic_lines"
+                class="oe_stat_button" icon="fa-usd"
+                string="Cost/Revenue" widget="statinfo"/>
+      </xpath>
+
       <xpath expr="//field[@name='recurring_next_date']" position="before">
         <field name="date_start" />
         <field name="commitment_period_number" />
