@@ -44,6 +44,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'quantity': [1, 1],
             'sale_order_line_id.product_id.name': [
                 'Fairphone Premium', 'headset'],
+            'analytic_account_id.name': [c1.name],
+            'analytic_account_id.partner_id': c1.partner_id,
         })
 
         self.assert_rounded_equals(i2.amount_total, 87.90)
@@ -57,8 +59,9 @@ class SaleOrderTC(RentalSaleOrderTC):
             'quantity': [1, 1, 1, 1],
             'sale_order_line_id.product_id.name': [
                 'PC', 'screen', 'keyboard', 'keyboard deluxe'],
+            'analytic_account_id.name': [c2.name],
+            'analytic_account_id.partner_id': c2.partner_id,
         })
-
 
         self.assert_rounded_equals(i3.amount_total, 75.0)
         self.assert_rounded_equals(i3.amount_untaxed, 62.5)
@@ -68,6 +71,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'price_unit': [60.0, 15.0],
             'quantity': [1, 1],
             'sale_order_line_id.product_id.name': [u'PC', u'screen'],
+            'analytic_account_id.name': [c3.name],
+            'analytic_account_id.partner_id': c3.partner_id,
         })
 
         self.assert_rounded_equals(i4.amount_total, 10.0)
@@ -78,6 +83,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'price_unit': [10.0],
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['GS Headset'],
+            'analytic_account_id.name': [c4.name],
+            'analytic_account_id.partner_id': c4.partner_id,
         })
 
         self.assert_rounded_equals(i5.amount_total, 20.0)
@@ -88,6 +95,8 @@ class SaleOrderTC(RentalSaleOrderTC):
             'price_unit': [20.0],
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['FP2'],
+            'analytic_account_id.name': [c5.name],
+            'analytic_account_id.partner_id': c5.partner_id,
         })
 
     def test_rental_contract_creation_with_fpos(self):
@@ -165,6 +174,48 @@ class SaleOrderTC(RentalSaleOrderTC):
             'quantity': [1],
             'sale_order_line_id.product_id.name': ['FP2'],
         })
+
+    def test_yearly_with_accessory(self):
+        " Accessories priced monthly: contract template quantity to be honored "
+
+        partner = self.env.ref('base.res_partner_3')
+        tax = self.get_default_tax()
+
+        contract_tmpl = self._create_rental_contract_tmpl(
+            1, contract_line_ids=[
+                self._contract_line(
+                    1, '1 year of ##PRODUCT##', tax, specific_price=0.0
+                ),
+                self._contract_line(
+                    2, '1 month of ##ACCESSORY##', tax,
+                    quantity=12  # Important!
+                ),
+            ]
+        )
+
+        headset = self._create_rental_product(
+            name='GS Headset', list_price=1., rental_price=75.,
+            property_contract_template_id=contract_tmpl.id)
+        oline_p = self._oline(headset)
+
+        micro = self._create_rental_product(
+            name='micro', list_price=3., rental_price=1.5,
+            property_contract_template_id=False)
+        oline_a = self._oline(micro)
+
+        headset.accessory_product_ids |= micro
+
+        so = self.env['sale.order'].create({
+            'partner_id': partner.id, 'order_line': [oline_p, oline_a],
+        })
+
+        so.action_confirm()
+        contracts = self.env['contract.contract'].of_sale(so)
+
+        self.assertEqual(len(contracts), 1)
+        self.assertEquals(
+            [(l.name, l.quantity) for l in contracts.contract_line_ids],
+            [('1 year of GS Headset', 1.0), ('1 month of micro', 12.0)])
 
 
 class SaleOrderAttachmentsTC(RentalSaleOrderTC):
