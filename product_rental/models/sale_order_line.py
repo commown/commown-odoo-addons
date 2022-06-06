@@ -81,7 +81,7 @@ class ProductRentalSaleOrderLine(models.Model):
     @api.model
     def _product_rental_create_contract_line(
             self, contract, contract_descr):
-        """Return contract lines from given contract template and products.
+        """Return contract lines from given contract and products.
 
         See `_gen_contract_lines` docstring for more details.
         """
