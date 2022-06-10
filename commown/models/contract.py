@@ -27,6 +27,18 @@ class Contract(models.Model):
               'Possible markers: #START#, #END#, #INV# (invoice number)'),
     )
 
+    payment_issue_ids = fields.One2many(
+        comodel_name="project.task",
+        compute="_compute_payment_issues",
+        string="Payment issues",
+    )
+
+    def _compute_payment_issues(self):
+        for record in self:
+            record.payment_issue_ids = self.env["project.task"].search([
+                ("invoice_id", "in", record._get_related_invoices().ids),
+            ]).ids
+
     def name_get(self):
         result = []
         for record in self:
