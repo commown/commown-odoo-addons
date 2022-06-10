@@ -7,20 +7,22 @@
     <field name="model">contract.contract</field>
     <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
     <field name="arch" type="xml">
-      <xpath expr="//group[@name='main']" position="after">
-        <group name="related_issues" string="Related issues">
-          <field name="issue_ids" readonly="1">
-            <tree default_order="project_id, penalty_exemption, contractual_issue_date desc, contractual_issue_type, stage_id, name">
-              <field name="project_id"/>
-              <field name="name"/>
-              <field name="contractual_issue_date"/>
-              <field name="contractual_issue_type"/>
-              <field name="penalty_exemption"/>
-              <field name="stage_id"/>
-              <field name="create_date"/>
-            </tree>
-          </field>
-        </group>
+      <xpath expr="//notebook" position="inside">
+        <page name="related_issues" string="Related issues">
+          <group name="related_issues" string="Related issues">
+            <field name="issue_ids" readonly="1">
+              <tree default_order="project_id, penalty_exemption, contractual_issue_date desc, contractual_issue_type, stage_id, name">
+                <field name="project_id"/>
+                <field name="name"/>
+                <field name="contractual_issue_date"/>
+                <field name="contractual_issue_type"/>
+                <field name="penalty_exemption"/>
+                <field name="stage_id"/>
+                <field name="create_date"/>
+              </tree>
+            </field>
+          </group>
+        </page>
       </xpath>
     </field>
   </record>
