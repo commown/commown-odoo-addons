@@ -32,4 +32,25 @@
     </field>
   </record>
 
+  <record id="contract_contract_customer_form_view"
+          model="ir.ui.view">
+    <field name="name">Contract form (in commown)</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="commown_contractual_issue.contract_contract_customer_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='issue_ids']" position="after">
+        <field name="payment_issue_ids" readonly="1">
+            <tree default_order="create_date">
+              <field name="name"/>
+              <field name="invoice_id"/>
+              <field name="stage_id"/>
+              <field name="invoice_unpaid_count"/>
+              <field name="invoice_next_payment_date"/>
+              <field name="create_date" invisible="1"/>
+            </tree>
+          </field>
+      </xpath>
+    </field>
+  </record>
+
 </odoo>

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-01 22:34+0000\n"
-"PO-Revision-Date: 2022-06-01 22:34+0000\n"
+"POT-Creation-Date: 2022-06-10 14:15+0000\n"
+"PO-Revision-Date: 2022-06-10 14:15+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -246,6 +246,11 @@ msgstr "Compte de pertes"
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__account_profit_id
 msgid "Account Profit"
 msgstr "Compte de profits"
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_reconciliation_widget
+msgid "Account Reconciliation widget"
+msgstr "outil de réconciliation de compte"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -578,6 +583,11 @@ msgid "Payment Acquirer"
 msgstr "Intermédiaire de Paiement"
 
 #. module: commown
+#: model:ir.model.fields,field_description:commown.field_contract_contract__payment_issue_ids
+msgid "Payment issues"
+msgstr "Incidents de paiement"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_contract_contract__transaction_label
 #: model:ir.model.fields,field_description:commown.field_contract_template__transaction_label
 msgid "Payment label"
@@ -747,12 +757,6 @@ msgstr "[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})"
 #: model:mail.template,subject:commown.mail_template_lead_start_error
 msgid "[Commown] ERROR starting crm.lead id ${object.id}"
 msgstr "[Commown] ERREUR lors du démarrage de l'opportunité id ${object.id}"
-
-#. module: commown
-#: model:base.automation,name:commown.order_sent
-#: model:ir.actions.server,name:commown.order_sent_ir_actions_server
-msgid "[Commown] Sale done"
-msgstr "[Commown] Commande effectuée"
 
 #. module: commown
 #: model:base.automation,name:commown.mail_message_arrival_concerning_issue
