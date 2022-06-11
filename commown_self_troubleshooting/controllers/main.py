@@ -57,4 +57,4 @@ class SelfHelp(http.Controller):
                 env.ref('project.mt_task_rating').id,
             ])],
         })
-        return request.redirect('/my/tasks/%d' % task.id)
+        return request.redirect('/my/task/%d' % task.id)
