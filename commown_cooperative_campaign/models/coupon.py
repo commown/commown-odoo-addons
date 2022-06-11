@@ -1,3 +1,4 @@
+import logging
 import hashlib
 
 import phonenumbers
@@ -6,6 +7,9 @@ from odoo import models, fields, api
 
 
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
+
+
+_logger = logging.getLogger(__file__)
 
 
 class Campaign(models.Model):
@@ -37,6 +41,14 @@ class Campaign(models.Model):
 
         country_code = partner.country_id.code
         if not country_code:
+            return None
+
+        if not self.cooperative_salt:
+            # Should never occur, this is purely defensive code
+            # This avoids a crash that could have quite some consequences
+            # like not validating a sale, as this method is triggered by
+            # contract date_end changes.
+            _logger.error("Cooperative campaign %d has no salt set", self.id)
             return None
 
         for phone_num in (partner.mobile, partner.phone):
