@@ -1,1 +1,1 @@
-from . import test_urban_mine
+import test_urban_mine
