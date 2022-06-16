@@ -15,6 +15,8 @@ class ProjectTask(models.Model):
             task.last_partner_msg_date = task.create_date
         return task
 
+    @api.multi
+    @api.returns('mail.message', lambda value: value.id)
     def message_post(self, *args, **kwargs):
         """ Update the last_partner_msg_date field when a message is posted.
 
