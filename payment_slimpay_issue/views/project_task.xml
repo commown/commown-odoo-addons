@@ -25,9 +25,15 @@
       <field name="inherit_id" ref="project.view_task_kanban"/>
       <field name="arch" type="xml">
         <field name="stage_id" position="after">
+          <field name="partner_id" invisible="1"/>
           <field name="invoice_id" invisible="1"/>
           <field name="invoice_unpaid_count" invisible="1"/>
         </field>
+        <xpath expr="//div[hasclass('o_kanban_record_body')]" position="inside">
+          <div t-if="record.partner_id.raw_value !== false">
+            <t t-esc="record.partner_id.value"/>
+          </div>
+        </xpath>
         <xpath expr="//div[hasclass('oe_kanban_bottom_right')]" position="inside">
           <div t-if="record.invoice_id.raw_value !== false" class="pull-left ml8 mr8 text-danger">
             <t t-esc="record.invoice_unpaid_count.value"/> <i class="fa fa-money"/>
