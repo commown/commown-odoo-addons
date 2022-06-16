@@ -26,13 +26,13 @@ lead.update({'team_id': TEAM_ID,
     </field>
   </record>
 
-  <record id="action_got_registration" model="base.action.rule">
+  <record id="action_got_registration" model="base.automation">
     <field name="name">[commown] Urban mine registration</field>
     <field name="model_id" ref="base.model_res_partner"/>
     <field name="sequence">1</field>
-    <field name="kind">on_create</field>
+    <field name="trigger">on_create</field>
     <field name="filter_domain">[(u'from_urban_mine', u'=', True)]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('urban_mine.action_create_opportunity')])]"/>
+    <field name="child_ids" eval="[(6,0,[ref('urban_mine.action_create_opportunity')])]"/>
   </record>
 
   <!-- Urban mine validation handling: send a label by email -->
@@ -42,6 +42,7 @@ lead.update({'team_id': TEAM_ID,
     <field name="model_id" ref="crm.model_crm_lead"/>
     <field name="sequence">5</field>
     <field name="state">code</field>
+    <field name="binding_model_id" ref="crm.model_crm_lead"/>
     <field name="code"><![CDATA[
 label = record.parcel_labels('fp2-return-ins0', force_single=True)
 
@@ -54,14 +55,15 @@ record.with_context({'default_attachment_ids': (label.id,)}).message_post_with_t
     </field>
   </record>
 
-  <record id="action_registration_validated" model="base.action.rule">
+  <record id="action_registration_validated" model="base.automation">
     <field name="name">[commown] Urban mine was validated</field>
     <field name="model_id" ref="crm.model_crm_lead"/>
     <field name="sequence">1</field>
-    <field name="kind">on_write</field>
+    <field name="state">multi</field>
+    <field name="trigger">on_write</field>
     <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[urban-mine: send-label]')]</field>
     <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: send-label]')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('urban_mine.action_send_label')])]"/>
+    <field name="child_ids" eval="[(6,0,[ref('urban_mine.action_send_label')])]"/>
   </record>
 
   <!-- Urban mine payment handling: send an invoice and a coupon by email -->
@@ -71,6 +73,7 @@ record.with_context({'default_attachment_ids': (label.id,)}).message_post_with_t
     <field name="model_id" ref="crm.model_crm_lead"/>
     <field name="sequence">5</field>
     <field name="state">code</field>
+    <field name="binding_model_id" ref="crm.model_crm_lead"/>
     <field name="code"><![CDATA[
 CAMPAIGN = env['coupon.campaign'].search([
     ('name', 'ilike', 'mine urbaine'),
@@ -147,14 +150,14 @@ record.with_context(ctx).message_post_with_template(email_template)
     </field>
   </record>
 
-  <record id="action_registration_payment" model="base.action.rule">
+  <record id="action_registration_payment" model="base.automation">
     <field name="name">[commown] Urban mine device payment to be done</field>
     <field name="model_id" ref="crm.model_crm_lead"/>
     <field name="sequence">1</field>
-    <field name="kind">on_write</field>
+    <field name="trigger">on_write</field>
     <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[urban-mine: payment]')]</field>
     <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: payment]')]</field>
-    <field name="server_action_ids" eval="[(6,0,[ref('urban_mine.action_payment')])]"/>
+    <field name="child_ids" eval="[(6,0,[ref('urban_mine.action_payment')])]"/>
   </record>
 
 </odoo>
