@@ -1,4 +1,3 @@
-from pathlib import Path
 from urllib.parse import urlencode
 
 from lxml import html
@@ -6,9 +5,6 @@ from lxml import html
 from odoo.tests.common import HttpCase, get_db_name, HOST, PORT
 from odoo.addons.product_rental.tests.common import (
     RentalSaleOrderMixin, MockedEmptySessionMixin)
-
-
-HERE = (Path(__file__) / "..").resolve()
 
 
 def _csrf_token(page):
