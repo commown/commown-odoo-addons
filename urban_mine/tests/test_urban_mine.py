@@ -1,11 +1,12 @@
-# coding: utf-8
-
-import os.path as osp
+from pathlib import Path
 from base64 import b64decode
 
 import mock
 
 from odoo.tests.common import TransactionCase, at_install, post_install
+
+
+HERE = (Path(__file__) / "..").resolve()
 
 
 @at_install(False)
@@ -35,7 +36,7 @@ class TestRegistration(TransactionCase):
     def get_last_note_message(self, lead):
         return [
             m for m in lead.message_ids
-            if m.subtype_id.get_xml_id().values() == ["mail.mt_comment"]][0]
+            if list(m.subtype_id.get_xml_id().values()) == ["mail.mt_comment"]][0]
 
     def test_opportunity_creation(self):
         self.assertEqual(len(self.get_leads(self.partner.id)), 1)
@@ -44,7 +45,7 @@ class TestRegistration(TransactionCase):
         lead = self.get_leads(self.partner.id)
 
         fake_meta_data = {'labelResponse': {'parcelNumber': '8R0000000000'}}
-        with open(osp.join(osp.dirname(__file__), 'fake_label.pdf')) as fobj:
+        with open(HERE / 'fake_label.pdf', 'rb') as fobj:
             fake_label_data = fobj.read()
 
         with mock.patch(
@@ -60,7 +61,7 @@ class TestRegistration(TransactionCase):
         # A message attached to the lead was sent, with the PDF attached
         self.assertTrue(lead.message_ids)
         last_note_msg = self.get_last_note_message(lead)
-        self.assertIn(u'Accusé Réception', last_note_msg.subject)
+        self.assertIn('Accusé Réception', last_note_msg.subject)
         self.assertIn('COMMOWN-MU-%d' % lead.id, last_note_msg.subject)
         attachment = last_note_msg.attachment_ids
         self.assertEqual(len(attachment), 1)
@@ -89,7 +90,7 @@ class TestRegistration(TransactionCase):
             ])
         self.assertEqual(len(attachments), 1)
         last_note_msg = self.get_last_note_message(lead)
-        self.assertIn(u'Accord de reprise', last_note_msg.subject)
+        self.assertIn('Accord de reprise', last_note_msg.subject)
         self.assertIn('COMMOWN-MU-%d' % lead.id, last_note_msg.subject)
         last_coupon = self.env['coupon.coupon'].search([])[0]
         self.assertIn(last_coupon.code, last_note_msg.body)
