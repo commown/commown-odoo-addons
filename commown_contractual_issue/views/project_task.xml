@@ -9,10 +9,10 @@
       <!-- Move partner_id to the sheet and contract next to it -->
       <xpath expr="//page[@name='extra_info']//field[@name='partner_id']" position="replace"></xpath>
       <xpath expr="//sheet//group[1]" position="inside">
-        <group name="partner_contract" attrs="{'invisible': [('require_contract', '=', False)]}">
+        <group name="partner_contract">
           <field name="partner_id"/>
           <field name="contract_id"
-                 attrs="{'required': [('require_contract', '=', True)]}"
+                 attrs="{'required': [('require_contract', '=', True)], 'invisible': [('require_contract', '=', False)]}"
                  options="{'no_create': True}"/>
           <field name="commercial_partner_id" invisible="True"/>
           <field name="require_contract" invisible="True"/>
