@@ -102,10 +102,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
     def test_invoice_double_optin(self):
         "Double-optin specific 422 error must not raise"
         with requests_mock.Mocker() as rm:
-            response = mock.Mock(status_code=422,
-                                 json=lambda: {"detail": "Already opt-in"})
             rm.post("/campaigns/test-campaign/opt-in",
-                    exc=requests.HTTPError(response=response))
+                    status_code=422, json={"detail": "Already opt-in"})
 
             event = {"type": "optin",
                      "ts": ts_before(self.contract.recurring_next_date)}
@@ -152,7 +150,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         self.assertEqual(rm.request_history[0].json(), {
             'customer_key': self.customer_key,
             'optout_ts': ts_after(date_end, 0),
-            })
+        })
 
         # Check that nothing crashes when partner has no customer_key
         self.contract.partner_id.update({"phone": False, "mobile": False})
@@ -177,7 +175,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             with mock.patch(comp_path) as m_compute:
                 report = self.env.ref(
                     "contract_variable_discount.report_simulate_payments_html")
-                fragment = report.render({"docs": self.contract}, 'ir.qweb')
+                report.render({"docs": self.contract}, 'ir.qweb')
 
         self.assertTrue(m_compute.call_count > 1)
         self.assertEqual(m_optin.call_count, 0)
