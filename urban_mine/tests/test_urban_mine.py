@@ -1,11 +1,12 @@
-# coding: utf-8
-
-import os.path as osp
+from pathlib import Path
 from base64 import b64decode
 
 import mock
 
 from odoo.tests.common import TransactionCase, at_install, post_install
+
+
+HERE = (Path(__file__) / "..").resolve()
 
 
 @at_install(False)
@@ -26,27 +27,25 @@ class TestRegistration(TransactionCase):
             'from_urban_mine': True,
         })
 
-    def get_leads(self):
+    def get_leads(self, partner_id):
         return self.env['crm.lead'].search([
             ('team_id', '=', self.team.id),
-            ('partner_id', '=', self.partner.id),
+            ('partner_id', '=', partner_id),
         ])
 
     def get_last_note_message(self, lead):
-        mt_comment = self.env.ref("mail.mt_comment")
         return [
             m for m in lead.message_ids
-            if m.subtype_id.id == mt_comment.id and
-            m.model == "crm.lead"][0]
+            if list(m.subtype_id.get_xml_id().values()) == ["mail.mt_comment"]][0]
 
     def test_opportunity_creation(self):
-        self.assertEqual(len(self.get_leads()), 1)
+        self.assertEqual(len(self.get_leads(self.partner.id)), 1)
 
     def test_opportunity_ok(self):
-        lead = self.get_leads()
+        lead = self.get_leads(self.partner.id)
 
         fake_meta_data = {'labelResponse': {'parcelNumber': '8R0000000000'}}
-        with open(osp.join(osp.dirname(__file__), 'fake_label.pdf'), 'rb') as fobj:
+        with open(HERE / 'fake_label.pdf', 'rb') as fobj:
             fake_label_data = fobj.read()
 
         with mock.patch(
@@ -62,7 +61,7 @@ class TestRegistration(TransactionCase):
         # A message attached to the lead was sent, with the PDF attached
         self.assertTrue(lead.message_ids)
         last_note_msg = self.get_last_note_message(lead)
-        self.assertIn(u'Accusé Réception', last_note_msg.subject)
+        self.assertIn('Accusé Réception', last_note_msg.subject)
         self.assertIn('COMMOWN-MU-%d' % lead.id, last_note_msg.subject)
         attachment = last_note_msg.attachment_ids
         self.assertEqual(len(attachment), 1)
@@ -88,10 +87,10 @@ class TestRegistration(TransactionCase):
         attachments = self.env['ir.attachment'].search([
             ("res_model", "=", invoice._name),
             ("res_id", "=", invoice.id),
-        ])
+            ])
         self.assertEqual(len(attachments), 1)
         last_note_msg = self.get_last_note_message(lead)
-        self.assertIn(u'Accord de reprise', last_note_msg.subject)
+        self.assertIn('Accord de reprise', last_note_msg.subject)
         self.assertIn('COMMOWN-MU-%d' % lead.id, last_note_msg.subject)
-        last_coupon = self.env.ref("urban_mine.urban_mine_campaing")
+        last_coupon = self.env['coupon.coupon'].search([])[0]
         self.assertIn(last_coupon.code, last_note_msg.body)
