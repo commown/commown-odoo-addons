@@ -83,6 +83,11 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                     " Partner is %s (id: %d)" % (partner.name, partner.id))
                 return False
 
+            # Do not call the cooperative WS if we are simulating
+            # future invoices...
+            if self._context.get("is_simulation"):
+                return True
+
             url = self.env['ir.config_parameter'].get_param(
                 'commown_cooperative_campaign.base_url')
 
