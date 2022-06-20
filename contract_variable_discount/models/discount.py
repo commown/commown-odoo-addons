@@ -104,15 +104,17 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         required=True,
     )
 
+    def is_valid(self, contract_line, date):
+        return (self._condition_ok(contract_line, date)
+                and self._start_date_ok(contract_line, date)
+                and self._end_date_ok(contract_line, date))
+
     @api.multi
     def compute(self, contract_line, date_invoice):
         " Return the actual discount for given contract line and invoice date "
 
         self.ensure_one()
-
-        if (self._condition_ok(contract_line, date_invoice)
-                and self._start_date_ok(contract_line, date_invoice)
-                and self._end_date_ok(contract_line, date_invoice)):
+        if self.is_valid(contract_line, date_invoice):
             return self._compute_amount(contract_line, date_invoice)
 
     def _compute_amount(self, contract_line, date_invoice):
