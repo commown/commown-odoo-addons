@@ -18,6 +18,7 @@
         'commown_contract_variable_discount',
         'queue_job',
         'keychain',
+        'l10n_fr',
     ],
     'data': [
         'data/action_coupon.xml',

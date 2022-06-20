@@ -32,6 +32,11 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                     u" Partner is %s (id: %d)" % (partner.name, partner.id))
                 return False
 
+            # Do not call the cooperative WS if we are simulating
+            # future invoices...
+            if self._context.get("is_simulation"):
+                return True
+
             url = ws_utils.coop_ws_base_url(self.env)
 
             # Each contract invoice starts by optin, to allow easy joining
