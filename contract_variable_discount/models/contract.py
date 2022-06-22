@@ -206,7 +206,10 @@ class Contract(models.Model):
         last_date = fields.Date.from_string(self.recurring_next_date)
         try:
             while last_date < max_date:
-                inv = self.recurring_create_invoice()
+                # Use context to make it possible to avoid external side effects
+                # (cooperative campaign through http api for instance):
+                inv = self.with_context(
+                    is_simulation=True).recurring_create_invoice()
                 last_date = fields.Date.from_string(inv.date_invoice)
                 if last_amount != inv.amount_total:
                     _logger.debug("> KEEP invoice %s (amount %s)",

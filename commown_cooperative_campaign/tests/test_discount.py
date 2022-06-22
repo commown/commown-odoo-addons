@@ -90,28 +90,29 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         before1 = partial(ts_before, days=1)
 
         self.assertEqual(
-            self.invoice(before1, mock_optin=True).amount_total, 6.9)
+            self.invoice(before1, mock_optin=True).amount_total, 7.2)
         self.assertEqual(
-            self.invoice(before1, ts_after, mock_optin=True).amount_total, 6.9)
+            self.invoice(before1, ts_after, mock_optin=True).amount_total, 7.2)
         self.assertEqual(
-            self.invoice(before7, before1, mock_optin=True).amount_total, 34.5)
-        self.assertEqual(
-            self.invoice(ts_after, mock_optin=True).amount_total, 34.5)
+            self.invoice(before7, before1, mock_optin=True).amount_total, 36.0)
+
+        # optin WS should not be called here as the invoice date is
+        # now too late according to the discount end date (equals
+        # contract end instead of being strictly less than it)
+        self.assertEqual(self.invoice(ts_after).amount_total, 36.0)
 
     def test_invoice_no_identifier(self):
         "Partners having no phone or country do not benefit from the discount"
         self.so.partner_id.phone = False
         before1 = partial(ts_before, days=1)
         self.assertEqual(
-            self.invoice(before1, check_mock_calls=False).amount_total, 34.5)
+            self.invoice(before1, check_mock_calls=False).amount_total, 36.0)
 
     def test_invoice_double_optin(self):
         "Double-optin specific 422 error must not raise"
         with requests_mock.Mocker() as rm:
-            response = mock.Mock(status_code=422,
-                                 json=lambda: {"detail": "Already opt-in"})
             rm.post("/campaigns/test-campaign/opt-in",
-                    exc=requests.HTTPError(response=response))
+                    status_code=422, json={"detail": "Already opt-in"})
 
             event = {"type": "optin",
                      "ts": ts_before(self.contract.recurring_next_date)}
@@ -120,7 +121,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
             invoice = self.contract.recurring_create_invoice()
 
-        self.assertEqual(invoice.amount_total, 6.9)
+        self.assertEqual(invoice.amount_total, 7.2)
 
     def test_invoice_optin_error_any_422(self):
         "422 HTTP errors other than double optin must raise"
@@ -170,3 +171,20 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                     exc=Exception("Test failure: service should not be called"))
             self.contract.with_context(
                 test_queue_job_no_delay=True).date_end = date_end
+
+    def test_is_simulation(self):
+        " Don't call optin WS when simulating the future invoices "
+
+        pypath = "odoo.addons.commown_cooperative_campaign.models."
+        optin_path = pypath + "ws_utils.coop_ws_optin"
+        comp_path = pypath + ("discount.ContractTemplateAbstractDiscountLine."
+                              "_compute_condition_coupon_from_campaign")
+
+        with mock.patch(optin_path) as m_optin:
+            with mock.patch(comp_path) as m_compute:
+                report = self.env.ref(
+                    "contract_variable_discount.report_simulate_payments_html")
+                fragment = report.render({"docs": self.contract}, 'ir.qweb')
+
+        self.assertTrue(m_compute.call_count > 1)
+        self.assertEqual(m_optin.call_count, 0)
