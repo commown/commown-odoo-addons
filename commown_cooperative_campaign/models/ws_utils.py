@@ -156,7 +156,6 @@ def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9,
     resp = requests.post(
         url, json={"customer_key": customer_key, "optin_ts": optin_ts})
     if resp.status_code == 422:
-        import ipdb; ipdb.set_trace()
         json = resp.json()
         if json.get("detail", None) == 'Already opt-in':
             _logger.info(u"Double opt-in for %s", customer_key)
