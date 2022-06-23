@@ -10,7 +10,7 @@ import iso8601
 import requests
 from pprint import pformat
 
-from odoo import models
+from odoo import models, api
 
 _logger = logging.getLogger(__name__)
 
@@ -65,49 +65,82 @@ def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
 class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     _inherit = "contract.template.abstract.discount.line"
 
+    @api.multi
+    def compute(self, contract_line, date):
+        """Optin if valid and not simulating before computing the actual value
+
+        This is because we optin at first contract invoice generation,
+        i.e. when the customer receives is device. The sale could
+        indeed be canceled before this date.
+        """
+
+        # Use no_check_coop_ws context to disable optin check in the
+        # `is_valid` method here as the aim is... to optin!
+        if (not self._context.get("is_simulation")
+                and self.with_context(no_check_coop_ws=True).is_valid(
+                    contract_line, date)):
+            campaign = self.coupon_campaign_id
+
+            if campaign.is_coop_campaign:
+                contract = contract_line.contract_id
+                partner = contract.partner_id
+                identifier = campaign.coop_partner_identifier(partner)
+
+                if identifier:
+                    emitted_invoices = self.env["account.invoice"].search([
+                        ("invoice_line_ids.contract_line_id.contract_id", "=",
+                         contract.id),
+                    ])
+                    if len(emitted_invoices) == 0:
+                        # Contract start invoice: optin to the campaign
+                        url = self.env['ir.config_parameter'].get_param(
+                            'commown_cooperative_campaign.base_url')
+                        try:
+                            coop_ws_optin(url, campaign.name, identifier, date,
+                                          partner.tz)
+                        except requests.HTTPError as exc:
+                            # Try to handle double-optin nicely
+                            if exc.response.status_code == 422:
+                                json = exc.response.json()
+                                if json.get("detail", None) == 'Already opt-in':
+                                    _logger.info("Double opt-in for %s (%d)"
+                                                 % (partner.name, partner.id))
+                                else:
+                                    _logger.error("Opt-in error json: %s" % json)
+                                    raise
+                            else:
+                                raise
+
+                else:
+                    _logger.warning(
+                        "Couldn't build a partner id for a coop campaign."
+                        " Partner is %s (id: %d)" % (partner.name, partner.id))
+
+        return super().compute(contract_line, date)
+
     def _compute_condition_coupon_from_campaign(self, contract_line, date):
 
-        result = super(
-                ContractTemplateAbstractDiscountLine, self
-        )._compute_condition_coupon_from_campaign(contract_line, date)
+        result = super()._compute_condition_coupon_from_campaign(
+            contract_line, date)
 
-        campaign = self.coupon_campaign_id
-        if result and campaign.is_coop_campaign:
+        if (result
+                and not self._context.get("no_check_coop_ws")
+                and self.coupon_campaign_id.is_coop_campaign):
 
-            contract = contract_line.contract_id
-            partner = contract.partner_id
-            identifier = campaign.coop_partner_identifier(partner)
-            if not identifier:
-                _logger.warning(
-                    "Couldn't build a partner identifier for a coop campaign."
-                    " Partner is %s (id: %d)" % (partner.name, partner.id))
-                return False
+            # Do not call the cooperative WS if we are simulating
+            # future invoices...
+            if not self._context.get("is_simulation"):
+                contract = contract_line.contract_id
+                partner = contract.partner_id
+                campaign = self.coupon_campaign_id
+                identifier = campaign.coop_partner_identifier(partner)
 
-            url = self.env['ir.config_parameter'].get_param(
-                'commown_cooperative_campaign.base_url')
+                if not identifier:
+                    return False
 
-            emitted_invoices = self.env["account.invoice"].search([
-                ("invoice_line_ids.contract_line_id.contract_id", "=",
-                 contract.id),
-            ])
-            if len(emitted_invoices) == 0:
-                # Contract start invoice: optin to the cooperative campaign
-                try:
-                    coop_ws_optin(url, campaign.name, identifier, date,
-                                  partner.tz)
-                except requests.HTTPError as exc:
-                    # Try to handle double-optin nicely
-                    if exc.response.status_code == 422:
-                        json = exc.response.json()
-                        if json.get("detail", None) == 'Already opt-in':
-                            _logger.info("Double opt-in for %s (%d)"
-                                         % (partner.name, partner.id))
-                        else:
-                            _logger.error("Opt-in error json: %s" % json)
-                            raise
-                    else:
-                        raise
+                url = self.env['ir.config_parameter'].get_param(
+                    'commown_cooperative_campaign.base_url')
 
-            result = coop_ws_query(url, campaign.name, identifier, date)
+                result = coop_ws_query(url, campaign.name, identifier, date)
 
         return result
