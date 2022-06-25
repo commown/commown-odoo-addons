@@ -20,12 +20,17 @@ class DiscountLineTC(TestContractBase):
             "condition": "no_issue_to_date",
         })
 
+        # Add a non-contractual issue (to check it does not raise a bug)
+        self.contract.issue_ids |= self.env['project.task'].create({
+            "name": "task0",
+        })
+
         # Test without penalty
-        self.assertFalse(self.contract.issue_ids)
         self.contract.issue_ids |= self.env['project.task'].create({
             "name": "task1",
             "penalty_exemption": True,
             "contractual_issue_date": self.contract.date_start,
+            "contractual_issue_type": "loss",
         })
 
         inv1 = self.contract.recurring_create_invoice()
@@ -36,6 +41,7 @@ class DiscountLineTC(TestContractBase):
             "name": "task2",
             "penalty_exemption": False,
             "contractual_issue_date": self.contract.date_start,
+            "contractual_issue_type": "theft",
         })
 
         inv2 = self.contract.recurring_create_invoice()
