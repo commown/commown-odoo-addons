@@ -1,4 +1,5 @@
 from odoo import fields, models, api, _
+from odoo.exceptions import ValidationError
 
 
 class Contract(models.Model):
@@ -30,6 +31,41 @@ class Contract(models.Model):
         string="Commitment end date",
         compute="_compute_commitment_end_date", store=True,
     )
+
+    # Add modification behaviour to recurring_next_date
+    recurring_next_date = fields.Date(
+        inverse='_inverse_recurring_next_date',
+    )
+
+    def _inverse_recurring_next_date(self):
+        """Allow modification of the next recurring date
+
+        ... if no invoice with a date later than the new next date exists
+        (even draft one may be aggregated and invoiced, so we really need
+         no invoice past that date).
+
+        In that case, set the next date and reset the last_date_invoiced
+        of each line.
+
+        """
+        for record in self:
+            if self.env["account.invoice.line"].search_count([
+                ("contract_line_id", "in", record.contract_line_ids.ids),
+                ("invoice_id.date_invoice", ">=", record.recurring_next_date),
+            ]):
+                raise ValidationError(
+                    "There are invoices past the new next recurring date."
+                    " Please remove them before."
+                )
+
+            last_date_invoiced = max(
+                record._get_related_invoices().mapped("date_invoice")
+                + [record.date_start])
+
+            for cline in record.contract_line_ids:
+                # Update last_date_invoiced first to avoid model constraint
+                cline.last_date_invoiced = last_date_invoiced
+                cline.recurring_next_date = record.recurring_next_date
 
     @api.depends("date_start", "commitment_period_number",
                  "commitment_period_type")
