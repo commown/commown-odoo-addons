@@ -161,14 +161,31 @@ def dump_all_mandates(acquirer, refresh, mandates_fpath, **params):
     json.dump(mandates, open(mandates_fpath, 'wb'))
 
 
+def filter_has_contract(acquirer, mandate_repr):
+    "mandate partner has no contract"
+    partner = acquirer.env['res.partner'].browse(
+        mandate_repr['subscriber']['reference'])
+    return bool(acquirer.env["contract.contract"].search([
+        ("commercial_partner_id", "=", partner.commercial_partner_id.id),
+    ]))
+
+
 def restore_all_missing_mandates(
-        acquirer, mandates_fpath='/tmp/mandates.json', **params):
+        acquirer, mandates_fpath='/tmp/mandates.json',
+        filter_func=filter_has_contract, **params):
     " Restore all mandates from production to preproduction environment "
 
     mandates_repr = json.load(open(mandates_fpath))
     known_mandate_refs = dict(get_all_mandates_repr(
         acquirer, mandate_doc_ref, **params))
     for mandate_repr in mandates_repr:
+        partner = acquirer.env['res.partner'].browse(
+            mandate_repr['subscriber']['reference'])
+        if filter_func and not filter_func(acquirer, mandate_repr):
+            _logger.info("Skipping mandate %s of %s: %s",
+                         mandate_repr["reference"], partner.name,
+                         filter_func.__doc__)
+            continue
         ref = mandate_repr['reference'] = 'TEST' + mandate_repr['reference'][4:]
         if ref not in known_mandate_refs:
             try:
@@ -187,8 +204,6 @@ def restore_all_missing_mandates(
                 acquirer, mandate_doc_ref, mandateReference=ref))
             known_mandate_refs[ref] = mandate_repr_
         else:
-            partner = acquirer.env['res.partner'].browse(
-                mandate_repr['subscriber']['reference'])
             set_mandate(acquirer, partner, known_mandate_refs[ref])
             _logger.debug('Pre-existing mandate %s assigned to %s',
                           ref, partner.name)
