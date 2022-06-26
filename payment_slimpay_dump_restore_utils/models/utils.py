@@ -184,7 +184,16 @@ def restore_all_missing_mandates(
         acquirer, mandate_doc_ref, **params))
     for mandate_repr in mandates_repr:
         partner = acquirer.env['res.partner'].browse(
-            mandate_repr['subscriber']['reference'])
+            mandate_repr['subscriber']['reference']).exists()
+        if not partner:
+            _logger.error(
+                "Partner %s of mandate %s not found in odoo (name: %s).",
+                mandate_repr['subscriber']['reference'],
+                mandate_repr['reference'],
+                (mandate_repr['signatory']['givenName']
+                 + mandate_repr['signatory']['familyName'])
+            )
+            continue
         if filter_func and not filter_func(acquirer, mandate_repr):
             _logger.info("Skipping mandate %s of %s: %s",
                          mandate_repr["reference"], partner.name,
