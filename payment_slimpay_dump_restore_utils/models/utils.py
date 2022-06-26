@@ -130,6 +130,10 @@ def replace_mandate(acquirer, mandate_repr):
             partner.name)
         mandate_repr['signatory']['billingAddress']['country'] = 'FR'
 
+    # Remove BIC, which may be wrong (for unknown reason, CMCIFR2AXXX
+    # crashes) and can be computed automatically by Slimpay from the IBAN
+    mandate_repr["signatory"]["bankAccount"].pop("bic", None)
+
     mandate_repr['creditor'] = {'reference': acquirer.slimpay_creditor}
     new_mandate_doc = acquirer.slimpay_client.action(
         'POST', 'create-mandates', params=mandate_repr)
