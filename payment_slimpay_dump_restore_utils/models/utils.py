@@ -130,6 +130,10 @@ def replace_mandate(acquirer, mandate_repr):
             partner.name)
         mandate_repr['signatory']['billingAddress']['country'] = 'FR'
 
+    # Remove BIC, which may be wrong (for unknown reason, CMCIFR2AXXX
+    # crashes) and can be computed automatically by Slimpay from the IBAN
+    mandate_repr["signatory"]["bankAccount"].pop("bic", None)
+
     mandate_repr['creditor'] = {'reference': acquirer.slimpay_creditor}
     new_mandate_doc = acquirer.slimpay_client.action(
         'POST', 'create-mandates', params=mandate_repr)
@@ -161,14 +165,40 @@ def dump_all_mandates(acquirer, refresh, mandates_fpath, **params):
     json.dump(mandates, open(mandates_fpath, 'wb'))
 
 
+def filter_has_contract(acquirer, mandate_repr):
+    "mandate partner has no contract"
+    partner = acquirer.env['res.partner'].browse(
+        mandate_repr['subscriber']['reference'])
+    return bool(acquirer.env["contract.contract"].search([
+        ("commercial_partner_id", "=", partner.commercial_partner_id.id),
+    ]))
+
+
 def restore_all_missing_mandates(
-        acquirer, mandates_fpath='/tmp/mandates.json', **params):
+        acquirer, mandates_fpath='/tmp/mandates.json',
+        filter_func=filter_has_contract, **params):
     " Restore all mandates from production to preproduction environment "
 
     mandates_repr = json.load(open(mandates_fpath))
     known_mandate_refs = dict(get_all_mandates_repr(
         acquirer, mandate_doc_ref, **params))
     for mandate_repr in mandates_repr:
+        partner = acquirer.env['res.partner'].browse(
+            mandate_repr['subscriber']['reference']).exists()
+        if not partner:
+            _logger.error(
+                "Partner %s of mandate %s not found in odoo (name: %s).",
+                mandate_repr['subscriber']['reference'],
+                mandate_repr['reference'],
+                (mandate_repr['signatory']['givenName']
+                 + mandate_repr['signatory']['familyName'])
+            )
+            continue
+        if filter_func and not filter_func(acquirer, mandate_repr):
+            _logger.info("Skipping mandate %s of %s: %s",
+                         mandate_repr["reference"], partner.name,
+                         filter_func.__doc__)
+            continue
         ref = mandate_repr['reference'] = 'TEST' + mandate_repr['reference'][4:]
         if ref not in known_mandate_refs:
             try:
@@ -181,14 +211,12 @@ def restore_all_missing_mandates(
                 import traceback as tb
                 _logger.error(
                     'Error when trying to replace mandate for %s:\n%s',
-                    mandate_repr['signatory']['email'], tb.format_exc(exc))
+                    mandate_repr['signatory']['email'], tb.format_exc())
                 continue
             mandate_repr_ = next(get_all_mandates_repr(
                 acquirer, mandate_doc_ref, mandateReference=ref))
             known_mandate_refs[ref] = mandate_repr_
         else:
-            partner = acquirer.env['res.partner'].browse(
-                mandate_repr['subscriber']['reference'])
             set_mandate(acquirer, partner, known_mandate_refs[ref])
             _logger.debug('Pre-existing mandate %s assigned to %s',
                           ref, partner.name)
