@@ -202,7 +202,7 @@ def restore_all_missing_mandates(
                 import traceback as tb
                 _logger.error(
                     'Error when trying to replace mandate for %s:\n%s',
-                    mandate_repr['signatory']['email'], tb.format_exc(exc))
+                    mandate_repr['signatory']['email'], tb.format_exc())
                 continue
             mandate_repr_ = next(get_all_mandates_repr(
                 acquirer, mandate_doc_ref, mandateReference=ref))
