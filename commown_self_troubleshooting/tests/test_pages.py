@@ -171,9 +171,9 @@ class PagesTC(HttpCase):
 
             try:
                 doc = self.get_page(page_url)
-            except Exception as exc:
+            except:
                 self.fail("Error loading %s:\n%s"
-                          % (page_url, tb.format_exc(exc)))
+                          % (page_url, tb.format_exc()))
 
             self.assertEqual(
                 self._contract_options(doc, value2int),
