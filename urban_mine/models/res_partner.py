@@ -8,6 +8,7 @@ class UrbanMinePartner(models.Model):
                                      website_form_blacklisted=False)
 
     @api.model
+    @api.returns('self', lambda value: value.id)
     def create(self, vals):
         result = super().create(vals)
 
