@@ -5,6 +5,7 @@ class Message(models.Model):
     _inherit = 'mail.message'
 
     @api.model
+    @api.returns('self', lambda value: value.id)
     def create(self, values):
         """ Circumvent an odoo bug
 
