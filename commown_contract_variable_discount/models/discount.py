@@ -44,7 +44,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         try:
             coupons = line.sale_order_line_id.order_id.used_coupons()
             return self.coupon_campaign_id in coupons.mapped("campaign_id")
-        except Exception as exc:
+        except:
             import traceback as tb
-            _logger.exception(tb.format_exc(exc))
+            _logger.exception(tb.format_exc())
             return False

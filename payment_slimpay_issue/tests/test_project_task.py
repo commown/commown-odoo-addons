@@ -5,6 +5,7 @@ import mock
 from odoo.tests.common import at_install, post_install, TransactionCase
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+from ..models.project_task import ProjectTask as SlimpayIssuePT
 
 
 class FakeDoc(dict):
@@ -68,6 +69,33 @@ def fake_issue_doc(id='fake_issue', date='2019-03-28', amount='100.0',
 @post_install(True)
 class ProjectTC(TransactionCase):
 
+    @classmethod
+    def setUpClass(cls):
+        """ If the commown module is loaded (in the CI), monkey patch its ProjectTask
+        class to let current module's slimpay_payment_issue_process_automatically
+        method show its effects. This makes tests easier and faster, avoiding to
+        create invoices from contracts.
+        """
+        try:
+            from odoo.addons.commown.models.project_task import ProjectTask
+        except ImportError:
+            pass
+        else:
+            cls._old_pt_slimpay_payment_issue_process_automatically = (
+                ProjectTask.slimpay_payment_issue_process_automatically)
+            ProjectTask.slimpay_payment_issue_process_automatically = (
+                SlimpayIssuePT.slimpay_payment_issue_process_automatically)
+
+    @classmethod
+    def tearDownClass(cls):
+        try:
+            from odoo.addons.commown.models.project_task import ProjectTask
+        except ImportError:
+            pass
+        else:
+            ProjectTask.slimpay_payment_issue_process_automatically = (
+                cls._old_pt_slimpay_payment_issue_process_automatically)
+
     def setUp(self):
         patcher = mock.patch('odoo.addons.account_payment_slimpay'
                              '.models.slimpay_utils.get_client')
@@ -96,8 +124,6 @@ class ProjectTC(TransactionCase):
             'code': 'RC',
             'company_id': self.env.user.company_id.id,
             'type': 'bank',
-            'default_debit_account_id': self.customer_account.id,
-            'default_credit_account_id': self.customer_account.id,
             'update_posted': True,
         })
 
@@ -229,7 +255,7 @@ class ProjectTC(TransactionCase):
             'partner_zip': self.partner.zip,
             'partner_email': self.partner.email,
             'invoice_ids': [(6, 0, invoice.ids)],
-            })
+        })
 
         payment = self.env['account.payment'].create({
             'company_id': self.env.user.company_id.id,
@@ -414,7 +440,7 @@ class ProjectTC(TransactionCase):
 
     def _slimpay_supplier_invoices(self):
         slimpay_partner = self.env.ref(
-                'payment_slimpay_issue.slimpay_fees_partner')
+            'payment_slimpay_issue.slimpay_fees_partner')
         return self.env['account.invoice'].search([
             ('partner_id', '=', slimpay_partner.id),
             ('type', '=', 'in_invoice'),
@@ -476,8 +502,11 @@ class ProjectTC(TransactionCase):
                          ['cancelled'])
         self.assertEqual(task.invoice_id.amount_total, 100.)
         self.assertInStage(task, 'stage_warn_partner_and_wait')
-        self.assertEqual(task_emails(task).mapped('subject'),
-                         ['YourCompany: rejected payment'])
+        # When CI runs, commown module is installed and sends a SMS too, so
+        # we use assertIn and not assertEquals below:
+        emails = task_emails(task)
+        self.assertIn('YourCompany: rejected payment',
+                      emails.mapped('subject'))
         self.assertEqual(self.invoice.state, 'open')
 
         act = self._simulate_wait(task, days=6)
@@ -490,7 +519,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(len(payins), 1)
         self.assertEqual(payins[0][1]['params']['label'], 'dummy label')
         self.assertEqual(self.invoice.state, 'paid')
-        self.assertEqual(len(task_emails(task)), 1)  # no new email
+        self.assertEqual(len(task_emails(task)), len(emails))  # no new email
         self.assertIn('slimpay_ref_1 ', task.name)
 
         act, get = self._execute_cron([
@@ -504,8 +533,10 @@ class ProjectTC(TransactionCase):
                          ['cancelled', 'cancelled'])
         self.assertEqual(task.invoice_id.amount_total, 105)
         self.assertInStage(task, 'stage_warn_partner_and_wait')
-        self.assertEqual(task_emails(task).mapped('subject'),
-                         2 * ['YourCompany: rejected payment'])
+        emails = task_emails(task)
+        self.assertEqual(
+            [s for s in emails.mapped('subject') if "rejected" in s],
+            2 * ['YourCompany: rejected payment'])
         self.assertEqual(self.invoice.state, 'open')
         self.assertIn('slimpay_ref_2 - slimpay_ref_1 ',
                       task.name)
@@ -515,7 +546,6 @@ class ProjectTC(TransactionCase):
         txs = self._invoice_txs(self.invoice)
         self.assertEqual(len(txs), 3)
         self.assertEqual((txs[1], txs[2]), (tx1, tx0))
-        tx2 = txs[0]
         payins = self._action_calls(act, 'create-payins')
         self.assertEqual(len(payins), 1)
         self.assertEqual(payins[0][1]['params']['label'], 'dummy label')
@@ -554,15 +584,16 @@ class ProjectTC(TransactionCase):
         # Execute test: generate 3 issues and simulate a crash when the
         # second is acknowledged to Slimpay
         act, get = self._execute_cron(
-            [fake_issue_doc(id='i0',
-                            payment_ref=tx0.acquirer_reference,
-                            subscriber_ref=self.partner.id),
-             fake_issue_doc(id='i1',
-                            payment_ref=tx1.acquirer_reference,
-                            subscriber_ref=self.partner.id),
-             fake_issue_doc(id='i2',
-                            payment_ref=tx2.acquirer_reference,
-                            subscriber_ref=self.partner.id)
+            [
+                fake_issue_doc(id='i0',
+                               payment_ref=tx0.acquirer_reference,
+                               subscriber_ref=self.partner.id),
+                fake_issue_doc(id='i1',
+                               payment_ref=tx1.acquirer_reference,
+                               subscriber_ref=self.partner.id),
+                fake_issue_doc(id='i2',
+                               payment_ref=tx2.acquirer_reference,
+                               subscriber_ref=self.partner.id)
             ],
             fake_action_crash_for('ack-payment-issue', 'i1')
         )

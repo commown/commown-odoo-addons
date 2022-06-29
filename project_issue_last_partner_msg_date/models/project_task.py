@@ -8,6 +8,7 @@ class ProjectTask(models.Model):
     last_partner_msg_date = fields.Datetime('Last partner message date')
 
     @api.model
+    @api.returns('self', lambda value: value.id)
     def create(self, values):
         "Set last_partner_msg_date to utcnow by default"
         task = super().create(values)
