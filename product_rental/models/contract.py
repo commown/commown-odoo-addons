@@ -1,5 +1,10 @@
+import logging
+
 from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
+
+
+_logger = logging.getLogger(__file__)
 
 
 class Contract(models.Model):
@@ -48,19 +53,29 @@ class Contract(models.Model):
         of each line.
 
         """
+        force = self._context.get("force_recurring_next_date", False)
+
         for record in self:
-            if self.env["account.invoice.line"].search_count([
+            active_invoices = self.env["account.invoice.line"].search_count([
                 ("contract_line_id", "in", record.contract_line_ids.ids),
                 ("invoice_id.date_invoice", ">=", record.recurring_next_date),
-            ]):
+                ("state", "!=", "cancel"),
+            ])
+            if not force and active_invoices:
                 raise ValidationError(
                     "There are invoices past the new next recurring date."
                     " Please remove them before."
                 )
 
+            invoices = record._get_related_invoices()
+            if force:
+                invoices = invoices.filtered(lambda inv: inv.state == "paid")
             last_date_invoiced = max(
-                record._get_related_invoices().mapped("date_invoice")
-                + [record.date_start])
+                invoices.mapped("date_invoice") + [record.date_start])
+
+            _logger.info("Setting all contract %s lines last_date_invoiced"
+                         " to %s and recurring_next_date to %s", record.name,
+                         last_date_invoiced, record.recurring_next_date)
 
             for cline in record.contract_line_ids:
                 # Update last_date_invoiced first to avoid model constraint
