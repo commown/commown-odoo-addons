@@ -56,20 +56,19 @@ class Contract(models.Model):
         force = self._context.get("force_recurring_next_date", False)
 
         for record in self:
-            active_invoices = self.env["account.invoice.line"].search_count([
+            active_invlines = self.env["account.invoice.line"].search_count([
                 ("contract_line_id", "in", record.contract_line_ids.ids),
                 ("invoice_id.date_invoice", ">=", record.recurring_next_date),
-                ("state", "!=", "cancel"),
+                ("invoice_id.state", "!=", "cancel"),
             ])
-            if not force and active_invoices:
+            if not force and active_invlines:
                 raise ValidationError(
                     "There are invoices past the new next recurring date."
                     " Please remove them before."
                 )
 
-            invoices = record._get_related_invoices()
-            if force:
-                invoices = invoices.filtered(lambda inv: inv.state == "paid")
+            invoices = record._get_related_invoices().filtered(
+                lambda inv: inv.state != "cancel")
             last_date_invoiced = max(
                 invoices.mapped("date_invoice") + [record.date_start])
 
