@@ -4,10 +4,15 @@ from odoo import api, models
 class CommownAccountMassReconcileMethod(models.Model):
     _inherit = 'account.mass.reconcile.method'
 
-    @api.model
-    def _get_all_rec_method(self):
-        methods = super(CommownAccountMassReconcileMethod,
-                        self)._get_all_rec_method()
-        methods.append(('mass.reconcile.simple.partner_commown',
-                        'Simple. Amount and Partner. Max date gap optimized.'))
-        return methods
+    @staticmethod
+    def _get_reconcilation_methods():
+        return [
+            ('mass.reconcile.simple.name', 'Simple. Amount and Name'),
+            ('mass.reconcile.simple.partner', 'Simple. Amount and Partner'),
+            ('mass.reconcile.simple.reference',
+             'Simple. Amount and Reference'),
+            ('mass.reconcile.advanced.ref',
+             'Advanced. Partner and Ref.'),
+            ('mass.reconcile.simple.partner_commown',
+             'Simple. Amount and Partner. Max date gap optimized.'),
+        ]
