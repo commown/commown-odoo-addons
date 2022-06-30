@@ -95,7 +95,8 @@
     </xpath>
   </template>
 
-  <template id="products_add_to_cart_group_sales" inherit_id="website_sale_cart_selectable.products_add_to_cart">
+  <template id="products_add_to_cart_group_sales"
+            inherit_id="website_sale_cart_selectable.products_add_to_cart">
     <xpath expr="//t[@t-if='len(product.product_variant_ids) == 1'] and product.website_btn_addtocart_published" position="attributes">
       <attribute name="t-if">len(product.product_variant_ids) == 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
     </xpath>
@@ -126,6 +127,16 @@
     <!-- Not lang related: hide stupid odoo hardcoded message like "30-day money-back guarantee" blah blah -->
     <xpath expr="(//div[@id='product_details']//hr)[last()]" position="replace"></xpath>
     <xpath expr="(//div[@id='product_details']//p)[last()]" position="replace"></xpath>
+
+    <!-- Display availability warning for service products -->
+    <xpath expr="//a[@id='add_to_cart']" position="after">
+      <t t-set="availability_class" t-value="product.type == 'service' and {'warning': 'warning', 'block': 'danger'}.get(product.sale_line_warn, '') or ''" />
+      <div t-if="availability_class" t-attf-class="alert alert-{{ availability_class }}">
+        <span class="fa fa-warning"/>
+        <span t-field="product.sale_line_warn_msg"/>
+      </div>
+    </xpath>
+
     <!-- End not lang related -->
 
     <xpath expr="//t[@t-call='website.layout']/*[1]" position="before">
@@ -149,6 +160,7 @@
     <xpath expr="//div[@t-field='product.website_description']" position="attributes">
       <attribute name="t-if">display_product</attribute>
     </xpath>
+
   </template>
 
   <!-- Language related hacks END -->
