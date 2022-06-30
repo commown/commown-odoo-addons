@@ -7,10 +7,6 @@ from odoo import api, models
 _logger = logging.getLogger(__name__)
 
 
-def fast_to_dt(string_date):
-    return datetime(*list(map(int, string_date.split('-'))))
-
-
 class CommownMassReconcileSimplePartner(models.TransientModel):
     _name = 'mass.reconcile.simple.partner_commown'
     _inherit = 'mass.reconcile.simple'
@@ -40,7 +36,7 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
         _logger.info('Reconciling %s lines...', len(lines))
         while (count < len(lines)
                and success_count < max_reconcile_lines):
-            date_1 = fast_to_dt(lines[count]['date_maturity'])
+            date_1 = lines[count]['date_maturity']
             if count and not count % 10:
                 _logger.info('Reconcile progress: %s/%s', count, len(lines))
             for i in range(count + 1, len(lines)):
@@ -49,7 +45,7 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
                                  ' (key field changed)', i - count)
                     break
                 if max_reconcile_days_gap is not None:
-                    gap = (fast_to_dt(lines[i]['date_maturity']) - date_1).days
+                    gap = (lines[i]['date_maturity'] - date_1).days
                     if gap > max_reconcile_days_gap:
                         _logger.info('Stop searching - %d trial(s)'
                                      ' (date gap reached)', i - count)
