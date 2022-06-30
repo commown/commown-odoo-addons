@@ -41,8 +41,10 @@
     </xpath>
 
     <xpath expr="div" position="after">
-      <div t-if="product.is_rental" class="product_price mt16">
-        <p t-if="commitment_period['number'] > 0">
+      <div t-if="product.is_rental"
+           id="product_rental_price"
+           class="product_price mt16">
+        <p t-if="product.is_contract and commitment_period['number'] > 0">
           <b class="commitment"><span>Commitment duration: </span><span t-esc="commitment_period['number']"/> <span t-esc="commitment_period['type']"/></b>
         </p>
         <h4 class="oe_price_h4 css_editable_mode_hidden">
