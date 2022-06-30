@@ -46,6 +46,7 @@ class SlimpayParser(FileParser):
     @classmethod
     def parser_for(cls, parser_name):
         return parser_name == "slimpay"
+
     conversion_dict = {
         "Libelle": text_type,
         "Nomdebiteur": text_type,
@@ -57,17 +58,6 @@ class SlimpayParser(FileParser):
         "OriginalTransactionID": text_type,
     }
 
-    def _unique_transaction_id(self, row):
-        template = "%(TransactionID)s/%(CodeOP)s/%(Dateexecution)s"
-        if row["OriginalTransactionID"].strip():
-            template = "%(OriginalTransactionID)s/" + template
-        return template % row
-
-    def _skip(self, row):
-        return not row["CodeOP"] or bool(self.env["account.move.line"].search([
-            ("ref", "=", self._unique_transaction_id(row)),
-        ]))
-
     def _post(self, *args, **kwargs):
         """ Remove all rows to be skipped:
         - the lines that do not represent a bank op (totals, comments, etc.)
@@ -76,9 +66,9 @@ class SlimpayParser(FileParser):
         # Proceed in line reverse order to remove rows in-place by index number
         initial_len = len(self.result_row_list)
         for num, row in enumerate(reversed(self.result_row_list)):
-            if self._skip(row):
-                del self.result_row_list[initial_len-num-1]
-        return super(SlimpayParser, self)._post(*args, **kwargs)
+            if not row["CodeOP"]:
+                del self.result_row_list[initial_len - num - 1]
+        return super()._post(*args, **kwargs)
 
     def _get_partner_id(self, line):
         if line["CodeOP"].startswith("FEE-"):
@@ -107,9 +97,9 @@ class SlimpayParser(FileParser):
             "date_maturity": line["Datevaleur"],
             "credit": line["Creditvaleur"],
             "debit": line["Debitvaleur"],
-            "ref": self._unique_transaction_id(line),
             "already_completed": False,
             "partner_id": self._get_partner_id(line),
             "account_id": self._get_account_id(line),
-            }
+        }
+        _logger.debug("get_move_line_vals returns %s", vals)
         return vals
