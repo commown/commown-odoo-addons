@@ -22,6 +22,7 @@
         "views/portal_contract.xml",
         "views/payment_transaction.xml",
         "views/product_template.xml",
+        "views/sale_order.xml",
         "views/website_sale_templates.xml",
     ],
     "demo": ["demo/data.xml"],

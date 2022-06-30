@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+
+  <record id="view_order_form" model="ir.ui.view">
+    <field name="name">sale.order.form (in product_rental)</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="product_contract.view_order_form"/>
+
+    <!-- Remove the contract creation button -->
+    <field name="arch" type="xml">
+      <xpath expr="//button[@name='action_create_contract']" position="replace"></xpath>
+    </field>
+
+  </record>
+
+</odoo>
