@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ir_ui_menu_group_portal,ir.ui.menu_portal,base.model_ir_ui_menu,base.group_portal,1,0,0,0
+access_calendar_attendee_group_portal,calendar.attendee_portal,calendar.model_calendar_attendee,base.group_portal,1,0,0,0
+access_ir_model_group_portal,ir.model_portal,base.model_ir_model,base.group_portal,1,0,0,0
