@@ -75,7 +75,7 @@
   <template id="product_price_b2b" inherit_id="website_sale_b2b.product_price_b2b">
 
     <!-- Add attribute-value dependent show/ hide html functions -->
-    <xpath expr="div[@t-if='product.is_rental']" position="inside">
+    <xpath expr="div[@id='product_rental_price']" position="inside">
       <script type="text/javascript"
               src="/commown/static/src/js/website_sale.js"></script>
       <!-- Example usage
