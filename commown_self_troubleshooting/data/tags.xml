@@ -22,6 +22,11 @@
       <field name="name">EXPED À FAIRE</field>
     </record>
 
+    <record id="tag-to-callback" model="project.tags">
+      <field name="name">Sérénité</field>
+      <field name="color">1</field>
+    </record>
+
     <record id="tag-inform-only" model="project.tags">
       <field name="name">Pour information</field>
     </record>

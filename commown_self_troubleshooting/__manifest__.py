@@ -30,6 +30,8 @@
         'data/FP3/screen/issue_template.xml',
         'data/GS/form_day.xml',
         'data/GS/issue_template.xml',
+        'data/Assistance/Serenity/form.xml',
+        'data/Assistance/Serenity/issue_template.xml',
         'data/common_steps.xml',
         'data/project.xml',
         'data/tags.xml',
