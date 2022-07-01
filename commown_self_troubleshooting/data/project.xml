@@ -6,6 +6,10 @@
       <field name="name">Support</field>
     </record>
 
+    <!-- <record id="stage_callback" model="project.task.type">
+      <field name="name">Call</field>
+    </record> -->
+
     <record id="stage_pending" model="project.task.type">
       <field name="name">Pending</field>
     </record>
