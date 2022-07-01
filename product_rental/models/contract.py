@@ -77,7 +77,9 @@ class Contract(models.Model):
 
             if force and last_date_invoiced >= new_date:
                 real_last_date_invoiced = last_date_invoiced
-                last_date_invoiced = max([d for d in inv_dates if d < new_date])
+                last_date_invoiced = max(
+                    [d for d in inv_dates if d < new_date] + [record.date_start]
+                )
                 _logger.warning(
                     "Forcing last_date_invoiced to %s although last invoice"
                     " date is %s", last_date_invoiced, real_last_date_invoiced)
