@@ -56,9 +56,10 @@ class Contract(models.Model):
         force = self._context.get("force_recurring_next_date", False)
 
         for record in self:
+            new_date = record.recurring_next_date
             active_invlines = self.env["account.invoice.line"].search_count([
                 ("contract_line_id", "in", record.contract_line_ids.ids),
-                ("invoice_id.date_invoice", ">=", record.recurring_next_date),
+                ("invoice_id.date_invoice", ">=", new_date),
                 ("invoice_id.state", "!=", "cancel"),
             ])
             if not force and active_invlines:
@@ -67,19 +68,28 @@ class Contract(models.Model):
                     " Please remove them before."
                 )
 
-            invoices = record._get_related_invoices().filtered(
-                lambda inv: inv.state != "cancel")
-            last_date_invoiced = max(
-                invoices.mapped("date_invoice") + [record.date_start])
+            inv_dates = (
+                record._get_related_invoices().filtered(
+                    lambda inv: inv.state != "cancel").mapped("date_invoice")
+                + [record.date_start]
+            )
+            last_date_invoiced = max(inv_dates)
+
+            if force and last_date_invoiced >= new_date:
+                real_last_date_invoiced = last_date_invoiced
+                last_date_invoiced = max([d for d in inv_dates if d < new_date])
+                _logger.warning(
+                    "Forcing last_date_invoiced to %s although last invoice"
+                    " date is %s", last_date_invoiced, real_last_date_invoiced)
 
             _logger.info("Setting all contract %s lines last_date_invoiced"
                          " to %s and recurring_next_date to %s", record.name,
-                         last_date_invoiced, record.recurring_next_date)
+                         last_date_invoiced, new_date)
 
             for cline in record.contract_line_ids:
                 # Update last_date_invoiced first to avoid model constraint
                 cline.last_date_invoiced = last_date_invoiced
-                cline.recurring_next_date = record.recurring_next_date
+                cline.recurring_next_date = new_date
 
     @api.depends("date_start", "commitment_period_number",
                  "commitment_period_type")
