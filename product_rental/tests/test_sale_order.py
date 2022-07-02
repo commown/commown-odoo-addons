@@ -1,7 +1,21 @@
+from mock import patch
+
+from odoo.tests.common import at_install, post_install
+
+from odoo.addons.payment.models.payment_acquirer import PaymentTransaction
+
 from .common import RentalSaleOrderTC
 
 
-class SaleOrderTC(RentalSaleOrderTC):
+def fake_s2s_do_transaction(self, **kwargs):
+    for tx in self:
+        tx.state = "done"
+        return True
+
+
+@at_install(False)
+@post_install(True)
+class SaleOrderContractGenerationTC(RentalSaleOrderTC):
 
     def assert_contract_lines_attributes_equal(self, contract, value_dict):
         for attr, value in value_dict.items():
@@ -216,6 +230,59 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertEquals(
             [(l.name, l.quantity) for l in contracts.contract_line_ids],
             [('1 year of GS Headset', 1.0), ('1 month of micro', 12.0)])
+
+    def test_automatic_payment(self):
+        so = self.create_sale_order()
+        so.action_confirm()
+
+        acquirer = self.env.ref("payment.payment_acquirer_transfer")
+
+        token = self.env['payment.token'].create({
+            'name': 'Test Token',
+            'partner_id': so.partner_id.id,
+            'active': True,
+            'acquirer_id': acquirer.id,
+            'acquirer_ref': 'my_ref',
+        })
+
+        customer_journal = self.env['account.journal'].create({
+            'name': 'Customer journal',
+            'code': 'RC',
+            'company_id': self.env.user.company_id.id,
+            'type': 'bank',
+            'update_posted': True,
+        })
+
+        pay_meth = self.env.ref('payment.account_payment_method_electronic_in')
+
+        pay_mode = self.env["account.payment.mode"].create({
+            "name": "Automatic contract payment",
+            "payment_method_id": pay_meth.id,
+            "payment_type": "inbound",
+            "bank_account_link": "fixed",
+            "fixed_journal_id": customer_journal.id,
+        })
+
+        contract = self.env['contract.contract'].of_sale(so)[0]
+        contract.update({
+            "is_auto_pay": True,
+            "payment_token_id": token.id,
+            "payment_mode_id": pay_mode.id,
+        })
+
+        with patch.object(PaymentTransaction, "s2s_do_transaction",
+                          new=fake_s2s_do_transaction):
+            contract.recurring_create_invoice()
+
+        # Do not use _recurring_create_invoice return value here as
+        # contract_queue_job (installed in the CI) returns an empty invoice set
+        # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
+        #  /models/contract_contract.py#L21)
+        inv = self.env["account.invoice"].search([
+            ('invoice_line_ids.contract_line_id.contract_id', '=',
+             contract.id),
+        ])
+        self.assertEqual(inv.state, "paid")
 
 
 class SaleOrderAttachmentsTC(RentalSaleOrderTC):
