@@ -165,4 +165,29 @@
 
   <!-- Language related hacks END -->
 
+  <template id="short_cart_summary" inherit_id="website_sale.short_cart_summary">
+
+    <!-- Add a message to tell the users they need an IBAN to pay -->
+    <xpath expr="//t[@t-call='website_sale.total']" position="after">
+      <div class="alert-warning mt-3 mb-3 pl-2 pr-2 pt-2 pb-2">
+        Le règlement se fait par prélèvement bancaire. Pour finaliser
+        la demande, vous aurez donc besoin de l'IBAN de votre compte.
+      </div>
+    </xpath>
+
+  </template>
+
+  <template id="payment" inherit_id="website_sale.payment">
+
+    <!-- Add UI elements to emphasize the user needs to check its delivery address -->
+    <xpath expr="//div[@id='shipping_and_billing']/*[1]" position="before">
+      <h3 class="card-title">Adresse de livraison</h3>
+      <h4 class="card-subtitle mb-3 text-danger">Merci de vérifier vos adresses</h4>
+    </xpath>
+
+  </template>
+
+
+
+
 </odoo>
