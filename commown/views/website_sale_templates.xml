@@ -165,4 +165,16 @@
 
   <!-- Language related hacks END -->
 
+  <template id="short_cart_summary" inherit_id="website_sale.short_cart_summary">
+
+    <!-- Add a message to tell the users they need an IBAN to pay -->
+    <xpath expr="//t[@t-call='website_sale.total']" position="after">
+      <div class="alert-warning mt-3 mb-3 pl-2 pr-2 pt-2 pb-2">
+        Le règlement se fait par prélèvement bancaire. Pour finaliser
+        la demande, vous aurez donc besoin de l'IBAN de votre compte.
+      </div>
+    </xpath>
+
+  </template>
+
 </odoo>
