@@ -19,9 +19,9 @@ class ParcelError(Exception):
     pass
 
 
-def colissimo_status_request(login, password, ref):
+def colissimo_status_request(account, password, ref):
     resp = requests.get(
-        BASE_URL, {"accountNumber": login, "password": password, "skybillNumber": ref}
+        BASE_URL, {"accountNumber": account, "password": password, "skybillNumber": ref}
     )
     resp.raise_for_status()
     return resp.content.decode("utf-8")
@@ -208,7 +208,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         self.ensure_one()
         account = self._delivery_tracking_parent().shipping_account_id
         resp = colissimo_status_request(
-            account.login, account._get_password(), self.expedition_ref
+            account.account, account.password, self.expedition_ref
         )
         doc = lxml.etree.fromstring(resp)
         try:
