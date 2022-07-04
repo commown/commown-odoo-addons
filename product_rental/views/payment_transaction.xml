@@ -49,12 +49,12 @@ for invoice in record.invoice_ids:
   </record>
 
   <record id="payment_transaction_done" model="base.automation">
-    <field name="name">[commown] Payment transaction done</field>
+    <field name="name">[commown] Contract-related payment transaction done</field>
     <field name="model_id" ref="payment.model_payment_transaction"/>
     <field name="sequence">1</field>
     <field name="trigger">on_write</field>
     <field name="filter_pre_domain">[('state', '!=', 'done')]</field>
-    <field name="filter_domain">[('state', '=', 'done')]</field>
+    <field name="filter_domain">[('state', '=', 'done'), ('payment_id', '=', False)]</field>
     <field name="action_server_id"
            eval="ref('action_contract_auto_account_payment')"/>
   </record>
