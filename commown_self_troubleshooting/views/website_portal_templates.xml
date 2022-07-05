@@ -63,6 +63,15 @@
           </div>
         </div>
 
+        <div class="mt-3" t-if="'FP4' in contract_types">
+          <h5>Fairphone 4</h5>
+          <div class="list-group">
+            <a target="_blank" class="list-group-item" t-attf-href="/page/self-troubleshoot-fp4-screen">
+              Mon écran (ou sa protection) est fissuré
+</a>
+          </div>
+        </div>
+
         <div class="mt-3" t-if="'GS' in contract_types">
           <h5>Gerrard Street</h5>
           <div class="list-group">
