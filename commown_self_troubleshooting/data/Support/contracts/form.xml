@@ -21,7 +21,6 @@
             </t>
 
             <!-- Variables à modifier ici -->
-            <t t-set="contract_name_like"></t>
             <t t-set="tag_names">Demande contrat </t>
             <t t-set="issue_title"> Demande contrat </t>
             <t t-set="issue_description_template">issue-description-contract-request</t>
@@ -46,7 +45,9 @@
                   </ul>
 
                   <div>
-                    <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+                    <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="custom_domain" t-value="[]"/>
+                    </t>
 
                     <div id="step-1">
                       <div class="clearfix">

@@ -2,6 +2,7 @@ from datetime import date, timedelta
 import traceback as tb
 
 from lxml import html, etree
+from mock import patch
 
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
@@ -9,6 +10,8 @@ from werkzeug.wrappers import BaseResponse
 from odoo.service import wsgi_server
 
 from odoo.tests.common import HttpCase, at_install, post_install
+
+from ..models.res_partner import ResPartner
 
 
 def value2int(lxml_element):
@@ -116,14 +119,6 @@ class PagesTC(HttpCase):
         return set(apply_transform(o) for o in doc.xpath(xpath)
                    if o.get("disabled", None) != "disabled")
 
-    def _contract_name_like(self, page_url):
-        """ Find and return the contract_name_like variable value from the qweb
-        arch of given self troubleshooting page xmlid (without the module part).
-        """
-        tmpl = self.env["website.page"].search([("url", "=", page_url)]).view_id
-        return etree.fromstring(tmpl.arch).xpath(
-            "//t[@t-set='contract_name_like']/text()")[0]
-
     def test_portal_no_contract(self):
         "Portal home must not crash if user has no or a not-templated contract"
         doc = self.get_page('/my/home')
@@ -156,26 +151,24 @@ class PagesTC(HttpCase):
                           set((c1 | c2 | c4 | c5).ids))
 
     def test_pages_load_without_errors(self):
-        "All pages should be generated without an error"
+        """ All pages should be generated without an error
 
-        # We create a contract to appear on each page, to check the contract
-        # choice selector does not crash
-        contract_created = {}
+        res.partner's method `self_troubleshooting_contracts` is mocked here as
+        it is tested elsewhere.
+        """
+
+        contract = self.create_contract(self._create_ct("no-matter-name"))
 
         for page_url in sorted(self._ts_page_urls("")):
-            ct_name =  self._contract_name_like(page_url) + "/B2C"
-
-            if ct_name not in contract_created:
-                contract_created[ct_name] = self.create_contract(
-                    self._create_ct(ct_name))
 
             try:
-                doc = self.get_page(page_url)
+                with patch.object(ResPartner, "self_troubleshooting_contracts",
+                                  return_value=contract) as m:
+                    doc = self.get_page(page_url)
             except:
                 self.fail("Error loading %s:\n%s"
                           % (page_url, tb.format_exc()))
 
             self.assertEqual(
-                self._contract_options(doc, value2int),
-                {contract_created[ct_name].id},
+                self._contract_options(doc, value2int), {contract.id},
                 "Wrong contract choice list in page '%s'" % page_url)

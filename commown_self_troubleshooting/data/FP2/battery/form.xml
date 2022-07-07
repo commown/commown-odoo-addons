@@ -27,7 +27,6 @@ $(document).ready(function() {
             </t>
 
             <!-- Variables à modifier ici -->
-            <t t-set="contract_name_like">FP2/</t>
             <t t-set="tag_names">Appareil FP2,FP MOD batterie</t>
             <t t-set="issue_title">FP2 - Batterie</t>
             <t t-set="issue_description_template">issue-description-fp2-battery</t>
@@ -56,7 +55,10 @@ $(document).ready(function() {
                   </ul>
 
                   <div>
-                    <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+                    <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="contracts"
+                         t-value="env.user.partner_id.self_troubleshooting_contracts('fp2-battery-page')"/>
+                    </t>
 
                     <div id="step-1">
                       <div class="clearfix">
@@ -145,6 +147,8 @@ $(document).ready(function() {
       <field name="website_published">True</field>
       <field name="url">/page/self-troubleshoot-fp2-battery</field>
       <field name="view_id" ref="fp2-battery"/>
+      <field name="website_meta_title">Fairphone 2</field>
+      <field name="website_meta_description">Ma batterie se décharge rapidement</field>
     </record>
 
 </odoo>

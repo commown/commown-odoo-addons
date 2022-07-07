@@ -46,7 +46,6 @@
             </t>
 
             <!-- Variables à modifier ici -->
-            <t t-set="contract_name_like">GS/</t>
             <t t-set="tag_names">Appareil GS Day</t>
             <t t-set="issue_title">Casque DAY - Son</t>
             <t t-set="issue_description_template">issue-description-gs</t>
@@ -77,7 +76,10 @@
                   </ul>
 
                   <div>
-                  <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+                    <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="contracts"
+                         t-value="env.user.partner_id.self_troubleshooting_contracts('gs-day-page')"/>
+                    </t>
 
                   <div id="step-1">
                     <div class="clearfix">
@@ -191,6 +193,8 @@
       <field name="website_published">True</field>
       <field name="url">/page/self-troubleshoot-gs-day</field>
       <field name="view_id" ref="gs-day"/>
+      <field name="website_meta_title">Gerrard Street</field>
+      <field name="website_meta_description">Problème de son avec mon casque DAY</field>
     </record>
 
 </odoo>

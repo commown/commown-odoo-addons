@@ -20,8 +20,6 @@
               });
             </script>
           </t>
-          <!-- Variables à modifier ici / pas du tout clean comme façon de choper FP4/FP3 -->
-          <t t-set="contract_name_like">FP</t>
           <t t-set="tag_names">Auto-dépannage,Sérénité</t>
           <t t-set="issue_title">Option Sérénité - Me rappeler</t>
           <t t-set="issue_description_template">issue-description-serenity</t>
@@ -58,7 +56,10 @@
                 </ul>
 
                 <div>
-                  <t t-call="commown_self_troubleshooting.step-contract-choice" />
+                  <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="contracts"
+                         t-value="env.user.partner_id.self_troubleshooting_contracts('serenity-page')"/>
+                  </t>
 
                   <div id="step-1">
                     <h2>
@@ -112,6 +113,8 @@
     <field name="website_published">True</field>
     <field name="url">/page/self-troubleshoot-serenity</field>
     <field name="view_id" ref="serenity" />
+    <field name="website_meta_title">Option Sérénité</field>
+    <field name="website_meta_description">Être rappelé par l'équipe Support</field>
   </record>
 
 </odoo>
