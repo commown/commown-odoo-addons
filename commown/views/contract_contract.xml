@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+  <!-- Set higher priority to the customer form view so that it becomes the default -->
+  <record id="contract.contract_contract_customer_form_view" model="ir.ui.view">
+    <field name="priority" eval="5"/>
+  </record>
+
   <record id="contract_contract_form_view"
           model="ir.ui.view">
     <field name="name">Commown contract</field>
