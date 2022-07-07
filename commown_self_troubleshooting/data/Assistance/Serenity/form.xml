@@ -36,6 +36,7 @@
               <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
               <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
               <input type="hidden" name="tags" id="tags" t-att-value="tag_names" />
+              <input type="hidden" name="priority" id="priority" value="2" />
               <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
 
               <div id="smartwizard">
