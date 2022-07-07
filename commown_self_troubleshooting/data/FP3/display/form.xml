@@ -30,7 +30,6 @@
           </t>
 
           <!-- Variables à modifier ici -->
-          <t t-set="contract_name_like">FP3</t>
           <t t-set="tag_names">FP MOD ecran</t>
           <t t-set="issue_title">FP3 - Écran </t>
           <t t-set="issue_description_template">issue-description-fp3-display</t>
@@ -59,7 +58,10 @@
                 </ul>
 
                 <div>
-                  <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+                  <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="contracts"
+                         t-value="env.user.partner_id.self_troubleshooting_contracts('fp3-display-page')"/>
+                  </t>
 
                   <t t-call="commown_self_troubleshooting.step-manipulation-option">
                     <t t-set="step">1</t>
@@ -126,6 +128,8 @@
       <field name="website_published">True</field>
       <field name="url">/page/self-troubleshoot-fp3-display</field>
       <field name="view_id" ref="fp3-display"/>
+      <field name="website_meta_title">Fairphone 3/3+</field>
+      <field name="website_meta_description">Mon écran ne fonctionne plus</field>
     </record>
 
 </odoo>
