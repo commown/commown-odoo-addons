@@ -21,6 +21,10 @@
                 />
           </xpath>
 
+          <xpath expr="//field[@name='team_id']" position="after">
+            <field name="contract_id"/>
+          </xpath>
+
           <xpath expr="//div[hasclass('oe_title')]//h2[hasclass('o_row')]" position="attributes">
             <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
           </xpath>
