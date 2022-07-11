@@ -1,4 +1,4 @@
-# Copyright (C) 2021 - Commown (https://commown.coop)
+# Copyright (C) 2022 - Commown (https://commown.coop)
 # @author: Florent Cayré
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -7,7 +7,7 @@
     'category': 'Business',
     'description': ('Use telecommown web services to handle discounts'
                     ' from multi-partners cooperative campaigns'),
-    'version': '12.0.1.0.1',
+    'version': '12.0.1.1.0',
     'author': "Commown SCIC",
     'license': "AGPL-3",
     'website': "https://commown.coop",
@@ -19,6 +19,7 @@
         'queue_job',
     ],
     'data': [
+        'data/action_coupon.xml',
         'data/ir_config_parameter.xml',
         'views/coupon.xml',
     ],
