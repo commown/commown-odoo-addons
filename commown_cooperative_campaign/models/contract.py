@@ -6,7 +6,7 @@ import pytz
 import requests
 from pprint import pformat
 
-from odoo import models, fields, api
+from odoo import models, api
 from odoo.addons.queue_job.job import job
 
 
@@ -48,22 +48,20 @@ class Contract(models.Model):
     def write(self, values):
         "opt-out cooperative campaign(s) if any, when the contract ends"
         res = super(Contract, self).write(values)
-        if "date_end" not in values:
+        if not values.get("date_end"):
             return res
+
         for contract in self:
             for contract_line in contract.contract_line_ids:
                 for discount_line in contract_line._applicable_discount_lines():
                     campaign = discount_line.coupon_campaign_id
                     if not campaign.is_coop_campaign:
                         continue
-                    date_end = fields.Date.from_string(contract.date_end)
                     _dl = discount_line.with_context(no_check_coop_ws=True)
-                    if _dl.is_valid(contract_line, date_end):
+                    if _dl.is_valid(contract_line, contract.date_end):
                         partner_id = contract.partner_id
                         key = campaign.coop_partner_identifier(partner_id)
                         if key:
-                            date_end = fields.Date.from_string(
-                                contract.date_end or "2100-01-01")
                             contract.with_delay()._coop_ws_optout(
-                                campaign, key, date_end, partner_id.tz)
+                                campaign, key, contract.date_end, partner_id.tz)
         return res
