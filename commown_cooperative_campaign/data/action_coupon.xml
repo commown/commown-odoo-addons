@@ -4,8 +4,8 @@
 
     <record id="action_coop_campaign_optin_status" model="ir.actions.server">
       <field name="name">[commown] See coop campaign optin status</field>
-      <field name="model_id" ref="model_coupon_coupon"/>
-      <field name="binding_model_id" ref="model_coupon_coupon"/>
+      <field name="model_id" ref="website_sale_coupon.model_coupon_coupon"/>
+      <field name="binding_model_id" ref="website_sale_coupon.model_coupon_coupon"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">record.action_coop_campaign_optin_status()</field>
@@ -13,8 +13,8 @@
 
     <record id="action_coop_campaign_optin_now" model="ir.actions.server">
       <field name="name">[commown] Optin partner to coop campaign now</field>
-      <field name="model_id" ref="model_coupon_coupon"/>
-      <field name="binding_model_id" ref="model_coupon_coupon"/>
+      <field name="model_id" ref="website_sale_coupon.model_coupon_coupon"/>
+      <field name="binding_model_id" ref="website_sale_coupon.model_coupon_coupon"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
       <field name="code">action = record.action_coop_campaign_optin_now()</field>
