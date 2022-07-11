@@ -22,6 +22,7 @@
         'data/action_coupon.xml',
         'data/ir_config_parameter.xml',
         'views/coupon.xml',
+        'views/wizard_late_optin.xml',
     ],
     'installable': True,
 }

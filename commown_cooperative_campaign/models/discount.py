@@ -45,7 +45,8 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
         return True
 
 
-def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
+def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9,
+                  silent_double_optin=True):
     "Query the cooperative web services to insert a new subscription"
 
     _logger.info("Optin %s: %s on %s...", campaign_ref, customer_key, date)
@@ -56,10 +57,22 @@ def coop_ws_optin(base_url, campaign_ref, customer_key, date, tz, hour=9):
     url = base_url + "/campaigns/%s/opt-in" % urllib.parse.quote_plus(campaign_ref)
     resp = requests.post(
         url, json={"customer_key": customer_key, "optin_ts": optin_ts})
+
+    if resp.status_code == 422:
+        json = resp.json()
+        if json.get("detail", None) == 'Already opt-in':
+            _logger.info(u"Double opt-in for %s", customer_key)
+            if silent_double_optin:
+                return
+            else:
+                raise UserError(_("Already opt-in (may not be visible"
+                                  " if before the campaign start)"))
+        else:
+            _logger.error(u"Opt-in error json: %s" % json)
+
     resp.raise_for_status()
 
-    resp_data = resp.json()
-    _logger.debug("Got web services response:\n %s", pformat(resp_data))
+    _logger.debug("Got web services response:\n %s", pformat(resp.json()))
 
 
 class ContractTemplateAbstractDiscountLine(models.AbstractModel):
