@@ -122,6 +122,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             [
                 (self._delivery_tracking_stage_rel, "like", "%" + marker),
                 ("expedition_ref", "!=", False),
+                ("expedition_ref", "!=", ""),
                 ("expedition_ref", "not like", "https://"),
                 ("expedition_ref", "not like", "http://"),
                 (
