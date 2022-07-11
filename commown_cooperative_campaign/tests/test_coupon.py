@@ -32,6 +32,7 @@ class CouponTestTC(SavepointCase):
         })
         self.key = campaign.coop_partner_identifier(so.partner_id)
         self.paths = {
+            "opt-in": "/campaigns/test-campaign/opt-in",
             "important-events": ("/campaigns/test-campaign/subscriptions"
                                  "/important-events"),
             "subscriptions": ("/campaign/test-campaign/"
@@ -144,3 +145,14 @@ class CouponTestTC(SavepointCase):
                 "- telecoop: 01/01/2020 00:00:00",
             ])
         )
+
+    def test_wizard_late_optin(self):
+        wizard = self.env["coupon.late.optin.wizard"].create({
+            "coupon_id": self.coupon.id,
+        })
+
+        optin = {"customer_key": self.key, "optin_ts": _date(2020, 1, 1)}
+
+        with requests_mock.Mocker() as rm:
+            rm.post(self.paths["opt-in"], json=optin)
+            wizard.late_optin()
