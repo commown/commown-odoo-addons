@@ -38,6 +38,7 @@ class SelfHelp(http.Controller):
 
         task_data = {
             'name': post['self-troubleshoot-type'],
+            'priority': str(int(post.get('priority', 0))),
             'contract_id': int(post['device_contract']),
             'partner_id': partner.id,
             'description': self._description(**post),

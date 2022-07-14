@@ -36,7 +36,6 @@
             </t>
 
             <!-- Variables à modifier ici -->
-            <t t-set="contract_name_like">FP2/</t>
             <t t-set="tag_names">Appareil FP2,FP MOD micro</t>
             <t t-set="issue_title">FP2 - Micro</t>
             <t t-set="issue_description_template">issue-description-fp2-micro</t>
@@ -67,7 +66,10 @@
                   </ul>
 
                   <div>
-                    <t t-call="commown_self_troubleshooting.step-contract-choice"/>
+                    <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="contracts"
+                         t-value="env.user.partner_id.self_troubleshooting_contracts('fp2-micro-page')"/>
+                    </t>
 
                     <div id="step-1">
                       <h2><i class="fas fa-microphone-slash"/> Mode micro coupé</h2>
@@ -171,6 +173,8 @@
       <field name="website_published">True</field>
       <field name="url">/page/self-troubleshoot-fp2-micro</field>
       <field name="view_id" ref="fp2-micro"/>
+      <field name="website_meta_title">Fairphone 2</field>
+      <field name="website_meta_description">Mon interlocuteur ne m'entend pas</field>
     </record>
 
 </odoo>

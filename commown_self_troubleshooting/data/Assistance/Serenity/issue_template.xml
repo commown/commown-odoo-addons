@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="issue-description-serenity" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-serenity</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-serenity</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-serenity">
+        Numéro de téléphone à appeler :
+        <t t-esc="phone" />
+        <t t-if="more_info">
+          Informations complémentaires :
+          <t t-esc="more_info" />
+        </t>
+      </t>
+    </field>
+  </record>
+
+</odoo>

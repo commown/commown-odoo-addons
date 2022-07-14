@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="serenity" model="ir.ui.view">
+    <field name="name">Self-troubleshoot Serenity option</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-serenity</field>
+    <field name="arch" type="xml">
+
+      <t t-name="website.self-troubleshoot-serenity">
+        <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-set="title">Commown - Auto-dépannage - Option Sérénité</t>
+          <t t-set="head">
+
+            <script type="text/javascript">
+              $(document).ready(function() {
+
+                const wizard = setUpWizard($('#smartwizard'));
+
+              });
+            </script>
+          </t>
+          <t t-set="tag_names">Auto-dépannage,Sérénité</t>
+          <t t-set="issue_title">Option Sérénité - Me rappeler</t>
+          <t t-set="issue_description_template">issue-description-serenity</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="container">
+            <h1>Auto-dépannage : Option Sérénité - Être rappelé</h1>
+            <h2>Je rencontre un incident qui nécessite qu'on me rappelle</h2>
+            <br />
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input type="hidden" name="tags" id="tags" t-att-value="tag_names" />
+              <input type="hidden" name="priority" id="priority" value="2" />
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+
+              <div id="smartwizard">
+                <ul>
+                  <li>
+                    <a href="#step-0">
+                      Contexte
+                      <br />
+                      <small>Appareil concerné</small>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#step-1">
+                      Étape 1
+                      <br />
+                      <small>Mes coordonnées</small>
+                    </a>
+                  </li>
+                </ul>
+
+                <div>
+                  <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="contracts"
+                         t-value="env.user.partner_id.self_troubleshooting_contracts('serenity-page')"/>
+                  </t>
+
+                  <div id="step-1">
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      En validant ce formulaire, une demande d'assistance prioritaire
+                      sera envoyée à notre équipe support qui vous rappelera dès que possible.
+                    </p>
+                    <p class="text-danger">NB: nous allons vous appeler dans les heures suivant la demande (jours ouvrés uniquement).</p>
+
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                      <div class="row">
+                        <div class="col-xs-6 form-group">
+                          <label for="phone">
+                            <i class="fas fa-phone-alt" />
+                            N° de téléphone pour vous joindre
+                          </label>
+                          <input class="form-control" name="phone" id="phone" type="tel" required="required"
+                                  t-att-value="env.user.partner_id.mobile or env.user.partner_id.phone or ''"
+                                  data-required-error="Saisissez un numéro de téléphone pour l'appel." />
+                          <div class="help-block with-errors" />
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="more_info_step_1">Décrivez-nous l'incident rencontré
+                          (facultatif, mais permet une prise en charge optimale) :</label>
+                        <textarea class="form-control" rows="3" id="more_info_step_1" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_callback').id" />
+                        <button type="submit" class="btn btn-primary" name="action">Être rappelé</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+  <record id="serenity-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-serenity</field>
+    <field name="view_id" ref="serenity" />
+    <field name="website_meta_title">Option Sérénité</field>
+    <field name="website_meta_description">Être rappelé par l'équipe Support</field>
+  </record>
+
+</odoo>
