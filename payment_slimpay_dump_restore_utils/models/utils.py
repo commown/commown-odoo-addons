@@ -162,7 +162,7 @@ def dump_all_mandates(acquirer, refresh, mandates_fpath, **params):
 
     mandates = old_mandates + list(
         get_all_mandates_repr(acquirer, mandate_doc_to_repr, **params))
-    json.dump(mandates, open(mandates_fpath, 'wb'))
+    json.dump(mandates, open(mandates_fpath, 'w'))
 
 
 def filter_has_contract(acquirer, mandate_repr):
