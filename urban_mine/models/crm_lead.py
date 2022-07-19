@@ -35,7 +35,7 @@ class CrmLead(models.Model):
         ref = self.env.ref
         invoice = self.env["account.invoice"].create(
             {
-                "type": u"in_invoice",
+                "type": "in_invoice",
                 "company_id": ref("base.main_company").id,
                 "currency_id": ref("base.EUR").id,
                 "reference": "COMMOWN-MU-%d" % self.id,
