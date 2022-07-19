@@ -5,7 +5,6 @@ from odoo.tests.common import TransactionCase, at_install, post_install
 @at_install(False)
 @post_install(True)
 class UtmSourceTC(TransactionCase):
-
     def test_action_merge(self):
         ref = self.env.ref
         source1 = ref("utm.utm_source_search_engine")
