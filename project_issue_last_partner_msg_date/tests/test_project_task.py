@@ -1,4 +1,3 @@
-from time import sleep
 
 from odoo.tests.common import TransactionCase, at_install, post_install
 
