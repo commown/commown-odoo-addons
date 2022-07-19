@@ -13,8 +13,7 @@ class ResPartner(models.Model):
         "The location used for a partner is its commercial's except for commown"
         self.ensure_one()
 
-        if (self.commercial_partner_id != self
-                and self.commercial_partner_id.id != 1):
+        if self.commercial_partner_id != self and self.commercial_partner_id.id != 1:
             return self.commercial_partner_id
         else:
             return self
@@ -26,16 +25,20 @@ class ResPartner(models.Model):
         if partner != self:
             return partner.get_customer_location()
 
-        parent_location = self.env.ref('stock.stock_location_customers')
+        parent_location = self.env.ref("stock.stock_location_customers")
 
-        return self.env["stock.location"].search([
-            ("partner_id", "=", self.id),
-            ("usage", "=", "internal"),
-            ("location_id", "=", parent_location.id),
-        ], order="id ASC", limit=1)
+        return self.env["stock.location"].search(
+            [
+                ("partner_id", "=", self.id),
+                ("usage", "=", "internal"),
+                ("location_id", "=", parent_location.id),
+            ],
+            order="id ASC",
+            limit=1,
+        )
 
     def get_or_create_customer_location(self):
-        """ Return current partner's location, creating it if it does not exist
+        """Return current partner's location, creating it if it does not exist
 
         The created location is a child of standard location for all
         customers, with usage 'customer' and same name as the partner.
@@ -49,13 +52,22 @@ class ResPartner(models.Model):
         if partner != self:
             return partner.get_or_create_customer_location()
 
-        parent_location = self.env.ref('stock.stock_location_customers')
+        parent_location = self.env.ref("stock.stock_location_customers")
 
-        _logger.debug("Partner %d (%s) has no customer location yet,"
-                      " creating one", self.id, self.name)
-        return self.env['stock.location'].sudo().create({
-            'name': self.name,
-            'usage': 'internal',
-            'partner_id': self.id,
-            'location_id': parent_location.id,
-        })
+        _logger.debug(
+            "Partner %d (%s) has no customer location yet," " creating one",
+            self.id,
+            self.name,
+        )
+        return (
+            self.env["stock.location"]
+            .sudo()
+            .create(
+                {
+                    "name": self.name,
+                    "usage": "internal",
+                    "partner_id": self.id,
+                    "location_id": parent_location.id,
+                }
+            )
+        )

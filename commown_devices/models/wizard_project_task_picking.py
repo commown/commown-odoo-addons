@@ -40,10 +40,11 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
 
     def present_location(self):
         return self.task_id.lot_id.quant_ids.filtered(
-            lambda q: q.quantity > 0).location_id
+            lambda q: q.quantity > 0
+        ).location_id
 
     def _possible_dest_locations(self):
-        """ Possible destinations: all listed the `destination_ref` attribute
+        """Possible destinations: all listed the `destination_ref` attribute
         and their children, excluding views.
         """
         orig_location = self.present_location()
@@ -53,8 +54,9 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             loc = self.env.ref("commown_devices.%s" % ref)
             if loc != orig_location:
                 if loc.usage == "view":
-                    result |= result.search([("id", "child_of", loc.id),
-                                             ("usage", "!=", "view")])
+                    result |= result.search(
+                        [("id", "child_of", loc.id), ("usage", "!=", "view")]
+                    )
                 else:
                     result |= loc
         return result
@@ -63,11 +65,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
     def onchange_task_id(self):
         if self.task_id:
             dest_locations = self._possible_dest_locations()
-            return {
-                "domain": {
-                    "location_dest_id": [("id", "in", dest_locations.ids)]
-                }
-            }
+            return {"domain": {"location_dest_id": [("id", "in", dest_locations.ids)]}}
 
     @api.multi
     def create_picking(self):
@@ -77,8 +75,13 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             raise UserError(_("Can't move device: no device set on this task!"))
 
         return internal_picking(
-            "Task-%s" % self.task_id.id, [lot], self.present_location(),
-            self.location_dest_id, date=self.date, do_transfer=True)
+            "Task-%s" % self.task_id.id,
+            [lot],
+            self.present_location(),
+            self.location_dest_id,
+            date=self.date,
+            do_transfer=True,
+        )
 
 
 class ProjectTaskOutwardPickingWizard(models.TransientModel):
@@ -96,8 +99,10 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
     variant_id = fields.Many2one(
         "product.product",
         string=u"Variant",
-        domain=("[('tracking', '=', 'serial'),"
-                " ('product_tmpl_id', '=', product_tmpl_id)]"),
+        domain=(
+            "[('tracking', '=', 'serial'),"
+            " ('product_tmpl_id', '=', product_tmpl_id)]"
+        ),
         required=True,
         default=lambda self: self._compute_default_variant_id(),
     )
@@ -111,8 +116,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     def _get_task(self):
         if not self.task_id and "default_task_id" in self.env.context:
-            return self.env["project.task"].browse(
-                self.env.context["default_task_id"])
+            return self.env["project.task"].browse(self.env.context["default_task_id"])
         else:
             return self.task
 
@@ -125,12 +129,14 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
     def _domain_lot_id(self):
         quant_domain = [
             ("quantity", ">", 0),
-            ("location_id", "child_of", self.env.ref(
-                "commown_devices.stock_location_available_for_rent").id),
+            (
+                "location_id",
+                "child_of",
+                self.env.ref("commown_devices.stock_location_available_for_rent").id,
+            ),
         ]
         if self.product_tmpl_id:
-            quant_domain.append(
-                ("product_tmpl_id", "=", self.product_tmpl_id.id))
+            quant_domain.append(("product_tmpl_id", "=", self.product_tmpl_id.id))
         if self.variant_id:
             quant_domain.append(("product_id", "=", self.variant_id.id))
         quants = self.env["stock.quant"].search(quant_domain)
@@ -154,8 +160,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     @api.onchange("variant_id")
     def onchange_variant_id(self):
-        if (self.variant_id
-                and self.product_tmpl_id != self.variant_id.product_tmpl_id):
+        if self.variant_id and self.product_tmpl_id != self.variant_id.product_tmpl_id:
             self.product_tmpl_id = self.variant_id.product_tmpl_id
 
         lots = self.env["stock.production.lot"].search(self._domain_lot_id())
@@ -194,8 +199,9 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
     def create_picking(self):
         return self.task_id.contract_id.receive_device(
             self.lot_id,
-            self.env.ref('commown_devices.stock_location_devices_to_check'),
-            date=self.date)
+            self.env.ref("commown_devices.stock_location_devices_to_check"),
+            date=self.date,
+        )
 
 
 class ProjectTaskContractTransferWizard(models.TransientModel):
@@ -217,11 +223,12 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             raise UserError(_("Can't move device: no device set on this task!"))
 
         transfer_location = self.env.ref(
-            "commown_devices.stock_location_contract_transfer")
+            "commown_devices.stock_location_contract_transfer"
+        )
 
         self.task_id.contract_id.receive_device(
-            self.task_id.lot_id, transfer_location, date=self.date,
-            do_transfer=True)
+            self.task_id.lot_id, transfer_location, date=self.date, do_transfer=True
+        )
 
         quant = self.task_id.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
         self.contract_id.send_device(quant, date=self.date, do_transfer=True)

@@ -2,16 +2,18 @@ from .common import DeviceAsAServiceTC
 
 
 class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
-
     def prepare_wizard(self, related_entity, relation_field, user_choices=None):
         wizard_name = "%s.picking.wizard" % related_entity._name
-        return self.prepare_ui(wizard_name, related_entity, relation_field,
-                               user_choices=user_choices)
+        return self.prepare_ui(
+            wizard_name, related_entity, relation_field, user_choices=user_choices
+        )
 
     def get_lead(self):
-        return self.env["crm.lead"].search([
-            ("so_line_id", "=", self.so.order_line.ids[0]),
-        ])[0]
+        return self.env["crm.lead"].search(
+            [
+                ("so_line_id", "=", self.so.order_line.ids[0]),
+            ]
+        )[0]
 
     def test_ui(self):
 
@@ -32,21 +34,26 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         self.assertEqual(defaults["product_tmpl_id"], self.storable_product.id)
 
         # Check domains
-        self.assertEqual(sorted(possibilities["product_tmpl_id"]),
-                         [self.storable_product, fp3_plus])
-        self.assertEqual(possibilities["variant_id"],
-                         self.storable_product.product_variant_id)
-        self.assertEqual(sorted(possibilities["lot_id"].mapped("name")),
-                         ["my-fp3-1", "my-fp3-2", "my-fp3-3"])
+        self.assertEqual(
+            sorted(possibilities["product_tmpl_id"]), [self.storable_product, fp3_plus]
+        )
+        self.assertEqual(
+            possibilities["variant_id"], self.storable_product.product_variant_id
+        )
+        self.assertEqual(
+            sorted(possibilities["lot_id"].mapped("name")),
+            ["my-fp3-1", "my-fp3-2", "my-fp3-3"],
+        )
 
         # Check with another user product choice
         defaults, possibilities = self.prepare_wizard(
-            lead, "lead_id", user_choices={"product_tmpl_id": fp3_plus.id})
+            lead, "lead_id", user_choices={"product_tmpl_id": fp3_plus.id}
+        )
 
-        self.assertEqual(possibilities["variant_id"],
-                         fp3_plus.product_variant_id)
-        self.assertEqual(sorted(possibilities["lot_id"].mapped("name")),
-                         ["my-fp3+-1", "my-fp3+-2"])
+        self.assertEqual(possibilities["variant_id"], fp3_plus.product_variant_id)
+        self.assertEqual(
+            sorted(possibilities["lot_id"].mapped("name")), ["my-fp3+-1", "my-fp3+-2"]
+        )
 
     def test_picking(self):
 
