@@ -2,10 +2,9 @@ import logging
 from base64 import b64encode
 
 from odoo import http
-from odoo.addons.portal.controllers.portal import CustomerPortal
 
 from odoo.addons.commown.models.res_partner import FileTooBig
-
+from odoo.addons.portal.controllers.portal import CustomerPortal
 
 _logger = logging.getLogger(__name__)
 

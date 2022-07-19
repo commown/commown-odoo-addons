@@ -1,9 +1,9 @@
 import logging
 
-from ..models.sale_order import CouponError
-
 from odoo import http
 from odoo.http import request
+
+from ..models.sale_order import CouponError
 
 _logger = logging.getLogger(__name__)
 

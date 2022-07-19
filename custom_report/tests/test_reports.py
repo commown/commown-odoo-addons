@@ -2,7 +2,7 @@ import re
 
 import lxml.html
 
-from odoo.tests.common import at_install, post_install, TransactionCase
+from odoo.tests.common import TransactionCase, at_install, post_install
 
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 

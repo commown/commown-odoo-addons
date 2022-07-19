@@ -1,8 +1,7 @@
 import cgi
 from urllib.parse import urlencode
 
-from odoo import models, fields, api, _
-
+from odoo import _, api, fields, models
 
 EMAIL_RATINGS = [
     ("-1", "No data"),

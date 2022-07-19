@@ -1,11 +1,9 @@
 import logging
-
 from collections import OrderedDict
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 from .common import internal_picking
-
 
 _logger = logging.getLogger(__name__)
 

@@ -4,8 +4,7 @@
 import logging
 import uuid
 
-from odoo import fields, models, api, _
-
+from odoo import _, api, fields, models
 
 _logger = logging.getLogger(__name__)
 

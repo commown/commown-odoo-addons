@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from lxml import html
-
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
@@ -9,10 +8,9 @@ from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase, get_db_name
 
 from odoo.addons.product_rental.tests.common import (
-    RentalSaleOrderMixin,
     MockedEmptySessionMixin,
+    RentalSaleOrderMixin,
 )
-
 
 HERE = (Path(__file__) / "..").resolve()
 

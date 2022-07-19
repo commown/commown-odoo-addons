@@ -3,8 +3,9 @@ from datetime import date
 import lxml.html
 from mock import patch
 
-from odoo.addons.contract.tests.test_contract import TestContractBase
 from odoo import fields, models
+
+from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
 class TestConditionDiscountLine(models.Model):
