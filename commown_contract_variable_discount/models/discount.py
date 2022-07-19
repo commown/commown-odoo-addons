@@ -34,10 +34,13 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     def _compute_condition_no_issue_to_date(self, line, date):
         return not [
-            t for t in line.contract_id.issue_ids
-            if (t.contractual_issue_type
+            t
+            for t in line.contract_id.issue_ids
+            if (
+                t.contractual_issue_type
                 and not t.penalty_exemption
-                and t.contractual_issue_date < date)
+                and t.contractual_issue_date < date
+            )
         ]
 
     def _compute_condition_coupon_from_campaign(self, line, date):
@@ -46,5 +49,6 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             return self.coupon_campaign_id in coupons.mapped("campaign_id")
         except:
             import traceback as tb
+
             _logger.exception(tb.format_exc())
             return False
