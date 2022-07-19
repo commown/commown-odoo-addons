@@ -1,6 +1,5 @@
 from datetime import date, timedelta
 
-from odoo import fields
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
