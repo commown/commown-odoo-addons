@@ -6,7 +6,7 @@ class AccountBankStatement(models.Model):
 
     @api.multi
     def reconciliation_widget_preprocess(self):
-        " Override to order statement lines by date instead of by id. "
+        "Override to order statement lines by date instead of by id."
         result = super(AccountBankStatement, self).reconciliation_widget_preprocess()
         result["st_lines_ids"] = (
             self.env["account.bank.statement.line"]

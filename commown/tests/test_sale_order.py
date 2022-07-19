@@ -49,7 +49,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         return team
 
     def test_add_to_product_support_group(self):
-        """ Buying a product must add buyer to product's support groups """
+        """Buying a product must add buyer to product's support groups"""
 
         # Check test prerequisites
         self.assertFalse(self.user.groups_id & (self.g1 | self.g2 | self.g3))
@@ -63,7 +63,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertIn(self.g3, self.user.groups_id)
 
     def test_add_followup_card_name_with_coupon(self):
-        """ Followup card name must indicate sale coupons were used if any """
+        """Followup card name must indicate sale coupons were used if any"""
 
         # Simulate the usage of a coupon in the sale:
         campaign = self.env["coupon.campaign"].create(
@@ -96,7 +96,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         )
 
     def test_add_receivable_account(self):
-        " Buying a product must add the buyer a dedicated receivable account "
+        "Buying a product must add the buyer a dedicated receivable account"
 
         self.so.action_confirm()
 

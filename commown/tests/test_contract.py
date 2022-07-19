@@ -56,7 +56,7 @@ class ContractPaymentTC(TestContractBase):
             self.assertEqual(label, expected_label)
 
     def test_amount(self):
-        "Contract amount does not take "
+        "Contract amount does not take"
 
         self.assertEqual(self.contract.amount(), 50.0)
 

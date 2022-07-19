@@ -37,7 +37,7 @@ COUPON_DEFAULTS = {
 
 
 def convert_svg_to_pdf(svg_content, settings):
-    """ Convert given svg content into a pdf (as bytes) """
+    """Convert given svg content into a pdf (as bytes)"""
     width_in_pt = int(settings["page_width_mm"] / 25.4 * 72)  # 1pt = 1/72 inch
     directory = tempfile.mkdtemp()
     try:

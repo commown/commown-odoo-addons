@@ -29,7 +29,7 @@ class CustomerPortal(CustomerPortal):
     ]
 
     def details_form_validate(self, data):
-        """ Add Slimpay validation of submitted partner data """
+        """Add Slimpay validation of submitted partner data"""
         error, error_message = super(CustomerPortal, self).details_form_validate(data)
         Partner = http.request.env["res.partner"]
         values = {key: data[key] for key in self.MANDATORY_BILLING_FIELDS}

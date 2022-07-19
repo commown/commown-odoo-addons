@@ -10,7 +10,7 @@ class AccountReconciliation(models.AbstractModel):
 
     @api.model
     def get_bank_statement_data(self, bank_statement_ids):
-        " Order lines to reconcile in ascending date order "
+        "Order lines to reconcile in ascending date order"
         result = super().get_bank_statement_data(bank_statement_ids)
         result["lines"] = sorted(result["lines"], key=self._reconcile_line_date)
         return result
