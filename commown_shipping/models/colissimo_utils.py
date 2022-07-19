@@ -25,7 +25,7 @@ class AddressTooLong(Exception):  # noqa: B903
 
 
 def normalize_phone(phone_number, country_code):
-    " Colissimo only accepts french phone numbers "
+    "Colissimo only accepts french phone numbers"
     if country_code == "FR" and phone_number:
         tel = phonenumbers.parse(phone_number, country_code)
         return phonenumbers.format_number(

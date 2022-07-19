@@ -28,7 +28,7 @@ class UrbanMinePartner(models.Model):
             lead.update(
                 {
                     "team_id": self.env.ref("urban_mine.urban_mine_managers").id,
-                    "name": (u"[COMMOWN-MU-%d] " % lead.id) + lead.name,
+                    "name": ("[COMMOWN-MU-%d] " % lead.id) + lead.name,
                 }
             )
 

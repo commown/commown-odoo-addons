@@ -15,8 +15,8 @@ class ProjectTaskAbstractPickingWizard(models.AbstractModel):
     )
 
     date = fields.Datetime(
-        string=u"date",
-        help=u"Defaults to now - To be set only to force a date",
+        string="date",
+        help="Defaults to now - To be set only to force a date",
     )
 
 
@@ -90,7 +90,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     product_tmpl_id = fields.Many2one(
         "product.template",
-        string=u"Product",
+        string="Product",
         domain="[('tracking', '=', 'serial')]",
         required=True,
         default=lambda self: self._compute_default_product_tmpl_id(),
@@ -98,7 +98,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     variant_id = fields.Many2one(
         "product.product",
-        string=u"Variant",
+        string="Variant",
         domain=(
             "[('tracking', '=', 'serial'),"
             " ('product_tmpl_id', '=', product_tmpl_id)]"
@@ -109,7 +109,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     lot_id = fields.Many2one(
         "stock.production.lot",
-        string=u"Device",
+        string="Device",
         domain=lambda self: self._domain_lot_id(),
         required=True,
     )
@@ -183,7 +183,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
 
     lot_id = fields.Many2one(
         "stock.production.lot",
-        string=u"Device",
+        string="Device",
         required=True,
     )
 
@@ -210,7 +210,7 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
 
     contract_id = fields.Many2one(
         "contract.contract",
-        string=u"Destination contract",
+        string="Destination contract",
         required=True,
         domain=[("date_end", "=", False)],
     )

@@ -91,7 +91,7 @@ class Contract(models.Model):
         self.ensure_one()
         return sum(
             self.contract_line_ids.filtered(
-                lambda l: (l.qty_type != "variable" or u"[DE]" in l.qty_formula_id.name)
+                lambda l: (l.qty_type != "variable" or "[DE]" in l.qty_formula_id.name)
             ).mapped("price_subtotal")
         )
 

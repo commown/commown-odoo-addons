@@ -2,7 +2,7 @@ from odoo import api, models
 
 
 class CompletedGroup(models.Model):
-    """ Complete res.groups with helper methods """
+    """Complete res.groups with helper methods"""
 
     _inherit = "res.groups"
 

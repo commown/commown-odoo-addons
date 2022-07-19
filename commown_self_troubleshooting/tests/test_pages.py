@@ -83,7 +83,7 @@ class PagesTC(HttpCase):
         if ended:
             cline_attrs["date_end"] = "2022-01-01"
         attrs = {
-            "name": u"Test contract",
+            "name": "Test contract",
             "contract_template_id": template and template.id,
             "partner_id": self.user.partner_id.id,
             "contract_line_ids": [(0, 0, cline_attrs)],

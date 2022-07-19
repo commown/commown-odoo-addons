@@ -43,7 +43,7 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
 
         self.deposit_product = self.env["product.product"].create(
             {
-                "name": u"FP2 Premium",
+                "name": "FP2 Premium",
                 "is_rental": True,
                 "type": "service",
                 "list_price": 60,
@@ -53,7 +53,7 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
 
         self.equity_product = self.env["product.product"].create(
             {
-                "name": u"Coop Part",
+                "name": "Coop Part",
                 "is_equity": True,
                 "type": "service",
                 "list_price": 20,
@@ -62,7 +62,7 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
 
         self.std_product = self.env["product.product"].create(
             {
-                "name": u"Std product",
+                "name": "Std product",
                 "type": "service",
                 "list_price": 1,
             }
@@ -240,6 +240,6 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         )  # 1 product line only
 
     def test_sale(self):
-        " Check sale orders print with no error "
+        "Check sale orders print with no error"
         so = self.sale(self.b2c_partner, [self.std_product, self.equity_product])
         self.html_sale(so)

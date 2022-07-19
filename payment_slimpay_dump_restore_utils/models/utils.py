@@ -203,7 +203,7 @@ def restore_all_missing_mandates(
     filter_func=filter_has_contract,
     **params
 ):
-    " Restore all mandates from production to preproduction environment "
+    "Restore all mandates from production to preproduction environment"
 
     mandates_repr = json.load(open(mandates_fpath))
     known_mandate_refs = dict(
