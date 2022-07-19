@@ -3,15 +3,17 @@
 # @author Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import logging
+from datetime import datetime
+
+from six import text_type
+
 from odoo import api, fields, models
+
 from odoo.addons.account_move_base_import.parser.file_parser import (
     FileParser,
     float_or_zero,
 )
-from datetime import datetime
-from six import text_type
-
-import logging
 
 _logger = logging.getLogger(__name__)
 
