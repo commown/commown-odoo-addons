@@ -49,19 +49,6 @@ repos:
     rev: 20.8b1
     hooks:
       - id: black
-  # # Note : disabled. this will makes ugly xml files.
-  # # Note : so, .prettierrc.yml is unused for the time being.
-  # # - repo: https://github.com/pre-commit/mirrors-prettier
-  # #   rev: v2.1.2
-  # #   hooks:
-  # #     - id: prettier
-  # #       name: prettier (with plugin-xml)
-  # #       additional_dependencies:
-  # #         - "prettier@2.1.2"
-  # #         - "@prettier/plugin-xml@0.12.0"
-  # #       args:
-  # #         - --plugin=@prettier/plugin-xml
-  # #       files: \.(css|htm|html|js|json|jsx|less|md|scss|toml|ts|xml|yaml|yml)$
   # - repo: https://github.com/pre-commit/mirrors-eslint
   #   rev: v7.8.1
   #   hooks:
