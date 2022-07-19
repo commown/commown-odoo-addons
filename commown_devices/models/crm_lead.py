@@ -13,10 +13,12 @@ class CrmLead(models.Model):
     def action_generate_picking(self):
         contract = self.contract_id
 
-        if contract.picking_ids.filtered(lambda p: p.state == 'assigned'):
+        if contract.picking_ids.filtered(lambda p: p.state == "assigned"):
             raise UserError(
-                _('The contract has already assigned picking(s)!\n'
-                  'Either cancel, scrap or validate it.')
+                _(
+                    "The contract has already assigned picking(s)!\n"
+                    "Either cancel, scrap or validate it."
+                )
             )
 
         view = self.env.ref("commown_devices.wizard_crm_lead_picking_form")
@@ -34,10 +36,11 @@ class CrmLead(models.Model):
     def delivery_perform_actions(self):
         "Validate shipping"
         super(CrmLead, self).delivery_perform_actions()
-        picking = self.contract_id.picking_ids.filtered(
-            lambda p: p.state == 'assigned')
+        picking = self.contract_id.picking_ids.filtered(lambda p: p.state == "assigned")
         if len(picking) == 1:
             # time doesn't really matter for now; ideally
             # deliver_date would become delivery_datetime:
-            do_new_transfer(picking, datetime.datetime.combine(
-                self.delivery_date, self.delivery_time))
+            do_new_transfer(
+                picking,
+                datetime.datetime.combine(self.delivery_date, self.delivery_time),
+            )

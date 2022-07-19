@@ -9,15 +9,13 @@ _logger = logging.getLogger(__name__)
 
 
 class ShopRedirect(WebsiteSale):
-
-    @route(['/shop/redirect'], type='http', auth="none", website=True)
-    def shop_redirect(self, redirect='/', **kwargs):
-        _logger.debug('shop redirect called redirect=%s, kwargs=%s',
-                      redirect, kwargs)
+    @route(["/shop/redirect"], type="http", auth="none", website=True)
+    def shop_redirect(self, redirect="/", **kwargs):
+        _logger.debug("shop redirect called redirect=%s, kwargs=%s", redirect, kwargs)
         if redirect.startswith("http://") or redirect.startswith("https://"):
-            if not urlparse(redirect).netloc.endswith('commown.coop'):
+            if not urlparse(redirect).netloc.endswith("commown.coop"):
                 redirect = "/shop"
-                _logger.info('Redirecting spammer to %s', redirect)
+                _logger.info("Redirecting spammer to %s", redirect)
                 return request.redirect(redirect)
         self._store_affiliate_info(**kwargs)
         return request.redirect(redirect)

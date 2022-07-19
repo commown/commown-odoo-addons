@@ -11,35 +11,36 @@ class Contract(models.Model):
     _inherit = "contract.contract"
 
     commitment_period_number = fields.Integer(
-        string='Commitment period number',
-        help='Commitment duration in number of periods',
+        string="Commitment period number",
+        help="Commitment duration in number of periods",
         default=0,
         required=True,
     )
 
     commitment_period_type = fields.Selection(
         [
-            ('daily', 'Day(s)'),
-            ('weekly', 'Week(s)'),
-            ('monthly', 'Month(s)'),
-            ('monthlylastday', 'Month(s) last day'),
-            ('quarterly', 'Quarter(s)'),
-            ('semesterly', 'Semester(s)'),
-            ('yearly', 'Year(s)'),
+            ("daily", "Day(s)"),
+            ("weekly", "Week(s)"),
+            ("monthly", "Month(s)"),
+            ("monthlylastday", "Month(s) last day"),
+            ("quarterly", "Quarter(s)"),
+            ("semesterly", "Semester(s)"),
+            ("yearly", "Year(s)"),
         ],
-        default='monthly',
-        string='Commitment period type',
+        default="monthly",
+        string="Commitment period type",
         required=True,
     )
 
     commitment_end_date = fields.Date(
         string="Commitment end date",
-        compute="_compute_commitment_end_date", store=True,
+        compute="_compute_commitment_end_date",
+        store=True,
     )
 
     # Add modification behaviour to recurring_next_date
     recurring_next_date = fields.Date(
-        inverse='_inverse_recurring_next_date',
+        inverse="_inverse_recurring_next_date",
     )
 
     def _inverse_recurring_next_date(self):
@@ -57,22 +58,22 @@ class Contract(models.Model):
 
         for record in self:
             new_date = record.recurring_next_date
-            active_invlines = self.env["account.invoice.line"].search_count([
-                ("contract_line_id", "in", record.contract_line_ids.ids),
-                ("invoice_id.date_invoice", ">=", new_date),
-                ("invoice_id.state", "!=", "cancel"),
-            ])
+            active_invlines = self.env["account.invoice.line"].search_count(
+                [
+                    ("contract_line_id", "in", record.contract_line_ids.ids),
+                    ("invoice_id.date_invoice", ">=", new_date),
+                    ("invoice_id.state", "!=", "cancel"),
+                ]
+            )
             if not force and active_invlines:
                 raise ValidationError(
                     "There are invoices past the new next recurring date."
                     " Please remove them before."
                 )
 
-            inv_dates = (
-                record._get_related_invoices().filtered(
-                    lambda inv: inv.state != "cancel").mapped("date_invoice")
-                + [record.date_start]
-            )
+            inv_dates = record._get_related_invoices().filtered(
+                lambda inv: inv.state != "cancel"
+            ).mapped("date_invoice") + [record.date_start]
             last_date_invoiced = max(inv_dates)
 
             if force and last_date_invoiced >= new_date:
@@ -82,38 +83,47 @@ class Contract(models.Model):
                 )
                 _logger.warning(
                     "Forcing last_date_invoiced to %s although last invoice"
-                    " date is %s", last_date_invoiced, real_last_date_invoiced)
+                    " date is %s",
+                    last_date_invoiced,
+                    real_last_date_invoiced,
+                )
 
-            _logger.info("Setting all contract %s lines last_date_invoiced"
-                         " to %s and recurring_next_date to %s", record.name,
-                         last_date_invoiced, new_date)
+            _logger.info(
+                "Setting all contract %s lines last_date_invoiced"
+                " to %s and recurring_next_date to %s",
+                record.name,
+                last_date_invoiced,
+                new_date,
+            )
 
             for cline in record.contract_line_ids:
                 # Update last_date_invoiced first to avoid model constraint
                 cline.last_date_invoiced = last_date_invoiced
                 cline.recurring_next_date = new_date
 
-    @api.depends("date_start", "commitment_period_number",
-                 "commitment_period_type")
+    @api.depends("date_start", "commitment_period_number", "commitment_period_type")
     def _compute_commitment_end_date(self):
         delta = self.env["contract.line"].get_relative_delta
         for record in self:
             if record.date_start:
                 record.commitment_end_date = record.date_start + delta(
-                    record.commitment_period_type,
-                    record.commitment_period_number)
+                    record.commitment_period_type, record.commitment_period_number
+                )
 
     @api.model
     def of_sale(self, sale):
-        return self.search([
-            ("contract_line_ids.sale_order_line_id.order_id", "=", sale.id),
-        ])
+        return self.search(
+            [
+                ("contract_line_ids.sale_order_line_id.order_id", "=", sale.id),
+            ]
+        )
 
     @api.multi
     def action_show_analytic_lines(self):
         self.ensure_one()
         account = self.mapped("contract_line_ids.analytic_account_id").filtered(
-            lambda acc: acc.name == self.name)
+            lambda acc: acc.name == self.name
+        )
         if account:
             return {
                 "name": _("Cost/Revenue"),

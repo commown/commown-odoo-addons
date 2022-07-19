@@ -34,9 +34,10 @@ class ContractTemplateLine(models.Model):
     )
 
     variable_discount = fields.Boolean(
-        "Variable discount?", store=False, compute='_compute_variable_discount')
+        "Variable discount?", store=False, compute="_compute_variable_discount"
+    )
 
-    @api.depends('discount_line_ids')
+    @api.depends("discount_line_ids")
     def _compute_variable_discount(self):
         for record in self:
             record.variable_discount = bool(record.discount_line_ids)
@@ -68,37 +69,42 @@ class ContractLine(models.Model):
     )
 
     variable_discount = fields.Boolean(
-        "Variable discount?", store=False, compute='_compute_variable_discount')
+        "Variable discount?", store=False, compute="_compute_variable_discount"
+    )
 
     def _domain_contract_template_line_id(self):
         contract = self.contract_id
         if not contract and "contract_id" in self.env.context:
             contract = contract.browse(self.env.context["contract_id"])
-        return [('contract_id', '=', contract.contract_template_id.id)]
+        return [("contract_id", "=", contract.contract_template_id.id)]
 
     @api.model
     def _prepare_invoice_line(self, invoice_id=False, invoice_values=False):
         "Compute discount and append discount description to invoice line name"
         vals = super(ContractLine, self)._prepare_invoice_line(
-            invoice_id, invoice_values)
+            invoice_id, invoice_values
+        )
 
         result = self.compute_discount(invoice_values["date_invoice"])
 
         vals["discount"] = result["total"]
         descriptions = result["descriptions"]
         if descriptions:
-            vals["name"] += "\n" + (_("Applied discounts:\n- %s")
-                                     % "\n- ".join(descriptions))
+            vals["name"] += "\n" + (
+                _("Applied discounts:\n- %s") % "\n- ".join(descriptions)
+            )
 
         return vals
 
-    @api.depends('contract_template_line_id.discount_line_ids',
-                 'specific_discount_line_ids')
+    @api.depends(
+        "contract_template_line_id.discount_line_ids", "specific_discount_line_ids"
+    )
     def _compute_variable_discount(self):
         for record in self:
             record.variable_discount = bool(
-                record.specific_discount_line_ids or
-                record.contract_template_line_id.discount_line_ids)
+                record.specific_discount_line_ids
+                or record.contract_template_line_id.discount_line_ids
+            )
 
     @api.multi
     def compute_discount(self, date_invoice):
@@ -117,12 +123,12 @@ class ContractLine(models.Model):
         contract line discount.
         """
 
-        total_discount = 0.
+        total_discount = 0.0
         customer_descriptions = []
 
         for discount_line in self._applicable_discount_lines():
             value = discount_line.compute(self, date_invoice)
-            if value is not None and value > 0.:
+            if value is not None and value > 0.0:
                 total_discount += value
                 customer_descriptions.append(discount_line.name)
 
@@ -132,13 +138,13 @@ class ContractLine(models.Model):
         }
 
     def _applicable_discount_lines(self):
-        """ Yields applicable discount lines, either contract.discount.line or
+        """Yields applicable discount lines, either contract.discount.line or
         contract.template.discount.line instances.
         """
         self.ensure_one()
 
         c_lines = self.specific_discount_line_ids
-        replaced_ids = c_lines.mapped('replace_discount_line_id').ids
+        replaced_ids = c_lines.mapped("replace_discount_line_id").ids
 
         for line in self.contract_template_line_id.discount_line_ids:
             if line.id not in replaced_ids:
@@ -162,7 +168,8 @@ class Contract(models.Model):
         """
         new_lines = super(Contract, self)._convert_contract_lines(contract)
         for contract_line, contract_template_line in zip(
-                new_lines, contract.contract_line_ids):
+            new_lines, contract.contract_line_ids
+        ):
             contract_line.contract_template_line_id = contract_template_line
         return new_lines
 
@@ -193,7 +200,7 @@ class Contract(models.Model):
         # This is ugly (as is_auto_pay is introduced by contract_payment_auto)
         # BUT it is so dangerous not to unset it in the simulation that we
         # prefer this over more complex and not so secure solutions...
-        if getattr(self, 'is_auto_pay', False):
+        if getattr(self, "is_auto_pay", False):
             self.is_auto_pay = False
 
         last_date = self.recurring_next_date
@@ -201,19 +208,24 @@ class Contract(models.Model):
             while last_date < max_date:
                 # Use context to make it possible to avoid external side effects
                 # (cooperative campaign through http api for instance):
-                inv = self.with_context(
-                    is_simulation=True).recurring_create_invoice()
+                inv = self.with_context(is_simulation=True).recurring_create_invoice()
                 last_date = inv.date_invoice
                 if last_amount != inv.amount_total:
-                    _logger.debug("> KEEP invoice %s (amount %s)",
-                                  inv.date_invoice, inv.amount_total)
+                    _logger.debug(
+                        "> KEEP invoice %s (amount %s)",
+                        inv.date_invoice,
+                        inv.amount_total,
+                    )
                     last_amount = inv.amount_total
                     data = inv.read()[0]
                     data["invoice_line_ids"] = inv.invoice_line_ids.read()
                     inv_data.append(data)
                 else:
-                    _logger.debug("> SKIP invoice %s (amount %s)",
-                                  inv.date_invoice, inv.amount_total)
+                    _logger.debug(
+                        "> SKIP invoice %s (amount %s)",
+                        inv.date_invoice,
+                        inv.amount_total,
+                    )
 
             return inv_data
         finally:

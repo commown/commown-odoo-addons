@@ -45,10 +45,10 @@ repos:
           - --remove-all-unused-imports
           - --remove-duplicate-keys
           - --remove-unused-variables
-  # - repo: https://github.com/psf/black
-  #   rev: 20.8b1
-  #   hooks:
-  #     - id: black
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+      - id: black
   # # Note : disabled. this will makes ugly xml files.
   # # Note : so, .prettierrc.yml is unused for the time being.
   # # - repo: https://github.com/pre-commit/mirrors-prettier
