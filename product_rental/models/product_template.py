@@ -1,6 +1,7 @@
 import logging
 
-from odoo import models, fields, api
+from odoo import api, fields, models
+
 import odoo.addons.decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
