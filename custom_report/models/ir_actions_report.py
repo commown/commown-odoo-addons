@@ -2,7 +2,7 @@ from odoo import api, models
 
 
 class IrActionsReport(models.Model):
-    " Override methods called by portal to use py3o when useful "
+    "Override methods called by portal to use py3o when useful"
 
     _inherit = "ir.actions.report"
 
