@@ -113,7 +113,7 @@ class CustomerPortalTC(RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase):
         doc = self.get_page(test_client, "/my/invoices")
         hrefs = doc.xpath("//*[hasclass('o_portal_my_doc_table')]//a/@href")
         self.assertTrue(
-            set([href.split("?", 1)[0] for href in hrefs]),
+            {href.split("?", 1)[0] for href in hrefs},
             {"/my/invoices/%d" % inv.id for inv in (invs[0], invs[2])},
         )
         self.assertTrue(all("report_type=pdf" in href for href in hrefs))

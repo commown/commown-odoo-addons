@@ -85,12 +85,12 @@ class Campaign(models.Model):
 
         # Check products
         if self.target_product_tmpl_ids:
-            target_product_tmpl_ids = set(pt.id for pt in self.target_product_tmpl_ids)
-            sold_product_tmpl_ids = set(
+            target_product_tmpl_ids = {pt.id for pt in self.target_product_tmpl_ids}
+            sold_product_tmpl_ids = {
                 l.product_id.product_tmpl_id.id
                 for l in sale_order.order_line
                 if l.product_uom_qty > 0
-            )
+            }
             if not target_product_tmpl_ids.intersection(sold_product_tmpl_ids):
                 return False
 
