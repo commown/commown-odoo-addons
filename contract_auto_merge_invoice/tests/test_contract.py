@@ -1,6 +1,6 @@
-from odoo.addons.contract.tests.test_contract import TestContractBase
-
 from odoo.tests.common import at_install, post_install
+
+from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
 @at_install(False)
