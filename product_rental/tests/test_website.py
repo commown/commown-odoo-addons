@@ -1,9 +1,9 @@
 import lxml.html
 from mock import patch
 
-from odoo.addons.website.models.website import Website  # see mock
-
 from odoo import api
+
+from odoo.addons.website.models.website import Website  # see mock
 from odoo.addons.website.tools import MockRequest
 
 from .common import RentalSaleOrderTC

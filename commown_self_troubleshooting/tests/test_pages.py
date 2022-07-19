@@ -1,14 +1,12 @@
-from datetime import date, timedelta
 import traceback as tb
+from datetime import date, timedelta
 
 from lxml import html
 from mock import patch
-
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
 from odoo.service import wsgi_server
-
 from odoo.tests.common import HttpCase
 
 from ..models.res_partner import ResPartner

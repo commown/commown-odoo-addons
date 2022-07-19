@@ -1,4 +1,4 @@
-from odoo import models, api
+from odoo import api, models
 
 from .utils import dump_all_mandates, restore_all_missing_mandates
 

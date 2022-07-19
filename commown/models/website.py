@@ -1,6 +1,5 @@
-from odoo import models, api
+from odoo import api, models, tools
 from odoo.http import request
-from odoo import tools
 
 
 class Website(models.Model):

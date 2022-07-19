@@ -1,5 +1,6 @@
-from odoo.addons.contract.tests.test_contract import TestContractBase
 from odoo.exceptions import ValidationError
+
+from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
 class ContractTC(TestContractBase):

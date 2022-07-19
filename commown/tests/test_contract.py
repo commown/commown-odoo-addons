@@ -1,6 +1,6 @@
-from odoo.addons.contract.tests.test_contract import TestContractBase
-
 from mock import patch
+
+from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
 class ContractPaymentTC(TestContractBase):

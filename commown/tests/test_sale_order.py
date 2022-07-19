@@ -1,5 +1,6 @@
-from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 from odoo.tests.common import at_install, post_install
+
+from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
 @at_install(False)

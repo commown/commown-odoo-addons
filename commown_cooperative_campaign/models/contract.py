@@ -1,14 +1,14 @@
 import logging
 import urllib.parse
 from datetime import datetime
+from pprint import pformat
 
 import pytz
 import requests
-from pprint import pformat
 
-from odoo import models, api
+from odoo import api, models
+
 from odoo.addons.queue_job.job import job
-
 
 _logger = logging.getLogger(__file__)
 

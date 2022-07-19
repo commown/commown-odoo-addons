@@ -2,9 +2,10 @@ from datetime import datetime, timedelta
 
 import mock
 
-from odoo.tests.common import at_install, post_install, TransactionCase
+from odoo.tests.common import TransactionCase, at_install, post_install
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+
 from ..models.project_task import ProjectTask as SlimpayIssuePT
 
 

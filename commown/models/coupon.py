@@ -1,10 +1,9 @@
-import subprocess
-import tempfile
 import os.path as osp
 import shutil
+import subprocess
+import tempfile
 
 from odoo import models
-
 
 COUPON_DEFAULTS = {
     "page_width_mm": 210,

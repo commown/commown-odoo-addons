@@ -1,5 +1,5 @@
-from functools import partial
 from datetime import datetime, timedelta
+from functools import partial
 
 import mock
 import pytz

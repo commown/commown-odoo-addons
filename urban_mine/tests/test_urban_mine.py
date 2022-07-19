@@ -1,10 +1,9 @@
-from pathlib import Path
 from base64 import b64decode
+from pathlib import Path
 
 import mock
 
 from odoo.tests.common import TransactionCase, at_install, post_install
-
 
 HERE = (Path(__file__) / "..").resolve()
 

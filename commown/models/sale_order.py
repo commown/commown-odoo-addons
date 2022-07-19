@@ -1,6 +1,6 @@
 import html
 
-from odoo import models, api, _
+from odoo import _, api, models
 
 
 class SaleOrder(models.Model):

@@ -97,14 +97,14 @@ repos:
     hooks:
       - id: pyupgrade
         args: ["--keep-percent-format"]
-  # - repo: https://github.com/PyCQA/isort
-  #   rev: 5.5.1
-  #   hooks:
-  #     - id: isort
-  #       name: isort except __init__.py
-  #       args:
-  #         - --settings=.
-  #       exclude: /__init__\.py$
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.5.1
+    hooks:
+      - id: isort
+        name: isort except __init__.py
+        args:
+          - --settings=.
+        exclude: /__init__\.py$
   - repo: https://github.com/acsone/setuptools-odoo
     rev: 2.6.0
     hooks:
