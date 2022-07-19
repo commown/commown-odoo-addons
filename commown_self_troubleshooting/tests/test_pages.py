@@ -129,11 +129,11 @@ class PagesTC(HttpCase):
         "Find and return the contract id options found in given page html doc"
         xpath = "//div[@id='step-0']//select[@id='device_contract']//option"
         apply_transform = apply_transform or (lambda o: o)
-        return set(
+        return {
             apply_transform(o)
             for o in doc.xpath(xpath)
             if o.get("disabled", None) != "disabled"
-        )
+        }
 
     def test_portal_no_contract(self):
         "Portal home must not crash if user has no or a not-templated contract"
