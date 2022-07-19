@@ -47,7 +47,7 @@ class ProjectTaskTC(TransactionCase):
         )
 
     def reset_actions_last_run(self):
-        " Unset all commown actions' last_run date "
+        "Unset all commown actions' last_run date"
         action_refs = (
             self.env["ir.model.data"]
             .search([("module", "=", "commown"), ("model", "=", "base.automation")])

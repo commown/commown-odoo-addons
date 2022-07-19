@@ -21,7 +21,7 @@ def coop_ws_important_events(base_url, campaign_ref, customer_key):
     "Query the cooperative web services to see if a subscription is active"
 
     _logger.info(
-        u"Querying %s, campaign %s, identifier %s", base_url, campaign_ref, customer_key
+        "Querying %s, campaign %s, identifier %s", base_url, campaign_ref, customer_key
     )
 
     url = (
@@ -33,7 +33,7 @@ def coop_ws_important_events(base_url, campaign_ref, customer_key):
     resp.raise_for_status()
 
     subscriptions = resp.json()
-    _logger.debug(u"Got web services response:\n %s", pformat(subscriptions))
+    _logger.debug("Got web services response:\n %s", pformat(subscriptions))
     return subscriptions
 
 
@@ -55,10 +55,10 @@ def coop_human_readable_important_events(events, dt_format):
 
     for num, event in enumerate(events):
         if num:
-            result += u"\n\n"
+            result += "\n\n"
         ctx = {
             "key": event["customer_key"],
-            "validity": u" >> ".join(
+            "validity": " >> ".join(
                 sorted(format_ws_date(e["ts"], dt_format) for e in event["events"])
             ),
             "details": _hr_details(event["details"], dt_format),
@@ -80,7 +80,7 @@ def coop_ws_subscriptions(base_url, campaign_ref, customer_key):
     "Query the cooperative web services to list customer subscriptions"
 
     _logger.debug(
-        u"Querying details %s, campaign %s, identifier %s",
+        "Querying details %s, campaign %s, identifier %s",
         base_url,
         campaign_ref,
         customer_key,
@@ -93,7 +93,7 @@ def coop_ws_subscriptions(base_url, campaign_ref, customer_key):
     resp.raise_for_status()
 
     subscriptions = resp.json()
-    _logger.debug(u"Got web services response:\n %s", pformat(subscriptions))
+    _logger.debug("Got web services response:\n %s", pformat(subscriptions))
     return subscriptions
 
 
@@ -118,9 +118,9 @@ def coop_human_readable_subscriptions(subscriptions, dt_format):
         )
 
     if subscriptions:
-        result.append(_("No subscription to %s.") % u",".join(missing))
+        result.append(_("No subscription to %s.") % ",".join(missing))
 
-    return u"\n".join(result)
+    return "\n".join(result)
 
 
 def parse_ws_date(str_date):
@@ -149,8 +149,8 @@ def _hr_details(subscription_details, dt_format):
             _optinout = _hr_optin_out(
                 details["optin_ts"], details["optout_ts"], dt_format
             )
-            result.append(u"- %s: %s" % (member, _optinout))
-    return u"\n".join(result)
+            result.append("- %s: %s" % (member, _optinout))
+    return "\n".join(result)
 
 
 class Coupon(models.Model):
@@ -180,7 +180,7 @@ class Coupon(models.Model):
 
         response = [
             _("Subscription status for %(partner)s is: %(result)s"),
-            u"%(details)s",
+            "%(details)s",
         ]
         ctx = {"partner": partner.name}
         lang = self.env["res.lang"].search([("code", "=", self.env.user.lang)])
@@ -214,7 +214,7 @@ class Coupon(models.Model):
             )
             response.append(_("Key: %(key)s") % {"key": key})
 
-        raise UserError(u"\n--\n".join(response) % ctx)
+        raise UserError("\n--\n".join(response) % ctx)
 
     @api.multi
     def action_coop_campaign_optin_now(self):

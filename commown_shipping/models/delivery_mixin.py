@@ -164,22 +164,22 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         )
         self.update(
             {
-                "expedition_status": u"[%(code)s] %(label)s" % infos,
+                "expedition_status": "[%(code)s] %(label)s" % infos,
                 "expedition_status_fetch_date": now,
             }
         )
 
         code = infos["code"]
         date = parse_date(infos["date"])
-        result = [u"%(number)s - %(name)s : %(code)s (%(label)s)" % infos]
+        result = ["%(number)s - %(name)s : %(code)s (%(label)s)" % infos]
 
         if code in ("LIVCFM", "LIVGAR", "LIVVOI"):
             # Parcel is considered delivered: this will trigger delivery actions
             final_stage = self._delivery_final_stage()
             if not final_stage:
-                raise ValueError(u"No final stage found for %s" % self)
+                raise ValueError("No final stage found for %s" % self)
             self.update({"delivery_date": date.date(), "stage_id": final_stage.id})
-            result.append(u"Delivered.")
+            result.append("Delivered.")
 
         elif code.endswith("CFM") or code in (
             "DEPGUI",
@@ -190,12 +190,12 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             "RENLNA",
         ):
             # Wait!
-            result.append(u"Nothing done")
+            result.append("Nothing done")
 
         elif code in ("MLVARS", "RENAVI"):
             # More than 8 day-old MLVARS: log a warning and send an email once
             if (now.replace(tzinfo=UTC) - date) > MLVARS_MAX_WAIT:
-                result.append(u"Urgency mail sent.")
+                result.append("Urgency mail sent.")
                 if not self.expedition_urgency_mail_sent:
                     self.expedition_urgency_mail_sent = True
                     _self = self.with_context({"postal_code": code})
@@ -203,9 +203,9 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
         else:
             # Unexpected code: emit a warning
-            result.append(u"Unhandled code")
+            result.append("Unhandled code")
 
-        return u"\n".join(result)
+        return "\n".join(result)
 
     def _delivery_tracking_colissimo_status(self):
         self.ensure_one()
@@ -220,7 +220,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             label = doc.xpath("//eventLibelle/text()")[0]
         except IndexError:
             raise ParcelError(
-                u"Error requesting parcel status for %s. Response was:\n%s"
+                "Error requesting parcel status for %s. Response was:\n%s"
                 % (self, resp)
             )
         return {"code": code, "label": label, "date": date}

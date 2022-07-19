@@ -54,7 +54,7 @@ def _gen_contract_lines(so_line, contract, rental_products):
 
 
 def _rental_products(so_line, acc_by_so_line):
-    " Helper function to prepare data required for contract line generation "
+    "Helper function to prepare data required for contract line generation"
     _acs = acc_by_so_line[so_line]
     __acs = [(p, l, l.product_uom_qty) for (p, l) in set(_acs)]
     qtty = so_line.product_uom_qty
@@ -110,7 +110,7 @@ class ProductRentalSaleOrderLine(models.Model):
 
 
 def _rental_products(contract_descr):
-    " Helper function to prepare data required for contract line generation "
+    "Helper function to prepare data required for contract line generation"
     so_line = contract_descr["so_line"]
     _acs = contract_descr["accessories"]
     __acs = [(p, l, 1) for (p, l) in set(_acs)]

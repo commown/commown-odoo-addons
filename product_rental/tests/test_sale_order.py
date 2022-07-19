@@ -97,10 +97,10 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         self.assert_contract_lines_attributes_equal(
             c3,
             {
-                "name": [u"1 month of PC", u"1 month of screen"],
+                "name": ["1 month of PC", "1 month of screen"],
                 "price_unit": [60.0, 15.0],
                 "quantity": [1, 1],
-                "sale_order_line_id.product_id.name": [u"PC", u"screen"],
+                "sale_order_line_id.product_id.name": ["PC", "screen"],
                 "analytic_account_id.name": [c3.name],
                 "analytic_account_id.partner_id": c3.partner_id,
             },
@@ -206,10 +206,10 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         self.assert_contract_lines_attributes_equal(
             c3,
             {
-                "name": [u"1 month of PC", u"1 month of screen"],
+                "name": ["1 month of PC", "1 month of screen"],
                 "price_unit": [60.0, 15.0],
                 "quantity": [1, 1],
-                "sale_order_line_id.product_id.name": [u"PC", u"screen"],
+                "sale_order_line_id.product_id.name": ["PC", "screen"],
             },
         )
 
@@ -240,7 +240,7 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         )
 
     def test_yearly_with_accessory(self):
-        " Accessories priced monthly: contract template quantity to be honored "
+        "Accessories priced monthly: contract template quantity to be honored"
 
         partner = self.env.ref("base.res_partner_3")
         tax = self.get_default_tax()
@@ -388,7 +388,7 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
         return sorted(self.so.message_ids[0].attachment_ids.mapped("name"))
 
     def test_sale_quotation_send_emails_fr(self):
-        """ break /usr/lib/python3/dist-packages/odoo/models.py:1148 """
+        """break /usr/lib/python3/dist-packages/odoo/models.py:1148"""
         self.assertEqual(
             self.check_sale_quotation_send_emails("fr_FR"),
             ["doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
