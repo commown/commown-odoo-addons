@@ -1,7 +1,7 @@
 import logging
 from datetime import date
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
 from odoo.addons.contract.models.abstract_contract import ContractAbstractContract
 
