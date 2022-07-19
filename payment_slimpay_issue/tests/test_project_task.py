@@ -273,7 +273,7 @@ class ProjectTC(TransactionCase):
     def assertIssuesAcknowledged(self, act, *expected_slimpay_ids):
         issue_acks = self._action_calls(act, "ack-payment-issue")
         self.assertEqual(
-            set(kw["doc"]["id"] for (args, kw) in issue_acks), set(expected_slimpay_ids)
+            {kw["doc"]["id"] for (args, kw) in issue_acks}, set(expected_slimpay_ids)
         )
 
     def _action_calls(self, act, func_name):
