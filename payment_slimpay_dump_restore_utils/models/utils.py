@@ -1,11 +1,10 @@
-import os.path as osp
 import json
 import logging
+import os.path as osp
 
 from odoo.exceptions import MissingError
 
 from odoo.addons.account_payment_slimpay.models import slimpay_utils
-
 
 _logger = logging.getLogger(__name__)
 
