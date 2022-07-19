@@ -9,7 +9,8 @@ class ProductPublicCategory(models.Model):
         self.ensure_one()
         try:
             root_b2b_categ_id = self.env.ref(
-                'website_sale_b2b.b2b_website_root_categ').id
+                "website_sale_b2b.b2b_website_root_categ"
+            ).id
         except ValueError:
             root_b2b_categ_id = None  # B2B category was removed
         if root_b2b_categ_id:
