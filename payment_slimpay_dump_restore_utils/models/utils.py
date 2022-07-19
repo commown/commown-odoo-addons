@@ -207,7 +207,7 @@ def restore_all_missing_mandates(
                 print('Partner not found when trying to replace mandate for %s'
                        % mandate_repr['signatory']['email'])
                 continue
-            except Exception as exc:
+            except Exception:
                 import traceback as tb
                 _logger.error(
                     'Error when trying to replace mandate for %s:\n%s',
