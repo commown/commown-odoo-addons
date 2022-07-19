@@ -23,8 +23,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     amount_type = fields.Selection(
-        [("fix", "Fixed"),
-         ("percent", "Percentage")],
+        [("fix", "Fixed"), ("percent", "Percentage")],
         string="Amount type",
         default="percent",
         required=True,
@@ -37,8 +36,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     start_type = fields.Selection(
-        [("relative", "Relative"),
-         ("absolute", "Absolute")],
+        [("relative", "Relative"), ("absolute", "Absolute")],
         default="relative",
         string="Start type",
         required=True,
@@ -60,10 +58,12 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     start_unit = fields.Selection(
-        [("days", "Days"),
-         ("weeks", "Weeks"),
-         ("months", "Months"),
-         ("years", "Years")],
+        [
+            ("days", "Days"),
+            ("weeks", "Weeks"),
+            ("months", "Months"),
+            ("years", "Years"),
+        ],
         string="Units",
         help="Units of the discount start difference with the reference date",
         default="months",
@@ -71,9 +71,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     end_type = fields.Selection(
-        [("empty", "Empty"),
-         ("relative", "Relative"),
-         ("absolute", "Absolute")],
+        [("empty", "Empty"), ("relative", "Relative"), ("absolute", "Absolute")],
         default="empty",
         string="End type",
         required=True,
@@ -94,10 +92,12 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     end_unit = fields.Selection(
-        [("days", "Days"),
-         ("weeks", "Weeks"),
-         ("months", "Months"),
-         ("years", "Years")],
+        [
+            ("days", "Days"),
+            ("weeks", "Weeks"),
+            ("months", "Months"),
+            ("years", "Years"),
+        ],
         string="Units",
         help="Units of the discount end difference with the reference date",
         default="months",
@@ -105,9 +105,11 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     def is_valid(self, contract_line, date):
-        return (self._condition_ok(contract_line, date)
-                and self._start_date_ok(contract_line, date)
-                and self._end_date_ok(contract_line, date))
+        return (
+            self._condition_ok(contract_line, date)
+            and self._start_date_ok(contract_line, date)
+            and self._end_date_ok(contract_line, date)
+        )
 
     @api.multi
     def compute(self, contract_line, date_invoice):
@@ -119,44 +121,51 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     def _compute_amount(self, contract_line, date_invoice):
         if self.amount_type == "fix":
-            discount = 100. * self.amount_value / contract_line.price_unit
+            discount = 100.0 * self.amount_value / contract_line.price_unit
         elif self.amount_type == "percent":
             discount = self.amount_value
         else:
             raise ValidationError(
                 _("Invalid discount amount type '%s' for contract %s")
-                % (self.amount_type, contract_line.contract_id.name))
+                % (self.amount_type, contract_line.contract_id.name)
+            )
         return discount
 
     def _compute_date(self, contract_line, date_attr_prefix):
-        """ Return the start or end date (depending on `date_attr_prefix`)
+        """Return the start or end date (depending on `date_attr_prefix`)
 
         If the date type is 'empty', return None.
         """
 
-        assert date_attr_prefix in ('start', 'end')
+        assert date_attr_prefix in ("start", "end")
 
         date_type = getattr(self, "%s_type" % date_attr_prefix)
         if date_type == "empty":
             return None
         elif date_type == "absolute":
-            return getattr(self, '%s_date' % date_attr_prefix)
+            return getattr(self, "%s_date" % date_attr_prefix)
 
         cfields = contract_line.contract_id.fields_get()
 
         reference = getattr(self, "%s_reference" % date_attr_prefix)
         if reference not in cfields or cfields[reference]["type"] != "date":
             raise ValidationError(
-                _("Incorrect reference '%s' in discount date of contract %s"
-                  " line id %d")
-                % (reference, contract_line.contract_id.name, contract_line.id))
+                _(
+                    "Incorrect reference '%s' in discount date of contract %s"
+                    " line id %d"
+                )
+                % (reference, contract_line.contract_id.name, contract_line.id)
+            )
 
         reference_date = getattr(contract_line.contract_id, reference)
         if not reference_date:
             raise ValidationError(
-                _("Incorrect reference date value for '%s' of contract %s"
-                  " line id %d")
-                % (reference, contract_line.contract_id.name, contract_line.id))
+                _(
+                    "Incorrect reference date value for '%s' of contract %s"
+                    " line id %d"
+                )
+                % (reference, contract_line.contract_id.name, contract_line.id)
+            )
 
         unit = getattr(self, "%s_unit" % date_attr_prefix)
         value = getattr(self, "%s_value" % date_attr_prefix)
@@ -178,7 +187,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         if meth is None:
             raise ValidationError(
                 _("Invalid discount condition %s in contract %s")
-                % (self.condition, contract_line.contract_id.name))
+                % (self.condition, contract_line.contract_id.name)
+            )
         return meth(contract_line, date_invoice)
 
 
@@ -214,18 +224,18 @@ class ContractDiscountLine(models.Model):
     )
 
     @api.multi
-    @api.depends('contract_line_id.inherited_discount_line_ids')
+    @api.depends("contract_line_id.inherited_discount_line_ids")
     def _compute_replace_discount_line_id_domain(self):
         for rec in self:
             ids = rec.contract_line_id.inherited_discount_line_ids.ids
-            rec.replace_discount_line_id_domain = json.dumps(
-                [('id', 'in', ids)]
-            )
+            rec.replace_discount_line_id_domain = json.dumps([("id", "in", ids)])
 
     replace_discount_line_id = fields.Many2one(
         comodel_name="contract.template.discount.line",
         string="Replace discount line",
-        help=("If a discount line is added here, it will no more apply"
-              " but be replaced by current line"),
+        help=(
+            "If a discount line is added here, it will no more apply"
+            " but be replaced by current line"
+        ),
         required=False,
     )
