@@ -64,9 +64,9 @@ class SaleOrder(models.Model):
             ]
         )
 
-        deserve_ra = set(
+        deserve_ra = {
             (cl.contract_id, cl.sale_order_line_id) for cl in contract_lines
-        )
+        }
 
         for contract, so_line in deserve_ra:
             leads |= self._create_lead(
