@@ -8,7 +8,7 @@
     "version": "12.0.1.1.0",
     "category": "Finance",
     "website": "https://commown.coop",
-    'author': "Commown,Odoo Community Association (OCA)",
+    "author": "Commown,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,
     "installable": True,
@@ -19,10 +19,7 @@
     "depends": [
         "account_move_base_import",
     ],
-    "data": [
-    ],
-    "demo": [
-    ],
-    "qweb": [
-    ]
+    "data": [],
+    "demo": [],
+    "qweb": [],
 }

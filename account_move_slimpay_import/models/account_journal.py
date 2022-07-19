@@ -5,7 +5,8 @@
 
 from odoo import api, fields, models
 from odoo.addons.account_move_base_import.parser.file_parser import (
-    FileParser, float_or_zero
+    FileParser,
+    float_or_zero,
 )
 from datetime import datetime
 from six import text_type
@@ -41,7 +42,8 @@ class SlimpayParser(FileParser):
     def __init__(self, journal, ftype="csv", **kwargs):
         self.env = journal.env
         super(SlimpayParser, self).__init__(
-            journal, ftype=ftype, extra_fields=self.conversion_dict, **kwargs)
+            journal, ftype=ftype, extra_fields=self.conversion_dict, **kwargs
+        )
 
     @classmethod
     def parser_for(cls, parser_name):
@@ -59,7 +61,7 @@ class SlimpayParser(FileParser):
     }
 
     def _post(self, *args, **kwargs):
-        """ Remove all rows to be skipped:
+        """Remove all rows to be skipped:
         - the lines that do not represent a bank op (totals, comments, etc.)
         - the lines that have already been imported (to allow report overlaps)
         """
@@ -78,9 +80,15 @@ class SlimpayParser(FileParser):
         if _pid is not None:
             partner = partner.search([("id", "=", _pid)])
         if not partner and line["TransactionID"]:
-            partner = self.env["payment.transaction"].search([
-                ("acquirer_reference", "=", line["TransactionID"]),
-            ]).mapped("partner_id")
+            partner = (
+                self.env["payment.transaction"]
+                .search(
+                    [
+                        ("acquirer_reference", "=", line["TransactionID"]),
+                    ]
+                )
+                .mapped("partner_id")
+            )
         if len(partner) == 1:
             return partner.commercial_partner_id.id
         return False
