@@ -34,7 +34,7 @@ class WebsiteTC(RentalSaleOrderTC):
         with patch.object(Website, "get_alternate_languages", return_value=()):
             with MockRequest(self.env, website=self.website) as request:
                 request.httprequest.args = []
-                request.httprequest.query_string = u""
+                request.httprequest.query_string = ""
                 request.endpoint_arguments = {}
                 html = view.render(render_kwargs)
         return lxml.html.fromstring(html)
