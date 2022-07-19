@@ -21,10 +21,12 @@ def pdf_page_num(ir_attachment):
 
 
 def colissimo_resp_ok(json_data, pdf_data):
-    enc = MultipartEncoder(fields={
-        'field1': ('file1', json_data, 'application/json'),
-        'field2': ('file2', pdf_data, 'application/octet-stream'),
-    })
+    enc = MultipartEncoder(
+        fields={
+            "field1": ("file1", json_data, "application/json"),
+            "field2": ("file2", pdf_data, "application/octet-stream"),
+        }
+    )
     return (
         {"Content-Type": "multipart/mixed; boundary=%s" % enc.boundary_value},
         enc.to_string(),
@@ -32,7 +34,6 @@ def colissimo_resp_ok(json_data, pdf_data):
 
 
 class BaseShippingTC(TransactionCase):
-
     def setUp(self):
         super(BaseShippingTC, self).setUp()
         with open(osp.join(HERE, "fake_label.pdf"), "rb") as fobj:
@@ -50,8 +51,9 @@ class BaseShippingTC(TransactionCase):
     def mock_colissimo_ok(self, mocker):
         fake_meta_data = {"labelResponse": {"parcelNumber": "6X0000000000"}}
         headers, body = colissimo_resp_ok(
-            json.dumps(fake_meta_data).encode("utf-8"), self.fake_label_data)
-        mocker.post(BASE_URL + '/generateLabel', content=body, headers=headers)
+            json.dumps(fake_meta_data).encode("utf-8"), self.fake_label_data
+        )
+        mocker.post(BASE_URL + "/generateLabel", content=body, headers=headers)
 
     def assertEqualFakeLabel(self, ir_attachment):
         self.assertEqual(b64decode(ir_attachment.datas), self.fake_label_data)

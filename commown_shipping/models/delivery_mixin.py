@@ -101,7 +101,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     @api.multi
     def delivery_email_template(self):
-        """ If current entity is attached to a parent with shipping activated,
+        """If current entity is attached to a parent with shipping activated,
         return the entity's custom delivery mail template if any or the parent's
         delivery mail template if any. Return None if all other cases.
         """

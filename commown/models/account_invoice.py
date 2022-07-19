@@ -2,7 +2,7 @@ from odoo import models, api
 
 
 class AccountInvoice(models.Model):
-    _inherit = 'account.invoice'
+    _inherit = "account.invoice"
 
     @api.model
     def _get_invoice_key_cols(self):
@@ -11,7 +11,7 @@ class AccountInvoice(models.Model):
         """
         key_cols = super(AccountInvoice, self)._get_invoice_key_cols()
         try:
-            key_cols.remove('user_id')
+            key_cols.remove("user_id")
         except ValueError:
             pass
         return key_cols

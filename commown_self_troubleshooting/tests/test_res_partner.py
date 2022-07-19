@@ -12,16 +12,14 @@ def _normalize_all_data(data):
 
 
 class TroubleshootingDataTC(RentalSaleOrderTC):
-
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.res_partner_3")
         self.contract_fp2 = self._rental_contract("FP2")
         self.contract_serenity = self._rental_contract("FP4", "Option Sérénité")
 
-    def _rental_contract(self, base_name, extended_product_name="",
-                         date_start=None):
-        """ Create and return a rental contract starting at `date_start`
+    def _rental_contract(self, base_name, extended_product_name="", date_start=None):
+        """Create and return a rental contract starting at `date_start`
         (defaults to today)
 
         The contract is generated from the sale order of a rental product based
@@ -38,35 +36,44 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
             name=(base_name + " " + extended_product_name).strip(),
             property_contract_template_id=contract_tmpl,
         )
-        so = self.env["sale.order"].create({
-            "partner_id": self.partner.id,
-            "order_line": [self._oline(product)],
-        })
+        so = self.env["sale.order"].create(
+            {
+                "partner_id": self.partner.id,
+                "order_line": [self._oline(product)],
+            }
+        )
         so.action_confirm()
 
         contract = self.env["contract.contract"].of_sale(so).ensure_one()
 
-        contract.contract_line_ids.update({
-            "date_start": date_start or datetime.date.today(),
-        })
+        contract.contract_line_ids.update(
+            {
+                "date_start": date_start or datetime.date.today(),
+            }
+        )
         contract._compute_date_end()
 
         return contract
 
     def test_all_data(self):
         data = self.partner.self_troubleshooting_all_data()
-        self.assertEqual(_normalize_all_data(data), [
-            {"title": "Fairphone 2",
-             "pages": [
-                 {"url_path": "/page/self-troubleshoot-fp2-battery"},
-                 {"url_path": "/page/self-troubleshoot-fp2-camera"},
-                 {"url_path": "/page/self-troubleshoot-fp2-micro"},
-             ],
-            },
-            {"title": "Option Sérénité",
-             "pages": [{"url_path": "/page/self-troubleshoot-serenity"}],
-            }
-        ])
+        self.assertEqual(
+            _normalize_all_data(data),
+            [
+                {
+                    "title": "Fairphone 2",
+                    "pages": [
+                        {"url_path": "/page/self-troubleshoot-fp2-battery"},
+                        {"url_path": "/page/self-troubleshoot-fp2-camera"},
+                        {"url_path": "/page/self-troubleshoot-fp2-micro"},
+                    ],
+                },
+                {
+                    "title": "Option Sérénité",
+                    "pages": [{"url_path": "/page/self-troubleshoot-serenity"}],
+                },
+            ],
+        )
 
     def test_fp2_battery(self):
         get_contracts = self.partner.self_troubleshooting_contracts
@@ -74,15 +81,19 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
         self.assertEqual(get_contracts("fp2-battery"), self.contract_fp2)
 
         # Check not started contracts are not returned
-        self.contract_fp2.contract_line_ids.update({
-            "date_start": datetime.date(2030, 1, 1),
-        })
+        self.contract_fp2.contract_line_ids.update(
+            {
+                "date_start": datetime.date(2030, 1, 1),
+            }
+        )
 
         # Check ended contracts are not returned
-        self.contract_fp2.contract_line_ids.update({
-            "date_start": datetime.date(2020, 1, 1),
-            "date_end": datetime.date(2021, 1, 1),
-        })
+        self.contract_fp2.contract_line_ids.update(
+            {
+                "date_start": datetime.date(2020, 1, 1),
+                "date_end": datetime.date(2021, 1, 1),
+            }
+        )
         self.assertFalse(get_contracts("fp2-battery"))
 
     def test_serenity(self):

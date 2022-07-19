@@ -3,7 +3,6 @@ from odoo.exceptions import ValidationError
 
 
 class ContractTC(TestContractBase):
-
     def test_inverse_recurring_next_date_error(self):
         self.contract.is_auto_pay = False
         init_recurring_next_date = self.contract.recurring_next_date
@@ -12,8 +11,9 @@ class ContractTC(TestContractBase):
         with self.assertRaises(ValidationError) as err:
             self.contract.recurring_next_date = init_recurring_next_date
 
-        self.assertIn("There are invoices past the new next recurring date",
-                      str(err.exception))
+        self.assertIn(
+            "There are invoices past the new next recurring date", str(err.exception)
+        )
 
     def test_inverse_recurring_next_date_ok(self):
         self.contract.is_auto_pay = False
@@ -25,5 +25,5 @@ class ContractTC(TestContractBase):
 
         self.assertEqual(
             set(self.contract.mapped("contract_line_ids.recurring_next_date")),
-            {init_recurring_next_date}
+            {init_recurring_next_date},
         )
