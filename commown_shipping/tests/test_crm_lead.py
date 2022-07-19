@@ -239,7 +239,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.check_mail_delivered("Product delivered", "LIVCFM")
 
     def test_actions_on_delivery_send_email_no_status(self):
-        " Check empty expedition status is OK "
+        "Check empty expedition status is OK"
 
         self.assertTrue(self.lead.send_email_on_delivery)
 
@@ -268,7 +268,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.check_mail_delivered("Test custom email", "LIVGAR")
 
     def test_actions_on_delivery_send_email_no_template(self):
-        " A user error must be raised in the case no template was specified "
+        "A user error must be raised in the case no template was specified"
 
         self.assertTrue(self.lead.send_email_on_delivery)
         self.lead.on_delivery_email_template_id = False
