@@ -4,7 +4,6 @@ from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
 from odoo.service import wsgi_server
-
 from odoo.tests.common import HttpCase, at_install, post_install
 
 

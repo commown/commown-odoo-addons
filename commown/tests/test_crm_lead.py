@@ -1,8 +1,9 @@
 from datetime import date
 
+from odoo.tests.common import at_install, post_install
+
 from odoo.addons.product_rental.models.sale_order_line import NO_DATE
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
-from odoo.tests.common import at_install, post_install
 
 
 @at_install(False)

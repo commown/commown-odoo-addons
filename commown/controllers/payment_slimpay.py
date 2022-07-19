@@ -7,7 +7,6 @@ from odoo.addons.website_sale_payment_slimpay.controllers.main import (
     SlimpayControllerWebsiteSale,
 )
 
-
 _logger = logging.getLogger(__name__)
 
 

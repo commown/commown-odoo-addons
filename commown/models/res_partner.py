@@ -3,8 +3,7 @@ from base64 import b64decode
 
 import magic
 
-from odoo import models, fields, tools, api, _
-
+from odoo import _, api, fields, models, tools
 
 _logger = logging.getLogger(__name__)
 

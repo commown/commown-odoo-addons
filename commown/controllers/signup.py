@@ -1,7 +1,8 @@
 import logging
 
-from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 from odoo.http import request
+
+from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 
 _logger = logging.getLogger(__name__)
 
