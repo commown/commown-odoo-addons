@@ -10,9 +10,11 @@ _logger = logging.getLogger(__name__)
 
 class ContractTemplatePlannedMailGenerator(models.Model):
     _name = "contract_emails.planned_mail_generator"
-    _description = ("Defines on a contract model what mail template to send"
-                    " and how to compute the planned send date from the"
-                    " contract start date.")
+    _description = (
+        "Defines on a contract model what mail template to send"
+        " and how to compute the planned send date from the"
+        " contract start date."
+    )
 
     contract_id = fields.Many2one(
         "contract.template",
@@ -42,17 +44,21 @@ class ContractTemplatePlannedMailGenerator(models.Model):
             ("monthly", "Month(s)"),
             ("monthlylastday", "Month(s) last day"),
             ("yearly", "Year(s)"),
-         ],
+        ],
         default="monthly",
         string="Time unit",
-        help=("Unit of the time interval after contract start date"
-              " when the email will be sent"),
+        help=(
+            "Unit of the time interval after contract start date"
+            " when the email will be sent"
+        ),
     )
 
     max_delay_days = fields.Integer(
         string="Max email delay (in days)",
-        help=("Once this delay after the intended send date is expired,"
-              " the email is not sent"),
+        help=(
+            "Once this delay after the intended send date is expired,"
+            " the email is not sent"
+        ),
         default=30,
     )
 
@@ -67,16 +73,18 @@ class ContractTemplatePlannedMailGenerator(models.Model):
         today = date.today()
         for record in self:
             dt = self.env["contract.line"].get_relative_delta(
-                record.interval_type, record.interval_number)
+                record.interval_type, record.interval_number
+            )
             record.send_date_offset_days = (today + dt - today).days
 
     @api.model
     def cron_send_planned_mails(self):
-        """ Mails to be sent today:
+        """Mails to be sent today:
         - contract_start + related_offset >= today
         - not already sent
         """
-        self.env.cr.execute("""
+        self.env.cr.execute(
+            """
             SELECT C.id, PMG.id
               FROM contract_contract C
               JOIN contract_template CT ON (C.contract_template_id=CT.id)
@@ -89,34 +97,41 @@ class ContractTemplatePlannedMailGenerator(models.Model):
                                WHERE PMS.contract_id=C.id
                                  AND PMS.planned_mail_generator_id=PMG.id)
              ORDER BY C.id, PMG.send_date_offset_days
-        """)
+        """
+        )
         result = self.env.cr.fetchall()
         channel = self.env.ref("contract_emails.channel")
         subtype = self.env.ref("mail.mt_comment")
         for contract_id, planned_mail_generator_id in result:
             contract = self.env["contract.contract"].browse(contract_id)
             pmg = self.env["contract_emails.planned_mail_generator"].browse(
-                planned_mail_generator_id)
+                planned_mail_generator_id
+            )
             pmg.send_planned_mail(contract)
-            if not any(f.channel_id.id == channel.id
-                       for f in contract.message_follower_ids):
-                self.env['mail.followers'].create({
-                    'channel_id': channel.id,
-                    'partner_id': False,
-                    'res_id': contract.id,
-                    'res_model': contract._name,
-                    'subtype_ids': [(6, 0, subtype.ids)]
-                })
+            if not any(
+                f.channel_id.id == channel.id for f in contract.message_follower_ids
+            ):
+                self.env["mail.followers"].create(
+                    {
+                        "channel_id": channel.id,
+                        "partner_id": False,
+                        "res_id": contract.id,
+                        "res_model": contract._name,
+                        "subtype_ids": [(6, 0, subtype.ids)],
+                    }
+                )
 
     @api.multi
     def send_planned_mail(self, contract):
         self.ensure_one()
         contract.message_post_with_template(self.mail_template_id.id)
-        self.env["contract_emails.planned_mail_sent"].create({
-            "send_date": fields.Datetime.now(),
-            "contract_id": contract.id,
-            "planned_mail_generator_id": self.id,
-        })
+        self.env["contract_emails.planned_mail_sent"].create(
+            {
+                "send_date": fields.Datetime.now(),
+                "contract_id": contract.id,
+                "planned_mail_generator_id": self.id,
+            }
+        )
 
 
 class ContractTemplate(models.Model):
@@ -125,25 +140,29 @@ class ContractTemplate(models.Model):
     planned_mail_gen_ids = fields.One2many(
         string="Planned emails",
         comodel_name="contract_emails.planned_mail_generator",
-        inverse_name='contract_id',
+        inverse_name="contract_id",
     )
 
 
 class Contract(models.Model):
     _inherit = "contract.contract"
 
-    NO_SYNC = ContractAbstractContract.NO_SYNC + ['planned_mail_gen_ids']
+    NO_SYNC = ContractAbstractContract.NO_SYNC + ["planned_mail_gen_ids"]
 
 
 class ContractSentPlannedEmail(models.Model):
     _name = "contract_emails.planned_mail_sent"
-    _description = ("Keeps track of the planned mails sent from a contract"
-                    " to avoid sending them more than once")
+    _description = (
+        "Keeps track of the planned mails sent from a contract"
+        " to avoid sending them more than once"
+    )
 
     _sql_constraints = [
-        ('uniq_contract_and_mail_gen',
-         'UNIQUE (contract_id, planned_mail_generator_id)',
-         'Planned mail cannot be send twice for the same contract.'),
+        (
+            "uniq_contract_and_mail_gen",
+            "UNIQUE (contract_id, planned_mail_generator_id)",
+            "Planned mail cannot be send twice for the same contract.",
+        ),
     ]
 
     contract_id = fields.Many2one(
