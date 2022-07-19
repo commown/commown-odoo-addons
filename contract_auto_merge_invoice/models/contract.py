@@ -6,7 +6,7 @@ class Contract(models.Model):
 
     @api.multi
     def _prepare_invoice(self, *args, **kwargs):
-        " Override contract invoice creation to add auto_merge=True "
+        "Override contract invoice creation to add auto_merge=True"
         vals = super(Contract, self)._prepare_invoice(*args, **kwargs)
         vals["auto_merge"] = True
         return vals
