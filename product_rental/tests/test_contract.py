@@ -7,7 +7,7 @@ class ContractTC(TestContractBase):
     def test_inverse_recurring_next_date_error(self):
         self.contract.is_auto_pay = False
         init_recurring_next_date = self.contract.recurring_next_date
-        inv = self.contract.recurring_create_invoice()
+        self.contract.recurring_create_invoice()
 
         with self.assertRaises(ValidationError) as err:
             self.contract.recurring_next_date = init_recurring_next_date
