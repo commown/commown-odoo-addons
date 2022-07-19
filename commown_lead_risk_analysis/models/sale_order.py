@@ -1,7 +1,6 @@
 import logging
 
-from odoo import models, api
-
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -64,9 +63,7 @@ class SaleOrder(models.Model):
             ]
         )
 
-        deserve_ra = {
-            (cl.contract_id, cl.sale_order_line_id) for cl in contract_lines
-        }
+        deserve_ra = {(cl.contract_id, cl.sale_order_line_id) for cl in contract_lines}
 
         for contract, so_line in deserve_ra:
             leads |= self._create_lead(
