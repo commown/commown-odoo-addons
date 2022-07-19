@@ -191,7 +191,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             self.contract.with_context(test_queue_job_no_delay=True).date_end = date_end
 
     def test_is_simulation(self):
-        " Don't call optin WS when simulating the future invoices "
+        "Don't call optin WS when simulating the future invoices"
 
         pypath = "odoo.addons.commown_cooperative_campaign.models.discount."
         optin_path = pypath + "coop_ws_optin"

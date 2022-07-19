@@ -10,12 +10,12 @@ class LateOptinWizard(models.TransientModel):
 
     coupon_id = fields.Many2one(
         "coupon.coupon",
-        string=u"Coupon",
+        string="Coupon",
         required=True,
     )
 
     date = fields.Date(
-        string=u"Optin date",
+        string="Optin date",
         default=date.today(),
         required=True,
     )
