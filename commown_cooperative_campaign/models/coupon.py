@@ -22,11 +22,15 @@ _logger = logging.getLogger(__file__)
 def coop_ws_important_events(base_url, campaign_ref, customer_key):
     "Query the cooperative web services to see if a subscription is active"
 
-    _logger.info(u"Querying %s, campaign %s, identifier %s",
-                 base_url, campaign_ref, customer_key)
+    _logger.info(
+        u"Querying %s, campaign %s, identifier %s", base_url, campaign_ref, customer_key
+    )
 
-    url = (base_url + "/campaigns/%s/subscriptions/important-events"
-           % urllib.parse.quote_plus(campaign_ref))
+    url = (
+        base_url
+        + "/campaigns/%s/subscriptions/important-events"
+        % urllib.parse.quote_plus(campaign_ref)
+    )
     resp = requests.get(url, params={"customer_key": customer_key})
     resp.raise_for_status()
 
@@ -57,27 +61,36 @@ def coop_human_readable_important_events(events, dt_format):
         ctx = {
             "key": event["customer_key"],
             "validity": u" >> ".join(
-                sorted(format_ws_date(e["ts"], dt_format)
-                       for e in event["events"])),
+                sorted(format_ws_date(e["ts"], dt_format) for e in event["events"])
+            ),
             "details": _hr_details(event["details"], dt_format),
         }
-        result += _("Validity: %(validity)s\n"
-                    "--\n"
-                    "Key: %(key)s\n"
-                    "--\n"
-                    "Details:\n%(details)s\n"
-                    ) % ctx
+        result += (
+            _(
+                "Validity: %(validity)s\n"
+                "--\n"
+                "Key: %(key)s\n"
+                "--\n"
+                "Details:\n%(details)s\n"
+            )
+            % ctx
+        )
     return result
 
 
 def coop_ws_subscriptions(base_url, campaign_ref, customer_key):
     "Query the cooperative web services to list customer subscriptions"
 
-    _logger.debug(u"Querying details %s, campaign %s, identifier %s",
-                  base_url, campaign_ref, customer_key)
+    _logger.debug(
+        u"Querying details %s, campaign %s, identifier %s",
+        base_url,
+        campaign_ref,
+        customer_key,
+    )
 
-    url = (base_url + "/campaign/%s/subscriptions"
-           % urllib.parse.quote_plus(campaign_ref))
+    url = base_url + "/campaign/%s/subscriptions" % urllib.parse.quote_plus(
+        campaign_ref
+    )
     resp = requests.get(url, params={"customer_key": customer_key})
     resp.raise_for_status()
 
@@ -95,13 +108,16 @@ def coop_human_readable_subscriptions(subscriptions, dt_format):
     for i, sub in enumerate(subscriptions):
         member = sub["member"]["login"]
         if not i:
-            missing = sorted(m["login"] for m in sub["campaign"]["members"]
-                             if m["login"] != member)
-        result.append(_("Subscription to %(member)s: %(optinout)s") % {
-            "member": member,
-            "optinout": _hr_optin_out(
-                sub["optin_ts"], sub["optout_ts"], dt_format),
-        })
+            missing = sorted(
+                m["login"] for m in sub["campaign"]["members"] if m["login"] != member
+            )
+        result.append(
+            _("Subscription to %(member)s: %(optinout)s")
+            % {
+                "member": member,
+                "optinout": _hr_optin_out(sub["optin_ts"], sub["optout_ts"], dt_format),
+            }
+        )
 
     if subscriptions:
         result.append(_("No subscription to %s.") % u",".join(missing))
@@ -132,8 +148,9 @@ def _hr_details(subscription_details, dt_format):
         if "optin_ts" not in details:
             result.append(_("not subscribed"))
         else:
-            _optinout = _hr_optin_out(details["optin_ts"], details["optout_ts"],
-                                      dt_format)
+            _optinout = _hr_optin_out(
+                details["optin_ts"], details["optout_ts"], dt_format
+            )
             result.append((u"- %s: %s" % (member, _optinout)))
     return u"\n".join(result)
 
@@ -159,8 +176,9 @@ class Coupon(models.Model):
     def action_coop_campaign_optin_status(self):
         partner, key = self._action_coop_prerequisites()
         campaign = self.campaign_id
-        base_url = self.env['ir.config_parameter'].get_param(
-            'commown_cooperative_campaign.base_url')
+        base_url = self.env["ir.config_parameter"].get_param(
+            "commown_cooperative_campaign.base_url"
+        )
 
         response = [
             _("Subscription status for %(partner)s is: %(result)s"),
@@ -169,35 +187,40 @@ class Coupon(models.Model):
         ctx = {"partner": partner.name}
         lang = self.env["res.lang"].search([("code", "=", self.env.user.lang)])
 
-        subscriptions = coop_ws_important_events(
-            base_url, campaign.name, key)
+        subscriptions = coop_ws_important_events(base_url, campaign.name, key)
 
         is_valid = subscriptions and coop_ws_valid_events(
-            subscriptions[0]["events"], datetime.datetime.today())
+            subscriptions[0]["events"], datetime.datetime.today()
+        )
 
         if is_valid:
-            ctx.update({
-                "details": coop_human_readable_important_events(
-                    subscriptions, lang.date_format + " " + lang.time_format),
-                "result": _("fully subscribed"),
-            })
+            ctx.update(
+                {
+                    "details": coop_human_readable_important_events(
+                        subscriptions, lang.date_format + " " + lang.time_format
+                    ),
+                    "result": _("fully subscribed"),
+                }
+            )
 
         else:
             # Has incomplete subscriptions?
             subscriptions = coop_ws_subscriptions(base_url, campaign.name, key)
-            ctx.update({
-                "details": coop_human_readable_subscriptions(
-                    subscriptions, lang.date_format + " " + lang.time_format),
-                "result": _("not fully subscribed"),
-            })
+            ctx.update(
+                {
+                    "details": coop_human_readable_subscriptions(
+                        subscriptions, lang.date_format + " " + lang.time_format
+                    ),
+                    "result": _("not fully subscribed"),
+                }
+            )
             response.append(_("Key: %(key)s") % {"key": key})
 
         raise UserError(u"\n--\n".join(response) % ctx)
 
     @api.multi
     def action_coop_campaign_optin_now(self):
-        view = self.env.ref("commown_cooperative_campaign."
-                            "wizard_late_optin_form")
+        view = self.env.ref("commown_cooperative_campaign." "wizard_late_optin_form")
         return {
             "type": "ir.actions.act_window",
             "src_model": "coupon.coupon",
@@ -214,19 +237,23 @@ class Campaign(models.Model):
 
     is_coop_campaign = fields.Boolean(
         string="Cooperative campaign",
-        help=("If true, the coupon-related discount condition will use the"
-              " cooperative web services to check its validity."),
+        help=(
+            "If true, the coupon-related discount condition will use the"
+            " cooperative web services to check its validity."
+        ),
         index=True,
-        default=False)
+        default=False,
+    )
 
     cooperative_salt = fields.Char(
         invisible=True,
         copy=False,
-        help="Salt used to create a cooperative identifier from partner data")
+        help="Salt used to create a cooperative identifier from partner data",
+    )
 
     @api.multi
     def coop_partner_identifier(self, partner):
-        """ Returns given partner's identifier for current cooperative campaign
+        """Returns given partner's identifier for current cooperative campaign
 
         ... or none if the campaign is not cooperative or the identifier cannot
         be computed.
@@ -254,7 +281,7 @@ class Campaign(models.Model):
                 if phonenumbers.number_type(phone_obj) == MOBILE_TYPE:
                     phone = phonenumbers.format_number(
                         phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
-                    ).replace(' ', '')
+                    ).replace(" ", "")
                     hash = hashlib.sha256()
-                    hash.update((phone + self.cooperative_salt).encode('utf-8'))
+                    hash.update((phone + self.cooperative_salt).encode("utf-8"))
                     return hash.hexdigest()
