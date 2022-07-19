@@ -3,10 +3,12 @@ from datetime import datetime, timedelta
 import lxml.etree
 import requests
 from iso8601 import parse_date
-from odoo import _, api, fields, models
-from odoo.addons.queue_job.job import job
-from odoo.exceptions import UserError
 from pytz import UTC
+
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+
+from odoo.addons.queue_job.job import job
 
 BASE_URL = "https://www.coliposte.fr/tracking-chargeur-cxf/TrackingServiceWS/track"
 

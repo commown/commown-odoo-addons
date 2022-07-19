@@ -1,14 +1,14 @@
-from datetime import date, timedelta
 import resource
+from datetime import date, timedelta
 
-from mock import patch
 import requests_mock
+from mock import patch
 
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.queue_job.job import Job
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
+from odoo.addons.queue_job.job import Job
 
 from ..models.colissimo_utils import shipping_data
 from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin

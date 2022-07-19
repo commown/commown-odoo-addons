@@ -3,10 +3,10 @@ import logging
 import re
 from cgi import parse_header
 from datetime import datetime
-from requests_toolbelt.multipart import decoder
 
 import phonenumbers
 import requests
+from requests_toolbelt.multipart import decoder
 
 _logger = logging.getLogger(__name__)
 

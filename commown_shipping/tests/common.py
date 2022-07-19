@@ -4,13 +4,12 @@ from base64 import b64decode
 from io import BytesIO
 from urllib.parse import urlparse
 
+from PyPDF2 import PdfFileReader
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 from odoo.tests.common import TransactionCase
 
 from ..models.colissimo_utils import BASE_URL
-
-from PyPDF2 import PdfFileReader
 
 HERE = osp.dirname(__file__)
 
