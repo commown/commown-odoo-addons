@@ -21,13 +21,13 @@
             </script>
           </t>
           <t t-set="tag_names">Auto-dépannage,Sérénité</t>
-          <t t-set="issue_title">Option Sérénité - Me rappeler</t>
+          <t t-set="issue_title">Option Sérénité - M'appeler</t>
           <t t-set="issue_description_template">issue-description-serenity</t>
           <!-- Fin des variables à modifier -->
 
           <div class="container">
-            <h1>Auto-dépannage : Option Sérénité - Être rappelé</h1>
-            <h2>Je rencontre un incident qui nécessite qu'on me rappelle</h2>
+            <h1>Auto-dépannage : Option Sérénité - Être appelé</h1>
+            <h2>Je rencontre un incident qui nécessite qu'on m'appelle</h2>
             <br />
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
@@ -68,9 +68,9 @@
                     </h2>
                     <p>
                       En validant ce formulaire, une demande d'assistance prioritaire
-                      sera envoyée à notre équipe support qui vous rappelera dès que possible.
+                      sera envoyée à notre équipe support qui vous appellera dès que possible.
                     </p>
-                    <p class="text-danger">NB: nous allons vous appeler dans les heures suivant la demande (jours ouvrés uniquement).</p>
+                    <p class="text-danger">NB : nous allons vous appeler <b>en numéro masqué</b> dans les heures suivant la demande (jours ouvrés uniquement).</p>
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="row">
@@ -94,7 +94,7 @@
 
                       <div class="form-group">
                         <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_callback').id" />
-                        <button type="submit" class="btn btn-primary" name="action">Être rappelé</button>
+                        <button type="submit" class="btn btn-primary" name="action">Être appelé</button>
                       </div>
                     </div>
                   </div>
@@ -114,7 +114,7 @@
     <field name="url">/page/self-troubleshoot-serenity</field>
     <field name="view_id" ref="serenity" />
     <field name="website_meta_title">Option Sérénité</field>
-    <field name="website_meta_description">Être rappelé par l'équipe Support</field>
+    <field name="website_meta_description">Être appelé par l'équipe Support</field>
   </record>
 
 </odoo>
