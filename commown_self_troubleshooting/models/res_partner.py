@@ -1,5 +1,5 @@
-import os.path as osp
 import datetime
+import os.path as osp
 from collections import defaultdict
 
 from odoo import models
