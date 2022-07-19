@@ -133,7 +133,7 @@ class ProjectTask(models.Model):
 
     @api.model
     def _slimpay_payment_issue_ack(self, client, issue_doc):
-        """ Set a Slimpay issue designated by given document as processed """
+        """Set a Slimpay issue designated by given document as processed"""
         doc = client.action("POST", "ack-payment-issue", doc=issue_doc)
         assert doc["executionStatus"] == "processed"
         _logger.debug("Issue id %s marked as processed", issue_doc["id"])
