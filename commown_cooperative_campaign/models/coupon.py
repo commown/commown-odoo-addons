@@ -151,7 +151,7 @@ def _hr_details(subscription_details, dt_format):
             _optinout = _hr_optin_out(
                 details["optin_ts"], details["optout_ts"], dt_format
             )
-            result.append((u"- %s: %s" % (member, _optinout)))
+            result.append(u"- %s: %s" % (member, _optinout))
     return u"\n".join(result)
 
 
