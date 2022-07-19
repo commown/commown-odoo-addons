@@ -1,17 +1,15 @@
 import datetime
-import logging
 import hashlib
+import logging
 import urllib
-
 from pprint import pformat
 
 import iso8601
 import phonenumbers
 import requests
 
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-
 
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 

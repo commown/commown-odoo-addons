@@ -1,16 +1,16 @@
 # Copyright (C) 2021 - Commown (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-import urllib.parse
 import logging
+import urllib.parse
 from datetime import datetime
-
-import pytz
-import iso8601
-import requests
 from pprint import pformat
 
-from odoo import models, api
+import iso8601
+import pytz
+import requests
+
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 from datetime import date
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 from .discount import coop_ws_optin
 
