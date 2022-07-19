@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 import traceback as tb
 
-from lxml import html, etree
+from lxml import html
 from mock import patch
 
 from werkzeug.test import Client
@@ -9,7 +9,7 @@ from werkzeug.wrappers import BaseResponse
 
 from odoo.service import wsgi_server
 
-from odoo.tests.common import HttpCase, at_install, post_install
+from odoo.tests.common import HttpCase
 
 from ..models.res_partner import ResPartner
 
