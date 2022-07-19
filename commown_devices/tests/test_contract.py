@@ -1,6 +1,5 @@
-from .common import DeviceAsAServiceTC
-
 from ..models.common import do_new_transfer
+from .common import DeviceAsAServiceTC
 
 
 class ContractTC(DeviceAsAServiceTC):
