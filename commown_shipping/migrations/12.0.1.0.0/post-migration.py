@@ -13,14 +13,16 @@ def migrate(env, version):
     }
 
     for old_name, new_name in mapping.items():
-        old_id = env["ir.model.data"].search([
-            ('module', '=', 'commown_shipping'),
-            ('name', '=', old_name)
-        ]).res_id
-        new_id = env["ir.model.data"].search([
-            ('module', '=', 'commown_shipping'),
-            ('name', '=', new_name)
-        ]).res_id
+        old_id = (
+            env["ir.model.data"]
+            .search([("module", "=", "commown_shipping"), ("name", "=", old_name)])
+            .res_id
+        )
+        new_id = (
+            env["ir.model.data"]
+            .search([("module", "=", "commown_shipping"), ("name", "=", new_name)])
+            .res_id
+        )
 
         for table in ["project_project", "crm_team"]:
             openupgrade.logged_query(
@@ -28,9 +30,11 @@ def migrate(env, version):
                 """
                 UPDATE %s
                 SET shipping_account_id = %s
-                WHERE %s = %s""", (
+                WHERE %s = %s""",
+                (
                     AsIs(table),
                     new_id,
-                    AsIs(openupgrade.get_legacy_name('shipping_account_id')),
-                    old_id
-                ))
+                    AsIs(openupgrade.get_legacy_name("shipping_account_id")),
+                    old_id,
+                ),
+            )

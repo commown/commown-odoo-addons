@@ -4,7 +4,6 @@ from .common import BaseShippingTC, pdf_page_num
 
 
 class ProjectTaskTC(BaseShippingTC):
-
     def setUp(self):
         super(ProjectTaskTC, self).setUp()
         self.task = self.env.ref("project.project_task_1")

@@ -8,7 +8,7 @@ _column_renames = {
     ],
     "crm_team": [
         ("shipping_account_id", None),
-    ]
+    ],
 }
 
 

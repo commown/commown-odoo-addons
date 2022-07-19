@@ -35,7 +35,7 @@ def normalize_phone(phone_number, country_code):
 
 
 def delivery_data(partner):
-    """ Return delivery data for given partner, taking into account:
+    """Return delivery data for given partner, taking into account:
 
     - that mobile phone numbers may be found in partner.phone instead
       of partner.mobile: put value into mobile if pertinent
@@ -103,7 +103,7 @@ def shipping_data(
     deposit_date=None,
     label_format="PDF_A4_300dpi",
 ):
-    """ Return colissimo WS shipping data for given arguments.
+    """Return colissimo WS shipping data for given arguments.
 
     The `sender` and `recipient` are odoo res.partner objects.
 

@@ -37,7 +37,7 @@ class ParcelType(models.Model):
     def colissimo_label(
         self, shipping_account, shipping_password, sender, recipient, ref=""
     ):
-        """ Return the meta data and the PDF data of a colissimo label from:
+        """Return the meta data and the PDF data of a colissimo label from:
 
         - shipping_account: Shipping Account for colissimo
         (use server_env to encrypt data)
