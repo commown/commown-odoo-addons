@@ -163,7 +163,7 @@ class ContractTC(TestContractBase):
         )
 
     def test_discount_override(self):
-        " Discounts on contract template are handled but can be overidden "
+        "Discounts on contract template are handled but can be overidden"
 
         # Add a line with 2 discounts on a new contract template
         _vals = self.line_template_vals.copy()
