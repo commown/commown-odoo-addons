@@ -3,18 +3,16 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    'name': 'Contract auto merge invoice',
-    'category': 'Accounting',
-    'version': '12.0.1.0.0',
-    'author': "Commown SCIC SAS",
-    'license': "AGPL-3",
-    'website': "https://commown.coop",
-
-    'depends': [
-        'contract',
-        'account_invoice_merge_auto',
+    "name": "Contract auto merge invoice",
+    "category": "Accounting",
+    "version": "12.0.1.0.0",
+    "author": "Commown SCIC SAS",
+    "license": "AGPL-3",
+    "website": "https://commown.coop",
+    "depends": [
+        "contract",
+        "account_invoice_merge_auto",
     ],
-
-    'installable': True,
-    'application': False,
+    "installable": True,
+    "application": False,
 }
