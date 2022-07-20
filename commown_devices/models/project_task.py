@@ -1,4 +1,4 @@
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models
 
 
 class ProjectTask(models.Model):
@@ -17,18 +17,18 @@ class ProjectTask(models.Model):
     )
 
     device_tracking = fields.Boolean(
-        'Use for device tracking?',
-        related='project_id.device_tracking')
+        "Use for device tracking?", related="project_id.device_tracking"
+    )
 
     def _compute_storable_product_domain(self):
-        domain = [('tracking', '=', 'serial')]
+        domain = [("tracking", "=", "serial")]
         if self.require_contract:
             products = self._may_be_related_lots().mapped("product_id")
             domain = [("id", "in", products.ids)]
         return domain
 
     def _may_be_related_lots(self):
-        """ Return lots that lay be related to current task:
+        """Return lots that lay be related to current task:
         - those already in charge of the partner (contract.quant_ids)
         - those sent to the partner but not arrived yet.
         """
@@ -39,14 +39,16 @@ class ProjectTask(models.Model):
             contracts = self.contract_id
 
         elif self.commercial_partner_id:
-            domain = [('partner_id.commercial_partner_id', '=',
-                       self.commercial_partner_id.id)]
+            domain = [
+                ("partner_id.commercial_partner_id", "=", self.commercial_partner_id.id)
+            ]
             contracts = contracts.search(domain)
 
         for contract in contracts:
             lots |= contract.quant_ids.mapped("lot_id")
             lots |= contract.picking_ids.filtered(
-                lambda c: c.state == "assigned").mapped("move_line_ids.lot_id")
+                lambda c: c.state == "assigned"
+            ).mapped("move_line_ids.lot_id")
 
         return lots
 
@@ -62,13 +64,20 @@ class ProjectTask(models.Model):
             domain.append(("id", "in", lots.ids or [0]))
 
         else:
-            qdom = [("quantity", ">", 0),
-                    "|",
-                    ("location_id", "child_of", self.env.ref(
-                        "commown_devices.stock_location_devices_to_check").id),
-                    ("location_id", "child_of", self.env.ref(
-                        "commown_devices.stock_location_new_devices").id),
-                    ]
+            qdom = [
+                ("quantity", ">", 0),
+                "|",
+                (
+                    "location_id",
+                    "child_of",
+                    self.env.ref("commown_devices.stock_location_devices_to_check").id,
+                ),
+                (
+                    "location_id",
+                    "child_of",
+                    self.env.ref("commown_devices.stock_location_new_devices").id,
+                ),
+            ]
             if product:  # optimize the request a bit
                 qdom.append(("lot_id.product_id", "=", product.id))
             quants = self.env["stock.quant"].search(qdom)
@@ -77,7 +86,7 @@ class ProjectTask(models.Model):
         return domain
 
     def _reset_field_target(self, field_name, domain):
-        """ Set value of `field_name` according to its `domain` and actual value
+        """Set value of `field_name` according to its `domain` and actual value
 
         Perform a search of the possible values from `domain` and:
         - if there is a single possible value, use it to set the field
@@ -120,8 +129,11 @@ class ProjectTask(models.Model):
         if self.lot_id:
             self.storable_product_id = self.lot_id.product_id
             if not self.contract_id:
-                contracts = self.lot_id.mapped("quant_ids").filtered(
-                    lambda q: q.quantity > 0).mapped("contract_id")
+                contracts = (
+                    self.lot_id.mapped("quant_ids")
+                    .filtered(lambda q: q.quantity > 0)
+                    .mapped("contract_id")
+                )
                 if len(contracts) == 1:
                     self.contract_id = contracts.id
 
@@ -135,10 +147,16 @@ class ProjectTask(models.Model):
             "default_scrap_location_id": scrap_loc.id,
         }
 
-        current_loc = self.env['stock.quant'].search([
-            ('lot_id', '=', self.lot_id.id),
-            ('quantity', '>', 0),
-        ]).location_id
+        current_loc = (
+            self.env["stock.quant"]
+            .search(
+                [
+                    ("lot_id", "=", self.lot_id.id),
+                    ("quantity", ">", 0),
+                ]
+            )
+            .location_id
+        )
         if current_loc:
             ctx["default_location_id"] = current_loc[0].id
 

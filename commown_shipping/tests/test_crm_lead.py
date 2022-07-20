@@ -1,14 +1,14 @@
-from datetime import date, timedelta
 import resource
+from datetime import date, timedelta
 
-from mock import patch
 import requests_mock
+from mock import patch
 
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.queue_job.job import Job
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
+from odoo.addons.queue_job.job import Job
 
 from ..models.colissimo_utils import shipping_data
 from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
@@ -16,7 +16,6 @@ from .common import BaseShippingTC, pdf_page_num
 
 
 class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
-
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
 
@@ -99,7 +98,7 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
             ).run()
 
     def test_shipping_data_address_too_long(self):
-        """ When a partner has a too long address, a user error is raised
+        """When a partner has a too long address, a user error is raised
         with its name (useful when printing several labels at once).
         """
         other_partner = self.lead.partner_id.copy({"street": "x" * 100})
@@ -153,8 +152,9 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         self.assertEqualFakeLabel(att)
 
     def test_print_parcel_action(self):
-        resource.setrlimit(resource.RLIMIT_AS, (resource.RLIM_INFINITY,
-                                                resource.RLIM_INFINITY))
+        resource.setrlimit(
+            resource.RLIMIT_AS, (resource.RLIM_INFINITY, resource.RLIM_INFINITY)
+        )
         leads = self.env["crm.lead"]
         for num in range(5):
             leads += self.lead.copy({"name": "[SO%05d] Test lead" % num})
@@ -167,7 +167,6 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
 
 
 class CrmLeadDeliveryTC(TransactionCase):
-
     def setUp(self):
         super(CrmLeadDeliveryTC, self).setUp()
         team = self.env.ref("sales_team.salesteam_website_sales")
@@ -240,7 +239,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.check_mail_delivered("Product delivered", "LIVCFM")
 
     def test_actions_on_delivery_send_email_no_status(self):
-        " Check empty expedition status is OK "
+        "Check empty expedition status is OK"
 
         self.assertTrue(self.lead.send_email_on_delivery)
 
@@ -255,9 +254,11 @@ class CrmLeadDeliveryTC(TransactionCase):
 
         self.assertTrue(self.lead.send_email_on_delivery)
 
-        self.lead.on_delivery_email_template_id = self.lead.team_id.on_delivery_email_template_id.copy(  # noqa: B950
-            {"subject": "Test custom email"}
-        ).id
+        self.lead.on_delivery_email_template_id = (
+            self.lead.team_id.on_delivery_email_template_id.copy(  # noqa: B950
+                {"subject": "Test custom email"}
+            ).id
+        )
 
         # Simulate delivery
         self.lead.expedition_status = "[LIVGAR] Test"
@@ -267,7 +268,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         self.check_mail_delivered("Test custom email", "LIVGAR")
 
     def test_actions_on_delivery_send_email_no_template(self):
-        " A user error must be raised in the case no template was specified "
+        "A user error must be raised in the case no template was specified"
 
         self.assertTrue(self.lead.send_email_on_delivery)
         self.lead.on_delivery_email_template_id = False
@@ -282,12 +283,12 @@ def _status(code, label="test label", _date=None):
 
 
 class CrmLeadDeliveryTrackingTC(TransactionCase):
-
     def setUp(self):
         super(CrmLeadDeliveryTrackingTC, self).setUp()
 
         account = self.env.ref(
-            "commown_shipping.shipping-account-colissimo-std-account")
+            "commown_shipping.shipping-account-colissimo-std-account"
+        )
         self.team = self.env.ref("sales_team.salesteam_website_sales")
         mt_id = self.env.ref("commown_shipping.delivery_email_example").id
         self.team.update(

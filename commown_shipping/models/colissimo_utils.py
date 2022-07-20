@@ -3,10 +3,10 @@ import logging
 import re
 from cgi import parse_header
 from datetime import datetime
-from requests_toolbelt.multipart import decoder
 
 import phonenumbers
 import requests
+from requests_toolbelt.multipart import decoder
 
 _logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class AddressTooLong(Exception):  # noqa: B903
 
 
 def normalize_phone(phone_number, country_code):
-    " Colissimo only accepts french phone numbers "
+    "Colissimo only accepts french phone numbers"
     if country_code == "FR" and phone_number:
         tel = phonenumbers.parse(phone_number, country_code)
         return phonenumbers.format_number(
@@ -35,7 +35,7 @@ def normalize_phone(phone_number, country_code):
 
 
 def delivery_data(partner):
-    """ Return delivery data for given partner, taking into account:
+    """Return delivery data for given partner, taking into account:
 
     - that mobile phone numbers may be found in partner.phone instead
       of partner.mobile: put value into mobile if pertinent
@@ -103,7 +103,7 @@ def shipping_data(
     deposit_date=None,
     label_format="PDF_A4_300dpi",
 ):
-    """ Return colissimo WS shipping data for given arguments.
+    """Return colissimo WS shipping data for given arguments.
 
     The `sender` and `recipient` are odoo res.partner objects.
 

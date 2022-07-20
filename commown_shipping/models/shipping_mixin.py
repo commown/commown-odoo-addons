@@ -24,6 +24,7 @@ if tuple(sys.version_info)[:2] < (3, 7):
     def run(*args, **kwargs):
         kwargs.pop("capture_output")
         return _run(*args, **kwargs)
+
 else:
     run = _run
 
@@ -51,7 +52,7 @@ class CommownShippingMixin(models.AbstractModel):
 
     @api.multi
     def _create_parcel_label(self, parcel, shipping_account, recipient, ref):
-        """ Generate a new label from following arguments:
+        """Generate a new label from following arguments:
         - parcel: a commown.parcel.type entity
         - shipping_account: Shipping Account for colissimo
         - recipient: the recipient res.partner entity
@@ -100,7 +101,7 @@ class CommownShippingMixin(models.AbstractModel):
 
     @api.multi
     def _get_or_create_label(self, parcel, *args, **kwargs):
-        " Return current label if expedition_ref is set, or create a new one "
+        "Return current label if expedition_ref is set, or create a new one"
         self.ensure_one()
         return self.label_attachment(parcel) or self._create_parcel_label(
             parcel, *args, **kwargs

@@ -1,6 +1,6 @@
 from datetime import date
 
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 from .discount import coop_ws_optin
 
@@ -10,12 +10,12 @@ class LateOptinWizard(models.TransientModel):
 
     coupon_id = fields.Many2one(
         "coupon.coupon",
-        string=u"Coupon",
+        string="Coupon",
         required=True,
     )
 
     date = fields.Date(
-        string=u"Optin date",
+        string="Optin date",
         default=date.today(),
         required=True,
     )
@@ -26,8 +26,15 @@ class LateOptinWizard(models.TransientModel):
         partner, key = self.coupon_id._action_coop_prerequisites()
         campaign = self.coupon_id.campaign_id
 
-        base_url = self.env['ir.config_parameter'].get_param(
-            'commown_cooperative_campaign.base_url')
+        base_url = self.env["ir.config_parameter"].get_param(
+            "commown_cooperative_campaign.base_url"
+        )
 
-        coop_ws_optin(base_url, campaign.name, key, self.date, partner.tz,
-                      silent_double_optin=False)
+        coop_ws_optin(
+            base_url,
+            campaign.name,
+            key,
+            self.date,
+            partner.tz,
+            silent_double_optin=False,
+        )

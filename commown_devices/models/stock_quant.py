@@ -1,7 +1,7 @@
-from odoo import models, fields
+from odoo import fields, models
 
 
 class StockQuant(models.Model):
     _inherit = "stock.quant"
 
-    contract_id = fields.Many2one('contract.contract', string='Contract')
+    contract_id = fields.Many2one("contract.contract", string="Contract")

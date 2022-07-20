@@ -1,6 +1,5 @@
 from datetime import date, timedelta
 
-from odoo import fields
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
@@ -9,27 +8,30 @@ def is_mail(message):
 
 
 def get_model(object):
-    return object.env['ir.model'].search([("model", "=", object._name)])
+    return object.env["ir.model"].search([("model", "=", object._name)])
 
 
 class ContractTemplateMailGenerator(TestContractBase):
-
     def create_mt(self, **kwargs):
-        return self.env["mail.template"].create({
-            "model_id": kwargs.get("model_id", get_model(self.contract).id),
-            "name": kwargs.get("name", "Test template name"),
-            "subject": kwargs.get("subject", "${object.name}"),
-            "body_html": kwargs.get("body_html", "Test body"),
-            "user_signature": False,
-        })
+        return self.env["mail.template"].create(
+            {
+                "model_id": kwargs.get("model_id", get_model(self.contract).id),
+                "name": kwargs.get("name", "Test template name"),
+                "subject": kwargs.get("subject", "${object.name}"),
+                "body_html": kwargs.get("body_html", "Test body"),
+                "user_signature": False,
+            }
+        )
 
     def create_contract(self, date_start, date_end=None, **kwargs):
         kwargs.setdefault("contract_template_id", self.template.id)
         contract = self.contract.copy(kwargs)
-        contract.contract_line_ids.update({
-            "recurring_next_date": date_start,
-            "date_start": date_start,
-        })
+        contract.contract_line_ids.update(
+            {
+                "recurring_next_date": date_start,
+                "date_start": date_start,
+            }
+        )
         contract.date_start = date_start
         if date_end:
             contract.date_end = date_end
@@ -43,7 +45,7 @@ class ContractTemplateMailGenerator(TestContractBase):
             "interval_type": "daily",
         }
         values.update(kwargs)
-        return self.env['contract_emails.planned_mail_generator'].create(values)
+        return self.env["contract_emails.planned_mail_generator"].create(values)
 
     def test_cron(self):
         "Emails planned in the past must be sent"
@@ -61,10 +63,10 @@ class ContractTemplateMailGenerator(TestContractBase):
         c4 = self.create_contract(today - timedelta(days=30), date_end=today)
 
         # Check channel is not already listening to contract
-        self.assertFalse(c1.message_follower_ids.mapped('channel_id'))
-        self.assertFalse(c2.message_follower_ids.mapped('channel_id'))
-        self.assertFalse(c3.message_follower_ids.mapped('channel_id'))
-        self.assertFalse(c4.message_follower_ids.mapped('channel_id'))
+        self.assertFalse(c1.message_follower_ids.mapped("channel_id"))
+        self.assertFalse(c2.message_follower_ids.mapped("channel_id"))
+        self.assertFalse(c3.message_follower_ids.mapped("channel_id"))
+        self.assertFalse(c4.message_follower_ids.mapped("channel_id"))
 
         pmt_model.cron_send_planned_mails()
 
@@ -74,22 +76,21 @@ class ContractTemplateMailGenerator(TestContractBase):
         c3_mails = c3.message_ids.filtered(is_mail).sorted("id")
         c4_mails = c4.message_ids.filtered(is_mail).sorted("id")
 
-        self.assertEqual(
-            c1_mails.mapped("body"),
-            ["<p>Mail at contract start</p>"])
+        self.assertEqual(c1_mails.mapped("body"), ["<p>Mail at contract start</p>"])
         self.assertEqual(
             c2_mails.mapped("body"),
-            ["<p>Mail at contract start</p>", "<p>Mail after 6 days</p>"])
+            ["<p>Mail at contract start</p>", "<p>Mail after 6 days</p>"],
+        )
         self.assertEqual(
-            c3_mails.mapped("body"),
-            ["<p>Mail after 25 days</p>"])  # Other mails are too old
+            c3_mails.mapped("body"), ["<p>Mail after 25 days</p>"]
+        )  # Other mails are too old
         self.assertFalse(c4_mails)
 
         # Channel must follow the contracts from which an email was sent
-        self.assertEqual(c1.message_follower_ids.mapped('channel_id'), channel)
-        self.assertEqual(c2.message_follower_ids.mapped('channel_id'), channel)
-        self.assertEqual(c3.message_follower_ids.mapped('channel_id'), channel)
-        self.assertFalse(c4.message_follower_ids.mapped('channel_id'))
+        self.assertEqual(c1.message_follower_ids.mapped("channel_id"), channel)
+        self.assertEqual(c2.message_follower_ids.mapped("channel_id"), channel)
+        self.assertEqual(c3.message_follower_ids.mapped("channel_id"), channel)
+        self.assertFalse(c4.message_follower_ids.mapped("channel_id"))
 
         # Check messages are not sent again and again
         pmt_model.cron_send_planned_mails()
@@ -98,4 +99,4 @@ class ContractTemplateMailGenerator(TestContractBase):
         self.assertEqual(c2.message_ids.filtered(is_mail), c2_mails)
         self.assertEqual(c3.message_ids.filtered(is_mail), c3_mails)
 
-        self.assertFalse(c4.message_follower_ids.mapped('channel_id'))
+        self.assertFalse(c4.message_follower_ids.mapped("channel_id"))

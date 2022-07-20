@@ -1,4 +1,4 @@
-from odoo import models, api
+from odoo import api, models
 from odoo.exceptions import UserError
 
 
@@ -6,15 +6,13 @@ class UtmSource(models.Model):
     _inherit = "utm.source"
 
     def _related_entities_by_field(self):
-        fields = self.env['ir.model.fields'].search([
-            ('relation', '=', 'utm.source')
-        ])
+        fields = self.env["ir.model.fields"].search([("relation", "=", "utm.source")])
 
         for field in fields:
             model = field.model_id.model
-            if model == 'utm.mixin':
+            if model == "utm.mixin":
                 continue
-            yield field, self.env[model].search([(field.name, 'in', self.ids)])
+            yield field, self.env[model].search([(field.name, "in", self.ids)])
 
     @api.multi
     def action_merge(self):
@@ -29,14 +27,19 @@ class UtmSource(models.Model):
 
     @api.multi
     def action_remove(self):
-        """ Remove current sources if they are not related to any entity
+        """Remove current sources if they are not related to any entity
         and raise a user error otherwise.
         """
         for field, entities in self._related_entities_by_field():
             if entities:
-                raise UserError("Cannot remove: %d '%s' point to '%s'" % (
-                    len(entities), field.model_id.name,
-                    ",".join(entities.mapped(field.name + ".name"))))
+                raise UserError(
+                    "Cannot remove: %d '%s' point to '%s'"
+                    % (
+                        len(entities),
+                        field.model_id.name,
+                        ",".join(entities.mapped(field.name + ".name")),
+                    )
+                )
                 break
         else:
             self.sudo().unlink()
