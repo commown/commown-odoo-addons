@@ -45,8 +45,13 @@ def internal_picking(
     )
 
     for lot, move in moves.items():
-        move.quantity_done = move.product_uom_qty
-        move.move_line_ids.update({"lot_id": lot.id})
+        move.move_line_ids.update(
+            {
+                "lot_id": lot.id,
+                "location_id": orig_location.id,
+                "qty_done": lot.product_qty,
+            }
+        )
 
     if do_transfer:
         do_new_transfer(picking, date)
