@@ -1,0 +1,12 @@
+<odoo>
+
+  <record id="action_set_picking_date_done_to_scheduled" model="ir.actions.server">
+    <field name="name">[LOG] Force picking and move dates to picking scheduled date</field>
+    <field name="model_id" ref="stock.model_stock_picking"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="binding_model_id" ref="stock.model_stock_picking"/>
+    <field name="code">record.action_set_date_done_to_scheduled()</field>
+  </record>
+
+</odoo>

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-12 10:48+0000\n"
-"PO-Revision-Date: 2022-05-12 10:48+0000\n"
+"POT-Creation-Date: 2022-07-22 14:03+0000\n"
+"PO-Revision-Date: 2022-07-22 14:03+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,8 +26,8 @@ msgid "Article"
 msgstr "Article"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:77
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:217
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:75
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:223
 #, python-format
 msgid "Can't move device: no device set on this task!"
 msgstr "Mouvement impossible : aucun appareil n'est paramétré sur cette tâche !"
@@ -61,12 +61,7 @@ msgstr "Stock lié au contrat"
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_crm_lead_picking_wizard
 msgid "Create a picking from a lead"
-msgstr "Faire une expédition depuis une opportunité"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_picking_wizard
-msgid "Create a picking from a task"
-msgstr "Faire une expédition depuis une tâche"
+msgstr "Créer un transfert depuis une opportunité"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_involved_device_picking_wizard
@@ -153,7 +148,7 @@ msgstr "Nom affiché"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__id
 msgid "ID"
-msgstr "Identifiant"
+msgstr "ID"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard____last_update
@@ -236,7 +231,7 @@ msgstr "Projet"
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_quant
 msgid "Quants"
-msgstr "Mouvements unitaires"
+msgstr "Quants"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_inward_picking_form
@@ -244,13 +239,13 @@ msgid "Receive a device"
 msgstr "Rapatrier un appareil"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:148
+#: code:addons/commown_devices/models/project_task.py:166
 #, python-format
 msgid "Scrap device"
-msgstr "Mettre un appareil au rebut"
+msgstr "Mise au rebut"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/crm_lead.py:27
+#: code:addons/commown_devices/models/crm_lead.py:29
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_outward_picking_form
 #, python-format
@@ -292,6 +287,12 @@ msgid "Transfer device to new contract"
 msgstr "Transférer un appareil vers un autre contrat"
 
 #. module: commown_devices
+#: code:addons/commown_devices/models/picking.py:16
+#, python-format
+msgid "Transfer must be done to use this action"
+msgstr "Le transfert doit être dans l'état \"fait\" avant d'utiliser cette action"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_project__device_tracking
 #: model:ir.model.fields,field_description:commown_devices.field_project_task__device_tracking
 msgid "Use for device tracking?"
@@ -304,14 +305,19 @@ msgid "Variant"
 msgstr "Variante"
 
 #. module: commown_devices
-#: model:ir.actions.server,name:commown_devices.action_generate_picking
-msgid "[commown] Generate picking"
-msgstr "[commown] Générer le mouvement d'appareils"
+#: model:ir.actions.server,name:commown_devices.action_set_picking_date_done_to_scheduled
+msgid "[LOG] Force picking and move dates to picking scheduled date"
+msgstr "[LOG] Forcer la date du transfert et mouvements associés à la date prévue"
 
 #. module: commown_devices
 #: model:ir.actions.act_window,name:commown_devices.action_wizard_project_task_contract_transfer
 msgid "[commown] CONTRACT: Transfer involved device to another contract"
 msgstr "[commown] CONTRACT : Transférer l'appareil vers un autre contrat"
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.action_generate_picking
+msgid "[commown] Generate picking"
+msgstr "[commown] Générer le mouvement d'appareils"
 
 #. module: commown_devices
 #: model:ir.actions.act_window,name:commown_devices.action_wizard_project_task_involved_device_picking
@@ -321,17 +327,17 @@ msgstr "[commown] REPARATION : Déplacer l'appareil concerné"
 #. module: commown_devices
 #: model:ir.actions.act_window,name:commown_devices.action_wizard_project_task_inward_picking
 msgid "[commown] SUPPORT: Receive a device"
-msgstr "[commown] SUPPORT : Rapatrier un appareil"
-
-#. module: commown_devices
-#: model:ir.actions.server,name:commown_devices.action_scrap_task_device
-msgid "[commown] Scrap involved device"
-msgstr "[commown] Mettre l'appareil concerné au rebut"
+msgstr "[commown] SUPPORT: Réceptionner un appareil"
 
 #. module: commown_devices
 #: model:ir.actions.act_window,name:commown_devices.action_wizard_project_task_outward_picking
 msgid "[commown] SUPPORT: Send a device"
 msgstr "[commown] SUPPORT : Envoyer un appareil"
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.action_scrap_task_device
+msgid "[commown] Scrap involved device"
+msgstr "[commown] Mettre l'appareil concerné au rebut"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__date
@@ -340,7 +346,7 @@ msgstr "[commown] SUPPORT : Envoyer un appareil"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__date
 msgid "date"
-msgstr ""
+msgstr "date"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
@@ -365,4 +371,3 @@ msgstr "project.task.inward.picking.wizard"
 #: model:ir.model,name:commown_devices.model_project_task_outward_picking_wizard
 msgid "project.task.outward.picking.wizard"
 msgstr "project.task.outward.picking.wizard"
-
