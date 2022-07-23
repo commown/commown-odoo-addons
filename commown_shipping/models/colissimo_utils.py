@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 from cgi import parse_header
 from datetime import datetime
 
@@ -67,29 +66,11 @@ def delivery_data(partner):
     if partner.parent_id and partner.parent_id.is_company:
         partner_data["companyName"] = partner.parent_id.name
 
-    delivery_id = partner.address_get(["delivery"])["delivery"]
-    if delivery_id == partner.id:
-        result_data = partner_data
-    else:
-        result_data = None
-        comment = partner.browse(delivery_id).comment
-        if comment:
-            match = re.match(r"^\[BP\] (?P<bp>[0-9]+)$", comment)
-            if match:
-                result_data = partner_data
-                result_data["BP"] = match.groupdict()["bp"]
-        if result_data is None:
-            result_data = delivery_data(partner.env["res.partner"].browse(delivery_id))
-            # Add fallback contact values if not set in delivery contact:
-            for attr in "phoneNumber", "mobileNumber", "email", "companyName":
-                if not result_data.get(attr) and attr in partner_data:
-                    result_data[attr] = partner_data[attr]
-
     for attr in ("line1", "line2", "line3"):
-        if len(result_data.get(attr) or "") > 35:  # handle False and None
+        if len(partner_data.get(attr) or "") > 35:  # handle False and None
             raise AddressTooLong(partner)
 
-    return result_data
+    return partner_data
 
 
 def shipping_data(

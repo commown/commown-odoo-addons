@@ -36,11 +36,17 @@ def _ref_from_name(name):
 
 class CommownShippingMixin(models.AbstractModel):
     _name = "commown.shipping.mixin"
+    _description = "Object used to edit shipping labels and track parcels"
+
+    recipient_partner_id = fields.Many2one(
+        "res.partner",
+        "Delivery partner",
+        help="If left empty, a delivery partner will be looked-up for specified partner",
+    )
 
     # Needs to be overloaded: used to store multiple label pdfs
     # (when printing several labels at once)
     _shipping_parent_rel = None
-    _description = "Object used to edit shipping labels and track parcels"
 
     @api.multi
     def _shipping_parent(self):
@@ -125,9 +131,16 @@ class CommownShippingMixin(models.AbstractModel):
 
         for record in self:
             account = record._default_shipping_account()
+
+            recipient = record.recipient_partner_id
+            if not recipient:
+                recipient = self.env["res.partner"].browse(
+                    record.partner_id.address_get(["delivery"])["delivery"]
+                )
+
             try:
                 label = record._get_or_create_label(
-                    parcel, account, record.partner_id, record.get_label_ref()
+                    parcel, account, recipient, record.get_label_ref()
                 )
             except ColissimoError as exc:
                 msg = _("Colissimo error:\n%s") % exc.args[0]
