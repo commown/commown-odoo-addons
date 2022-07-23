@@ -6,6 +6,7 @@
     <field name="model">project.task</field>
     <field name="inherit_id" ref="project.view_task_form2" />
     <field name="arch" type="xml">
+
       <xpath expr="//notebook" position="inside">
         <page
           name="delivery"
@@ -34,6 +35,11 @@
           </group>
         </page>
       </xpath>
+
+      <xpath expr="//field[@name='partner_id']" position="after">
+        <field name="recipient_partner_id"/>
+      </xpath>
+
     </field>
   </record>
 
