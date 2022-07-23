@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 08:30+0000\n"
-"PO-Revision-Date: 2022-06-22 08:30+0000\n"
+"POT-Creation-Date: 2022-07-23 05:57+0000\n"
+"PO-Revision-Date: 2022-07-23 05:57+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgid "Account Password"
 msgstr "Mot de passe du compte"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:135
+#: code:addons/commown_shipping/models/shipping_mixin.py:144
 #, python-format
 msgid "Address too long for \"%s\""
 msgstr "Adresse de \"%s\" trop longue"
@@ -40,7 +40,6 @@ msgstr "Envoi automatique de l'email à la livraison"
 
 #. module: commown_shipping
 #: model:ir.cron,cron_name:commown_shipping.delivery_tracking_crm_lead
-#: model:ir.cron,cron_name:commown_shipping.delivery_tracking_project_issue
 #: model:ir.cron,cron_name:commown_shipping.delivery_tracking_project_task
 msgid "Base: Auto-vacuum internal data"
 msgstr "Base : données internes sur l'aspiration automatique"
@@ -58,7 +57,7 @@ msgid "Class holding the fields and methods to track parcel delivery"
 msgstr "Classe portant les champs et méthodes de suivi des colis"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:132
+#: code:addons/commown_shipping/models/shipping_mixin.py:141
 #, python-format
 msgid "Colissimo error:\n"
 "%s"
@@ -108,6 +107,13 @@ msgstr "Date de livraison"
 #: model_terms:ir.ui.view,arch_db:commown_shipping.view_task_form2
 msgid "Delivery followup"
 msgstr "Suivi de l'expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin__recipient_partner_id
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__recipient_partner_id
+#: model:ir.model.fields,field_description:commown_shipping.field_project_task__recipient_partner_id
+msgid "Delivery partner"
+msgstr "Adresse de livraison"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__delivery_tracking
@@ -181,7 +187,14 @@ msgstr "Mail au client pour une récupération urgente"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
+
+#. module: commown_shipping
+#: model:ir.model.fields,help:commown_shipping.field_commown_shipping_mixin__recipient_partner_id
+#: model:ir.model.fields,help:commown_shipping.field_crm_lead__recipient_partner_id
+#: model:ir.model.fields,help:commown_shipping.field_project_task__recipient_partner_id
+msgid "If left empty, a delivery partner will be looked-up for specified partner"
+msgstr "Lorsque laissée vide, une adresse de livraison sera recherchée pour le partenaire de la carte"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__insurance_value
@@ -226,7 +239,7 @@ msgid "Name"
 msgstr "Nom"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/delivery_mixin.py:95
+#: code:addons/commown_shipping/models/delivery_mixin.py:97
 #, python-format
 msgid "No mail email template specified for %s (neither in current record nor its parent)"
 msgstr "Aucun modèle de courriel paramétré pour %s (ni sur le doc courant ni sur son parent)"
