@@ -62,3 +62,8 @@ class CrmLeadTC(RentalSaleOrderTC):
         # Check results: contract started but is_auto_pay unchanged
         self.assertEqual(contract.date_start, date(2018, 1, 1))
         self.assertFalse(contract.is_auto_pay)
+
+        # Simulate delivery again: happens when we send a new device
+        # Contract start date should not change again!
+        lead.delivery_date = date(2017, 1, 1)
+        self.assertEqual(contract.date_start, date(2018, 1, 1))
