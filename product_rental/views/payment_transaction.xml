@@ -20,32 +20,7 @@
     <field name="model_id" ref="payment.model_payment_transaction"/>
     <field name="sequence">5</field>
     <field name="state">code</field>
-    <field name="code">
-<![CDATA[
-
-for invoice in record.invoice_ids:
-
-    for contract in invoice.mapped("invoice_line_ids.contract_line_id.contract_id"):
-
-        if contract.payment_mode_id:
-
-            payment = env['account.payment'].create({
-                'company_id': 1,  # ourselves!
-                'partner_id': contract.partner_id.id,
-                'partner_type': 'customer',
-                'state': 'draft',
-                'payment_type': 'inbound',
-                'journal_id': contract.payment_mode_id.fixed_journal_id.id,
-                'payment_method_id': contract.payment_mode_id.payment_method_id.id,
-                'amount': record.amount,
-                'payment_transaction_id': record.id,
-                'invoice_ids': [(6, 0, [invoice.id])],
-            })
-
-            payment.post()
-
-]]>
-    </field>
+    <field name="code">record.autopay_contract_invoices()</field>
   </record>
 
   <record id="payment_transaction_done" model="base.automation">
