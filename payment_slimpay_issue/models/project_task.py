@@ -409,6 +409,8 @@ class ProjectTask(models.Model):
             )
             payment.post()
 
+            transaction.payment_id = payment.id
+
             if self.slimpay_payment_label:
                 transaction = transaction.with_context(
                     slimpay_payin_label=self.slimpay_payment_label
