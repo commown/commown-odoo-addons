@@ -3,7 +3,7 @@
     "category": "Business",
     "summary": "Commown SCIC business application",
     "version": "12.0.1.0.0",
-    "description": "Commown SCIC business application",
+    "description": "Commown SCIC business applications",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
