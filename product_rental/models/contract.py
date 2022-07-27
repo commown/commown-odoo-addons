@@ -37,13 +37,19 @@ class Contract(models.Model):
         store=True,
     )
 
-    # Add modification behaviour to recurring_next_date
-    recurring_next_date = fields.Date(
-        inverse="_inverse_recurring_next_date",
-    )
+    date_start = fields.Date(inverse="_inverse_date_start")
+
+    recurring_next_date = fields.Date(inverse="_inverse_recurring_next_date")
+
+    def _inverse_date_start(self):
+        "Allow the direct modification of the start date"
+        for record in self:
+            for cline in record.contract_line_ids:
+                cline.date_start = record.date_start
+                cline._onchange_date_start()
 
     def _inverse_recurring_next_date(self):
-        """Allow modification of the next recurring date
+        """Allow the direct modification of the next recurring date
 
         ... if no invoice with a date later than the new next date exists
         (even draft one may be aggregated and invoiced, so we really need
