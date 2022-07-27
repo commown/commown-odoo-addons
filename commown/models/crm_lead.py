@@ -15,11 +15,10 @@ class CrmLead(models.Model):
         super(CrmLead, self).delivery_perform_actions()
         today = date.today()
         for record in self:
+            # Current method may be called by users not allowed to update
+            # contracts, so we use sudo here:
             contract = record.contract_id.sudo()
             # Do not restart contract that have already started
             if contract.date_start and contract.date_start <= today:
                 continue
-            for cline in contract.contract_line_ids:
-                cline.date_start = record.delivery_date
-                cline._onchange_date_start()
-            contract._compute_date_end()
+            contract.date_start = record.delivery_date
