@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="issue-description-contract-termination" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-contract-termination</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-contract-termination</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-contract-termination">
+        <p t-if="more_info">
+          Informations complémentaires :
+        </p>
+      </t>
+    </field>
+  </record>
+
+</odoo>

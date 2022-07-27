@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="contract-termination" model="ir.ui.view">
+    <field name="name">Self-troubleshoot Contract Termination</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-contract-termination</field>
+    <field name="arch" type="xml">
+
+      <t t-name="website.self-troubleshoot-contract-termination">
+        <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-set="title">Commown - Vie de mes contrats - Changement d'appareil</t>
+          <t t-set="head">
+
+            <script type="text/javascript">
+              $(document).ready(function() {
+
+                const wizard = setUpWizard($('#smartwizard'));
+
+                $('input[type=radio][name=net_contract-termination]').change(function () {
+                  wizard.toggleStep(2, this.value==='pay');
+                  wizard.toggleStep(3, this.value==='termination');
+               });
+
+              });
+            </script>
+          </t>
+          <t t-set="tag_names"></t>
+          <t t-set="issue_title">Je ne veux plus de mon appareil ou je veux un autre modèle</t>
+          <t t-set="issue_description_template">issue-description-contract-termination</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="container">
+            <h1>Vie de mes contrats - Changement d'appareil</h1>
+            <h2>Je ne veux plus de mon appareil ou je veux un autre modèle</h2>
+            <br />
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input type="hidden" name="tags" id="tags" t-att-value="tag_names" />
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+
+              <div id="smartwizard">
+                <ul>
+                  <li>
+                    <a href="#step-0">
+                      Contexte
+                      <br />
+                      <small>Appareil concerné</small>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#step-1">
+                      Étape 1
+                      <br />
+                      <small>Période d'engagement</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-2">Étape 2
+                      <br/>
+                      <small>Régler loyer ou transfert</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-3">Étape 3
+                      <br/>
+                      <small>Résiliation</small>
+                    </a>
+                  </li>
+                </ul>
+
+                <div>
+
+                  <t t-set="contracts"
+                  t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
+
+                  <div id="step-0">
+                    <div class="clearfix">
+                      <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
+                      <h2>Appareil concerné</h2>
+                    </div>
+                    <p>Choisissez ci-dessous le l'appareil dont vous voulez vous séparer.</p>
+                    <div id="form-step-0" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="device_contract">Contrat de votre appareil :</label>
+                        <select class="form-control" required="required" id="device_contract" name="device_contract" data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
+                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                          <t t-foreach="contracts" t-as="c">
+                            <t t-set="_date" t-value="c.date_start" />
+                            <option t-att-value="c.id" t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, _date.year, _date.month, _date.day)" />
+                          </t>
+                        </select>
+                        <div class="help-block with-errors" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-1">
+                    <h2>
+                      Période d'engagement
+                    </h2>
+                    <p>
+                      À ce stade de votre contrat, deux possibilités s'offrent à vous :
+                    </p>
+                    <p>
+                      Soit vous êtes encore engagé, auquel cas il ne vous reste qu'à attendre la fin de votre
+                      engagement avant de restituer votre appareil (plus de détails sur notre
+                      <a href="" target="_blank">wiki</a>). Cependant, vous pouvez également opter pour une des deux
+                      solutions suivantes : régler les loyers restants ou effectuer un transfert de contrat.
+                    </p>
+                    <p>
+                      Soit vous n'êtes plus engagé, vous pouvez donc résilier votre appareil définitivement ou
+                      opter pour un nouveau modèle (dans les deux cas, merci d'aller jusqu'à la fin du processus de
+                      résiliation.
+                    </p>
+                    <p class="text-danger">Vous êtes engagé jusqu'au :</p>
+
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label>Veuillez choisir entre une des deux options</label>
+                        <br />
+                        <br />
+                        <label class="radio-inline" for="net_pay-yes">Régler les loyers restant ou transférer mon contrat</label>
+                        <input type="radio" name="net_contract-termination" id="net_pay-yes" value="pay" required="required"
+                               data-required-error="Vous décidez de régler les loyers restant ou effectuer un transfert."/>
+                        <label class="radio-inline" for="net_contract-termination-yes">Résilier mon contrat</label>
+                        <input type="radio" name="net_contract-termination" id="net_contract-termination-yes" value="termination" required="required"/>
+                        <div class="help-block with-errors"/>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-2">
+                    <p>Toto</p>
+                  </div>
+
+                  <div id="step-3">
+                    <p>Tata</p>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+  <record id="contract-termination-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-contract-termination</field>
+    <field name="view_id" ref="contract-termination" />
+    <field name="website_meta_title">Vie de mes contrats</field>
+    <field name="website_meta_description">Je ne veux plus de mon appareil ou je veux un autre modèle</field>
+  </record>
+
+</odoo>
