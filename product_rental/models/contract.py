@@ -37,13 +37,19 @@ class Contract(models.Model):
         store=True,
     )
 
-    # Add modification behaviour to recurring_next_date
-    recurring_next_date = fields.Date(
-        inverse="_inverse_recurring_next_date",
-    )
+    date_start = fields.Date(inverse="_inverse_date_start")
+
+    recurring_next_date = fields.Date(inverse="_inverse_recurring_next_date")
+
+    def _inverse_date_start(self):
+        "Allow the direct modification of the start date"
+        for record in self:
+            for cline in record.contract_line_ids:
+                cline.date_start = record.date_start
+                cline._onchange_date_start()
 
     def _inverse_recurring_next_date(self):
-        """Allow modification of the next recurring date
+        """Allow the direct modification of the next recurring date
 
         ... if no invoice with a date later than the new next date exists
         (even draft one may be aggregated and invoiced, so we really need
@@ -70,12 +76,14 @@ class Contract(models.Model):
                     " Please remove them before."
                 )
 
-            inv_dates = record._get_related_invoices().filtered(
-                lambda inv: inv.state != "cancel"
-            ).mapped("date_invoice") + [record.date_start]
-            last_date_invoiced = max(inv_dates)
+            inv_dates = (
+                record._get_related_invoices()
+                .filtered(lambda inv: inv.state != "cancel")
+                .mapped("date_invoice")
+            )
+            last_date_invoiced = inv_dates and max(inv_dates) or False
 
-            if force and last_date_invoiced >= new_date:
+            if force and last_date_invoiced and last_date_invoiced >= new_date:
                 real_last_date_invoiced = last_date_invoiced
                 last_date_invoiced = max(
                     [d for d in inv_dates if d < new_date] + [record.date_start]

@@ -1,9 +1,20 @@
+from datetime import timedelta
+
 from odoo.exceptions import ValidationError
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
 class ContractTC(TestContractBase):
+    def test_inverse_date_start(self):
+        assert self.contract.contract_line_ids
+        new_date = self.contract.date_start - timedelta(days=1)
+        self.contract.date_start = new_date
+        self.assertEqual(self.contract.recurring_next_date, new_date)
+        clines = self.contract.contract_line_ids
+        self.assertEqual(set(clines.mapped("date_start")), {new_date})
+        self.assertEqual(set(clines.mapped("recurring_next_date")), {new_date})
+
     def test_inverse_recurring_next_date_error(self):
         self.contract.is_auto_pay = False
         init_recurring_next_date = self.contract.recurring_next_date
