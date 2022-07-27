@@ -76,12 +76,14 @@ class Contract(models.Model):
                     " Please remove them before."
                 )
 
-            inv_dates = record._get_related_invoices().filtered(
-                lambda inv: inv.state != "cancel"
-            ).mapped("date_invoice") + [record.date_start]
-            last_date_invoiced = max(inv_dates)
+            inv_dates = (
+                record._get_related_invoices()
+                .filtered(lambda inv: inv.state != "cancel")
+                .mapped("date_invoice")
+            )
+            last_date_invoiced = inv_dates and max(inv_dates) or False
 
-            if force and last_date_invoiced >= new_date:
+            if force and last_date_invoiced and last_date_invoiced >= new_date:
                 real_last_date_invoiced = last_date_invoiced
                 last_date_invoiced = max(
                     [d for d in inv_dates if d < new_date] + [record.date_start]
