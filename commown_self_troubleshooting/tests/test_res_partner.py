@@ -1,5 +1,6 @@
 import datetime
 
+from odoo.addons.product_rental.models.sale_order_line import NO_DATE
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
@@ -81,11 +82,8 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
         self.assertEqual(get_contracts("fp2-battery"), self.contract_fp2)
 
         # Check not started contracts are not returned
-        self.contract_fp2.contract_line_ids.update(
-            {
-                "date_start": datetime.date(2030, 1, 1),
-            }
-        )
+        self.contract_fp2.recurring_next_date = NO_DATE
+        self.contract_fp2.date_start = NO_DATE
 
         # Check ended contracts are not returned
         self.contract_fp2.contract_line_ids.update(
