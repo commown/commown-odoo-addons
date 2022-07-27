@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="issue-description-contract-termination" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-contract-termination</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-contract-termination</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-contract-termination">
+
+        <p>
+          <t t-if="net_contract_termination=='pay'">Je souhaite régler la totalité de mes loyers.</t>
+          <t t-else="">
+            <t t-if="net_contract_termination=='no'">Je souhaite effectuer un transfert de contrat.</t>
+            <t t-else="">Je souhaite résilier.</t>
+          </t>
+        </p>
+
+        <p t-if="more_info">Informations complémentaires :</p>
+        <pre t-if="more_info"><t t-esc="more_info" /></pre>
+
+      </t>
+
+    </field>
+  </record>
+
+</odoo>

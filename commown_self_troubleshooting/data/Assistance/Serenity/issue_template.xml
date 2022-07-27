@@ -8,10 +8,8 @@
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-serenity">
         <p>Numéro de téléphone à appeler : <b t-esc="phone"></b></p>
-        <p t-if="more_info">
-          Informations complémentaires :
-          <pre><t t-esc="more_info" /></pre>
-        </p>
+        <p t-if="more_info">Informations complémentaires :</p>
+        <pre t-if="more_info"><t t-esc="more_info" /></pre>
       </t>
     </field>
   </record>

@@ -273,15 +273,10 @@
         <t t-raw="tool_intro or ''" />
 
         <p>
-          Une demande d'assistance va être créée automatiquement
-        lorsque vous aurez soumis ce formulaire. Vous pourrez y
-        accéder à tout moment depuis
-          <a href=" https://shop.commown.coop/my/tasks" target="_blank">votre espace personnel</a>
-          , via la
-        section
-          <i>Mes demandes d'assistance</i>
-          pour en suivre
-        l'avancement et en consulter l'historique.
+          Une demande d'assistance va être créée automatiquement lorsque vous aurez soumis ce formulaire.
+          Vous pourrez y accéder à tout moment depuis
+          <a href=" /my/tasks" target="_blank">votre espace personnel</a>, via la section
+          <i>Mes demandes d'assistance</i> pour en suivre l'avancement et en consulter l'historique.
         </p>
 
         <t t-call="commown_self_troubleshooting.commown-signature" />
