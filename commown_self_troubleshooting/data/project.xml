@@ -6,6 +6,14 @@
       <field name="name">Support</field>
     </record>
 
+    <record id="contract_termination_project" model="project.project">
+      <field name="name">Termination</field>
+    </record>
+
+    <record id="stage_received_termination" model="project.task.type">
+      <field name="name">Received</field>
+    </record>
+
     <record id="stage_callback" model="project.task.type">
       <field name="name">Callback</field>
     </record>
