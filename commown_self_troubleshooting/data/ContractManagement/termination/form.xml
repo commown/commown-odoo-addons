@@ -25,7 +25,6 @@
               });
             </script>
           </t>
-          <t t-set="tag_names"></t>
           <t t-set="issue_title">Résiliation</t>
           <t t-set="issue_description_template">issue-description-contract-termination</t>
           <!-- Fin des variables à modifier -->
