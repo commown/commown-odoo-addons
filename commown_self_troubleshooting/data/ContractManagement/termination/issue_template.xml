@@ -8,7 +8,7 @@
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-contract-termination">
         <p t-if="more_info">
-          Informations complémentaires :
+          <pre><t t-esc="more_info" /></pre>
         </p>
       </t>
     </field>
