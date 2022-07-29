@@ -70,6 +70,13 @@ def delivery_data(partner):
         if len(partner_data.get(attr) or "") > 35:  # handle False and None
             raise AddressTooLong(partner)
 
+    if not (partner_data["phoneNumber"] or partner_data["mobileNumber"]):
+        raise ColissimoError(
+            "A phone number is required to generate a Colissimo label!"
+        )
+    if not partner_data["email"]:
+        raise ColissimoError("An email is required to generate a Colissimo label!")
+
     return partner_data
 
 
