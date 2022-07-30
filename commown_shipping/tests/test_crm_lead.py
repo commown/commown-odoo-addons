@@ -19,6 +19,14 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
 
+        self.sender = self.env.ref("base.res_partner_2")
+        self.sender.update(
+            {
+                "country_id": self._country("FR"),
+                "mobile": "0601020304",
+            }
+        )
+
         partner = self.env.ref("base.res_partner_1")
         product = self.env["product.product"].create(
             {"name": "Fairphone", "shipping_parcel_type_id": self.parcel_type.id}
@@ -62,7 +70,7 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
 
     def test_shipping_data_product_code(self):
         base_kwargs = {
-            "sender": self.env["res.partner"],
+            "sender": self.sender,
             "recipient": self.lead.partner_id,
             "order_number": "SO00000",
             "commercial_name": "Commown",
@@ -119,7 +127,7 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
     def test_shipping_data_empty_name(self):
         self.lead.partner_id.firstname = False
         data = shipping_data(
-            sender=self.env["res.partner"],
+            sender=self.sender,
             recipient=self.lead.partner_id,
             order_number="SO00000",
             commercial_name="Commown",
