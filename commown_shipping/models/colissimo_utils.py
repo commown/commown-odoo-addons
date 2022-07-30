@@ -7,6 +7,8 @@ import phonenumbers
 import requests
 from requests_toolbelt.multipart import decoder
 
+from odoo import _
+
 _logger = logging.getLogger(__name__)
 
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
@@ -24,8 +26,8 @@ class AddressTooLong(Exception):  # noqa: B903
 
 
 def normalize_phone(phone_number, country_code):
-    "Colissimo only accepts french phone numbers"
-    if country_code == "FR" and phone_number:
+    "Format phone number for Colissimo"
+    if phone_number:
         tel = phonenumbers.parse(phone_number, country_code)
         return phonenumbers.format_number(
             tel, phonenumbers.PhoneNumberFormat.NATIONAL
@@ -38,17 +40,19 @@ def delivery_data(partner):
 
     - that mobile phone numbers may be found in partner.phone instead
       of partner.mobile: put value into mobile if pertinent
-    - delivery contact may be specified on partner
-    - delivery contact may not have a copy of partner's phones and address
     - the address lines must not be too long (35 characters was the limit on
       coliship): in such a case, raise ValueError
+    - at least one phone number is required to ease delivery
+    - an email is required to get a delivery notification
 
     """
+
     mobile, fixed = partner.mobile, partner.phone
-    if not mobile and fixed and partner.country_id.code == "FR":
-        fixed_obj = phonenumbers.parse(fixed, "FR")
+    if not mobile and fixed:
+        fixed_obj = phonenumbers.parse(fixed, partner.country_id.code)
         if phonenumbers.number_type(fixed_obj) == MOBILE_TYPE:
             mobile, fixed = fixed, None
+
     partner_data = {
         "lastName": partner.lastname or "",
         "firstName": partner.firstname or "",
@@ -60,9 +64,11 @@ def delivery_data(partner):
         "mobileNumber": normalize_phone(mobile, partner.country_id.code) or "",
         "email": partner.email or "",
     }
+
     if partner.street2:
         partner_data["line1"] = partner.street
         partner_data["line2"] = partner.street2
+
     if partner.parent_id and partner.parent_id.is_company:
         partner_data["companyName"] = partner.parent_id.name
 
@@ -72,10 +78,11 @@ def delivery_data(partner):
 
     if not (partner_data["phoneNumber"] or partner_data["mobileNumber"]):
         raise ColissimoError(
-            "A phone number is required to generate a Colissimo label!"
+            _("A phone number is required to generate a Colissimo label!")
         )
+
     if not partner_data["email"]:
-        raise ColissimoError("An email is required to generate a Colissimo label!")
+        raise ColissimoError(_("An email is required to generate a Colissimo label!"))
 
     return partner_data
 
