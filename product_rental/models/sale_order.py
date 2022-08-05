@@ -180,3 +180,16 @@ class ProductRentalSaleOrder(models.Model):
             self._add_analytic_account(contract)
 
         return contracts
+
+    def action_show_contracts(self):
+        """Fix product_contract implementation of this same method
+
+        Fix a bug (in the js engine?) that leads to a UI crash when
+        adding a contract line to the displayed contract: without this,
+        the active_id is the sale order, and is (erronously) used as the
+        contract id to add contract lines to.
+        """
+        result = super().action_show_contracts()
+        if result["view_mode"] == "form":
+            result["context"] = {"active_id": result["res_id"]}
+        return result
