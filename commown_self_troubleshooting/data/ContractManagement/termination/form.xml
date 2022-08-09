@@ -17,9 +17,10 @@
 
                 const wizard = setUpWizard($('#smartwizard'));
 
-                $('input[type=radio][name=net_contract-termination]').change(function () {
+                $('input[type=radio][name=net_contract_termination]').change(function () {
                   wizard.toggleStep(2, this.value==='pay');
-                  wizard.toggleStep(3, this.value==='termination');
+                  wizard.toggleStep(3, this.value==='no');
+                  wizard.toggleStep(4, this.value==='termination');
                });
 
               });
@@ -59,11 +60,17 @@
                   <li disabled="disabled">
                     <a href="#step-2">Étape 2
                       <br/>
-                      <small>Régler loyer ou transfert</small>
+                      <small>Régler les loyers</small>
                     </a>
                   </li>
                   <li disabled="disabled">
                     <a href="#step-3">Étape 3
+                      <br/>
+                      <small>Transfert de contrat</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-4">Étape 4
                       <br/>
                       <small>Résiliation</small>
                     </a>
@@ -73,7 +80,7 @@
                 <div>
 
                   <t t-set="contracts"
-                  t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
+                     t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
 
                   <div id="step-0">
                     <div class="clearfix">
@@ -98,7 +105,7 @@
 
                   <div id="step-1">
                     <h2>
-                      Période d'engagement
+                      Régler les loyers ou transfert de contrat
                     </h2>
                     <p>
                       À ce stade de votre contrat, deux possibilités s'offrent à vous :
@@ -106,7 +113,7 @@
                     <p>
                       Soit vous êtes encore engagé, auquel cas il ne vous reste qu'à attendre la fin de votre
                       engagement avant de restituer votre appareil (plus de détails sur notre
-                      <a href="" target="_blank">wiki</a>). Cependant, vous pouvez également opter pour une des deux
+                      <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">wiki</a>). Cependant, vous pouvez également opter pour une des deux
                       solutions suivantes : régler les loyers restants ou effectuer un transfert de contrat.
                     </p>
                     <p>
@@ -114,28 +121,84 @@
                       opter pour un nouveau modèle (dans les deux cas, merci d'aller jusqu'à la fin du processus de
                       résiliation.
                     </p>
-                    <p class="text-danger">Vous êtes engagé jusqu'au :</p>
+                    <!-- <p class="text-danger">Vous êtes engagé jusqu'au :</p> -->
+
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label>Veuillez choisir entre une des deux options</label>
+                        <label>Veuillez choisir entre une des ces trois options</label>
                         <br />
                         <br />
-                        <label class="radio-inline" for="net_pay-yes">Régler les loyers restant ou transférer mon contrat</label>
-                        <input type="radio" name="net_contract-termination" id="net_pay-yes" value="pay" required="required"
-                               data-required-error="Veuillez choisir une des deux possibilités."/>
+                        <label class="radio-inline" for="net_pay-yes">Régler les loyers restant</label>
+                        <input type="radio" name="net_contract_termination" id="net_pay-yes" value="pay" required="required"
+                        data-required-error="Veuillez choisir une des trois possibilités."/>
+                        <label class="radio-inline" for="net_pay-no">Transférer mon contrat</label>
+                        <input type="radio" name="net_contract_termination" id="net_pay-no" value="no" required="required"
+                        data-required-error="Veuillez choisir une des trois possibilités."/>
                         <label class="radio-inline" for="net_contract-termination-yes">Résilier mon contrat</label>
-                        <input type="radio" name="net_contract-termination" id="net_contract-termination-yes" value="termination" required="required"/>
+                        <input type="radio" name="net_contract_termination" id="net_contract-termination-yes" value="termination" required="required"/>
                         <div class="help-block with-errors"/>
                       </div>
                     </div>
                   </div>
 
                   <div id="step-2">
-                    <p>Toto</p>
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      En appuyant sur <b>"Envoyer la demande"</b>, vous allez  à régler l'entièreté des loyers
+                      restant à payer sur votre contrat. Un mail sera envoyé à notre équipe de gestion qui
+                      reviendra vers vous avec une procédure détaillée sur le règlement ainsi que la restitution de
+                      l'appareil.
+                    </p>
+                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+
+                    <div id="form-step-2" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_2">
+                          Informations complémentaires :
+                        </label>
+                        <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="project_ref" value="contract_termination_project" />
+                        <button type="submit" class="btn btn-primary" name="action" value="contract_termination">Envoyer la demande</button>
+                      </div>
+                    </div>
                   </div>
 
                   <div id="step-3">
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      Toutes les informations relatives au transfert de votre contrat sont décrites sur
+                      notre <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">wiki</a>.
+                      Une fois celui-ci consulté, nous vous invitons à remplir ce champs texte ci-dessous pour nous exprimer
+                      l'identité (adresse mail, nom, prénom...) de votre repreneur s'il est connu.
+                    </p>
+                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+
+                    <div id="form-step-3" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_3">
+                          Merci de renseigner toutes les informations possibles :
+                        </label>
+                        <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info" required="required" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="project_ref" value="contract_termination_project" />
+                        <button type="submit" class="btn btn-primary" name="action" value="contract_termination">Envoyer la demande</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-4">
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
@@ -147,17 +210,17 @@
                     </p>
                     <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
-                    <div id="form-step-1" role="form" data-toggle="validator">
+                    <div id="form-step-4" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label for="more_info_step_1">
+                        <label for="more_info_step_4">
                           Merci de nous décrire au mieux les raisons qui vous poussent à résilier votre contrat :
                         </label>
-                        <textarea class="form-control" rows="3" id="more_info_step_1" name="more_info" required="required" />
+                        <textarea class="form-control" rows="3" id="more_info_step_4" name="more_info" required="required" />
                       </div>
 
                       <div class="form-group">
                         <input type="hidden" name="project_ref" value="contract_termination_project" />
-                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                        <button type="submit" class="btn btn-primary" name="action" value="contract_termination">Envoyer la demande</button>
                       </div>
                     </div>
                   </div>

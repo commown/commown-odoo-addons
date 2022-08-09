@@ -6,7 +6,18 @@
     <field name="type">qweb</field>
     <field name="key">commown_self_troubleshooting.issue-description-contract-termination</field>
     <field name="arch" type="xml">
-      <t t-name="self-troubleshoot-issue-description-contract-termination">
+    <t t-name="self-troubleshoot-issue-description-contract-termination">
+
+<t t-if="action=='contract_termination'">
+<t t-if="net_contract_termination=='pay'">
+Le client souhaite régler la totalité de ses loyers</t>
+<t t-else="">
+<t t-if="net_contract_termination=='no'">
+Le client souhaite effectuer un transfert de contrat</t>
+<t t-else="">
+Le client souhaite résilier</t>
+</t>
+</t>
         <p t-if="more_info">
           <pre><t t-esc="more_info" /></pre>
         </p>
