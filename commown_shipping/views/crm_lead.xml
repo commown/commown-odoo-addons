@@ -8,6 +8,7 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
         <field name="arch" type="xml">
+
           <xpath
           expr="//notebook/page/field[@name='description']/ancestor::page[1]"
           position="before"
@@ -39,6 +40,11 @@
               </group>
             </page>
           </xpath>
+
+          <xpath expr="//field[@name='partner_id']" position="after">
+            <field name="recipient_partner_id"/>
+          </xpath>
+
         </field>
     </record>
 

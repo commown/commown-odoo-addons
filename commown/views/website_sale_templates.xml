@@ -191,7 +191,17 @@
 
   </template>
 
+  <template id="address" inherit_id="website_sale.address">
 
+    <xpath expr="//div[@id='div_phone']" position="before">
+      <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-md-6">
+        <label class="col-form-label" for="email">Email</label>
+        <input type="email" name="email"
+               t-attf-class="form-control #{error.get('email') and 'is-invalid' or ''}"
+               t-att-value="'email' in checkout and checkout['email']" />
+      </div>
+    </xpath>
 
+  </template>
 
 </odoo>

@@ -1,12 +1,13 @@
 import json
 import logging
-import re
 from cgi import parse_header
 from datetime import datetime
 
 import phonenumbers
 import requests
 from requests_toolbelt.multipart import decoder
+
+from odoo import _
 
 _logger = logging.getLogger(__name__)
 
@@ -25,8 +26,8 @@ class AddressTooLong(Exception):  # noqa: B903
 
 
 def normalize_phone(phone_number, country_code):
-    "Colissimo only accepts french phone numbers"
-    if country_code == "FR" and phone_number:
+    "Format phone number for Colissimo"
+    if phone_number:
         tel = phonenumbers.parse(phone_number, country_code)
         return phonenumbers.format_number(
             tel, phonenumbers.PhoneNumberFormat.NATIONAL
@@ -39,17 +40,19 @@ def delivery_data(partner):
 
     - that mobile phone numbers may be found in partner.phone instead
       of partner.mobile: put value into mobile if pertinent
-    - delivery contact may be specified on partner
-    - delivery contact may not have a copy of partner's phones and address
     - the address lines must not be too long (35 characters was the limit on
       coliship): in such a case, raise ValueError
+    - at least one phone number is required to ease delivery
+    - an email is required to get a delivery notification
 
     """
+
     mobile, fixed = partner.mobile, partner.phone
-    if not mobile and fixed and partner.country_id.code == "FR":
-        fixed_obj = phonenumbers.parse(fixed, "FR")
+    if not mobile and fixed:
+        fixed_obj = phonenumbers.parse(fixed, partner.country_id.code)
         if phonenumbers.number_type(fixed_obj) == MOBILE_TYPE:
             mobile, fixed = fixed, None
+
     partner_data = {
         "lastName": partner.lastname or "",
         "firstName": partner.firstname or "",
@@ -61,35 +64,27 @@ def delivery_data(partner):
         "mobileNumber": normalize_phone(mobile, partner.country_id.code) or "",
         "email": partner.email or "",
     }
+
     if partner.street2:
         partner_data["line1"] = partner.street
         partner_data["line2"] = partner.street2
+
     if partner.parent_id and partner.parent_id.is_company:
         partner_data["companyName"] = partner.parent_id.name
 
-    delivery_id = partner.address_get(["delivery"])["delivery"]
-    if delivery_id == partner.id:
-        result_data = partner_data
-    else:
-        result_data = None
-        comment = partner.browse(delivery_id).comment
-        if comment:
-            match = re.match(r"^\[BP\] (?P<bp>[0-9]+)$", comment)
-            if match:
-                result_data = partner_data
-                result_data["BP"] = match.groupdict()["bp"]
-        if result_data is None:
-            result_data = delivery_data(partner.env["res.partner"].browse(delivery_id))
-            # Add fallback contact values if not set in delivery contact:
-            for attr in "phoneNumber", "mobileNumber", "email", "companyName":
-                if not result_data.get(attr) and attr in partner_data:
-                    result_data[attr] = partner_data[attr]
-
     for attr in ("line1", "line2", "line3"):
-        if len(result_data.get(attr) or "") > 35:  # handle False and None
+        if len(partner_data.get(attr) or "") > 35:  # handle False and None
             raise AddressTooLong(partner)
 
-    return result_data
+    if not (partner_data["phoneNumber"] or partner_data["mobileNumber"]):
+        raise ColissimoError(
+            _("A phone number is required to generate a Colissimo label!")
+        )
+
+    if not partner_data["email"]:
+        raise ColissimoError(_("An email is required to generate a Colissimo label!"))
+
+    return partner_data
 
 
 def shipping_data(
