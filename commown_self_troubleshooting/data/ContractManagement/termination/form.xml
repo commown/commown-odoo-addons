@@ -32,7 +32,7 @@
 
           <div class="container">
             <h1>Vie de mes contrats - Changement d'appareil</h1>
-            <h2>Je ne veux plus de mon appareil ou je veux un autre modèle</h2>
+            <h2>Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</h2>
             <br />
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
@@ -87,7 +87,7 @@
                       <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
                       <h2>Appareil concerné</h2>
                     </div>
-                    <p>Choisissez ci-dessous le l'appareil dont vous voulez vous séparer.</p>
+                    <p>Choisissez ci-dessous le contrat lié à l'appareil concerné.</p>
                     <div id="form-step-0" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label for="device_contract">Contrat de votre appareil :</label>
@@ -105,21 +105,36 @@
 
                   <div id="step-1">
                     <h2>
-                      Régler les loyers ou transfert de contrat
+                      Je vérifie mon engagement
                     </h2>
                     <p>
                       À ce stade de votre contrat, deux possibilités s'offrent à vous :
                     </p>
                     <p>
-                      Soit vous êtes encore engagé, auquel cas il ne vous reste qu'à attendre la fin de votre
-                      engagement avant de restituer votre appareil (plus de détails sur notre
-                      <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">wiki</a>). Cependant, vous pouvez également opter pour une des deux
-                      solutions suivantes : régler les loyers restants ou effectuer un transfert de contrat.
+                      1/ Soit vous êtes encore engagé.e, auquel cas nous vous invitons à
+                      attendre la fin de votre période d'engagement pour soumettre votre
+                      demande (retrouvez tous les détails utiles sur notre
+                      <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">WIKI</a>).
+                      Cependant, vous pouvez aussi opter pour une des deux alternatives suivantes :
+                      régler les mensualités restantes jusqu'à la fin de la période d'engagement
+                      ou effectuer un transfert de votre contrat à un tiers.
                     </p>
                     <p>
-                      Soit vous n'êtes plus engagé, vous pouvez donc résilier votre appareil définitivement ou
-                      opter pour un nouveau modèle (dans les deux cas, merci d'aller jusqu'à la fin du processus de
-                      résiliation.
+                      2/ Soit vous n'êtes plus engagé.e, et vous pouvez donc :
+                      <ul>
+                        <li>
+                          commander un nouveau modèle (directement sur notre
+                          <a href="https://shop.commown.coop/shop" target="_blank">magasin en ligne</a>,
+                          ce qui vous laissera le temps d'effectuer le transfert de données entre vos 2 appareils)
+                        </li>
+                        <li>
+                          ou arrêter ici l'aventure -choix qui nous attristerait mais que nous respectons bien entendu
+                        </li>
+                      </ul>
+                    </p>
+                    <p>
+                      Dans les 2 cas le contrat actuel doit donc être résilié, et nous vous
+                      invitons à aller jusqu'à la fin de ce processus. 
                     </p>
                     <!-- <p class="text-danger">Vous êtes engagé jusqu'au :</p> -->
 
@@ -129,13 +144,13 @@
                         <label>Veuillez choisir entre une des ces trois options</label>
                         <br />
                         <br />
-                        <label class="radio-inline" for="net_pay-yes">Régler les loyers restant</label>
+                        <label class="radio-inline" for="net_pay-yes">Régler les mensualités restantes</label>
                         <input type="radio" name="net_contract_termination" id="net_pay-yes" value="pay" required="required"
                         data-required-error="Veuillez choisir une des trois possibilités."/>
                         <label class="radio-inline" for="net_pay-no">Transférer mon contrat</label>
                         <input type="radio" name="net_contract_termination" id="net_pay-no" value="no" required="required"
                         data-required-error="Veuillez choisir une des trois possibilités."/>
-                        <label class="radio-inline" for="net_contract-termination-yes">Résilier mon contrat</label>
+                        <label class="radio-inline" for="net_contract-termination-yes">Résilier mon contrat actuel</label>
                         <input type="radio" name="net_contract_termination" id="net_contract-termination-yes" value="termination" required="required"/>
                         <div class="help-block with-errors"/>
                       </div>
@@ -148,10 +163,11 @@
                       Confirmation de votre demande
                     </h2>
                     <p>
-                      En appuyant sur <b>"Envoyer la demande"</b>, vous allez  à régler l'entièreté des loyers
-                      restant à payer sur votre contrat. Un mail sera envoyé à notre équipe de gestion qui
-                      reviendra vers vous avec une procédure détaillée sur le règlement ainsi que la restitution de
-                      l'appareil.
+                      En appuyant sur <b>"Envoyer la demande"</b>, vous acceptez de régler
+                      l'entièreté des mensualités restantes à payer jusqu'à la fin de
+                      la période d'engagement de votre contrat. Le règlement s'effectuera
+                      par prélèvement automatique, puis notre équipe de gestion reviendra
+                      vers vous concernant les modalités de restitution de l'appareil.
                     </p>
                     <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
@@ -178,7 +194,7 @@
                     <p>
                       Toutes les informations relatives au transfert de votre contrat sont décrites sur
                       notre <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">wiki</a>.
-                      Une fois celui-ci consulté, nous vous invitons à remplir ce champs texte ci-dessous pour nous exprimer
+                      Une fois celui-ci consulté, nous vous invitons à remplir ce champ de texte ci-dessous pour nous exprimer
                       l'identité (adresse mail, nom, prénom...) de votre repreneur s'il est connu.
                     </p>
                     <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
@@ -204,16 +220,17 @@
                       Confirmation de votre demande
                     </h2>
                     <p>
-                      En validant ce formulaire, une demande de résiliation de votre contrat
-                      sera envoyée à notre équipe de gestion qui reviendra vers vous par mail
-                      avec une procédure détaillée sur la restitution de l'appareil.
+                      En validant ce formulaire, une demande de résiliation de votre contrat actuel
+                      sera envoyée à notre équipe de gestion qui reviendra vers vous par mail concernant
+                      les modalités de restitution de l'appareil.
                     </p>
                     <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
                     <div id="form-step-4" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label for="more_info_step_4">
-                          Merci de nous décrire au mieux les raisons qui vous poussent à résilier votre contrat :
+                          Nous vous invitons à nous préciser les raisons qui vous y incitent à faire ce choix, ce feedback étant
+                          très important pour nous dans le cadre de notre démarche d'amélioration continue :
                         </label>
                         <textarea class="form-control" rows="3" id="more_info_step_4" name="more_info" required="required" />
                       </div>
