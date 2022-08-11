@@ -39,7 +39,10 @@ class SelfHelp(http.Controller):
             "contract_id": int(post["device_contract"]),
             "partner_id": partner.id,
             "description": self._description(**post),
-            "project_id": env.ref("commown_self_troubleshooting." + post.get("project_ref", "support_project")).id,
+            "project_id": env.ref(
+                "commown_self_troubleshooting."
+                + post.get("project_ref", "support_project")
+            ).id,
             "tag_ids": [(6, 0, self._tag_ids(**post))],
         }
         if post.get("stage_id", None):
