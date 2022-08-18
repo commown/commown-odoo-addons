@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-06 21:31+0000\n"
-"PO-Revision-Date: 2022-06-06 21:31+0000\n"
+"POT-Creation-Date: 2022-08-18 16:29+0000\n"
+"PO-Revision-Date: 2022-08-18 16:29+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,12 @@ msgid "Contract Template"
 msgstr "Modèle de contrat"
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:57
+#: model_terms:ir.ui.view,arch_db:product_rental.contract_template_form_view
+msgid "Contractual documents"
+msgstr "Documents contractuels (CGS/CP)"
+
+#. module: product_rental
+#: code:addons/product_rental/models/contract.py:136
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_contract_form_view
 #, python-format
 msgid "Cost/Revenue"
@@ -89,6 +94,16 @@ msgstr "Coûts / Revenus"
 #: selection:product.template,rental_frequency:0
 msgid "Daily"
 msgstr "par jour"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_contract_contract__date_start
+msgid "Date Start"
+msgstr "Date de début"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_contract_contract__recurring_next_date
+msgid "Date of Next Invoice"
+msgstr "Date de la prochaine facture"
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
@@ -153,6 +168,11 @@ msgstr "par mois"
 #: model:ir.model.fields,field_description:product_rental.field_contract_template__payment_mode_id
 msgid "Payment Mode"
 msgstr "Mode de paiement"
+
+#. module: product_rental
+#: model:ir.model,name:product_rental.model_payment_transaction
+msgid "Payment Transaction"
+msgstr "Transaction"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_product_template
@@ -222,6 +242,6 @@ msgstr "par an"
 #. module: product_rental
 #: model:base.automation,name:product_rental.payment_transaction_done
 #: model:ir.actions.server,name:product_rental.action_contract_auto_account_payment
-msgid "[commown] Payment transaction done"
-msgstr "[commown] Paiement d'une transaction effectué"
+msgid "[commown] Contract-related payment transaction done"
+msgstr "[commown] Paiement automatique des transactions induites par un contrat"
 
