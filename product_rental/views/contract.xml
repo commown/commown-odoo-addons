@@ -24,6 +24,7 @@
       </xpath>
 
       <xpath expr="//form" position="inside">
+        <div class="o_horizontal_separator">Contractual documents</div>
         <div class="oe_chatter"></div>
       </xpath>
 
