@@ -23,6 +23,11 @@
         <p> <strong>##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name</p>
       </xpath>
 
+      <xpath expr="//form" position="inside">
+        <div class="o_horizontal_separator">Contractual documents</div>
+        <div class="oe_chatter"></div>
+      </xpath>
+
     </field>
   </record>
 
