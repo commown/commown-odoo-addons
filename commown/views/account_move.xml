@@ -6,10 +6,16 @@
     <field name="model">account.move</field>
     <field name="inherit_id" ref="account.view_move_form"/>
     <field name="arch" type="xml">
+
       <xpath expr="//sheet" position="after">
         <div class="oe_chatter"></div>
         <script>$("button.o_chatter_button_attachment").click();</script>
       </xpath>
+
+      <xpath expr="//field[@name='line_ids']//field[@name='date_maturity']" position="attributes">
+        <attribute name="invisible"></attribute>
+      </xpath>
+
     </field>
   </record>
 
