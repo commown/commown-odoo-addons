@@ -57,6 +57,7 @@
         "data/product_public_category.xml",
         "security/ir.model.access.csv",
         "views/account_invoice.xml",
+        "views/account_move.xml",
         "views/actions_account_invoice.xml",
         "views/actions_crm_lead.xml",
         "views/actions_utm_source.xml",
