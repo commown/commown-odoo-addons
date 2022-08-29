@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="contract-termination" model="ir.ui.view">
+    <field name="name">Self-troubleshoot Contract Termination</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-contract-termination</field>
+    <field name="arch" type="xml">
+
+      <t t-name="website.self-troubleshoot-contract-termination">
+        <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-set="title">Commown - Vie de mes contrats - Changement d'appareil</t>
+          <t t-set="head">
+
+            <script type="text/javascript">
+              $(document).ready(function() {
+
+                const wizard = setUpWizard($('#smartwizard'));
+
+                $('input[type=radio][name=net_contract_termination]').change(function () {
+                  wizard.toggleStep(2, this.value==='pay');
+                  wizard.toggleStep(3, this.value==='no');
+                  wizard.toggleStep(4, this.value==='termination');
+               });
+
+              });
+            </script>
+          </t>
+          <t t-set="issue_title">Résiliation</t>
+          <t t-set="issue_description_template">issue-description-contract-termination</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="container">
+            <h1>Vie de mes contrats - Changement d'appareil</h1>
+            <h2>Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</h2>
+            <br />
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input type="hidden" name="tags" id="tags" t-att-value="tag_names" />
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+
+              <div id="smartwizard">
+                <ul>
+                  <li>
+                    <a href="#step-0">
+                      Contexte
+                      <br />
+                      <small>Appareil concerné</small>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#step-1">
+                      Étape 1
+                      <br />
+                      <small>Période d'engagement</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-2">Étape 2
+                      <br/>
+                      <small>Régler les loyers</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-3">Étape 3
+                      <br/>
+                      <small>Transfert de contrat</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-4">Étape 4
+                      <br/>
+                      <small>Résiliation</small>
+                    </a>
+                  </li>
+                </ul>
+
+                <div>
+
+                  <t t-set="contracts"
+                     t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
+
+                  <div id="step-0">
+                    <div class="clearfix">
+                      <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
+                      <h2>Appareil concerné</h2>
+                    </div>
+                    <p>Choisissez ci-dessous le contrat lié à l'appareil concerné.</p>
+                    <div id="form-step-0" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="device_contract">Contrat de votre appareil :</label>
+                        <select class="form-control" required="required" id="device_contract" name="device_contract" data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
+                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                          <t t-foreach="contracts" t-as="c">
+                            <t t-set="_date" t-value="c.date_start" />
+                            <option t-att-value="c.id" t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, _date.year, _date.month, _date.day)" />
+                          </t>
+                        </select>
+                        <div class="help-block with-errors" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-1">
+                    <h2>
+                      Je vérifie mon engagement
+                    </h2>
+                    <p>
+                      À ce stade de votre contrat, deux possibilités s'offrent à vous :
+                    </p>
+                    <p>
+                      1/ Soit vous êtes encore engagé.e, auquel cas nous vous invitons à
+                      attendre la fin de votre période d'engagement pour soumettre votre
+                      demande (retrouvez tous les détails utiles sur notre
+                      <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">WIKI</a>).
+                      Cependant, vous pouvez aussi opter pour une des deux alternatives suivantes :
+                      régler les mensualités restantes jusqu'à la fin de la période d'engagement
+                      ou effectuer un transfert de votre contrat à un tiers.
+                    </p>
+                    <p>
+                      2/ Soit vous n'êtes plus engagé.e, et vous pouvez donc :
+                      <ul>
+                        <li>
+                          commander un nouveau modèle (directement sur notre
+                          <a href="/shop" target="_blank">magasin en ligne</a>,
+                          ce qui vous laissera le temps d'effectuer le transfert de données entre vos 2 appareils)
+                        </li>
+                        <li>
+                          ou arrêter ici l'aventure (choix qui nous attristerait mais que nous respectons bien entendu)
+                        </li>
+                      </ul>
+                    </p>
+                    <p>
+                      Dans les 2 cas le contrat actuel doit donc être résilié, et nous vous
+                      invitons à aller jusqu'à la fin de ce processus.
+                    </p>
+                    <!-- <p class="text-danger">Vous êtes engagé jusqu'au :</p> -->
+
+
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label>Veuillez choisir entre une des ces trois options</label>
+                        <br />
+                        <br />
+                        <label class="radio-inline" for="net_pay-yes">Régler les mensualités restantes</label>
+                        <input type="radio" name="net_contract_termination" id="net_pay-yes" value="pay" required="required"
+                        data-required-error="Veuillez choisir une des trois possibilités."/>
+                        <label class="radio-inline" for="net_pay-no">Transférer mon contrat</label>
+                        <input type="radio" name="net_contract_termination" id="net_pay-no" value="no" required="required"
+                        data-required-error="Veuillez choisir une des trois possibilités."/>
+                        <label class="radio-inline" for="net_contract-termination-yes">Résilier mon contrat actuel</label>
+                        <input type="radio" name="net_contract_termination" id="net_contract-termination-yes" value="termination" required="required"/>
+                        <div class="help-block with-errors"/>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-2">
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      En appuyant sur <b>"Envoyer la demande"</b>, vous acceptez de régler
+                      l'entièreté des mensualités restantes à payer jusqu'à la fin de
+                      la période d'engagement de votre contrat. Le règlement s'effectuera
+                      par prélèvement automatique, puis notre équipe de gestion reviendra
+                      vers vous concernant les modalités de restitution de l'appareil.
+                    </p>
+                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+
+                    <div id="form-step-2" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_2">
+                          Informations complémentaires :
+                        </label>
+                        <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="project_ref" value="contract_termination_project" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-3">
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      Toutes les informations relatives au transfert de votre contrat sont décrites sur
+                      notre <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">wiki</a>.
+                      Une fois celui-ci consulté, nous vous invitons à remplir ce champ de texte ci-dessous pour nous exprimer
+                      l'identité (adresse mail, nom, prénom...) de votre repreneur s'il est connu.
+                    </p>
+                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+
+                    <div id="form-step-3" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_3">
+                          Merci de renseigner toutes les informations possibles :
+                        </label>
+                        <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info" required="required" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="project_ref" value="contract_termination_project" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-4">
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      En validant ce formulaire, une demande de résiliation de votre contrat actuel
+                      sera envoyée à notre équipe de gestion qui reviendra vers vous par mail concernant
+                      les modalités de restitution de l'appareil.
+                    </p>
+                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+
+                    <div id="form-step-4" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_4">
+                          Nous vous invitons à nous préciser les raisons qui vous y incitent à faire ce choix, ce feedback étant
+                          très important pour nous dans le cadre de notre démarche d'amélioration continue :
+                        </label>
+                        <textarea class="form-control" rows="3" id="more_info_step_4" name="more_info" required="required" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="project_ref" value="contract_termination_project" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+  <record id="contract-termination-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-contract-termination</field>
+    <field name="view_id" ref="contract-termination" />
+    <field name="website_meta_title">Vie de mes contrats</field>
+    <field name="website_meta_description">Je ne veux plus de mon appareil ou je veux un autre modèle</field>
+  </record>
+
+</odoo>

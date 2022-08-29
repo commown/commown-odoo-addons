@@ -137,18 +137,20 @@ class PagesTC(HttpCase):
         "Portal home must not crash if user has no or a not-templated contract"
         doc = self.get_page("/my/home")
         self.assertFalse(ts_link_urls(doc))
+
+        # Do not test for absence of troubleshooting links when there
+        # is a contract, as there will be one at least, to terminate it
         self.create_contract(False)
-        doc = self.get_page("/my/home")
-        self.assertFalse(ts_link_urls(doc))
+        self.get_page("/my/home")
 
     def test_portal_with_contracts(self):
         "Page should load without crashing if user has a no template-contract"
         self.create_contract(self._create_ct("FP2/B2C"))
         doc = self.get_page("/my/home")
-        self.assertEquals(ts_link_urls(doc), self._ts_page_urls("fp2"))
+        self.assertGreater(ts_link_urls(doc), self._ts_page_urls("fp2"))
         self.create_contract(self._create_ct("FP3+/B2B"))
         doc = self.get_page("/my/home")
-        self.assertEquals(ts_link_urls(doc), self._ts_page_urls("fp2", "fp3"))
+        self.assertGreater(ts_link_urls(doc), self._ts_page_urls("fp2", "fp3"))
 
     def test_page_contract_options(self):
         ct = self._create_ct("FP2/B2C")

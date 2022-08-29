@@ -62,6 +62,12 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
             _normalize_all_data(data),
             [
                 {
+                    "title": "Vie de mes contrats",
+                    "pages": [
+                        {"url_path": "/page/self-troubleshoot-contract-termination"},
+                    ],
+                },
+                {
                     "title": "Fairphone 2",
                     "pages": [
                         {"url_path": "/page/self-troubleshoot-fp2-battery"},
