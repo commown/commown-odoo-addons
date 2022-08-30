@@ -125,6 +125,19 @@ class CommownShippingMixin(models.AbstractModel):
             parent_ref = _ref_from_name(parent.name) or str(parent.id)
             return "{}-{}".format(parent_ref, entity_ref)
 
+    def _recipient_partner(self):
+        "Give the opportunity to override shipping recipient computation"
+        self.ensure_one()
+
+        result = self.recipient_partner_id
+
+        if not result:
+            result = self.env["res.partner"].browse(
+                self.partner_id.address_get(["delivery"])["delivery"]
+            )
+
+        return result
+
     @api.multi
     def _print_parcel_labels(self, parcel, account=None, force_single=False):
         paths = []
@@ -132,11 +145,7 @@ class CommownShippingMixin(models.AbstractModel):
         for record in self:
             account = record._default_shipping_account()
 
-            recipient = record.recipient_partner_id
-            if not recipient:
-                recipient = self.env["res.partner"].browse(
-                    record.partner_id.address_get(["delivery"])["delivery"]
-                )
+            recipient = record._recipient_partner()
 
             try:
                 label = record._get_or_create_label(
