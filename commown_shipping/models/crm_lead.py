@@ -45,3 +45,13 @@ class CrmLead(models.Model):
             return self._print_parcel_labels(
                 self._default_shipping_parcel_type(), force_single=force_single
             )
+
+    def _recipient_partner(self):
+        "Override recipient partner computation to use the sale.order if any"
+        self.ensure_one()
+
+        return (
+            self.recipient_partner_id
+            or self.mapped("so_line_id.order_id.partner_shipping_id")
+            or super(CrmLead, self)._recipient_partner()
+        )

@@ -116,7 +116,7 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         for num in range(5):
             leads += self.lead.copy({"name": "[SO%05d] Test lead" % num})
             if num == 3:
-                leads[-1].partner_id = other_partner
+                leads[-1].recipient_partner_id = other_partner
 
         with self.assertRaises(UserError) as err:
             self._print_outward_labels(leads)
