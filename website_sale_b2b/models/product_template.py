@@ -16,7 +16,4 @@ class ProductTemplate(models.Model):
     @api.multi
     def is_b2b(self):
         self.ensure_one()
-        for category in self.public_categ_ids:
-            if category.is_b2b():
-                return True
-        return False
+        return self.website_id == self.env.ref("website_sale_b2b.b2b_website")

@@ -16,7 +16,7 @@
     ],
     "external_dependencies": {},
     "data": [
-        "data/product_public_category.xml",
+        "data/website.xml",
         "views/website_sale_product.xml",
         "views/product_template.xml",
     ],
