@@ -1,3 +1,5 @@
+import datetime
+
 from .common import DeviceAsAServiceTC
 
 
@@ -210,6 +212,26 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             possible_values["variant_id"], self.storable_product.product_variant_ids
         )
         self.assertEqual(sorted(possible_values["lot_id"].mapped("name")), ["fp4"])
+
+        # Actually create a picking
+        self.task.update(
+            {"contract_id": self.c1.id, "lot_id": self.c1.quant_ids[0].lot_id}
+        )
+
+        date = datetime.datetime(2020, 1, 10, 16, 2, 34)
+        wizard = self.env["project.task.outward.picking.wizard"].create(
+            {
+                "task_id": self.task.id,
+                "date": date,
+                "lot_id": self.task.lot_id.id,
+                "variant_id": self.task.lot_id.product_id.id,
+                "product_tmpl_id": self.task.lot_id.product_id.product_tmpl_id.id,
+            }
+        )
+        picking = wizard.create_picking()
+
+        self.assertEqual(picking.scheduled_date, date)
+        self.assertEqual(picking.date_done, date)
 
     def test_wizard_inward(self):
 
