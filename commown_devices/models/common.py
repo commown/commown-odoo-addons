@@ -37,6 +37,8 @@ def internal_picking(
             }
         )
 
+    picking.scheduled_date = date
+
     assert picking.move_lines
     picking.action_confirm()
     picking.action_assign()
