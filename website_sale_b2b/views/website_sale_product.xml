@@ -52,7 +52,18 @@
 
     <!-- END Replace description_sale by website_description_sale -->
 
+    <!-- Cart lines modifications: -->
 
+    <template id="cart_lines" inherit_id="website_sale.cart_lines">
+
+      <!-- * Replace description_sale by website_description_sale -->
+      <xpath expr="//t[@t-call='website_sale.cart_line_description_following_lines']" position="replace">
+        <div class="text-muted d-none d-md-block small" t-field="line.product_id.website_description_sale"></div>
+      </xpath>
+
+    </template>
+
+    <!-- END Cart lines modifications -->
 
   </data>
 </odoo>
