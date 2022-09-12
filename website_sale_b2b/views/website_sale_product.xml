@@ -63,6 +63,13 @@
 
     </template>
 
+    <!-- * Insert excl. taxes in rental price in each line -->
+    <template id="cart_line_product_link" inherit_id="product_rental.cart_line_product_link">
+      <xpath expr="//span[@t-field='product.rental_frequency']" position="before">
+        <t t-if="product_tmpl.is_b2b()">excl. taxes</t>
+      </xpath>
+    </template>
+
     <!-- END Cart lines modifications -->
 
   </data>
