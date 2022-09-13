@@ -62,11 +62,11 @@
       </div>
     </xpath>
 
-    <!-- Remove company name -->
+    <!-- Remove company name: once checked and set by us, do not edit on portal -->
     <xpath expr="//form//input[@name='company_name']/ancestor::div[1]" position="replace">
     </xpath>
 
-    <!-- Remove VAT -->
+    <!-- Remove VAT: once checked and set by us, do not edit on portal -->
     <xpath expr="//form//input[@name='vat']/ancestor::div[1]" position="replace">
     </xpath>
 
