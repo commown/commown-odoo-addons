@@ -43,9 +43,12 @@
 
     <!-- Add zip as required: remove label-optional class from input -->
     <xpath expr="//form//input[@name='zip']/ancestor::div[1]" position="replace">
-      <div t-attf-class="form-group #{error.get('zip') and 'has-error' or ''} col-sm-4 div_zip">
+      <div t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip">
         <label class="col-form-label" for="zip">Zip Code</label>
-        <input type="text" name="zip" class="form-control" t-att-value="'zip' in checkout and checkout['zip']" />
+        <input type="text"
+               name="zip"
+               t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}"
+               t-att-value="'zip' in checkout and checkout['zip']" />
       </div>
     </xpath>
 
