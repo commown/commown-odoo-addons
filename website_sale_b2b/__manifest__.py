@@ -16,7 +16,9 @@
     ],
     "external_dependencies": {},
     "data": [
+        "data/ir_config_parameter.xml",
         "data/website.xml",
+        "views/payment_portal_templates.xml",
         "views/website_sale_product.xml",
         "views/product_template.xml",
     ],
