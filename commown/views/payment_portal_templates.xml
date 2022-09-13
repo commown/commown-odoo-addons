@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <!-- Customize the checkout process for legal reasons  -->
+  <template id="payment" inherit_id="website_sale.payment">
 
-  <template id="payment" inherit_id="website_sale.payment"
-            name="Payment (commown)">
-
-    <xpath expr="//t[@t-set='submit_txt']" position="replace">
-      <t t-set="submit_txt">Accept and pay</t>
+    <!-- Add UI elements to emphasize the user needs to check its delivery address -->
+    <xpath expr="//div[@id='shipping_and_billing']/*[1]" position="before">
+      <h3 class="card-title">Adresse de livraison</h3>
+      <h4 class="card-subtitle mb-3 text-danger">Merci de vérifier vos adresses</h4>
     </xpath>
 
   </template>
 
-  <template id="payment_tokens_list" inherit_id="payment.payment_tokens_list"
-            name="Payment Tokens list (commown)">
+  <template id="payment_tokens_list" inherit_id="payment.payment_tokens_list">
 
     <xpath expr="//form" position="before">
-      <div class="alert alert-warning" role="alert">
+
+      <div t-if="not is_big_b2b" class="alert alert-warning" role="alert">
         En cliquant sur "Accepter et payer", je reconnais avoir pris connaissance des
         <a class="fr lang" target="_blank"
            href="https://commown.coop/mentions-legales">conditions de services et informations légales</a><a class="de lang" target="_blank"
            href="https://commown.coop/de/allgemeine_gesch%C3%A4ftsbedingungen/">conditions de services et informations légales</a>
         et je les accepte.
       </div>
+
     </xpath>
 
     <xpath expr="//form" position="after">
-      <div class="float-right col-4 pr-0 mt-1 text-right">
+
+      <div t-if="not is_big_b2b" class="float-right col-4 pr-0 mt-1 text-right">
         Vous serez redirigé·e vers un formulaire de signature de mandat
         SEPA (Slimpay), sauf si vous êtes déjà client.
       </div>
+
     </xpath>
 
   </template>
