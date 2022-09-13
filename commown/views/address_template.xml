@@ -1,19 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="address" inherit_id="website_sale.address_b2b">
-    <xpath expr="//form//input[@name='company_name']/ancestor::div[1]" position="replace"></xpath>
-    <xpath expr="//form//input[@name='vat']/ancestor::div[1]" position="replace"></xpath>
-    <!-- Add zip as required: -->
-    <!-- * remove label-optional class from input -->
-    <!-- * add in field_required hidden input for the controller -->
+
+  <template id="address" inherit_id="website_sale.address">
+
+    <!-- Add maxlength to address lines to ease user understanding -->
+    <xpath expr="//input[@name='street']" position="attributes">
+      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
+    </xpath>
+
+    <xpath expr="//input[@name='street2']" position="attributes">
+      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
+    </xpath>
+
+    <!-- Display email input no matter the mode 'billing': we need it for delivery too -->
+    <xpath expr="//input[@name='email']/ancestor::t[1]" position="attributes">
+      <attribute name="t-if">True</attribute>
+    </xpath>
+
+    <!-- Add company_name and vat as required in b2b -->
+    <xpath expr="//div[@id='div_phone']" position="after">
+      <t t-set="is_b2b"
+         t-value="env['res.partner'].browse(partner_id).mapped('user_ids.website_id') == env.ref('website_sale_b2b.b2b_website')" />
+
+      <t t-if="is_b2b and mode[1] == 'billing'">
+        <div class="w-100"/>
+        <div t-attf-class="form-group #{error.get('company_name') and 'o_has_error' or ''} col-lg-6">
+          <label class="col-form-label" for="company_name">Company Name</label>
+          <input type="text"
+                 name="company_name"
+                 t-attf-class="form-control #{error.get('company_name') and 'is-invalid' or ''}"
+                 t-att-value="'commercial_company_name' in checkout and checkout['commercial_company_name'] or 'company_name' in checkout and checkout['company_name']" />
+        </div>
+        <div t-attf-class="form-group #{error.get('vat') and 'o_has_error' or ''} col-lg-6 div_vat">
+          <label class="col-form-label" for="vat">VAT</label>
+          <input type="text"
+                 name="vat"
+                 t-attf-class="form-control #{error.get('vat') and 'is-invalid' or ''}"
+                 t-att-value="'vat' in checkout and checkout['vat']" />
+        </div>
+      </t>
+    </xpath>
+
+    <!-- Add zip as required: remove label-optional class from input -->
     <xpath expr="//form//input[@name='zip']/ancestor::div[1]" position="replace">
       <div t-attf-class="form-group #{error.get('zip') and 'has-error' or ''} col-sm-4 div_zip">
         <label class="control-label" for="zip">Zip Code</label>
         <input type="text" name="zip" class="form-control" t-att-value="'zip' in checkout and checkout['zip']" />
       </div>
-   </xpath>
-    <xpath expr="//form//input[@name='field_required']" position="replace">
-      <input type="hidden" name="field_required" t-att-value="'firstname,lastname,phone,zip,country_id'" />
     </xpath>
+
+    <!-- * add in field_required hidden input for the controller -->
+    <xpath expr="//form//input[@name='field_required']" position="replace">
+      <t t-set="is_b2b"
+         t-value="env['res.partner'].browse(partner_id).mapped('user_ids.website_id') == env.ref('website_sale_b2b.b2b_website')" />
+      <input type="hidden"
+             name="field_required"
+             t-att-value="'firstname,lastname,phone,zip,country_id' + ',company_name,vat' if is_b2b else ''" />
+    </xpath>
+
   </template>
+
 </odoo>
