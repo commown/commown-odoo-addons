@@ -5,13 +5,14 @@
   <template id="portal_layout" inherit_id="portal.portal_layout">
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]/div[1]" position="after">
       <div class="mt-2">
+        <t t-set="is_b2b" t-value="user_id.website_id == env.ref('website_sale_b2b.b2b_website')"/>
         <t t-set="no_card" t-value="(not user_id.partner_id.id_card1 and not user_id.partner_id.id_card2)" />
-        <t t-set="no_poa" t-value="not user_id.partner_id.proof_of_address" />
+        <t t-set="no_poa" t-value="(is_b2b and not user_id.partner_id.company_record) or (not is_b2b and not user_id.partner_id.proof_of_address)" />
         <i class="fa fa-copy fa-fw"/><span class="ml-2">ID card</span> <i
             t-attf-class="fa #{no_card and 'fa-exclamation-triangle' or 'fa-check' }"
             t-attf-style="#{no_card and 'color:red' or ''}" />
         <br/>
-        <i class="fa fa-copy fa-fw"/><span class="ml-2">Proof of address</span> <i
+        <i class="fa fa-copy fa-fw"/><span class="ml-2"><t t-if="is_b2b">Company record</t><t t-else="">Proof of address</t></span> <i
             t-attf-class="fa #{no_poa and 'fa-exclamation-triangle' or 'fa-check' }"
             t-attf-style="#{no_poa and 'color:red' or ''}"
             />
@@ -90,7 +91,8 @@
 
       <h3 class="col-lg-12">Documents</h3>
 
-      <t t-foreach="['id_card1', 'id_card2', 'proof_of_address']" t-as="field">
+      <t t-set="is_b2b" t-value="user_id.website_id == env.ref('website_sale_b2b.b2b_website')"/>
+      <t t-foreach="['id_card1', 'id_card2', 'company_record' if is_b2b else 'proof_of_address']" t-as="field">
         <t t-set="label" t-value="partner._fields[field].get_description(env)['string']" />
         <div t-attf-class="form-group #{error.get(field) and 'has-error' or ''} col-lg-6">
           <label class="control-label" t-attf-for="#{field}" t-esc="label" />
