@@ -58,7 +58,7 @@
          t-value="env['res.partner'].browse(partner_id).mapped('user_ids.website_id') == env.ref('website_sale_b2b.b2b_website')" />
       <input type="hidden"
              name="field_required"
-             t-att-value="'firstname,lastname,phone,zip,country_id' + ',company_name,vat' if is_b2b else ''" />
+             t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name,vat' if is_b2b else '')" />
     </xpath>
 
   </template>
