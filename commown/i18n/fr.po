@@ -170,13 +170,6 @@ msgid "<b>Product is not available for the moment</b>"
 msgstr "<b>Article indisponible pour le moment</b>"
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.portal_layout
-msgid "<br/>\n"
-"        <i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Proof of address</span>"
-msgstr "<br/>\n"
-"        <i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Justificatif de domicile</span>"
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
 msgid "<em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société par Actions Simplifiée</em>"
 msgstr "<em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société par Actions Simplifiée</em>"
@@ -207,7 +200,7 @@ msgid "<i title=\"Download document\" class=\"fa fa-download\"/>"
 msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
 
 #. module: commown
-#: code:addons/commown/models/sale_order.py:69
+#: code:addons/commown/models/sale_order.py:67
 #, python-format
 msgid "<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
 msgstr "<p><b>N° de commande :</b> {sale_name}</p><p><b>Date de la commande :</b> {date.day}-{date.month}-{date.year}</p><p><b>Article :</b> {product_name}</p>"
@@ -298,6 +291,18 @@ msgid "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state 
 msgstr "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "Company Name"
+msgstr "Nom de la société"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_res_partner__company_record
+#: model:ir.model.fields,field_description:commown.field_res_users__company_record
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Company record"
+msgstr "K-bis ou similaire"
+
+#. module: commown
 #: model:ir.model,name:commown.model_res_partner
 msgid "Contact"
 msgstr "Contact"
@@ -386,7 +391,7 @@ msgid "Fermer"
 msgstr "Fermer"
 
 #. module: commown
-#: code:addons/commown/models/res_partner.py:76
+#: code:addons/commown/models/res_partner.py:90
 #, python-format
 msgid "File too big (limit is %dMo)"
 msgstr "Fichier trop gros (la limite est %d Mo)"
@@ -537,7 +542,7 @@ msgstr "Ma pièce d'identité<br>"
 #. module: commown
 #: model:product.template,name:commown.sepa_mandate
 msgid "Mandat SEPA"
-msgstr "Mandat SEPA (copie)"
+msgstr "Mandat SEPA"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -653,6 +658,7 @@ msgstr "Projet"
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_res_partner__proof_of_address
 #: model:ir.model.fields,field_description:commown.field_res_users__proof_of_address
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
 msgid "Proof of address"
 msgstr "Justificatif de domicile"
 
@@ -719,6 +725,12 @@ msgid "Tasks"
 msgstr "Tâches"
 
 #. module: commown
+#: model:ir.model.fields,help:commown.field_res_partner__company_record
+#: model:ir.model.fields,help:commown.field_res_users__company_record
+msgid "This field holds a file to store a company record. Images are resized to 1240x1754 and, all files are limited to 5Mo."
+msgstr "Ce champ contient un fichier de stockage du K-bis ou similaire. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+
+#. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner__proof_of_address
 #: model:ir.model.fields,help:commown.field_res_users__proof_of_address
 msgid "This field holds a file to store a proof of address. Images are resized to 1240x1754 and, all files are limited to 5Mo."
@@ -765,6 +777,11 @@ msgstr "Unité(s)"
 #: model:ir.model,name:commown.model_res_users
 msgid "Users"
 msgstr "Utilisateurs"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "VAT"
+msgstr "TVA"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
@@ -879,9 +896,13 @@ msgstr "[commown] Envoyer un SMS de rappel"
 #. module: commown
 #: model:ir.actions.server,name:commown.action_send_issue_reminder_email
 msgid "[commown] Send a reminder email concerning an issue"
-msgstr "[commown] Envoyer un courriel de rappel concernant un ticket"
+msgstr "[commown] Envoyer un courriel de rappel concernant une demande d'assistance"
 
 #. module: commown
+#: model:base.automation,name:commown.issue_reminder_delay_expired
+#: model:base.automation,name:commown.issue_waiting_customer_for_too_long
+#: model:base.automation,name:commown.manual_issue_waiting_for_too_long
+#: model:ir.actions.server,name:commown.action_move_issue_to_stop_waiting_stage
 #: model:ir.actions.server,name:commown.manual_issue_waiting_for_too_long_ir_actions_server
 msgid "[commown] Time spent in the manual followup stage was too long"
 msgstr "[commown] Le temps passé dans l'étape de suivi manuel a expiré"
