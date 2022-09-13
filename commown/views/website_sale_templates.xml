@@ -181,14 +181,4 @@
 
   </template>
 
-  <template id="payment" inherit_id="website_sale.payment">
-
-    <!-- Add UI elements to emphasize the user needs to check its delivery address -->
-    <xpath expr="//div[@id='shipping_and_billing']/*[1]" position="before">
-      <h3 class="card-title">Adresse de livraison</h3>
-      <h4 class="card-subtitle mb-3 text-danger">Merci de vérifier vos adresses</h4>
-    </xpath>
-
-  </template>
-
 </odoo>
