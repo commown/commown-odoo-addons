@@ -23,7 +23,7 @@
 
       <form t-if="is_big_b2b" action="/shop/submit_order" method="post" class="clearfix">
         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-        <input type="hidden" t-if="order_id" name="order_id" t-att-value="order_id"/>
+        <input type="hidden" name="order_id" t-att-value="order.id"/>
         <div class="float-left mt-2">
           <a role="button" href="/shop/cart" class="btn btn-secondary">
             <i class="fa fa-chevron-left"/>
