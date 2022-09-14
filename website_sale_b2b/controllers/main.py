@@ -1,5 +1,6 @@
 import logging
 
+from odoo import http
 from odoo.http import request
 
 from odoo.addons.website_sale.controllers.main import WebsiteSale
@@ -46,3 +47,27 @@ class WebsiteSaleB2B(WebsiteSale):
         else:
             res = super(WebsiteSaleB2B, self).get_attribute_value_ids(product)
         return res
+
+    @http.route(
+        ["/shop/submit_order"], type="http", auth="public", website=True, sitemap=False
+    )
+    def submit_order(self, **post):
+        "Called by big b2b quotation request button on the online shop"
+
+        # Empty cart
+        request.session.update(
+            {
+                "sale_order_id": False,
+                "website_sale_current_pl": False,
+                "sale_last_order_id": False,
+            }
+        )
+        request.website.env.user.partner_id.last_website_so_id = False
+        request.website.sale_get_order(force_create=True)
+
+        # Create opportunity
+        order = request.env["sale.order"].sudo().browse(int(post["order_id"]))
+        order.create_b2b_opportunity()
+
+        # Display confirmation page
+        return request.render("website_sale_b2b.order_submitted", {"order": order})

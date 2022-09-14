@@ -11,16 +11,19 @@
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [
+        "crm",
         "product_rental",
         "website_sale",
     ],
     "external_dependencies": {},
     "data": [
+        "data/crm.xml",
         "data/ir_config_parameter.xml",
         "data/website.xml",
         "views/payment_portal_templates.xml",
-        "views/website_sale_product.xml",
         "views/product_template.xml",
+        "views/website_sale_product.xml",
+        "views/website_sale_order.xml",
     ],
     "installable": True,
 }

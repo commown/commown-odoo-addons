@@ -1,0 +1,16 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="big_b2b_team" model="crm.team">
+      <field name="name">Big B2B Team</field>
+    </record>
+
+    <record id="big_b2b_stage_new" model="crm.stage">
+      <field name="name">New quotation submitted</field>
+      <field name="team_id" ref="website_sale_b2b.big_b2b_team"/>
+    </record>
+
+  </data>
+
+</odoo>
