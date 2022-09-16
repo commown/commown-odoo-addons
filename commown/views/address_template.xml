@@ -20,7 +20,7 @@
     <!-- Add company_name and vat as required in b2b -->
     <xpath expr="//div[@id='div_phone']" position="after">
       <t t-set="is_b2b"
-         t-value="env['res.partner'].browse(partner_id).mapped('user_ids.website_id') == env.ref('website_sale_b2b.b2b_website')" />
+         t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
 
       <t t-if="is_b2b and mode[1] == 'billing'">
         <div class="w-100"/>
@@ -55,7 +55,7 @@
     <!-- * add in field_required hidden input for the controller -->
     <xpath expr="//form//input[@name='field_required']" position="replace">
       <t t-set="is_b2b"
-         t-value="env['res.partner'].browse(partner_id).mapped('user_ids.website_id') == env.ref('website_sale_b2b.b2b_website')" />
+         t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
       <input type="hidden"
              name="field_required"
              t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name,vat' if is_b2b else '')" />
