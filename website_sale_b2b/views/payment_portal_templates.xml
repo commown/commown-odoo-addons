@@ -6,7 +6,7 @@
     <!-- Add variables to detect Big B2B -->
     <xpath expr="//*[@t-call='payment.payment_tokens_list']" position="inside">
       <t t-set="is_b2b"
-         t-value="env['res.partner'].browse(partner_id).mapped('user_ids.website_id') == env.ref('website_sale_b2b.b2b_website')" />
+         t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
       <t t-set="is_big_b2b"
          t-value="is_b2b and sum(order.mapped('order_line.product_uom_qty')) > float(env['ir.config_parameter'].sudo().get_param('website_sale_b2b.big_b2b_min_qty'))" />
     </xpath>
