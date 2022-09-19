@@ -1,0 +1,40 @@
+<odoo>
+
+  <record id="login" model="ir.ui.view">
+    <field name="name">Web login page (in the website_sale_b2b module)</field>
+    <field name="inherit_id" ref="web.login"/>
+    <field name="arch" type="xml">
+
+      <!-- Add the site name to the login page -->
+      <xpath expr="//input[@name='csrf_token']" position="before">
+        <p t-esc="request.website.name" class="h3 text-center pb-2"></p>
+      </xpath>
+
+      <!-- Add a b2c/b2b checkbox to the login page -->
+      <xpath expr="//div[hasclass('field-password')]" position="after">
+        <div t-if="request.website.login_checkbox_message" class="form-group form-check">
+          <input type="checkbox"
+                 class="form-check-input"
+                 id="b2c_b2b"
+                 required="required"
+                 value="yes"></input>
+          <label t-esc="request.website.login_checkbox_message"
+                 class="form-check-label"
+                 for="b2c_b2b"></label>
+        </div>
+      </xpath>
+
+      <!-- Add a helper message if login went wrong -->
+      <xpath expr="//t[@t-esc='error']/ancestor::*[1]" position="after">
+        <p t-if="error" class="medium text-danger">
+          Or am I at the wrong place?
+          <t t-foreach="request.env['website'].search([('id', '!=', request.website.id)])" t-as="other_website">
+            <br/>Connect to <a t-attf-href="https://{{ other_website.domain }}/my" t-esc="other_website.name"></a>
+          </t>
+        </p>
+      </xpath>
+
+    </field>
+  </record>
+
+</odoo>
