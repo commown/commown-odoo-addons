@@ -1,0 +1,17 @@
+<odoo>
+
+  <!-- Make user website visible/editable -->
+  <record id="view_users_form" model="ir.ui.view">
+    <field name="name">res.users.form (from website_sale_b2b)</field>
+    <field name="model">res.users</field>
+    <field name="inherit_id" ref="base.view_users_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//div[hasclass('oe_title')]" position="inside">
+        <group>
+          <field name="website_id"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
