@@ -22,6 +22,7 @@
         "data/website.xml",
         "views/payment_portal_templates.xml",
         "views/product_template.xml",
+        "views/res_users.xml",
         "views/website_sale_product.xml",
         "views/website_sale_order.xml",
     ],
