@@ -21,7 +21,14 @@
                   wizard.toggleStep(2, this.value==='pay');
                   wizard.toggleStep(3, this.value==='no');
                   wizard.toggleStep(4, this.value==='termination');
-               });
+                });
+
+                $('select[name=device_contract]').change(function() {
+                  let $details = $('#contract_details').show();
+                  let contract_data = this.selectedOptions[0].dataset
+                  $details.find('#contract_name').text(contract_data.contractName);
+                  $details.find('#contract_commitment_end_date').text(contract_data.commitmentEndDate);
+                });
 
               });
             </script>
@@ -88,6 +95,11 @@
                     <h2>
                       Je vérifie mon engagement
                     </h2>
+                    <p class="text-danger bg-danger" style="display:none ; padding: 1em; margin: 1em 0" id="contract_details">
+                      La fin de la période d'engagement du contrat que vous avez sélectionné (<b id="contract_name"></b>)
+                      est : <b id="contract_commitment_end_date"></b>.
+                    </p>
+
                     <p>
                       À ce stade de votre contrat, deux possibilités s'offrent à vous :
                     </p>
@@ -117,8 +129,6 @@
                       Dans les 2 cas le contrat actuel doit donc être résilié, et nous vous
                       invitons à aller jusqu'à la fin de ce processus.
                     </p>
-                    <!-- <p class="text-danger">Vous êtes engagé jusqu'au :</p> -->
-
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
