@@ -28,6 +28,7 @@
                   let contract_data = this.selectedOptions[0].dataset
                   $details.find('#contract_name').text(contract_data.contractName);
                   $details.find('#contract_commitment_end_date').text(contract_data.commitmentEndDate);
+                  $('#self-troubleshoot-type').val('Résiliation - ' + contract_data.contractName);
                 });
 
               });
