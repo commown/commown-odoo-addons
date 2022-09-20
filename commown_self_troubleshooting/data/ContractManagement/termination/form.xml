@@ -258,7 +258,7 @@
     <field name="url">/page/self-troubleshoot-contract-termination</field>
     <field name="view_id" ref="contract-termination" />
     <field name="website_meta_title">Vie de mes contrats</field>
-    <field name="website_meta_description">Je ne veux plus de mon appareil ou je veux un autre modèle</field>
+    <field name="website_meta_description">Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</field>
   </record>
 
 </odoo>
