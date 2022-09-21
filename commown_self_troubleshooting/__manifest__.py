@@ -5,7 +5,7 @@
 {
     "name": "Commown Self Troubleshooting",
     "category": "",
-    "version": "12.0.1.0.2",
+    "version": "12.0.1.0.3",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
