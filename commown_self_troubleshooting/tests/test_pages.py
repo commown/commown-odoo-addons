@@ -39,12 +39,7 @@ class PagesTC(HttpCase):
 
     def _create_ct(self, name):
         with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            return env["contract.template"].create(
-                {
-                    "name": name,
-                }
-            )
+            return self.env(test_cursor)["contract.template"].create({"name": name})
 
     def _login(self):
         "Authenticate the test client with the `self.user` portal user"
@@ -174,20 +169,25 @@ class PagesTC(HttpCase):
         it is tested elsewhere.
         """
 
-        contract = self.create_contract(self._create_ct("no-matter-name"))
+        cid = self.create_contract(self._create_ct("no-matter-name")).id
 
-        for page_url in sorted(self._ts_page_urls("")):
+        with self.registry.cursor() as test_cursor:
+            contract = self.env(test_cursor)["contract.contract"].browse(cid)
 
-            try:
-                with patch.object(
-                    ResPartner, "self_troubleshooting_contracts", return_value=contract
-                ) as m:
-                    doc = self.get_page(page_url)
-            except:
-                self.fail("Error loading %s:\n%s" % (page_url, tb.format_exc()))
+            for page_url in sorted(self._ts_page_urls("")):
 
-            self.assertEqual(
-                self._contract_options(doc, value2int),
-                {contract.id},
-                "Wrong contract choice list in page '%s'" % page_url,
-            )
+                try:
+                    with patch.object(
+                        ResPartner,
+                        "self_troubleshooting_contracts",
+                        return_value=contract,
+                    ) as m:
+                        doc = self.get_page(page_url)
+                except:
+                    self.fail("Error loading %s:\n%s" % (page_url, tb.format_exc()))
+
+                self.assertEqual(
+                    self._contract_options(doc, value2int),
+                    {cid},
+                    "Wrong contract choice list in page '%s'" % page_url,
+                )

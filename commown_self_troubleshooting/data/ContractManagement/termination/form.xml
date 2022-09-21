@@ -17,11 +17,26 @@
 
                 const wizard = setUpWizard($('#smartwizard'));
 
+                function contractChanged() {
+                  let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
+                  let $details = $('#contract_details').show();
+                  $details.find('#contract_name').text(contractData.contractName);
+                  $details.find('#contract_commitment_end_date').text(contractData.commitmentEndDate);
+                  $('#self-troubleshoot-type').val('Résiliation - ' + contractData.contractName);
+                  wizard.toggleStep(1, contractData.inCommitment === "true");
+                  wizard.toggleStep(2, contractData.inCommitment === "true");
+                  wizard.toggleStep(3, contractData.inCommitment === "true");
+                  wizard.toggleStep(4, contractData.inCommitment !== "true");
+                }
+
+                $('select[name=device_contract]').change(contractChanged);
+
                 $('input[type=radio][name=net_contract_termination]').change(function () {
                   wizard.toggleStep(2, this.value==='pay');
                   wizard.toggleStep(3, this.value==='no');
-                  wizard.toggleStep(4, this.value==='termination');
-               });
+                });
+
+                contractChanged();
 
               });
             </script>
@@ -79,70 +94,36 @@
 
                 <div>
 
-                  <t t-set="contracts"
-                     t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
-
-                  <div id="step-0">
-                    <div class="clearfix">
-                      <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
-                      <h2>Appareil concerné</h2>
-                    </div>
-                    <p>Choisissez ci-dessous le contrat lié à l'appareil concerné.</p>
-                    <div id="form-step-0" role="form" data-toggle="validator">
-                      <div class="form-group">
-                        <label for="device_contract">Contrat de votre appareil :</label>
-                        <select class="form-control" required="required" id="device_contract" name="device_contract" data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
-                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
-                          <t t-foreach="contracts" t-as="c">
-                            <t t-set="_date" t-value="c.date_start" />
-                            <option t-att-value="c.id" t-esc="u'%s (démarré le %s/%s/%s)' % (c.name, _date.year, _date.month, _date.day)" />
-                          </t>
-                        </select>
-                        <div class="help-block with-errors" />
-                      </div>
-                    </div>
-                  </div>
+                  <t t-call="commown_self_troubleshooting.step-contract-choice">
+                    <t t-set="contracts"
+                       t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
+                  </t>
 
                   <div id="step-1">
                     <h2>
-                      Je vérifie mon engagement
+                      Je suis toujours engagé
                     </h2>
-                    <p>
-                      À ce stade de votre contrat, deux possibilités s'offrent à vous :
+                    <p class="text-danger bg-danger" style="display:none ; padding: 1em; margin: 1em 0" id="contract_details">
+                      La fin de la période d'engagement du contrat que vous avez sélectionné (<b id="contract_name"></b>)
+                      est : <b id="contract_commitment_end_date"></b>.
                     </p>
-                    <p>
-                      1/ Soit vous êtes encore engagé.e, auquel cas nous vous invitons à
-                      attendre la fin de votre période d'engagement pour soumettre votre
-                      demande (retrouvez tous les détails utiles sur notre
-                      <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">WIKI</a>).
-                      Cependant, vous pouvez aussi opter pour une des deux alternatives suivantes :
-                      régler les mensualités restantes jusqu'à la fin de la période d'engagement
-                      ou effectuer un transfert de votre contrat à un tiers.
-                    </p>
-                    <p>
-                      2/ Soit vous n'êtes plus engagé.e, et vous pouvez donc :
-                      <ul>
-                        <li>
-                          commander un nouveau modèle (directement sur notre
-                          <a href="/shop" target="_blank">magasin en ligne</a>,
-                          ce qui vous laissera le temps d'effectuer le transfert de données entre vos 2 appareils)
-                        </li>
-                        <li>
-                          ou arrêter ici l'aventure (choix qui nous attristerait mais que nous respectons bien entendu)
-                        </li>
-                      </ul>
-                    </p>
-                    <p>
-                      Dans les 2 cas le contrat actuel doit donc être résilié, et nous vous
-                      invitons à aller jusqu'à la fin de ce processus.
-                    </p>
-                    <!-- <p class="text-danger">Vous êtes engagé jusqu'au :</p> -->
 
+                    <p>À ce stade de votre contrat, nous vous invitons à attendre la fin de votre période d'engagement pour
+                       soumettre votre demande (retrouvez tous les détails utiles sur
+                       <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">cette page</a>
+                       de notre wiki).
+                    </p>
+
+                    <p>Cependant, vous pouvez aussi opter pour une des deux alternatives suivantes :</p>
+                    <ul>
+                      <li>régler les mensualités restantes jusqu'à la fin de la période d'engagement</li>
+                      <li>ou effectuer un transfert de votre contrat à un tiers.</li>
+                    </ul>
+                    <br />
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label>Veuillez choisir entre une des ces trois options</label>
-                        <br />
+                        <label>Veuillez choisir entre une des ces deux options</label>
                         <br />
                         <label class="radio-inline" for="net_pay-yes">Régler les mensualités restantes</label>
                         <input type="radio" name="net_contract_termination" id="net_pay-yes" value="pay" required="required"
@@ -150,8 +131,6 @@
                         <label class="radio-inline" for="net_pay-no">Transférer mon contrat</label>
                         <input type="radio" name="net_contract_termination" id="net_pay-no" value="no" required="required"
                         data-required-error="Veuillez choisir une des trois possibilités."/>
-                        <label class="radio-inline" for="net_contract-termination-yes">Résilier mon contrat actuel</label>
-                        <input type="radio" name="net_contract_termination" id="net_contract-termination-yes" value="termination" required="required"/>
                         <div class="help-block with-errors"/>
                       </div>
                     </div>
@@ -227,6 +206,20 @@
                     <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
                     <div id="form-step-4" role="form" data-toggle="validator">
+                      <input type="hidden" name="net_contract_termination" value="termination"/>
+
+                      <p>Vous n'êtes plus engagé.e, et vous pouvez donc :</p>
+                      <ul>
+                        <li>
+                          commander un nouveau modèle (directement sur notre
+                          <a href="/shop" target="_blank">magasin en ligne</a>,
+                          ce qui vous laissera le temps d'effectuer le transfert de données entre vos 2 appareils)
+                        </li>
+                        <li>
+                          ou arrêter ici l'aventure (choix qui nous attristerait mais que nous respectons bien entendu).
+                        </li>
+                      </ul>
+
                       <div class="form-group">
                         <label for="more_info_step_4">
                           Nous vous invitons à nous préciser les raisons qui vous y incitent à faire ce choix, ce feedback étant
@@ -258,7 +251,7 @@
     <field name="url">/page/self-troubleshoot-contract-termination</field>
     <field name="view_id" ref="contract-termination" />
     <field name="website_meta_title">Vie de mes contrats</field>
-    <field name="website_meta_description">Je ne veux plus de mon appareil ou je veux un autre modèle</field>
+    <field name="website_meta_description">Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</field>
   </record>
 
 </odoo>

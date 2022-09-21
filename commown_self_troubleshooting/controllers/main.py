@@ -48,6 +48,7 @@ class SelfHelp(http.Controller):
         if post.get("stage_id", None):
             task_data["stage_id"] = int(post["stage_id"])
         task = env["project.task"].sudo().create(task_data)
+        task.onchange_contract_or_product()
 
         env["mail.followers"].create(
             {
