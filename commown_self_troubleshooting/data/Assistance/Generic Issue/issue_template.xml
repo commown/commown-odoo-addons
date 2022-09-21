@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="issue-description-generic-issue" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-generic-issue</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-generic-issue</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-generic-issue">
+
+        <p t-if="more_info">Informations complémentaires :</p>
+        <pre t-if="more_info"><t t-esc="more_info" /></pre>
+
+      </t>
+
+    </field>
+  </record>
+
+</odoo>

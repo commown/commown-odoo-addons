@@ -33,6 +33,8 @@
         "data/GS/issue_template.xml",
         "data/Assistance/Serenity/form.xml",
         "data/Assistance/Serenity/issue_template.xml",
+        "data/Assistance/Generic Issue/form.xml",
+        "data/Assistance/Generic Issue/issue_template.xml",
         "data/common_steps.xml",
         "data/project.xml",
         "data/tags.xml",
