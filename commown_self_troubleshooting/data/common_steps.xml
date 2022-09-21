@@ -30,12 +30,16 @@
               <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
               <t t-foreach="contracts" t-as="c">
                 <t t-set="s_date" t-value="c.date_start.strftime(date_format)" />
+                <t t-set="c_date" t-value="c.commitment_end_date.strftime(date_format)" />
+                <t t-set="in_commitment" t-value="datetime.date.today() &lt; c.commitment_end_date" />
+                <t t-set="option_text" t-value="'%s (démarré le %s%s)' % (c.name, s_date, in_commitment and ' - engagé jusqu\'au ' + c_date or '')"/>
                 <option
                     t-att-value="c.id"
-                    t-esc="'%s (démarré le %s)' % (c.name, s_date)"
+                    t-esc="option_text"
                     t-att-data-contract-name="c.name"
                     t-att-data-start-date="s_date"
-                    t-att-data-commitment-end-date="c.commitment_end_date.strftime(date_format)"
+                    t-att-data-commitment-end-date="c_date"
+                    t-att-data-in-commitment="in_commitment and 'true' or 'false'"
                     />
               </t>
             </select>
