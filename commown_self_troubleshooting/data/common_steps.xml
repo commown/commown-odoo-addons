@@ -112,7 +112,7 @@
         modifier en cas de besoin. Notez que le paquet sera
         déposé directement dans votre boite aux lettres :
         votre présence n'est pas requise lors du passage du
-        facteur.
+        facteur (sauf pour les cas d'une livraison PC).
         </p>
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
