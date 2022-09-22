@@ -31,6 +31,7 @@
                   wizard.toggleStep(3, this.value==='broken');
                   wizard.toggleStep(4, this.value==='course');
                   wizard.toggleStep(5, this.value==='upgrade');
+                  wizard.toggleStep(6, this.id==='net_confirm');
                 });
 
               });
@@ -137,13 +138,13 @@
                         <input type="radio" name="net_generic_issue" id="net_bug" value="bug" required="required"
                         data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <label class="radio-inline" for="net_broken">Casse</label>
-                        <input type="radio" name="net_generic_issue" id="net_broken" value="broken" required="required"
+                        <input type="radio" name="net_generic_issue" id="net_confirm" value="broken" required="required"
                         data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <label class="radio-inline" for="net_course">Formation</label>
                         <input type="radio" name="net_generic_issue" id="net_course" value="course" required="required"
                         data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <label class="radio-inline" for="net_upgrade">Demande de matériel</label>
-                        <input type="radio" name="net_generic_issue" id="net_upgrade" value="upgrade" required="required"
+                        <input type="radio" name="net_generic_issue" id="net_confirm" value="upgrade" required="required"
                         data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <div class="help-block with-errors"/>
                       </div>
@@ -175,7 +176,9 @@
                       </li>
                     </ol>
                     <p class="text-danger">
-                      NB: Adopter ce formalisme vous garantit une meilleure prise en charge
+                      <strong>
+                        NB: Adopter ce formalisme vous garantit une meilleure prise en charge
+                      </strong>
                     </p>
 
                     <div id="form-step-2" role="form" data-toggle="validator">
