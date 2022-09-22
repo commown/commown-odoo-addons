@@ -8,6 +8,19 @@
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-generic-issue">
 
+        <t t-if="action=='ship'">
+          Je rencontre une casse.
+
+          L'adresse d'expédition est la suivante :
+          <t t-esc="name"/>
+          <t t-esc="u'\n'.join((street, street2)).strip()"/>
+          <t t-esc="zipcode"/> <t t-esc="city"/>
+          <t t-esc="country"/>
+
+          Informations supplémentaires utiles à la livraison :
+          Numéro de téléphone : <t t-esc="phone"/>
+          Adresse de courriel : <t t-esc="email"/></t>
+
         <p t-if="more_info">Informations complémentaires :</p>
         <pre t-if="more_info"><t t-esc="more_info" /></pre>
 
