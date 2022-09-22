@@ -17,6 +17,15 @@
 
                 const wizard = setUpWizard($('#smartwizard'));
 
+                function contractChanged() {
+                  let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
+                  let $details = $('#contract_details').show();
+                  $details.find('#contract_name').text(contractData.contractName);
+                  $details.find('#contract_commitment_end_date').text(contractData.commitmentEndDate);
+                }
+
+                $('select[name=device_contract]').change(contractChanged);
+
                 $('input[type=radio][name=net_generic_issue]').change(function () {
                   wizard.toggleStep(2, this.value==='bug');
                   wizard.toggleStep(3, this.value==='broken');
@@ -102,27 +111,28 @@
                     <h2>
                       Vous avez besoin d'une d'assistance car
                     </h2>
-                    <p>
-                      1/ Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
+                    <ol>
+                    <li>
+                      Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
                       matériel), choisissez l'option <strong>Panne / bugs</strong>
-                    </p>
-                    <p>
-                      2/ Votre appareil a subi une chûte, est cassé ou a rencontre un dégât des eaux, choisissez
+                    </li>
+                    <li>
+                      Votre appareil a subi une chûte, est cassé ou a rencontre un dégât des eaux, choisissez
                       l'option <strong>Casse</strong>
-                    </p>
-                    <p>
-                      3/ Vous avez besoin d'une assistance à l'usage de votre
+                    </li>
+                    <li>
+                      Vous avez besoin d'une assistance à l'usage de votre
                       appareil, choisissez l'option <strong>Assistance à l'usage</strong>
-                    </p>
-                    <p>
-                      4/ Vous voulez faire valoir votre droit de formation Linux d'une heure
+                    </li>
+                    <li>
+                      Vous voulez faire valoir votre droit de formation Linux d'une heure
                       avec notre équipe, choisissez l'option <strong>Formation</strong>
-                    </p>
-                    <p>
-                      5/ Vous souhaitez faire évoluer votre matériel (ajout de plus d'espace de
+                    </li>
+                    <li>
+                      Vous souhaitez faire évoluer votre matériel (ajout de plus d'espace de
                       stockage, de RAM...), choisissez l'option <strong>Demande de matériel</strong>
-                    </p>
-
+                    </li>
+                    </ol>
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label>Veuillez choisir entre une des ces cinq options</label>
@@ -148,7 +158,44 @@
                   </div>
 
                   <div id="step-2">
-                    <p>Panne / bugs</p>
+                    <p>Afin de traiter au mieux votre demande, nous vous invitons à adopter le formalisme
+                      ci-dessous qui permet d'obtenir une aide optimale. Il consiste à répondre aux 4 questions
+                      suivantes pour bien nous faire comprendre le problème que vous rencontrez :
+                    </p>
+                    <ol>
+                      <li>
+                        Décrivez avec précision ce que vous observez
+                        (toute photo, screenshot des éléments, ou copie
+                        des messages d'erreur est utile et bienvenue)
+                      </li>
+                      <li>
+                        Le cas échéant décrivez avec précision les opérations
+                        que vous effectuez. L'objectif est de nous aider à les reproduire.
+                      </li>
+                      <li>
+                        Décrivez quel résultat vous vous attendiez à obtenir de
+                        ces opérations. L'objectif est d'éviter tout malentendu sur les attendus.
+                      </li>
+                      <li>
+                        Décrivez le résultat obtenu, qui ne vous satisfait donc pas.
+                        L'objectif est d'être bien sûr qu'on obtient la même chose que vous.
+                      </li>
+                    </ol>
+                    <p class="text-danger">
+                      NB: Adopter ce formalisme vous garantit une meilleure prise en charge
+                    </p>
+
+                    <div id="form-step-2" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" required="required" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_received').id" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+                    </div>
+
                   </div>
 
                   <div id="step-3">
