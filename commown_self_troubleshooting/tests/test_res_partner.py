@@ -76,8 +76,16 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
                     ],
                 },
                 {
+                    "title": "Demande d'assistance",
+                    "pages": [
+                        {"url_path": "/page/self-troubleshoot-generic-issue"}
+                    ],
+                },
+                {
                     "title": "Option Sérénité",
-                    "pages": [{"url_path": "/page/self-troubleshoot-serenity"}],
+                    "pages": [
+                        {"url_path": "/page/self-troubleshoot-serenity"}
+                    ],
                 },
             ],
         )
