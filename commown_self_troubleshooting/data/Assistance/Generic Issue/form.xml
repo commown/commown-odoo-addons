@@ -29,9 +29,8 @@
                 $('input[type=radio][name=net_generic_issue]').change(function () {
                   wizard.toggleStep(2, this.value==='bug');
                   wizard.toggleStep(3, this.value==='broken');
-                  wizard.toggleStep(4, this.value==='help');
-                  wizard.toggleStep(5, this.value==='course');
-                  wizard.toggleStep(6, this.value==='upgrade');
+                  wizard.toggleStep(4, this.value==='course');
+                  wizard.toggleStep(5, this.value==='upgrade');
                 });
 
               });
@@ -71,7 +70,7 @@
                   <li disabled="disabled">
                     <a href="#step-2">Étape 2
                       <br/>
-                      <small>Panne / bugs</small>
+                      <small>Incident, assistance</small>
                     </a>
                   </li>
                   <li disabled="disabled">
@@ -83,23 +82,17 @@
                   <li disabled="disabled">
                     <a href="#step-4">Étape 4
                       <br/>
-                      <small>Assistance à l'usage</small>
+                      <small>Formation</small>
                     </a>
                   </li>
                   <li disabled="disabled">
                     <a href="#step-5">Étape 5
                       <br/>
-                      <small>Formation</small>
-                    </a>
-                  </li>
-                  <li disabled="disabled">
-                    <a href="#step-6">Étape 6
-                      <br/>
                       <small>Demande de matériel</small>
                     </a>
                   </li>
                   <li disabled="disabled">
-                    <a href="#step-7">Étape 7
+                    <a href="#step-6">Étape 6
                       <br/>
                       <small>Confirmation</small>
                     </a>
@@ -120,15 +113,11 @@
                     <ul>
                       <li>
                         Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
-                        matériel), choisissez l'option <strong>Panne / bugs</strong>
+                        matériel), choisissez l'option <strong>Incident, assistance</strong>
                       </li>
                       <li>
                         Votre appareil a subi une chûte, est cassé ou a rencontre un dégât des eaux, choisissez
                         l'option <strong>Casse</strong>
-                      </li>
-                      <li>
-                        Vous avez besoin d'une assistance à l'usage de votre
-                        appareil, choisissez l'option <strong>Assistance à l'usage</strong>
                       </li>
                       <li>
                         Vous voulez faire valoir votre droit de formation Linux d'une heure
@@ -142,23 +131,20 @@
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label>Veuillez choisir entre une des ces cinq options</label>
+                        <label>Veuillez choisir entre une des ces quatre options</label>
                         <br />
-                        <label class="radio-inline" for="net_bug">Panne / bugs</label>
+                        <label class="radio-inline" for="net_bug">Incident, assistance</label>
                         <input type="radio" name="net_generic_issue" id="net_bug" value="bug" required="required"
-                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <label class="radio-inline" for="net_broken">Casse</label>
                         <input type="radio" name="net_generic_issue" id="net_broken" value="broken" required="required"
-                        data-required-error="Veuillez choisir une des cinq possibilités."/>
-                        <label class="radio-inline" for="net_help">Assistance à l'usage</label>
-                        <input type="radio" name="net_generic_issue" id="net_help" value="help" required="required"
-                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <label class="radio-inline" for="net_course">Formation</label>
                         <input type="radio" name="net_generic_issue" id="net_course" value="course" required="required"
-                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <label class="radio-inline" for="net_upgrade">Demande de matériel</label>
                         <input type="radio" name="net_generic_issue" id="net_upgrade" value="upgrade" required="required"
-                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
                         <div class="help-block with-errors"/>
                       </div>
                     </div>
@@ -222,20 +208,64 @@
                   </div>
 
                   <div id="step-4">
-                    <p>Assistance à l'usage</p>
+                    <!-- Integrate Linux logo -->
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      Vous souhaitez bénéficier de votre <strong>heure</strong> de formation Linux régit par votre contrat.<br /><br />
+                      Nous avons besoin de deux éléments :
+                      <ul>
+                        <li>
+                          vos disponibilités
+                        </li>
+                        <li>
+                          un résumé des points à aborder lors de la formation
+                        </li>
+                      </ul>
+                    </p>
+                    <p class="text-danger">
+                      NB: le descriptif des points à aborder est primordial pour nos équipes afin de faciliter
+                      le travail en âmont et fluidifier nos échanges lors de la formation.
+                    </p>
+
+                    <div id="form-step-4" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_4">Incrivez vos disponibilités et les sujets à aborder :</label>
+                        <textarea class="form-control" required="required" rows="3" id="more_info_step_4" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_callback').id" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer ma demande</button>
+                      </div>
+                    </div>
+
                   </div>
 
                   <div id="step-5">
-                    <p>Formation</p>
+                    <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
+                      Ce champ permet à l'équipe de Commown de s'assurer que votre adresse d'expédition est la bonne.
+                      Si ce n'est pas le cas, merci de la mettre à jour ci-dessous. <br /><br />
+
+                      Après la complétion de ces informations, veuillez cliquer sur <strong>Suivant</strong>, cela vous
+                      redirigera vers un champ de texte dans lequel vous pourrez nous indiquer ce que vous
+                      souhaitez comme matériel supplémentaire (plus de stockage, plus de RAM...) et sur quel appareil.
+                      Nous reviendrons alors vers vous au plus vite avec le prix mensuel de ce matériel supplémentaire.<br /><br />
+
+                      NB: nous ne garantissons pas que le matériel supplémentaire demandé soit en stock.
+                    </p>
+
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">5</t>
+                      <t t-set="new_module">une nouvelle pièce</t>
+                    </t>
                   </div>
 
                   <div id="step-6">
-                    <p>Demande de matériel</p>
-                  </div>
-
-                  <div id="step-7">
                     <t t-call="commown_self_troubleshooting.step-confirm-change">
-                      <t t-set="step">7</t>
+                      <t t-set="step">6</t>
                     </t>
                   </div>
 

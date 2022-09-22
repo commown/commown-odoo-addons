@@ -107,8 +107,7 @@
         <p>
           Nous allons vous envoyer
           <t t-esc="new_module" />
-          pour
-        résoudre le problème. Veuillez vérifier attentivement
+        . Veuillez vérifier attentivement
         les informations d'expédition ci-dessous, et les
         modifier en cas de besoin. Notez que le paquet sera
         déposé directement dans votre boite aux lettres :
@@ -282,7 +281,7 @@
           Confirmation de votre demande
         </h2>
         <p>En appuyant sur le bouton ci-dessous vous confirmerez votre
-        demande d'envoi.</p>
+        demande.</p>
 
         <t t-raw="tool_intro or ''" />
 
