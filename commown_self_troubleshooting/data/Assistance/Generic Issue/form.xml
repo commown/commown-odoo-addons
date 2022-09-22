@@ -98,6 +98,12 @@
                       <small>Demande de matériel</small>
                     </a>
                   </li>
+                  <li disabled="disabled">
+                    <a href="#step-7">Étape 7
+                      <br/>
+                      <small>Confirmation</small>
+                    </a>
+                  </li>
                 </ul>
 
                 <div>
@@ -109,30 +115,31 @@
 
                   <div id="step-1">
                     <h2>
-                      Vous avez besoin d'une d'assistance car
+                      Vous avez besoin d'une assistance car
                     </h2>
-                    <ol>
-                    <li>
-                      Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
-                      matériel), choisissez l'option <strong>Panne / bugs</strong>
-                    </li>
-                    <li>
-                      Votre appareil a subi une chûte, est cassé ou a rencontre un dégât des eaux, choisissez
-                      l'option <strong>Casse</strong>
-                    </li>
-                    <li>
-                      Vous avez besoin d'une assistance à l'usage de votre
-                      appareil, choisissez l'option <strong>Assistance à l'usage</strong>
-                    </li>
-                    <li>
-                      Vous voulez faire valoir votre droit de formation Linux d'une heure
-                      avec notre équipe, choisissez l'option <strong>Formation</strong>
-                    </li>
-                    <li>
-                      Vous souhaitez faire évoluer votre matériel (ajout de plus d'espace de
-                      stockage, de RAM...), choisissez l'option <strong>Demande de matériel</strong>
-                    </li>
-                    </ol>
+                    <ul>
+                      <li>
+                        Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
+                        matériel), choisissez l'option <strong>Panne / bugs</strong>
+                      </li>
+                      <li>
+                        Votre appareil a subi une chûte, est cassé ou a rencontre un dégât des eaux, choisissez
+                        l'option <strong>Casse</strong>
+                      </li>
+                      <li>
+                        Vous avez besoin d'une assistance à l'usage de votre
+                        appareil, choisissez l'option <strong>Assistance à l'usage</strong>
+                      </li>
+                      <li>
+                        Vous voulez faire valoir votre droit de formation Linux d'une heure
+                        avec notre équipe, choisissez l'option <strong>Formation</strong>
+                      </li>
+                      <li>
+                        Vous souhaitez faire évoluer votre matériel (ajout de plus d'espace de
+                        stockage, de RAM...), choisissez l'option <strong>Demande de matériel</strong>
+                      </li>
+                    </ul>
+
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label>Veuillez choisir entre une des ces cinq options</label>
@@ -199,7 +206,19 @@
                   </div>
 
                   <div id="step-3">
-                    <p>Casse</p>
+                    <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
+                      La prise en charge d'une casse est différente selon les contrats souscrit chez Commown.
+                      Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
+                      <strong>Conditions Particulières</strong> retrouvables <a href="/my/orders" target="_blank">ici</a>.
+                      <br /><br />
+                      Pour un dégât des eaux sur votre Fairphone, veuillez suivre ces instructions sur notre
+                      <a href="https://wiki.commown.coop/Fairphone-tomb%C3%A9-dans-l%E2%80%99eau-ou-mouill%C3%A9" target="_blank">WIKI</a>
+                      dans l'attente d'un nouvel appareil.
+                    </p>
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">3</t>
+                      <t t-set="new_module">un nouvel appareil ou module</t>
+                    </t>
                   </div>
 
                   <div id="step-4">
@@ -212,6 +231,12 @@
 
                   <div id="step-6">
                     <p>Demande de matériel</p>
+                  </div>
+
+                  <div id="step-7">
+                    <t t-call="commown_self_troubleshooting.step-confirm-change">
+                      <t t-set="step">7</t>
+                    </t>
                   </div>
 
                 </div>
