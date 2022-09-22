@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <record id="contract-termination" model="ir.ui.view">
+  <record id="generic-issue" model="ir.ui.view">
     <field name="name">Self-troubleshoot Generic Issue</field>
     <field name="type">qweb</field>
     <field name="key">website.self-troubleshoot-generic-issue</field>
     <field name="arch" type="xml">
 
-      <t t-name="website.self-troubleshoot-contract-termination">
+      <t t-name="website.self-troubleshoot-generic-issue">
         <t t-call="commown-self-troubleshoot.web-layout">
           <t t-set="title">Commown - Demande d'assistance</t>
           <t t-set="head">
@@ -16,6 +16,14 @@
               $(document).ready(function() {
 
                 const wizard = setUpWizard($('#smartwizard'));
+
+                $('input[type=radio][name=net_generic_issue]').change(function () {
+                  wizard.toggleStep(2, this.value==='bug');
+                  wizard.toggleStep(3, this.value==='broken');
+                  wizard.toggleStep(4, this.value==='help');
+                  wizard.toggleStep(5, this.value==='course');
+                  wizard.toggleStep(6, this.value==='upgrade');
+                });
 
               });
             </script>
@@ -92,7 +100,7 @@
 
                   <div id="step-1">
                     <h2>
-                      Votre demande d'assistance concerne
+                      Vous avez besoin d'une d'assistance car
                     </h2>
                     <p>
                       1/ Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
@@ -111,11 +119,54 @@
                       avec notre équipe, choisissez l'option <strong>Formation</strong>
                     </p>
                     <p>
-                      5/ Vous souhaittez faire évoluer votre matériel (ajout de plus d'espace de
+                      5/ Vous souhaitez faire évoluer votre matériel (ajout de plus d'espace de
                       stockage, de RAM...), choisissez l'option <strong>Demande de matériel</strong>
                     </p>
 
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label>Veuillez choisir entre une des ces cinq options</label>
+                        <br />
+                        <label class="radio-inline" for="net_bug">Panne / bugs</label>
+                        <input type="radio" name="net_generic_issue" id="net_bug" value="bug" required="required"
+                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        <label class="radio-inline" for="net_broken">Casse</label>
+                        <input type="radio" name="net_generic_issue" id="net_broken" value="broken" required="required"
+                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        <label class="radio-inline" for="net_help">Assistance à l'usage</label>
+                        <input type="radio" name="net_generic_issue" id="net_help" value="help" required="required"
+                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        <label class="radio-inline" for="net_course">Formation</label>
+                        <input type="radio" name="net_generic_issue" id="net_course" value="course" required="required"
+                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        <label class="radio-inline" for="net_upgrade">Demande de matériel</label>
+                        <input type="radio" name="net_generic_issue" id="net_upgrade" value="upgrade" required="required"
+                        data-required-error="Veuillez choisir une des cinq possibilités."/>
+                        <div class="help-block with-errors"/>
+                      </div>
+                    </div>
                   </div>
+
+                  <div id="step-2">
+                    <p>Panne / bugs</p>
+                  </div>
+
+                  <div id="step-3">
+                    <p>Casse</p>
+                  </div>
+
+                  <div id="step-4">
+                    <p>Assistance à l'usage</p>
+                  </div>
+
+                  <div id="step-5">
+                    <p>Formation</p>
+                  </div>
+
+                  <div id="step-6">
+                    <p>Demande de matériel</p>
+                  </div>
+
                 </div>
               </div>
             </form>
