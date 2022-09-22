@@ -114,10 +114,11 @@
                     <ul>
                       <li>
                         Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
-                        matériel), choisissez l'option <strong>Incident, assistance</strong>
+                        matérielle), choisissez l'option <strong>Incident, assistance</strong>
                       </li>
                       <li>
-                        Votre appareil a subi une chûte, est cassé ou a rencontre un dégât des eaux, choisissez
+                        Votre appareil a subi un accident (chute brutale, oxydation accidentelle) conduisant
+                        à une destruction totale ou partielle de l'appareil loué et nuisant à son bon fonctionnement, choisissez
                         l'option <strong>Casse</strong>
                       </li>
                       <li>
@@ -125,14 +126,14 @@
                         avec notre équipe, choisissez l'option <strong>Formation</strong>
                       </li>
                       <li>
-                        Vous souhaitez faire évoluer votre matériel (ajout de plus d'espace de
-                        stockage, de RAM...), choisissez l'option <strong>Demande de matériel</strong>
+                        Vous souhaitez faire évoluer votre matériel (espace de stockage
+                        supplémentaire, accessoires...), choisissez l'option <strong>Demande de matériel</strong>
                       </li>
                     </ul>
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label>Veuillez choisir entre une des ces quatre options</label>
+                        <label>Veuillez choisir une des ces quatre options</label>
                         <br />
                         <label class="radio-inline" for="net_bug">Incident, assistance</label>
                         <input type="radio" name="net_generic_issue" id="net_bug" value="bug" required="required"
@@ -159,8 +160,7 @@
                     <ol>
                       <li>
                         Décrivez avec précision ce que vous observez
-                        (toute photo, screenshot des éléments, ou copie
-                        des messages d'erreur est utile et bienvenue)
+                        (ex: copie des messages d'erreur est utile et bienvenue)
                       </li>
                       <li>
                         Le cas échéant décrivez avec précision les opérations
@@ -200,7 +200,7 @@
                       Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
                       <strong>Conditions Particulières</strong> retrouvables <a href="/my/orders" target="_blank">ici</a>.
                       <br /><br />
-                      Pour un dégât des eaux sur votre Fairphone, veuillez suivre ces instructions sur notre
+                      Pour un dégât des eaux sur votre Fairphone, veuillez suivre ces instructions de notre
                       <a href="https://wiki.commown.coop/Fairphone-tomb%C3%A9-dans-l%E2%80%99eau-ou-mouill%C3%A9" target="_blank">WIKI</a>
                       dans l'attente d'un nouvel appareil.
                     </p>
@@ -230,12 +230,12 @@
                     </p>
                     <p class="text-danger">
                       NB: le descriptif des points à aborder est primordial pour nos équipes afin de faciliter
-                      le travail en âmont et fluidifier nos échanges lors de la formation.
+                      le travail en amont et fluidifier nos échanges lors de la formation.
                     </p>
 
                     <div id="form-step-4" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label for="more_info_step_4">Incrivez vos disponibilités et les sujets à aborder :</label>
+                        <label for="more_info_step_4">Inscrivez vos disponibilités et les sujets à aborder :</label>
                         <textarea class="form-control" required="required" rows="3" id="more_info_step_4" name="more_info" />
                       </div>
 
@@ -255,7 +255,7 @@
                       Après la complétion de ces informations, veuillez cliquer sur <strong>Suivant</strong>, cela vous
                       redirigera vers un champ de texte dans lequel vous pourrez nous indiquer ce que vous
                       souhaitez comme matériel supplémentaire (plus de stockage, plus de RAM...) et sur quel appareil.
-                      Nous reviendrons alors vers vous au plus vite avec le prix mensuel de ce matériel supplémentaire.<br /><br />
+                      Nous reviendrons alors vers vous au plus vite avec le surcoût mensuel de ce matériel supplémentaire.<br /><br />
 
                       NB: nous ne garantissons pas que le matériel supplémentaire demandé soit en stock.
                     </p>
