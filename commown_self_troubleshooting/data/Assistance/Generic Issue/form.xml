@@ -19,9 +19,9 @@
 
                 function contractChanged() {
                   let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
-                  let $details = $('#contract_details').show();
-                  $details.find('#contract_name').text(contractData.contractName);
-                  $details.find('#contract_commitment_end_date').text(contractData.commitmentEndDate);
+                  if (contractData.orderId) {
+                    $("#order_link").attr("href", "/my/orders/" + contractData.orderId);
+                  }
                 }
 
                 $('select[name=device_contract]').change(contractChanged);
@@ -197,7 +197,8 @@
                     <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
                       La prise en charge d'une casse est différente selon les contrats souscrit chez Commown.
                       Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
-                      <strong>Conditions Particulières</strong> retrouvables <a href="/my/orders" target="_blank">ici</a>.
+                      <strong>Conditions Particulières</strong> que vous pouvez retrouver dans votre espace-client
+                      <a id="order_link" href="/my/orders" target="_blank">ici</a>.
                       <br /><br />
                       Pour un dégât des eaux sur votre Fairphone, veuillez suivre ces instructions de notre
                       <a href="https://wiki.commown.coop/Fairphone-tomb%C3%A9-dans-l%E2%80%99eau-ou-mouill%C3%A9" target="_blank">WIKI</a>
