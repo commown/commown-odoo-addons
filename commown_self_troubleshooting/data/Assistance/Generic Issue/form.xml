@@ -247,24 +247,23 @@
 
                   </div>
 
-                  <div id="step-5">
-                    <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
-                      Ce champ permet à l'équipe de Commown de s'assurer que votre adresse d'expédition est la bonne.
-                      Si ce n'est pas le cas, merci de la mettre à jour ci-dessous. <br /><br />
+                  <t t-call="commown_self_troubleshooting.step-ship-module">
+                    <t t-set="step">5</t>
+                    <t t-set="header">
+                      <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
+                        Ce formulaire permet à l'équipe de Commown de s'assurer que votre adresse d'expédition est la bonne.
+                        Si ce n'est pas le cas, merci de la mettre à jour ci-dessous. <br /><br />
 
-                      Après la complétion de ces informations, veuillez cliquer sur <strong>Suivant</strong>, cela vous
-                      redirigera vers un champ de texte dans lequel vous pourrez nous indiquer ce que vous
-                      souhaitez comme matériel supplémentaire (plus de stockage, plus de RAM...) et sur quel appareil.
-                      Nous reviendrons alors vers vous au plus vite avec le surcoût mensuel de ce matériel supplémentaire.<br /><br />
+                        Après la complétion de ces informations, veuillez cliquer sur <strong>Suivant</strong>, cela vous
+                        redirigera vers une page dans laquelle vous pourrez nous indiquer ce que vous
+                        souhaitez comme matériel supplémentaire (plus de stockage, plus de RAM...) et sur quel appareil.
+                        Nous reviendrons alors vers vous au plus vite avec le surcoût mensuel de ce matériel supplémentaire.<br /><br />
 
-                      NB: nous ne garantissons pas que le matériel supplémentaire demandé soit en stock.
-                    </p>
-
-                    <t t-call="commown_self_troubleshooting.step-ship-module">
-                      <t t-set="step">5</t>
-                      <t t-set="new_module">une nouvelle pièce</t>
+                        NB : nous ne garantissons pas que le matériel supplémentaire demandé soit en stock.
+                      </p>
                     </t>
-                  </div>
+                    <t t-set="new_module">une nouvelle pièce</t>
+                  </t>
 
                   <div id="step-6">
                     <t t-call="commown_self_troubleshooting.step-confirm-change">

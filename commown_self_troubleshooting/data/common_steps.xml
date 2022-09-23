@@ -105,6 +105,7 @@
           <i class="fas fa-shipping-fast" />
           Informations d'expédition
         </h2>
+        <p t-if="header" t-raw="header"></p>
         <p>
           Nous allons vous envoyer
           <t t-esc="new_module" />
