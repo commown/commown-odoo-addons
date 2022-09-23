@@ -33,20 +33,24 @@ class SelfHelp(http.Controller):
         partner = env.user.partner_id
         post = request.params.copy()
 
+        project_ref = "commown_self_troubleshooting." + post.get(
+            "project_ref", "support_project"
+        )
+
         task_data = {
             "name": post["self-troubleshoot-type"],
             "priority": str(int(post.get("priority", 0))),
             "contract_id": int(post["device_contract"]),
             "partner_id": partner.id,
             "description": self._description(**post),
-            "project_id": env.ref(
-                "commown_self_troubleshooting."
-                + post.get("project_ref", "support_project")
-            ).id,
+            "project_id": env.ref(project_ref).id,
             "tag_ids": [(6, 0, self._tag_ids(**post))],
         }
-        if post.get("stage_id", None):
-            task_data["stage_id"] = int(post["stage_id"])
+
+        if post.get("stage_ref", None):
+            stage_ref = "commown_self_troubleshooting." + post["stage_ref"]
+            task_data["stage_id"] = env.ref(stage_ref).id
+
         task = env["project.task"].sudo().create(task_data)
         task.onchange_contract_or_product()
 
