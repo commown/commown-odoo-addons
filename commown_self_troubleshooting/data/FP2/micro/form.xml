@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" name="stage_id" t-att-value="stage_long_term_followup"/>
+                          <input type="hidden" name="stage_ref" value="stage_long_term_followup"/>
                           <button type="submit" class="btn btn-primary" name="action" value="wait-simcard">Envoyer les informations</button>
                         </div>
                       </div>
