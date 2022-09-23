@@ -20,7 +20,7 @@
               });
             </script>
           </t>
-          <t t-set="tag_names">Auto-dépannage,Sérénité</t>
+          <t t-set="tag_names">Sérénité</t>
           <t t-set="issue_title">Option Sérénité - M'appeler</t>
           <t t-set="issue_description_template">issue-description-serenity</t>
           <!-- Fin des variables à modifier -->
