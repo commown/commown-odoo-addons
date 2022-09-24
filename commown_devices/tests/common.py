@@ -10,7 +10,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         contract_tmpl = self._create_rental_contract_tmpl(
             1,
             contract_line_ids=[
-                self._contract_line(1, "1 month Fairphone premium", tax),
+                self._contract_line(1, "1 month ##PRODUCT##", tax),
                 self._contract_line(1, "Accessory: ##ACCESSORY##", tax),
             ],
         )
