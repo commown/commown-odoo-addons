@@ -25,7 +25,7 @@
         <field name="mail_template_id"/>
         <field name="interval_number"/>
         <field name="interval_type"/>
-          <field name="max_delay_days"/>
+        <field name="max_delay_days"/>
       </tree>
     </field>
   </record>
