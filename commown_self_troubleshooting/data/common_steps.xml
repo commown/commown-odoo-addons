@@ -40,6 +40,7 @@
                     t-att-data-start-date="s_date"
                     t-att-data-commitment-end-date="c_date"
                     t-att-data-in-commitment="in_commitment and 'true' or 'false'"
+                    t-att-data-order-id="c.mapped('contract_line_ids.sale_order_line_id.order_id').id or ''"
                     />
               </t>
             </select>
@@ -104,16 +105,16 @@
           <i class="fas fa-shipping-fast" />
           Informations d'expédition
         </h2>
+        <p t-if="header" t-raw="header"></p>
         <p>
           Nous allons vous envoyer
           <t t-esc="new_module" />
-          pour
-        résoudre le problème. Veuillez vérifier attentivement
+        . Veuillez vérifier attentivement
         les informations d'expédition ci-dessous, et les
         modifier en cas de besoin. Notez que le paquet sera
         déposé directement dans votre boite aux lettres :
         votre présence n'est pas requise lors du passage du
-        facteur.
+        facteur (sauf pour les cas d'une livraison PC).
         </p>
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
@@ -225,7 +226,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_solved').id" />
+            <input type="hidden" name="stage_ref" value="stage_solved" />
             <button type="submit" class="btn btn-primary" name="action" value="inform">Envoyer les informations</button>
           </div>
 
@@ -267,7 +268,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_received').id" />
+            <input type="hidden" name="stage_ref" value="stage_received" />
             <button type="submit" class="btn btn-primary" name="action" value="contact">Envoyer les informations</button>
           </div>
 
@@ -282,7 +283,7 @@
           Confirmation de votre demande
         </h2>
         <p>En appuyant sur le bouton ci-dessous vous confirmerez votre
-        demande d'envoi.</p>
+        demande.</p>
 
         <t t-raw="tool_intro or ''" />
 
@@ -305,7 +306,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_pending').id" />
+            <input type="hidden" name="stage_ref" value="stage_pending" />
             <button type="submit" class="btn btn-primary" name="action" value="ship">Confirmer ma demande</button>
           </div>
         </div>

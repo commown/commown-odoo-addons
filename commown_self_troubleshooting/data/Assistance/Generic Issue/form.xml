@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="generic-issue" model="ir.ui.view">
+    <field name="name">Self-troubleshoot Generic Issue</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-generic-issue</field>
+    <field name="arch" type="xml">
+
+      <t t-name="website.self-troubleshoot-generic-issue">
+        <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-set="title">Commown - Demande d'assistance</t>
+          <t t-set="head">
+
+            <script type="text/javascript">
+              $(document).ready(function() {
+
+                const wizard = setUpWizard($('#smartwizard'));
+
+                function contractChanged() {
+                  let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
+                  if (contractData.orderId) {
+                    $("#order_link").attr("href", "/my/orders/" + contractData.orderId);
+                  }
+                }
+
+                $('select[name=device_contract]').change(contractChanged);
+
+                $('input[type=radio][name=net_generic_issue]').change(function () {
+                  wizard.toggleStep(2, this.value==='bug');
+                  wizard.toggleStep(3, this.value==='broken');
+                  wizard.toggleStep(4, this.value==='course');
+                  wizard.toggleStep(5, this.value==='upgrade');
+                  wizard.toggleStep(6, this.id==='net_confirm');
+                });
+
+              });
+            </script>
+          </t>
+          <t t-set="issue_title">Demande d'assistance</t>
+          <t t-set="issue_description_template">issue-description-generic-issue</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="container">
+            <h1>Demande d'assistance</h1>
+            <h2>Je rencontre un incident ou souhaite obtenir de l'assistance sur mon appareil</h2>
+            <br />
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+
+              <div id="smartwizard">
+                <ul>
+                  <li>
+                    <a href="#step-0">
+                      Contexte
+                      <br />
+                      <small>Appareil concerné</small>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#step-1">
+                      Étape 1
+                      <br />
+                      <small>Demande d'assistance</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-2">Étape 2
+                      <br/>
+                      <small>Incident, assistance</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-3">Étape 3
+                      <br/>
+                      <small>Casse</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-4">Étape 4
+                      <br/>
+                      <small>Formation</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-5">Étape 5
+                      <br/>
+                      <small>Demande de matériel</small>
+                    </a>
+                  </li>
+                  <li disabled="disabled">
+                    <a href="#step-6">Étape 6
+                      <br/>
+                      <small>Confirmation</small>
+                    </a>
+                  </li>
+                </ul>
+
+                <div>
+
+                  <t t-call="commown_self_troubleshooting.step-contract-choice">
+                      <t t-set="contracts"
+                         t-value="env.user.partner_id.self_troubleshooting_contracts('generic-issue-page')"/>
+                  </t>
+
+                  <div id="step-1">
+                    <h2>
+                      Vous avez besoin d'une assistance car
+                    </h2>
+                    <ul>
+                      <li>
+                        Vous rencontrez un incident avec votre appareil (bug logiciel ou panne
+                        matérielle), choisissez l'option <strong>Incident, assistance</strong>
+                      </li>
+                      <li>
+                        Votre appareil a subi un accident (chute brutale, oxydation accidentelle) conduisant
+                        à une destruction totale ou partielle de l'appareil loué et nuisant à son bon fonctionnement, choisissez
+                        l'option <strong>Casse</strong>
+                      </li>
+                      <li>
+                        Vous voulez faire valoir votre droit de formation Linux d'une heure
+                        avec notre équipe, choisissez l'option <strong>Formation</strong>
+                      </li>
+                      <li>
+                        Vous souhaitez faire évoluer votre matériel (espace de stockage
+                        supplémentaire, accessoires...), choisissez l'option <strong>Demande de matériel</strong>
+                      </li>
+                    </ul>
+
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label>Veuillez choisir une des ces quatre options</label>
+                        <br />
+                        <label class="radio-inline" for="net_bug">Incident, assistance</label>
+                        <input type="radio" name="net_generic_issue" id="net_bug" value="bug" required="required"
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
+                        <label class="radio-inline" for="net_broken">Casse</label>
+                        <input type="radio" name="net_generic_issue" id="net_confirm" value="broken" required="required"
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
+                        <label class="radio-inline" for="net_course">Formation</label>
+                        <input type="radio" name="net_generic_issue" id="net_course" value="course" required="required"
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
+                        <label class="radio-inline" for="net_upgrade">Demande de matériel</label>
+                        <input type="radio" name="net_generic_issue" id="net_confirm" value="upgrade" required="required"
+                        data-required-error="Veuillez choisir une des quatre possibilités."/>
+                        <div class="help-block with-errors"/>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-2">
+                    <p>Afin de traiter au mieux votre demande, nous vous invitons à adopter le formalisme
+                      ci-dessous qui permet d'obtenir une aide optimale. Il consiste à répondre aux 4 questions
+                      suivantes pour bien nous faire comprendre le problème que vous rencontrez :
+                    </p>
+                    <ol>
+                      <li>
+                        Décrivez avec précision ce que vous observez
+                        (ex: copie des messages d'erreur est utile et bienvenue)
+                      </li>
+                      <li>
+                        Le cas échéant décrivez avec précision les opérations
+                        que vous effectuez. L'objectif est de nous aider à les reproduire.
+                      </li>
+                      <li>
+                        Décrivez quel résultat vous vous attendiez à obtenir de
+                        ces opérations. L'objectif est d'éviter tout malentendu sur les attendus.
+                      </li>
+                      <li>
+                        Décrivez le résultat obtenu, qui ne vous satisfait donc pas.
+                        L'objectif est d'être bien sûr qu'on obtient la même chose que vous.
+                      </li>
+                    </ol>
+                    <p class="text-danger">
+                      <strong>
+                        NB: Adopter ce formalisme vous garantit une meilleure prise en charge
+                      </strong>
+                    </p>
+
+                    <div id="form-step-2" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" required="required" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="stage_ref" value="stage_received" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div id="step-3">
+                    <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
+                      La prise en charge d'une casse est différente selon les contrats souscrit chez Commown.
+                      Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
+                      <strong>Conditions Particulières</strong> que vous pouvez retrouver dans votre espace-client
+                      <a id="order_link" href="/my/orders" target="_blank">ici</a>.
+                      <br /><br />
+                      Pour un dégât des eaux sur votre Fairphone, veuillez suivre ces instructions de notre
+                      <a href="https://wiki.commown.coop/Fairphone-tomb%C3%A9-dans-l%E2%80%99eau-ou-mouill%C3%A9" target="_blank">WIKI</a>
+                      dans l'attente d'un nouvel appareil.
+                    </p>
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">3</t>
+                      <t t-set="new_module">un nouvel appareil ou module</t>
+                    </t>
+                  </div>
+
+                  <div id="step-4">
+                    <!-- Integrate Linux logo -->
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+                    <p>
+                      Vous souhaitez bénéficier de votre <strong>heure</strong> de formation Linux régit par votre contrat.<br /><br />
+                      Nous avons besoin de deux éléments :
+                      <ul>
+                        <li>
+                          vos disponibilités
+                        </li>
+                        <li>
+                          un résumé des points à aborder lors de la formation
+                        </li>
+                      </ul>
+                    </p>
+                    <p class="text-danger">
+                      NB: le descriptif des points à aborder est primordial pour nos équipes afin de faciliter
+                      le travail en amont et fluidifier nos échanges lors de la formation.
+                    </p>
+
+                    <div id="form-step-4" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_4">Inscrivez vos disponibilités et les sujets à aborder :</label>
+                        <textarea class="form-control" required="required" rows="3" id="more_info_step_4" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="stage_ref" value="stage_callback" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer ma demande</button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <t t-call="commown_self_troubleshooting.step-ship-module">
+                    <t t-set="step">5</t>
+                    <t t-set="header">
+                      <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
+                        Ce formulaire permet à l'équipe de Commown de s'assurer que votre adresse d'expédition est la bonne.
+                        Si ce n'est pas le cas, merci de la mettre à jour ci-dessous. <br /><br />
+
+                        Après la complétion de ces informations, veuillez cliquer sur <strong>Suivant</strong>, cela vous
+                        redirigera vers une page dans laquelle vous pourrez nous indiquer ce que vous
+                        souhaitez comme matériel supplémentaire (plus de stockage, plus de RAM...) et sur quel appareil.
+                        Nous reviendrons alors vers vous au plus vite avec le surcoût mensuel de ce matériel supplémentaire.<br /><br />
+
+                        NB : nous ne garantissons pas que le matériel supplémentaire demandé soit en stock.
+                      </p>
+                    </t>
+                    <t t-set="new_module">une nouvelle pièce</t>
+                  </t>
+
+                  <div id="step-6">
+                    <t t-call="commown_self_troubleshooting.step-confirm-change">
+                      <t t-set="step">6</t>
+                    </t>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+  <record id="generic-issue-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-generic-issue</field>
+    <field name="view_id" ref="generic-issue" />
+    <field name="website_meta_title">Demande d'assistance</field>
+    <field name="website_meta_description">Je rencontre un incident ou souhaite obtenir de l'assistance sur mon appareil</field>
+  </record>
+
+</odoo>

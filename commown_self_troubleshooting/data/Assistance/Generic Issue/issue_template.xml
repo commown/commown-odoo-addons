@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="issue-description-generic-issue" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-generic-issue</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-generic-issue</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-generic-issue">
+        <t t-if="net_generic_issue=='course'">
+            <p>Je souhaite effectuer mon heure de formation Linux.</p>
+        </t>
+        <t t-if="action=='ship'">
+          <t t-if="net_generic_issue=='upgrade'">
+            <p>
+              Je souhaite un matériel supplémentaire
+            </p>
+          </t>
+          <t t-else="">
+            <p>
+              Je rencontre une casse avec mon appareil
+            </p>
+          </t>
+          <p>
+            L'adresse d'expédition est la suivante : <br/>
+            <t t-esc="name"/><br/>
+            <t t-esc="u'\n'.join((street, street2)).strip()"/><br/>
+            <t t-esc="zipcode"/>
+            <t t-esc="city"/> <br/>
+            <t t-esc="country"/><br/>
+            Informations supplémentaires utiles à la livraison :<br/>
+            Numéro de téléphone : <t t-esc="phone"/><br/>
+            Adresse de courriel : <t t-esc="email"/>
+          </p>
+        </t>
+        <p t-if="more_info">Informations complémentaires :</p>
+        <pre t-if="more_info"><t t-esc="more_info" /></pre>
+
+      </t>
+
+    </field>
+  </record>
+
+</odoo>

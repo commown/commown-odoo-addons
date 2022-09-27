@@ -20,7 +20,7 @@
               });
             </script>
           </t>
-          <t t-set="tag_names">Auto-dépannage,Sérénité</t>
+          <t t-set="tag_names">Sérénité</t>
           <t t-set="issue_title">Option Sérénité - M'appeler</t>
           <t t-set="issue_description_template">issue-description-serenity</t>
           <!-- Fin des variables à modifier -->
@@ -93,7 +93,7 @@
                       </div>
 
                       <div class="form-group">
-                        <input type="hidden" name="stage_id" t-att-value="env.ref('commown_self_troubleshooting.stage_callback').id" />
+                        <input type="hidden" name="stage_ref" value="stage_callback" />
                         <button type="submit" class="btn btn-primary" name="action">Être appelé</button>
                       </div>
                     </div>
