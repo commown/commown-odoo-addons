@@ -2,7 +2,7 @@ from urllib.parse import urlencode
 
 from lxml import html
 
-from odoo.tests.common import HOST, PORT, HttpCase, get_db_name
+from odoo.tests.common import HOST, PORT, HttpCase, SavepointCase, get_db_name
 
 from odoo.addons.product_rental.tests.common import (
     MockedEmptySessionMixin,
@@ -68,3 +68,20 @@ class ResPartnerResetPasswordTC(
                 get_db_name(), "portal", "dummy_pass", None
             )
         )
+
+
+class ResPartnerSimpleTC(SavepointCase):
+    def test_create_supplier(self):
+        p1 = self.env["res.partner"].create({"name": "p1", "supplier": True})
+
+        expected = "401-F-%d" % p1.id
+        self.assertEqual(p1.property_account_payable_id.code, expected)
+
+    def test_update_to_supplier(self):
+        p1 = self.env["res.partner"].create({"name": "p1", "supplier": False})
+
+        expected = "401-F-%d" % p1.id
+        self.assertNotEqual(p1.property_account_payable_id.code, expected)
+
+        p1.supplier = True
+        self.assertEqual(p1.property_account_payable_id.code, expected)
