@@ -76,17 +76,51 @@ class CommownPartner(models.Model):
                         field, _("File too big (limit is %dMo)") % self.max_doc_size_Mo
                     )
 
+    def _create_payable_account(self):
+        """If partner is a supplier and its payable account does not exist or
+        is the fr standard one, create a payable account dedicated to
+        this supplier. For employees of a company, go up the parent_id
+        hierarchy and create the account there.
+        """
+
+        ref_account = self.env.ref("l10n_fr.1_fr_pcg_pay")
+        tva = self.env.ref("l10n_fr.1_tva_normale")
+        tag = self.env.ref("account.account_tag_operating")
+        account_type = self.env.ref("account.data_account_type_payable")
+        account_model = self.env["account.account"]
+
+        for partner in self:
+            while partner.parent_id:
+                partner = partner.parent_id
+
+            account = partner.property_account_payable_id
+            if not account or account == ref_account:
+                partner.property_account_payable_id = account_model.create(
+                    {
+                        "code": "401-F-%s" % partner.id,
+                        "name": partner.name,
+                        "tag_ids": [(6, 0, tag.ids)],
+                        "user_type_id": account_type.id,
+                        "tax_ids": [(6, 0, tva.ids)],
+                        "reconcile": True,
+                    }
+                )
+
     @api.model
     @api.returns("self", lambda value: value.id)
     def create(self, vals):
-        "Apply binary docs limit policy before creating the entity"
         self._apply_bin_field_size_policy(vals)
-        return super(CommownPartner, self).create(vals)
+        result = super(CommownPartner, self).create(vals)
+        if result.supplier:
+            result._create_payable_account()
+        return result
 
     def write(self, vals, **kwargs):
-        "Apply binary docs limit policy before updating the entity"
         self._apply_bin_field_size_policy(vals)
-        return super(CommownPartner, self).write(vals, **kwargs)
+        result = super(CommownPartner, self).write(vals, **kwargs)
+        if "supplier" in vals and vals["supplier"]:
+            self._create_payable_account()
+        return result
 
     @api.model
     def signup_retrieve_info(self, token):
