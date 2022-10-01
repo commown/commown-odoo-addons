@@ -99,7 +99,7 @@
               </group>
               <group string="Marketing">
                 <field name="campaign_id" />
-                <field name="medium_id" />
+                <field name="medium_id" invisible="1"/>
                 <field name="source_id" />
               </group>
               <group name="phonecall_validation" string="Phone call validation">
