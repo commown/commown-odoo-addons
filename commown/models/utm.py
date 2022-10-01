@@ -2,11 +2,12 @@ from odoo import api, models
 from odoo.exceptions import UserError
 
 
-class UtmSource(models.Model):
-    _inherit = "utm.source"
+class UtmCommownUtilsMixin(models.AbstractModel):
+    _name = "utm.commown_utils.mixin"
+    _description = "Mixin for utm classes, to easily merge/ safely remove them"
 
     def _related_entities_by_field(self):
-        fields = self.env["ir.model.fields"].search([("relation", "=", "utm.source")])
+        fields = self.env["ir.model.fields"].search([("relation", "=", self._name)])
 
         for field in fields:
             model = field.model_id.model
@@ -43,3 +44,13 @@ class UtmSource(models.Model):
                 break
         else:
             self.sudo().unlink()
+
+
+class UtmSource(models.Model):
+    _name = "utm.source"
+    _inherit = ["utm.source", "utm.commown_utils.mixin"]
+
+
+class UtmCampaign(models.Model):
+    _name = "utm.campaign"
+    _inherit = ["utm.campaign", "utm.commown_utils.mixin"]

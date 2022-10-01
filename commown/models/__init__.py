@@ -17,5 +17,5 @@ from . import res_partner
 from . import res_user
 from . import sale_order
 from . import simple_reconciliation
-from . import utm_source
+from . import utm
 from . import website
