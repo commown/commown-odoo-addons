@@ -2,7 +2,7 @@
     "name": "Commown lead risk analysis",
     "category": "Business",
     "summary": "Add risk analysis-related fields to leads",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "description": "Risk analysis data storage for Commown leads",
     "author": "Commown SCIC SAS",
     "license": "AGPL-3",
