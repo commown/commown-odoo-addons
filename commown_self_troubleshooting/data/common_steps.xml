@@ -307,6 +307,7 @@
 
           <div class="form-group">
             <input type="hidden" name="stage_ref" value="stage_received" />
+            <input type="hidden" name="priority" id="priority" value="1" />
             <button type="submit" class="btn btn-primary" name="action" value="ship">Confirmer ma demande</button>
           </div>
         </div>
