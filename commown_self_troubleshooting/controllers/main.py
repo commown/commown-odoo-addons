@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 
 class SelfHelp(http.Controller):
 
-    action_tags = {"inform": ["tag-inform-only"], "ship": ["tag-to-be-shipped"]}
+    action_tags = {"inform": ["tag-inform-only"]}
 
     def ref(self, suffix):
         return request.env.ref("commown_self_troubleshooting." + suffix)
