@@ -211,7 +211,8 @@
                   </div>
 
                   <div id="step-4">
-                    <!-- Integrate Linux logo -->
+                    <img src="/commown_self_troubleshooting/static/images/logo_linux.png"
+                         alt="Logo Linux" />
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
