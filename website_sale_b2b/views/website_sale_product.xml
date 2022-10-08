@@ -5,26 +5,6 @@
       <xpath expr="//*[@t-field='product.rental_frequency']" position="before">
         <t t-if="product.is_b2b()"><span>excl. taxes</span></t>
       </xpath>
-
-      <!-- Remove deposit price: cannot use deposit price as product price in B2B
-           as sale drafts would use it which is not what we want. -->
-      <xpath expr="//*[hasclass('initial_deposit_title')]//ancestor::h4" position="attributes">
-        <attribute name="t-if">not product.is_b2b()</attribute>
-      </xpath>
-
-      <xpath expr="//*[hasclass('commitment')]/span[1]" position="replace">
-        <t t-if="not product.is_b2b()">
-          <span>Commitment duration: </span>
-        </t>
-        <t t-else="">
-          <span>Commitment duration: from </span>
-        </t>
-      </xpath>
-
-      <xpath expr="//*[hasclass('oe_rental_price')]" position="attributes">
-        <attribute name="t-esc">(product.is_b2b() and product.lst_price or product.website_price) * product.rental_price / (product.list_price or 1)</attribute>
-      </xpath>
-
     </template>
 
     <!-- Replace description_sale by website_description_sale -->
