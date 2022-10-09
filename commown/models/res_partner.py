@@ -90,12 +90,11 @@ class CommownPartner(models.Model):
         account_model = self.env["account.account"]
 
         for partner in self:
-            while partner.parent_id:
-                partner = partner.parent_id
+            partner = partner.commercial_partner_id
 
             account = partner.property_account_payable_id
             if not account or account == ref_account:
-                partner.property_account_payable_id = account_model.create(
+                new_account = account_model.create(
                     {
                         "code": "401-F-%s" % partner.id,
                         "name": partner.name,
@@ -104,6 +103,9 @@ class CommownPartner(models.Model):
                         "tax_ids": [(6, 0, tva.ids)],
                         "reconcile": True,
                     }
+                )
+                (partner | partner.child_ids).update(
+                    {"property_account_payable_id": new_account}
                 )
 
     @api.model
