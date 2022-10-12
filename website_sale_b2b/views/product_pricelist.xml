@@ -1,0 +1,19 @@
+<odoo>
+
+  <record model="ir.ui.view" id="product_pricelist_view">
+    <field name="name">product.pricelist.form (in website_sale_b2b)</field>
+    <field name="model">product.pricelist</field>
+    <field name="inherit_id" ref="product.product_pricelist_view"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//field[@name='country_group_ids']" position="before">
+          <field name="account_for_rented_quantity"/>
+          <field name="account_for_rented_quantity_category_ids"
+                 attrs="{'invisible': [('account_for_rented_quantity', '!=', 'product-category')]}"/>
+      </xpath>
+
+    </field>
+  </record>
+
+
+</odoo>
