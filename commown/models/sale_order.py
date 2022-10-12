@@ -55,7 +55,9 @@ class SaleOrder(models.Model):
         account = partner.property_account_receivable_id
         if not account or account.code != account_code:
             new_account = self._get_or_create_receivable_account(account_code)
-            partner.update({"property_account_receivable_id": new_account.id})
+            (partner | partner.child_ids).update(
+                {"property_account_receivable_id": new_account.id}
+            )
 
     def _create_investment_followup_task(self):
         product_tmpl_ids = (

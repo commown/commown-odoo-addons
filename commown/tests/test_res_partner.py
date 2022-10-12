@@ -85,3 +85,25 @@ class ResPartnerSimpleTC(SavepointCase):
 
         p1.supplier = True
         self.assertEqual(p1.property_account_payable_id.code, expected)
+
+    def test_create_supplier_add_child(self):
+        p1 = self.env["res.partner"].create(
+            {"name": "p1", "supplier": True, "is_company": True}
+        )
+        p2 = self.env["res.partner"].create({"name": "p2", "parent_id": p1.id})
+
+        expected = "401-F-%d" % p1.id
+        self.assertEqual(p1.property_account_payable_id.code, expected)
+        self.assertEqual(p2.property_account_payable_id.code, expected)
+
+    def test_create_child_supplier(self):
+        p1 = self.env["res.partner"].create({"name": "p1", "is_company": True})
+        p2 = self.env["res.partner"].create({"name": "p2", "parent_id": p1.id})
+        p3 = self.env["res.partner"].create({"name": "p2", "parent_id": p1.id})
+
+        p3.supplier = True
+
+        expected = "401-F-%d" % p1.id
+        self.assertEqual(p1.property_account_payable_id.code, expected)
+        self.assertEqual(p2.property_account_payable_id.code, expected)
+        self.assertEqual(p3.property_account_payable_id.code, expected)
