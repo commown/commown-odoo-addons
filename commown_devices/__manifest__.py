@@ -24,6 +24,7 @@
         "views/product.xml",
         "views/project_project.xml",
         "views/project_task.xml",
+        "views/stock_picking.xml",
         "views/wizard_crm_lead_picking.xml",
         "views/wizard_project_task_picking.xml",
     ],
