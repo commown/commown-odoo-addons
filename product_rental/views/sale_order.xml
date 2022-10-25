@@ -8,9 +8,18 @@
     <field name="model">sale.order</field>
     <field name="inherit_id" ref="product_contract.view_order_form"/>
 
-    <!-- Remove the contract creation button -->
     <field name="arch" type="xml">
+      <!-- Remove the contract creation button -->
       <xpath expr="//button[@name='action_create_contract']" position="replace"></xpath>
+
+      <!-- Replace the contracts show button ignoring contract_nb (which value is wrong for us) -->
+      <xpath expr="//button[@name='action_show_contracts']" position="replace">
+        <button string="Contracts" icon="fa-book"
+                type="object" name="action_show_contracts"
+                attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}">
+        </button>
+      </xpath>
+
     </field>
 
   </record>
