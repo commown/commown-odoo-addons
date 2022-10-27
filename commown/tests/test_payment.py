@@ -7,6 +7,8 @@ from odoo.tests.common import at_install, post_install
 from odoo.addons.account_payment_slimpay.tests.common import MockedSlimpayMixin
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
+from .common import fake_slimpay_server_env_config
+
 
 @at_install(False)
 @post_install(True)
@@ -26,6 +28,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         self.setup_mocks()
         self.addCleanup(request_patcher.stop)
 
+    @fake_slimpay_server_env_config()
     def test_token_replaced(self):
         "Partner payment_token_id must be the last token created for a web sale"
         # Assign an "old" token to the web partner:
