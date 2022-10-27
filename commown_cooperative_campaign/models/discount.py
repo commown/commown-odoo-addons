@@ -10,7 +10,8 @@ import iso8601
 import pytz
 import requests
 
-from odoo import api, models
+from odoo import _, api, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 

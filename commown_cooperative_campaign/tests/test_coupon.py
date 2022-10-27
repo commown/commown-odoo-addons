@@ -181,3 +181,24 @@ class CouponTestTC(SavepointCase):
         with requests_mock.Mocker() as rm:
             rm.post(self.paths["opt-in"], json=optin)
             wizard.late_optin()
+
+    def test_wizard_late_optin_error(self):
+        wizard = self.env["coupon.late.optin.wizard"].create(
+            {
+                "coupon_id": self.coupon.id,
+            }
+        )
+
+        with requests_mock.Mocker() as rm:
+            rm.post(
+                self.paths["opt-in"],
+                status_code=422,
+                json={"detail": "Already opt-in"},
+            )
+            with self.assertRaises(UserError) as err:
+                wizard.late_optin()
+
+        self.assertEqual(
+            err.exception.name,
+            "Already opt-in (may not be visible if before the campaign start)",
+        )
