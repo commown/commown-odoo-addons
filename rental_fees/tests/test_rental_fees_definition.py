@@ -1,3 +1,5 @@
+from datetime import date
+
 from odoo.models import ValidationError
 
 from .common import RentalFeesTC
@@ -39,6 +41,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
                 "partner_id": po2.partner_id.id,
                 "product_template_id": self.storable_product.id,
                 "order_ids": [(4, po2.id, 0)],
+                "agreed_to_std_price_ratio": 0.5,
             }
         )
         with self.assertRaises(ValidationError) as err:
@@ -69,4 +72,43 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         self.assertEqual(
             sorted(self.env[act["res_model"]].search(act["domain"]).mapped("name")),
             ["N/S 1", "N/S 2", "N/S 3", "N/S 4", "N/S 5"],
+        )
+
+    def test_compensation_price(self):
+        device = self.fees_def.devices().filtered(lambda d: d.name == "N/S 1")
+
+        self.assertEqual(self.fees_def.compensation_price(device), 400.0)
+
+        po2 = self.create_po_and_picking(("N/S 4", "N/S 5"), price_unit=150.0)
+        fees_def2 = self.env["rental_fees.definition"].create(
+            {
+                "name": "fees_def 2",
+                "partner_id": po2.partner_id.id,
+                "product_template_id": self.storable_product.id,
+                "order_ids": [(4, po2.id, 0)],
+                "agreed_to_std_price_ratio": 0.4,
+            }
+        )
+        device2 = fees_def2.devices().filtered(lambda d: d.name == "N/S 4")
+
+        self.assertEqual(fees_def2.compensation_price(device2), 375.0)
+
+    def test_to_be_compensated_device(self):
+        device = self.fees_def.devices().filtered(lambda d: d.name == "N/S 1")
+        task = self.env["project.task"].create(
+            {
+                "name": "test breakage",
+                "contractual_issue_type": "breakage",
+                "contractual_issue_date": date(2021, 3, 15),
+                "lot_id": device.id,
+            }
+        )
+
+        self.assertFalse(
+            self.fees_def.to_be_compensated_devices(date(2021, 3, 1)),
+        )
+
+        self.assertDictEqual(
+            self.fees_def.to_be_compensated_devices(date(2021, 8, 1)),
+            {device: task},
         )

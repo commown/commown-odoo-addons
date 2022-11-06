@@ -296,7 +296,27 @@ class RentalFeesComputation(models.Model):
 
         total_fees = 0.0
 
+        to_be_compensated_devices = fees_def.to_be_compensated_devices(self.until_date)
+
         for device in fees_def.devices():
+
+            if device in to_be_compensated_devices:
+                task = to_be_compensated_devices[device]
+                fees = fees_def.compensation_price(device)
+                self.env["rental_fees.computation.detail"].sudo().create(
+                    {
+                        "fees_computation_id": self.id,
+                        "fees": fees,
+                        "fees_type": "compensation",
+                        "lot_id": device.id,
+                        "contract_id": task.contract_id.id,
+                        "from_date": fees_def.purchase_date(device),
+                        "to_date": task.contractual_issue_date,
+                        "fees_definition_line_id": fees_def.line_ids[0].id,
+                    }
+                )
+                total_fees += fees
+                continue
 
             periods = self.rental_periods(device)
             if not periods:
@@ -312,6 +332,7 @@ class RentalFeesComputation(models.Model):
                     {
                         "fees_computation_id": self.id,
                         "fees": fees,
+                        "fees_type": "fees",
                         "lot_id": device.id,
                         "contract_id": period["contract"].id,
                         "from_date": period["from_date"],
@@ -338,6 +359,12 @@ class RentalFeesComputationDetail(models.Model):
 
     fees = fields.Float(
         string="Computed fees",
+        required=True,
+    )
+
+    fees_type = fields.Selection(
+        [("fees", "Rental Fees"), ("compensation", "Compensation")],
+        string="Fees type",
         required=True,
     )
 

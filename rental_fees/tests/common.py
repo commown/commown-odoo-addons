@@ -13,6 +13,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 "partner_id": self.po.partner_id.id,
                 "product_template_id": self.storable_product.id,
                 "order_ids": [(6, 0, self.po.ids)],
+                "agreed_to_std_price_ratio": 0.5,
             }
         )
         self.env["rental_fees.definition_line"].create(
@@ -46,7 +47,13 @@ class RentalFeesTC(DeviceAsAServiceTC):
             }
         )
 
-    def create_po_and_picking(self, serials, partner=None, product=None):
+    def create_po_and_picking(
+        self,
+        serials,
+        partner=None,
+        product=None,
+        price_unit=200.0,
+    ):
         "Return a purchase order with a done picking, generating given serials"
         partner = partner or self.env.ref("base.res_partner_1")
         product = product or self.storable_product.product_variant_id
@@ -58,7 +65,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 "product_id": product.id,
                 "product_qty": len(serials),
                 "product_uom": product.uom_id.id,
-                "price_unit": 1.0,
+                "price_unit": price_unit,
                 "date_planned": date(2021, 1, 1),
                 "order_id": po.id,
             }
