@@ -25,6 +25,18 @@ class RentalFeesComputation(models.Model):
         required=True,
     )
 
+    partner_id = fields.Many2one(
+        "res.partner",
+        related="fees_definition_id.partner_id",
+        store=True,
+    )
+
+    product_template_id = fields.Many2one(
+        "product.template",
+        related="fees_definition_id.product_template_id",
+        store=True,
+    )
+
     until_date = fields.Date(
         string="Compute until",
         help="Date until which fees are computed (past, present or future)",
