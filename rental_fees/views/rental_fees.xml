@@ -24,6 +24,12 @@
         <field name="partner_id" string="Supplier"/>
         <field name="product_template_id"/>
         <field name="order_ids"/>
+        <group expand="0" string="Group By">
+          <filter string="Supplier" name="supplier"
+                  context="{'group_by': 'partner_id'}"/>
+          <filter string="Product" name="product"
+                  context="{'group_by': 'product_template_id'}"/>
+        </group>
       </search>
     </field>
   </record>
@@ -116,11 +122,41 @@
     <field name="arch" type="xml">
       <tree string="Rental fees computations">
         <field name="fees_definition_id"/>
+        <field name="partner_id" invisible="True"/>
+        <field name="product_template_id" invisible="True"/>
         <field name="until_date"/>
         <field name="fees"/>
         <field name="invoice_ids" widget="many2many_tags"/>
         <field name="state"/>
       </tree>
+    </field>
+  </record>
+
+  <record id="rental_fees_computation_view_search" model="ir.ui.view">
+    <field name="name">rental_fees.computation.search</field>
+    <field name="model">rental_fees.computation</field>
+    <field name="arch" type="xml">
+      <search string="Rental Fees Computation">
+        <field name="fees_definition_id" string="Fees definition"/>
+        <field name="invoice_ids" string="Invoices"/>
+        <field name="partner_id" string="Supplier"/>
+        <field name="product_template_id" string="Product"/>
+        <group name="invoices">
+          <filter string="Invoiced" name="invoiced"
+                  domain="[('invoice_ids', '!=', False)]"/>
+          <separator/>
+          <filter string="To invoice" name="to_invoice"
+                  domain="[('invoice_ids', '=', False)]"/>
+        </group>
+        <group expand="0" string="Group By">
+          <filter string="Fees definition" name="fees_definition"
+                  context="{'group_by': 'fees_definition_id'}"/>
+          <filter string="Supplier" name="supplier"
+                  context="{'group_by': 'partner_id'}"/>
+          <filter string="Product" name="product"
+                  context="{'group_by': 'product_template_id'}"/>
+        </group>
+      </search>
     </field>
   </record>
 
@@ -167,6 +203,7 @@
     <field name="res_model">rental_fees.computation</field>
     <field name="view_type">form</field>
     <field name="view_id" ref="rental_fees_computation_view_tree"/>
+    <field name="search_view_id" ref="rental_fees_computation_view_search"/>
   </record>
 
   <menuitem id="menu_rental_fees_computation_menu"
