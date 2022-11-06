@@ -106,10 +106,21 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.send_device("N/S 2", contract=contract2, date="2021-03-06")
         contract2.date_start = "2021-03-06"
 
-        while contract1.recurring_next_date <= date(2021, 4, 1):
+        device2 = contract2.quant_ids.lot_id
+        task = self.env["project.task"].create(
+            {
+                "name": "test breakage",
+                "contractual_issue_type": "breakage",
+                "contractual_issue_date": date(2021, 4, 5),
+                "lot_id": device2.id,
+                "contract_id": contract2.id,
+            }
+        )
+
+        while contract1.recurring_next_date <= date(2021, 5, 1):
             contract1._recurring_create_invoice()
 
-        while contract2.recurring_next_date <= date(2021, 4, 1):
+        while contract2.recurring_next_date <= date(2021, 5, 1):
             contract2._recurring_create_invoice()
 
         c1 = self.compute("2021-01-31", invoice=True)
@@ -129,6 +140,12 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertIn("03/31/2021", c3.invoice_ids.invoice_line_ids[0].name)
         self.assertEqual(c3.invoice_ids.amount_total, 5.0)
         c3.invoice_ids.action_invoice_open()
+
+        c4 = self.compute("2021-04-30", invoice=True)
+        self.assertEqual(c4.fees, 420.0)
+        self.assertIn("04/30/2021", c4.invoice_ids.invoice_line_ids[0].name)
+        self.assertEqual(c4.invoice_ids.amount_total, 412.5)
+        c4.invoice_ids.action_invoice_open()
 
         # Paying an invoice, even after another one was emitted must work
         self.pay(c2.invoice_ids)

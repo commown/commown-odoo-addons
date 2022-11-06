@@ -41,6 +41,16 @@ class RentalFeesDefinition(models.Model):
         domain=[("type", "=", "product")],
     )
 
+    agreed_to_std_price_ratio = fields.Float(
+        "Agreed / standard price ratio",
+        required=True,
+        help=(
+            "Ratio between the purchase price in this fees agreement"
+            " and the standard price. Used for compensation in case of a"
+            " device breakage."
+        ),
+    )
+
     order_ids = fields.Many2many(
         comodel_name="purchase.order",
         string="Purchase orders",
@@ -121,6 +131,35 @@ class RentalFeesDefinition(models.Model):
         return self.mapped("order_ids.picking_ids.move_line_ids.lot_id").filtered(
             lambda d: d.product_id.product_tmpl_id == self.product_template_id
         )
+
+    def to_be_compensated_devices(self, date):
+        all_devices = self.devices()
+        tasks = self.env["project.task"].search(
+            [
+                ("contractual_issue_type", "in", ("breakage", "loss", "theft")),
+                ("contractual_issue_date", "<=", date),
+                ("lot_id", "in", all_devices.ids),
+            ]
+        )
+        return {task.lot_id: task for task in tasks}
+
+    def compensation_price(self, device):
+        po_line = self.env["purchase.order.line"].search(
+            [
+                ("order_id", "in", self.order_ids.ids),
+                ("order_id.picking_ids.move_line_ids.lot_id", "=", device.id),
+            ]
+        )
+        return po_line.price_unit / self.agreed_to_std_price_ratio
+
+    def purchase_date(self, device):
+        po_line = self.env["purchase.order.line"].search(
+            [
+                ("order_id", "in", self.order_ids.ids),
+                ("order_id.picking_ids.move_line_ids.lot_id", "=", device.id),
+            ]
+        )
+        return po_line.order_id.date_order
 
     @api.multi
     def button_open_devices(self):
