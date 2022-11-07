@@ -18,5 +18,6 @@
         "security/ir.model.access.csv",
         "views/rental_fees_computation.xml",
         "views/rental_fees_definition.xml",
+        "views/rental_fees_report.xml",
     ],
 }

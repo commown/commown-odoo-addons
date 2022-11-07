@@ -18,6 +18,7 @@ def _not_canceled(invoice):
 class RentalFeesComputation(models.Model):
     _name = "rental_fees.computation"
     _description = "Computation of rental fees"
+    _inherit = ["mail.thread"]
 
     fees_definition_id = fields.Many2one(
         "rental_fees.definition",
@@ -83,6 +84,12 @@ class RentalFeesComputation(models.Model):
         compute="_compute_invoiced_amount",
         store=True,
     )
+
+    def rental_details(self):
+        return self.detail_ids.filtered(lambda d: d.fees_type == "fees")
+
+    def compensation_details(self):
+        return self.detail_ids.filtered(lambda d: d.fees_type == "compensation")
 
     def _has_later_invoiced_computation(self):
         self.ensure_one()
@@ -231,6 +238,16 @@ class RentalFeesComputation(models.Model):
 
         return result
 
+    def amount_to_be_invoiced(self):
+        past_invs = (
+            self.fees_definition_id.computation_ids.filtered(
+                lambda c: c.until_date < self.until_date
+            )
+            .mapped("invoice_ids")
+            .filtered(_not_canceled)
+        )
+        return self.fees - sum(past_invs.mapped("amount_total") or (0,))
+
     @api.multi
     def action_invoice(self):
         """Generate a draft invoice based on the invoice model of the fees def
@@ -252,13 +269,7 @@ class RentalFeesComputation(models.Model):
         if self._has_later_invoiced_computation():
             raise UserError(_("There is a later invoice for the same fees definition"))
 
-        other_comp_invs = (
-            (fees_def.computation_ids - self)
-            .mapped("invoice_ids")
-            .filtered(_not_canceled)
-        )
-
-        amount = self.fees - sum(other_comp_invs.mapped("amount_total") or (0,))
+        amount = self.amount_to_be_invoiced()
         inv = fees_def.model_invoice_id.copy({"date_invoice": self.until_date})
         inv.invoice_line_ids[0].update({"price_unit": amount, "quantity": 1.0})
 
