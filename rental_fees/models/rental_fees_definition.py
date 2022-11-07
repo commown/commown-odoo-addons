@@ -2,6 +2,7 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools import misc
 
 
 class RentalFeesDefinition(models.Model):
@@ -297,3 +298,16 @@ class RentalFeesDefinitionLine(models.Model):
                 sum(i.price_total - i.price_tax for i in invoice_lines)
                 * self.monthly_fees
             )
+
+    def format_fees_amount(self):
+        if self.fees_type == "proportional":
+            return "%.02f %%" % (100 * self.monthly_fees)
+        elif self.fees_type == "fix":
+            return _("%(fixed_amount)s %(currency)s (fixed)") % {
+                "fixed_amount": misc.formatLang(
+                    self.env,
+                    self.monthly_fees,
+                    monetary=True,
+                ),
+                "currency": self.env.user.company_id.currency_id.symbol,
+            }
