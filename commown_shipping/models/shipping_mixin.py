@@ -36,12 +36,18 @@ def _ref_from_name(name):
 
 class CommownShippingMixin(models.AbstractModel):
     _name = "commown.shipping.mixin"
-    _description = "Object used to edit shipping labels and track parcels"
+    _description = "Object used to edit shipping labels"
 
     recipient_partner_id = fields.Many2one(
         "res.partner",
         "Delivery partner",
-        help="If left empty, a delivery partner will be looked-up for specified partner",
+        help=(
+            "If left empty, a delivery partner will be looked-up for specified"
+            " partner:\n"
+            "- for crm leads, the sale's delivery partner will be used;\n"
+            "- for project tasks (support, etc.), odoo will try to find a"
+            " delivery partner from the partner or its company."
+        ),
     )
 
     # Needs to be overloaded: used to store multiple label pdfs
