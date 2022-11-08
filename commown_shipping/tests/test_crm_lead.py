@@ -173,6 +173,39 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         self.assertEqual(all_labels.name, self.parcel_type.name + ".pdf")
         self.assertEqual(pdf_page_num(all_labels), 2)
 
+    def test_recipient_partner(self):
+        so = self.lead.so_line_id.order_id
+
+        so.partner_shipping_id = self.lead.partner_id.copy(
+            {
+                "name": "SO Delivery",
+                "parent_id": self.lead.partner_id.id,
+                "is_company": False,
+                "type": "delivery",
+            }
+        )
+
+        other_shipping_partner = self.lead.partner_id.copy(
+            {
+                "name": "Hand-made Delivery",
+                "parent_id": self.lead.partner_id.id,
+                "is_company": False,
+                "type": "delivery",
+            }
+        )
+
+        # Test pre-requisite:
+        self.assertEqual(
+            self.env["res.partner"].browse(
+                self.lead.partner_id.address_get(["delivery"])["delivery"]
+            ),
+            other_shipping_partner,
+        )
+
+        with self.assertRaises(UserError) as err:
+            self.lead._recipient_partner()
+        self.assertIn("address ambiguity", err.exception.name)
+
 
 class CrmLeadDeliveryTC(TransactionCase):
     def setUp(self):
