@@ -6,14 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 05:57+0000\n"
-"PO-Revision-Date: 2022-07-23 05:57+0000\n"
+"POT-Creation-Date: 2022-11-08 11:33+0000\n"
+"PO-Revision-Date: 2022-11-08 11:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: commown_shipping
+#: code:addons/commown_shipping/models/colissimo_utils.py:81
+#, python-format
+msgid "A phone number is required to generate a Colissimo label!"
+msgstr "Un numéro de téléphone est requis pour générer une étiquette Colissimo !"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__account
@@ -26,10 +32,16 @@ msgid "Account Password"
 msgstr "Mot de passe du compte"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:144
+#: code:addons/commown_shipping/models/shipping_mixin.py:158
 #, python-format
 msgid "Address too long for \"%s\""
 msgstr "Adresse de \"%s\" trop longue"
+
+#. module: commown_shipping
+#: code:addons/commown_shipping/models/colissimo_utils.py:85
+#, python-format
+msgid "An email is required to generate a Colissimo label!"
+msgstr "Une adresse électronique est requise pour générer une étiquette Colissimo !"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__send_email_on_delivery
@@ -57,7 +69,7 @@ msgid "Class holding the fields and methods to track parcel delivery"
 msgstr "Classe portant les champs et méthodes de suivi des colis"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:141
+#: code:addons/commown_shipping/models/shipping_mixin.py:155
 #, python-format
 msgid "Colissimo error:\n"
 "%s"
@@ -101,6 +113,12 @@ msgstr "Modèle de courriel par défaut"
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__delivery_date
 msgid "Delivery Date"
 msgstr "Date de livraison"
+
+#. module: commown_shipping
+#: code:addons/commown_shipping/models/crm_lead.py:65
+#, python-format
+msgid "Delivery address ambiguity: there is one on the sale and another on the partner. Please fill-in the recipient partner field to desambiguify."
+msgstr "Adresse de livraison ambigüe : il y en a une sur la vente et une autre sur le partenaire. Merci de remplir le champ \"Adresse de livraison\" pour lever l'ambigüité."
 
 #. module: commown_shipping
 #: model_terms:ir.ui.view,arch_db:commown_shipping.crm_case_form_view_oppor
@@ -193,8 +211,12 @@ msgstr ""
 #: model:ir.model.fields,help:commown_shipping.field_commown_shipping_mixin__recipient_partner_id
 #: model:ir.model.fields,help:commown_shipping.field_crm_lead__recipient_partner_id
 #: model:ir.model.fields,help:commown_shipping.field_project_task__recipient_partner_id
-msgid "If left empty, a delivery partner will be looked-up for specified partner"
-msgstr "Lorsque laissée vide, une adresse de livraison sera recherchée pour le partenaire de la carte"
+msgid "If left empty, a delivery partner will be looked-up for specified partner:\n"
+"- for crm leads, the sale's delivery partner will be used;\n"
+"- for project tasks (support, etc.), odoo will try to find a delivery partner from the partner or its company."
+msgstr "Lorsque laissée vide, une adresse de livraison sera recherchée pour le partenaire de la carte :\n"
+"- pour les opportunités, l'adresse de livraison du bon de commande sera utilisée ;\n"
+"- pour les tâches (support, etc.), odoo cherchera un partenaire de livraison en partant du partenaire ou en remontant à sa société."
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__insurance_value
@@ -251,8 +273,8 @@ msgstr "Parent des objets gérant des expéditions"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_shipping_mixin
-msgid "Object used to edit shipping labels and track parcels"
-msgstr "Objet utilisé pour créer des étiquettes d'expédition et suivre les colis"
+msgid "Object used to edit shipping labels"
+msgstr "Objet utilisé pour créer des étiquettes d'expéditions"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_parcel_type
@@ -316,6 +338,11 @@ msgstr "Colis retour"
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__so_line_id
 msgid "Sale order line"
 msgstr "Ligne de bons de commande"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_crm_team
+msgid "Sales Channels"
+msgstr "Canaux de vente"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__sender
@@ -382,4 +409,3 @@ msgstr "[commown] Étiquette aller Crosscall (<1kg, 300€)"
 #: model:ir.model,name:commown_shipping.model_commown_delivery_parent_mixin
 msgid "commown.delivery.parent.mixin"
 msgstr "commown.delivery.parent.mixin"
-
