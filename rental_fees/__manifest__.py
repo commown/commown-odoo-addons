@@ -13,6 +13,7 @@
         "commown_devices",
         "purchase",
         "queue_job",
+        "report_py3o",
     ],
     "data": [
         "security/ir.model.access.csv",
