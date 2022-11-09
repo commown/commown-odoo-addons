@@ -133,25 +133,34 @@ class RentalFeesDefinition(models.Model):
             lambda d: d.product_id.product_tmpl_id == self.product_template_id
         )
 
-    def to_be_compensated_devices(self, date):
-        all_devices = self.devices()
-        tasks = self.env["project.task"].search(
+    def scrapped_devices(self, date):
+        quants = self.env["stock.quant"].search(
             [
-                ("contractual_issue_type", "in", ("breakage", "loss", "theft")),
-                ("contractual_issue_date", "<=", date),
-                ("lot_id", "in", all_devices.ids),
+                ("lot_id", "in", self.devices().ids),
+                ("quantity", ">", 0.0),
+                ("location_id.scrap_location", "=", True),
+                ("in_date", "<=", date),
             ]
         )
-        return {task.lot_id: task for task in tasks}
 
-    def compensation_price(self, device):
+        return {
+            quant.lot_id: {
+                "date": quant.in_date.date(),
+            }
+            for quant in quants
+        }
+
+    def prices(self, device):
         po_line = self.env["purchase.order.line"].search(
             [
                 ("order_id", "in", self.order_ids.ids),
                 ("order_id.picking_ids.move_line_ids.lot_id", "=", device.id),
             ]
         )
-        return po_line.price_unit / self.agreed_to_std_price_ratio
+        return {
+            "purchase": po_line.price_unit,
+            "compensation": po_line.price_unit / self.agreed_to_std_price_ratio,
+        }
 
     def purchase_date(self, device):
         po_line = self.env["purchase.order.line"].search(
