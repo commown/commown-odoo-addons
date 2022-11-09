@@ -74,10 +74,13 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             ["N/S 1", "N/S 2", "N/S 3", "N/S 4", "N/S 5"],
         )
 
-    def test_compensation_price(self):
+    def test_prices(self):
         device = self.fees_def.devices().filtered(lambda d: d.name == "N/S 1")
 
-        self.assertEqual(self.fees_def.compensation_price(device), 400.0)
+        self.assertEqual(
+            self.fees_def.prices(device),
+            {"compensation": 400.0, "purchase": 200.0},
+        )
 
         po2 = self.create_po_and_picking(("N/S 4", "N/S 5"), price_unit=150.0)
         fees_def2 = self.env["rental_fees.definition"].create(
@@ -91,24 +94,20 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         )
         device2 = fees_def2.devices().filtered(lambda d: d.name == "N/S 4")
 
-        self.assertEqual(fees_def2.compensation_price(device2), 375.0)
-
-    def test_to_be_compensated_device(self):
-        device = self.fees_def.devices().filtered(lambda d: d.name == "N/S 1")
-        task = self.env["project.task"].create(
-            {
-                "name": "test breakage",
-                "contractual_issue_type": "breakage",
-                "contractual_issue_date": date(2021, 3, 15),
-                "lot_id": device.id,
-            }
+        self.assertEqual(
+            fees_def2.prices(device2),
+            {"compensation": 375.0, "purchase": 150.0},
         )
 
+    def test_scrapped_devices(self):
+        device = self.fees_def.devices().filtered(lambda d: d.name == "N/S 1")
+        self.scrap_device(device, date(2021, 3, 15))
+
         self.assertFalse(
-            self.fees_def.to_be_compensated_devices(date(2021, 3, 1)),
+            self.fees_def.scrapped_devices(date(2021, 3, 1)),
         )
 
         self.assertDictEqual(
-            self.fees_def.to_be_compensated_devices(date(2021, 8, 1)),
-            {device: task},
+            self.fees_def.scrapped_devices(date(2021, 8, 1)),
+            {device: {"date": date(2021, 3, 15)}},
         )

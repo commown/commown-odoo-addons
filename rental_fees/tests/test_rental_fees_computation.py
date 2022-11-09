@@ -107,15 +107,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         contract2.date_start = "2021-03-06"
 
         device2 = contract2.quant_ids.lot_id
-        task = self.env["project.task"].create(
-            {
-                "name": "test breakage",
-                "contractual_issue_type": "breakage",
-                "contractual_issue_date": date(2021, 4, 5),
-                "lot_id": device2.id,
-                "contract_id": contract2.id,
-            }
-        )
+        self.scrap_device(device2, date(2021, 4, 5))
 
         while contract1.recurring_next_date <= date(2021, 5, 1):
             contract1._recurring_create_invoice()

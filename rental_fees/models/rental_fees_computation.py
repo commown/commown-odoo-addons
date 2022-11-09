@@ -309,61 +309,74 @@ class RentalFeesComputation(models.Model):
             record.state = "running"
             record.with_delay()._run()
 
+    def _add_compensation(self, device, device_fees, scrap_details):
+        prices = self.fees_definition_id.prices(device)
+        compensation_price = max(
+            prices["purchase"] + device_fees,
+            prices["compensation"],
+        )
+
+        return (
+            self.env["rental_fees.computation.detail"]
+            .sudo()
+            .create(
+                {
+                    "fees_computation_id": self.id,
+                    "fees": compensation_price,
+                    "fees_type": "compensation",
+                    "lot_id": device.id,
+                    "from_date": self.fees_definition_id.purchase_date(device),
+                    "to_date": scrap_details["date"],
+                }
+            )
+        )
+
+    def _add_fees_periods(self, device, periods):
+        result = self.env["rental_fees.computation.detail"]
+        for period in periods:
+            result |= result.sudo().create(
+                {
+                    "fees_computation_id": self.id,
+                    "fees": period["fees"],
+                    "fees_type": "fees",
+                    "lot_id": device.id,
+                    "contract_id": period["contract"].id,
+                    "from_date": period["from_date"],
+                    "to_date": period["to_date"],
+                    "fees_definition_line_id": period["fees_def_line"].id,
+                }
+            )
+        return result
+
     @job(default_channel="root")
     def _run(self):
         self.ensure_one()
 
-        self.detail_ids.unlink()  # just in case
-
         fees_def = self.fees_definition_id
-
         total_fees = 0.0
-
-        to_be_compensated_devices = fees_def.to_be_compensated_devices(self.until_date)
+        scrapped_devices = fees_def.scrapped_devices(self.until_date)
 
         for device in fees_def.devices():
 
-            if device in to_be_compensated_devices:
-                task = to_be_compensated_devices[device]
-                fees = fees_def.compensation_price(device)
-                self.env["rental_fees.computation.detail"].sudo().create(
-                    {
-                        "fees_computation_id": self.id,
-                        "fees": fees,
-                        "fees_type": "compensation",
-                        "lot_id": device.id,
-                        "contract_id": task.contract_id.id,
-                        "from_date": fees_def.purchase_date(device),
-                        "to_date": task.contractual_issue_date,
-                        "fees_definition_line_id": fees_def.line_ids[0].id,
-                    }
-                )
-                total_fees += fees
-                continue
-
             periods = self.rental_periods(device)
-            if not periods:
-                continue
+            if periods:
+                periods = self.split_periods_wrt_fees_def(periods, fees_def)
 
-            periods = self.split_periods_wrt_fees_def(periods, fees_def)
-
+            device_fees = 0.0
             for period in periods:
-                fees_def_line = period["fees_def_line"]
-                fees = fees_def_line.compute_fees(period)
+                period["fees"] = period["fees_def_line"].compute_fees(period)
+                device_fees += period["fees"]
 
-                self.env["rental_fees.computation.detail"].sudo().create(
-                    {
-                        "fees_computation_id": self.id,
-                        "fees": fees,
-                        "fees_type": "fees",
-                        "lot_id": device.id,
-                        "contract_id": period["contract"].id,
-                        "from_date": period["from_date"],
-                        "to_date": period["to_date"],
-                        "fees_definition_line_id": fees_def_line.id,
-                    }
+            if device in scrapped_devices:
+                comp_details = self._add_compensation(
+                    device,
+                    device_fees,
+                    scrapped_devices[device],
                 )
-                total_fees += fees
+            else:
+                comp_details = self._add_fees_periods(device, periods)
+
+            total_fees += sum(comp_details.mapped("fees"))
 
         self.fees = total_fees
         self.state = "done"
@@ -400,7 +413,6 @@ class RentalFeesComputationDetail(models.Model):
     contract_id = fields.Many2one(
         "contract.contract",
         string="Contract",
-        required=True,
     )
 
     from_date = fields.Date(
@@ -416,5 +428,4 @@ class RentalFeesComputationDetail(models.Model):
     fees_definition_line_id = fields.Many2one(
         "rental_fees.definition_line",
         string="Fees definition line",
-        required=True,
     )

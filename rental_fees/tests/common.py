@@ -1,6 +1,15 @@
-from datetime import date
+from datetime import date, datetime
 
 from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
+
+
+def _set_date(entity, value, attr_name):
+    setattr(entity.sudo(), attr_name, value)
+    sql = "UPDATE %s SET %s=%%s WHERE id=%%s" % (
+        entity._name.replace(".", "_"),
+        attr_name,
+    )
+    entity.env.cr.execute(sql, (str(value), entity.id))
 
 
 class RentalFeesTC(DeviceAsAServiceTC):
@@ -77,3 +86,30 @@ class RentalFeesTC(DeviceAsAServiceTC):
             move_line.update({"lot_name": lot_name, "qty_done": 1})
         po.picking_ids.button_validate()
         return po
+
+    def current_quant(self, device):
+        return (
+            self.env["stock.quant"]
+            .search([("lot_id", "=", device.id), ("quantity", ">", 0.0)])
+            .ensure_one()
+        )
+
+    def scrap_device(self, device, date):
+        "Simulate device scrapping at given (enforced) date"
+        scrap_loc = self.env.ref("stock.stock_location_scrapped")
+        scrap = self.env["stock.scrap"].create(
+            {
+                "lot_id": device.id,
+                "product_id": device.product_id.id,
+                "product_uom_id": device.product_id.uom_id.id,
+                "location_id": self.current_quant(device).location_id.id,
+                "scrap_location_id": scrap_loc.id,
+                "date_expected": date,
+            }
+        )
+        scrap.do_scrap()
+        datet = datetime.combine(date, datetime.min.time())
+        _set_date(scrap.move_id, datet, "date")
+        quant = self.current_quant(device)
+        _set_date(quant, datet, "in_date")
+        return scrap
