@@ -214,7 +214,7 @@ class RentalFeesComputation(models.Model):
         for period in periods:
             for split_date, fees_def_line in split_dates.items():
 
-                if split_date < period["from_date"]:
+                if split_date and split_date < period["from_date"]:
                     continue
 
                 from_date = result[-1]["to_date"] if result else period["from_date"]
