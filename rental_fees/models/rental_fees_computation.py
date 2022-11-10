@@ -85,11 +85,14 @@ class RentalFeesComputation(models.Model):
         store=True,
     )
 
+    def details(self, *fees_types):
+        return self.detail_ids.filtered(lambda d: d.fees_type in fees_types)
+
     def rental_details(self):
-        return self.detail_ids.filtered(lambda d: d.fees_type == "fees")
+        return self.details("fees")
 
     def compensation_details(self):
-        return self.detail_ids.filtered(lambda d: d.fees_type == "compensation")
+        return self.details("compensation")
 
     def _has_later_invoiced_computation(self):
         self.ensure_one()
@@ -309,7 +312,7 @@ class RentalFeesComputation(models.Model):
             record.state = "running"
             record.with_delay()._run()
 
-    def _add_compensation(self, device, device_fees, scrap_details):
+    def _add_compensation(self, device, delivery_date, device_fees, scrap_details):
         prices = self.fees_definition_id.prices(device)
         compensation_price = max(
             prices["purchase"] + device_fees,
@@ -325,7 +328,7 @@ class RentalFeesComputation(models.Model):
                     "fees": compensation_price,
                     "fees_type": "compensation",
                     "lot_id": device.id,
-                    "from_date": self.fees_definition_id.purchase_date(device),
+                    "from_date": delivery_date,
                     "to_date": scrap_details["date"],
                 }
             )
@@ -356,7 +359,7 @@ class RentalFeesComputation(models.Model):
         total_fees = 0.0
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
 
-        for device in fees_def.devices():
+        for device, delivery_date in fees_def.devices_delivery().items():
 
             periods = self.rental_periods(device)
             if periods:
@@ -370,6 +373,7 @@ class RentalFeesComputation(models.Model):
             if device in scrapped_devices:
                 comp_details = self._add_compensation(
                     device,
+                    delivery_date,
                     device_fees,
                     scrapped_devices[device],
                 )

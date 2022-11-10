@@ -58,13 +58,13 @@ class RentalFeesDefinitionTC(RentalFeesTC):
     def test_devices(self):
         fees_def = self.fees_def
         self.assertEqual(
-            sorted(fees_def.devices().mapped("name")),
+            sorted(d.name for d in fees_def.devices_delivery()),
             ["N/S 1", "N/S 2", "N/S 3"],
         )
 
         fees_def.order_ids |= self.create_po_and_picking(("N/S 4", "N/S 5"))
         self.assertEqual(
-            sorted(fees_def.devices().mapped("name")),
+            sorted(d.name for d in fees_def.devices_delivery()),
             ["N/S 1", "N/S 2", "N/S 3", "N/S 4", "N/S 5"],
         )
 
@@ -75,7 +75,9 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         )
 
     def test_prices(self):
-        device = self.fees_def.devices().filtered(lambda d: d.name == "N/S 1")
+        for device in self.fees_def.devices_delivery():
+            if device.name == "N/S 1":
+                break
 
         self.assertEqual(
             self.fees_def.prices(device),
@@ -92,7 +94,9 @@ class RentalFeesDefinitionTC(RentalFeesTC):
                 "agreed_to_std_price_ratio": 0.4,
             }
         )
-        device2 = fees_def2.devices().filtered(lambda d: d.name == "N/S 4")
+        for device2 in fees_def2.devices_delivery():
+            if device2.name == "N/S 4":
+                break
 
         self.assertEqual(
             fees_def2.prices(device2),
@@ -100,7 +104,9 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         )
 
     def test_scrapped_devices(self):
-        device = self.fees_def.devices().filtered(lambda d: d.name == "N/S 1")
+        for device in self.fees_def.devices_delivery():
+            if device.name == "N/S 1":
+                break
         self.scrap_device(device, date(2021, 3, 15))
 
         self.assertFalse(

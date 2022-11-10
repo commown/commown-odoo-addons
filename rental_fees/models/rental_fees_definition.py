@@ -128,15 +128,17 @@ class RentalFeesDefinition(models.Model):
                     % (overrides[0].name, overrides[0].id)
                 )
 
-    def devices(self):
-        return self.mapped("order_ids.picking_ids.move_line_ids.lot_id").filtered(
-            lambda d: d.product_id.product_tmpl_id == self.product_template_id
-        )
+    def devices_delivery(self):
+        result = {}
+        for ml in self.mapped("order_ids.picking_ids.move_line_ids"):
+            if ml.lot_id.product_id.product_tmpl_id == self.product_template_id:
+                result[ml.lot_id] = ml.date
+        return result
 
     def scrapped_devices(self, date):
         quants = self.env["stock.quant"].search(
             [
-                ("lot_id", "in", self.devices().ids),
+                ("lot_id", "in", [d.id for d in self.devices_delivery()]),
                 ("quantity", ">", 0.0),
                 ("location_id.scrap_location", "=", True),
                 ("in_date", "<=", date),
@@ -162,21 +164,12 @@ class RentalFeesDefinition(models.Model):
             "compensation": po_line.price_unit / self.agreed_to_std_price_ratio,
         }
 
-    def purchase_date(self, device):
-        po_line = self.env["purchase.order.line"].search(
-            [
-                ("order_id", "in", self.order_ids.ids),
-                ("order_id.picking_ids.move_line_ids.lot_id", "=", device.id),
-            ]
-        )
-        return po_line.order_id.date_order
-
     @api.multi
     def button_open_devices(self):
         self.ensure_one()
         return {
             "name": _("Devices"),
-            "domain": [("id", "in", self.devices().ids)],
+            "domain": [("id", "in", [d.id for d in self.devices_delivery()])],
             "type": "ir.actions.act_window",
             "view_mode": "tree,form",
             "res_model": "stock.production.lot",
