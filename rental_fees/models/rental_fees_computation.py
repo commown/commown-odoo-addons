@@ -195,7 +195,7 @@ class RentalFeesComputation(models.Model):
 
         return result
 
-    def split_periods_wrt_fees_def(self, periods, fees_def):
+    def split_periods_wrt_fees_def(self, periods):
         """Split given periods into smaller ones wrt. given fees def
 
         ... and add the corresponding line definition to the resulting
@@ -207,7 +207,8 @@ class RentalFeesComputation(models.Model):
         origin_date = periods[0]["from_date"]
 
         split_dates = {
-            line.compute_end_date(origin_date): line for line in fees_def.line_ids
+            line.compute_end_date(origin_date): line
+            for line in self.fees_definition_id.line_ids
         }
 
         for period in periods:
@@ -363,7 +364,7 @@ class RentalFeesComputation(models.Model):
 
             periods = self.rental_periods(device)
             if periods:
-                periods = self.split_periods_wrt_fees_def(periods, fees_def)
+                periods = self.split_periods_wrt_fees_def(periods)
 
             device_fees = 0.0
             for period in periods:
