@@ -320,25 +320,20 @@ class RentalFeesComputation(models.Model):
             prices["compensation"],
         )
 
-        return (
-            self.env["rental_fees.computation.detail"]
-            .sudo()
-            .create(
-                {
-                    "fees_computation_id": self.id,
-                    "fees": compensation_price,
-                    "fees_type": "compensation",
-                    "lot_id": device.id,
-                    "from_date": delivery_date,
-                    "to_date": scrap_details["date"],
-                }
-            )
+        self.env["rental_fees.computation.detail"].sudo().create(
+            {
+                "fees_computation_id": self.id,
+                "fees": compensation_price,
+                "fees_type": "compensation",
+                "lot_id": device.id,
+                "from_date": delivery_date,
+                "to_date": scrap_details["date"],
+            }
         )
 
     def _add_fees_periods(self, device, periods):
-        result = self.env["rental_fees.computation.detail"]
         for period in periods:
-            result |= result.sudo().create(
+            self.env["rental_fees.computation.detail"].sudo().create(
                 {
                     "fees_computation_id": self.id,
                     "fees": period["fees"],
@@ -350,14 +345,12 @@ class RentalFeesComputation(models.Model):
                     "fees_definition_line_id": period["fees_def_line"].id,
                 }
             )
-        return result
 
     @job(default_channel="root")
     def _run(self):
         self.ensure_one()
 
         fees_def = self.fees_definition_id
-        total_fees = 0.0
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
 
         for device, delivery_date in fees_def.devices_delivery().items():
@@ -372,18 +365,17 @@ class RentalFeesComputation(models.Model):
                 device_fees += period["fees"]
 
             if device in scrapped_devices:
-                comp_details = self._add_compensation(
+                self._add_compensation(
                     device,
                     delivery_date,
                     device_fees,
                     scrapped_devices[device],
                 )
             else:
-                comp_details = self._add_fees_periods(device, periods)
 
-            total_fees += sum(comp_details.mapped("fees"))
+                self._add_fees_periods(device, periods)
 
-        self.fees = total_fees
+        self.fees = sum(self.detail_ids.mapped("fees"))
         self.state = "done"
 
 
