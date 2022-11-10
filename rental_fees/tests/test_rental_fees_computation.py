@@ -138,6 +138,8 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertIn("04/30/2021", c4.invoice_ids.invoice_line_ids[0].name)
         self.assertEqual(c4.invoice_ids.amount_total, 412.5)
         c4.invoice_ids.action_invoice_open()
+        compensations = c4.compensation_details()
+        self.assertEqual(compensations.mapped("fees"), [400.0])
 
         # Paying an invoice, even after another one was emitted must work
         self.pay(c2.invoice_ids)
