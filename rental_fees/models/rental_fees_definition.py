@@ -52,6 +52,30 @@ class RentalFeesDefinition(models.Model):
         ),
     )
 
+    penalty_period_duration = fields.Integer(
+        "No rental penalty period duration (in years)",
+        required=True,
+        default=0,
+        help=(
+            "During this number of years after the device delivery,"
+            " penalty fees will be paid for devices that have not been"
+            " rented for a too long time."
+        ),
+    )
+
+    no_rental_duration = fields.Integer(
+        "No rental duration before penalty (months)",
+        required=True,
+        default=0,
+        help=(
+            "During a certain period after the device delivery, penalty fees"
+            " will be paid for a device that would not have been rented for"
+            " this number of consecutive months. The amount of these fees"
+            " equals the amount due if the device had been rented in during"
+            " these no-rental months."
+        ),
+    )
+
     order_ids = fields.Many2many(
         comodel_name="purchase.order",
         string="Purchase orders",
@@ -132,7 +156,7 @@ class RentalFeesDefinition(models.Model):
         result = {}
         for ml in self.mapped("order_ids.picking_ids.move_line_ids"):
             if ml.lot_id.product_id.product_tmpl_id == self.product_template_id:
-                result[ml.lot_id] = ml.date
+                result[ml.lot_id] = ml.date.date()
         return result
 
     def scrapped_devices(self, date):
