@@ -196,3 +196,76 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertIn(
             "Some non-draft computations use this fees definition.", err.exception.name
         )
+
+    def test_compute_no_rental_compensation_zero_1(self):
+        "No rental conditions check: A first rental is required"
+        comp = self.compute("2022-01-01")
+        self.assertFalse(comp.details("no_rental_compensation").mapped("fees"))
+
+    def test_compute_no_rental_compensation_zero_2(self):
+        "No rental conditions check: within defined penalty period"
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.receive_device("N/S 1", contract, "2021-07-02")
+        contract.end_date = "2021-07-02"
+
+        comp = self.compute("2022-02-01")
+        self.assertFalse(comp.details("no_rental_compensation").mapped("fees"))
+
+    def test_compute_no_rental_compensation_zero_3(self):
+        "No rental conditions check: rented again before the limit"
+        contract1 = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract1, "2021-02-01")
+        contract1.date_start = "2021-02-01"
+        self.receive_device("N/S 1", contract1, "2021-03-15")
+        contract1.end_date = "2021-03-15"
+
+        contract2 = self.env["contract.contract"].of_sale(self.so)[1]
+        self.send_device("N/S 1", contract2, "2021-09-14")
+        contract2.date_start = "2021-09-14"
+        self.receive_device("N/S 1", contract2, "2021-09-14")
+        contract2.end_date = "2021-09-14"
+
+        comp = self.compute("2021-10-01")
+        self.assertFalse(comp.details("no_rental_compensation").mapped("fees"))
+
+    def test_compute_no_rental_compensation_non_zero_1(self):
+        "No rental conditions fulfilled: compensation occurs, then no more fees"
+        contract1 = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract1, "2021-02-01")
+        contract1.date_start = "2021-02-01"
+        while contract1.recurring_next_date <= date(2021, 4, 1):
+            contract1._recurring_create_invoice()
+        self.receive_device("N/S 1", contract1, "2021-04-01")
+        contract1.end_date = "2021-04-01"
+
+        contract2 = self.env["contract.contract"].of_sale(self.so)[1]
+        self.send_device("N/S 1", contract2, "2022-02-01")
+        contract2.date_start = "2022-02-01"
+        while contract2.recurring_next_date <= date(2022, 4, 1):
+            contract2._recurring_create_invoice()
+
+        comp = self.compute("2022-04-01")
+        self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [400.0])
+        self.assertEqual(comp.rental_details().mapped("fees"), [])
+
+    def test_compute_no_rental_compensation_non_zero_2(self):
+        "No rental conditions fulfilled: compensation occurs then no other compensation"
+
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        device = contract.quant_ids.ensure_one().lot_id
+        while contract.recurring_next_date <= date(2021, 4, 1):
+            contract._recurring_create_invoice()
+        self.receive_device("N/S 1", contract, "2021-04-01")
+        contract.end_date = "2021-04-01"
+
+        self.scrap_device(device, date(2021, 12, 1))  # after no rental limit!
+
+        comp = self.compute("2022-04-01")
+        self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [400.0])
+        self.assertFalse(comp.details("lost_device_compensation").mapped("fees"))
+        self.assertEqual(comp.rental_details().mapped("fees"), [])  # XXX

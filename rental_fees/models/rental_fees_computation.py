@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date
@@ -92,7 +94,7 @@ class RentalFeesComputation(models.Model):
         return self.details("fees")
 
     def compensation_details(self):
-        return self.details("compensation")
+        return self.details("no_rental_compensation", "lost_device_compensation")
 
     def _has_later_invoiced_computation(self):
         self.ensure_one()
@@ -195,6 +197,32 @@ class RentalFeesComputation(models.Model):
 
         return result
 
+    def scan_no_rental(self, device, delivery_date, periods):
+        """Scan gaps between periods for too long no rental periods
+
+        Also mind the gap between the last period and the computation date, if any.
+        Any rental period after the compensation is removed (would generate no fees).
+        Returns the no rental date limit if reached (False otherwise), and the new
+        rental period list.
+        """
+
+        if not periods:
+            return False, periods
+
+        no_rental_limit, result = False, [periods[0]]
+
+        for period in periods[1:] + [{"fake": True, "from_date": self.until_date}]:
+            last_rental_date = result[-1]["to_date"] or self.until_date
+            no_rental_limit = self.valid_no_rental_limit(
+                delivery_date, last_rental_date, period["from_date"]
+            )
+            if no_rental_limit:
+                break
+            if not period.get("fake"):
+                result.append(period)
+
+        return no_rental_limit, result
+
     def split_periods_wrt_fees_def(self, periods):
         """Split given periods into smaller ones wrt. given fees def
 
@@ -241,6 +269,20 @@ class RentalFeesComputation(models.Model):
                     break
 
         return result
+
+    def valid_no_rental_limit(
+        self, delivery_date, last_rental_date, new_rental_date=None
+    ):
+        fees_def = self.fees_definition_id
+        period_duration = relativedelta(years=fees_def.penalty_period_duration)
+        no_rental_duration = relativedelta(months=fees_def.no_rental_duration)
+
+        penalty_period_end = delivery_date + period_duration
+        no_rental_limit = last_rental_date + no_rental_duration
+        new_rental_date = new_rental_date or self.until_date
+
+        if no_rental_limit <= new_rental_date and no_rental_limit <= penalty_period_end:
+            return no_rental_limit
 
     def amount_to_be_invoiced(self):
         past_invs = (
@@ -313,7 +355,9 @@ class RentalFeesComputation(models.Model):
             record.state = "running"
             record.with_delay()._run()
 
-    def _add_compensation(self, device, delivery_date, device_fees, scrap_details):
+    def _add_compensation(
+        self, compensation_type, device, delivery_date, device_fees, to_date
+    ):
         prices = self.fees_definition_id.prices(device)
         compensation_price = max(
             prices["purchase"] + device_fees,
@@ -324,10 +368,10 @@ class RentalFeesComputation(models.Model):
             {
                 "fees_computation_id": self.id,
                 "fees": compensation_price,
-                "fees_type": "compensation",
+                "fees_type": compensation_type,
                 "lot_id": device.id,
                 "from_date": delivery_date,
-                "to_date": scrap_details["date"],
+                "to_date": to_date,
             }
         )
 
@@ -356,6 +400,10 @@ class RentalFeesComputation(models.Model):
         for device, delivery_date in fees_def.devices_delivery().items():
 
             periods = self.rental_periods(device)
+            no_rental_limit, periods = self.scan_no_rental(
+                device, delivery_date, periods
+            )
+
             if periods:
                 periods = self.split_periods_wrt_fees_def(periods)
 
@@ -364,15 +412,23 @@ class RentalFeesComputation(models.Model):
                 period["fees"] = period["fees_def_line"].compute_fees(period)
                 device_fees += period["fees"]
 
-            if device in scrapped_devices:
+            if no_rental_limit:
                 self._add_compensation(
+                    "no_rental_compensation",
                     device,
                     delivery_date,
                     device_fees,
-                    scrapped_devices[device],
+                    no_rental_limit,
+                )
+            elif device in scrapped_devices:
+                self._add_compensation(
+                    "lost_device_compensation",
+                    device,
+                    delivery_date,
+                    device_fees,
+                    scrapped_devices[device]["date"],
                 )
             else:
-
                 self._add_fees_periods(device, periods)
 
         self.fees = sum(self.detail_ids.mapped("fees"))
@@ -396,7 +452,11 @@ class RentalFeesComputationDetail(models.Model):
     )
 
     fees_type = fields.Selection(
-        [("fees", "Rental Fees"), ("compensation", "Compensation")],
+        [
+            ("fees", "Rental Fees"),
+            ("no_rental_compensation", "No rental compensation"),
+            ("lost_device_compensation", "Lost device compensation"),
+        ],
         string="Fees type",
         required=True,
     )

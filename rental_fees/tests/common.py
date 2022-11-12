@@ -23,6 +23,8 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 "product_template_id": self.storable_product.id,
                 "order_ids": [(6, 0, self.po.ids)],
                 "agreed_to_std_price_ratio": 0.5,
+                "penalty_period_duration": 1,
+                "no_rental_duration": 6,
             }
         )
         self.env["rental_fees.definition_line"].create(
@@ -85,6 +87,12 @@ class RentalFeesTC(DeviceAsAServiceTC):
         for lot_name, move_line in zip(serials, move_lines):
             move_line.update({"lot_name": lot_name, "qty_done": 1})
         po.picking_ids.button_validate()
+
+        for move in po.picking_ids.move_lines:
+            _set_date(move, po.date_planned, "date")
+            for ml in move.move_line_ids:
+                _set_date(ml, po.date_planned, "date")
+
         return po
 
     def current_quant(self, device):
@@ -113,3 +121,12 @@ class RentalFeesTC(DeviceAsAServiceTC):
         quant = self.current_quant(device)
         _set_date(quant, datet, "in_date")
         return scrap
+
+    def receive_device(self, serial, contract, date):
+        lot_id = (
+            self.env["stock.production.lot"]
+            .search([("name", "=", serial)])
+            .ensure_one()
+        )
+        loc = self.env.ref("commown_devices.stock_location_devices_to_check")
+        contract.receive_device(lot_id, loc, date, True)
