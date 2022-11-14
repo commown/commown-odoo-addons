@@ -34,7 +34,9 @@
           </p>
         </t>
         <p t-if="more_info">Informations complémentaires :</p>
-        <pre t-if="more_info"><t t-esc="more_info" /></pre>
+        <div t-if="more_info">
+          <t t-esc="more_info" />
+        </div>
 
       </t>
 
