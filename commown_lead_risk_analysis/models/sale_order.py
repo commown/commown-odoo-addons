@@ -58,7 +58,7 @@ class SaleOrder(models.Model):
         contract_lines = self.env["contract.line"].search(
             [
                 ("sale_order_line_id.order_id", "=", self.id),
-                ("sale_order_line_id.product_id.is_contract", "=", True),
+                ("sale_order_line_id.product_id.is_rental", "=", True),
                 ("sale_order_line_id.product_id.followup_sales_team_id", "!=", False),
             ]
         )
@@ -80,12 +80,12 @@ class SaleOrder(models.Model):
                 self.name,
             )
 
-        # Also create a lead for non contract products with a followup team
+        # Also create a lead for non rental products with a followup team
         count = 0
         for so_line in self.order_line:
             product = so_line.product_id
             team = product.followup_sales_team_id
-            if team and not product.is_contract:
+            if team and not product.is_rental:
                 for _num in range(int(so_line.product_uom_qty)):
                     count += 1
                     name = self.risk_analysis_lead_title(so_line, secondary_index=count)

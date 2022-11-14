@@ -192,7 +192,7 @@ class RentalSaleOrderMixin:
         kwargs.setdefault("is_rental", True)
         kwargs.setdefault("type", "service")
         kwargs.setdefault("taxes_id", False)
-        kwargs["is_contract"] = bool(kwargs["property_contract_template_id"])
+        kwargs["is_contract"] = bool(kwargs.get("property_contract_template_id"))
         result = self.env["product.product"].create(kwargs)
         # Otherwise is_contract may be wrong (in one of commown_devices tests):
         result.env.cache.invalidate()

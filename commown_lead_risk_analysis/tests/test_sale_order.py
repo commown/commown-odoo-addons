@@ -42,12 +42,21 @@ class SaleOrderTC(RentalSaleOrderTC):
         product2.followup_sales_team_id = self.team2.id
         so_line2 = self._oline(product2, product_uom_qty=3)
 
+        self.team3 = self.team1.copy({"name": "team3"})
+        product3 = self._create_rental_product(
+            name="Phone protection",
+            list_price=2.0,
+            rental_price=1.0,
+            followup_sales_team_id=self.team3.id,
+        )
+        so_line3 = self._oline(product3, product_uom_qty=1)
+
         self.so = self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
                 "partner_invoice_id": partner.id,
                 "partner_shipping_id": partner.id,
-                "order_line": [so_line1, so_line2],
+                "order_line": [so_line1, so_line2, so_line3],
             }
         )
 
@@ -57,24 +66,30 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.so.action_confirm()
         new_leads = self.env["crm.lead"].search([]) - old_leads
 
-        so_line1, so_line2 = self.so.order_line
+        so_line1, so_line2, so_line3 = self.so.order_line
         leads1 = new_leads.filtered(lambda l: l.team_id == self.team1)
         leads2 = new_leads.filtered(lambda l: l.team_id == self.team2)
+        leads3 = new_leads.filtered(lambda l: l.team_id == self.team3)
 
-        self.assertEqual(new_leads, leads1 | leads2)
+        self.assertEqual(new_leads, leads1 | leads2 | leads3)
         self.assertEqual(len(leads1), 2)
         self.assertEqual(len(leads2), 3)
+        self.assertEqual(len(leads3), 1)
         self.assertEqual(leads1.mapped("stage_id"), self.stage1)
         self.assertFalse(leads2.mapped("stage_id"))
         self.assertEqual(leads1.mapped("so_line_id"), so_line1)
         self.assertEqual(leads2.mapped("so_line_id"), so_line2)
+        self.assertEqual(leads3.mapped("so_line_id"), so_line3)
 
         self.assertEqual(
             sorted(leads1.mapped("contract_id.name")),
             ["%s-01" % self.so.name, "%s-02" % self.so.name],
         )
+
         self.assertFalse(leads2.mapped("contract_id"))
         self.assertEqual(
             sorted(leads2.mapped("name")),
             ["[%s-00/%d] Install /e/OS" % (self.so.name, i) for i in (1, 2, 3)],
         )
+
+        self.assertTrue(leads3.contract_id)
