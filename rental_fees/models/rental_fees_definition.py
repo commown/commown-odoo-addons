@@ -96,30 +96,65 @@ class RentalFeesDefinition(models.Model):
         copy=False,
     )
 
-    non_draft_computation_count = fields.Integer(
-        default=0,
-        compute="_compute_computation_count",
+    last_non_draft_computation_date = fields.Date(
+        default=False,
+        compute="_compute_last_non_draft_computation_date",
     )
 
     @api.depends("computation_ids.state")
-    def _compute_computation_count(self):
+    def _compute_last_non_draft_computation_date(self):
         for record in self:
-            record.non_draft_computation_count = len(
-                record.computation_ids.filtered(lambda r: r.state != "draft")
+            cs = record.computation_ids.filtered(lambda r: r.state != "draft")
+            record.last_non_draft_computation_date = (
+                max(cs.mapped("until_date")) if cs else False
             )
 
     @api.multi
     def write(self, vals):
-        "Deny updates when there are already non draft computations"
+        """Deny updates which would change the result of existing computations like:
+
+        - removing an order which already generated fees
+        - changing a non-aesthetic field (any other but name, model_invoice_id)
+        """
+
+        old_order_ids = {}
+        if "order_ids" in vals:
+            for record in self:
+                if record.last_non_draft_computation_date:
+                    old_order_ids[record] = record.order_ids
+
+        update_important_fields = bool(
+            set(vals) - set({"name", "model_invoice_id", "order_ids"})
+        )
         for record in self:
-            if record.non_draft_computation_count > 0:
+            if record.last_non_draft_computation_date and update_important_fields:
                 raise ValidationError(
                     _(
                         "Some non-draft computations use this fees definition."
                         " Please remove or set them draft to modify the definition."
                     )
                 )
-        return super().write(vals)
+
+        result = super().write(vals)
+
+        for fees_def in old_order_ids:
+            removed_orders = old_order_ids[fees_def] - fees_def.order_ids
+            product, def_id = fees_def.product_template_id, fees_def.id
+            removed_order_devices = removed_orders.mapped(
+                "picking_ids.move_line_ids.lot_id"
+            ).filtered(lambda d: d.product_id.product_tmpl_id == product)
+            if self.env["rental_fees.computation.detail"].search_count(
+                [
+                    ("lot_id", "in", removed_order_devices.ids),
+                    ("fees_computation_id.fees_definition_id", "=", def_id),
+                    ("fees", ">", 0),
+                ]
+            ):
+                raise ValidationError(
+                    _("Removed orders affect existing computation results.")
+                )
+
+        return result
 
     @api.constrains("partner_id")
     def _check_partner_coherency(self):
@@ -260,7 +295,7 @@ class RentalFeesDefinitionLine(models.Model):
     def write(self, vals):
         "Deny updates when there are already non draft computations"
         for record in self:
-            if record.fees_definition_id.non_draft_computation_count > 0:
+            if record.fees_definition_id.last_non_draft_computation_date:
                 raise ValidationError(
                     _(
                         "Some non-draft computations use this fees definition."

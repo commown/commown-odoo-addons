@@ -154,11 +154,16 @@ class RentalFeesComputationTC(RentalFeesTC):
             err.exception.name,
         )
 
-    def test_cannot_modify_def_with_computation(self):
+    def test_cannot_modify_important_def_fields_with_computation(self):
         "Cannot modify a fees def which has a non-draft computation"
 
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract=contract, date="2021-02-15")
+        contract.date_start = "2021-02-15"
+        contract._recurring_create_invoice()
+
         # Can modify while computation is draft:
-        computation = self.compute("2021-02-01", run=False)
+        computation = self.compute("2021-03-01", run=False)
         self.assertEqual(computation.state, "draft")
 
         new_fees_def_line = self.env["rental_fees.definition_line"].create(
@@ -173,9 +178,19 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
         self.fees_def.line_ids |= new_fees_def_line
 
+        # Modifications are restricted once computation is done:
         computation._run()
         self.assertEqual(computation.state, "done")
+        self.assertTrue(
+            computation.detail_ids.filtered(
+                lambda d: d.lot_id.name == "N/S 1" and d.fees > 0
+            )
+        )
 
+        # - modifying the name should be OK
+        self.fees_def.name = "Changed name"
+
+        # - but not the definition lines
         with self.assertRaises(ValidationError) as err:
             self.fees_def.line_ids |= self.env["rental_fees.definition_line"].create(
                 {
@@ -195,6 +210,13 @@ class RentalFeesComputationTC(RentalFeesTC):
             new_fees_def_line.duration_value = 20
         self.assertIn(
             "Some non-draft computations use this fees definition.", err.exception.name
+        )
+
+        # - nor remove a po that generated a non-nul fees already
+        with self.assertRaises(ValidationError) as err:
+            self.fees_def.order_ids -= self.po
+        self.assertEqual(
+            "Removed orders affect existing computation results.", err.exception.name
         )
 
     def test_compute_no_rental_compensation_zero_1(self):
