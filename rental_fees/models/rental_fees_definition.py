@@ -70,9 +70,7 @@ class RentalFeesDefinition(models.Model):
         help=(
             "During a certain period after the device delivery, penalty fees"
             " will be paid for a device that would not have been rented for"
-            " this number of consecutive months. The amount of these fees"
-            " equals the amount due if the device had been rented in during"
-            " these no-rental months."
+            " this number of consecutive months."
         ),
     )
 
