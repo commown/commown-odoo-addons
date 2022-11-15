@@ -213,7 +213,7 @@ class RentalFeesDefinition(models.Model):
         po_line = self.env["purchase.order.line"].search(
             [
                 ("order_id", "in", self.order_ids.ids),
-                ("order_id.picking_ids.move_line_ids.lot_id", "=", device.id),
+                ("move_ids.move_line_ids.lot_id", "=", device.id),
             ]
         )
         return {
