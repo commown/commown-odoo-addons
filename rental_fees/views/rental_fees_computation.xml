@@ -10,9 +10,9 @@
         <field name="fees_definition_id"/>
         <field name="partner_id" invisible="True"/>
         <field name="product_template_id" invisible="True"/>
-        <field name="until_date"/>
-        <field name="fees"/>
-        <field name="invoice_ids" widget="many2many_tags"/>
+        <field name="fees" string="Fees until date"/>
+        <field name="until_date" string="Date"/>
+        <field name="invoiced_amount" sum="1"/>
         <field name="state"/>
       </tree>
     </field>
@@ -63,7 +63,22 @@
             <field name="until_date"/>
           </group>
           <group name="invoices" attrs="{'invisible': [('state', '!=', 'done')]}">
-            <field name="invoice_ids"/>
+            <field name="invoice_ids" widget="many2many">
+              <tree
+                  decoration-muted="state == 'cancel'"
+                  decoration-it="state == 'draft'"
+                  decoration-warning="state in ('open', 'paid') and type in ('in_invoice', 'out_refund')"
+                  decoration-success="state in ('open', 'paid') and type not in ('in_invoice', 'out_refund')"
+                  >
+                <field name="type"/>
+                <field name="date_invoice"/>
+                <field name="reference"/>
+                <field name="amount_untaxed"/>
+                <field name="amount_total"/>
+                <field name="residual"/>
+                <field name="state"/>
+              </tree>
+            </field>
           </group>
           <group name="results" attrs="{'invisible': [('state', '!=', 'done')]}" >
             <field name="fees" readonly="1"/>
