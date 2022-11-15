@@ -59,8 +59,8 @@
         </header>
         <sheet>
           <group name="main">
-            <field name="fees_definition_id"/>
-            <field name="until_date"/>
+            <field name="fees_definition_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+            <field name="until_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
           </group>
           <group name="invoices" attrs="{'invisible': [('state', '!=', 'done')]}">
             <field name="invoice_ids" widget="many2many">
