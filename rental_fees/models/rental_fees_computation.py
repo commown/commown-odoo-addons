@@ -118,7 +118,13 @@ class RentalFeesComputation(models.Model):
         """
         for record in self:
             invs = record.invoice_ids.filtered(_not_canceled)
-            new_amount = sum(invs.mapped("amount_total")) if invs else 0.0
+            new_amount = 0.0
+            for inv in invs:
+                # We count here positively the amounts invoices by the partner to us
+                if inv.type in ("in_invoice", "out_refund"):
+                    new_amount += inv.amount_total
+                else:
+                    new_amount -= inv.amount_total
 
             self.env.cr.execute(
                 "SELECT invoiced_amount FROM rental_fees_computation"
@@ -285,14 +291,11 @@ class RentalFeesComputation(models.Model):
             return no_rental_limit
 
     def amount_to_be_invoiced(self):
-        past_invs = (
+        return self.fees - sum(
             self.fees_definition_id.computation_ids.filtered(
                 lambda c: c.until_date < self.until_date
-            )
-            .mapped("invoice_ids")
-            .filtered(_not_canceled)
+            ).mapped("invoiced_amount")
         )
-        return self.fees - sum(past_invs.mapped("amount_total") or (0,))
 
     @api.multi
     def action_invoice(self):
