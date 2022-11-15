@@ -319,9 +319,8 @@ class RentalFeesComputation(models.Model):
         inv = fees_def.model_invoice_id.copy({"date_invoice": self.until_date})
         inv.invoice_line_ids[0].update({"price_unit": amount, "quantity": 1.0})
 
-        lang = fees_def.partner_id.lang
         markers = {
-            "##DATE##": format_date(self.env, self.until_date, lang_code=lang),
+            "##DATE##": format_date(self.env, self.until_date),
         }
 
         for inv_line in inv.invoice_line_ids:
