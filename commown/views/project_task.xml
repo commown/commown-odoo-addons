@@ -112,6 +112,8 @@ next_stage_marker = {
     'waiting-customer': 'reminder-email',
     'reminder-email': 'end-ok',
     'manual': 'pending',
+    'sending-pieces-ongoing': 'pending',
+    'waiting-pieces-return': 'pending',
 }
 for orig, dest in next_stage_marker.items():
     if '[after-sale: %s]' % orig in (record.stage_id.name or ''):
@@ -164,6 +166,34 @@ for orig, dest in next_stage_marker.items():
     <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: manual]')]</field>
     <field name="trg_date_id" search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"/>
     <field name="trg_date_range">10</field>
+    <field name="trg_date_range_type">day</field>
+    <field name="action_server_id" eval="ref('action_move_issue_to_stop_waiting_stage')"/>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       time spent in the "sending pieces" stage was too long -->
+  <record id="sending_pieces_issue_waiting_for_too_long" model="base.automation">
+    <field name="name">[commown] Time spent in the sending pieces followup stage was too long</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: sending-pieces-ongoing]')]</field>
+    <field name="trg_date_id" search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"/>
+    <field name="trg_date_range">3</field>
+    <field name="trg_date_range_type">day</field>
+    <field name="action_server_id" eval="ref('action_move_issue_to_stop_waiting_stage')"/>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       delay in the "waiting pieces return" has expired -->
+  <record id="issue_waiting_return_delay" model="base.automation">
+    <field name="name">[commown] Delay waiting for the customer to return the hardware back expired</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field name="filter_domain">[(u'stage_id', u'ilike', u'[after-sale: waiting-pieces-return]')]</field>
+    <field name="trg_date_id" search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"/>
+    <field name="trg_date_range">15</field>
     <field name="trg_date_range_type">day</field>
     <field name="action_server_id" eval="ref('action_move_issue_to_stop_waiting_stage')"/>
   </record>
