@@ -134,12 +134,12 @@ class RentalFeesComputationTC(RentalFeesTC):
         c3.invoice_ids.action_invoice_open()
 
         c4 = self.compute("2021-04-30", invoice=True)
-        self.assertEqual(c4.fees, 420.0)
+        self.assertEqual(c4.fees, 320.0)
         self.assertIn("04/30/2021", c4.invoice_ids.invoice_line_ids[0].name)
-        self.assertEqual(c4.invoice_ids.amount_total, 412.5)
+        self.assertEqual(c4.invoice_ids.amount_total, 312.5)
         c4.invoice_ids.action_invoice_open()
         compensations = c4.compensation_details()
-        self.assertEqual(compensations.mapped("fees"), [400.0])
+        self.assertEqual(compensations.mapped("fees"), [300.0])
 
         # Paying an invoice, even after another one was emitted must work
         self.pay(c2.invoice_ids)
@@ -270,8 +270,8 @@ class RentalFeesComputationTC(RentalFeesTC):
             contract2._recurring_create_invoice()
 
         comp = self.compute("2022-04-01")
-        self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [400.0])
-        self.assertEqual(comp.rental_details().mapped("fees"), [])
+        self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [300.0])
+        self.assertFalse(comp.rental_details().mapped("fees"))
 
     def test_compute_no_rental_compensation_non_zero_2(self):
         "No rental conditions fulfilled: compensation occurs then no other compensation"
@@ -288,6 +288,6 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.scrap_device(device, date(2021, 12, 1))  # after no rental limit!
 
         comp = self.compute("2022-04-01")
-        self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [400.0])
+        self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [300.0])
         self.assertFalse(comp.details("lost_device_compensation").mapped("fees"))
-        self.assertEqual(comp.rental_details().mapped("fees"), [])  # XXX
+        self.assertFalse(comp.rental_details().mapped("fees"))

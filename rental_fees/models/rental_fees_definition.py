@@ -218,7 +218,7 @@ class RentalFeesDefinition(models.Model):
         )
         return {
             "purchase": po_line.price_unit,
-            "compensation": po_line.price_unit / self.agreed_to_std_price_ratio,
+            "standard": po_line.price_unit / self.agreed_to_std_price_ratio,
         }
 
     @api.multi

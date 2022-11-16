@@ -22,7 +22,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 "partner_id": self.po.partner_id.id,
                 "product_template_id": self.storable_product.id,
                 "order_ids": [(6, 0, self.po.ids)],
-                "agreed_to_std_price_ratio": 0.5,
+                "agreed_to_std_price_ratio": 0.4,
                 "penalty_period_duration": 1,
                 "no_rental_duration": 6,
             }
