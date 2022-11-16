@@ -81,26 +81,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
 
         self.assertEqual(
             self.fees_def.prices(device),
-            {"compensation": 400.0, "purchase": 200.0},
-        )
-
-        po2 = self.create_po_and_picking(("N/S 4", "N/S 5"), price_unit=150.0)
-        fees_def2 = self.env["rental_fees.definition"].create(
-            {
-                "name": "fees_def 2",
-                "partner_id": po2.partner_id.id,
-                "product_template_id": self.storable_product.id,
-                "order_ids": [(4, po2.id, 0)],
-                "agreed_to_std_price_ratio": 0.4,
-            }
-        )
-        for device2 in fees_def2.devices_delivery():
-            if device2.name == "N/S 4":
-                break
-
-        self.assertEqual(
-            fees_def2.prices(device2),
-            {"compensation": 375.0, "purchase": 150.0},
+            {"standard": 500.0, "purchase": 200.0},
         )
 
     def test_scrapped_devices(self):

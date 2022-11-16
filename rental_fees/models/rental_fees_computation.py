@@ -394,9 +394,10 @@ class RentalFeesComputation(models.Model):
         self, compensation_type, device, delivery_date, device_fees, to_date
     ):
         prices = self.fees_definition_id.prices(device)
+
         compensation_price = max(
-            prices["purchase"] + device_fees,
-            prices["compensation"],
+            device_fees,
+            prices["standard"] - prices["purchase"],
         )
 
         self.env["rental_fees.computation.detail"].sudo().create(
