@@ -16,4 +16,20 @@
     <field name="binding_type">report</field>
   </record>
 
+  <record id="rental_fees.action_py3o_spreadsheet_fees_rental_computation" model="ir.actions.report">
+    <field name="name">[commown] Export to spreadsheet</field>
+    <field name="type">ir.actions.report</field>
+    <field name="model">rental_fees.computation</field>
+    <field name="report_type">py3o</field>
+    <field name="report_name">rental_fees.spreadsheet_rental_fees_computation</field>
+    <field name="module">rental_fees</field>
+    <field name="py3o_filetype">ods</field>
+    <field name="py3o_template_fallback">report/rental_fees_computation.ods</field>
+    <field name="attachment_use">True</field>
+    <field name="attachment">"%s %s.ods" % (object.until_date.strftime("%Y-%m-%d"), object.fees_definition_id.name)</field>
+    <field name="print_report_name">"%s %s.ods" % (object.until_date.strftime("%Y-%m-%d"), object.fees_definition_id.name)</field>
+    <field name="binding_model_id" ref="rental_fees.model_rental_fees_computation"/>
+    <field name="binding_type">report</field>
+  </record>
+
 </odoo>
