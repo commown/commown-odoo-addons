@@ -96,6 +96,39 @@ class RentalFeesComputation(models.Model):
     def compensation_details(self):
         return self.details("no_rental_compensation", "lost_device_compensation")
 
+    def per_device_revenues(self):
+        fees_data = {
+            item["lot_id"][0]: item["fees"]
+            for item in self.env["rental_fees.computation.detail"].read_group(
+                [("fees_computation_id", "=", self.id)],
+                ["fees:sum"],
+                ["lot_id"],
+                lazy=False,
+            )
+        }
+
+        purchase_data = {
+            device: ol
+            for ol in self.fees_definition_id.mapped("order_ids.order_line")
+            for device in ol.mapped("move_ids.move_line_ids.lot_id")
+        }
+
+        price_ratio = self.fees_definition_id.agreed_to_std_price_ratio
+        result = {}
+
+        for device in sorted(purchase_data, key=lambda d: d.product_id):
+            fees = fees_data.get(device.id, 0.0)
+            purchase_price = purchase_data[device].price_unit
+            result[device] = {
+                "purchase": purchase_data[device].order_id,
+                "purchase_line": purchase_data[device],
+                "purchase_price": purchase_price,
+                "without_agreement": purchase_price / price_ratio,
+                "fees": fees,
+                "total": purchase_price + fees,
+            }
+        return result
+
     def _has_later_invoiced_computation(self):
         self.ensure_one()
         for computation in self.fees_definition_id.computation_ids - self:
