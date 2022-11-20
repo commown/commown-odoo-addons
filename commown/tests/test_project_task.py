@@ -31,7 +31,19 @@ class ProjectTaskTC(TransactionCase):
         )
         self.stage_manual = self.stage_pending.copy(
             {"name": "Solved [after-sale: manual]", "mail_template_id": False}
-        )[0]
+        )
+        self.stage_sending_pieces = self.stage_pending.copy(
+            {
+                "name": "Sending Pieces [after-sale: sending-pieces-ongoing]",
+                "mail_template_id": False,
+            }
+        )
+        self.stage_waiting_pieces_return = self.stage_pending.copy(
+            {
+                "name": "Waiting Pieces [after-sale: waiting-pieces-return]",
+                "mail_template_id": False,
+            }
+        )
 
         self.partner = self.env.ref("base.partner_demo_portal")
         self.partner.update({"firstname": "Flo", "phone": "0000000000"})
@@ -189,7 +201,31 @@ class ProjectTaskTC(TransactionCase):
 
         self.assertEqual(self.task.stage_id, self.stage_pending)
 
-    def test_payment_task_process_automatically(self):
+    def test_move_sending_pieces_ongoing_to_pending(self):
+
+        self.task.update({"stage_id": self.stage_sending_pieces.id})
+        self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
+
+        self.reset_actions_last_run()
+        self.env["base.automation"]._check()  # method called by crontab
+
+        self.assertEqual(
+            self.task.stage_id, self.stage_pending, self.task.stage_id.name
+        )
+
+    def test_move_waiting_pieces_to_pending(self):
+
+        self.task.update({"stage_id": self.stage_waiting_pieces_return.id})
+        self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
+
+        self.reset_actions_last_run()
+        self.env["base.automation"]._check()  # method called by crontab
+
+        self.assertEqual(
+            self.task.stage_id, self.stage_pending, self.task.stage_id.name
+        )
+
+    def _test_payment_task_process_automatically(self):
         inv = (
             self.env["account.invoice"]
             .search([])
