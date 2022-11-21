@@ -49,9 +49,9 @@ class RentalFeesComputation(models.Model):
 
     state = fields.Selection(
         [
-            ("draft", _("Draft")),
-            ("running", _("Running")),
-            ("done", _("Done")),
+            ("draft", "Draft"),
+            ("running", "Running"),
+            ("done", "Done"),
         ],
         "State",
         default="draft",
