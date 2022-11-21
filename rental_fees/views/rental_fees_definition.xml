@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="rental_fees_definition_view_tree" model="ir.ui.view">
+    <field name="name">rental.fees.definition.tree</field>
+    <field name="model">rental_fees.definition</field>
+    <field name="arch" type="xml">
+      <tree string="Rental fees definitions">
+        <field name="name"/>
+        <field name="partner_id"/>
+        <field name="product_template_id"/>
+        <field name="agreed_to_std_price_ratio" widget="percentage"/>
+        <field name="order_ids" widget="many2many_tags"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="rental_fees_definition_view_search" model="ir.ui.view">
+    <field name="name">rental_fees.definition.search</field>
+    <field name="model">rental_fees.definition</field>
+    <field name="arch" type="xml">
+      <search string="Rental Fees">
+        <field name="partner_id" string="Supplier"/>
+        <field name="product_template_id"/>
+        <field name="order_ids"/>
+        <group expand="0" string="Group By">
+          <filter string="Supplier" name="supplier"
+                  context="{'group_by': 'partner_id'}"/>
+          <filter string="Product" name="product"
+                  context="{'group_by': 'product_template_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="rental_fees_definition_view_form" model="ir.ui.view">
+    <field name="name">rental_fees.definition.form</field>
+    <field name="model">rental_fees.definition</field>
+    <field name="arch" type="xml">
+      <form string="Rental fees definition">
+        <sheet>
+          <div class="oe_button_box">
+            <button
+                string="Devices"
+                class="oe_stat_button"
+                icon="fa-laptop"
+                type="object"
+                name="button_open_devices"
+                />
+          </div>
+          <div class="oe_title">
+            <label for="name" class="oe_edit_only"/>
+            <h1>
+              <field name="name" class="oe_inline"/>
+            </h1>
+          </div>
+          <group name="main">
+            <field name="partner_id"/>
+            <field name="product_template_id"/>
+            <field name="model_invoice_id"/>
+            <field name="agreed_to_std_price_ratio" widget="percentage"/>
+          </group>
+          <group name="orders">
+            <field name="order_ids" widget="many2many" domain="[('partner_id', '=', partner_id)]" />
+          </group>
+          <group name="lines">
+            <field name="line_ids">
+              <tree default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="duration_value"/>
+                <field name="duration_unit"/>
+                <field name="fees_type"/>
+                <field name="monthly_fees"/>
+              </tree>
+            </field>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="rental_fees_definition_line_view_form" model="ir.ui.view">
+    <field name="name">rental_fees.definition_line.form</field>
+    <field name="model">rental_fees.definition_line</field>
+    <field name="arch" type="xml">
+      <form string="Rental fees definition line">
+        <sheet>
+          <field name="sequence" invisible="1"/>
+          <group>
+            <group name="duration" string="Duration">
+              <field name="duration_value"/>
+              <field name="duration_unit"/>
+            </group>
+            <group name="value" string="Fees value">
+              <field name="fees_type"/>
+              <field name="monthly_fees"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="rental_fees_definitions_action" model="ir.actions.act_window">
+    <field name="name">Rental fees definitions</field>
+    <field name="res_model">rental_fees.definition</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="rental_fees_definition_view_tree"/>
+    <field name="search_view_id" ref="rental_fees_definition_view_search"/>
+  </record>
+
+  <menuitem id="menu_rental_fees_definitions_menu"
+            action="rental_fees_definitions_action"
+            parent="purchase.menu_procurement_management"
+            sequence="30"
+            />
+
+</odoo>
