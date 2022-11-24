@@ -106,3 +106,48 @@ class Pricelist(models.Model):
             date=date,
             uom_id=uom_id,
         )
+
+
+class PricelistItem(models.Model):
+    _inherit = "product.pricelist.item"
+
+    percentage_exclude_extra = fields.Boolean(
+        string="Exclude variant extra prices from reductions?",
+        default=False,
+    )
+
+    def _compute_price(self, price, price_uom, product, quantity=1.0, partner=False):
+        "Override to handle the percentage-extra-excluded case"
+
+        if (
+            product._name == "product.product"
+            and self.compute_price == "percentage"
+            and self.percentage_exclude_extra
+        ):
+            base_product = product.product_tmpl_id.product_variant_id
+            wo_extra_price = base_product.price_compute(self.base)[base_product.id]
+            reduced_wo_extra_price = super(PricelistItem, self)._compute_price(
+                wo_extra_price,
+                price_uom,
+                product,
+                quantity,
+                partner,
+            )
+            extra_price = price - wo_extra_price
+            result_price = reduced_wo_extra_price + extra_price
+            _logger.debug(
+                "Reduced price = reduced base (%.02f) + extra (%.02f) = %.02f",
+                reduced_wo_extra_price,
+                extra_price,
+                result_price,
+            )
+            return result_price
+
+        else:
+            return super(PricelistItem, self)._compute_price(
+                price,
+                price_uom,
+                product,
+                quantity,
+                partner,
+            )
