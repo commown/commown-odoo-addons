@@ -15,5 +15,19 @@
     </field>
   </record>
 
+  <record model="ir.ui.view" id="product_pricelist_item_form_view">
+    <field name="name">product.pricelist.item.form (in website_sale_b2b)</field>
+    <field name="model">product.pricelist.item</field>
+    <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//field[@name='compute_price']/ancestor::group[1]" position="after">
+        <group attrs="{'invisible': [('compute_price', '!=', 'percentage')]}">
+          <field name="percentage_exclude_extra"/>
+        </group>
+      </xpath>
+
+    </field>
+  </record>
 
 </odoo>
