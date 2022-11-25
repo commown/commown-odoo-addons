@@ -9,6 +9,8 @@ _logger = logging.getLogger(__name__)
 
 
 class WebsiteSaleB2B(WebsiteSale):
+    BIG_PRODUCT_QTY = 100000
+
     def get_attribute_value_ids(self, product):
         """When in B2B, return prices without taxes. This is a duplication of
         website_sale controller method but replacing website_public_price by
@@ -71,3 +73,41 @@ class WebsiteSaleB2B(WebsiteSale):
 
         # Display confirmation page
         return request.render("website_sale_b2b.order_submitted", {"order": order})
+
+    @http.route()
+    def product(self, product, category="", search="", **kwargs):
+        """Compute default add_qty as minimum to get the lowest unit price
+        and complete the render context with rental quantities informations
+        (quantity of devices taken into account in the price and reason for it).
+        """
+
+        rental_infos = {"reason": None, "quantity": 0.0}
+        min_add_qty = 1
+
+        env = request.env
+        if request.website == env.ref("website_sale_b2b.b2b_website"):
+            min_add_qty = 2
+
+            partner = env.user.partner_id.commercial_partner_id
+            if partner != env.user.partner_id:
+
+                pl = request.website.get_current_pricelist()
+                rental_infos = pl._rented_quantity_infos(product, partner)
+
+                if rental_infos["quantity"] > 0.0:
+                    min_add_qty = 1
+
+                if "add_qty" not in kwargs:
+                    _rid = pl._compute_price_rule(
+                        [(product, self.BIG_PRODUCT_QTY, partner)]
+                    )[product.id][1]
+                    if _rid:
+                        best_rule = env["product.pricelist.item"].browse(_rid)
+                        kwargs["add_qty"] = (
+                            best_rule.min_quantity - rental_infos["quantity"]
+                        )
+
+        result = super().product(product, category, search, **kwargs)
+        result.qcontext["rental_infos"] = rental_infos
+        result.qcontext["min_add_qty"] = min_add_qty
+        return result

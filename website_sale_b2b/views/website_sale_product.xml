@@ -32,6 +32,30 @@
 
     <!-- END Replace description_sale by website_description_sale -->
 
+    <template id="product_quantity" inherit_id="website_sale.product_quantity">
+
+      <xpath expr="//input[@type='text'][@name='add_qty']" position="attributes">
+        <attribute name="data-min"/>
+        <attribute name="t-att-data-min">min_add_qty</attribute>
+        <attribute name="t-att-value">max(add_qty, min_add_qty)</attribute>
+      </xpath>
+
+      <xpath expr="//a[@id='add_to_cart']" position="before">
+        <div t-if="rental_infos['quantity'] > 0.0"
+             class="small font-weight-bold mb-2">
+          This reduced price takes into account the <t t-esc="'%g' % rental_infos['quantity']"/> devices
+          <t t-if="pricelist.account_for_rented_quantity == 'product-category'">
+            of the <i t-esc="rental_infos['reason'].name"></i> category
+          </t>
+          <t t-elif="pricelist.account_for_rented_quantity == 'product-template'">
+            of the same model
+          </t>
+          you already have.
+        </div>
+      </xpath>
+
+    </template>
+
     <!-- Cart lines modifications: -->
 
     <template id="cart_lines" inherit_id="website_sale.cart_lines">
