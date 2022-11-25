@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-13 05:47+0000\n"
-"PO-Revision-Date: 2022-09-13 05:47+0000\n"
+"POT-Creation-Date: 2022-11-25 13:22+0000\n"
+"PO-Revision-Date: 2022-11-25 13:22+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,26 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: website_sale_b2b
-#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
-msgid "<span>Commitment duration: </span>"
-msgstr "<span>Durée d'engagement : </span>"
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
+msgid ") nous a bien été soumise, merci !"
+msgstr ") nous a bien été soumise, merci !"
 
 #. module: website_sale_b2b
-#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
-msgid "<span>Commitment duration: from </span>"
-msgstr "Durée d'engagement : à partir de "
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.login
+msgid "<br/>Connect to"
+msgstr "<br/>Aller sur"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
+msgid "<i class=\"fa fa-chevron-left\"/>\n"
+"            <span>Revenir au panier</span>"
+msgstr "<i class=\"fa fa-chevron-left\"/>\n"
+"            <span>Revenir au panier</span>"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
+msgid "<span>Soumettre ma demande</span> <i class=\"fa fa-chevron-right\"/>"
+msgstr "<span>Soumettre ma demande</span> <i class=\"fa fa-chevron-right\"/>"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
@@ -34,7 +46,82 @@ msgstr "<span>HT</span>"
 #: model:ir.model.fields,help:website_sale_b2b.field_product_product__website_description_sale
 #: model:ir.model.fields,help:website_sale_b2b.field_product_template__website_description_sale
 msgid "A description of the Product that you want to communicate to your online customers."
-msgstr "Une description de l'article affichée uniquement dans le magasin en ligne"
+msgstr "Une description du produit que vous voulez afficher sur le magasin en ligne."
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist__account_for_rented_quantity
+msgid "Account For Rented Quantity"
+msgstr "Prendre en compte la quantité déjà louée"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist__account_for_rented_quantity_category_ids
+msgid "Account For Rented Quantity Category"
+msgstr "Catégories pour sommer les quantités déjà louées"
+
+#. module: website_sale_b2b
+#: selection:product.pricelist,account_for_rented_quantity:0
+msgid "At category level"
+msgstr "Au niveau des catégories d'articles"
+
+#. module: website_sale_b2b
+#: selection:product.pricelist,account_for_rented_quantity:0
+msgid "At product level"
+msgstr "Au niveau du modèle d'article"
+
+#. module: website_sale_b2b
+#: model:website,name:website_sale_b2b.b2b_website
+msgid "Products for professionals"
+msgstr "Commown pour les professionnels"
+
+#. module: website_sale_b2b
+#: model:ir.model,name:website_sale_b2b.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: website_sale_b2b
+#: model:crm.stage,name:website_sale_b2b.big_b2b_stage_new
+msgid "Demandes Shop Hors-seuil"
+msgstr "Demandes Shop Hors-seuil"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist_item__percentage_exclude_extra
+msgid "Exclude variant extra prices from reductions?"
+msgstr "Ne pas appliquer sur le supplément de prix des variantes"
+
+#. module: website_sale_b2b
+#: model:website,login_checkbox_message:website_sale_b2b.b2b_website
+msgid "Je représente une entreprise, association, collectivité..."
+msgstr "Je représente une entreprise, association, collectivité..."
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,help:website_sale_b2b.field_product_pricelist__account_for_rented_quantity_category_ids
+msgid "List of the product web categories in which rental products will be counted for volume discounts."
+msgstr "Catégories web pour agréger les quantités louées pour les réductions en volume"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_website__login_checkbox_message
+msgid "Login checkbox message"
+msgstr "Message de la case à cocher sur la page de connexion"
+
+#. module: website_sale_b2b
+#: selection:product.pricelist,account_for_rented_quantity:0
+msgid "No"
+msgstr "Non"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.login
+msgid "Or am I at the wrong place?"
+msgstr "Ou je suis au mauvais endroit..."
+
+#. module: website_sale_b2b
+#: model:ir.model,name:website_sale_b2b.model_product_pricelist
+msgid "Pricelist"
+msgstr "Liste de prix"
+
+#. module: website_sale_b2b
+#: model:ir.model,name:website_sale_b2b.model_product_pricelist_item
+msgid "Pricelist Item"
+msgstr "Élément de la liste de prix"
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_template
@@ -42,15 +129,58 @@ msgid "Product Template"
 msgstr "Modèle d'article"
 
 #. module: website_sale_b2b
+#: model:ir.model,name:website_sale_b2b.model_sale_order
+msgid "Sale Order"
+msgstr "Vente"
+
+#. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_product__website_description_sale
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_template__website_description_sale
 msgid "Sale description for the website"
-msgstr "Description de l'article pour le magasin en ligne"
+msgstr "Description pour la vente en ligne"
 
 #. module: website_sale_b2b
+#: model:crm.team,name:website_sale_b2b.big_b2b_team
+msgid "Sales"
+msgstr "Ventes"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,help:website_sale_b2b.field_product_pricelist__account_for_rented_quantity
+msgid "Take into account the quantity already rented by customer's company to compute which price rule to apply."
+msgstr "Prendre en compte les articles déjà loués par l'entreprise du client pour déterminer la règle de prix à appliquer"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
+msgid "Un membre de l’équipe commerciale vous recontactera rapidement\n"
+"        pour finaliser la commande."
+msgstr "Un membre de l’équipe commerciale vous recontactera rapidement\n"
+"        pour finaliser la commande."
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
+msgid "Votre demande (référencée"
+msgstr "Votre demande (référencée"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
+msgid "Votre demande a été soumise"
+msgstr "Votre demande a été soumise"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
+msgid "Vous allez être recontacté.e dans les prochains jours."
+msgstr "Vous allez être recontacté.e dans les prochains jours."
+
+#. module: website_sale_b2b
+#: model:ir.model,name:website_sale_b2b.model_website
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_template_form_view
 msgid "Website"
 msgstr "Site Web"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_website__name
+msgid "Website Name"
+msgstr "Nom du site web"
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_public_category
