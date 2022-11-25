@@ -6,7 +6,7 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 class RentalProductWebsiteSale(WebsiteSale):
     @http.route()
     def product(self, product, category="", search="", **kwargs):
-        result = super().product(product, category="", search="", **kwargs)
+        result = super().product(product, category, search, **kwargs)
         if product.is_rental:
             result.qcontext.update(
                 {
