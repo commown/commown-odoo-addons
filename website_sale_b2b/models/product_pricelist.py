@@ -52,6 +52,30 @@ class Pricelist(models.Model):
             )
 
     @api.multi
+    def _rented_quantity_infos(self, product, partner):
+        choice = self.account_for_rented_quantity
+        infos = {"reason": None, "quantity": 0.0}
+
+        if choice not in ("no", False):
+            if choice == "product-template":
+                infos["quantity"] = partner.rented_quantity(product_template=product)
+
+            elif choice == "product-category":
+                categ = self._search_suitable_category(product)
+                _logger.debug(
+                    "Pricelist category for product %s (%d): %s",
+                    product.name,
+                    product.id,
+                    categ and categ.name or "None",
+                )
+
+                if categ is not None:
+                    infos["quantity"] = partner.rented_quantity(product_category=categ)
+                    infos["reason"] = categ
+
+        return infos
+
+    @api.multi
     def _compute_price_rule(self, products_qty_partner, date=False, uom_id=False):
         self.ensure_one()
         choice = self.account_for_rented_quantity
@@ -65,35 +89,13 @@ class Pricelist(models.Model):
             )
 
             new_products_qty_partner = []
-            suitable_category = {}
 
             for product, qty, partner in products_qty_partner:
                 partner = (partner or self.env.user.partner_id).commercial_partner_id
-
-                if choice == "product-template":
-                    qty += partner.rented_quantity(product_template=product)
-
-                elif choice == "product-category":
-
-                    if product not in suitable_category:
-                        suitable_category[product] = self._search_suitable_category(
-                            product
-                        )
-
-                    categ = suitable_category[product]
-                    _logger.debug(
-                        "Pricelist category for product %s (%d): %s",
-                        product.name,
-                        product.id,
-                        categ and categ.name or "None",
-                    )
-
-                    if categ is not None:
-                        added_qty = partner.rented_quantity(product_category=categ)
-                        qty += added_qty
-                        _logger.debug("Rented quantity added: %s", added_qty)
-
-                new_products_qty_partner.append((product, qty, partner))
+                rental_infos = self._rented_quantity_infos(product, partner)
+                added_qty = rental_infos["quantity"]
+                _logger.debug("Rented quantity infos: %s", rental_infos)
+                new_products_qty_partner.append((product, qty + added_qty, partner))
 
             products_qty_partner = new_products_qty_partner
             _logger.debug(
@@ -101,11 +103,15 @@ class Pricelist(models.Model):
                 products_qty_partner,
             )
 
-        return super(Pricelist, self)._compute_price_rule(
+        result = super(Pricelist, self)._compute_price_rule(
             products_qty_partner,
             date=date,
             uom_id=uom_id,
         )
+
+        _logger.debug("  > base _compute_price_rule result: %s", result)
+
+        return result
 
 
 class PricelistItem(models.Model):
