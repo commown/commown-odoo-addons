@@ -1,4 +1,5 @@
 from odoo import fields
+from odoo.exceptions import UserError
 
 from .common import DeviceAsAServiceTC
 
@@ -18,8 +19,13 @@ class CrmLeadTC(DeviceAsAServiceTC):
         lot = self.adjust_stock()  # have 1 product in stock
         quant = lot.quant_ids.filtered(lambda q: q.quantity > 0).ensure_one()
 
-        picking = lead.contract_id.send_device(quant)
+        # Should not be able to put the lead to a "go" column without a picking:
+        stage = self.env["crm.stage"].create({"name": "GO [stock: check-has-picking]"})
+        with self.assertRaises(UserError) as err:
+            lead.stage_id = stage.id
+        self.assertEqual("Lead has no assigned picking.", err.exception.name)
 
+        picking = lead.contract_id.send_device(quant)
         self.assertEqual(picking.mapped("move_lines.product_qty"), [1.0])
         self.assertEqual(picking.state, "assigned")
 
