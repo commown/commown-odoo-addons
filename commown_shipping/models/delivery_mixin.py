@@ -195,12 +195,21 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         elif code in ("MLVARS", "RENAVI"):
             # More than 8 day-old MLVARS: log a warning and send an email once
             if (now.replace(tzinfo=UTC) - date) > MLVARS_MAX_WAIT:
-                result.append("Urgency mail sent.")
                 if not self.expedition_urgency_mail_sent:
                     self.expedition_urgency_mail_sent = True
-                    _self = self.with_context({"postal_code": code})
-                    _self.message_post_with_template(self.delivery_email_template().id)
+                    if self.send_email_on_delivery:
+                        mail_template = self.delivery_email_template()
+                        if mail_template:
+                            _self = self.with_context({"postal_code": code})
+                            _self.message_post_with_template(mail_template.id)
+                            result.append("Urgency mail sent.")
 
+                    self.message_post_with_template(
+                        self.env.ref("commown_shipping.parcel_at_postoffice").id,
+                        subtype_id=self.env.ref("mail.mt_note").id,
+                        notif_layout="mail.mail_notification_light",
+                    )
+                    result.append("Commown postoffice notification sent.")
         else:
             # Unexpected code: emit a warning
             result.append("Unhandled code")
