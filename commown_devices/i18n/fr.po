@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-22 14:03+0000\n"
-"PO-Revision-Date: 2022-07-22 14:03+0000\n"
+"POT-Creation-Date: 2022-11-28 21:27+0000\n"
+"PO-Revision-Date: 2022-11-28 21:27+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -184,6 +184,12 @@ msgid "Lead"
 msgstr "Piste"
 
 #. module: commown_devices
+#: code:addons/commown_devices/models/crm_lead.py:52
+#, python-format
+msgid "Lead has no assigned picking."
+msgstr "Aucun appareil expédié !"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_crm_lead
 msgid "Lead/Opportunity"
 msgstr "Piste/opportunité"
@@ -242,10 +248,10 @@ msgstr "Rapatrier un appareil"
 #: code:addons/commown_devices/models/project_task.py:166
 #, python-format
 msgid "Scrap device"
-msgstr "Mise au rebut"
+msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/crm_lead.py:29
+#: code:addons/commown_devices/models/crm_lead.py:33
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_outward_picking_form
 #, python-format
@@ -269,7 +275,7 @@ msgid "Task"
 msgstr "Tâche"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/crm_lead.py:18
+#: code:addons/commown_devices/models/crm_lead.py:22
 #, python-format
 msgid "The contract has already assigned picking(s)!\n"
 "Either cancel, scrap or validate it."
