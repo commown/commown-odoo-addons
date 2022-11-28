@@ -23,6 +23,7 @@
     "data": [
         "data/actions.xml",
         "data/cron.xml",
+        "data/mail_template.xml",
         "data/parcels.xml",
         "data/shipping_accounts.xml",
         "views/crm_team.xml",
