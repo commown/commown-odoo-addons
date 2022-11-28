@@ -15,6 +15,18 @@ from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
 from .common import BaseShippingTC, pdf_page_num
 
 
+class CheckMailMixin:
+    "Small helper class to check sent emails easily"
+
+    def _check_mail(self, mail, subject, content, check_recipients=None):
+        self.assertEqual(mail.message_type, "notification")
+        self.assertEqual(mail.subject, subject)
+        self.assertIn(content, mail.body)
+        if check_recipients is not None:
+            self.assertItemsEqual(mail.partner_ids.mapped("name"), check_recipients)
+        return mail
+
+
 class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
@@ -207,7 +219,7 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         self.assertIn("address ambiguity", err.exception.name)
 
 
-class CrmLeadDeliveryTC(TransactionCase):
+class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
     def setUp(self):
         super(CrmLeadDeliveryTC, self).setUp()
         team = self.env.ref("sales_team.salesteam_website_sales")
@@ -234,11 +246,7 @@ class CrmLeadDeliveryTC(TransactionCase):
         )[0]
 
     def check_mail_delivered(self, subject, code):
-        last_message = self._last_message()
-        self.assertEqual(last_message.message_type, "notification")
-        self.assertEqual(last_message.subject, subject)
-        self.assertIn("code: %s" % code, last_message.body)
-        return last_message
+        return self._check_mail(self._last_message(), subject, "code: " + code)
 
     def test_delivery_email_template(self):
         # Shipping deactivated, template set => None expected
@@ -323,7 +331,7 @@ def _status(code, label="test label", _date=None):
     return {"code": code, "label": label, "date": _date or date.today().isoformat()}
 
 
-class CrmLeadDeliveryTrackingTC(TransactionCase):
+class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
     def setUp(self):
         super(CrmLeadDeliveryTrackingTC, self).setUp()
 
@@ -375,75 +383,94 @@ class CrmLeadDeliveryTrackingTC(TransactionCase):
             [self.lead2.id, self.lead1.id],
         )
 
-    def _perform_jobs_with_colissimo_status(self, *statuses):
+    def exec_job_with_status(self, lead_statuses):
         queued_jobs = self.env["queue.job"].search([])
-        if len(statuses) == 1:
-            statuses = [statuses[0]] * len(queued_jobs)
+        self.assertEqual(queued_jobs.mapped("state"), ["pending"] * len(lead_statuses))
 
-        self.assertEqual(queued_jobs.mapped("state"), ["pending"] * len(statuses))
-
-        for status, queued_job in zip(statuses, queued_jobs):
+        for queued_job in queued_jobs:
             job = Job.load(self.env, queued_job.uuid)
             with patch.object(
                 DeliveryMixin,
                 "_delivery_tracking_colissimo_status",
-                side_effect=lambda *args: status,
+                side_effect=lambda *args: lead_statuses[job.recordset],
             ):
                 job.perform()
 
     def test_cron_ok1(self):
         leads = self.env["crm.lead"]._cron_delivery_auto_track()
-        self._perform_jobs_with_colissimo_status(_status("LIVCFM"))
+        self.exec_job_with_status({l: _status("LIVCFM") for l in leads})
 
         self.assertEqual(leads.mapped("expedition_status"), ["[LIVCFM] test label"] * 2)
         self.assertEqual(leads.mapped("stage_id"), self.stage_final)
 
     def test_cron_ok2(self):
-        leads = self.env["crm.lead"]._cron_delivery_auto_track()
-        self._perform_jobs_with_colissimo_status(_status("LIVCFM"), _status("RENLNA"))
+        lead1, lead2 = self.env["crm.lead"]._cron_delivery_auto_track()
+        self.exec_job_with_status({lead1: _status("LIVCFM"), lead2: _status("RENLNA")})
 
-        self.assertItemsEqual(
-            leads.mapped("expedition_status"),
-            ["[LIVCFM] test label", "[RENLNA] test label"],
-        )
-        self.assertItemsEqual(
-            leads.mapped("stage_id"), [self.stage_final, self.stage_track]
-        )
+        self.assertItemsEqual(lead1.expedition_status, "[LIVCFM] test label")
+        self.assertItemsEqual(lead2.expedition_status, "[RENLNA] test label")
+
+        self.assertItemsEqual(lead1.stage_id, self.stage_final)
+        self.assertItemsEqual(lead2.stage_id, self.stage_track)
 
     def test_cron_ok_mlvars1(self):
-        leads = self.env["crm.lead"]._cron_delivery_auto_track()
-        self._perform_jobs_with_colissimo_status(_status("LIVCFM"), _status("MLVARS"))
+        lead1, lead2 = self.env["crm.lead"]._cron_delivery_auto_track()
+        self.exec_job_with_status({lead1: _status("LIVCFM"), lead2: _status("MLVARS")})
 
-        self.assertItemsEqual(
-            leads.mapped("expedition_status"),
-            ["[LIVCFM] test label", "[MLVARS] test label"],
-        )
-        self.assertItemsEqual(
-            leads.mapped("stage_id"), [self.stage_final, self.stage_track]
-        )
-        self.assertEqual(leads.mapped("expedition_urgency_mail_sent"), [False, False])
+        self.assertEqual(lead1.expedition_status, "[LIVCFM] test label")
+        self.assertEqual(lead2.expedition_status, "[MLVARS] test label")
+
+        self.assertEqual(lead1.stage_id, self.stage_final)
+        self.assertEqual(lead2.stage_id, self.stage_track)
+
+        self.assertFalse(lead1.expedition_urgency_mail_sent)
+        self.assertFalse(lead2.expedition_urgency_mail_sent)
+
         self.assertEqual(
-            leads.mapped("message_ids.subtype_id.name"), ["Opportunity Created"]
+            lead1.mapped("message_ids.subtype_id.name"),
+            ["Opportunity Created"],
+        )
+
+        self.assertEqual(
+            lead2.mapped("message_ids.subtype_id.name"),
+            ["Opportunity Created"],
         )
 
     def test_cron_ok_mlvars2(self):
-        leads = self.env["crm.lead"]._cron_delivery_auto_track()
+        lead1, lead2 = self.env["crm.lead"]._cron_delivery_auto_track()
+
+        partner_id = self.env.ref("base.res_partner_1").id
+        lead2.partner_id = partner_id
+        lead2.message_follower_ids |= self.env["mail.followers"].create(
+            {"partner_id": partner_id, "res_model": lead2._name, "res_id": lead2.id},
+        )
+        lead2.send_email_on_delivery = True
+
         date_old = (date.today() - timedelta(days=9)).isoformat()
-        self._perform_jobs_with_colissimo_status(
-            _status("LIVCFM"), _status("MLVARS", _date=date_old)
+        self.exec_job_with_status(
+            {lead1: _status("LIVCFM"), lead2: _status("MLVARS", _date=date_old)},
         )
 
-        self.assertItemsEqual(
-            leads.mapped("expedition_status"),
-            ["[LIVCFM] test label", "[MLVARS] test label"],
+        self.assertEqual(lead1.expedition_status, "[LIVCFM] test label")
+        self.assertEqual(lead2.expedition_status, "[MLVARS] test label")
+
+        self.assertEqual(lead1.stage_id, self.stage_final)
+        self.assertEqual(lead2.stage_id, self.stage_track)
+
+        self.assertFalse(lead1.expedition_urgency_mail_sent)
+        self.assertTrue(lead2.expedition_urgency_mail_sent)
+
+        self.assertEqual(
+            lead1.mapped("message_ids.subtype_id.name"),
+            ["Opportunity Created"],
         )
-        self.assertItemsEqual(
-            leads.mapped("stage_id"), [self.stage_final, self.stage_track]
+
+        self.assertEqual(
+            lead2.mapped("message_ids.subtype_id.name"),
+            ["Note", "Discussions", "Opportunity Created"],
         )
-        self.assertItemsEqual(
-            leads.mapped("expedition_urgency_mail_sent"), [True, False]
-        )
-        self.assertItemsEqual(
-            leads.mapped("message_ids.subtype_id.name"),
-            ["Opportunity Created", "Discussions"],
-        )
+
+        msg1, msg2 = lead2.message_ids[:2]
+        subject = "YourCompany - Customer parcel waiting at the postoffice"
+        self._check_mail(msg1, subject, "postoffice", ["YourCompany"])
+        self._check_mail(msg2, "Product delivered", "code: MLVARS", ["Wood Corner"])
