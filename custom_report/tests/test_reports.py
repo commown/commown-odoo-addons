@@ -114,9 +114,11 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         if is_refund:
             inv.type = "out_refund"
         if contract:
+            cline = contract.contract_line_ids[0]
             inv.invoice_line_ids.update(
                 {
-                    "contract_line_id": contract.contract_line_ids[0].id,
+                    "contract_line_id": cline.id,
+                    "account_analytic_id": cline.analytic_account_id.id,
                 }
             )
         inv.action_invoice_open()
@@ -150,10 +152,16 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         )
 
     def test_b2c_from_contract(self):
+        cname, partner = "Test Contract", self.b2c_partner
+
+        aa = self.env["account.analytic.account"].create(
+            {"name": cname, "partner_id": partner.id}
+        )
+
         contract = self.env["contract.contract"].create(
             {
-                "name": "Test Contract",
-                "partner_id": self.b2c_partner.id,
+                "name": cname,
+                "partner_id": partner.id,
                 "pricelist_id": self.b2c_partner.property_product_pricelist.id,
                 "contract_line_ids": [
                     (
@@ -162,6 +170,7 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
                         {
                             "name": "line 1",
                             "product_id": self.std_product.id,
+                            "analytic_account_id": aa.id,
                         },
                     )
                 ],
