@@ -29,7 +29,7 @@
             <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
           </xpath>
 
-          <xpath expr="//field[@name='priority']/ancestor::group[1]" position="attributes">
+          <xpath expr="//field[@name='priority']" position="attributes">
             <attribute name="attrs">{'invisible': [('used_for_risk_analysis', '=', True)]}</attribute>
           </xpath>
 
