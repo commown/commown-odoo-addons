@@ -19,9 +19,10 @@ class SaleOrder(models.Model):
 
         team = self.env.ref("website_sale_b2b.big_b2b_team")
         stage = self.env.ref("website_sale_b2b.big_b2b_stage_new")
+        company_name = self.partner_id.commercial_company_name or "?"
         lead = self.env["crm.lead"].create(
             {
-                "name": "%s / %s" % (self.name, self.partner_id.company_name),
+                "name": "%s / %s" % (self.name, company_name),
                 "partner_id": self.partner_id.id,
                 "type": "opportunity",
                 "team_id": team.id,
