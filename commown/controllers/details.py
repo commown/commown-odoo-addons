@@ -22,6 +22,7 @@ class CustomerPortal(CustomerPortal):
         "country_id",
     ]
     OPTIONAL_BILLING_FIELDS = [
+        "street2",
         "id_card1",
         "id_card2",
         "proof_of_address",
@@ -31,20 +32,23 @@ class CustomerPortal(CustomerPortal):
     def details_form_validate(self, data):
         """Add Slimpay validation of submitted partner data"""
         error, error_message = super(CustomerPortal, self).details_form_validate(data)
-        Partner = http.request.env["res.partner"]
+        partner_model = http.request.env["res.partner"]
         values = {key: data[key] for key in self.MANDATORY_BILLING_FIELDS}
         values.update(
             {key: data[key] for key in self.OPTIONAL_BILLING_FIELDS if key in data}
         )
         values.update({"zip": values.pop("zipcode", "")})
-        for attribute, message in Partner.slimpay_checks(values).items():
+        for attribute, message in partner_model.slimpay_checks(values).items():
             error[attribute] = "error"
             error_message.append(message)
         try:
-            Partner._apply_bin_field_size_policy(values)
+            partner_model._apply_bin_field_size_policy(values)
         except FileTooBig as exc:
             error[exc.field] = "error"
             error_message.append(exc.msg)
+
+        partner_model.validate_street_lines(data, error, error_message)
+
         return error, error_message
 
     @http.route()

@@ -69,6 +69,22 @@
     <xpath expr="//form//input[@name='vat']/ancestor::div[1]" position="replace">
     </xpath>
 
+    <!-- Add maxlength to the street field -->
+    <xpath expr="//form//input[@name='street']" position="attributes">
+      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
+    </xpath>
+
+    <!-- Add street2 -->
+    <xpath expr="//form//input[@name='street']/ancestor::div[1]" position="after">
+      <div t-attf-class="form-group #{error.get('street2') and 'o_has_error' or ''} col-xl-6">
+        <label class="col-form-label" for="street2">Street 2</label>
+        <input type="text"
+               name="street2"
+               t-att-maxlength="env['res.partner'].MAX_ADDRESS_SIZE"
+               t-attf-class="form-control #{error.get('street2') and 'is-invalid' or ''}" t-att-value="street2 or partner.street2"/>
+      </div>
+    </xpath>
+
     <!-- Add ID card and proof of address before address -->
     <xpath expr="//form//select[@name='country_id']/ancestor::div[1]" position="after">
 
