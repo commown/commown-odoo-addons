@@ -15,6 +15,8 @@ MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 
 BASE_URL = "https://ws.colissimo.fr/sls-ws/SlsServiceWSRest"
 
+MAX_ADDRESS_SIZE_COLISSIMO = 35
+
 
 class ColissimoError(Exception):
     pass
