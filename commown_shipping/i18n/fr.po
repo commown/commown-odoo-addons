@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-08 11:33+0000\n"
-"PO-Revision-Date: 2022-11-08 11:33+0000\n"
+"POT-Creation-Date: 2022-12-06 17:20+0000\n"
+"PO-Revision-Date: 2022-12-06 17:20+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,23 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/colissimo_utils.py:81
+#: model:mail.template,body_html:commown_shipping.parcel_at_postoffice
+msgid "\n"
+"      <p>The parcel of this order is waiting at the postoffice.</p>\n"
+"      \n"
+"      "
+msgstr "\n"
+"      <p>Le colis de cette commande attend le destinataire à son bureau de poste.</p>\n"
+"      \n"
+"      "
+
+#. module: commown_shipping
+#: model:mail.template,subject:commown_shipping.parcel_at_postoffice
+msgid "${object.user_id.company_id.name} - Customer parcel waiting at the postoffice"
+msgstr "${object.user_id.company_id.name} - Le colis d'un client l'attend à son bureau de poste"
+
+#. module: commown_shipping
+#: code:addons/commown_shipping/models/colissimo_utils.py:74
 #, python-format
 msgid "A phone number is required to generate a Colissimo label!"
 msgstr "Un numéro de téléphone est requis pour générer une étiquette Colissimo !"
@@ -32,13 +48,13 @@ msgid "Account Password"
 msgstr "Mot de passe du compte"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:158
+#: code:addons/commown_shipping/models/res_partner.py:43
 #, python-format
-msgid "Address too long for \"%s\""
-msgstr "Adresse de \"%s\" trop longue"
+msgid "Address lines' length is limited to %s. Please fix."
+msgstr "Les lignes d'adresse sont limitées à %s caractères."
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/colissimo_utils.py:85
+#: code:addons/commown_shipping/models/colissimo_utils.py:78
 #, python-format
 msgid "An email is required to generate a Colissimo label!"
 msgstr "Une adresse électronique est requise pour générer une étiquette Colissimo !"
@@ -69,7 +85,7 @@ msgid "Class holding the fields and methods to track parcel delivery"
 msgstr "Classe portant les champs et méthodes de suivi des colis"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:155
+#: code:addons/commown_shipping/models/shipping_mixin.py:161
 #, python-format
 msgid "Colissimo error:\n"
 "%s"
@@ -195,7 +211,7 @@ msgstr "Date de récupération du statut"
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_urgency_mail_sent
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_urgency_mail_sent
 msgid "Expedition urgency mail send"
-msgstr "Mail au client pour une récupération urgente"
+msgstr "Courriel au client pour une récupération urgente"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__id
@@ -205,7 +221,7 @@ msgstr "Mail au client pour une récupération urgente"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: commown_shipping
 #: model:ir.model.fields,help:commown_shipping.field_commown_shipping_mixin__recipient_partner_id
@@ -377,6 +393,11 @@ msgstr "Données du compte d'expédition"
 #: model:ir.model,name:commown_shipping.model_project_task
 msgid "Task"
 msgstr "Tâche"
+
+#. module: commown_shipping
+#: sql_constraint:res.partner:0
+msgid "The street field size cannot exceed 35"
+msgstr "Chaque ligne d'adresse ne peut dépasser 35 caractères"
 
 #. module: commown_shipping
 #: sql_constraint:commown.parcel.type:0
