@@ -193,6 +193,14 @@
 
   <template id="address" inherit_id="website_sale.address">
 
+    <xpath expr="//input[@name='street']" position="attributes">
+      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
+    </xpath>
+
+    <xpath expr="//input[@name='street2']" position="attributes">
+      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
+    </xpath>
+
     <xpath expr="//div[@id='div_phone']" position="before">
       <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-md-6">
         <label class="col-form-label" for="email">Email</label>

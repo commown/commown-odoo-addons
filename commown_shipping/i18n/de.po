@@ -21,133 +21,129 @@ msgid "\n"
 "      <p>The parcel of this order is waiting at the postoffice.</p>\n"
 "      \n"
 "      "
-msgstr "\n"
-"      <p>Le colis de cette commande attend le destinataire à son bureau de poste.</p>\n"
-"      \n"
-"      "
+msgstr ""
 
 #. module: commown_shipping
 #: model:mail.template,subject:commown_shipping.parcel_at_postoffice
 msgid "${object.user_id.company_id.name} - Customer parcel waiting at the postoffice"
-msgstr "${object.user_id.company_id.name} - Le colis d'un client l'attend à son bureau de poste"
+msgstr ""
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/colissimo_utils.py:74
 #, python-format
 msgid "A phone number is required to generate a Colissimo label!"
-msgstr "Un numéro de téléphone est requis pour générer une étiquette Colissimo !"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__account
 msgid "Account Number"
-msgstr "Numéro de compte"
+msgstr "Kontonummer"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__password
 msgid "Account Password"
-msgstr "Mot de passe du compte"
+msgstr "Passwort"
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/res_partner.py:43
 #, python-format
 msgid "Address lines' length is limited to %s. Please fix."
-msgstr "Les lignes d'adresse sont limitées à %s caractères."
+msgstr ""
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/colissimo_utils.py:78
 #, python-format
 msgid "An email is required to generate a Colissimo label!"
-msgstr "Une adresse électronique est requise pour générer une étiquette Colissimo !"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__send_email_on_delivery
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__send_email_on_delivery
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__send_email_on_delivery
 msgid "Automatic email on delivery"
-msgstr "Envoi automatique de l'email à la livraison"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.cron,cron_name:commown_shipping.delivery_tracking_crm_lead
 #: model:ir.cron,cron_name:commown_shipping.delivery_tracking_project_task
 msgid "Base: Auto-vacuum internal data"
-msgstr "Base : données internes sur l'aspiration automatique"
+msgstr "Basis: Auto-Vacuum für interne Daten"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__default_perform_actions_on_delivery
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_team__default_perform_actions_on_delivery
 #: model:ir.model.fields,field_description:commown_shipping.field_project_project__default_perform_actions_on_delivery
 msgid "By default, perform actions on delivery"
-msgstr "Effectuer les actions post-livraison par défaut"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_track_delivery_mixin
 msgid "Class holding the fields and methods to track parcel delivery"
-msgstr "Classe portant les champs et méthodes de suivi des colis"
+msgstr ""
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/shipping_mixin.py:161
 #, python-format
 msgid "Colissimo error:\n"
 "%s"
-msgstr "Erreur Colissimo :\n"
-"%s"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_res_partner
 msgid "Contact"
-msgstr "Contact"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__create_uid
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__create_uid
 msgid "Created by"
-msgstr "Créé par"
+msgstr "Erstellt von"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__create_date
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__create_date
 msgid "Created on"
-msgstr "Créé le"
+msgstr "Erstellt am:"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__on_delivery_email_template_id
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__on_delivery_email_template_id
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__on_delivery_email_template_id
 msgid "Custom email model for this entity"
-msgstr "Modèle de courriel spécifique"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__on_delivery_email_template_id
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_team__on_delivery_email_template_id
 #: model:ir.model.fields,field_description:commown_shipping.field_project_project__on_delivery_email_template_id
 msgid "Default delivery email model for this entity"
-msgstr "Modèle de courriel par défaut"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__delivery_date
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__delivery_date
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__delivery_date
 msgid "Delivery Date"
-msgstr "Date de livraison"
+msgstr "Liefertermin"
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/crm_lead.py:65
 #, python-format
 msgid "Delivery address ambiguity: there is one on the sale and another on the partner. Please fill-in the recipient partner field to desambiguify."
-msgstr "Adresse de livraison ambigüe : il y en a une sur la vente et une autre sur le partenaire. Merci de remplir le champ \"Adresse de livraison\" pour lever l'ambigüité."
+msgstr ""
 
 #. module: commown_shipping
 #: model_terms:ir.ui.view,arch_db:commown_shipping.crm_case_form_view_oppor
 #: model_terms:ir.ui.view,arch_db:commown_shipping.view_task_form2
 msgid "Delivery followup"
-msgstr "Suivi de l'expédition"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin__recipient_partner_id
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__recipient_partner_id
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__recipient_partner_id
 msgid "Delivery partner"
-msgstr "Adresse de livraison"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__delivery_tracking
@@ -156,17 +152,17 @@ msgstr "Adresse de livraison"
 #: model:ir.model.fields,field_description:commown_shipping.field_project_project__delivery_tracking
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__delivery_tracking
 msgid "Delivery tracking"
-msgstr "Suivi d'expédition"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.cron,name:commown_shipping.delivery_tracking_crm_lead
-msgid "Delivery tracking: crm.lead"
-msgstr "Suivi colissimo : opportunités"
+msgid "Delivery tracking: crm.lead--disabled-by-openupgrade"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.cron,name:commown_shipping.delivery_tracking_project_task
-msgid "Delivery tracking: project.task"
-msgstr "Suivi colissimo : tâches"
+msgid "Delivery tracking: project.task--disabled-by-openupgrade"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__display_name
@@ -176,42 +172,42 @@ msgstr "Suivi colissimo : tâches"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__display_name
 msgid "Display Name"
-msgstr "Nom affiché"
+msgstr "Anzeigename"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_date
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_date
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_date
 msgid "Expedition Date"
-msgstr "Date d'expédition"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_ref
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_ref
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_ref
 msgid "Expedition reference"
-msgstr "N° d'expédition"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_status
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_status
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_status
 msgid "Expedition status"
-msgstr "Statut de l'expédition"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_status_fetch_date
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_status_fetch_date
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_status_fetch_date
 msgid "Expedition status fetch date"
-msgstr "Date de récupération du statut"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_urgency_mail_sent
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_urgency_mail_sent
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_urgency_mail_sent
 msgid "Expedition urgency mail send"
-msgstr "Courriel au client pour une récupération urgente"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__id
@@ -221,7 +217,7 @@ msgstr "Courriel au client pour une récupération urgente"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,help:commown_shipping.field_commown_shipping_mixin__recipient_partner_id
@@ -230,19 +226,17 @@ msgstr "ID"
 msgid "If left empty, a delivery partner will be looked-up for specified partner:\n"
 "- for crm leads, the sale's delivery partner will be used;\n"
 "- for project tasks (support, etc.), odoo will try to find a delivery partner from the partner or its company."
-msgstr "Lorsque laissée vide, une adresse de livraison sera recherchée pour le partenaire de la carte :\n"
-"- pour les opportunités, l'adresse de livraison du bon de commande sera utilisée ;\n"
-"- pour les tâches (support, etc.), odoo cherchera un partenaire de livraison en partant du partenaire ou en remontant à sa société."
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__insurance_value
 msgid "Insurance value (€)"
-msgstr "Valeur assurée (€)"
+msgstr ""
 
 #. module: commown_shipping
 #: sql_constraint:commown.parcel.type:0
 msgid "Insurance value must be >= 0!"
-msgstr "La valeur assurée doit être >= 0!"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin____last_update
@@ -252,129 +246,129 @@ msgstr "La valeur assurée doit être >= 0!"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin____last_update
 msgid "Last Modified on"
-msgstr "Dernière Modification le"
+msgstr "Zuletzt geändert am"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__write_uid
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__write_uid
 msgid "Last Updated by"
-msgstr "Dernière mise à jour par"
+msgstr "Zuletzt aktualisiert von"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__write_date
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__write_date
 msgid "Last Updated on"
-msgstr "Dernière mise à jour le"
+msgstr "Zuletzt aktualisiert am"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_crm_lead
 msgid "Lead/Opportunity"
-msgstr "Piste/opportunité"
+msgstr "Lead/Möglichkeit"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__name
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/delivery_mixin.py:97
 #, python-format
 msgid "No mail email template specified for %s (neither in current record nor its parent)"
-msgstr "Aucun modèle de courriel paramétré pour %s (ni sur le doc courant ni sur son parent)"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_shipping_parent_mixin
 msgid "Object that contains shipping objects"
-msgstr "Parent des objets gérant des expéditions"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_shipping_mixin
 msgid "Object used to edit shipping labels"
-msgstr "Objet utilisé pour créer des étiquettes d'expéditions"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_parcel_type
 msgid "Parcel description"
-msgstr "Description colis"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__name
 msgid "Parcel name"
-msgstr "Nom du colis"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__technical_name
 msgid "Parcel technical name"
-msgstr "Nom technique du colis"
+msgstr ""
 
 #. module: commown_shipping
 #: sql_constraint:commown.parcel.type:0
 msgid "Parcel technical names must be unique."
-msgstr "Le nom technique du colis doit être unique."
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_product_product__shipping_parcel_type_id
 #: model:ir.model.fields,field_description:commown_shipping.field_product_template__shipping_parcel_type_id
 msgid "Parcel type"
-msgstr "Type de colis"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.actions.act_window,name:commown_shipping.action_view_parcel_types
 #: model:ir.ui.menu,name:commown_shipping.menu_parcel_types
 #: model_terms:ir.ui.view,arch_db:commown_shipping.parcel_types_tree
 msgid "Parcel types"
-msgstr "Types de colis"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__password_env_default
 msgid "Password Env Default"
-msgstr "Valeur Env par défaut pour le mot de passe"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__password_env_is_editable
 msgid "Password Env Is Editable"
-msgstr "La valeur Env du mot de passe est éditable"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_product_template
 msgid "Product Template"
-msgstr "Modèle d'article"
+msgstr "Produktvorlage"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_project_project
 msgid "Project"
-msgstr "Projet"
+msgstr "Projekt"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__is_return
 msgid "Return parcel"
-msgstr "Colis retour"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__so_line_id
 msgid "Sale order line"
-msgstr "Ligne de bons de commande"
+msgstr "Verkaufsauftragszeile"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_crm_team
 msgid "Sales Channels"
-msgstr "Canaux de vente"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__sender
 msgid "Sender"
-msgstr "Expéditeur"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__server_env_defaults
 msgid "Server Env Defaults"
-msgstr "Valeur par défaut de l'environnement serveur"
+msgstr ""
 
 #. module: commown_shipping
 #: model_terms:ir.ui.view,arch_db:commown_shipping.crm_team_view_form
 #: model_terms:ir.ui.view,arch_db:commown_shipping.edit_project
 msgid "Shipping"
-msgstr "Expédition"
+msgstr "Versand"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__shipping_account_id
@@ -382,51 +376,52 @@ msgstr "Expédition"
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_team__shipping_account_id
 #: model:ir.model.fields,field_description:commown_shipping.field_project_project__shipping_account_id
 msgid "Shipping account"
-msgstr "Compte d'expédition"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_shipping_account
 msgid "Shipping account data"
-msgstr "Données du compte d'expédition"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_project_task
 msgid "Task"
-msgstr "Tâche"
+msgstr "Aufgabe"
 
 #. module: commown_shipping
 #: sql_constraint:res.partner:0
 msgid "The street field size cannot exceed 35"
-msgstr "Chaque ligne d'adresse ne peut dépasser 35 caractères"
+msgstr ""
 
 #. module: commown_shipping
 #: sql_constraint:commown.parcel.type:0
 msgid "The weight must be > 0!"
-msgstr "Le poids doit être > 0 !"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__weight
 msgid "Weight (kg)"
-msgstr "Poids (kg)"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.actions.server,name:commown_shipping.action_print_outward_fp2_label_issue
 #: model:ir.actions.server,name:commown_shipping.action_print_outward_fp2_label_task
 msgid "[commown] Print Fairphone parcel outward label(s)"
-msgstr "[commown] Imprimer une (des) étiquette(s) aller Fairphone"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.actions.server,name:commown_shipping.action_print_return_fp2_label_issue
 #: model:ir.actions.server,name:commown_shipping.action_print_return_fp2_label_task
 msgid "[commown] Print Fairphone parcel return label"
-msgstr "[commown] Imprimer une étiquette retour pour un Fairphone"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.actions.server,name:commown_shipping.action_print_outward_label_lead
 msgid "[commown] Étiquette aller Crosscall (<1kg, 300€)"
-msgstr "[commown] Étiquette aller Crosscall (<1kg, 300€)"
+msgstr ""
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_delivery_parent_mixin
 msgid "commown.delivery.parent.mixin"
-msgstr "commown.delivery.parent.mixin"
+msgstr ""
+
