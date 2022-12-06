@@ -248,7 +248,7 @@ msgstr "Rapatrier un appareil"
 #: code:addons/commown_devices/models/project_task.py:166
 #, python-format
 msgid "Scrap device"
-msgstr ""
+msgstr "Mise au rebut"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/crm_lead.py:33
