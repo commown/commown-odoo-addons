@@ -22,11 +22,6 @@ class ColissimoError(Exception):
     pass
 
 
-class AddressTooLong(Exception):  # noqa: B903
-    def __init__(self, partner):
-        self.partner = partner
-
-
 def normalize_phone(phone_number, country_code):
     "Format phone number for Colissimo"
     if phone_number:
@@ -73,10 +68,6 @@ def delivery_data(partner):
 
     if partner.parent_id and partner.parent_id.is_company:
         partner_data["companyName"] = partner.parent_id.name
-
-    for attr in ("line1", "line2", "line3"):
-        if len(partner_data.get(attr) or "") > 35:  # handle False and None
-            raise AddressTooLong(partner)
 
     if not (partner_data["phoneNumber"] or partner_data["mobileNumber"]):
         raise ColissimoError(

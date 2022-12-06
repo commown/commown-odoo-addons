@@ -117,25 +117,6 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
                 {"active_model": leads._name, "active_ids": leads.ids}
             ).run()
 
-    def test_shipping_data_address_too_long(self):
-        """When a partner has a too long address, a user error is raised
-        with its name (useful when printing several labels at once).
-        """
-        other_partner = self.lead.partner_id.copy({"street": "x" * 100})
-        other_partner.name = "John TestAddressTooLong"
-
-        leads = self.env["crm.lead"]
-        for num in range(5):
-            leads += self.lead.copy({"name": "[SO%05d] Test lead" % num})
-            if num == 3:
-                leads[-1].recipient_partner_id = other_partner
-
-        with self.assertRaises(UserError) as err:
-            self._print_outward_labels(leads)
-        self.assertEqual(
-            err.exception.name, 'Address too long for "John TestAddressTooLong"'
-        )
-
     def test_shipping_data_empty_name(self):
         self.lead.partner_id.firstname = False
         data = shipping_data(
