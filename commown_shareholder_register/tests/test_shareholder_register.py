@@ -1,4 +1,9 @@
+from base64 import decodebytes
 from datetime import date
+from io import BytesIO
+
+from odf import opendocument
+from odf.table import Table, TableCell, TableRow
 
 from odoo.tests import common
 
@@ -79,21 +84,44 @@ class TestShareholderRegister(common.SavepointCase):
         cls._add_shares(cls.partner_2, cls.account_porteur, (2022, 3, 12), 20)
         cls._add_shares(cls.partner_3, cls.account_soutient, (2022, 3, 12), -200)
 
-    def shareholders(self, *date_tuple):
+    def register(self, *date_tuple):
         reg = self.env["commown_shareholder_register.register"].create(
             {"date": date(*date_tuple)}
         )
-        return reg.get_shareholders()
+        return reg
 
     def test_get_shareholders(self):
-        result = self.shareholders(2022, 7, 24)
+        result = self.register(2022, 7, 24).get_shareholders()
         # Check total balance
-        self.assertEquals(result["total"]["balance"], 2300)
+        self.assertEqual(result["total"]["balance"], 2300)
         # Check college assignation
-        self.assertEquals(result["partners"][self.partner_2]["college"]["letter"], "D")
+        self.assertEqual(result["partners"][self.partner_2]["college"]["letter"], "D")
         # Check college balance calculation
-        self.assertEquals(result["colleges"]["A"]["total"], 2000)
-        self.assertEquals(result["colleges"]["D"]["total"], 300)
+        self.assertEqual(result["colleges"]["A"]["total"], 2000)
+        self.assertEqual(result["colleges"]["D"]["total"], 300)
         # Check that the partner with no more shares is not in the register
-        result = self.shareholders(2022, 8, 13)
+        result = self.register(2022, 8, 13).get_shareholders()
         self.assertFalse(self.partner_1 in result["partners"])
+
+        self.assertCountEqual(
+            result["warnings"],
+            [
+                "The partner Partner 2 has not enough shares for college A",
+                "The partner Partner 3 has a negative share number",
+            ],
+        )
+
+    def test_report(self):
+        # Beware that the row index depends on the number of colleges
+        sheet_idx, row_idx, col_idx = 0, 6, 2
+        register = self.register(2022, 8, 13)
+        reg_data = register.get_shareholders()
+        register.generate_register()
+        ods_file = opendocument.load(BytesIO(decodebytes(register.report)))
+        value = (
+            ods_file.getElementsByType(Table)[sheet_idx]
+            .getElementsByType(TableRow)[row_idx]
+            .getElementsByType(TableCell)[col_idx]
+            .getAttribute("value")
+        )
+        self.assertEqual(float(value), reg_data["total"]["balance"])
