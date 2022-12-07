@@ -13,6 +13,11 @@
     "website": "https://commown.coop",
     "depends": [
         "account",
+        "report_py3o",
+    ],
+    "data": [
+        "report/report.xml",
+        "views/register.xml",
     ],
     "installable": True,
 }

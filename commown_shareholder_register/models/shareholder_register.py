@@ -1,4 +1,6 @@
-from odoo import _, fields, models
+import base64
+
+from odoo import _, api, fields, models
 
 NOMINAL_SHARE_AMOUNT = 20
 
@@ -66,6 +68,8 @@ class ShareholderRegister(models.TransientModel):
         string="Date",
         help="Date of the register",
     )
+    report = fields.Binary("Shareholder Register", readonly=True)
+    report_name = fields.Char(string="Filename", size=256, readonly=True)
 
     def get_shareholders(self):
         data = self.env["account.move.line"].read_group(
@@ -151,3 +155,28 @@ class ShareholderRegister(models.TransientModel):
         result["total"]["shareholder_number"] = len(result["partners"])
 
         return result
+
+    @api.multi
+    def generate_register(self):
+        report = (
+            self.env["ir.actions.report"]
+            ._get_report_from_name("commown_shareholder_register.spreadsheet")
+            .ensure_one()
+        )
+        result = report.render(self.ids)[0]
+        self.write(
+            {
+                "report": base64.encodebytes(result),
+                "report_name": "register.ods",
+            }
+        )
+
+        action = {
+            "name": "register",
+            "type": "ir.actions.act_url",
+            "url": "web/content/?model=%s&id=%d&filename_field=report_name&"
+            "field=report&download=true&filename=%s"
+            % (self._name, self.id, self.report_name),
+            "target": "self",
+        }
+        return action
