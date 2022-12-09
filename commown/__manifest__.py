@@ -68,6 +68,7 @@
         "views/crm_lead.xml",
         "views/payment_portal_templates.xml",
         "views/product_template.xml",
+        "views/project_project.xml",
         "views/project_task.xml",
         "views/res_lang.xml",
         "views/res_partner.xml",
