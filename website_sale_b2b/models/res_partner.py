@@ -16,6 +16,10 @@ def _all_children(entities):
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    website_id = fields.Many2one(
+        help="Website the user can log in. An empty value means all websites."
+    )
+
     @api.multi
     def rented_quantity(self, product_template=None, product_category=None):
         self.ensure_one()
