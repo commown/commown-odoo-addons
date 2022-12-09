@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <!-- Edit issue type form -->
+
+  <record model="ir.ui.view" id="view_task_form2">
+    <field name="name">project.task.form</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="commown_contractual_issue.view_task_form2"/>
+    <field name="arch" type="xml">
+      <!-- Add internal follow-up in it's own page-->
+      <xpath expr="//notebook" position="inside">
+        <page name="internal_followup" string="Internal Followup" attrs="{'invisible': [('show_internal_followup', '=', False)]}">
+            <field name="internal_followup" type="html"/>
+            <field name="show_internal_followup" invisible="1"/>
+        </page>
+    </xpath>
+    </field>
+  </record>
+
+  <!-- Edit task type form -->
   <record model="ir.ui.view" id="task_type_edit">
     <field name="name">project.task.type.form</field>
     <field name="model">project.task.type</field>

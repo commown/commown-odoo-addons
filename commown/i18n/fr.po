@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-05 19:28+0000\n"
-"PO-Revision-Date: 2022-12-05 19:28+0000\n"
+"POT-Creation-Date: 2022-12-16 15:33+0000\n"
+"PO-Revision-Date: 2022-12-16 15:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -436,6 +436,13 @@ msgid "In Progress"
 msgstr "En cours"
 
 #. module: commown
+#: model:ir.model.fields,field_description:commown.field_project_task__internal_followup
+#: model_terms:ir.ui.view,arch_db:commown.edit_project
+#: model_terms:ir.ui.view,arch_db:commown.view_task_form2
+msgid "Internal Followup"
+msgstr "Suivi Interne"
+
+#. module: commown
 #: model:ir.model,name:commown.model_account_invoice
 msgid "Invoice"
 msgstr "Facture"
@@ -639,6 +646,11 @@ msgid "Product Template"
 msgstr "Modèle d'article"
 
 #. module: commown
+#: model:ir.model,name:commown.model_project_project
+msgid "Project"
+msgstr "Projet"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_res_partner__proof_of_address
 #: model:ir.model.fields,field_description:commown.field_res_users__proof_of_address
 msgid "Proof of address"
@@ -668,6 +680,12 @@ msgstr "Filtrer sur des partenaires"
 #: model:ir.model,name:commown.model_sale_order
 msgid "Sale Order"
 msgstr "Commande"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_project_project__show_internal_followup
+#: model:ir.model.fields,field_description:commown.field_project_task__show_internal_followup
+msgid "Show internal follow-up"
+msgstr "Afficher le suivi interne"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate

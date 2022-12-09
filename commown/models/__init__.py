@@ -8,6 +8,7 @@ from . import coupon
 from . import mass_reconcile
 from . import payment
 from . import product_template
+from . import project_project
 from . import project_task
 from . import project_task_type
 from . import reconciliation_widget
