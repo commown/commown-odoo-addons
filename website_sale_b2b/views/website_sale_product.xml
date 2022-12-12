@@ -35,9 +35,7 @@
     <template id="product_quantity" inherit_id="website_sale.product_quantity">
 
       <xpath expr="//input[@type='text'][@name='add_qty']" position="attributes">
-        <attribute name="data-min"/>
-        <attribute name="t-att-data-min">min_add_qty</attribute>
-        <attribute name="t-att-value">max(add_qty, min_add_qty)</attribute>
+        <attribute name="t-att-value">max(add_qty, 1)</attribute>
       </xpath>
 
       <xpath expr="//a[@id='add_to_cart']" position="before">
