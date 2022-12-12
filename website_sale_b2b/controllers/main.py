@@ -87,20 +87,19 @@ class WebsiteSaleB2B(WebsiteSale):
         if request.website == env.ref("website_sale_b2b.b2b_website"):
 
             partner = env.user.partner_id.commercial_partner_id
-            if partner != env.user.partner_id:
 
-                pl = request.website.get_current_pricelist()
-                rental_infos = pl._rented_quantity_infos(product, partner)
+            plist = request.website.get_current_pricelist()
+            rental_infos = plist._rented_quantity_infos(product, partner)
 
-                if "add_qty" not in kwargs:
-                    _rid = pl._compute_price_rule(
-                        [(product, self.BIG_PRODUCT_QTY, partner)]
-                    )[product.id][1]
-                    if _rid:
-                        best_rule = env["product.pricelist.item"].browse(_rid)
-                        kwargs["add_qty"] = (
-                            best_rule.min_quantity - rental_infos["quantity"]
-                        )
+            if "add_qty" not in kwargs:
+                _rid = plist._compute_price_rule(
+                    [(product, self.BIG_PRODUCT_QTY, partner)]
+                )[product.id][1]
+                if _rid:
+                    best_rule = env["product.pricelist.item"].browse(_rid)
+                    kwargs["add_qty"] = (
+                        best_rule.min_quantity - rental_infos["quantity"]
+                    )
 
         result = super().product(product, category, search, **kwargs)
         result.qcontext["rental_infos"] = rental_infos
