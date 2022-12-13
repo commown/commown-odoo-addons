@@ -72,7 +72,7 @@
       <t t-set="product" t-value="line.product_id"/>
       <t t-set="product_tmpl" t-value="product.product_tmpl_id"/>
       <t t-if="product_tmpl.is_rental">
-        (<t t-esc="product.website_price / product_tmpl.rental_price_ratio()" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+        (<t t-esc="line.price_unit / product_tmpl.rental_price_ratio()" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
         <span  t-field="product.rental_frequency"/>)
       </t>
       <t t-if="product_tmpl.is_rental and product_tmpl.is_deposit"><strong> - Deposit</strong></t>
@@ -87,7 +87,7 @@
       <t t-set="product" t-value="line.product_id"/>
       <t t-set="product_tmpl" t-value="product.product_tmpl_id"/>
       <t t-if="product_tmpl.is_rental">
-        (<t t-esc="product.website_price / product_tmpl.rental_price_ratio()"
+        (<t t-esc="line.price_unit / product_tmpl.rental_price_ratio()"
             t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
         <span t-field="product.rental_frequency"/>)
         <p t-if="product_tmpl.is_deposit">Deposit</p>
