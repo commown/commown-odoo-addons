@@ -20,21 +20,31 @@
             <span t-esc="line.product_id.display_name"/>
           </a>
         </t>
+
         <div t-if="line.product_id.is_rental" class="rent">
+
           <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
-          ( loyer unitaire :
-          <span t-esc="line.price_unit * line.product_id.rental_price / (line.product_id.list_price or 1)"
-                t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
-          <span t-field="line.product_id.rental_frequency"/>
-          <t t-foreach="contracts" t-as="contract">
-            <t> - </t>
-            <span t-if="len(contracts) &gt; 1">contrat <span t-field="contract.name"/>, </span>
-            <span t-if="contract.date_start &lt; datetime.date(2030, 1, 1)" class="commitment-end-date">
-              fin de la période d'engagement :
-              <span t-field="contract.commitment_end_date" t-options="{'widget': 'date'}"/>
-            </span>
-            <span t-else="">location non démarrée</span>
-          </t>)
+
+          <p class="mb-0">Loyer unitaire :
+            <span t-esc="line.price_unit * line.product_id.rental_price / (line.product_id.list_price or 1)"
+                  t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
+            <span t-field="line.product_id.rental_frequency"/>
+          </p>
+
+          <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :
+            <ul class="contract-list">
+              <t t-foreach="contracts" t-as="contract">
+                <li>Contrat <span t-field="contract.name"/> :
+                  <span t-if="contract.date_start &lt; datetime.date(2030, 1, 1)"
+                        class="commitment-end-date"
+                        t-field="contract.commitment_end_date"
+                        t-options="{'widget': 'date'}"/>
+                  <span t-else="">Location non démarrée</span>
+                </li>
+              </t>
+            </ul>
+          </p>
+
         </div>
         <p>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
