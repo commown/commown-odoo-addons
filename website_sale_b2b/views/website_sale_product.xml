@@ -38,6 +38,11 @@
         <attribute name="t-att-value">max(add_qty, 1)</attribute>
       </xpath>
 
+      <!-- Prevent form submission on enter by adding another -invisible- input -->
+      <xpath expr="//input[@type='text'][@name='add_qty']" position="after">
+        <input type="text" style="display: none;"/>
+      </xpath>
+
       <xpath expr="//a[@id='add_to_cart']" position="before">
         <div t-if="rental_infos['quantity'] > 0.0"
              class="small font-weight-bold mb-2">
