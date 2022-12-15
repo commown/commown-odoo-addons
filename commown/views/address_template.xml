@@ -37,6 +37,7 @@
                  name="vat"
                  t-attf-class="form-control #{error.get('vat') and 'is-invalid' or ''}"
                  t-att-value="'vat' in checkout and checkout['vat']" />
+          <p t-if="'vat' in error" class="text-error">Please enter a valid VAT number</p>
         </div>
       </t>
     </xpath>
