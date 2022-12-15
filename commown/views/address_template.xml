@@ -32,7 +32,7 @@
                  t-att-value="'commercial_company_name' in checkout and checkout['commercial_company_name'] or 'company_name' in checkout and checkout['company_name']" />
         </div>
         <div t-attf-class="form-group #{error.get('vat') and 'o_has_error' or ''} col-lg-6 div_vat">
-          <label class="col-form-label" for="vat">VAT</label>
+          <label class="col-form-label label-optional" for="vat">VAT</label>
           <input type="text"
                  name="vat"
                  t-attf-class="form-control #{error.get('vat') and 'is-invalid' or ''}"
@@ -59,7 +59,7 @@
          t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
       <input type="hidden"
              name="field_required"
-             t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name,vat' if is_b2b else '')" />
+             t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name' if is_b2b else '')" />
     </xpath>
 
   </template>
