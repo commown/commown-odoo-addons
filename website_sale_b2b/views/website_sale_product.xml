@@ -57,6 +57,14 @@
         </div>
       </xpath>
 
+      <xpath expr="//a[@id='add_to_cart']" position="after">
+        <div t-if="env.user.has_group('sales_team.group_sale_manager') and product.is_b2b()"
+             class="text-muted">(viewed by sales only) -
+          <span>Variant id: <span id="variant_id_placeholder"></span></span>
+          <script type="text/javascript" src="/website_sale_b2b/static/src/js/website_sale.js" />
+        </div>
+      </xpath>
+
     </template>
 
     <!-- Cart lines modifications: -->
