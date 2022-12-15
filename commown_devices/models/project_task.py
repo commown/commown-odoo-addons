@@ -21,7 +21,7 @@ class ProjectTask(models.Model):
     )
 
     def _compute_storable_product_domain(self):
-        domain = [("tracking", "=", "serial")]
+        domain = [("type", "=", "product")]
         if self.require_contract:
             products = self._may_be_related_lots().mapped("product_id")
             domain = [("id", "in", products.ids)]
