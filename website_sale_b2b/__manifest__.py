@@ -22,6 +22,7 @@
         "data/website.xml",
         "views/login.xml",
         "views/payment_portal_templates.xml",
+        "views/portal_wizard.xml",
         "views/product_pricelist.xml",
         "views/product_template.xml",
         "views/res_users.xml",
