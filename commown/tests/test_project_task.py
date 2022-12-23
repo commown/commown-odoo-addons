@@ -1,11 +1,49 @@
+from odoo.exceptions import AccessError
 from odoo.tests.common import TransactionCase, at_install, post_install
 
 
 @at_install(False)
 @post_install(True)
-class ProjectTaskTC(TransactionCase):
+class ProjectTaskModelTC(TransactionCase):
+    def test_followup_view(self):
+        project = self.env.ref("commown_self_troubleshooting.support_project")
+        project.show_internal_followup = True
+
+        partner = self.env.ref("base.partner_demo_portal")
+        task = self.env["project.task"].create(
+            {
+                "name": "Commown test",
+                "project_id": project.id,
+                "partner_id": partner.id,
+                "internal_followup": "<p>Coucou</p>",
+            }
+        )
+        self.env["mail.followers"].create(
+            {
+                "partner_id": partner.id,
+                "res_id": task.id,
+                "res_model": "project.task",
+            }
+        )
+
+        demo_user = self.env.ref("base.user_demo")
+        task_user = self.env["project.task"].sudo(demo_user).browse(task.id)
+        self.assertEquals(task_user.name, "Commown test")
+        self.assertEquals(task_user.internal_followup, "<p>Coucou</p>")
+
+        task_portal = self.env["project.task"].sudo(partner.user_ids).browse(task.id)
+        self.assertEquals(task_portal.name, "Commown test")
+        with self.assertRaises(AccessError) as err:
+            task_portal.internal_followup
+        self.assertIn("security restrictions", err.exception.name)
+        self.assertIn("internal_followup", err.exception.name)
+
+
+@at_install(False)
+@post_install(True)
+class ProjectTaskActionTC(TransactionCase):
     def setUp(self):
-        super(ProjectTaskTC, self).setUp()
+        super(ProjectTaskActionTC, self).setUp()
 
         self.project = self.env.ref("commown_self_troubleshooting.support_project")
 

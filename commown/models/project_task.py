@@ -14,6 +14,11 @@ class ProjectTask(models.Model):
         ],
     )
 
+    show_internal_followup = fields.Boolean(
+        "Show internal follow-up", related="project_id.show_internal_followup"
+    )
+    internal_followup = fields.Html(groups="base.group_user")
+
     def slimpay_payment_issue_process_automatically(self):
         """Handle a payment issue automatically only when it comes from a
         contract generated invoice.
