@@ -6,14 +6,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-25 13:22+0000\n"
-"PO-Revision-Date: 2022-11-25 13:22+0000\n"
+"POT-Creation-Date: 2022-12-23 17:03+0000\n"
+"PO-Revision-Date: 2022-12-23 17:03+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
+msgid "(viewed by sales only) -\n"
+"          <span>Variant id: <span id=\"variant_id_placeholder\"/></span>"
+msgstr "(vu par les vendeurs uniquement) -\n"
+"          <span>ID de la variante : <span id=\"variant_id_placeholder\"/></span>"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
@@ -79,9 +86,9 @@ msgid "Contact"
 msgstr "Contact"
 
 #. module: website_sale_b2b
-#: model:crm.stage,name:website_sale_b2b.big_b2b_stage_new
-msgid "Demandes Shop Hors-seuil"
-msgstr "Demandes Shop Hors-seuil"
+#: model:ir.model.fields,help:website_sale_b2b.field_portal_wizard_user__website_id
+msgid "Empty means all websites"
+msgstr "La valeur vide signifie tous les sites"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist_item__percentage_exclude_extra
@@ -89,9 +96,14 @@ msgid "Exclude variant extra prices from reductions?"
 msgstr "Ne pas appliquer sur le supplément de prix des variantes"
 
 #. module: website_sale_b2b
-#: model:website,login_checkbox_message:website_sale_b2b.b2b_website
-msgid "Je représente une entreprise, association, collectivité..."
-msgstr "Je représente une entreprise, association, collectivité..."
+#: model:ir.model,name:website_sale_b2b.model_portal_wizard
+msgid "Grant Portal Access"
+msgstr "Gestion de l'accès au portail"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_portal_wizard_user__had_user
+msgid "Had User"
+msgstr "Avait déjà un utilisateur"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_product_pricelist__account_for_rented_quantity_category_ids
@@ -104,6 +116,11 @@ msgid "Login checkbox message"
 msgstr "Message de la case à cocher sur la page de connexion"
 
 #. module: website_sale_b2b
+#: model:crm.stage,name:website_sale_b2b.big_b2b_stage_new
+msgid "New quotation submitted"
+msgstr "Nouveau devis soumis"
+
+#. module: website_sale_b2b
 #: selection:product.pricelist,account_for_rented_quantity:0
 msgid "No"
 msgstr "Non"
@@ -112,6 +129,11 @@ msgstr "Non"
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.login
 msgid "Or am I at the wrong place?"
 msgstr "Ou je suis au mauvais endroit..."
+
+#. module: website_sale_b2b
+#: model:ir.model,name:website_sale_b2b.model_portal_wizard_user
+msgid "Portal User Config"
+msgstr "Paramétrage du portail utilisateur"
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_pricelist
@@ -127,6 +149,11 @@ msgstr "Élément de la liste de prix"
 #: model:ir.model,name:website_sale_b2b.model_product_template
 msgid "Product Template"
 msgstr "Modèle d'article"
+
+#. module: website_sale_b2b
+#: model:ir.model.fields,field_description:website_sale_b2b.field_res_partner__website_id
+msgid "Registration Website"
+msgstr "Site web"
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_sale_order
@@ -148,6 +175,11 @@ msgstr "Ventes"
 #: model:ir.model.fields,help:website_sale_b2b.field_product_pricelist__account_for_rented_quantity
 msgid "Take into account the quantity already rented by customer's company to compute which price rule to apply."
 msgstr "Prendre en compte les articles déjà loués par l'entreprise du client pour déterminer la règle de prix à appliquer"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
+msgid "This reduced price takes into account the"
+msgstr "Ce tarif est réduit en prenant en compte les"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
@@ -173,6 +205,7 @@ msgstr "Vous allez être recontacté.e dans les prochains jours."
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_website
+#: model:ir.model.fields,field_description:website_sale_b2b.field_portal_wizard_user__website_id
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_template_form_view
 msgid "Website"
 msgstr "Site Web"
@@ -188,7 +221,36 @@ msgid "Website Product Category"
 msgstr "Catégorie d'articles du site Web"
 
 #. module: website_sale_b2b
+#: model:ir.model.fields,help:website_sale_b2b.field_res_partner__website_id
+msgid "Website the user can log in. An empty value means all websites."
+msgstr "Site web de connexion. Une valeur vide signifie tous les sites."
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
+msgid "category"
+msgstr " "
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
+msgid "devices"
+msgstr "appareils"
+
+#. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.cart_line_product_link
 msgid "excl. taxes"
 msgstr "HT"
 
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
+msgid "of the"
+msgstr "de la catégorie"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
+msgid "of the same model"
+msgstr "du même modèle"
+
+#. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
+msgid "you already have."
+msgstr "que vous avez déjà."
