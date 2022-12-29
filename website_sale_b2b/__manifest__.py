@@ -26,6 +26,7 @@
         "views/product_pricelist.xml",
         "views/product_template.xml",
         "views/res_users.xml",
+        "views/sale_portal_templates.xml",
         "views/signup.xml",
         "views/website.xml",
         "views/website_sale_order.xml",
