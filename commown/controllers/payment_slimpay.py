@@ -17,7 +17,15 @@ class CommownSlimpayController(SlimpayControllerWebsiteSale):
         auth="public",
         website=True,
     )
-    def payment_slimpay_transaction(self, acquirer_id, token=None, **kwargs):
+    def payment_slimpay_transaction(
+        self,
+        acquirer_id,
+        save_token=False,
+        so_id=None,
+        access_token=None,
+        token=None,
+        **kwargs
+    ):
         """This method reuses the partner's token unless the SEPA mandate
         product is in current sale order. Note this plays well with
         the `commown.payment` template (in website_sale_templates.xml)
@@ -26,7 +34,8 @@ class CommownSlimpayController(SlimpayControllerWebsiteSale):
         """
         _logger.debug("Examine if partner's mandate can be reused...")
 
-        so = request.env["sale.order"].sudo().browse(request.session["sale_order_id"])
+        so_id = so_id or request.session["sale_order_id"]
+        so = request.env["sale.order"].sudo().browse(so_id)
         sepa_id = request.env.ref("commown.sepa_mandate").id
 
         if (
@@ -41,6 +50,9 @@ class CommownSlimpayController(SlimpayControllerWebsiteSale):
 
         return super(CommownSlimpayController, self).payment_slimpay_transaction(
             acquirer_id,
+            save_token=save_token,
+            so_id=so_id,
+            access_token=access_token,
             token=token,
             **kwargs,
         )
