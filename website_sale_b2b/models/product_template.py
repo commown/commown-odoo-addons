@@ -13,6 +13,16 @@ class ProductTemplate(models.Model):
         ),
     )
 
+    description_sale_is_template = fields.Boolean(
+        "Description for customers is a template",
+        help=(
+            "If set, the sale order line descriptions with this article are"
+            " interpreted as mako templates, with 'record' being the order line,"
+            " and recomputed as soon as the unit price of the order line changes."
+        ),
+        default=False,
+    )
+
     @api.multi
     def is_b2b(self):
         self.ensure_one()
