@@ -97,9 +97,7 @@ class WebsiteSaleB2B(WebsiteSale):
                 )[product.id][1]
                 if _rid:
                     best_rule = env["product.pricelist.item"].browse(_rid)
-                    kwargs["add_qty"] = (
-                        best_rule.min_quantity - rental_infos["quantity"]
-                    )
+                    kwargs["add_qty"] = best_rule.min_quantity
 
         result = super().product(product, category, search, **kwargs)
         result.qcontext["rental_infos"] = rental_infos
