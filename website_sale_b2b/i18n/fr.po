@@ -98,6 +98,11 @@ msgid "Empty means all websites"
 msgstr "La valeur vide signifie tous les sites"
 
 #. module: website_sale_b2b
+#: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
+msgid "En raison du nombre important d’appareils souhaités, un membre de l’équipe commerciale vous recontactera rapidement pour finaliser la commande."
+msgstr "En raison du nombre important d’appareils souhaités, un membre de l’équipe commerciale vous recontactera rapidement pour finaliser la commande."
+
+#. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist_item__percentage_exclude_extra
 msgid "Exclude variant extra prices from reductions?"
 msgstr "Ne pas appliquer sur le supplément de prix des variantes"
@@ -203,13 +208,6 @@ msgstr "Prendre en compte les articles déjà loués par l'entreprise du client 
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "This reduced price takes into account the"
 msgstr "Ce tarif est réduit en prenant en compte les"
-
-#. module: website_sale_b2b
-#: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
-msgid "Un membre de l’équipe commerciale vous recontactera rapidement\n"
-"        pour finaliser la commande."
-msgstr "Un membre de l’équipe commerciale vous recontactera rapidement\n"
-"        pour finaliser la commande."
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
