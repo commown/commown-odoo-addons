@@ -12,6 +12,7 @@
     "website": "https://commown.coop",
     "depends": [
         "crm",
+        "mail",
         "product_rental",
         "website_sale",
     ],
