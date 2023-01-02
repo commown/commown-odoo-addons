@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-16 15:33+0000\n"
-"PO-Revision-Date: 2022-12-16 15:33+0000\n"
+"POT-Creation-Date: 2023-01-02 15:54+0000\n"
+"PO-Revision-Date: 2023-01-02 15:54+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -160,11 +160,6 @@ msgstr "Rappel finalisation de votre commande : Pensez à mettre vos documents e
 "L'équipe Commown - contact@commown.coop"
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
-msgid "( loyer unitaire :"
-msgstr "(loyer unitaire :"
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.product
 msgid "<b>Product is not available for the moment</b>"
 msgstr "<b>Article indisponible pour le moment</b>"
@@ -200,7 +195,7 @@ msgid "<i title=\"Download document\" class=\"fa fa-download\"/>"
 msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
 
 #. module: commown
-#: code:addons/commown/models/sale_order.py:67
+#: code:addons/commown/models/sale_order.py:69
 #, python-format
 msgid "<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
 msgstr "<p><b>N° de commande :</b> {sale_name}</p><p><b>Date de la commande :</b> {date.day}-{date.month}-{date.year}</p><p><b>Article :</b> {product_name}</p>"
@@ -328,6 +323,11 @@ msgid "Contract Template"
 msgstr "Modèle de contrat"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Contrat"
+msgstr "Contrat"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_res_partner__country_id
 #: model:ir.model.fields,field_description:commown.field_res_users__country_id
 msgid "Country"
@@ -371,11 +371,6 @@ msgid "Documents sent by email"
 msgstr "Documents envoyés par courrier électronique"
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.address
-msgid "Email"
-msgstr "Courriel"
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
 msgid "En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance des"
 msgstr "En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance des"
@@ -402,6 +397,11 @@ msgid "Filter"
 msgstr "Filtrer"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Fin des périodes d'engagement :"
+msgstr "Fin des périodes d'engagement :"
+
+#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
 #: model_terms:ir.ui.view,arch_db:commown.signup_field
 msgid "First name"
@@ -411,6 +411,11 @@ msgstr "Prénom"
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__income_exchange_account_id
 msgid "Gain Exchange Rate Account"
 msgstr "Compte de gain de change"
+
+#. module: commown
+#: model:ir.model,name:commown.model_portal_wizard
+msgid "Grant Portal Access"
+msgstr "Gérer l'accès au portal"
 
 #. module: commown
 #: selection:project.task,priority:0
@@ -525,6 +530,11 @@ msgid "Liens"
 msgstr "Liens"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Location non démarrée"
+msgstr "Location non démarrée"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__expense_exchange_account_id
 msgid "Loss Exchange Rate Account"
 msgstr "Compte de perte de change"
@@ -533,6 +543,11 @@ msgstr "Compte de perte de change"
 #: selection:project.task,priority:0
 msgid "Low"
 msgstr "Faible"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Loyer unitaire :"
+msgstr "Loyer unitaire :"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
@@ -631,6 +646,16 @@ msgid "Payment label"
 msgstr "Libellé bancaire"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "Please enter a valid VAT number"
+msgstr "Merci de saisir un n° de TVA valide"
+
+#. module: commown
+#: model:ir.model,name:commown.model_portal_wizard_user
+msgid "Portal User Config"
+msgstr "Paramétrage du portail utilisateur"
+
+#. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
 msgid "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
 msgstr "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
@@ -686,6 +711,11 @@ msgstr "Filtrer sur des partenaires"
 #: model:ir.model,name:commown.model_sale_order
 msgid "Sale Order"
 msgstr "Commande"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "See product details"
+msgstr "Voir les détails du produit"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_project__show_internal_followup
@@ -784,11 +814,6 @@ msgid "VAT"
 msgstr "TVA"
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
-msgid "Voir les détails"
-msgstr "Voir les détails"
-
-#. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
 msgid "Vous allez recevoir un SMS avec un code pour valider le mandat."
 msgstr "Vous allez recevoir un SMS avec un code pour valider le mandat."
@@ -819,6 +844,11 @@ msgstr "Publié sur le web"
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__write_off
 msgid "Write off allowed"
 msgstr "Écart autorisé"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "Zip Code"
+msgstr "Code postal"
 
 #. module: commown
 #: model:mail.template,subject:commown.email_send_invoice_from_contract
@@ -899,10 +929,6 @@ msgid "[commown] Send a reminder email concerning an issue"
 msgstr "[commown] Envoyer un courriel de rappel concernant une demande d'assistance"
 
 #. module: commown
-#: model:base.automation,name:commown.issue_reminder_delay_expired
-#: model:base.automation,name:commown.issue_waiting_customer_for_too_long
-#: model:base.automation,name:commown.manual_issue_waiting_for_too_long
-#: model:ir.actions.server,name:commown.action_move_issue_to_stop_waiting_stage
 #: model:ir.actions.server,name:commown.manual_issue_waiting_for_too_long_ir_actions_server
 msgid "[commown] Time spent in the manual followup stage was too long"
 msgstr "[commown] Le temps passé dans l'étape de suivi manuel a expiré"
@@ -918,29 +944,14 @@ msgid "conditions de services et informations légales"
 msgstr "conditions de services et informations légales"
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
-msgid "contrat"
-msgstr "contrat"
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
 msgid "et je les accepte."
 msgstr "et je les accepte."
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
-msgid "fin de la période d'engagement :"
-msgstr "fin de la période d'engagement :"
-
-#. module: commown
 #: model:product.template,weight_uom_name:commown.sepa_mandate
 msgid "kg"
 msgstr "kg"
-
-#. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
-msgid "location non démarrée"
-msgstr "location non démarrée"
 
 #. module: commown
 #: model:mail.template,subject:commown.sms_template_lead_doc_reminder
