@@ -79,6 +79,11 @@
           </div>
         </div>
 
+        <!-- Display line templated description sale converted to HTML
+             (without the product name, which is already display above) -->
+        <p class="mx-4 p-4 bg-light"
+           t-raw="env['ir.qweb.field.text'].value_to_html(line.templated_description_sale(with_prefix=False), None)"/>
+
     </xpath>
 
   </template>
