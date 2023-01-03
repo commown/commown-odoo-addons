@@ -17,9 +17,8 @@
 
       <div t-if="not is_big_b2b" class="alert alert-warning" role="alert">
         En cliquant sur "Accepter et payer", je reconnais avoir pris connaissance des
-        <a class="fr lang" target="_blank"
-           href="https://commown.coop/mentions-legales">conditions de services et informations légales</a><a class="de lang" target="_blank"
-           href="https://commown.coop/de/allgemeine_gesch%C3%A4ftsbedingungen/">conditions de services et informations légales</a>
+        <a target="_blank"
+           t-att-href="env.user.website_id.legal_notice_url">conditions de services et informations légales</a>
         et je les accepte.
       </div>
 

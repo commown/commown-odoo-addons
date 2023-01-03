@@ -8,6 +8,7 @@
 
       <xpath expr="//group[@name='other']/group" position="inside">
         <field name="login_checkbox_message"/>
+        <field name="legal_notice_url"/>
       </xpath>
 
     </field>
