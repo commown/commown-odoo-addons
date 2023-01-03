@@ -107,8 +107,10 @@ class WebsiteSaleB2B(WebsiteSale):
         "VAT is required in foreign countries"
         errors, messages = super().checkout_form_validate(mode, all_form_values, data)
         env = http.request.env
-        if http.request.website == env.ref("website_sale_b2b.b2b_website") and data.get(
-            "country_id"
-        ) != str(env.user.company_id.country_id.id):
+        if (
+            http.request.website == env.ref("website_sale_b2b.b2b_website")
+            and data.get("country_id")
+            and data.get("country_id") != str(env.user.company_id.country_id.id)
+        ):
             errors["vat"] = "error"
         return errors, messages
