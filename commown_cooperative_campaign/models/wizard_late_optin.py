@@ -7,6 +7,7 @@ from .discount import coop_ws_optin
 
 class LateOptinWizard(models.TransientModel):
     _name = "coupon.late.optin.wizard"
+    _description = "Helper to manually register a coupon"
 
     coupon_id = fields.Many2one(
         "coupon.coupon",
