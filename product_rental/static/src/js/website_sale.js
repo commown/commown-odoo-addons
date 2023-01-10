@@ -4,13 +4,12 @@ odoo.define('product_rental.ProductConfiguratorMixin', function (require) {
 var ProductConfiguratorMixin = require('sale.ProductConfiguratorMixin');
 var sAnimations = require('website.content.snippets.animation');
 
-var $rental_price = $('.oe_website_sale .oe_rental_price');
-var ratio = parseFloat($rental_price.data('rental-ratio'));
-
 sAnimations.registry.WebsiteSale.include({
     _onChangeCombination: function (ev, $parent, combination){
         this._super.apply(this, arguments);
-        let price = this._priceToStr(combination.price /= ratio);
+        let $rental_price = $parent.find('.oe_rental_price');
+        let ratio = parseFloat($rental_price.data('rental-ratio'));
+        let price = this._priceToStr(combination.price / ratio);
         $rental_price.find(".oe_currency_value").html(price);
     }
 });
