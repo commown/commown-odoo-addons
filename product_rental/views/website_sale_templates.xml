@@ -95,4 +95,37 @@
     </xpath>
   </template>
 
+  <template id="product_configurator_configure_optional_products"
+            inherit_id="sale.product_configurator_configure_optional_products">
+
+    <xpath expr="//*[hasclass('td-product_name')]//strong" position="after">
+      <t t-set="product_tmpl" t-value="product_variant.product_tmpl_id"/>
+      <t t-if="product_tmpl.is_rental">
+        (<span class="oe_rental_price" t-att-data-rental-ratio="product_tmpl.rental_price_ratio()"><t
+        t-esc="combination_info['price'] / product_tmpl.rental_price_ratio()"
+        t-options="{'widget': 'monetary', 'display_currency': (pricelist or product).currency_id}"/>
+        <span t-field="product_variant.rental_frequency"/>
+        </span>)
+      </t>
+      <t t-if="product_tmpl.is_rental and product_tmpl.is_deposit"><strong> - Deposit</strong></t>
+    </xpath>
+
+  </template>
+
+  <template id="optional_product_items"
+            inherit_id="sale.optional_product_items">
+    <xpath expr="//*[hasclass('td-product_name')]//strong" position="after">
+      <t t-set="product_tmpl" t-value="product_variant.product_tmpl_id"/>
+      <t t-if="product_tmpl.is_rental">
+        (<span class="oe_rental_price" t-att-data-rental-ratio="product_tmpl.rental_price_ratio()"><t
+        t-esc="combination_info['price'] / product_tmpl.rental_price_ratio()"
+        t-options="{'widget': 'monetary', 'display_currency': (pricelist or product).currency_id}"/>
+        <span t-field="product_variant.rental_frequency"/></span>)
+      </t>
+      <t t-if="product_tmpl.is_rental and product_tmpl.is_deposit"><strong> - Deposit</strong></t>
+    </xpath>
+  </template>
+
+
+
 </odoo>
