@@ -18,13 +18,29 @@
       </xpath>
     </template>
 
-    <template id="products_description_b2b" inherit_id="website_sale.products_description">
+    <template id="products_description_b2b"
+              inherit_id="website_sale.products_description">
       <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
         <attribute name="t-field">product.website_description_sale</attribute>
       </xpath>
     </template>
 
-    <template id="suggested_products_list_b2b" inherit_id="website_sale.suggested_products_list">
+    <template id="suggested_products_list_b2b"
+              inherit_id="website_sale.suggested_products_list">
+      <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
+        <attribute name="t-field">product.website_description_sale</attribute>
+      </xpath>
+    </template>
+
+    <template id="product_configurator_configure_optional_products"
+              inherit_id="sale.product_configurator_configure_optional_products">
+      <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
+        <attribute name="t-field">product.website_description_sale</attribute>
+      </xpath>
+    </template>
+
+    <template id="optional_product_items"
+              inherit_id="sale.optional_product_items">
       <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
         <attribute name="t-field">product.website_description_sale</attribute>
       </xpath>
