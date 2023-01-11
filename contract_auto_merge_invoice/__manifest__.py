@@ -5,8 +5,8 @@
 {
     "name": "Contract auto merge invoice",
     "category": "Accounting",
-    "version": "12.0.1.0.0",
-    "author": "Commown SCIC SAS",
+    "version": "12.0.1.1.0",
+    "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [
