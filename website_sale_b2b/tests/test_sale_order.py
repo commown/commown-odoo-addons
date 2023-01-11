@@ -31,3 +31,11 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         pt.description_sale = "${record.display_commitment_duration()}"
         so_line._recompute_name()
         self.assertEqual(so_line.name, prefix + "12 month(s)")
+
+    def test_action_quotation_send(self):
+        self.so.partner_id.website_id = self.env.ref("website_sale_b2b.b2b_website").id
+        action = self.so.action_quotation_send()
+        self.assertEqual(
+            action["context"]["default_template_id"],
+            self.env.ref("website_sale_b2b.email_template_edi_sale").id,
+        )

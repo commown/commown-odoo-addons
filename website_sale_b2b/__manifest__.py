@@ -20,6 +20,7 @@
     "data": [
         "data/crm.xml",
         "data/ir_config_parameter.xml",
+        "data/mail_template.xml",
         "data/website.xml",
         "views/login.xml",
         "views/payment_portal_templates.xml",
