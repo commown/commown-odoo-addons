@@ -38,32 +38,43 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         required=True,
     )
 
-    def present_location(self):
-        return self.task_id.lot_id.quant_ids.filtered(
-            lambda q: q.quantity > 0
-        ).location_id
+    present_location_id = fields.Many2one(
+        "stock.location",
+        string="Present location of the product",
+        required=True,
+    )
 
     def _possible_dest_locations(self):
         """Possible destinations: all listed the `destination_ref` attribute
         and their children, excluding views.
         """
-        orig_location = self.present_location()
+        orig_location = self.present_location_id
         result = self.env["stock.location"]
 
         for ref in self.destination_refs:
             loc = self.env.ref("commown_devices.%s" % ref)
+
             if loc != orig_location:
                 if loc.usage == "view":
                     result |= result.search(
-                        [("id", "child_of", loc.id), ("usage", "!=", "view")]
+                        [
+                            ("id", "child_of", loc.id),
+                            ("usage", "!=", "view"),
+                            ("id", "!=", orig_location.id),
+                        ]
                     )
                 else:
                     result |= loc
+
         return result
 
     @api.onchange("task_id")
     def onchange_task_id(self):
         if self.task_id:
+
+            self.present_location_id = self.task_id.lot_id.quant_ids.filtered(
+                lambda q: q.quantity > 0
+            ).location_id
             dest_locations = self._possible_dest_locations()
             return {"domain": {"location_dest_id": [("id", "in", dest_locations.ids)]}}
 
@@ -77,7 +88,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         return internal_picking(
             "Task-%s" % self.task_id.id,
             [lot],
-            self.present_location(),
+            self.present_location_id,
             self.location_dest_id,
             date=self.date,
             do_transfer=True,
