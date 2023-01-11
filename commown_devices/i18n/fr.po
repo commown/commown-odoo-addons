@@ -219,6 +219,11 @@ msgid "Pickings"
 msgstr "Expéditions"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__present_location_id
+msgid "Present location of the product"
+msgstr "Localisation actuelle"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__product_tmpl_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__product_tmpl_id
 msgid "Product"
