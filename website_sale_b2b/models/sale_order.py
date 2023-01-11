@@ -36,6 +36,17 @@ class SaleOrder(models.Model):
         lead.update({"team_id": team.id, "stage_id": stage.id})
         return lead
 
+    @api.multi
+    def action_quotation_send(self):
+        result = super().action_quotation_send()
+        ref = self.env.ref
+        if result["context"][
+            "default_use_template"
+        ] and self.partner_id.website_id == ref("website_sale_b2b.b2b_website"):
+            b2b_template = ref("website_sale_b2b.email_template_edi_sale")
+            result["context"]["default_template_id"] = b2b_template.id
+        return result
+
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
