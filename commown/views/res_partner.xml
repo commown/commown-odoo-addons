@@ -19,6 +19,7 @@
               </group>
               <group name="proof_of_address">
                 <field name="proof_of_address" widget="binary" class="oe_inline"/>
+                <field name="company_record" widget="binary" class="oe_inline"/>
               </group>
             </page>
           </xpath>

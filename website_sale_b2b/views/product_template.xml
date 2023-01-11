@@ -17,6 +17,10 @@
           </page>
         </xpath>
 
+        <xpath expr="//field[@name='description_sale']" position="before">
+          <field name="description_sale_is_template"/>
+        </xpath>
+
       </field>
     </record>
 

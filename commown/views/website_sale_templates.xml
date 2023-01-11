@@ -7,10 +7,7 @@
     <!-- Change link text to the product display name instead of the order
          line name which contains the whole product description, and
          move the latter to a fly-over icon -->
-    <xpath expr="//td[@id='product_name']" position="replace">
-
-      <td id="product_name" class="col-md-5">
-
+    <xpath expr="//td[@id='product_name']//*[@t-field='line.name']" position="replace">
         <t t-if="not line.product_id.website_published">
           <span t-esc="line.product_id.display_name"/>
         </t>
@@ -20,26 +17,38 @@
             <span t-esc="line.product_id.display_name"/>
           </a>
         </t>
+    </xpath>
+
+    <xpath expr="//td[@id='product_name']" position="inside">
         <div t-if="line.product_id.is_rental" class="rent">
+
           <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
-          ( loyer unitaire :
-          <span t-esc="line.price_unit * line.product_id.rental_price / (line.product_id.list_price or 1)"
-                t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
-          <span t-field="line.product_id.rental_frequency"/>
-          <t t-foreach="contracts" t-as="contract">
-            <t> - </t>
-            <span t-if="len(contracts) &gt; 1">contrat <span t-field="contract.name"/>, </span>
-            <span t-if="contract.date_start &lt; datetime.date(2030, 1, 1)" class="commitment-end-date">
-              fin de la période d'engagement :
-              <span t-field="contract.commitment_end_date" t-options="{'widget': 'date'}"/>
-            </span>
-            <span t-else="">location non démarrée</span>
-          </t>)
+
+          <p class="mb-0">Loyer unitaire :
+            <span t-esc="line.price_unit * line.product_id.rental_price / (line.product_id.list_price or 1)"
+                  t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
+            <span t-field="line.product_id.rental_frequency"/>
+          </p>
+
+          <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :
+            <ul class="contract-list">
+              <t t-foreach="contracts" t-as="contract">
+                <li>Contrat <span t-field="contract.name"/> :
+                  <span t-if="contract.date_start &lt; datetime.date(2030, 1, 1)"
+                        class="commitment-end-date"
+                        t-field="contract.commitment_end_date"
+                        t-options="{'widget': 'date'}"/>
+                  <span t-else="">Location non démarrée</span>
+                </li>
+              </t>
+            </ul>
+          </p>
+
         </div>
         <p>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                   t-attf-data-target="#myModal{{line.id}}">
-            Voir les détails
+            See product details
           </button>
         </p>
 
@@ -70,7 +79,10 @@
           </div>
         </div>
 
-      </td>
+        <!-- Display line templated description sale converted to HTML
+             (without the product name, which is already display above) -->
+        <p class="mx-4 p-4 bg-light"
+           t-raw="env['ir.qweb.field.text'].value_to_html(line.templated_description_sale(with_prefix=False), None)"/>
 
     </xpath>
 
@@ -176,37 +188,6 @@
       <div class="alert-warning mt-3 mb-3 pl-2 pr-2 pt-2 pb-2">
         Le règlement se fait par prélèvement bancaire. Pour finaliser
         la demande, vous aurez donc besoin de l'IBAN de votre compte.
-      </div>
-    </xpath>
-
-  </template>
-
-  <template id="payment" inherit_id="website_sale.payment">
-
-    <!-- Add UI elements to emphasize the user needs to check its delivery address -->
-    <xpath expr="//div[@id='shipping_and_billing']/*[1]" position="before">
-      <h3 class="card-title">Adresse de livraison</h3>
-      <h4 class="card-subtitle mb-3 text-danger">Merci de vérifier vos adresses</h4>
-    </xpath>
-
-  </template>
-
-  <template id="address" inherit_id="website_sale.address">
-
-    <xpath expr="//input[@name='street']" position="attributes">
-      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
-    </xpath>
-
-    <xpath expr="//input[@name='street2']" position="attributes">
-      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
-    </xpath>
-
-    <xpath expr="//div[@id='div_phone']" position="before">
-      <div t-attf-class="form-group #{error.get('email') and 'o_has_error' or ''} col-md-6">
-        <label class="col-form-label" for="email">Email</label>
-        <input type="email" name="email"
-               t-attf-class="form-control #{error.get('email') and 'is-invalid' or ''}"
-               t-att-value="'email' in checkout and checkout['email']" />
       </div>
     </xpath>
 

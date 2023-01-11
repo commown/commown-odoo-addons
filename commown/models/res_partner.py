@@ -17,7 +17,12 @@ class FileTooBig(Exception):
 class CommownPartner(models.Model):
     _inherit = "res.partner"
 
-    auto_widget_binary_fields = ["id_card1", "id_card2", "proof_of_address"]
+    auto_widget_binary_fields = [
+        "id_card1",
+        "id_card2",
+        "proof_of_address",
+        "company_record",
+    ]
 
     max_doc_image_size = (1240, 1754)
     max_doc_size_Mo = 5
@@ -50,6 +55,15 @@ class CommownPartner(models.Model):
         help=(
             "This field holds a file to store a proof of address. "
             + _binary_field_policy
+        ),
+    )
+
+    company_record = fields.Binary(
+        "Company record",
+        attachment=True,
+        store=True,
+        help=(
+            "This field holds a file to store a company record. " + _binary_field_policy
         ),
     )
 

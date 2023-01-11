@@ -5,26 +5,6 @@
       <xpath expr="//*[@t-field='product.rental_frequency']" position="before">
         <t t-if="product.is_b2b()"><span>excl. taxes</span></t>
       </xpath>
-
-      <!-- Remove deposit price: cannot use deposit price as product price in B2B
-           as sale drafts would use it which is not what we want. -->
-      <xpath expr="//*[hasclass('initial_deposit_title')]//ancestor::h4" position="attributes">
-        <attribute name="t-if">not product.is_b2b()</attribute>
-      </xpath>
-
-      <xpath expr="//*[hasclass('commitment')]/span[1]" position="replace">
-        <t t-if="not product.is_b2b()">
-          <span>Commitment duration: </span>
-        </t>
-        <t t-else="">
-          <span>Commitment duration: from </span>
-        </t>
-      </xpath>
-
-      <xpath expr="//*[hasclass('oe_rental_price')]" position="attributes">
-        <attribute name="t-esc">(product.is_b2b() and product.lst_price or product.website_price) * product.rental_price / (product.list_price or 1)</attribute>
-      </xpath>
-
     </template>
 
     <!-- Replace description_sale by website_description_sale -->
@@ -38,13 +18,29 @@
       </xpath>
     </template>
 
-    <template id="products_description_b2b" inherit_id="website_sale.products_description">
+    <template id="products_description_b2b"
+              inherit_id="website_sale.products_description">
       <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
         <attribute name="t-field">product.website_description_sale</attribute>
       </xpath>
     </template>
 
-    <template id="suggested_products_list_b2b" inherit_id="website_sale.suggested_products_list">
+    <template id="suggested_products_list_b2b"
+              inherit_id="website_sale.suggested_products_list">
+      <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
+        <attribute name="t-field">product.website_description_sale</attribute>
+      </xpath>
+    </template>
+
+    <template id="product_configurator_configure_optional_products"
+              inherit_id="sale.product_configurator_configure_optional_products">
+      <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
+        <attribute name="t-field">product.website_description_sale</attribute>
+      </xpath>
+    </template>
+
+    <template id="optional_product_items"
+              inherit_id="sale.optional_product_items">
       <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
         <attribute name="t-field">product.website_description_sale</attribute>
       </xpath>
@@ -52,7 +48,60 @@
 
     <!-- END Replace description_sale by website_description_sale -->
 
+    <template id="product_quantity" inherit_id="website_sale.product_quantity">
 
+      <xpath expr="//input[@type='text'][@name='add_qty']" position="attributes">
+        <attribute name="t-att-value">max(add_qty, 1)</attribute>
+      </xpath>
+
+      <!-- Prevent form submission on enter by adding another -invisible- input -->
+      <xpath expr="//input[@type='text'][@name='add_qty']" position="after">
+        <input type="text" style="display: none;"/>
+      </xpath>
+
+      <xpath expr="//a[@id='add_to_cart']" position="before">
+        <div t-if="rental_infos['quantity'] > 0.0"
+             class="small font-weight-bold mb-2">
+          This reduced price takes into account the <t t-esc="'%g' % rental_infos['quantity']"/> devices
+          <t t-if="pricelist.account_for_rented_quantity == 'product-category'">
+            of the <i t-esc="rental_infos['reason'].name"></i> category
+          </t>
+          <t t-elif="pricelist.account_for_rented_quantity == 'product-template'">
+            of the same model
+          </t>
+          you already have.
+        </div>
+      </xpath>
+
+      <xpath expr="//a[@id='add_to_cart']" position="after">
+        <div t-if="env.user.has_group('sales_team.group_sale_manager') and product.is_b2b()"
+             class="text-muted">(viewed by sales only) -
+          <span>Variant id: <span id="variant_id_placeholder"></span></span>
+          <script type="text/javascript" src="/website_sale_b2b/static/src/js/website_sale.js" />
+        </div>
+      </xpath>
+
+    </template>
+
+    <!-- Cart lines modifications: -->
+
+    <template id="cart_lines" inherit_id="website_sale.cart_lines">
+
+      <!-- * Replace description_sale by website_description_sale -->
+      <xpath expr="//t[@t-call='website_sale.cart_line_description_following_lines']" position="replace">
+        <div class="text-muted d-none d-md-block small" t-field="line.product_id.website_description_sale"></div>
+      </xpath>
+
+    </template>
+
+    <!-- * Insert excl. taxes in rental price in each line -->
+    <template id="cart_line_product_link" inherit_id="product_rental.cart_line_product_link">
+      <xpath expr="//span[@t-field='product.rental_frequency']" position="before">
+        <t t-if="product_tmpl.is_b2b()">excl. taxes</t>
+      </xpath>
+    </template>
+
+    <!-- END Cart lines modifications -->
 
   </data>
 </odoo>
