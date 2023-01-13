@@ -130,11 +130,8 @@
   <!-- Language related hacks START -->
 
   <template id="products_categories" inherit_id="website_sale.products_categories">
-    <xpath expr="//div[@id='products_grid_before']/ul[hasclass('nav')]/li[1]" position="attributes">
-      <attribute name="t-if">request.lang == 'fr_FR'</attribute>
-    </xpath>
     <xpath expr="//t[@t-call='website_sale.categories_recursive']" position="attributes">
-      <attribute name="t-if">(request.lang == 'fr_FR' and c != env.ref('commown.categ_de')) or request.env.user.has_group('website.group_website_publisher')</attribute>
+      <attribute name="t-if">c != env.ref('commown.categ_de')</attribute>
     </xpath>
   </template>
 
