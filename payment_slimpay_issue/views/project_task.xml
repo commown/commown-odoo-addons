@@ -7,12 +7,13 @@
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
           <xpath expr="//notebook" position="inside">
-            <page string="Payment">
+            <page string="Payment" attrs="{'invisible': [('project_id', '!=', %(payment_slimpay_issue.project_payment_issue)d)]}" >
               <group>
                 <field name="invoice_id"/>
                 <field name="invoice_unpaid_count"/>
                 <field name="invoice_next_payment_date"/>
                 <field name="slimpay_payment_label"/>
+                <field name="project_id" invisible="1"/>
               </group>
             </page>
           </xpath>
