@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-21 15:48+0000\n"
-"PO-Revision-Date: 2019-06-21 15:48+0000\n"
+"POT-Creation-Date: 2023-01-17 11:09+0000\n"
+"PO-Revision-Date: 2023-01-17 11:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -54,36 +54,68 @@ msgid "\n"
 "</div>\n"
 "\n"
 "    "
-msgstr "\n"
-"<div style=\"background:#F0F0F0;color:#515166;padding:10px 0px;font-family:Arial,Helvetica,sans-serif;font-size:14px;\">\n"
-"  <p>\n"
-"    <a href=\"/\"><img src=\"/web/binary/company_logo\" style=\"vertical-align:baseline;max-width:100px;\"></a>\n"
+msgstr "<div style=\"background:#F0F0F0;color:#515166;padding:10px 0px;font-family:Arial,Helvetica,sans-serif;font-size:14px;\">\n"
+"%set fees = object.env.ref('payment_slimpay_issue.management_fees_product')\n"
+"%set fees_price = fees.taxes_id.compute_all(fees.list_price, fees.currency_id)['total_included']\n"
+"%set date_format = object.env['res.lang'].search([('code', '=', object.partner_id.lang)]).date_format\n"
+"%set next_date = object.invoice_next_payment_date and format_date(object.invoice_next_payment_date) or None\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    <a href=\"/\" style=\"color:rgb(124, 123, 173);background-color:transparent;text-decoration-thickness:auto;text-decoration:none;\"><img src=\"/web/binary/company_logo\" style=\"border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-image-width:1;border-image-source:none;border-image-slice:100%;border-image-repeat:stretch;border-image-outset:0;border-left-style:none;border-left-color:currentcolor;border-bottom-style:none;border-bottom-color:currentcolor;border-right-style:none;border-right-color:currentcolor;border-top-style:none;border-top-color:currentcolor;vertical-align:baseline;max-width:100px;\"></a>\n"
 "  </p>\n"
 "  <br>\n"
-"  <p>Bonjour,</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object.partner_id.firstname},</p>\n"
 "  <br>\n"
-"  <p>Le prélèvement de votre facture ${object.invoice_id.number} a été\n"
-"    rejeté${object.invoice_unpaid_count != 0 and object.invoice_unpaid_count != 1 and ' de nouveau' or ''}.\n"
-"  </p>\n"
-"  <p>La prochaine tentative aura lieu dans les prochains jours.\n"
-"    Merci de nous contacter rapidement si vous pensez que ce prélèvement pourrait être de nouveau rejeté,\n"
-"    afin d'éviter à tous des frais bancaires.\n"
-"  </p>\n"
+"\n"
+"%if not object.invoice_unpaid_count or object.invoice_unpaid_count == 1:\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le prélèvement de la dernière facture (${object.invoice_id.number}) relative aux mensualités de location a malheureusement été rejeté par votre banque.</p>\n"
+"\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Ce sont des choses qui arrivent et nous comprenons qu’il puisse y\n"
+"  avoir un problème passager, et nous vous invitons à nous en faire\n"
+"  part via retour de mail dans les 48h.</p>\n"
+"\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">=&gt; En effet sans retour de votre part nous programmerons une\n"
+"  nouvelle tentative de prélèvement\n"
+"  ${next_date and ('pour le ' + next_date) or 'dans les prochains jours'}, et\n"
+"  nous vous remercions d'avance de bien vouloir vous assurer que le\n"
+"  prélèvement pourra avoir lieu sans problème. Cette opération ne sera\n"
+"  pas facturée par Commown (mais la facture sera majorée de\n"
+"  ${'%.02f' % fees_price}${fees.currency_id.symbol}&nbsp;TTC de\n"
+"  frais administratifs pour toute intervention ultérieure le cas\n"
+"  échéant). Si des frais de rejet sont facturés par votre banque à\n"
+"  Commown, ils vous seront malheureusement re-facturés le cas échéant.</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"><b style=\"font-weight:bold;\"><i>NB : si le rejet est lié à une modification récente de vos coordonnées bancaires, nous vous invitons à signer un nouveau mandat de prélèvement SEPA à jour en suivant la procédure (simple et rapide) décrite sur cette page de notre Wiki :&nbsp;https://wiki.commown.coop/Changer-de-compte-bancaire</i></b><br></p>\n"
+"%else:\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Malgré notre précédent message le prélèvement de la dernière\n"
+"facture (${object.invoice_id.number}) relative aux mensualités de\n"
+"location de l'appareil a été rejeté ${object.invoice_unpaid_count}\n"
+"fois par votre banque.</p>\n"
+"\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Nous avons programmé une ${object.invoice_unpaid_count+1}ème\n"
+"  tentative de prélèvement\n"
+"  ${next_date and ('pour le ' + next_date) or 'dans les prochains jours'}\n"
+"  (incl. frais de rejet de\n"
+"  ${'%.02f' % fees_price}${fees.currency_id.symbol}&nbsp;TTC), et nous\n"
+"  vous remercions d'avance de bien vouloir vous assurer auprès de\n"
+"  votre banque que le prélèvement pourra avoir lieu sans problème.\n"
+"  Si des frais de rejet sont facturés par votre banque à Commown,\n"
+"  ils vous seront malheureusement re-facturés le cas échéant.</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"><b style=\"font-weight:bold;\"><i>NB1 : si le rejet est lié à une modification récente de vos coordonnées bancaires, nous vous invitons à signer un nouveau mandat de prélèvement SEPA à jour en suivant la procédure (simple et rapide) décrite sur cette page de notre Wiki :&nbsp;https://wiki.commown.coop/Changer-de-compte-bancaire</i></b><br></p>\n"
+"\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"><i>NB2 : dans tous les cas nous vous invitons toujours à prendre\n"
+"contact avec l'équipe en amont pour anticiper au mieux ce type\n"
+"d'incident, ceci dans le but de trouver la solution la plus appropriée\n"
+"ensemble (et qui génère aussi le moins de frais pour vous).</i></p>\n"
+"%endif\n"
 "  <br>\n"
-"  <p>Cordialement,<br>\n"
-"    L'équipe \n"
-"    <a href=\"${object.project_id.company_id.website}\" style=\"color:#875A7B;\">\n"
-"      ${object.project_id.company_id.name}\n"
-"    </a>.\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dans l'intervalle nous restons à votre disposition,<br>\n"
+"    Coopérativement,<br>\n"
+"    L'équipe Commown.\n"
 "  </p>\n"
 "</div>\n"
-"\n"
-"    "
+""
 
 #. module: payment_slimpay_issue
 #: model:mail.template,subject:payment_slimpay_issue.mail_warn_user
 msgid "${object.project_id.company_id.name}: rejected payment"
-msgstr "${object.project_id.company_id.name}: rejet de prélèvement"
+msgstr "COMMOWN - ${(((not object.invoice_unpaid_count or object.invoice_unpaid_count == 1) and 'Rejet de prélèvement %s') or 'RELANCE amiable rejet de prélèvement %s') % object.invoice_id.number}"
 
 #. module: payment_slimpay_issue
 #: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
@@ -93,7 +125,27 @@ msgstr "${object.user_id.company_id.name}: nombre maximum de rejets de prélève
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_retry_payment_and_wait
 msgid "A payment is immediately retried when the issue is move here. The issue then stays here for a given number of days (see dedicated time-based automated action) during which the payment may be rejected again. After this period, the payment is considered OK and the issue fixed: in this case the issue will be moved to the corresponding column."
-msgstr "Une tentative de prélèvement est immédiatement effectuée lorsqu'un incident de paiement arrive dans cette colonne. Il y reste alors un nombre de jours donné (paramétrable dans l'action automatisée dédiée) pendant lesquels le prélèvement peut être rejeté de nouveau. À l'issue de cette période, le prélèvement est considéré comme validé et l'incident est automatiquement bougé dans la colonne correspondante."
+msgstr "Une tentative de prélèvement est immédiatement effectuée lorsqu'un incident de paiement arrive dans cette colonne. Il y reste alors un nombre de jours donné (paramétrable dans l'action automatisée dédiée, actuellement 8, cf. https://shop.commown.coop/web?debug#id=21&view_type=form&model=base.action.rule&menu_id=232&action=309) pendant lesquels le prélèvement peut être rejeté de nouveau. À l'issue de cette période, le prélèvement est considéré comme validé et l'incident est automatiquement bougé dans la colonne correspondante."
+
+#. module: payment_slimpay_issue
+#: model:ir.cron,cron_name:payment_slimpay_issue.ir_cron_check
+msgid "Base: Auto-vacuum internal data"
+msgstr "Base : données internes sur l'aspiration automatique"
+
+#. module: payment_slimpay_issue
+#: model:project.task.type,legend_blocked:payment_slimpay_issue.stage_issue_fixed
+#: model:project.task.type,legend_blocked:payment_slimpay_issue.stage_max_trials_reached
+#: model:project.task.type,legend_blocked:payment_slimpay_issue.stage_new
+#: model:project.task.type,legend_blocked:payment_slimpay_issue.stage_orphan
+#: model:project.task.type,legend_blocked:payment_slimpay_issue.stage_retry_payment_and_wait
+#: model:project.task.type,legend_blocked:payment_slimpay_issue.stage_warn_partner_and_wait
+msgid "Blocked"
+msgstr "Bloqué"
+
+#. module: payment_slimpay_issue
+#: model:ir.cron,name:payment_slimpay_issue.ir_cron_check
+msgid "Check Slimpay payment issues"
+msgstr "Vérification des impayés remontés par Slimpay"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_issue_fixed
@@ -101,19 +153,49 @@ msgid "Fixed payment issue"
 msgstr "Prélèvement validé"
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,help:payment_slimpay_issue.field_project_issue_invoice_next_payment_date
+#: model:product.template,name:payment_slimpay_issue.bank_fees_product
+msgid "Slimpay reject bank fees"
+msgstr "Frais bancaire de rejet de prélèvement"
+
+#. module: payment_slimpay_issue
+#: model:product.template,name:payment_slimpay_issue.bank_supplier_fees_product
+msgid "Slimpay supplier fees"
+msgstr "Frais bancaires sans taxes (pour impayés)"
+
+#. module: payment_slimpay_issue
+#: model:product.template,name:payment_slimpay_issue.management_fees_product
+msgid "Slimpay reject management fees"
+msgstr "Frais de gestion rejet de prélèvement"
+
+#. module: payment_slimpay_issue
+#: model:ir.model.fields,help:payment_slimpay_issue.field_project_task__invoice_next_payment_date
 msgid "If set in the future, the next payment trial (if any) will occur at this date"
 msgstr "Lorsque paramétré dans le futur, la prochaine tentative de prélèvement (le cas échéant) aura lieu à cette date"
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_issue_invoice_id
+#: model:project.task.type,legend_normal:payment_slimpay_issue.stage_issue_fixed
+#: model:project.task.type,legend_normal:payment_slimpay_issue.stage_max_trials_reached
+#: model:project.task.type,legend_normal:payment_slimpay_issue.stage_new
+#: model:project.task.type,legend_normal:payment_slimpay_issue.stage_orphan
+#: model:project.task.type,legend_normal:payment_slimpay_issue.stage_retry_payment_and_wait
+#: model:project.task.type,legend_normal:payment_slimpay_issue.stage_warn_partner_and_wait
+msgid "In Progress"
+msgstr "En cours"
+
+#. module: payment_slimpay_issue
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_id
 msgid "Invoice"
 msgstr "Facture"
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_issue_invoice_next_payment_date
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_next_payment_date
 msgid "Invoice next payment date"
 msgstr "Date du prochain prélèvement"
+
+#. module: payment_slimpay_issue
+#: model:project.project,label_tasks:payment_slimpay_issue.project_payment_issue
+msgid "Issues"
+msgstr "Incidents"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_max_trials_reached
@@ -121,7 +203,7 @@ msgid "Issues end-up here once the configured number of payment retrials (2 by d
 msgstr "Les incidents de paiement atterrissent ici lorsque le nombre maximum de tentatives de re-prélèvement (2 par défaut, peut être redéfini grâce au paramètre système \"payment_slimpay_issue.max_retrials\") a été atteint, et ils y restent en attendant un traitement manuel."
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,help:payment_slimpay_issue.field_project_issue_slimpay_payment_label
+#: model:ir.model.fields,help:payment_slimpay_issue.field_project_task__slimpay_payment_label
 msgid "Label the customer will see on his bank statement. When left empty, the Odoo transaction name will appear."
 msgstr "Libellé que le client verra sur son relevé bancaire. Lorsque laissé vide, c'est le nom de la transaction Odoo qui y figure."
 
@@ -131,13 +213,15 @@ msgid "Max payment trials reached"
 msgstr "Nb max d'impayés atteint"
 
 #. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.action_move_issue_to_fixed
-msgid "Move issue to the fixed issue stage"
+#: model:base.automation,name:payment_slimpay_issue.move_to_fixed_after_waiting_delay
+#: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_fixed
+msgid "Move task to fixed after waiting delay"
 msgstr "Passer l'incident de paiement dans la colonne Prélèvement validé"
 
 #. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.action_move_issue_to_payment_retrial
-msgid "Move issue to the payment retry stage"
+#: model:base.automation,name:payment_slimpay_issue.retry_payment_on_programed_date
+#: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_payment_retrial
+msgid "Move to retry payment stage at invoice next payment date"
 msgstr "Passer l'incident de paiement dans la colonne Tentative de prélèvement"
 
 #. module: payment_slimpay_issue
@@ -151,24 +235,18 @@ msgid "No corresponding invoice found"
 msgstr "Facture liée non déterminée"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_issue.py:159
+#: code:addons/payment_slimpay_issue/models/project_task.py:198
 #, python-format
 msgid "No payment ref"
 msgstr "No payment ref"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_issue.py:64
-#, python-format
-msgid "No sale journal defined for this company."
-msgstr "Aucun journal de vente paramétré pour l'entreprise."
-
-#. module: payment_slimpay_issue
-#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_issue_invoice_unpaid_count
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_unpaid_count
 msgid "Number of payment issues"
 msgstr "Nb de tentatives en échec"
 
 #. module: payment_slimpay_issue
-#: model:ir.ui.view,arch_db:payment_slimpay_issue.project_issue_form_view
+#: model_terms:ir.ui.view,arch_db:payment_slimpay_issue.project_task_form_view
 msgid "Payment"
 msgstr "Paiement"
 
@@ -178,14 +256,19 @@ msgid "Payment issues end-up here when no corresponding odoo invoice could be id
 msgstr "Les incidents de paiement atterrissent ici lorsque le lien avec une facture n'a pas pu être trouvé. Ils doivent alors être traités manuellement."
 
 #. module: payment_slimpay_issue
-#: model:ir.model,name:payment_slimpay_issue.model_project_issue
-msgid "Project Issue"
-msgstr "Incident"
+#: model:project.task.type,legend_done:payment_slimpay_issue.stage_issue_fixed
+#: model:project.task.type,legend_done:payment_slimpay_issue.stage_max_trials_reached
+#: model:project.task.type,legend_done:payment_slimpay_issue.stage_new
+#: model:project.task.type,legend_done:payment_slimpay_issue.stage_orphan
+#: model:project.task.type,legend_done:payment_slimpay_issue.stage_retry_payment_and_wait
+#: model:project.task.type,legend_done:payment_slimpay_issue.stage_warn_partner_and_wait
+msgid "Ready for Next Stage"
+msgstr "Prêt pour la prochaine étape"
 
 #. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.action_retry_payment
-msgid "Retry payment"
-msgstr "Nouvelle tentative de prélèvement"
+#: model:project.task.type,portal_displayed_name:payment_slimpay_issue.stage_orphan
+msgid "Rejet de prélèvement - Merci de nous contacter asap"
+msgstr "Rejet de prélèvement - Merci de nous contacter asap"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_retry_payment_and_wait
@@ -193,24 +276,33 @@ msgid "Retry payment and wait"
 msgstr "Re-tenter un prélèvement et attendre"
 
 #. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.set_invoice_next_payment_date
-msgid "Set invoice next payment date"
+#: model:base.automation,name:payment_slimpay_issue.retry_payment
+#: model:ir.actions.server,name:payment_slimpay_issue.action_retry_payment
+msgid "Retry payment when entering the dedicated stage"
+msgstr ""
+
+#. module: payment_slimpay_issue
+#: model:base.automation,name:payment_slimpay_issue.set_invoice_next_date_when_entering_warn_stage
+#: model:ir.actions.server,name:payment_slimpay_issue.set_invoice_next_date_when_entering_warn_stage_ir_actions_server
+msgid "Set next payment date when entering warn partner and wait stage"
 msgstr "Paramétrer la date du prochain prélèvement"
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_issue_slimpay_payment_label
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__slimpay_payment_label
 msgid "Slimpay payment label"
 msgstr "Libellé bancaire"
 
 #. module: payment_slimpay_issue
-#: model:product.template,name:payment_slimpay_issue.bank_fees_product
-msgid "Slimpay reject bank fees"
-msgstr "Frais bancaires des rejets de prélèvement"
+#: model:ir.model,name:payment_slimpay_issue.model_project_task
+msgid "Task"
+msgstr "Tâche"
 
 #. module: payment_slimpay_issue
-#: model:product.template,name:payment_slimpay_issue.management_fees_product
-msgid "Slimpay reject management fees"
-msgstr "Frais de gestion des rejets de prélèvement"
+#: model:product.template,uom_name:payment_slimpay_issue.bank_fees_product
+#: model:product.template,uom_name:payment_slimpay_issue.bank_supplier_fees_product
+#: model:product.template,uom_name:payment_slimpay_issue.management_fees_product
+msgid "Unit(s)"
+msgstr "Unité(s)"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_warn_partner_and_wait
@@ -221,4 +313,11 @@ msgstr "Avertir le partenaire et attendre"
 #: model:project.task.type,description:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid "When the issue is moved to this stage, the partner is immediately warned by email that the payment was rejected. The issue then stays here for a given number of days (see dedicated time-based automated action), then moves to the next stage."
 msgstr "Lorsqu'un incident de paiement arrive dans cette colonne,  le partenaire est immédiatement averti par courriel que le prélèvement a été rejeté. L'incident reste alors dans cette colonne un certain nombre de jours (paramétrable dans l'action automatisée dédiée), puis est automatiquement bougée dans la colonne suivante."
+
+#. module: payment_slimpay_issue
+#: model:product.template,weight_uom_name:payment_slimpay_issue.bank_fees_product
+#: model:product.template,weight_uom_name:payment_slimpay_issue.bank_supplier_fees_product
+#: model:product.template,weight_uom_name:payment_slimpay_issue.management_fees_product
+msgid "kg"
+msgstr ""
 
