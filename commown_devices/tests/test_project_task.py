@@ -154,6 +154,51 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         lot_names = set(choices["lot_id"].mapped("name"))
         self.assertEqual(lot_names, {"cc2", "cc3"})
 
+    def test_wizard_involved(self):
+
+        self.task.contract_id = self.c1
+        self.task.lot_id = self.task.contract_id.quant_ids[0].lot_id
+
+        values, possible_values = self.prepare_ui(
+            "project.task.involved_device_picking.wizard", self.task, "task_id"
+        )
+
+        self.assertEqual(
+            values["present_location_id"],
+            self.task.lot_id.quant_ids.filtered(
+                lambda q: q.quantity > 0
+            ).location_id.id,
+        )
+
+        # Create a picking and check the lot location at the end of the picking
+        date = datetime.datetime(2020, 1, 10, 16, 2, 34)
+        wizard = self.env["project.task.involved_device_picking.wizard"].create(
+            {
+                "task_id": self.task.id,
+                "date": date,
+                "location_dest_id": possible_values["location_dest_id"][0].id,
+                "present_location_id": values["present_location_id"],
+            }
+        )
+        wizard.create_picking()
+
+        self.assertEqual(
+            self.task.lot_id.quant_ids.filtered(
+                lambda q: q.quantity > 0
+            ).location_id.id,
+            possible_values["location_dest_id"][0].id,
+        )
+
+        # Check that the new location of the lot is no longer available as destination
+        values, possible_values = self.prepare_ui(
+            "project.task.involved_device_picking.wizard", self.task, "task_id"
+        )
+
+        self.assertNotIn(
+            values["present_location_id"],
+            possible_values["location_dest_id"].mapped("id"),
+        )
+
     def test_wizard_outward_with_task_only(self):
         values, possible_values = self.prepare_ui(
             "project.task.outward.picking.wizard", self.task, "task_id"
