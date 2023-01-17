@@ -39,3 +39,8 @@ def _i18n_account_invoice():
 
 def _i18n_sale_order():
     "Manually mark sale_order.odt report strings to be translated"
+    _("Order Acknowledgement")
+    _("Customer Number:")
+    _("VAT Number:")
+    _("To the attention of:")
+    _("Net Total")
