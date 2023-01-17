@@ -51,7 +51,11 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    name = fields.Text(compute="_recompute_name", store=True)
+    name = fields.Text(
+        compute="_recompute_name",
+        inverse=lambda self: None,  # Make it updatable through the UI despite compute
+        store=True,
+    )
 
     def display_rental_price(self, amount=None):
         """Format current line's product rental price in the order partner's language
