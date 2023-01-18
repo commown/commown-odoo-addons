@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-17 18:52+0000\n"
-"PO-Revision-Date: 2023-01-17 18:52+0000\n"
+"POT-Creation-Date: 2023-01-18 11:34+0000\n"
+"PO-Revision-Date: 2023-01-18 11:34+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -46,6 +46,12 @@ msgid "Company number / registry / VAT"
 msgstr "Handelsregisternummer / Registergericht / UST-ID Nr."
 
 #. module: custom_report
+#: code:addons/custom_report/i18n/i18n.py:50
+#, python-format
+msgid "Confirmation \"good for agreement\" desired before %s."
+msgstr "Bestätigung (\"Gut zum Einverständnis\") vor dem %s erwünscht."
+
+#. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:10
 #, python-format
 msgid "Contract"
@@ -68,6 +74,12 @@ msgstr "USt.-ID"
 #, python-format
 msgid "Customer number"
 msgstr "Kundennummer"
+
+#. module: custom_report
+#: code:addons/custom_report/i18n/i18n.py:47
+#, python-format
+msgid "Delivery address"
+msgstr "Lieferadresse"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:13
@@ -94,6 +106,12 @@ msgid "Invoice"
 msgstr "Rechnung"
 
 #. module: custom_report
+#: code:addons/custom_report/i18n/i18n.py:48
+#, python-format
+msgid "Invoice address"
+msgstr "Rechnungsadresse"
+
+#. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:17
 #, python-format
 msgid "Invoice date"
@@ -116,6 +134,12 @@ msgstr "Rechnungsbetrag netto"
 #, python-format
 msgid "No discount in case of anticipated payment. Delay penalty of 20% annual rate. For professionals, fixed-price debt collection compensation in case of payment delay: 40€."
 msgstr "Kein Skonto bei vorzeitiger Zahlung. Verzugszinsen in Höhe von 20% pro Jahr. Für Gewerbetreibende: Inkassoentschädigung zum Festpreis bei Zahlungsverzug: 40€."
+
+#. module: custom_report
+#: code:addons/custom_report/i18n/i18n.py:49
+#, python-format
+msgid "Notes"
+msgstr "Notizen"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:42
@@ -216,5 +240,5 @@ msgstr "MwSt.-Nummer"
 #: code:addons/custom_report/i18n/i18n.py:31
 #, python-format
 msgid "Your reference"
-msgstr "Ihre Referenz"
+msgstr "Referenz"
 

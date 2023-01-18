@@ -44,3 +44,7 @@ def _i18n_sale_order():
     _("VAT Number:")
     _("To the attention of:")
     _("Net Total")
+    _("Delivery address")
+    _("Invoice address")
+    _("Notes")
+    _('Confirmation "good for agreement" desired before %s.')
