@@ -1,10 +1,6 @@
 import re
 
-import lxml.html
-
-from odoo.tests.common import TransactionCase, at_install, post_install
-
-from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
+from .common import ReportTC
 
 
 def _product_descriptions(invoice_doc):
@@ -15,17 +11,9 @@ def _product_descriptions(invoice_doc):
     ]
 
 
-def _html_report(report, obj, debug_fpath=None):
-    html = report.render(obj.ids)[0]
-    if debug_fpath:
-        with open(debug_fpath, "wb") as fobj:
-            fobj.write(html)
-    return lxml.html.fromstring(html)
+class AccountInvoiceReportTC(ReportTC):
+    report_name = "account.report_invoice"
 
-
-@at_install(False)
-@post_install(True)
-class ReportTC(MockedEmptySessionMixin, TransactionCase):
     def setUp(self):
         super().setUp()
         self.b2c_partner = self.env.ref("base.partner_demo_portal")
@@ -67,20 +55,6 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
                 "list_price": 1,
             }
         )
-
-        # Hack: reuse pdf report as an html one, to ease parsing
-        self.inv_report = (
-            self.env["ir.actions.report"]
-            ._get_report_from_name("account.report_invoice")
-            .ensure_one()
-        )
-        self.inv_report.py3o_filetype = "html"
-        self.sale_report = (
-            self.env["ir.actions.report"]
-            ._get_report_from_name("sale.report_saleorder")
-            .ensure_one()
-        )
-        self.sale_report.py3o_filetype = "html"
 
     def sale(self, partner, products):
         olines = []
@@ -124,29 +98,23 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         inv.action_invoice_open()
         return inv
 
-    def html_invoice(self, inv, debug_fpath=None):
-        return _html_report(self.inv_report, inv, debug_fpath=debug_fpath)
-
-    def html_sale(self, sale, debug_fpath=None):
-        return _html_report(self.sale_report, sale, debug_fpath=debug_fpath)
-
     def test_b2c_deposit(self):
         inv = self.open_invoice(self.sale(self.b2c_partner, [self.deposit_product]))
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Certificate %s" % inv.display_name.strip()]
         )
 
     def test_b2c_equity(self):
         inv = self.open_invoice(self.sale(self.b2c_partner, [self.equity_product]))
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Certificate %s" % inv.display_name.strip()]
         )
 
     def test_b2c_std_product(self):
         inv = self.open_invoice(self.sale(self.b2c_partner, [self.std_product]))
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Invoice %s" % inv.display_name.strip()]
         )
@@ -178,7 +146,7 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         )
         so = self.sale(self.b2c_partner, [self.std_product])
         inv = self.open_invoice(so, contract=contract)
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Invoice %s" % inv.display_name.strip()]
         )
@@ -201,7 +169,7 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         inv = self.open_invoice(
             self.sale(self.b2c_partner, [self.std_product]), is_refund=True
         )
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Refund %s" % inv.display_name.strip()]
         )
@@ -210,21 +178,21 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         inv = self.open_invoice(
             self.sale(self.b2b_partner, [self.std_product]), is_refund=True
         )
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Refund %s" % inv.display_name.strip()]
         )
 
     def test_b2b_deposit(self):
         inv = self.open_invoice(self.sale(self.b2b_partner, [self.deposit_product]))
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Invoice %s" % inv.display_name.strip()]
         )
 
     def test_b2b_std_product(self):
         inv = self.open_invoice(self.sale(self.b2b_partner, [self.std_product]))
-        doc = self.html_invoice(inv)
+        doc = self.html_report(inv)
         self.assertEqual(
             doc.xpath("//h1/text()"), ["Invoice %s" % inv.display_name.strip()]
         )
@@ -233,7 +201,7 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         "Invoice lines with quantity equal to zero must not appear on invoice"
         so1 = self.sale(self.b2c_partner, [self.std_product, self.std_product])
         inv1 = self.open_invoice(so1)
-        doc1 = self.html_invoice(inv1)
+        doc1 = self.html_report(inv1)
 
         self.assertEqual(
             _product_descriptions(doc1), [self.std_product.name] * 2
@@ -242,13 +210,8 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
         so2 = self.sale(self.b2c_partner, [self.std_product, self.std_product])
         so2.order_line[1].product_uom_qty = 0  # Quantity 0 for second product
         inv2 = self.open_invoice(so2)
-        doc2 = self.html_invoice(inv2)
+        doc2 = self.html_report(inv2)
 
         self.assertEqual(
             _product_descriptions(doc2), [self.std_product.name]
         )  # 1 product line only
-
-    def test_sale(self):
-        "Check sale orders print with no error"
-        so = self.sale(self.b2c_partner, [self.std_product, self.equity_product])
-        self.html_sale(so)
