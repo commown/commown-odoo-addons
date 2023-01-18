@@ -33,3 +33,6 @@ class ReportTC(MockedEmptySessionMixin, TransactionCase):
 
     def html_report(self, entity, debug_fpath=None):
         return _html_report(self.report, entity, debug_fpath=debug_fpath)
+
+    def h1(self, doc):
+        return doc.xpath("normalize-space(//h1)")
