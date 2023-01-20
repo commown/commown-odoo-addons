@@ -8,8 +8,9 @@
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [
-        # Commown modules
         "account_loan",
+        "survey",
+        # Commown modules
         "account_invoice_merge_auto_pay",
         "account_move_slimpay_import",
         "commown_shipping",
@@ -72,6 +73,7 @@
         "views/project_task.xml",
         "views/res_lang.xml",
         "views/res_partner.xml",
+        "views/survey.xml",
         "views/website_portal_templates.xml",
         "views/website_sale_templates.xml",
         "views/website_site_portal_sale_templates.xml",
