@@ -109,6 +109,7 @@ class WebsiteSaleB2B(WebsiteSale):
         env = http.request.env
         if (
             http.request.website == env.ref("website_sale_b2b.b2b_website")
+            and not data.get("vat")
             and data.get("country_id")
             and data.get("country_id") != str(env.user.company_id.country_id.id)
         ):
