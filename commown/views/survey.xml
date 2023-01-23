@@ -1,0 +1,12 @@
+<odoo>
+
+  <template id="page" inherit_id="survey.page">
+
+    <!-- Increase margin between questions -->
+    <xpath expr="//div[@class='js_question-wrapper']" position="attributes">
+      <attribute name="class">js_question-wrapper mt-4</attribute>
+    </xpath>
+
+  </template>
+
+</odoo>
