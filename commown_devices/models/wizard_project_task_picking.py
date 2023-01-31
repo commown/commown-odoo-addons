@@ -1,7 +1,9 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, Warning
 
 from .common import internal_picking
+
+RESILIATION_XML_ID = "commown_self_troubleshooting.contract_termination_project"
 
 
 class ProjectTaskAbstractPickingWizard(models.AbstractModel):
@@ -80,6 +82,9 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
+        if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
+            raise Warning(_("This action should not be used in resiliation project"))
+
         lot = self.task_id.lot_id
 
         if not lot:
