@@ -163,7 +163,7 @@ msgstr "Menge"
 #: code:addons/custom_report/i18n/i18n.py:21
 #, python-format
 msgid "Quotation"
-msgstr "Kostenvoranschlag"
+msgstr "Angebot"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:22
@@ -210,7 +210,7 @@ msgstr "Steuer"
 #: code:addons/custom_report/i18n/i18n.py:45
 #, python-format
 msgid "To the attention of:"
-msgstr "Zu Händen von:"
+msgstr "Zu Händen von"
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:28
