@@ -16,6 +16,7 @@ def _i18n_account_invoice():
     _("Invoice")
     _("Invoice date")
     _("Net total")
+    _("Page")
     _("Payment conditions")
     _("Quantity")
     _("Quotation")
