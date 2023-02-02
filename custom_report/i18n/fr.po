@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-18 11:34+0000\n"
-"PO-Revision-Date: 2023-01-18 11:34+0000\n"
+"POT-Creation-Date: 2023-02-02 10:58+0000\n"
+"PO-Revision-Date: 2023-02-02 10:58+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -40,13 +40,13 @@ msgid "Certificate date"
 msgstr "Date du justificatif"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:37
+#: code:addons/custom_report/i18n/i18n.py:38
 #, python-format
 msgid "Company number / registry / VAT"
 msgstr "SIREN / RCS / TVA"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:50
+#: code:addons/custom_report/i18n/i18n.py:51
 #, python-format
 msgid "Confirmation \"good for agreement\" desired before %s."
 msgstr "Confirmation (\"Bon pour accord\") souhaitée avant le %s."
@@ -58,7 +58,7 @@ msgid "Contract"
 msgstr "Contrat"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:43
+#: code:addons/custom_report/i18n/i18n.py:44
 #, python-format
 msgid "Customer Number:"
 msgstr "N° client :"
@@ -76,7 +76,7 @@ msgid "Customer number"
 msgstr "N° client"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:47
+#: code:addons/custom_report/i18n/i18n.py:48
 #, python-format
 msgid "Delivery address"
 msgstr "Adresse de livraison"
@@ -106,7 +106,7 @@ msgid "Invoice"
 msgstr "Facture"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:48
+#: code:addons/custom_report/i18n/i18n.py:49
 #, python-format
 msgid "Invoice address"
 msgstr "Adresse de facturation"
@@ -118,7 +118,7 @@ msgid "Invoice date"
 msgstr "Date de facturation"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:46
+#: code:addons/custom_report/i18n/i18n.py:47
 #, python-format
 msgid "Net Total"
 msgstr "Total HT"
@@ -130,19 +130,19 @@ msgid "Net total"
 msgstr "Total HT"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:32
+#: code:addons/custom_report/i18n/i18n.py:33
 #, python-format
 msgid "No discount in case of anticipated payment. Delay penalty of 20% annual rate. For professionals, fixed-price debt collection compensation in case of payment delay: 40€."
 msgstr "Pas d'escompte en cas de paiement anticipé. Pénalités de retard au taux annuel de 20%. Pour les professionnels, indemnité forfaitaire de recouvrement de 40€ facturée en cas de non respect des délais de paiement."
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:49
+#: code:addons/custom_report/i18n/i18n.py:50
 #, python-format
 msgid "Notes"
 msgstr "Notes"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:42
+#: code:addons/custom_report/i18n/i18n.py:43
 #, python-format
 msgid "Order Acknowledgement"
 msgstr "Bon de commande"
@@ -150,35 +150,41 @@ msgstr "Bon de commande"
 #. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:19
 #, python-format
+msgid "Page"
+msgstr "Page"
+
+#. module: custom_report
+#: code:addons/custom_report/i18n/i18n.py:20
+#, python-format
 msgid "Payment conditions"
 msgstr "Conditions de règlement"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:20
+#: code:addons/custom_report/i18n/i18n.py:21
 #, python-format
 msgid "Quantity"
 msgstr "Quantité"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:21
+#: code:addons/custom_report/i18n/i18n.py:22
 #, python-format
 msgid "Quotation"
 msgstr "Devis"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:22
+#: code:addons/custom_report/i18n/i18n.py:23
 #, python-format
 msgid "Refund"
 msgstr "Avoir"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:23
+#: code:addons/custom_report/i18n/i18n.py:24
 #, python-format
 msgid "Refund date"
 msgstr "Date de l'avoir"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:24
+#: code:addons/custom_report/i18n/i18n.py:25
 #, python-format
 msgid "Related invoice"
 msgstr "Facture liée"
@@ -189,55 +195,55 @@ msgid "Report Action"
 msgstr "Action Rapport"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:25
+#: code:addons/custom_report/i18n/i18n.py:26
 #, python-format
 msgid "Sales contact"
 msgstr "Contact commercial"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:26
+#: code:addons/custom_report/i18n/i18n.py:27
 #, python-format
 msgid "Sub-Total"
 msgstr "Sous-total"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:27
+#: code:addons/custom_report/i18n/i18n.py:28
 #, python-format
 msgid "Tax"
 msgstr "Taxe"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:45
+#: code:addons/custom_report/i18n/i18n.py:46
 #, python-format
 msgid "To the attention of:"
 msgstr "À l'attention de :"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:28
+#: code:addons/custom_report/i18n/i18n.py:29
 #, python-format
 msgid "Total"
 msgstr "Total TTC"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:29
+#: code:addons/custom_report/i18n/i18n.py:30
 #, python-format
 msgid "Unit Price"
 msgstr "Prix unitaire"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:30
+#: code:addons/custom_report/i18n/i18n.py:31
 #, python-format
 msgid "Untaxed Amount"
 msgstr "Prix HT"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:44
+#: code:addons/custom_report/i18n/i18n.py:45
 #, python-format
 msgid "VAT Number:"
 msgstr "N° de TVA :"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:31
+#: code:addons/custom_report/i18n/i18n.py:32
 #, python-format
 msgid "Your reference"
 msgstr "Votre référence"
