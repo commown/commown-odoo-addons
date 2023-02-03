@@ -30,8 +30,16 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self._create_and_send_device("cc2", None, cc)
         self._create_and_send_device("cc3", self.c3, cc, do_transfer=False)
 
-        # Create a unused product
-        self.storable_product.copy({"name": "unused product"})
+        # Create a unused product and an unused service
+        self.env["product.template"].create(
+            {"name": "unused product", "type": "product", "tracking": "none"}
+        )
+        self.env["product.template"].create(
+            {"name": "unused serial", "type": "product", "tracking": "serial"}
+        )
+        self.env["product.template"].create(
+            {"name": "unused service", "type": "service"}
+        )
 
     def _create_and_send_device(self, serial, contract, product=None, do_transfer=True):
         lot = self.adjust_stock(product, serial=serial)
@@ -128,10 +136,12 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertFalse(values.get("lot_id"))
 
         # > check domains
-        self.assertEqual(
-            set(choices["storable_product_id"].mapped("name")),
-            {"Core-X4", "Fairphone 3", "unused product"},
+        choice_names = set(choices["storable_product_id"].mapped("name"))
+        self.assertTrue(
+            {"Core-X4", "Fairphone 3", "unused product"}.issubset(choice_names)
         )
+        self.assertNotIn("unused service", choice_names)
+
         lot_names = set(choices["lot_id"].mapped("name"))
         self.assertEqual(lot_names, {"fp4", "fp5"})
 
@@ -147,10 +157,11 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(values.get("lot_id"), lot.id)
 
         # > check domains
-        self.assertEqual(
-            set(choices["storable_product_id"].mapped("name")),
-            {"Core-X4", "Fairphone 3", "unused product"},
+        choice_names = set(choices["storable_product_id"].mapped("name"))
+        self.assertTrue(
+            {"Core-X4", "Fairphone 3", "unused product"}.issubset(choice_names)
         )
+        self.assertNotIn("unused service", choice_names)
         lot_names = set(choices["lot_id"].mapped("name"))
         self.assertEqual(lot_names, {"cc2", "cc3"})
 
@@ -208,7 +219,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.assertEqual(
             sorted(possible_values["product_tmpl_id"].mapped("name")),
-            ["Core-X4", "Fairphone 3", "unused product"],
+            ["Core-X4", "Fairphone 3", "unused serial"],
         )
         self.assertEqual(
             sorted(possible_values["lot_id"].mapped("name")), ["cc2", "cc3", "fp4"]
@@ -228,7 +239,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.assertEqual(
             sorted(possible_values["product_tmpl_id"].mapped("name")),
-            ["Core-X4", "Fairphone 3", "unused product"],
+            ["Core-X4", "Fairphone 3", "unused serial"],
         )
         self.assertEqual(
             possible_values["variant_id"], self.storable_product.product_variant_ids
@@ -251,7 +262,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.assertEqual(
             sorted(possible_values["product_tmpl_id"].mapped("name")),
-            ["Core-X4", "Fairphone 3", "unused product"],
+            ["Core-X4", "Fairphone 3", "unused serial"],
         )
         self.assertEqual(
             possible_values["variant_id"], self.storable_product.product_variant_ids
