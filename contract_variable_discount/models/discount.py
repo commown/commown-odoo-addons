@@ -121,8 +121,10 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     def _compute_amount(self, contract_line, date_invoice):
         if self.amount_type == "fix":
+            # Transform amount into a percentage, which discount is!
             discount = 100.0 * self.amount_value / contract_line.price_unit
         elif self.amount_type == "percent":
+            # Discount is a percentage, so we can return our value directly:
             discount = self.amount_value
         else:
             raise ValidationError(
