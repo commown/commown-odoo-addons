@@ -6,173 +6,20 @@
     <field name="type">qweb</field>
     <field name="key">website.self-troubleshoot-fp3-screen</field>
     <field name="arch" type="xml">
-
-    <t t-name="website.self-troubleshoot-fp3-screen">
-      <t t-call="commown-self-troubleshoot.web-layout">
-        <t t-set="title">Commown - Auto-dépannage - Fairphone 3 : Mon écran (ou sa protection) est fissuré</t>
-        <t t-set="head">
-          <script type="text/javascript">
-
-            $(document).ready(function() {
-
-              const wizard = setUpWizard($('#smartwizard'));
-
-              $('#has_protection').change(function () {
-                  wizard.toggleStep(2, this.value==='yes');
-                  wizard.toggleStep(3, this.value==='no');
-              });
-
-              $('input[type=radio][name=replace_screen]').change(function () {
-                   wizard.toggleStep(4, this.value==='yes');
-              });
-
-            });
-
-          </script>
+      <t t-name="website.self-troubleshoot-fp3-screen">
+        <t t-call="website.self-troubleshoot-fp-screen">
+          <t t-set="model">FP3</t>
         </t>
-
-        <!-- Variables à modifier ici -->
-        <t t-set="tag_names">Appareil FP3</t>
-        <t t-set="issue_title">FP3 - Changement d'écran et/ou vitre de protection</t>
-        <t t-set="issue_description_template">issue-description-fp3-screen</t>
-        <!-- Fin des variables à modifier -->
-
-        <div class="container">
-          <h1>Auto-dépannage : Fairphone 3</h1>
-          <h2>Mon écran (ou sa protection) est fissuré </h2>
-          <br/>
-          <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
-                id="myForm" role="form">
-
-            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-            <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
-            <input type="hidden" name="tags" id="tags" t-att-value="tag_names"/>
-            <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
-
-            <div id="smartwizard">
-              <ul>
-                <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
-                <li><a href="#step-1">Étape 1<br/><small>Type de problème</small></a></li>
-                <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Vérification de l'écran</small></a></li>
-                <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>État de l'écran</small></a></li>
-                <li><a href="#step-4">Étape 4<br/><small>Option souscrite</small></a></li>
-                <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Expédition</small></a></li>
-                <li disabled="disabled"><a href="#step-6">Étape 6<br/><small>Confirmation</small></a></li>
-                <li><a href="#step-7">Étape 7<br/><small>Contacter un humain</small></a></li>
-              </ul>
-
-              <div>
-                <t t-call="commown_self_troubleshooting.step-contract-choice">
-                      <t t-set="contracts"
-                         t-value="env.user.partner_id.self_troubleshooting_contracts('fp3-screen-page')"/>
-                </t>
-
-                <div id="step-1">
-                  <h2><i class="fas fa-cogs"/>Type de problème</h2>
-                  <p>Commown fournit sans frais supplémentaires une protection d'écran afin de maximiser la
-                  durée de vie de l'appareil.</p>
-                  <p>Ainsi, votre FP3 doit déjà avoir une vitre de protection posée
-                  par nos soins avant de vous l'envoyer.</p>
-                  <p>Commençons par vérifier que la vitre de protection est bien présente sur votre FP3 :
-                  cela se remarque facilement dans les coins de l'écran grâce à un relief visible
-                  (cf. photo ci-dessous) et détectable au toucher.</p>
-                  <img src="/commown_self_troubleshooting/static/images/FP3/screen/fp3_screen_protection.png"
-                           alt="Écran FP3 avec protection"
-                           style="display: block; margin: auto;"/>
-                  <br />
-                  <div id="form-step-1" role="form" data-toggle="validator">
-                    <div class="form-group">
-                      <label for="has_protection">Confirmez-vous la présence d'une vitre de protection ?</label>
-                      <select class="form-control" required="required" id="has_protection" name="has_protection"
-                        data-required-error="Veuillez sélectionner un élément de la liste ci-dessus.">
-                        <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
-                        <option value="yes">Oui</option>
-                        <option value="no">Non</option>
-                      </select>
-                      <div class="help-block with-errors"/>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="step-2">
-                  <h2><i class="fas fa-airglass-slash"/>Vérification de l'écran</h2>
-                  <div id="form-step-2" role="form" data-toggle="validator">
-                    <div class="form-group">
-                      <p>L'objectif de cette étape est de savoir si l'écran a été touché. Si c'est le cas,
-                      on vous enverra un écran de remplacement muni d'une vitre de protection.
-                      Notez que cela sera considéré comme une casse. Pour en savoir plus, voir
-                      <a href="https://wiki.commown.coop/Dans+quel+%C3%A9tat+les+appareils+doivent-ils+%C3%AAtre+restitu%C3%A9s+%3F"
-                      target="_blank"> cette page</a> de notre wiki.</p>
-                      <p>S'il est évident que l'écran n'est pas endommagé (seulement des petites rayures sur
-                      la vitre de protection, des petites bulles...), choisissez l'option correspondante
-                      et passez à l'étape suivante.</p>
-                      <p>Si vous avez un doute, soulevez délicatement la vitre de protection afin de voir
-                      l'état de l'écran si c'est possible, sinon, enlevez la complètement, mais veillez
-                      à protéger l'écran le temps de recevoir la nouvelle protection.</p>
-                      <br/>
-                      <label class="radio-inline" for="replace_screen_yes_step_2">Mon écran doit être remplacé</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_yes_step_2" value="yes" required="required" data-required-error="Dites-nous si vous entendez du son."/>
-                      <label class="radio-inline" for="replace_screen_no_step_2">J'ai juste besoin d'une vitre de protection</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_no_step_2" value="no" required="required"/>
-                      <div class="help-block with-errors"/>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="step-3">
-                  <h2><i class="fas fa-airglass-slash"/>État de l'écran</h2>
-                  <div id="form-step-3" role="form" data-toggle="validator">
-                    <div class="form-group">
-                      <p>L'objectif de cette étape est de savoir si l'écran a été abîmé. Si c'est le cas,
-                      on vous enverra un écran de remplacement muni d'une vitre de protection.
-                      Notez que cela sera considéré comme une casse. Pour en savoir plus, voir
-                      <a href="https://wiki.commown.coop/Dans+quel+%C3%A9tat+les+appareils+doivent-ils+%C3%AAtre+restitu%C3%A9s+%3F"
-                      target="_blank"> cette page</a> de notre wiki.</p>
-                      <br/>
-                      <label class="radio-inline" for="replace_screen_yes_step_3">Mon écran doit être remplacé</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_yes_step_3" value="yes" required="required" data-required-error="Dites-nous si vous entendez du son."/>
-                      <label class="radio-inline" for="replace_screen_no_step_3">J'ai juste besoin d'une vitre de protection</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_no_step_3" value="no" required="required"/>
-                      <div class="help-block with-errors"/>
-                    </div>
-                  </div>
-                </div>
-
-                <t t-call="commown_self_troubleshooting.step-manipulation-option">
-                  <t t-set="step">4</t>
-                </t>
-
-                <t t-call="commown_self_troubleshooting.step-ship-module">
-                  <t t-set="step">5</t>
-                  <t t-set="new_module">les éléments nécessaires</t>
-                </t>
-
-                <t t-call="commown_self_troubleshooting.step-confirm-change">
-                  <t t-set="step">6</t>
-                </t>
-
-                <t t-call="commown_self_troubleshooting.step-contact-human">
-                  <t t-set="step">7</t>
-                </t>
-
-              </div>
-
-            </div>
-          </form>
-        </div>
-
       </t>
-    </t>
-
     </field>
   </record>
 
-    <record id="fp3-screen-page" model="website.page">
-      <field name="website_published">True</field>
-      <field name="url">/page/self-troubleshoot-fp3-screen</field>
-      <field name="view_id" ref="fp3-screen"/>
-      <field name="website_meta_title">Fairphone 3/3+</field>
-      <field name="website_meta_description">Mon écran (ou sa protection) est fissuré</field>
-    </record>
+  <record id="fp3-screen-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-fp3-screen</field>
+    <field name="view_id" ref="fp3-screen"/>
+    <field name="website_meta_title">Fairphone 3/3+</field>
+    <field name="website_meta_description">Mon écran (ou sa protection) est fissuré</field>
+  </record>
 
 </odoo>
