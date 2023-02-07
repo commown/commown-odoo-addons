@@ -59,7 +59,7 @@
          t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
       <input type="hidden"
              name="field_required"
-             t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name' if is_b2b else '')" />
+             t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name' if (is_b2b and mode[1] == 'billing') else '')" />
     </xpath>
 
   </template>
