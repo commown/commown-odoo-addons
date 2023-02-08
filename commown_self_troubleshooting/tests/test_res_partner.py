@@ -76,6 +76,10 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
                     ],
                 },
                 {
+                    "title": "Fairphone 4",
+                    "pages": [{"url_path": "/page/self-troubleshoot-fp4-screen"}],
+                },
+                {
                     "title": "Demande d'assistance",
                     "pages": [{"url_path": "/page/self-troubleshoot-generic-issue"}],
                 },
