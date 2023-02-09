@@ -15,6 +15,7 @@
         "project",
         "queue_job",
         "server_environment",
+        "web_ir_actions_act_multi",
     ],
     "external_dependencies": {
         "bin": ["pdfjam", "pdftk"],
@@ -32,6 +33,7 @@
         "views/product.xml",
         "views/project_project.xml",
         "views/project_task.xml",
+        "views/wizard_print_label.xml",
         "security/ir.model.access.csv",
     ],
     "demo": ["data/demo.xml"],
