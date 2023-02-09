@@ -1,0 +1,45 @@
+<odoo>
+
+  <record id="wizard_project_task_print_label_form" model="ir.ui.view">
+    <field name="name">[commown] Project task print label form view</field>
+    <field name="model">commown_shipping.task.print_label.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Print label">
+        <sheet>
+          <group>
+            <field name="shipping_ids" invisible="1"/>
+            <field name="parcel_type_id" options="{'no_create': True}"/>
+            <field name="use_full_page_per_label"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="print_label" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="wizard_crm_lead_print_label_form" model="ir.ui.view">
+    <field name="name">[commown] Crm lead print label form view</field>
+    <field name="model">commown_shipping.lead.print_label.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Print label">
+        <sheet>
+          <group>
+            <field name="shipping_ids" invisible="1"/>
+            <field name="parcel_type_id" options="{'no_create': True}"/>
+            <field name="use_full_page_per_label"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="print_label" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>
