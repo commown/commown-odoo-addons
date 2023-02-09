@@ -1,5 +1,7 @@
+import contextlib
 import json
 import os.path as osp
+import resource
 from base64 import b64decode
 from io import BytesIO
 from urllib.parse import urlparse
@@ -12,6 +14,16 @@ from odoo.tests.common import TransactionCase
 from ..models.colissimo_utils import BASE_URL
 
 HERE = osp.dirname(__file__)
+
+
+@contextlib.contextmanager
+def unlimited_resource():
+    old_limits = resource.getrlimit(resource.RLIMIT_AS)
+    resource.setrlimit(
+        resource.RLIMIT_AS, (resource.RLIM_INFINITY, resource.RLIM_INFINITY)
+    )
+    yield
+    resource.setrlimit(resource.RLIMIT_AS, old_limits)
 
 
 def pdf_page_num(ir_attachment):
@@ -61,3 +73,27 @@ class BaseShippingTC(TransactionCase):
         return self.env["ir.attachment"].browse(
             int(urlparse(download_action["url"]).path.rsplit("/", 1)[-1])
         )
+
+    def _print_label(self, model, entities, parcel_type, use_full_page_per_label=False):
+        wizard = self.env[model].create(
+            {
+                "shipping_ids": [(6, 0, entities.ids)],
+                "parcel_type_id": parcel_type.id,
+                "use_full_page_per_label": use_full_page_per_label,
+            },
+        )
+
+        with unlimited_resource():
+            action_multi = wizard.print_label()
+
+        self.assertEqual(action_multi["type"], "ir.actions.act_multi")
+        self.assertEqual(
+            [a["type"] for a in action_multi["actions"]],
+            [
+                "ir.actions.act_url",
+                "ir.actions.act_window_close",
+                "ir.actions.act_view_reload",
+            ],
+        )
+
+        return self._attachment_from_download_action(action_multi["actions"][0])

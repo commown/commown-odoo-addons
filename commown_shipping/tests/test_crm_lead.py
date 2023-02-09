@@ -1,4 +1,3 @@
-import resource
 from datetime import date, timedelta
 
 import requests_mock
@@ -108,14 +107,13 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         data = shipping_data(is_return=True, **base_kwargs)
         self.assertEqual(data["letter"]["service"]["productCode"], "CORI")
 
-    def _print_outward_labels(self, leads):
-        act = self.env.ref("commown_shipping.action_print_outward_label_lead")
-
-        with requests_mock.Mocker() as mocker:
-            self.mock_colissimo_ok(mocker)
-            return act.with_context(
-                {"active_model": leads._name, "active_ids": leads.ids}
-            ).run()
+    def print_label(self, leads, parcel_type, use_full_page_per_label=False):
+        return self._print_label(
+            "commown_shipping.lead.print_label.wizard",
+            leads,
+            parcel_type,
+            use_full_page_per_label,
+        )
 
     def test_shipping_data_empty_name(self):
         self.lead.partner_id.firstname = False
@@ -153,16 +151,14 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         self.assertEqualFakeLabel(att)
 
     def test_print_parcel_action(self):
-        resource.setrlimit(
-            resource.RLIMIT_AS, (resource.RLIM_INFINITY, resource.RLIM_INFINITY)
-        )
         leads = self.env["crm.lead"]
         for num in range(5):
             leads += self.lead.copy({"name": "[SO%05d] Test lead" % num})
 
-        download_action = self._print_outward_labels(leads)
+        with requests_mock.Mocker() as mocker:
+            self.mock_colissimo_ok(mocker)
+            all_labels = self.print_label(leads, self.parcel_type)
 
-        all_labels = self._attachment_from_download_action(download_action)
         self.assertEqual(all_labels.name, self.parcel_type.name + ".pdf")
         self.assertEqual(pdf_page_num(all_labels), 2)
 
