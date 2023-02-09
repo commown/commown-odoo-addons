@@ -37,10 +37,20 @@ class SelfHelp(http.Controller):
             "project_ref", "support_project"
         )
 
+        contract = self.env["contract.contract"].browse(int(post["device_contract"]))
+        if contract.partner_id.commercial_partner_id != partner.commercial_partner_id:
+            _logger.warning(
+                "partner %d posted self_troubleshooting data for contract %d"
+                " which is not his",
+                partner.id,
+                contract.id,
+            )
+            raise ValueError("Invalid contract")
+
         task_data = {
             "name": post["self-troubleshoot-type"],
             "priority": str(int(post.get("priority", 0))),
-            "contract_id": int(post["device_contract"]),
+            "contract_id": contract.id,
             "partner_id": partner.id,
             "description": self._description(**post),
             "project_id": env.ref(project_ref).id,

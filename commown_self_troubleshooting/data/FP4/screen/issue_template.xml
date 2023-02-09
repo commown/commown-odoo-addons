@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id="issue-description-fp4-screen" model="ir.ui.view">
+  <field name="name">self-troubleshoot-issue-description-fp4-screen</field>
+  <field name="type">qweb</field>
+  <field name="key">commown_self_troubleshooting.issue-description-fp4-screen</field>
+  <field name="arch" type="xml">
+    <t t-name="commown_self_troubleshooting.issue-description-fp4-screen">
+      <t t-call="commown_self_troubleshooting.issue-description-fp-screen">
+        <t t-set="model2">FP4</t>
+      </t>
+    </t>
+  </field>
+</record>
+</odoo>

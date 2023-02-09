@@ -19,6 +19,8 @@
     "data": [
         "data/ContractManagement/termination/form.xml",
         "data/ContractManagement/termination/issue_template.xml",
+        "data/FP/screen/form.xml",
+        "data/FP/screen/issue_template.xml",
         "data/FP2/camera/form.xml",
         "data/FP2/camera/issue_template.xml",
         "data/FP2/micro/form.xml",
@@ -29,6 +31,8 @@
         "data/FP3/display/issue_template.xml",
         "data/FP3/screen/form.xml",
         "data/FP3/screen/issue_template.xml",
+        "data/FP4/screen/form.xml",
+        "data/FP4/screen/issue_template.xml",
         "data/GS/form_day.xml",
         "data/GS/issue_template.xml",
         "data/Assistance/Serenity/form.xml",
