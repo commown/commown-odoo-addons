@@ -23,33 +23,33 @@ class SaleOrderTC(RentalSaleOrderTC):
                 self._contract_line(2, "1 month ##ACCESSORY##", tax),
             ],
         )
-        product1 = self._create_rental_product(
+        self.product1 = self._create_rental_product(
             name="Fairphone Premium",
             list_price=60.0,
             rental_price=30.0,
             followup_sales_team_id=self.team1.id,
             property_contract_template_id=contract_tmpl1.id,
         )
-        so_line1 = self._oline(product1, product_uom_qty=2)
+        so_line1 = self._oline(self.product1, product_uom_qty=2)
 
         self.team2 = self.team1.copy({"name": "team2"})
-        product2 = self.env["product.product"].create(
+        self.product2 = self.env["product.product"].create(
             {
                 "name": "Install /e/OS",
                 "type": "service",
+                "followup_sales_team_id": self.team2.id,
             }
         )
-        product2.followup_sales_team_id = self.team2.id
-        so_line2 = self._oline(product2, product_uom_qty=3)
+        so_line2 = self._oline(self.product2, product_uom_qty=3)
 
         self.team3 = self.team1.copy({"name": "team3"})
-        product3 = self._create_rental_product(
+        self.product3 = self._create_rental_product(
             name="Phone protection",
             list_price=2.0,
             rental_price=1.0,
             followup_sales_team_id=self.team3.id,
         )
-        so_line3 = self._oline(product3, product_uom_qty=1)
+        so_line3 = self._oline(self.product3, product_uom_qty=1)
 
         self.so = self.env["sale.order"].create(
             {
@@ -60,7 +60,7 @@ class SaleOrderTC(RentalSaleOrderTC):
             }
         )
 
-    def test_create_risk_analysis_leads(self):
+    def test_create_risk_analysis_leads_with_contracts(self):
 
         old_leads = self.env["crm.lead"].search([])
         self.so.action_confirm()
@@ -93,3 +93,29 @@ class SaleOrderTC(RentalSaleOrderTC):
         )
 
         self.assertTrue(leads3.contract_id)
+
+    def test_create_risk_analysis_leads_without_contracts(self):
+        "Also create RA leads for orphan products, ie when no contract was created"
+
+        rental_so_line = self._oline(self.product3, product_uom_qty=2)
+        service_so_line = self._oline(self.product2, product_uom_qty=1)
+        partner = self.env.ref("base.partner_demo_portal")
+        so = self.env["sale.order"].create(
+            {
+                "partner_id": partner.id,
+                "partner_invoice_id": partner.id,
+                "partner_shipping_id": partner.id,
+                "order_line": [rental_so_line, service_so_line],
+            }
+        )
+
+        old_leads = self.env["crm.lead"].search([])
+        so.action_confirm()
+        new_leads = self.env["crm.lead"].search([]) - old_leads
+
+        leads2 = new_leads.filtered(lambda l: l.team_id == self.team2)
+        leads3 = new_leads.filtered(lambda l: l.team_id == self.team3)
+
+        self.assertEqual(new_leads, leads2 | leads3)
+        self.assertEqual(len(leads2), 1)
+        self.assertEqual(len(leads3), 2)

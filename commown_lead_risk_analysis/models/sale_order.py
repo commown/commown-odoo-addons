@@ -51,43 +51,48 @@ class SaleOrder(models.Model):
         return "[%s] %s" % (name, so_line.product_id.display_name)
 
     def create_risk_analysis_leads(self):
+        """Create one risk analysis (RA) lead for each sold product with a followup team
+
+        Set the contract if the product is managed by one.
+        """
+
         self.ensure_one()
 
         leads = self.env["crm.lead"]
 
-        contract_lines = self.env["contract.line"].search(
+        clines = self.env["contract.line"].search(
             [
                 ("sale_order_line_id.order_id", "=", self.id),
-                ("sale_order_line_id.product_id.is_rental", "=", True),
                 ("sale_order_line_id.product_id.followup_sales_team_id", "!=", False),
             ]
         )
 
-        deserve_ra = {(cl.contract_id, cl.sale_order_line_id) for cl in contract_lines}
+        managed_by_contract = {}
+        for cline in clines:
+            product = cline.sale_order_line_id.product_id
+            for _num in range(int(cline.quantity)):
+                managed_by_contract.setdefault(product, []).append(cline.contract_id)
 
-        for contract, so_line in deserve_ra:
-            leads |= self._create_lead(
-                self.risk_analysis_lead_title(so_line, contract=contract),
-                so_line.product_id.followup_sales_team_id,
-                so_line,
-                contract_id=contract.id,
-            )
-        else:
-            _logger.debug(
-                "No contract line of contract product with a followup"
-                " sale team: no crm.lead for risk analysis created"
-                " (%s)",
-                self.name,
-            )
-
-        # Also create a lead for non rental products with a followup team
         count = 0
         for so_line in self.order_line:
             product = so_line.product_id
             team = product.followup_sales_team_id
-            if team and not product.is_rental:
-                for _num in range(int(so_line.product_uom_qty)):
+            if not team:
+                continue
+            for _num in range(int(so_line.product_uom_qty)):
+                contracts = managed_by_contract.get(product, [])
+                if contracts:
+                    contract = contracts.pop()
+                    lead = self._create_lead(
+                        self.risk_analysis_lead_title(so_line, contract=contract),
+                        team,
+                        so_line,
+                        contract_id=contract.id,
+                    )
+                else:
                     count += 1
                     name = self.risk_analysis_lead_title(so_line, secondary_index=count)
-                    leads |= self._create_lead(name, team, so_line)
+                    lead = self._create_lead(name, team, so_line)
+                leads |= lead
+
         return leads
