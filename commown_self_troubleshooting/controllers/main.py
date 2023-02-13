@@ -37,7 +37,7 @@ class SelfHelp(http.Controller):
             "project_ref", "support_project"
         )
 
-        contract = self.env["contract.contract"].browse(int(post["device_contract"]))
+        contract = env["contract.contract"].browse(int(post["device_contract"]))
         if contract.partner_id.commercial_partner_id != partner.commercial_partner_id:
             _logger.warning(
                 "partner %d posted self_troubleshooting data for contract %d"
