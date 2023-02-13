@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-16 08:45+0000\n"
-"PO-Revision-Date: 2022-05-16 08:45+0000\n"
+"POT-Creation-Date: 2023-02-13 13:44+0000\n"
+"PO-Revision-Date: 2023-02-13 13:44+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -78,13 +78,13 @@ msgid "Can use more than one coupon by sale"
 msgstr "Plusieurs coupons utilisables simultanément"
 
 #. module: website_sale_coupon
-#: code:addons/website_sale_coupon/models/sale_order.py:109
+#: code:addons/website_sale_coupon/models/sale_order.py:133
 #, python-format
 msgid "Cannot cumulate those coupons: %s"
 msgstr "Ces coupons ne sont pas cumulables : %s"
 
 #. module: website_sale_coupon
-#: code:addons/website_sale_coupon/models/sale_order.py:100
+#: code:addons/website_sale_coupon/models/sale_order.py:123
 #, python-format
 msgid "Cannot use more than one %s coupon"
 msgstr "On ne peut pas utiliser plus d'un coupon %s"
@@ -117,6 +117,8 @@ msgstr "Le coupon numéro"
 #. module: website_sale_coupon
 #: model:ir.ui.menu,name:website_sale_coupon.coupon_coupon
 #: model:ir.ui.menu,name:website_sale_coupon.coupon_main
+#: model_terms:ir.ui.view,arch_db:website_sale_coupon.sale_order_form
+#: model_terms:ir.ui.view,arch_db:website_sale_coupon.sale_order_portal_content
 msgid "Coupons"
 msgstr "Coupons"
 
@@ -158,7 +160,7 @@ msgstr "Description"
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__display_name
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__display_name
 msgid "Display Name"
-msgstr "Nom affiché"
+msgstr "Afficher Nom"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__emitted_coupons
@@ -243,6 +245,11 @@ msgid "Name"
 msgstr "Nom"
 
 #. module: website_sale_coupon
+#: model_terms:ir.ui.view,arch_db:website_sale_coupon.sale_order_form
+msgid "Open coupon"
+msgstr "Voir le coupon"
+
+#. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__seller_id
 msgid "Partner who sales the coupons"
 msgstr "Partenaire qui vend les coupons"
@@ -260,7 +267,7 @@ msgstr "Réservé pour une vente en cours"
 #. module: website_sale_coupon
 #: model:ir.model,name:website_sale_coupon.model_sale_order
 msgid "Sale Order"
-msgstr "Commande"
+msgstr "Vente"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__target_product_tmpl_ids
@@ -286,13 +293,14 @@ msgstr "Inutilisé"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__used_coupons
+#: model:ir.model.fields,field_description:website_sale_coupon.field_sale_order__used_coupon_ids
 msgid "Used coupons"
 msgstr "Coupons utilisés"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__used_for_sale_id
 msgid "Used for sale"
-msgstr "Utilisé dans la commande"
+msgstr "Utilisé dans la vente"
 
 #. module: website_sale_coupon
 #. openerp-web
