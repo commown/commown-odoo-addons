@@ -148,3 +148,13 @@ class Coupon(models.Model):
                 name = record.code
             result.append((record.id, name))
         return result
+
+    def open_coupon(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Open coupon",
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": self._name,
+            "res_id": self.env.context.get("default_active_id"),
+        }
