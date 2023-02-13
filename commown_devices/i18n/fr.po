@@ -288,6 +288,19 @@ msgstr "Le contrat est déjà associé à une expédition au moins !\n"
 "Il faut d'abord l'annuler, la valider ou mettre l'appareil au rebut."
 
 #. module: commown_devices
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:84
+#, python-format
+msgid "This action should not be used in resiliation project"
+msgstr "Cette action ne doit pas être utilisée dans le projet résiliation.\n"
+"Utilisez plutôt l'action 'Rapatrier un appareil'"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/project_task.py:150
+#, python-format
+msgid "This task can not be moved forward. There are still %s device(s) associated with the contract"
+msgstr "Cette carte ne peut pas être déplacée à cette étape. Il y a encore %s appareil(s) associé(s) au contrat"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_picking
 msgid "Transfer"
 msgstr "Transfert"

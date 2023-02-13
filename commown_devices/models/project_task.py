@@ -1,4 +1,10 @@
 from odoo import _, api, fields, models
+from odoo.exceptions import Warning
+
+CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
+    "commown_device.diagnostic_stage",
+    "commown_device.resiliated_stage",
+]
 
 
 class ProjectTask(models.Model):
@@ -136,6 +142,21 @@ class ProjectTask(models.Model):
                 )
                 if len(contracts) == 1:
                     self.contract_id = contracts.id
+
+    @api.constrains("stage_id")
+    def onchange_stage_id_prevent_contract_resiliation_with_device(self):
+        if self.stage_id and self.contract_id and self.contract_id.quant_nb > 0:
+            check_stage_ids = tuple(
+                self.env.ref(ref).id for ref in CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS
+            )
+            if self.stage_id.id in check_stage_ids:
+                raise Warning(
+                    _(
+                        "This task can not be moved forward. There are still %s device(s) "
+                        "associated with the contract"
+                    )
+                    % self.contract_id.quant_nb
+                )
 
     def action_scrap_device(self):
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
