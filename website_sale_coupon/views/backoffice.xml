@@ -2,6 +2,31 @@
 <odoo>
   <data>
 
+    <record id="sale_order_form" model="ir.ui.view">
+      <field name="name">sale.order.form (in the website_sale_coupon module)</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//notebook" position="inside">
+          <page name="coupons" string="Coupons">
+            <field name="used_coupon_ids">
+              <tree>
+                <field name="campaign_id"/>
+                <field name="code"/>
+                <field name="is_auto_coupon"/>
+                <button
+                    string="Open coupon"
+                    type="object"
+                    name="open_coupon"
+                    context="{'default_active_id': active_id}"
+                    />
+              </tree>
+            </field>
+          </page>
+        </xpath>
+      </field>
+    </record>
+
     <record id="coupon_campaign_form" model="ir.ui.view">
       <field name="name">Coupon Campaign</field>
       <field name="model">coupon.campaign</field>

@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, api, models
+from odoo import _, api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -11,6 +11,12 @@ class CouponError(Exception):
 
 class CouponSaleOrder(models.Model):
     _inherit = "sale.order"
+
+    used_coupon_ids = fields.One2many(
+        comodel_name="coupon.coupon",
+        inverse_name="used_for_sale_id",
+        string="Used coupons",
+    )
 
     @api.multi
     def action_confirm(self):
