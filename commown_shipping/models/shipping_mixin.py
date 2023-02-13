@@ -176,29 +176,32 @@ class CommownShippingMixin(models.AbstractModel):
                 capture_output=True,
                 check=True,
             )
-            run(
-                [
-                    "pdfjam",
-                    "--nup",
-                    "2x2",
-                    "--offset",
-                    "0.1cm 2.4cm",
-                    "--trim",
-                    "1.95cm 5.8cm 17.4cm 2.5cm",
-                    "--clip",
-                    "true",
-                    "--frame",
-                    "false",
-                    "--scale",
-                    "0.98",
-                    "--outfile",
-                    gettempdir(),
-                    fpath,
-                ],
-                capture_output=True,
-                check=True,
-            )
-            result_path = fpath[:-4] + "-pdfjam" + fpath[-4:]
+            if not force_single:
+                run(
+                    [
+                        "pdfjam",
+                        "--nup",
+                        "2x2",
+                        "--offset",
+                        "0.1cm 2.4cm",
+                        "--trim",
+                        "1.95cm 5.8cm 17.4cm 2.5cm",
+                        "--clip",
+                        "true",
+                        "--frame",
+                        "false",
+                        "--scale",
+                        "0.98",
+                        "--outfile",
+                        gettempdir(),
+                        fpath,
+                    ],
+                    capture_output=True,
+                    check=True,
+                )
+                result_path = fpath[:-4] + "-pdfjam" + fpath[-4:]
+            else:
+                result_path = fpath
 
         except CalledProcessError as exc:
             msg = exc.stderr.decode("utf-8") if exc.stderr else "No err output"
