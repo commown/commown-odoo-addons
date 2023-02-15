@@ -1,7 +1,6 @@
 from datetime import date
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 
 
 class CrmLead(models.Model):
@@ -48,26 +47,8 @@ class CrmLead(models.Model):
             )
 
     def _recipient_partner(self):
-        "Override recipient partner computation to use the sale.order if any"
+        "Override to use the sale order shipping partner as best non-explicit choice"
         self.ensure_one()
-
-        if self.recipient_partner_id:
-            return self.recipient_partner_id
-
-        so_address = self.mapped("so_line_id.order_id.partner_shipping_id")
-        odoo_address = self.env["res.partner"].browse(
-            self.partner_id.address_get(["delivery"])["delivery"]
+        return self.recipient_partner_id or self.mapped(
+            "so_line_id.order_id.partner_shipping_id"
         )
-
-        if so_address:
-            if odoo_address and so_address != odoo_address:
-                raise UserError(
-                    _(
-                        "Delivery address ambiguity: there is one on the sale"
-                        " and another on the partner. Please fill-in the"
-                        " recipient partner field to desambiguify."
-                    )
-                )
-            return so_address
-        else:
-            return odoo_address
