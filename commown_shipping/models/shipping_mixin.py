@@ -131,18 +131,22 @@ class CommownShippingMixin(models.AbstractModel):
             parent_ref = _ref_from_name(parent.name) or str(parent.id)
             return "{}-{}".format(parent_ref, entity_ref)
 
+    def _delivery_typed_partner(self):
+        "If current partner has a delivery-typed address return it else return None"
+        delivery_partner = self.env["res.partner"].browse(
+            self.partner_id.address_get(["delivery"])["delivery"]
+        )
+        if delivery_partner.type == "delivery":
+            return delivery_partner
+
     def _recipient_partner(self):
         "Give the opportunity to override shipping recipient computation"
         self.ensure_one()
-
-        result = self.recipient_partner_id
-
-        if not result:
-            result = self.env["res.partner"].browse(
-                self.partner_id.address_get(["delivery"])["delivery"]
-            )
-
-        return result
+        return (
+            self.recipient_partner_id
+            or self._delivery_typed_partner()
+            or self.partner_id
+        )
 
     @api.multi
     def _print_parcel_labels(self, parcel, account=None, force_single=False):
