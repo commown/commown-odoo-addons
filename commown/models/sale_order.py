@@ -18,47 +18,6 @@ class SaleOrder(models.Model):
         invoice_vals.pop("comment", None)
         return invoice_vals
 
-    def _get_or_create_receivable_account(self, account_code):
-        self.ensure_one()
-        existing = (
-            self.env["account.account"]
-            .search(
-                [
-                    ("code", "=", account_code),
-                ]
-            )
-            .exists()
-        )
-        if existing:
-            account = existing[0]
-        else:
-            ref = self.env.ref
-            account = self.env["account.account"].create(
-                {
-                    "code": account_code,
-                    "name": self.partner_id.name,
-                    "tag_ids": [(6, 0, [ref("account.account_tag_operating").id])],
-                    "user_type_id": ref("account.data_account_type_receivable").id,
-                    "tax_ids": [(6, 0, ref("l10n_fr.1_tva_normale").ids)],
-                    "reconcile": True,
-                }
-            )
-        return account
-
-    def _create_receivable_account(self):
-        """Add a dedicated receivable account to new customers. Use the ext_id
-        in config parameter `commown.default_customer_receivable_tax`
-        as a default tax for this account.
-        """
-        partner = self.partner_id.commercial_partner_id
-        account_code = "411-C-%s" % partner.id
-        account = partner.property_account_receivable_id
-        if not account or account.code != account_code:
-            new_account = self._get_or_create_receivable_account(account_code)
-            (partner | partner.child_ids).update(
-                {"property_account_receivable_id": new_account.id}
-            )
-
     def _create_investment_followup_task(self):
         product_tmpl_ids = (
             self.env["product.template"]
@@ -106,7 +65,7 @@ class SaleOrder(models.Model):
     @api.multi
     def action_confirm(self):
         self.ensure_one()
-        self._create_receivable_account()
+        self.partner_id._create_receivable_account()
         self._create_investment_followup_task()
         self._add_buyer_to_support_group()
         return super(SaleOrder, self).action_confirm()
