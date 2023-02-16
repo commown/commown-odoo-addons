@@ -107,3 +107,46 @@ class ResPartnerSimpleTC(SavepointCase):
         self.assertEqual(p1.property_account_payable_id.code, expected)
         self.assertEqual(p2.property_account_payable_id.code, expected)
         self.assertEqual(p3.property_account_payable_id.code, expected)
+
+    def test_create_company_set_receivable_account(self):
+        partner = self.env["res.partner"].create(
+            {"name": "Test partner", "customer": True, "company_name": "Test company"},
+        )
+
+        partner._create_receivable_account()
+        recv_acc = partner.property_account_receivable_id
+        partner.create_company()
+
+        company = partner.parent_id
+        self.assertEqual(company.property_account_receivable_id, recv_acc)
+        self.assertEqual(recv_acc.name, "Test company")
+        self.assertEqual(recv_acc.code, "411-C-%d" % company.id)
+
+    def test_create_company_with_custom_receivable_account(self):
+        partner = self.env["res.partner"].create(
+            {"name": "Test partner", "customer": True, "company_name": "Test company"},
+        )
+
+        partner._create_receivable_account()
+        recv_acc = partner.property_account_receivable_id
+        partner.create_company()
+
+        company = partner.parent_id
+        self.assertEqual(company.property_account_receivable_id, recv_acc)
+        self.assertEqual(recv_acc.name, "Test company")
+        self.assertEqual(recv_acc.code, "411-C-%d" % company.id)
+
+    def test_create_company_without_custom_receivable_account(self):
+        partner = self.env["res.partner"].create(
+            {"name": "Test partner", "customer": True, "company_name": "Test company"},
+        )
+
+        # Test prerequisite:
+        ref_account = self.env.ref("l10n_fr.1_fr_pcg_recv")
+        self.assertEqual(partner.property_account_receivable_id, ref_account)
+
+        partner.create_company()
+
+        company = partner.parent_id
+        self.assertEqual(company.property_account_receivable_id, ref_account)
+        self.assertEqual(ref_account.code, "411100")  # unchanged!

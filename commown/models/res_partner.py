@@ -157,15 +157,39 @@ class CommownPartner(models.Model):
     def create(self, vals):
         self._apply_bin_field_size_policy(vals)
         result = super(CommownPartner, self).create(vals)
+
         if result.supplier:
             result._create_payable_account()
+
         return result
 
-    def write(self, vals, **kwargs):
+    @api.multi
+    def write(self, vals):
         self._apply_bin_field_size_policy(vals)
-        result = super(CommownPartner, self).write(vals, **kwargs)
+
+        if "parent_id" in vals:
+            old_recv_acc = self.property_account_receivable_id
+
+        result = super(CommownPartner, self).write(vals)
+
         if "supplier" in vals and vals["supplier"]:
             self._create_payable_account()
+
+        if "parent_id" in vals and old_recv_acc:
+            data = _PROPERTY_ACCOUNT_DATA["receivable"]
+            ref_account = self.env.ref(data["ref_account"])
+            if (
+                old_recv_acc != ref_account
+                and self.parent_id.property_account_receivable_id == ref_account
+            ):
+                self.parent_id.property_account_receivable_id = old_recv_acc.id
+                old_recv_acc.update(
+                    {
+                        "code": data["code_template"] % self.parent_id.id,
+                        "name": self.parent_id.name,
+                    }
+                )
+
         return result
 
     @api.model
