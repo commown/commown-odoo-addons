@@ -8,6 +8,22 @@ from odoo import _, api, fields, models, tools
 _logger = logging.getLogger(__name__)
 
 
+_PROPERTY_ACCOUNT_DATA = {
+    "payable": {
+        "account_type": "account.data_account_type_payable",
+        "field_name": "property_account_payable_id",
+        "code_template": "401-F-%d",
+        "ref_account": "l10n_fr.1_fr_pcg_pay",
+    },
+    "receivable": {
+        "account_type": "account.data_account_type_receivable",
+        "field_name": "property_account_receivable_id",
+        "code_template": "411-C-%d",
+        "ref_account": "l10n_fr.1_fr_pcg_recv",
+    },
+}
+
+
 class FileTooBig(Exception):
     def __init__(self, field, msg):
         self.field = field
@@ -90,52 +106,90 @@ class CommownPartner(models.Model):
                         field, _("File too big (limit is %dMo)") % self.max_doc_size_Mo
                     )
 
-    def _create_payable_account(self):
-        """If partner is a supplier and its payable account does not exist or
-        is the fr standard one, create a payable account dedicated to
-        this supplier. For employees of a company, go up the parent_id
-        hierarchy and create the account there.
+    def _create_property_account(self, property_name):
+        """If partner's payable or receivable account does not exist or
+        is the fr standard one, create a dedicated account for the partner.
+        The account is associated to the commercial_partner, if any, but
+        linked to both partners.
         """
+        assert property_name in ("payable", "receivable")
 
-        ref_account = self.env.ref("l10n_fr.1_fr_pcg_pay")
         tva = self.env.ref("l10n_fr.1_tva_normale")
         tag = self.env.ref("account.account_tag_operating")
-        account_type = self.env.ref("account.data_account_type_payable")
-        account_model = self.env["account.account"]
+
+        data = _PROPERTY_ACCOUNT_DATA[property_name]
 
         for partner in self:
             partner = partner.commercial_partner_id
 
-            account = partner.property_account_payable_id
-            if not account or account == ref_account:
-                new_account = account_model.create(
+            account = getattr(partner, data["field_name"])
+            if not account or account == self.env.ref(data["ref_account"]):
+                new_account = self.env["account.account"].create(
                     {
-                        "code": "401-F-%s" % partner.id,
+                        "code": data["code_template"] % partner.id,
                         "name": partner.name,
                         "tag_ids": [(6, 0, tag.ids)],
-                        "user_type_id": account_type.id,
+                        "user_type_id": self.env.ref(data["account_type"]).id,
                         "tax_ids": [(6, 0, tva.ids)],
                         "reconcile": True,
                     }
                 )
-                (partner | partner.child_ids).update(
-                    {"property_account_payable_id": new_account}
-                )
+                (partner | partner.child_ids).update({data["field_name"]: new_account})
+
+    def _create_payable_account(self):
+        "See _create_property_account doc string"
+        self._create_property_account("payable")
+
+    def _create_receivable_account(self):
+        "See _create_property_account doc string"
+        # Protect against double creation
+        partner = self.commercial_partner_id
+        code = _PROPERTY_ACCOUNT_DATA["receivable"]["code_template"] % partner.id
+        existing = self.env["account.account"].search([("code", "=", code)])
+        if existing:
+            (partner | partner.child_ids).update(
+                {"property_account_receivable_id": existing.id},
+            )
+        self._create_property_account("receivable")
 
     @api.model
     @api.returns("self", lambda value: value.id)
     def create(self, vals):
         self._apply_bin_field_size_policy(vals)
         result = super(CommownPartner, self).create(vals)
+
         if result.supplier:
             result._create_payable_account()
+
         return result
 
-    def write(self, vals, **kwargs):
+    @api.multi
+    def write(self, vals):
         self._apply_bin_field_size_policy(vals)
-        result = super(CommownPartner, self).write(vals, **kwargs)
+
+        if "parent_id" in vals:
+            old_recv_acc = self.property_account_receivable_id
+
+        result = super(CommownPartner, self).write(vals)
+
         if "supplier" in vals and vals["supplier"]:
             self._create_payable_account()
+
+        if "parent_id" in vals and old_recv_acc:
+            data = _PROPERTY_ACCOUNT_DATA["receivable"]
+            ref_account = self.env.ref(data["ref_account"])
+            if (
+                old_recv_acc != ref_account
+                and self.parent_id.property_account_receivable_id == ref_account
+            ):
+                self.parent_id.property_account_receivable_id = old_recv_acc.id
+                old_recv_acc.update(
+                    {
+                        "code": data["code_template"] % self.parent_id.id,
+                        "name": self.parent_id.name,
+                    }
+                )
+
         return result
 
     @api.model
