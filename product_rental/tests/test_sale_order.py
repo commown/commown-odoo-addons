@@ -122,16 +122,16 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             },
         )
 
-        self.assert_rounded_equals(i5.amount_total, 20.0)
-        self.assert_rounded_equals(i5.amount_untaxed, 16.67)
+        self.assert_rounded_equals(i5.amount_total, 50.0)
+        self.assert_rounded_equals(i5.amount_untaxed, 41.67)
 
         self.assert_contract_lines_attributes_equal(
             c5,
             {
-                "name": ["1 month of FP2"],
-                "price_unit": [20.0],
-                "quantity": [1],
-                "sale_order_line_id.product_id.name": ["FP2"],
+                "name": ["1 month of FP2", "1 month of screen"],
+                "price_unit": [20.0, 15.0],
+                "quantity": [1, 2],
+                "sale_order_line_id.product_id.name": ["FP2", "screen"],
                 "analytic_account_id.name": [c5.name],
                 "analytic_account_id.partner_id": c5.partner_id,
             },
@@ -227,16 +227,16 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             },
         )
 
-        self.assert_rounded_equals(i5.amount_total, 20.0)
-        self.assert_rounded_equals(i5.amount_untaxed, 16.67)
+        self.assert_rounded_equals(i5.amount_total, 50.0)
+        self.assert_rounded_equals(i5.amount_untaxed, 41.67)
 
         self.assert_contract_lines_attributes_equal(
             c5,
             {
-                "name": ["1 month of FP2"],
-                "price_unit": [20.0],
-                "quantity": [1],
-                "sale_order_line_id.product_id.name": ["FP2"],
+                "name": ["1 month of FP2", "1 month of screen"],
+                "price_unit": [20.0, 15.0],
+                "quantity": [1, 2],
+                "sale_order_line_id.product_id.name": ["FP2", "screen"],
             },
         )
 
