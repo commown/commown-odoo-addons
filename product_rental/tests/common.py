@@ -103,7 +103,16 @@ class RentalSaleOrderMixin:
             4,
             contract_line_ids=[
                 self._contract_line(
-                    1, "1 month of ##PRODUCT##", tax, specific_price=0.0
+                    1,
+                    "1 month of ##PRODUCT##",
+                    tax,
+                    specific_price=0.0,
+                ),
+                self._contract_line(
+                    2,
+                    "1 month of ##ACCESSORY##",
+                    tax,
+                    specific_price=0.0,
                 ),
             ],
         )
@@ -130,7 +139,7 @@ class RentalSaleOrderMixin:
             rental_price=15.0,
             property_contract_template_id=False,
         )
-        oline_a2 = self._oline(a2, product_uom_qty=2)
+        oline_a2 = self._oline(a2, product_uom_qty=4)
 
         a3 = self._create_rental_product(
             name="keyboard",
