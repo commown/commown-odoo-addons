@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 from datetime import date
 
 from odoo import api, models
@@ -112,8 +113,11 @@ class ProductRentalSaleOrderLine(models.Model):
 def _rental_products(contract_descr):
     "Helper function to prepare data required for contract line generation"
     so_line = contract_descr["so_line"]
-    _acs = contract_descr["accessories"]
-    __acs = [(p, l, 1) for (p, l) in set(_acs)]
+
+    _acs = defaultdict(int)
+    for items in contract_descr["accessories"]:
+        _acs[items] += 1
+    __acs = [(p, l, q) for ((p, l), q) in _acs.items()]
 
     return {
         CONTRACT_PROD_MARKER: [(so_line.product_id, so_line, 1)],
