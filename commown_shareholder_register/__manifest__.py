@@ -14,10 +14,13 @@
     "depends": [
         "account",
         "report_py3o",
+        "mass_mailing",
     ],
     "data": [
+        "data/shareholder_tags_update.xml",
         "report/report.xml",
         "views/register.xml",
+        "views/shareholder_tags_update.xml",
     ],
     "installable": True,
 }
