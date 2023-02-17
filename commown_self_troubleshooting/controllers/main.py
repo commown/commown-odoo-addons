@@ -26,6 +26,20 @@ class SelfHelp(http.Controller):
             ids.append(self.ref("tag-need-screwdriver").id)
         return ids
 
+    def _check_posted_contract_id(self, contract_id):
+        contract_id = int(contract_id)
+        contract = request.env["contract.contract"].sudo().browse(contract_id)
+        partner = request.env.user.partner_id
+        if contract.partner_id.commercial_partner_id != partner.commercial_partner_id:
+            _logger.warning(
+                "partner %d posted self_troubleshooting data for contract %d"
+                " which is not his",
+                partner.id,
+                contract.id,
+            )
+            raise ValueError("Invalid contract")
+        return contract_id
+
     @http.route(["/self-troubleshoot"], type="http", auth="user", website=True)
     def create_support_card(self, **kw):
         _logger.info("create_support_card called with parameters %s", kw)
@@ -37,20 +51,12 @@ class SelfHelp(http.Controller):
             "project_ref", "support_project"
         )
 
-        contract = env["contract.contract"].browse(int(post["device_contract"]))
-        if contract.partner_id.commercial_partner_id != partner.commercial_partner_id:
-            _logger.warning(
-                "partner %d posted self_troubleshooting data for contract %d"
-                " which is not his",
-                partner.id,
-                contract.id,
-            )
-            raise ValueError("Invalid contract")
+        contract_id = self._check_posted_contract_id(post["device_contract"])
 
         task_data = {
             "name": post["self-troubleshoot-type"],
             "priority": str(int(post.get("priority", 0))),
-            "contract_id": contract.id,
+            "contract_id": contract_id,
             "partner_id": partner.id,
             "description": self._description(**post),
             "project_id": env.ref(project_ref).id,
