@@ -190,4 +190,14 @@
 
   </template>
 
+  <!-- Add a link to view product details from the options pop-up -->
+  <template id="optional_product_items"
+            inherit_id="website_sale_b2b.optional_product_items">
+    <xpath expr="//div[@t-field='product.website_description_sale']" position="before">
+      <a class="d-block" target="_blank" t-att-href="'/shop/product/%s' % slug(product)">
+        See details in a new window <i class="fa fa-external-link"></i>
+      </a>
+    </xpath>
+  </template>
+
 </odoo>
