@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 11:46+0000\n"
-"PO-Revision-Date: 2023-02-17 11:46+0000\n"
+"POT-Creation-Date: 2023-02-17 12:33+0000\n"
+"PO-Revision-Date: 2023-02-17 12:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -772,6 +772,11 @@ msgstr "Ce champ contient un fichier de stockage complémentaire pour la carte d
 #: model:ir.model.fields,help:commown.field_res_users__id_card1
 msgid "This field holds a file to store the ID card. Images are resized to 1240x1754 and, all files are limited to 5Mo."
 msgstr "Ce champ contient un fichier de stockage pour la carte d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_invoices
+msgid "Total amount"
+msgstr "Montant total"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
