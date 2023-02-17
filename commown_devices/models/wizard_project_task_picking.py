@@ -248,3 +248,21 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
 
         quant = self.task_id.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
         self.contract_id.send_device(quant, date=self.date, do_transfer=True)
+
+
+class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
+    _name = "project.task.notracking.outward.picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    variant_id = fields.Many2one(
+        "product.product",
+        string="Product",
+        domain="[('tracking', '=', 'none'), ('type', '=', 'product')]",
+        required=True,
+    )
+
+    @api.multi
+    def create_picking(self):
+        return self.task_id.contract_id.send_device_tracking_none(
+            self.variant_id, date=self.date
+        )

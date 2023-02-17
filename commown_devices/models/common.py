@@ -1,6 +1,65 @@
 from odoo import fields
 
 
+def internal_picking_tracking_none(
+    origin, products, orig_location, dest_location, date=None, do_transfer=False
+):
+    env = orig_location.env
+    picking_type = env.ref("stock.picking_type_internal")
+
+    date = date or fields.Datetime.now()
+
+    picking = env["stock.picking"].create(
+        {
+            "move_type": "direct",
+            "picking_type_id": picking_type.id,
+            "location_id": orig_location.id,
+            "location_dest_id": dest_location.id,
+            "date": date,
+            "date_done": date,
+            "origin": origin,
+        }
+    )
+
+    moves = {}
+    for product, quantity in products.items():
+        moves[product] = env["stock.move"].create(
+            {
+                "name": product.name,
+                "picking_id": picking.id,
+                "picking_type_id": picking_type.id,
+                "location_id": orig_location.id,
+                "location_dest_id": dest_location.id,
+                "product_id": product.id,
+                "product_uom_qty": quantity,
+                "product_uom": product.uom_id.id,
+                "date": date,
+            }
+        )
+
+    picking.scheduled_date = date
+
+    assert picking.move_lines
+    picking.action_confirm()
+    picking.action_assign()
+    assert picking.state == "assigned", (
+        "Cannot assign any device: state keeps: %r" % picking.state
+    )
+
+    for product, move in moves.items():
+        move.move_line_ids.update(
+            {
+                "location_id": orig_location.id,
+                "qty_done": products[product],
+            }
+        )
+
+    if do_transfer:
+        do_new_transfer(picking, date)
+
+    return picking
+
+
 def internal_picking(
     origin, lots, orig_location, dest_location, date=None, do_transfer=False
 ):
