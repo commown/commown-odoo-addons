@@ -136,6 +136,14 @@
       <attribute name="t-att-href">invoice.get_portal_url(report_type="pdf", download=True)</attribute>
     </xpath>
 
+    <!-- Add a column with the invoice total -->
+    <xpath expr="//t[@t-call='portal.portal_table']//thead//th[last()]" position="before">
+      <th class="text-right">Total amount</th>
+    </xpath>
+    <xpath expr="//t[@t-call='portal.portal_table']//tbody//td[last()]" position="before">
+      <td class="text-right"><span t-esc="-invoice.amount_total if invoice.type == 'out_refund' else invoice.amount_total" t-options='{"widget": "monetary", "display_currency": invoice.currency_id}'/></td>
+    </xpath>
+
   </template>
 
   <!-- Customize portal section titles -->
