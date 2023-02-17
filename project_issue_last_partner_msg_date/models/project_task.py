@@ -31,5 +31,5 @@ class ProjectTask(models.Model):
             and msg.author_id == self.partner_id
             and msg.message_type in ("email", "comment")
         ):
-            self.last_partner_msg_date = msg.create_date
+            self.sudo().last_partner_msg_date = msg.create_date
         return msg
