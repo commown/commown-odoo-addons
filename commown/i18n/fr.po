@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 15:54+0000\n"
-"PO-Revision-Date: 2023-01-02 15:54+0000\n"
+"POT-Creation-Date: 2023-02-17 11:46+0000\n"
+"PO-Revision-Date: 2023-02-17 11:46+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -195,7 +195,7 @@ msgid "<i title=\"Download document\" class=\"fa fa-download\"/>"
 msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
 
 #. module: commown
-#: code:addons/commown/models/sale_order.py:69
+#: code:addons/commown/models/sale_order.py:28
 #, python-format
 msgid "<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
 msgstr "<p><b>N° de commande :</b> {sale_name}</p><p><b>Date de la commande :</b> {date.day}-{date.month}-{date.year}</p><p><b>Article :</b> {product_name}</p>"
@@ -386,7 +386,7 @@ msgid "Fermer"
 msgstr "Fermer"
 
 #. module: commown
-#: code:addons/commown/models/res_partner.py:90
+#: code:addons/commown/models/res_partner.py:106
 #, python-format
 msgid "File too big (limit is %dMo)"
 msgstr "Fichier trop gros (la limite est %d Mo)"
@@ -411,11 +411,6 @@ msgstr "Prénom"
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__income_exchange_account_id
 msgid "Gain Exchange Rate Account"
 msgstr "Compte de gain de change"
-
-#. module: commown
-#: model:ir.model,name:commown.model_portal_wizard
-msgid "Grant Portal Access"
-msgstr "Gérer l'accès au portal"
 
 #. module: commown
 #: selection:project.task,priority:0
@@ -651,11 +646,6 @@ msgid "Please enter a valid VAT number"
 msgstr "Merci de saisir un n° de TVA valide"
 
 #. module: commown
-#: model:ir.model,name:commown.model_portal_wizard_user
-msgid "Portal User Config"
-msgstr "Paramétrage du portail utilisateur"
-
-#. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
 msgid "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
 msgstr "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
@@ -711,6 +701,11 @@ msgstr "Filtrer sur des partenaires"
 #: model:ir.model,name:commown.model_sale_order
 msgid "Sale Order"
 msgstr "Commande"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.optional_product_items
+msgid "See details in a new window <i class=\"fa fa-external-link\"/>"
+msgstr "Voir les détails dans une nouvelle fenêtre <i class=\"fa fa-external-link\"/>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
