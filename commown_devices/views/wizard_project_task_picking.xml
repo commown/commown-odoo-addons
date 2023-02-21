@@ -66,6 +66,27 @@
     </field>
   </record>
 
+  <record id="wizard_project_task_notracking_inward_picking_form" model="ir.ui.view">
+    <field name="name">[commown] Project task no tracking inward picking creation form view</field>
+    <field name="model">project.task.notracking.inward.picking.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Receive a not tracked product">
+        <sheet>
+          <group>
+            <field name="task_id" invisible="1"/>
+            <field name="date"/>
+            <field name="variant_id" options="{'no_create': True}"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="create_picking" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
   <record id="wizard_project_task_inward_picking_form" model="ir.ui.view">
     <field name="name">[commown] Project task inward picking creation form view</field>
     <field name="model">project.task.inward.picking.wizard</field>
