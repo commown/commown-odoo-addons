@@ -100,6 +100,25 @@ class Contract(models.Model):
             [lot], orig_location, dest_location, date=date, do_transfer=do_transfer
         )
 
+    @api.multi
+    def receive_device_tracking_none(
+        self, product, dest_location, date=False, do_transfer=False
+    ):
+        """Create a picking from partner's location to `dest_location`.
+        If given `date` is falsy (the default), it is set to now.
+        If `do_transfer` is True (default: False), execute the picking
+        at the previous date.
+        """
+
+        orig_location = self.partner_id.get_or_create_customer_location()
+        return self._create_picking_tracking_none(
+            {product: 1},
+            orig_location,
+            dest_location,
+            date=date,
+            do_transfer=do_transfer,
+        )
+
     def _create_picking_tracking_none(
         self, products, orig_location, dest_location, date=None, do_transfer=False
     ):
