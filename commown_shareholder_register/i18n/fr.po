@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-09 15:01+0000\n"
-"PO-Revision-Date: 2022-12-09 15:01+0000\n"
+"POT-Creation-Date: 2023-02-24 17:31+0000\n"
+"PO-Revision-Date: 2023-02-24 17:31+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,31 +17,37 @@ msgstr ""
 
 #. module: commown_shareholder_register
 #: model_terms:ir.ui.view,arch_db:commown_shareholder_register.register_form
+#: model_terms:ir.ui.view,arch_db:commown_shareholder_register.update_shareholder_form
 msgid "Cancel"
 msgstr "Annuler"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__create_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__create_uid
 msgid "Created by"
 msgstr "Créé par"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__create_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__create_date
 msgid "Created on"
 msgstr "Créé le"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__date
 msgid "Date"
 msgstr "Date"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,help:commown_shareholder_register.field_commown_shareholder_register_register__date
+#: model:ir.model.fields,help:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__date
 msgid "Date of the register"
 msgstr "Date d'extraction du registre"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__display_name
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__display_name
 msgid "Display Name"
 msgstr "Afficher Nom"
 
@@ -57,21 +63,25 @@ msgstr "Générer"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__id
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__id
 msgid "ID"
 msgstr "ID"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register____last_update
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update____last_update
 msgid "Last Modified on"
 msgstr "Dernière Modification le"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__write_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__write_uid
 msgid "Last Updated by"
 msgstr "Dernière mise à jour par"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__write_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__write_date
 msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
@@ -81,6 +91,11 @@ msgstr "Dernière mise à jour le"
 #: model:ir.ui.menu,name:commown_shareholder_register.register_report_menu
 msgid "Shareholder Register"
 msgstr "Registre des sociétaires"
+
+#. module: commown_shareholder_register
+#: model:ir.ui.menu,name:commown_shareholder_register.shareholders_update_contact_menu
+msgid "Shareholders"
+msgstr "Sociétariat"
 
 #. module: commown_shareholder_register
 #: model:ir.ui.menu,name:commown_shareholder_register.shareholders_reporting_menu
@@ -100,9 +115,25 @@ msgid "The partner %s has not enough shares for college %s"
 msgstr "Le partenaire %s n'a pas assez de parts pour être dans le collège %s"
 
 #. module: commown_shareholder_register
+#: model_terms:ir.ui.view,arch_db:commown_shareholder_register.update_shareholder_form
+msgid "Update"
+msgstr "Mettre à jour"
+
+#. module: commown_shareholder_register
+#: model:ir.actions.act_window,name:commown_shareholder_register.update_tags_action
+#: model:ir.ui.menu,name:commown_shareholder_register.shareholders_update_tags_menu
+msgid "Update Shareholders"
+msgstr "Mettre a jour les étiquettes"
+
+#. module: commown_shareholder_register
 #: model:ir.model,name:commown_shareholder_register.model_commown_shareholder_register_register
 msgid "Utility class to compute a shareholder register"
 msgstr "Classe transitoire pour calculer un registre de sociétaire"
+
+#. module: commown_shareholder_register
+#: model:ir.model,name:commown_shareholder_register.model_commown_shareholder_register_shareholder_tags_update
+msgid "Utility class to update partner shareholder's tag"
+msgstr "Classe permettant de mettre à jour les étiquettes des sociétaires"
 
 #. module: commown_shareholder_register
 #: model:ir.actions.report,name:commown_shareholder_register.action_py3o_spreadsheet
