@@ -1,0 +1,31 @@
+<odoo>
+
+  <record model="ir.ui.view" id="view_shareholder_college_tree">
+    <field name="name">shareholder.college.tree</field>
+    <field name="model">commown_shareholder_register.college</field>
+    <field name="arch" type="xml">
+      <tree editable="bottom">
+        <field name="name"/>
+        <field name="rank"/>
+        <field name="category_ids"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_college" model="ir.actions.act_window">
+    <field name="name">Shareholder College</field>
+    <field name="res_model">commown_shareholder_register.college</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="view_shareholder_college_tree"/>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem
+      id="college_menu"
+      parent="commown_shareholder_register.shareholders_reporting_menu"
+      action="action_college"
+      groups="account.group_account_manager"
+      sequence="120" />
+
+</odoo>
