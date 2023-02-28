@@ -51,6 +51,15 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             {"name": "unused service", "type": "service"}
         )
 
+        self.nontracked_product = self.env["product.template"].create(
+            {
+                "name": "non tracked product (Module)",
+                "type": "product",
+                "tracking": "none",
+            }
+        )
+        self.adjust_stock_notracking(self.nontracked_product.product_variant_id)
+
     def _create_and_send_device(self, serial, contract, product=None, do_transfer=True):
         lot = self.adjust_stock(product, serial=serial)
         if contract is not None:
@@ -361,3 +370,54 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.task_test_checks.stage_id = resiliated_stage
         self.assertTrue(self.task_test_checks.stage_id == resiliated_stage)
+
+    def test_outward_inward_notracking(self):
+        self.task.contract_id = self.c1
+        date = datetime.datetime(2020, 1, 10, 16, 2, 34)
+        pt_variant = self.nontracked_product.product_variant_id
+
+        initial_location = (
+            self.env["stock.quant"]
+            .search(
+                [
+                    ("product_id.id", "=", pt_variant.id),
+                    ("quantity", ">", "0"),
+                ]
+            )
+            .location_id
+        )
+        wizard = self.env["project.task.notracking.outward.picking.wizard"].create(
+            {"task_id": self.task.id, "date": date, "variant_id": pt_variant.id}
+        )
+        wizard.create_picking(do_transfer=True)
+
+        client_location = (
+            self.env["stock.quant"]
+            .search(
+                [
+                    ("product_id.id", "=", pt_variant.id),
+                    ("quantity", ">", "0"),
+                ]
+            )
+            .location_id
+        )
+        self.assertNotEqual(initial_location, client_location)
+
+        wizard_inward = self.env[
+            "project.task.notracking.inward.picking.wizard"
+        ].create({"task_id": self.task.id, "date": date, "variant_id": pt_variant.id})
+        wizard_inward.create_picking(do_transfer=True)
+        final_location = (
+            self.env["stock.quant"]
+            .search(
+                [
+                    ("product_id.id", "=", pt_variant.id),
+                    ("quantity", ">", "0"),
+                ]
+            )
+            .location_id
+        )
+        self.assertEqual(
+            final_location,
+            self.env.ref("commown_devices.stock_location_devices_to_check"),
+        )
