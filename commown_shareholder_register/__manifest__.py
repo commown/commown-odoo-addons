@@ -13,6 +13,7 @@
     "website": "https://commown.coop",
     "depends": [
         "account",
+        "base_company_extension",
         "report_py3o",
         "mass_mailing",
     ],
@@ -20,6 +21,7 @@
         "data/shareholder_tags_update.xml",
         "report/report.xml",
         "views/register.xml",
+        "views/res_company.xml",
         "views/shareholder_tags_update.xml",
     ],
     "installable": True,
