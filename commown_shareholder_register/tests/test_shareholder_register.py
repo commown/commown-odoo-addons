@@ -21,6 +21,28 @@ class TestShareholderRegister(common.SavepointCase):
         return account
 
     @classmethod
+    def _create_college(cls, name, rank):
+        college = cls.env["commown_shareholder_register.college"].create(
+            {
+                "name": name,
+                "rank": rank,
+            }
+        )
+        return college
+
+    @classmethod
+    def _create_category(cls, name, account, college, min_share_number):
+        category = cls.env["commown_shareholder_register.category"].create(
+            {
+                "name": name,
+                "account_id": account.id,
+                "college_id": college.id,
+                "min_share_number": min_share_number,
+            }
+        )
+        return category
+
+    @classmethod
     def _add_shares(cls, partner, account, date_tuple, amount):
         journal = (
             cls.env["account.journal"]
@@ -62,6 +84,8 @@ class TestShareholderRegister(common.SavepointCase):
     def setUpClass(cls):
 
         super(TestShareholderRegister, cls).setUpClass()
+        cls.env["res.company"].browse(1).nominal_share_amount = 20
+
         cls.partner_1 = cls.env["res.partner"].create({"name": "Partner 1"})
         cls.partner_2 = cls.env["res.partner"].create({"name": "Partner 2"})
         cls.partner_3 = cls.env["res.partner"].create({"name": "Partner 3"})
@@ -75,6 +99,29 @@ class TestShareholderRegister(common.SavepointCase):
             "10135000", "Account Bénéficiaire"
         )
         cls.account_balancing = cls._create_account("XXXXXXXX", "Balancing journal")
+
+        cls.college_A = cls._create_college("A", 80)
+        cls.college_B = cls._create_college("B", 30)
+        cls.college_D = cls._create_college("D", 40)
+
+        cls.cat_porteur = cls._create_category(
+            "Porteur",
+            cls.account_porteur,
+            cls.college_A,
+            100,
+        )
+        cls.cat_soutient = cls._create_category(
+            "Soutient",
+            cls.account_soutient,
+            cls.college_D,
+            5,
+        )
+        cls.cat_beneficiaire = cls._create_category(
+            "Beneficiare",
+            cls.account_beneficiaire,
+            cls.college_B,
+            1,
+        )
 
         cls.account_move_lines = cls.env["account.move.line"]
         cls._add_shares(cls.partner_1, cls.account_porteur, (2018, 3, 12), 2000)
@@ -91,14 +138,15 @@ class TestShareholderRegister(common.SavepointCase):
         return reg
 
     def test_get_shareholders(self):
+
         result = self.register(2018, 7, 24).get_shareholders()
         # Check total balance
         self.assertEqual(result["total"]["balance"], 2300)
         # Check college assignation
-        self.assertEqual(result["partners"][self.partner_2]["college"]["letter"], "D")
+        self.assertEqual(result["partners"][self.partner_2]["college"].name, "D")
         # Check college balance calculation
-        self.assertEqual(result["colleges"]["A"]["total"], 2000)
-        self.assertEqual(result["colleges"]["D"]["total"], 300)
+        self.assertEqual(result["colleges"][self.college_A]["total"], 2000)
+        self.assertEqual(result["colleges"][self.college_D]["total"], 300)
         # Check that the partner with no more shares is not in the register
         result = self.register(2018, 8, 13).get_shareholders()
         self.assertFalse(self.partner_1 in result["partners"])

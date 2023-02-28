@@ -27,14 +27,16 @@
     </record>
 
     <menuitem
-            id="shareholders_reporting_menu"
-            parent="account.menu_finance_reports"
-            name="Shareholders Reporting"
-            sequence="100" />
+        id="shareholders_reporting_menu"
+        parent="account.menu_finance"
+        name="Shareholders Reporting"
+        sequence="15" />
 
-    <menuitem id="register_report_menu"
-            parent="commown_shareholder_register.shareholders_reporting_menu"
-            action="register_action"
-            sequence="110" />
+    <menuitem
+        id="register_report_menu"
+        parent="commown_shareholder_register.shareholders_reporting_menu"
+        groups="account.group_account_user"
+        action="register_action"
+        sequence="110" />
 
 </odoo>
