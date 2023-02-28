@@ -14,14 +14,17 @@
     "depends": [
         "account",
         "base_company_extension",
+        "contacts",
         "report_py3o",
-        "mass_mailing",
     ],
     "data": [
         "data/shareholder_tags_update.xml",
         "report/report.xml",
+        "security/ir.model.access.csv",
         "views/register.xml",
         "views/res_company.xml",
+        "views/shareholder_category.xml",
+        "views/shareholder_college.xml",
         "views/shareholder_tags_update.xml",
     ],
     "installable": True,

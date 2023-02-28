@@ -40,7 +40,12 @@ class ShareholderTagsUpdate(models.TransientModel):
         sql = io.StringIO()
         sql.writelines(
             "%d\t%d\n%d\t%d\n"
-            % (partner.id, college_tag_ids[college], partner.id, shareholder_tag.id)
+            % (
+                partner.id,
+                college_tag_ids[college.name],
+                partner.id,
+                shareholder_tag.id,
+            )
             for college, data in shareholders_data["colleges"].items()
             for partner in data["partners"]
         )
