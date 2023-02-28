@@ -4,8 +4,6 @@ from odoo import _, api, fields, models
 
 NOMINAL_SHARE_AMOUNT = 20
 
-SHARE_ACCOUNT_IDENTIFIER = "1013%"
-
 SHARE_TYPE_DATA = {
     "10134000": {  # Porteurs de Projet
         "nom_part": "Parts sociales Porteurs de Projet",
@@ -74,7 +72,7 @@ class ShareholderRegister(models.TransientModel):
     def get_shareholders(self):
         data = self.env["account.move.line"].read_group(
             [
-                ("account_id.code", "=like", SHARE_ACCOUNT_IDENTIFIER),
+                ("account_id.code", "in", tuple(SHARE_TYPE_DATA.keys())),
                 ("partner_id", "!=", False),
                 ("date", "<", self.date),
                 ("partner_id.active", "=", True),
