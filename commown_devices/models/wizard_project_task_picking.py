@@ -262,9 +262,9 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
     )
 
     @api.multi
-    def create_picking(self):
+    def create_picking(self, do_transfer=False):
         return self.task_id.contract_id.send_device_tracking_none(
-            self.variant_id, date=self.date
+            self.variant_id, date=self.date, do_transfer=do_transfer
         )
 
 
@@ -280,9 +280,10 @@ class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
     )
 
     @api.multi
-    def create_picking(self):
+    def create_picking(self, do_transfer=False):
         return self.task_id.contract_id.receive_device_tracking_none(
             self.variant_id,
             self.env.ref("commown_devices.stock_location_devices_to_check"),
             date=self.date,
+            do_transfer=do_transfer,
         )

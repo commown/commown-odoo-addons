@@ -1,3 +1,5 @@
+import dateutil.parser
+
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
@@ -99,6 +101,48 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         self.env.cache.invalidate()
 
         return lot
+
+    def adjust_stock_notracking(self, product, qty=1.0, date="2000-01-01"):
+
+        location = self.env["stock.location"].create(
+            {
+                "name": "Test Module stock location",
+                "usage": "internal",
+                "partner_id": 1,
+                "location_id": self.env.ref(
+                    "commown_devices.stock_location_new_devices"
+                ).id,
+            }
+        )
+        inventory = self.env["stock.inventory"].create(
+            {
+                "name": "test stock %s" % product.name,
+                "location_id": location.id,
+                "filter": "product",
+                "product_id": product.id,
+                "date": dateutil.parser.parse(date),
+            }
+        )
+        inventory.action_start()
+        inventory.line_ids |= self.env["stock.inventory.line"].create(
+            {
+                "product_id": product.id,
+                "location_id": location.id,
+                "product_qty": qty,
+            }
+        )
+        inventory.action_validate()
+        assert inventory.state == "done", (
+            "Unexpected inventory state %s" % inventory.state
+        )
+
+        self.env.cache.invalidate()
+        quant = self.env["stock.quant"].search(
+            [("product_id.id", "=", product.id), ("location_id.id", "=", location.id)]
+        )
+        quant.in_date = dateutil.parser.parse(date)
+
+        return product
 
     def send_device(self, serial, contract=None, date=None):
         contract = contract or self.so.order_line.contract_id
