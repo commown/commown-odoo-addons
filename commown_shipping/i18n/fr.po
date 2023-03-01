@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-06 17:20+0000\n"
-"PO-Revision-Date: 2022-12-06 17:20+0000\n"
+"POT-Creation-Date: 2023-02-14 06:46+0000\n"
+"PO-Revision-Date: 2023-02-14 06:46+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,20 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_shipping
+#: model:mail.template,subject:commown_shipping.parcel_at_postoffice
+msgid "${object.user_id.company_id.name} - Customer parcel waiting at the postoffice"
+msgstr "${object.user_id.company_id.name} - Un colis attend le client au bureau de poste"
+
+#. module: commown_shipping
 #: model:mail.template,body_html:commown_shipping.parcel_at_postoffice
 msgid "\n"
 "      <p>The parcel of this order is waiting at the postoffice.</p>\n"
 "      \n"
 "      "
-msgstr "\n"
-"      <p>Le colis de cette commande attend le destinataire à son bureau de poste.</p>\n"
-"      \n"
-"      "
-
-#. module: commown_shipping
-#: model:mail.template,subject:commown_shipping.parcel_at_postoffice
-msgid "${object.user_id.company_id.name} - Customer parcel waiting at the postoffice"
-msgstr "${object.user_id.company_id.name} - Le colis d'un client l'attend à son bureau de poste"
+msgstr "<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est&nbsp;<b style=\"font-weight:bolder;font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; text-align: inherit; font-weight: bold;\">${object.partner_id.name}.</b></p><p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"><b style=\"font-weight:bolder;font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; text-align: inherit; font-weight: bold;\"><br></b><span style=\"font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; font-weight: initial; text-align: inherit;\">Il a au maximum 10 jours pour le récupérer, s'assurer qu'il peut le faire avant que le colis ne nous revienne.</span></p>"
 
 #. module: commown_shipping
 #: code:addons/commown_shipping/models/colissimo_utils.py:74
@@ -80,6 +77,12 @@ msgid "By default, perform actions on delivery"
 msgstr "Effectuer les actions post-livraison par défaut"
 
 #. module: commown_shipping
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_crm_lead_print_label_form
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_project_task_print_label_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_track_delivery_mixin
 msgid "Class holding the fields and methods to track parcel delivery"
 msgstr "Classe portant les champs et méthodes de suivi des colis"
@@ -100,12 +103,16 @@ msgstr "Contact"
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__create_uid
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__create_uid
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__create_uid
 msgid "Created by"
 msgstr "Créé par"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__create_date
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__create_date
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__create_date
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__create_date
 msgid "Created on"
 msgstr "Créé le"
 
@@ -171,12 +178,15 @@ msgstr "Suivi colissimo : tâches"
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__display_name
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__display_name
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__display_name
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__display_name
 msgid "Display Name"
-msgstr "Nom affiché"
+msgstr "Afficher Nom"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_date
@@ -216,9 +226,12 @@ msgstr "Courriel au client pour une récupération urgente"
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__id
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__id
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__id
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__id
 msgid "ID"
 msgstr "ID"
@@ -242,14 +255,17 @@ msgstr "Valeur assurée (€)"
 #. module: commown_shipping
 #: sql_constraint:commown.parcel.type:0
 msgid "Insurance value must be >= 0!"
-msgstr "La valeur assurée doit être >= 0!"
+msgstr "La valeur assurée doit être >= 0 !"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type____last_update
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account____last_update
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin____last_update
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin____last_update
 msgid "Last Modified on"
 msgstr "Dernière Modification le"
@@ -257,12 +273,16 @@ msgstr "Dernière Modification le"
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__write_uid
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__write_uid
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__write_uid
 msgid "Last Updated by"
 msgstr "Dernière mise à jour par"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__write_date
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__write_date
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__write_date
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__write_date
 msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
@@ -270,6 +290,11 @@ msgstr "Dernière mise à jour le"
 #: model:ir.model,name:commown_shipping.model_crm_lead
 msgid "Lead/Opportunity"
 msgstr "Piste/opportunité"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__shipping_ids
+msgid "Leads"
+msgstr "Pistes"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__name
@@ -281,6 +306,12 @@ msgstr "Nom"
 #, python-format
 msgid "No mail email template specified for %s (neither in current record nor its parent)"
 msgstr "Aucun modèle de courriel paramétré pour %s (ni sur le doc courant ni sur son parent)"
+
+#. module: commown_shipping
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_crm_lead_print_label_form
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_project_task_print_label_form
+msgid "OK"
+msgstr "OK
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_shipping_parent_mixin
@@ -313,6 +344,9 @@ msgid "Parcel technical names must be unique."
 msgstr "Le nom technique du colis doit être unique."
 
 #. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard__parcel_type_id
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__parcel_type_id
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__parcel_type_id
 #: model:ir.model.fields,field_description:commown_shipping.field_product_product__shipping_parcel_type_id
 #: model:ir.model.fields,field_description:commown_shipping.field_product_template__shipping_parcel_type_id
 msgid "Parcel type"
@@ -334,6 +368,32 @@ msgstr "Valeur Env par défaut pour le mot de passe"
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__password_env_is_editable
 msgid "Password Env Is Editable"
 msgstr "La valeur Env du mot de passe est éditable"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_project_task_print_label_wizard
+msgid "Print a Colissimo label"
+msgstr "Imprimer une étiquette colissimo"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_commown_shipping_abstract_print_label_wizard
+msgid "Print a Colissimo label (abstract class)"
+msgstr "Imprimer une étiquette colissimo (classe abstraite)"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_commown_shipping_lead_print_label_wizard
+msgid "Print a Colissimo label from a crm lead"
+msgstr "Imprimer une étiquette colissimo depuis une opportunité"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_commown_shipping_task_print_label_wizard
+msgid "Print a Colissimo label from a project task"
+msgstr "Imprimer une étiquette colissimo depuis une tâche"
+
+#. module: commown_shipping
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_crm_lead_print_label_form
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_project_task_print_label_form
+msgid "Print label"
+msgstr "Imprimer une étiquette"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_product_template
@@ -395,6 +455,11 @@ msgid "Task"
 msgstr "Tâche"
 
 #. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__shipping_ids
+msgid "Tasks"
+msgstr "Tâches"
+
+#. module: commown_shipping
 #: sql_constraint:res.partner:0
 msgid "The street field size cannot exceed 35"
 msgstr "Chaque ligne d'adresse ne peut dépasser 35 caractères"
@@ -405,28 +470,35 @@ msgid "The weight must be > 0!"
 msgstr "Le poids doit être > 0 !"
 
 #. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard__use_full_page_per_label
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__use_full_page_per_label
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__use_full_page_per_label
+msgid "Use a full page per label"
+msgstr "Utiliser une page entière par étiquette"
+
+#. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__weight
 msgid "Weight (kg)"
 msgstr "Poids (kg)"
 
 #. module: commown_shipping
-#: model:ir.actions.server,name:commown_shipping.action_print_outward_fp2_label_issue
-#: model:ir.actions.server,name:commown_shipping.action_print_outward_fp2_label_task
-msgid "[commown] Print Fairphone parcel outward label(s)"
-msgstr "[commown] Imprimer une (des) étiquette(s) aller Fairphone"
+#: model:ir.actions.act_window,name:commown_shipping.action_wizard_crm_lead_print_label
+msgid "[commown] Print label"
+msgstr "[commown] Imprimer une étiquette"
 
 #. module: commown_shipping
-#: model:ir.actions.server,name:commown_shipping.action_print_return_fp2_label_issue
-#: model:ir.actions.server,name:commown_shipping.action_print_return_fp2_label_task
-msgid "[commown] Print Fairphone parcel return label"
-msgstr "[commown] Imprimer une étiquette retour pour un Fairphone"
-
-#. module: commown_shipping
-#: model:ir.actions.server,name:commown_shipping.action_print_outward_label_lead
-msgid "[commown] Étiquette aller Crosscall (<1kg, 300€)"
-msgstr "[commown] Étiquette aller Crosscall (<1kg, 300€)"
+#: model:ir.actions.act_window,name:commown_shipping.action_wizard_project_task_print_label
+msgid "[commown] SUPPORT,GESTION: print label"
+msgstr "[commown] SUPPORT,GESTION: imprimer une étiquette"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_delivery_parent_mixin
 msgid "commown.delivery.parent.mixin"
 msgstr "commown.delivery.parent.mixin"
+
+#. module: commown_shipping
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_crm_lead_print_label_form
+#: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_project_task_print_label_form
+msgid "or"
+msgstr "ou"
+

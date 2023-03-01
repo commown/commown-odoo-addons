@@ -9,6 +9,14 @@ class ProjectTaskTC(BaseShippingTC):
         self.task = self.env.ref("project.project_task_1")
         self.task.project_id.shipping_account_id = self.shipping_account.id
 
+    def print_label(self, tasks, parcel_type, use_full_page_per_label=False):
+        return self._print_label(
+            "commown_shipping.task.print_label.wizard",
+            tasks,
+            parcel_type,
+            use_full_page_per_label,
+        )
+
     @requests_mock.Mocker()
     def test_print_parcel_actions(self, mocker):
 
@@ -20,24 +28,16 @@ class ProjectTaskTC(BaseShippingTC):
         for num in range(5):
             tasks += orig_task.copy({"name": "[SO%05d] Test lead" % num})
 
-        ref = self.env.ref
-        act_out = ref("commown_shipping.action_print_outward_fp2_label_task")
+        all_labels = self.print_label(tasks, self.parcel_type)
 
-        download_action = act_out.with_context(
-            {"active_model": tasks._name, "active_ids": tasks.ids}
-        ).run()
-
-        all_labels = self._attachment_from_download_action(download_action)
         self.assertEqual(all_labels.name, self.parcel_type.name + ".pdf")
         self.assertEqual(pdf_page_num(all_labels), 2)
 
-        act_ret = ref("commown_shipping.action_print_return_fp2_label_task")
-
+        return_parcel_type = self.env["commown.parcel.type"].search(
+            [("technical_name", "=", "fp2-return-ins300")],
+        )
         task = orig_task.copy({"name": "[Test single]"})
-        download_action = act_ret.with_context(
-            {"active_model": tasks._name, "active_id": task.ids}
-        ).run()
 
-        label = self._attachment_from_download_action(download_action)
+        label = self.print_label(task, return_parcel_type, use_full_page_per_label=True)
 
         self.assertEqualFakeLabel(label)
