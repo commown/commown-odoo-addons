@@ -78,7 +78,9 @@ class Contract(models.Model):
         """Insert custom payment transaction label into the context
         before executing the standard payment process."""
         if self.transaction_label:
-            last_date_invoiced = self.recurring_next_date - relativedelta(days=1)
+            last_date_invoiced = max(
+                self.contract_line_ids.mapped("last_date_invoiced")
+            ) + relativedelta(days=1)
             label = self._format_transaction_label(invoice, last_date_invoiced)
             _logger.debug("Bank label for invoice %s: %s", invoice.number, label)
             self = self.with_context(slimpay_payin_label=label)

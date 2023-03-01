@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from mock import patch
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
@@ -41,6 +42,11 @@ class ContractPaymentTC(TestContractBase):
             self.assertEqual(label, invoice.number)
 
     def test_custom_payin_label(self):
+        # Make this the last invoice of the contract
+        # (see project task #15112: crash on last invoice generation)
+        for cline in self.contract.contract_line_ids:
+            cline.date_end = cline.next_period_date_end - relativedelta(days=1)
+
         self.contract.write(
             {
                 "transaction_label": "Invoice #START# - #END# (#INV#)",
