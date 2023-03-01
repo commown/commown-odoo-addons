@@ -1,7 +1,5 @@
 import logging
 
-from dateutil.relativedelta import relativedelta
-
 from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
@@ -79,8 +77,8 @@ class Contract(models.Model):
         before executing the standard payment process."""
         if self.transaction_label:
             last_date_invoiced = max(
-                self.contract_line_ids.mapped("last_date_invoiced")
-            ) + relativedelta(days=1)
+                invoice.mapped("invoice_line_ids.contract_line_id.last_date_invoiced")
+            )
             label = self._format_transaction_label(invoice, last_date_invoiced)
             _logger.debug("Bank label for invoice %s: %s", invoice.number, label)
             self = self.with_context(slimpay_payin_label=label)
