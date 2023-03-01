@@ -16,6 +16,7 @@
         "base_company_extension",
         "contacts",
         "report_py3o",
+        "web_ir_actions_act_multi",
     ],
     "data": [
         "data/shareholder_tags_update.xml",

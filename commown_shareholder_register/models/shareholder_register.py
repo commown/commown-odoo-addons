@@ -126,12 +126,17 @@ class ShareholderRegister(models.TransientModel):
             }
         )
 
-        action = {
-            "name": "register",
-            "type": "ir.actions.act_url",
-            "url": "web/content/?model=%s&id=%d&filename_field=report_name&"
-            "field=report&download=true&filename=%s"
-            % (self._name, self.id, self.report_name),
-            "target": "self",
+        return {
+            "type": "ir.actions.act_multi",
+            "actions": [
+                {
+                    "name": "register",
+                    "type": "ir.actions.act_url",
+                    "url": "web/content/?model=%s&id=%d&filename_field=report_name&"
+                    "field=report&download=true&filename=%s"
+                    % (self._name, self.id, self.report_name),
+                    "target": "current",
+                },
+                {"type": "ir.actions.act_window_close"},
+            ],
         }
-        return action
