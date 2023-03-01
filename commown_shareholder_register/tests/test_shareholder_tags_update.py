@@ -1,14 +1,15 @@
-from base64 import decodebytes
 from datetime import date
-from io import BytesIO
-
-from odf import opendocument
-from odf.table import Table, TableCell, TableRow
 
 from odoo.tests import common
 
+SHAREHOLDER_TAG_XML_ID = "commown_shareholder_register.shareholder_tag"
+COLLEGE_A_XML_ID = "commown_shareholder_register.shareholder_tag_col_A"
+COLLEGE_B_XML_ID = "commown_shareholder_register.shareholder_tag_col_B"
+COLLEGE_C_XML_ID = "commown_shareholder_register.shareholder_tag_col_C"
+COLLEGE_D_XML_ID = "commown_shareholder_register.shareholder_tag_col_D"
 
-class TestShareholderRegister(common.SavepointCase):
+
+class TestShareholderTagsUpdate(common.SavepointCase):
     @classmethod
     def _create_account(cls, code, name):
         account = cls.env["account.account"].create(
@@ -83,7 +84,7 @@ class TestShareholderRegister(common.SavepointCase):
     @classmethod
     def setUpClass(cls):
 
-        super(TestShareholderRegister, cls).setUpClass()
+        super(TestShareholderTagsUpdate, cls).setUpClass()
         cls.env["res.company"].browse(1).nominal_share_amount = 20
 
         cls.partner_1 = cls.env["res.partner"].create({"name": "Partner 1"})
@@ -126,50 +127,51 @@ class TestShareholderRegister(common.SavepointCase):
         cls.account_move_lines = cls.env["account.move.line"]
         cls._add_shares(cls.partner_1, cls.account_porteur, (2018, 3, 12), 2000)
         cls._add_shares(cls.partner_1, cls.account_porteur, (2018, 8, 12), -2000)
-        cls._add_shares(cls.partner_2, cls.account_beneficiaire, (2018, 3, 12), 100)
-        cls._add_shares(cls.partner_2, cls.account_soutient, (2018, 3, 12), 200)
-        cls._add_shares(cls.partner_2, cls.account_porteur, (2018, 3, 12), 20)
-        cls._add_shares(cls.partner_3, cls.account_soutient, (2018, 3, 12), -200)
+        cls._add_shares(cls.partner_2, cls.account_beneficiaire, (2018, 3, 12), 200)
+        cls._add_shares(cls.partner_2, cls.account_soutient, (2018, 8, 12), 200)
 
-    def register(self, *date_tuple):
-        reg = self.env["commown_shareholder_register.register"].create(
+    def update_tags(self, *date_tuple):
+        self.env["commown_shareholder_register.shareholder_tags_update"].create(
             {"date": date(*date_tuple)}
+        ).action_update_partners_tag()
+
+    def test_tags_update(self):
+        self.update_tags(2018, 3, 13)
+        self.assertIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag"),
+            self.partner_1.category_id,
         )
-        return reg
-
-    def test_get_shareholders(self):
-
-        result = self.register(2018, 7, 24).get_shareholders()
-        # Check total balance
-        self.assertEqual(result["total"]["balance"], 2300)
-        # Check college assignation
-        self.assertEqual(result["partners"][self.partner_2]["college"].name, "D")
-        # Check college balance calculation
-        self.assertEqual(result["colleges"][self.college_A]["total"], 2000)
-        self.assertEqual(result["colleges"][self.college_D]["total"], 300)
-        # Check that the partner with no more shares is not in the register
-        result = self.register(2018, 8, 13).get_shareholders()
-        self.assertFalse(self.partner_1 in result["partners"])
-
-        self.assertCountEqual(
-            result["warnings"],
-            [
-                "The partner Partner 2 has not enough shares for college A",
-                "The partner Partner 3 has a negative share number",
-            ],
+        self.assertIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag_col_A"),
+            self.partner_1.category_id,
         )
-
-    def test_report(self):
-        # Beware that the row index depends on the number of colleges
-        sheet_idx, row_idx, col_idx = 0, 6, 2
-        register = self.register(2018, 8, 13)
-        reg_data = register.get_shareholders()
-        register.generate_register()
-        ods_file = opendocument.load(BytesIO(decodebytes(register.report)))
-        value = (
-            ods_file.getElementsByType(Table)[sheet_idx]
-            .getElementsByType(TableRow)[row_idx]
-            .getElementsByType(TableCell)[col_idx]
-            .getAttribute("value")
+        self.assertIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag"),
+            self.partner_2.category_id,
         )
-        self.assertEqual(float(value), reg_data["total"]["balance"])
+        self.assertIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag_col_B"),
+            self.partner_2.category_id,
+        )
+        self.update_tags(2018, 8, 13)
+
+        self.assertNotIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag"),
+            self.partner_1.category_id,
+        )
+        self.assertNotIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag_col_A"),
+            self.partner_1.category_id,
+        )
+        self.assertIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag"),
+            self.partner_2.category_id,
+        )
+        self.assertIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag_col_D"),
+            self.partner_2.category_id,
+        )
+        self.assertNotIn(
+            self.env.ref("commown_shareholder_register.shareholder_tag_col_B"),
+            self.partner_2.category_id,
+        )

@@ -1,0 +1,46 @@
+<odoo>
+
+    <record id="update_shareholder_form" model="ir.ui.view">
+        <field name="name">commown_shareholder.update.form</field>
+        <field name="model">commown_shareholder_register.shareholder_tags_update</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Update" name="action_update_partners_tag" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="update_tags_action" model="ir.actions.act_window">
+        <field name="name">Update Shareholders</field>
+        <field name="res_model">commown_shareholder_register.shareholder_tags_update</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+            id="tagging_contact_menu"
+            parent="contacts.menu_contacts"
+            name="Tagging"
+            sequence="90" />
+
+    <menuitem
+            id="shareholders_update_contact_menu"
+            parent="tagging_contact_menu"
+            name="Shareholders"
+            sequence="100" />
+
+    <menuitem id="shareholders_update_tags_menu"
+            parent="commown_shareholder_register.shareholders_update_contact_menu"
+            action="update_tags_action"
+            sequence="110" />
+
+</odoo>
