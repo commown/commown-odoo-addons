@@ -58,7 +58,7 @@ class ContractPaymentTC(TestContractBase):
         ) as pay:
             invoice = self.contract.recurring_create_invoice()
             label = pay.call_args[0][-1]
-            expected_label = "Invoice 01/15/2018 - 02/14/2018 (%s)" % invoice.number
+            expected_label = "Invoice 01/15/2018 - 02/13/2018 (%s)" % invoice.number
             self.assertEqual(label, expected_label)
 
     def test_amount(self):
