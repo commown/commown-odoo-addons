@@ -30,6 +30,20 @@
       <field name="location_id" ref="stock.stock_location_stock"/>
     </record>
 
+    <record id="stock_location_devices_to_repair" model="stock.location">
+      <field name="name">Devices to repair</field>
+      <field name="usage">view</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock.stock_location_stock"/>
+    </record>
+
+    <record id="stock_location_devices_to_repackage" model="stock.location">
+      <field name="name">Devices to repackage</field>
+      <field name="usage">view</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock.stock_location_stock"/>
+    </record>
+
     <record id="stock_location_outsourced_repair" model="stock.location">
       <field name="name">Waiting for an outsourced repair</field>
       <field name="usage">internal</field>
