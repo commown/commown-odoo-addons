@@ -11,6 +11,13 @@
     "maintainers": ["fcayre"],
     "license": "AGPL-3",
     "depends": [
+        "payment",
+        "queue_job",
+    ],
+    "data": [
+        "data/obsolescence_action.xml",
+        "security/ir.model.access.csv",
+        "views/payment_acquirer.xml",
     ],
     "installable": True,
 }
