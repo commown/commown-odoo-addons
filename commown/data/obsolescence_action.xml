@@ -1,0 +1,10 @@
+<odoo>
+
+  <record
+      id="obsolescence_action_reattribute_contracts"
+      model="payment_token_uniquify.obsolescence_action">
+    <field name="name">Reattribute contracts</field>
+    <field name="technical_name">reattribute_contracts</field>
+  </record>
+
+</odoo>

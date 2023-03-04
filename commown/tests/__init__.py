@@ -4,6 +4,7 @@ from . import test_controllers
 from . import test_crm_lead
 from . import test_customer_portal
 from . import test_payment
+from . import test_payment_token
 from . import test_project_task
 from . import test_reconciliation_widget
 from . import test_res_partner

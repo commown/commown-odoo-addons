@@ -7,6 +7,7 @@ from . import crm_lead
 from . import coupon
 from . import mass_reconcile
 from . import payment
+from . import payment_token_obsolescence_action
 from . import product_template
 from . import project_project
 from . import project_task
