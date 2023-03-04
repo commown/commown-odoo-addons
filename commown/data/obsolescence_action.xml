@@ -7,4 +7,11 @@
     <field name="technical_name">reattribute_contracts</field>
   </record>
 
+  <record
+      id="obsolescence_action_reattribute_draft_contract_invoices"
+      model="payment_token_uniquify.obsolescence_action">
+    <field name="name">Reattribute draft invoices</field>
+    <field name="technical_name">reattribute_draft_contract_invoices</field>
+  </record>
+
 </odoo>
