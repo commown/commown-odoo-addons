@@ -9,6 +9,8 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
     technical_name = fields.Selection(
         selection_add=[
             ("reattribute_contracts", "Reattribute contracts"),
+            ("reattribute_draft_contract_invoices",
+             "Reattribute draft contract invoices"),
         ],
     )
 
@@ -38,3 +40,18 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
                 "payment_token_id": False,
             }
         )
+
+    @api.model
+    def _run_action_reattribute_draft_contract_invoices(self, obsolete_tokens, new_token):
+        """Reattribute the draft invoices of partners which token just became obsolete
+        to the partner of the new token.
+        """
+
+        self.env["account.invoice"].search(
+            [
+                ("type", "=", "out_invoice"),
+                ("state", "=", "draft"),
+                ("partner_id.payment_token_id", "in", obsolete_tokens.ids),
+                ("invoice_line_ids.contract_line_id", "!=", False),
+            ]
+        ).update({"partner_id": new_token.partner_id.id})

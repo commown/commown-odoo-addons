@@ -82,3 +82,13 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         self.assertEqual(self.contract2.partner_id, new_token.partner_id)
         self.assertEqual(self.contract2.invoice_partner_id, new_token.partner_id)
         self.assertFalse(self.contract2.payment_token_id)
+
+    def test_action_reattribute_draft_contract_invoices(self):
+        # Generate draft invoices (contract isauto_pay is False)
+        inv = self.contract1._recurring_create_invoice()
+
+        # Configure acquirer with draft invoices reattribution and trigger obsolescence:
+        new_token = self._trigger_obsolescence("reattribute_draft_contract_invoices")
+
+        # Check the results: invoices must have been reattributed to the new partner:
+        self.assertEqual(inv.partner_id, new_token.partner_id)
