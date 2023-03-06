@@ -17,7 +17,7 @@ class ProjectTaskAbstractPickingWizard(models.AbstractModel):
     )
 
     date = fields.Datetime(
-        string="date",
+        string="Date",
         help="Defaults to now - To be set only to force a date",
     )
 
