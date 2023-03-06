@@ -9,6 +9,7 @@
     "website": "https://commown.coop",
     "depends": [
         "account_loan",
+        "base_user_role",
         "survey",
         # Commown modules
         "account_invoice_merge_auto_pay",
