@@ -7,5 +7,6 @@ from . import test_payment
 from . import test_project_task
 from . import test_reconciliation_widget
 from . import test_res_partner
+from . import test_res_users
 from . import test_sale_order
 from . import test_utm_source
