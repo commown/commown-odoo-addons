@@ -14,4 +14,11 @@
     <field name="technical_name">reattribute_draft_contract_invoices</field>
   </record>
 
+  <record
+      id="obsolescence_action_set_partner_invoice_merge_prefs"
+      model="payment_token_uniquify.obsolescence_action">
+    <field name="name">Set partner invoice merge preferences</field>
+    <field name="technical_name">set_partner_invoice_merge_prefs</field>
+  </record>
+
 </odoo>
