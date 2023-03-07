@@ -1,4 +1,8 @@
+import logging
+
 from odoo import api, fields, models
+
+_logger = logging.getLogger(__file__)
 
 
 class PaymentTokenUniquifyObsolescenceAction(models.Model):
@@ -24,6 +28,10 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
     @api.multi
     def run(self, obsolete_tokens, new_token):
         for action in self:
+            _logger.debug(
+                "Running obsolete token action %s with obsolete tokens %s and new %s"
+                % (action.name, obsolete_tokens.ids, new_token.id)
+            )
             meth_name = "_run_action_" + action.technical_name
             getattr(self, meth_name)(obsolete_tokens, new_token)
 
