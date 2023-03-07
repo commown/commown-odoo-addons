@@ -33,7 +33,6 @@ class Contract(models.Model):
                         "invoice_merge_next_date": vals["date_invoice"],
                         "invoice_merge_recurring_rule_type": cline.recurring_rule_type,
                         "invoice_merge_recurring_interval": cline.recurring_interval,
-                        "auto_merge_invoice": True,
                     }
                 )
         return vals
