@@ -1,3 +1,5 @@
+from datetime import date
+
 from odoo.addons.payment_token_uniquify.tests.common import PaymentTokenUniquifyTC
 
 
@@ -92,3 +94,29 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
 
         # Check the results: invoices must have been reattributed to the new partner:
         self.assertEqual(inv.partner_id, new_token.partner_id)
+
+    def test_action_set_partner_invoice_merge_prefs(self):
+        self.company_s1_w1.update(
+            {
+                "invoice_merge_recurring_rule_type": "monthly",
+                "invoice_merge_recurring_interval": 2,
+                "invoice_merge_next_date": "2018-02-19",
+            }
+        )
+
+        self.company_s1_w2.update(
+            {
+                "invoice_merge_recurring_rule_type": "yearly",
+                "invoice_merge_recurring_interval": 1,
+                "invoice_merge_next_date": "2018-02-28",
+            }
+        )
+
+        # Configure acquirer with invoice merge prefs set and trigger obsolescence:
+        new_token = self._trigger_obsolescence("set_partner_invoice_merge_prefs")
+
+        # Check the results: invoices must have been reattributed to the new partner:
+        partner = new_token.partner_id
+        self.assertEqual(partner.invoice_merge_recurring_rule_type, "monthly")
+        self.assertEqual(partner.invoice_merge_recurring_interval, 2)
+        self.assertEqual(partner.invoice_merge_next_date, date(2018, 2, 28))
