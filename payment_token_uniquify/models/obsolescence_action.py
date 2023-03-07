@@ -4,12 +4,21 @@ from odoo import api, fields, models
 class PaymentTokenUniquifyObsolescenceAction(models.Model):
     _name = "payment_token_uniquify.obsolescence_action"
     _description = "Action to be taken when a payment token becomes obsolete"
+    _order = "sequence asc"
 
     name = fields.Char(required=True)
+
     technical_name = fields.Selection(
         [("deactivate", "Deactivate")],
         string="Technical name",
         required=True,
+    )
+
+    sequence = fields.Integer(
+        "Sequence",
+        help="Action execution order (the smallest for the first executed action)",
+        required=True,
+        default=1,
     )
 
     @api.multi
