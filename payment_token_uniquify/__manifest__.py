@@ -18,6 +18,7 @@
         "data/obsolescence_action.xml",
         "security/ir.model.access.csv",
         "views/payment_acquirer.xml",
+        "views/res_partner.xml",
     ],
     "installable": True,
 }
