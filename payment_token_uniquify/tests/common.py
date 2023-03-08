@@ -10,16 +10,17 @@ class PaymentTokenUniquifyTC(SavepointCase):
     def setUp(self):
         super().setUp()
 
-        # A hierarchy of companies, main one has uniquify_token=False, the others True:
-        self.company = self.new_company(uniquify_token=False)
+        # A hierarchy of companies, main one has isolated_payment_tokens=True,
+        # the others False (i.e. the default):
+        self.company = self.new_company(isolated_payment_tokens=True)
 
         # - subcompany 1 with 2 workers:
-        self.company_s1 = self.new_company(self.company, name="s1", uniquify_token=True)
+        self.company_s1 = self.new_company(self.company, name="s1")
         self.company_s1_w1 = self.new_worker(self.company_s1)
         self.company_s1_w2 = self.new_worker(self.company_s1)
 
         # - subcompany 2 with 2 workers and one subcompany...
-        self.company_s2 = self.new_company(self.company, name="s2", uniquify_token=True)
+        self.company_s2 = self.new_company(self.company, name="s2")
         self.company_s2_w1 = self.new_worker(self.company_s2)
         self.company_s2_w2 = self.new_worker(self.company_s2)
 

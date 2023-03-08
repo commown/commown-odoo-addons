@@ -3,17 +3,23 @@ from .common import PaymentTokenUniquifyTC
 
 class PartnerTC(PaymentTokenUniquifyTC):
     def test_get_obsolete_tokens_individuals_no_uniquify(self):
-        "If uniquify_token is False on an individual, its tokens never become obsolete"
+        """If isolated_payment_tokens is True on an individual,
+        its tokens never become obsolete
+        """
 
-        p1 = self.env["res.partner"].create({"name": "test", "uniquify_token": False})
+        p1 = self.env["res.partner"].create(
+            {"name": "test", "isolated_payment_tokens": True}
+        )
         t1 = self.new_payment_token(p1)
         self.new_payment_token(p1)
         self.assertFalse(p1.get_obsolete_tokens(t1))
 
     def test_get_obsolete_tokens_individuals_uniquify(self):
-        "If uniquify_token is True on an individual, its tokens become obsolete"
+        "If isolated_payment is False on an individual, its tokens become obsolete"
 
-        p1 = self.env["res.partner"].create({"name": "test", "uniquify_token": True})
+        p1 = self.env["res.partner"].create(
+            {"name": "test", "isolated_payment_tokens": False}
+        )
         t1 = self.new_payment_token(p1)
         t2 = self.new_payment_token(p1)
         self.assertEqual(p1.get_obsolete_tokens(t2), t1)
@@ -21,7 +27,7 @@ class PartnerTC(PaymentTokenUniquifyTC):
         self.assertEqual(p1.get_obsolete_tokens(t3), t1 + t2)
 
     def test_get_obsolete_tokens_subcompanies_with_uniquify(self):
-        "Obsolete tokens do not propagate to uniquify_token False entities"
+        "Obsolete tokens do not propagate to isolated_payment_tokens True entities"
 
         # Test pre-requisite:
         self.assertEqual(self.company_s1_w1.commercial_partner_id, self.company_s1)

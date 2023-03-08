@@ -4,36 +4,29 @@ from odoo import fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    uniquify_token = fields.Boolean(
-        string="Uniquify payment token?",
+    isolated_payment_tokens = fields.Boolean(
+        string="Isolate payment tokens?",
         default=False,
         help=(
-            "If set, when a partner below this one in the hierarchy is"
-            " associated with previous tokens, its token become obsolete."
+            "If set, the payment token unification algorithm will stop"
+            " going up the partner hierarchy to select tokens to unify."
         ),
     )
 
     def get_obsolete_tokens(self, newer_token):
-        """Return the obsolete tokens of current partner
-
-        Go up the partner hierarchy (including current) until we find
-        a partner with uniquify_token set to true, if any, and return
-        the payment token of its children (including itself).
-
-        Return an empty payment.token instance if none where found.
-        """
+        "Return the obsolete tokens of current partner"
 
         self.ensure_one()
 
-        if self.uniquify_token:
+        if self.isolated_payment_tokens:
+            return self.env["payment.token"]
+
+        if self.parent_id and not self.parent_id.isolated_payment_tokens:
+            return self.parent_id.get_obsolete_tokens(newer_token)
+        else:
             return self.env["payment.token"].search(
                 [
                     ("partner_id", "child_of", self.id),
                     ("id", "!=", newer_token.id),
                 ]
             )
-
-        elif self.parent_id:
-            return self.parent_id.get_obsolete_tokens(newer_token)
-
-        return self.env["payment.token"]
