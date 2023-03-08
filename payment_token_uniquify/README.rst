@@ -24,9 +24,10 @@ defines the payment token model, associated to a partner.
 
 The module adds the ability to automatically archive or delete old
 payment tokens when a new one is created. The payment tokens
-considered obsolete depend on the setting of the `uniquify_token`
-field of the partner associated to the token, as well as its
-ancestors. See the configure section for details.
+considered obsolete depend on the setting of the
+`isolated_payment_tokens` field of the partner associated to the
+token, as well as its ancestors. See the configure section for
+details.
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
@@ -46,19 +47,13 @@ The module must be set in 2 ways:
 1. Define which payment tokens become obsolete
 
    First point is handled by a specific field on the partner called
-   `uniquify_token`: we go **up** the partner tree from the new
-   mandate signee; first partner with uniquify_token set to True
-   defines the subtree where all mandates will be obsoleted by the new
-   one.
+   `isolated_payment_tokens`: we go **up** the partner tree from the
+   new mandate signee; first partner without a parent or with a parent
+   which `isolated_payment_token` field is set to True defines the
+   subtree where all mandates will be obsoleted by the new one.
 
    The action taken for obsolete tokens depends on the settings
    described in the next section.
-
-   Note that if you want to set a default value for the
-   `uniquify_token` field for new portal partners, you must set it on
-   the Public Partner template of the considered website.
-
-   For a more fine grained control, another odoo module is needed.
 
 2. Define what to do with obsolete payment tokens
 
