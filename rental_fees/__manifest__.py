@@ -14,6 +14,7 @@
         "purchase",
         "queue_job",
         "report_py3o",
+        "account_usability",  # for the invoice line's date_invoice field
     ],
     "data": [
         "security/ir.model.access.csv",

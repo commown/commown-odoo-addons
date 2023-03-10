@@ -350,8 +350,8 @@ class RentalFeesDefinitionLine(models.Model):
             invoice_lines = self.env["account.invoice.line"].search(
                 [
                     ("contract_line_id.contract_id", "=", period["contract"].id),
-                    ("invoice_id.date_invoice", ">=", period["from_date"]),
-                    ("invoice_id.date_invoice", "<=", period["to_date"]),
+                    ("date_invoice", ">=", period["from_date"]),
+                    ("date_invoice", "<=", period["to_date"]),
                     (_path_to_storable, "=", _pt.id),
                 ],
             )
