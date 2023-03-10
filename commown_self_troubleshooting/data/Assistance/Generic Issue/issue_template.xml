@@ -23,14 +23,33 @@
           </t>
           <p>
             L'adresse d'expédition est la suivante : <br/>
-            <t t-esc="name"/><br/>
-            <t t-esc="u'\n'.join((street, street2)).strip()"/><br/>
-            <t t-esc="zipcode"/>
-            <t t-esc="city"/> <br/>
-            <t t-esc="country"/><br/>
+            <ul>
+              <li>
+                <t t-esc="name"/>
+              </li>
+              <li>
+                <t t-esc="u'\n'.join((street, street2)).strip()"/>
+              </li>
+              <li>
+                <t t-esc="zipcode"/>
+              </li>
+              <li>
+                <t t-esc="city"/>
+              </li>
+              <li>
+                <t t-esc="country"/>
+              </li>
+            </ul>
+
             Informations supplémentaires utiles à la livraison :<br/>
-            Numéro de téléphone : <t t-esc="phone"/><br/>
-            Adresse de courriel : <t t-esc="email"/>
+            <ul>
+              <li>
+                Numéro de téléphone : <t t-esc="phone"/>
+              </li>
+              <li>
+                Adresse de courriel : <t t-esc="email"/>
+              </li>
+            </ul>
           </p>
         </t>
         <p t-if="more_info">Informations complémentaires :</p>

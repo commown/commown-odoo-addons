@@ -6,34 +6,41 @@
   <field name="type">qweb</field>
   <field name="key">commown_self_troubleshooting.issue-description-fp-screen</field>
   <field name="arch" type="xml">
-  <t t-name="commown_self_troubleshooting.issue-description-fp-screen">
-Bonjour,
-<t t-if="action=='ship'">
-<t t-if="replace_screen=='no'">
-après avoir effectué un auto-dépannage, il ressort qu'une vitre de protection doit m'être envoyée.</t>
-<t t-else="">
-<t t-if="type_contrat=='me'">
-après avoir effectué un auto-dépannage, il ressort qu'un écran muni d'une protection doit m'être envoyé.</t>
-<t t-else="">
-après avoir effectué un auto-dépannage, il ressort qu'un nouvel appareil () doit m'être envoyé.</t>
-</t>
+    <t t-name="commown_self_troubleshooting.issue-description-fp-screen">
+      <p>Bonjour,</p>
+      <t t-if="action=='ship'">
+        <t t-if="replace_screen=='no'">
+          <p>après avoir effectué un auto-dépannage, il ressort qu'une vitre de protection doit m'être envoyée.</p>
+        </t>
+        <t t-else="">
+          <t t-if="type_contrat=='me'">
+            <p>après avoir effectué un auto-dépannage, il ressort qu'un écran muni d'une protection doit m'être envoyé.</p>
+          </t>
+          <t t-else="">
+            <p>après avoir effectué un auto-dépannage, il ressort qu'un nouvel appareil () doit m'être envoyé.</p>
+          </t>
+        </t>
 
-L'adresse d'expédition est la suivante :
-<t t-esc="model2"/>
-<t t-esc="name"/>
-<t t-esc="u'\n'.join((street, street2)).strip()"/>
-<t t-esc="zipcode"/> <t t-esc="city"/>
-<t t-esc="country"/>
+        <p>L'adresse d'expédition est la suivante:</p>
+        <ul>
+          <li><t t-esc="model2"/></li>
+          <li><t t-esc="name"/></li>
+          <li><t t-esc="u'\n'.join((street, street2)).strip()"/></li>
+          <li><t t-esc="zipcode"/></li>
+          <li><t t-esc="city"/></li>
+          <li><t t-esc="country"/></li>
+        </ul>
 
-Informations supplémentaires utiles à la livraison :
-Numéro de téléphone : <t t-esc="phone"/>
-Adresse de courriel : <t t-esc="email"/>
-</t>
-<t t-if="more_info">
-J'ai porté à votre connaissance les informations complémentaires suivantes :
----
-<t t-esc="more_info"/>
----</t>
+        <p>Informations supplémentaires utiles à la livraison:</p>
+        <ul>
+          <li>Numéro de téléphone : <t t-esc="phone"/></li>
+          <li>Adresse de courriel : <t t-esc="email"/></li>
+        </ul>
+      </t>
+      <t t-if="more_info">
+        <p>J'ai porté à votre connaissance les informations complémentaires suivantes:</p>
+        <p><t t-esc="more_info"/></p>
+      </t>
     </t>
   </field>
 </record>
