@@ -225,7 +225,12 @@ class RentalFeesComputation(models.Model):
                     raise ValueError("Device was already at customer location")
 
             elif current_period:
-                assert move_line.location_id in customer_locations
+                assert (
+                    move_line.location_id in customer_locations
+                ), "Device %s should be moving to a customer at %s" % (
+                    move_line.lot_id.name,
+                    move_date,
+                )
                 current_period["to_date"] = move_date
                 result.append(current_period.copy())
                 current_period.clear()
