@@ -298,7 +298,11 @@ class RentalFeesComputation(models.Model):
                 if split_date and split_date < period["from_date"]:
                     continue
 
-                from_date = result[-1]["to_date"] if result else period["from_date"]
+                from_date = (
+                    max(result[-1]["to_date"], period["from_date"])
+                    if result
+                    else period["from_date"]
+                )
 
                 if split_date and split_date < period["to_date"]:
                     result.append(
