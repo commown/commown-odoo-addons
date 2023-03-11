@@ -291,3 +291,13 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [300.0])
         self.assertFalse(comp.details("lost_device_compensation").mapped("fees"))
         self.assertFalse(comp.rental_details().mapped("fees"))
+
+    def test_fees_def_split_dates(self):
+        self.assertEqual(
+            {
+                date(2021, 3, 10): self.fees_def.line_ids[0],
+                date(2021, 6, 10): self.fees_def.line_ids[1],
+                None: self.fees_def.line_ids[2],
+            },
+            self.compute("2100-01-01")._fees_def_split_dates(date(2021, 1, 10)),
+        )

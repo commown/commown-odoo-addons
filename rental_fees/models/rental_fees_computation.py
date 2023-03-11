@@ -267,6 +267,20 @@ class RentalFeesComputation(models.Model):
 
         return no_rental_limit, result
 
+    def _fees_def_split_dates(self, origin_date):
+        """Return the end dates defined by all fees def line from given origin_date
+
+        The result is a {date: definition_line} dict
+        """
+        split_dates = {}
+
+        for line in self.fees_definition_id.line_ids:
+            new_date = line.compute_end_date(origin_date)
+            split_dates[new_date] = line
+            origin_date = new_date
+
+        return split_dates
+
     def split_periods_wrt_fees_def(self, periods):
         """Split given periods into smaller ones wrt. given fees def
 
@@ -276,12 +290,7 @@ class RentalFeesComputation(models.Model):
         """
         result = []
 
-        origin_date = periods[0]["from_date"]
-
-        split_dates = {
-            line.compute_end_date(origin_date): line
-            for line in self.fees_definition_id.line_ids
-        }
+        split_dates = self._fees_def_split_dates(periods[0]["from_date"])
 
         for period in periods:
             for split_date, fees_def_line in split_dates.items():
