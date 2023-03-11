@@ -40,7 +40,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
         self.env["rental_fees.definition_line"].create(
             {
                 "fees_definition_id": self.fees_def.id,
-                "sequence": 1,
+                "sequence": 2,
                 "duration_value": 3,
                 "duration_unit": "months",
                 "fees_type": "proportional",
@@ -50,7 +50,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
         self.env["rental_fees.definition_line"].create(
             {
                 "fees_definition_id": self.fees_def.id,
-                "sequence": 1,
+                "sequence": 100,
                 "duration_value": False,
                 "duration_unit": "months",
                 "fees_type": "proportional",
