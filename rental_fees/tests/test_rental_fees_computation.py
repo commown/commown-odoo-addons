@@ -6,6 +6,8 @@ from .common import RentalFeesTC
 
 
 class RentalFeesComputationTC(RentalFeesTC):
+    maxDiff = None
+
     def setUp(self):
         super().setUp()
 
@@ -300,4 +302,68 @@ class RentalFeesComputationTC(RentalFeesTC):
                 None: self.fees_def.line_ids[2],
             },
             self.compute("2100-01-01")._fees_def_split_dates(date(2021, 1, 10)),
+        )
+
+    def test_split_periods_wrt_fees_def_1(self):
+        _d = date
+
+        periods = [
+            {"from_date": _d(2021, 1, 10), "to_date": _d(2021, 2, 15), "contract": 0},
+            {"from_date": _d(2021, 3, 15), "to_date": _d(2021, 4, 15), "contract": 1},
+        ]
+
+        self.assertEqual(
+            [
+                {
+                    "contract": 0,
+                    "from_date": _d(2021, 1, 10),
+                    "to_date": _d(2021, 2, 15),
+                    "fees_def_line": self.fees_def.line_ids[0],
+                },
+                {
+                    "contract": 1,
+                    "from_date": _d(2021, 3, 15),
+                    "to_date": _d(2021, 4, 15),
+                    "fees_def_line": self.fees_def.line_ids[1],
+                },
+            ],
+            self.compute("2100-01-01").split_periods_wrt_fees_def(periods),
+        )
+
+    def test_split_periods_wrt_fees_def_2(self):
+        _d = date
+
+        periods = [
+            {"from_date": _d(2021, 1, 10), "to_date": _d(2021, 6, 30), "contract": 0},
+            {"from_date": _d(2021, 7, 15), "to_date": _d(2021, 12, 5), "contract": 1},
+        ]
+
+        self.assertEqual(
+            [
+                {
+                    "contract": 0,
+                    "from_date": _d(2021, 1, 10),
+                    "to_date": _d(2021, 3, 10),
+                    "fees_def_line": self.fees_def.line_ids[0],
+                },
+                {
+                    "contract": 0,
+                    "from_date": _d(2021, 3, 10),
+                    "to_date": _d(2021, 6, 10),
+                    "fees_def_line": self.fees_def.line_ids[1],
+                },
+                {
+                    "contract": 0,
+                    "from_date": _d(2021, 6, 10),
+                    "to_date": _d(2021, 6, 30),
+                    "fees_def_line": self.fees_def.line_ids[2],
+                },
+                {
+                    "contract": 1,
+                    "from_date": _d(2021, 7, 15),
+                    "to_date": _d(2021, 12, 5),
+                    "fees_def_line": self.fees_def.line_ids[2],
+                },
+            ],
+            self.compute("2100-01-01").split_periods_wrt_fees_def(periods),
         )
