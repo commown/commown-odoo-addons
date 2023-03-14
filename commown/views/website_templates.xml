@@ -41,9 +41,6 @@
               <a style="text-decoration: none" target="_blank" t-att-href="website.social_facebook" t-if="website.social_facebook">
                 <i class="fa fa-facebook-square"/>
               </a>
-              <a style="text-decoration: none" target="_blank" t-att-href="website.social_twitter" t-if="website.social_twitter">
-                <i class="fa fa-twitter"/>
-              </a>
               <a style="text-decoration: none" target="_blank" t-att-href="website.social_linkedin" t-if="website.social_linkedin">
                 <i class="fa fa-linkedin"/>
               </a>
