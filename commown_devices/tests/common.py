@@ -102,18 +102,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
         return lot
 
-    def adjust_stock_notracking(self, product, qty=1.0, date="2000-01-01"):
+    def adjust_stock_notracking(self, product, location, qty=1.0, date="2000-01-01"):
 
-        location = self.env["stock.location"].create(
-            {
-                "name": "Test Module stock location",
-                "usage": "internal",
-                "partner_id": 1,
-                "location_id": self.env.ref(
-                    "commown_devices.stock_location_new_devices"
-                ).id,
-            }
-        )
         inventory = self.env["stock.inventory"].create(
             {
                 "name": "test stock %s" % product.name,

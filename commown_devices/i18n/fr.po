@@ -349,6 +349,12 @@ msgid "These tasks can not be moved forward. There are still device(s) associate
 msgstr "Ces tâches ne peuvent pas être avancées à cette étape. Il y a encore un ou plusieurs appareils associé au(x) contrat(s) : %s"
 
 #. module: commown_devices
+#: code:addons/commown_devices/models/project_task.py:190
+#, python-format
+msgid "These tasks can not be moved forward. There are no picking linked to those tasks: %s"
+msgstr "Ces taches ne peuvent pas être avancée(s) à cette étape car il n'y a pas de transfert associés aux taches suivantes: %s"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_picking
 msgid "Transfer"
 msgstr "Transfert"

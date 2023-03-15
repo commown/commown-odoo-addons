@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+
+    <record id="picking_sent" model="project.task.type">
+      <field name="name">Picking sent stage</field>
+      <field name="check_picking_assigned" eval="True"/>
+    </record>
+
+    <record id="sup_picking_ongoing_stage" model="project.task.type">
+      <field name="name">Picking ongoing stage</field>
+      <field name="check_picking_assigned" eval="True"/>
+    </record>
+
+  </data>
+</odoo>
