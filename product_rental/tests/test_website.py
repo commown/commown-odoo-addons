@@ -55,6 +55,7 @@ class WebsiteTC(RentalSaleOrderTC):
                 "screen (deposit)",
                 "keyboard (deposit)",
                 "keyboard deluxe (deposit)",
+                "serenity level services (deposit)",
             ],
         )
 

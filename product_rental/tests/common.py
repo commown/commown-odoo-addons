@@ -88,6 +88,7 @@ class RentalSaleOrderMixin:
                 self._contract_line(
                     1, "1 month of ##PRODUCT##", tax, specific_price=0.0
                 ),
+                self._contract_line(2, "1 month of ##ACCESSORY##", tax),
             ],
         )
         product3 = self._create_rental_product(
@@ -160,6 +161,16 @@ class RentalSaleOrderMixin:
         product1.accessory_product_ids |= a1
         product2.accessory_product_ids |= a2 + a3 + a4
 
+        # Optional products
+        o1 = self._create_rental_product(
+            name="serenity level services",
+            list_price=3.0,
+            rental_price=6.0,
+            property_contract_template_id=False,
+        )
+        oline_o1 = self._oline(o1)
+        product3.optional_product_ids |= o1.product_tmpl_id
+
         return env["sale.order"].create(
             {
                 "partner_id": partner.id,
@@ -174,6 +185,7 @@ class RentalSaleOrderMixin:
                     oline_a2,
                     oline_a3,
                     oline_a4,
+                    oline_o1,
                 ],
             }
         )
