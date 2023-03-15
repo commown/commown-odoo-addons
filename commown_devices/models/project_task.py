@@ -179,7 +179,7 @@ class ProjectTask(models.Model):
         ctx = {
             "default_product_id": self.lot_id.product_id.id,
             "default_lot_id": self.lot_id.id,
-            "default_origin": "Task-%s" % self.id,
+            "default_origin": self.get_id_name(),
             "default_scrap_location_id": scrap_loc.id,
         }
 
@@ -204,3 +204,6 @@ class ProjectTask(models.Model):
             "view_type": "form",
             "context": ctx,
         }
+
+    def get_id_name(self):
+        return "Task-%s" % self.id

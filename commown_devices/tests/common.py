@@ -152,7 +152,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 ("quantity", ">", 0),
             ]
         )
-        contract.send_device(quant, date, True)
+        contract.send_device(quant, date=date, do_transfer=True)
 
     def prepare_ui(
         self, created_model_name, related_entity, relation_field, user_choices=None

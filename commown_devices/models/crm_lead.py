@@ -17,7 +17,7 @@ class CrmLead(models.Model):
     def action_generate_picking(self):
         contract = self.contract_id
 
-        if contract.picking_ids.filtered(lambda p: p.state == "assigned"):
+        if contract.picking_ids.filtered(_assigned):
             raise UserError(
                 _(
                     "The contract has already assigned picking(s)!\n"

@@ -91,7 +91,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             raise UserError(_("Can't move device: no device set on this task!"))
 
         return internal_picking(
-            "Task-%s" % self.task_id.id,
+            self.task_id.get_id_name(),
             [lot],
             self.present_location_id,
             self.location_dest_id,
@@ -190,7 +190,9 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
     @api.multi
     def create_picking(self):
         quant = self.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
-        return self.task_id.contract_id.send_device(quant, date=self.date)
+        return self.task_id.contract_id.send_device(
+            quant, origin=self.task_id.get_id_name(), date=self.date
+        )
 
 
 class ProjectTaskInwardPickingWizard(models.TransientModel):
@@ -216,6 +218,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
         return self.task_id.contract_id.receive_device(
             self.lot_id,
             self.env.ref("commown_devices.stock_location_devices_to_check"),
+            origin=self.task_id.get_id_name(),
             date=self.date,
         )
 
@@ -284,6 +287,7 @@ class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
         return self.task_id.contract_id.receive_device_tracking_none(
             self.variant_id,
             self.env.ref("commown_devices.stock_location_devices_to_check"),
+            origin=self.task_id.get_id_name(),
             date=self.date,
             do_transfer=do_transfer,
         )
