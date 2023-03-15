@@ -61,6 +61,7 @@ class RentalFeesComputation(models.Model):
 
     fees = fields.Float(
         string="Fees",
+        copy=False,
     )
 
     detail_ids = fields.One2many(
