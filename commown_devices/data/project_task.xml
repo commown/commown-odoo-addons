@@ -2,12 +2,12 @@
 <odoo>
   <data noupdate="1">
 
-      <record id="diagnostic_stage" model="project.task.type">
-          <field name="name">Diagnostic stage</field>
+    <record id="diagnostic_stage" model="project.task.type">
+      <field name="name">Diagnostic stage</field>
     </record>
 
-      <record id="resiliated_stage" model="project.task.type">
-          <field name="name">Resiliated stage</field>
+    <record id="resiliated_stage" model="project.task.type">
+        <field name="name">Resiliated stage</field>
     </record>
 
   </data>

@@ -6,6 +6,8 @@ CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.resiliated_stage",
 ]
 
+STOCK_XML_ID = "stock.stock_location_stock"
+
 
 class ProjectTaskType(models.Model):
     _inherit = "project.task.type"
@@ -169,6 +171,34 @@ class ProjectTask(models.Model):
                 _(
                     "These tasks can not be moved forward. There are still device(s) "
                     "associated with their contract: %s"
+                )
+                % erroneous_task.ids
+            )
+
+    @api.constrains("stage_id")
+    def onchange_stage_id_check_assigned_picking(self):
+        stock_location = self.env.ref(STOCK_XML_ID)
+        erroneous_task = self.search(
+            [
+                ("id", "in", self.ids),
+                ("stage_id.check_picking_assigned", "=", True),
+            ]
+        ).filtered(
+            lambda task: not any(
+                [
+                    picking["origin"] == task.get_id_name()
+                    and picking.state == "assigned"
+                    and "/" + str(stock_location.id) + "/"
+                    in picking.location_id.parent_path
+                    for picking in task.contract_id.picking_ids
+                ]
+            )
+        )
+        if erroneous_task:
+            raise Warning(
+                _(
+                    "These tasks can not be moved forward. There are no picking "
+                    "linked to those tasks: %s"
                 )
                 % erroneous_task.ids
             )
