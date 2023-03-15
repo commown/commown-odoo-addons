@@ -89,6 +89,7 @@ class ProductRentalSaleOrder(models.Model):
                 contract_descr["so_line"].name,
                 contract_num,
             )
+
             _logger.debug(
                 "Unassigned accessories: %s",
                 ", ".join(
@@ -96,8 +97,15 @@ class ProductRentalSaleOrder(models.Model):
                     for (a, so_lines) in bought_accessories.items()
                 ),
             )
+
+            main_product = contract_descr["main"]
+            main_accessories = (
+                main_product.accessory_product_ids
+                | main_product.optional_product_ids.mapped("product_variant_ids")
+            )
+
             for accessory, so_lines in list(bought_accessories.items()):
-                if accessory in contract_descr["main"].accessory_product_ids:
+                if accessory in main_accessories:
                     contract_descr["accessories"].append((accessory, so_lines.pop(0)))
                     _logger.debug("> Assigned accessory %s", accessory.name)
                     if len(bought_accessories[accessory]) == 0:

@@ -107,16 +107,19 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             },
         )
 
-        self.assert_rounded_equals(i4.amount_total, 10.0)
-        self.assert_rounded_equals(i4.amount_untaxed, 8.33)
+        self.assert_rounded_equals(i4.amount_total, 16.0)
+        self.assert_rounded_equals(i4.amount_untaxed, 13.33)
 
         self.assert_contract_lines_attributes_equal(
             c4,
             {
-                "name": ["1 month of GS Headset"],
-                "price_unit": [10.0],
-                "quantity": [1],
-                "sale_order_line_id.product_id.name": ["GS Headset"],
+                "name": ["1 month of GS Headset", "1 month of serenity level services"],
+                "price_unit": [10.0, 6.0],
+                "quantity": [1, 1],
+                "sale_order_line_id.product_id.name": [
+                    "GS Headset",
+                    "serenity level services",
+                ],
                 "analytic_account_id.name": [c4.name],
                 "analytic_account_id.partner_id": c4.partner_id,
             },
@@ -214,16 +217,19 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             },
         )
 
-        self.assert_rounded_equals(i4.amount_total, 10.0)
-        self.assert_rounded_equals(i4.amount_untaxed, 8.33)
+        self.assert_rounded_equals(i4.amount_total, 16.0)
+        self.assert_rounded_equals(i4.amount_untaxed, 13.33)
 
         self.assert_contract_lines_attributes_equal(
             c4,
             {
-                "name": ["1 month of GS Headset"],
-                "price_unit": [10.0],
-                "quantity": [1],
-                "sale_order_line_id.product_id.name": ["GS Headset"],
+                "name": ["1 month of GS Headset", "1 month of serenity level services"],
+                "price_unit": [10.0, 6.0],
+                "quantity": [1, 1],
+                "sale_order_line_id.product_id.name": [
+                    "GS Headset",
+                    "serenity level services",
+                ],
             },
         )
 
