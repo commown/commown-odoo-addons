@@ -129,4 +129,4 @@ class RentalFeesTC(DeviceAsAServiceTC):
             .ensure_one()
         )
         loc = self.env.ref("commown_devices.stock_location_devices_to_check")
-        contract.receive_device(lot_id, loc, date, True)
+        contract.receive_device(lot_id, loc, date=date, do_transfer=True)
