@@ -7,16 +7,6 @@ from .common import DeviceAsAServiceTC
 
 
 class ProjectTaskPickingTC(DeviceAsAServiceTC):
-    def _create_xml_id(self, record, name):
-        return self.env["ir.model.data"].create(
-            {
-                "module": "commown_devices",
-                "name": name,
-                "model": record._name,
-                "res_id": record.id,
-            }
-        )
-
     def setUp(self):
         super().setUp()
 
