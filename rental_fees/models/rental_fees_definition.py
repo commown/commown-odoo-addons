@@ -279,7 +279,7 @@ class RentalFeesDefinitionLine(models.Model):
             "Proportional: value is the monthly fees for full price"
             " - fees will be computed proportionally with today's price"
         ),
-        default="fixed",
+        default="fix",
         required=True,
     )
 
@@ -332,27 +332,30 @@ class RentalFeesDefinitionLine(models.Model):
             period["to_date"] <= fields.Date.today()
         ), "Future fees computations are not supported yet"
 
-        contract = period["contract"]
-        pt = self.fees_definition_id.product_template_id
-
-        invoice_lines = self.env["account.invoice.line"].search(
-            [
-                ("contract_line_id.contract_id", "=", contract.id),
-                ("invoice_id.date_invoice", ">=", period["from_date"]),
-                ("invoice_id.date_invoice", "<=", period["to_date"]),
-                (
-                    "contract_line_id.sale_order_line_id.product_id.product_tmpl_id.storable_product_id",
-                    "=",
-                    pt.id,
-                ),
-            ],
-        )
-
-        if self.fees_type == "fixed":
-            multiplier = 12 if contract.recurring_rule_type == "yearly" else 1
-            return self.monthly_fees * multiplier * len(invoice_lines)
+        if self.fees_type == "fix":
+            if self.monthly_fees == 0.0:
+                return 0.0
+            else:
+                return (
+                    self.monthly_fees
+                    * relativedelta(period["to_date"], period["from_date"]).months
+                )
 
         elif self.fees_type == "proportional":
+            _pt = self.fees_definition_id.product_template_id
+            _path_to_storable = (
+                "contract_line_id.sale_order_line_id"
+                ".product_id.product_tmpl_id.storable_product_id"
+            )
+            invoice_lines = self.env["account.invoice.line"].search(
+                [
+                    ("contract_line_id.contract_id", "=", period["contract"].id),
+                    ("date_invoice", ">=", period["from_date"]),
+                    ("date_invoice", "<=", period["to_date"]),
+                    (_path_to_storable, "=", _pt.id),
+                ],
+            )
+
             return (
                 sum(i.price_total - i.price_tax for i in invoice_lines)
                 * self.monthly_fees
@@ -361,6 +364,7 @@ class RentalFeesDefinitionLine(models.Model):
     def format_fees_amount(self):
         if self.fees_type == "proportional":
             return "%.02f %%" % (100 * self.monthly_fees)
+
         elif self.fees_type == "fix":
             return _("%(fixed_amount)s %(currency)s (fixed)") % {
                 "fixed_amount": misc.formatLang(

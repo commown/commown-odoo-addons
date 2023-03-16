@@ -61,6 +61,7 @@ class RentalFeesComputation(models.Model):
 
     fees = fields.Float(
         string="Fees",
+        copy=False,
     )
 
     detail_ids = fields.One2many(
@@ -225,7 +226,12 @@ class RentalFeesComputation(models.Model):
                     raise ValueError("Device was already at customer location")
 
             elif current_period:
-                assert move_line.location_id in customer_locations
+                assert (
+                    move_line.location_id in customer_locations
+                ), "Device %s should be moving to a customer at %s" % (
+                    move_line.lot_id.name,
+                    move_date,
+                )
                 current_period["to_date"] = move_date
                 result.append(current_period.copy())
                 current_period.clear()
@@ -262,6 +268,20 @@ class RentalFeesComputation(models.Model):
 
         return no_rental_limit, result
 
+    def _fees_def_split_dates(self, origin_date):
+        """Return the end dates defined by all fees def line from given origin_date
+
+        The result is a {date: definition_line} dict
+        """
+        split_dates = {}
+
+        for line in self.fees_definition_id.line_ids:
+            new_date = line.compute_end_date(origin_date)
+            split_dates[new_date] = line
+            origin_date = new_date
+
+        return split_dates
+
     def split_periods_wrt_fees_def(self, periods):
         """Split given periods into smaller ones wrt. given fees def
 
@@ -271,12 +291,7 @@ class RentalFeesComputation(models.Model):
         """
         result = []
 
-        origin_date = periods[0]["from_date"]
-
-        split_dates = {
-            line.compute_end_date(origin_date): line
-            for line in self.fees_definition_id.line_ids
-        }
+        split_dates = self._fees_def_split_dates(periods[0]["from_date"])
 
         for period in periods:
             for split_date, fees_def_line in split_dates.items():
@@ -284,7 +299,11 @@ class RentalFeesComputation(models.Model):
                 if split_date and split_date < period["from_date"]:
                     continue
 
-                from_date = result[-1]["to_date"] if result else period["from_date"]
+                from_date = (
+                    max(result[-1]["to_date"], period["from_date"])
+                    if result
+                    else period["from_date"]
+                )
 
                 if split_date and split_date < period["to_date"]:
                     result.append(
