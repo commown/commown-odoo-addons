@@ -90,8 +90,12 @@ class Pricelist(models.Model):
 
             new_products_qty_partner = []
 
+            partner_model = self.env["res.partner"]
+
             for product, qty, partner in products_qty_partner:
-                partner = (partner or self.env.user.partner_id).commercial_partner_id
+                if isinstance(partner, int):
+                    partner = partner_model.browse(partner)
+                partner = partner.commercial_partner_id
                 rental_infos = self._rented_quantity_infos(product, partner)
                 added_qty = rental_infos["quantity"]
                 _logger.debug("Rented quantity infos: %s", rental_infos)
