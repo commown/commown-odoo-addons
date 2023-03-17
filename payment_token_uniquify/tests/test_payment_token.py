@@ -6,7 +6,10 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         super().setUp()
 
         self.token1 = self.new_payment_token(self.company_s1_w1)
+        self.company_s1_w1.payment_token_id = self.token1.id
+
         self.token2 = self.new_payment_token(self.company_s1_w2)
+        self.company_s1_w2.payment_token_id = self.token2.id
 
         self.acquirer = self.env.ref("payment.payment_acquirer_transfer")
 
@@ -18,6 +21,10 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
             "payment_token_uniquify.obsolescence_action_deactivate"
         )
 
+        # Test pre-requisite
+        self.assertTrue(self.company_s1_w1.payment_token_id)
+        self.assertTrue(self.company_s1_w2.payment_token_id)
+
         # A new token is signed
         cm = self._check_obsolete_token_action_job()
         with cm:
@@ -26,3 +33,6 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
 
         self.assertFalse(self.token1.active)
         self.assertFalse(self.token2.active)
+
+        self.assertFalse(self.company_s1_w1.payment_token_id)
+        self.assertFalse(self.company_s1_w2.payment_token_id)
