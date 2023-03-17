@@ -94,7 +94,7 @@ class Pricelist(models.Model):
 
             for product, qty, partner in products_qty_partner:
                 if isinstance(partner, int):
-                    partner = partner_model.browse(partner)
+                    partner = partner_model.browse(partner) or self.env.user.partner_id
                 partner = partner.commercial_partner_id
                 rental_infos = self._rented_quantity_infos(product, partner)
                 added_qty = rental_infos["quantity"]
