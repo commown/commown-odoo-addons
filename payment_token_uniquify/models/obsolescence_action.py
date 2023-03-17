@@ -39,3 +39,12 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
     def _run_action_deactivate(self, obsolete_tokens, new_token):
         "Set the token active field to False"
         obsolete_tokens.update({"active": False})
+
+        # 2 cases here:
+        # - the partner's token has been replaced by the new one
+        #   (e.g. a single user changes is own token)
+        # - the partner's token is now obsolete: remove it to show
+        #   web UI users that the partner has no usable token anymore
+        for partner in obsolete_tokens.mapped("partner_id"):
+            if partner.payment_token_id in obsolete_tokens:
+                partner.payment_token_id = False
