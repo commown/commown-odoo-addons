@@ -1,0 +1,9 @@
+<odoo>
+
+  <record id="obsolescence_action_deactivate" model="payment_token_uniquify.obsolescence_action">
+    <field name="name">Deactivate</field>
+    <field name="technical_name">deactivate</field>
+    <field name="sequence">1000</field>
+  </record>
+
+</odoo>
