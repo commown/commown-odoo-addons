@@ -380,6 +380,7 @@ class ProjectTask(models.Model):
                     active_model="account.move",
                     active_ids=invoice.ids,
                     payment_transaction_label=self.slimpay_payment_label,
+                    slimpay_async_http=True,
                 )
                 .create(
                     {

@@ -101,6 +101,21 @@ class SlimpayTransaction(models.Model):
             return payment.ref
         return self.reference or "TR%d" % self.id
 
+    def slimpay_s2s_do_transaction(self, **kwargs):
+        "Execute non-interactive slimpay transactions in a job queue"
+
+        if self.env.context.get("slimpay_async_http", False):
+            self.with_delay(max_retries=1)._slimpay_s2s_do_transaction(**kwargs)
+            return True
+        else:
+            return self.slimpay_s2s_do_transaction(**kwargs)
+
+    def _slimpay_s2s_do_transaction(self, **kwargs):
+        "Slimpay transaction: MUST be executed in a queue job"
+        result = SlimpayTransaction.slimpay_s2s_do_transaction(self, **kwargs)
+        if not result:
+            raise ValueError(_("Slimpay transaction failed!"))
+
     def _send_payment_request(self):
         """Perform a payment through a server to server call using a previously
         signed mandate.
