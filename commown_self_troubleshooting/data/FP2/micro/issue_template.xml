@@ -1,36 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="issue-description-fp2-micro" model="ir.ui.view">
-      <field name="name">self-troubleshoot-issue-description-fp2-micro</field>
-      <field name="type">qweb</field>
-      <field name="key">commown_self_troubleshooting.issue-description-fp2-micro</field>
-      <field name="arch" type="xml">
-        <t t-name="self-troubleshoot-issue-description-fp2-micro">
-Bonjour,
-<t t-if="action=='ship'">
-après avoir effectué un auto-dépannage, il ressort que le module micro de mon FP2 doit être changé.
+  <record id="issue-description-fp2-micro" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-fp2-micro</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-fp2-micro</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-fp2-micro">
+        <t t-if="action=='ship'">
+        <p>
+          Après avoir effectué un auto-dépannage, il ressort que le module micro de mon FP2 doit être changé.
+        </p><br/>
+        <p>
+          L'adresse d'expédition est la suivante :<br/>
 
-L'adresse d'expédition est la suivante :
-<t t-esc="name"/>
-<t t-esc="u'\n'.join((street, street2)).strip()"/>
-<t t-esc="zipcode"/> <t t-esc="city"/>
-<t t-esc="country"/>
+          <ul>
+            <li>
+              <t t-esc="name"/>
+            </li>
+            <li>
+              <t t-esc="u'\n'.join((street, street2)).strip()"/>
+            </li>
+            <li>
+              <t t-esc="zipcode"/>
+            </li>
+            <li>
+              <t t-esc="city"/>
+            </li>
+            <li>
+              <t t-esc="country"/>
+            </li>
+          </ul>
 
-Informations supplémentaires utiles à la livraison :
-Numéro de téléphone : <t t-esc="phone"/>
-Adresse de courriel : <t t-esc="email"/></t>
-<t t-elif="action=='wait-simcard'">
-je vous informe que je vais tester avec une autre carte SIM.</t>
-<t t-if="mute_solved=='yes'">
-je vous informe que mon problème était lié à l'activation de la fonction "Couper micro" de mon FP2 et que j'ai pu le résoudre.</t>
-<t t-if="more_info">
-J'ai porté à votre connaissance les informations complémentaires suivantes :
----
-<t t-esc="more_info"/>
----</t>
-        </t>
-      </field>
-    </record>
+          Informations supplémentaires utiles à la livraison : <br/>
+
+          <ul>
+            <li>
+              Numéro de téléphone : <t t-esc="phone"/>
+            </li>
+            <li>
+              Adresse de courriel : <t t-esc="email"/>
+            </li>
+          </ul>
+        </p>
+      </t>
+
+        <p t-elif="action=='wait-simcard'">
+          je vous informe que je vais tester avec une autre carte SIM.
+        </p>
+
+        <p t-if="mute_solved=='yes'">
+          je vous informe que mon problème était lié à l'activation de la fonction "Couper micro" de mon FP2 et que j'ai pu le résoudre.
+        </p>
+
+        <p t-if="more_info">
+          J'ai porté à votre connaissance les informations complémentaires suivantes :
+        </p>
+        <div t-if="more_info">
+          <t t-esc="more_info"/>
+        </div>
+      </t>
+    </field>
+  </record>
 
 </odoo>
