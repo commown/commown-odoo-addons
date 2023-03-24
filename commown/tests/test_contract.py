@@ -37,7 +37,8 @@ class ContractPaymentTC(TestContractBase):
             "odoo.addons.account_payment_slimpay.models."
             "slimpay_utils.SlimpayClient.create_payment"
         ) as pay:
-            invoice = self.contract.recurring_create_invoice()
+            contract = self.contract.with_context(test_queue_job_no_delay=True)
+            invoice = contract.recurring_create_invoice()
             label = pay.call_args[0][-1]
             self.assertEqual(label, invoice.number)
 
@@ -56,7 +57,8 @@ class ContractPaymentTC(TestContractBase):
             "odoo.addons.account_payment_slimpay.models."
             "slimpay_utils.SlimpayClient.create_payment"
         ) as pay:
-            invoice = self.contract.recurring_create_invoice()
+            contract = self.contract.with_context(test_queue_job_no_delay=True)
+            invoice = contract.recurring_create_invoice()
             label = pay.call_args[0][-1]
             expected_label = "Invoice 01/15/2018 - 02/13/2018 (%s)" % invoice.number
             self.assertEqual(label, expected_label)

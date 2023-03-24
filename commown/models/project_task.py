@@ -1,6 +1,6 @@
 import logging
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 
@@ -20,6 +20,14 @@ class ProjectTask(models.Model):
         "Show internal follow-up", related="project_id.show_internal_followup"
     )
     internal_followup = fields.Html(groups="base.group_user")
+
+    @api.multi
+    def _slimpay_payment_issue_retry_payment(self, *args, **kwargs):
+        "Activate jobs for Slimpay http calls"
+        return super(
+            ProjectTask,
+            self.with_context(slimpay_async_http=True),
+        )._slimpay_payment_issue_retry_payment(*args, **kwargs)
 
     def has_no_partner_message(self):
         "Return True if the author of one of task's messages is not an employee"
