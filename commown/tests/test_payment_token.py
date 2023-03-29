@@ -1,6 +1,14 @@
-from datetime import date
+from odoo import fields
 
 from odoo.addons.payment_token_uniquify.tests.common import PaymentTokenUniquifyTC
+
+
+def _payment_prefs(interval, rule_type, next_date):
+    return {
+        "invoice_merge_recurring_interval": interval,
+        "invoice_merge_recurring_rule_type": rule_type,
+        "invoice_merge_next_date": fields.Date.to_date(next_date),
+    }
 
 
 class PaymentTokenTC(PaymentTokenUniquifyTC):
@@ -50,7 +58,7 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
             }
         )
 
-    def _trigger_obsolescence(self, *action_refs):
+    def _trigger_obsolescence(self, *action_refs, **new_partner_kwargs):
         """Trigger the tested code: a partner of the company creates a new token
 
         A payment acquirer is used that is first configured to trigger
@@ -63,12 +71,15 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
                 "commown.obsolescence_action_" + action_ref
             )
 
-        company_s1_w3 = self.new_worker(self.company_s1)
+        company_s1_w3 = self.new_worker(self.company_s1, **new_partner_kwargs)
         cm = self._check_obsolete_token_action_job()
         with cm:
             new_token = self.new_payment_token(company_s1_w3, acquirer)
             cm.gen.send(new_token)
         return new_token
+
+    def check_payment_prefs(self, partner, expected_prefs):
+        self.assertEqual({f: partner[f] for f in expected_prefs}, expected_prefs)
 
     def test_action_reattribute_contracts(self):
         # Configure acquirer with contract reattribution and trigger obsolescence:
@@ -95,28 +106,30 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         # Check the results: invoices must have been reattributed to the new partner:
         self.assertEqual(inv.partner_id, new_token.partner_id)
 
-    def test_action_set_partner_invoice_merge_prefs(self):
-        self.company_s1_w1.update(
-            {
-                "invoice_merge_recurring_rule_type": "monthly",
-                "invoice_merge_recurring_interval": 2,
-                "invoice_merge_next_date": "2018-02-19",
-            }
-        )
-
-        self.company_s1_w2.update(
-            {
-                "invoice_merge_recurring_rule_type": "yearly",
-                "invoice_merge_recurring_interval": 1,
-                "invoice_merge_next_date": "2018-02-28",
-            }
-        )
+    def test_action_set_partner_invoice_merge_prefs_1(self):
+        self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-19"))
+        self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-28"))
 
         # Configure acquirer with invoice merge prefs set and trigger obsolescence:
         new_token = self._trigger_obsolescence("set_partner_invoice_merge_prefs")
 
-        # Check the results: invoices must have been reattributed to the new partner:
-        partner = new_token.partner_id
-        self.assertEqual(partner.invoice_merge_recurring_rule_type, "monthly")
-        self.assertEqual(partner.invoice_merge_recurring_interval, 2)
-        self.assertEqual(partner.invoice_merge_next_date, date(2018, 2, 28))
+        # Check the results: payment prefs must have been smartly set on new partner
+        self.check_payment_prefs(
+            new_token.partner_id, _payment_prefs(2, "monthly", "2018-02-28")
+        )
+
+    def test_action_set_partner_invoice_merge_prefs_2(self):
+        "Do not change a partner's payment prefs on new mandate signature"
+        self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-19"))
+        self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-28"))
+
+        # Configure acquirer with invoice merge prefs setting, preset the new
+        # partner's payment preferences and trigger obsolescence
+        payment_prefs = _payment_prefs(1, "monthly", "2018-02-03")
+        new_token = self._trigger_obsolescence(
+            "set_partner_invoice_merge_prefs",
+            **payment_prefs,
+        )
+
+        # Check the results: payment prefs of the new signee must be untouched
+        self.check_payment_prefs(new_token.partner_id, payment_prefs)
