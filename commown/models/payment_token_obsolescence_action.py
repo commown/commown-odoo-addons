@@ -85,6 +85,9 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         field_rinterval = "invoice_merge_recurring_interval"
         field_date = "invoice_merge_next_date"
 
+        if new_token.partner_id[field_date]:
+            return
+
         partners = obsolete_tokens.mapped("partner_id")
 
         rtypes = [
