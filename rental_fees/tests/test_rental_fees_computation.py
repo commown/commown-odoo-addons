@@ -192,34 +192,18 @@ class RentalFeesComputationTC(RentalFeesTC):
         # - modifying the name should be OK
         self.fees_def.name = "Changed name"
 
-        # - but not the definition lines
-        with self.assertRaises(ValidationError) as err:
-            self.fees_def.line_ids |= self.env["rental_fees.definition_line"].create(
-                {
-                    "fees_definition_id": self.fees_def.id,
-                    "sequence": 30,
-                    "duration_value": 10,
-                    "duration_unit": "months",
-                    "fees_type": "proportional",
-                    "monthly_fees": 0.4,
-                }
-            )
-        self.assertIn(
-            "Some non-draft computations use this fees definition.", err.exception.name
-        )
+        # - but not product_template_id or partner_id
+        expected_msg = "Some non-draft computations use this fees definition."
 
         with self.assertRaises(ValidationError) as err:
-            new_fees_def_line.duration_value = 20
-        self.assertIn(
-            "Some non-draft computations use this fees definition.", err.exception.name
-        )
+            pt_ref = "product.product_product_1_product_template"
+            self.fees_def.product_template_id = self.env.ref(pt_ref).id
+        self.assertIn(expected_msg, err.exception.name)
 
-        # - nor remove a po that generated a non-nul fees already
         with self.assertRaises(ValidationError) as err:
-            self.fees_def.order_ids -= self.po
-        self.assertEqual(
-            "Removed orders affect existing computation results.", err.exception.name
-        )
+            partner_ref = "base.res_partner_1"
+            self.fees_def.partner_id = self.env.ref(partner_ref).id
+        self.assertIn(expected_msg, err.exception.name)
 
     def test_compute_no_rental_compensation_zero_1(self):
         "No rental conditions check: A first rental is required"

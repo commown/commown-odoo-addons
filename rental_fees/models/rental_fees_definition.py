@@ -115,17 +115,11 @@ class RentalFeesDefinition(models.Model):
         - changing a non-aesthetic field (any other but name, model_invoice_id)
         """
 
-        old_order_ids = {}
-        if "order_ids" in vals:
-            for record in self:
-                if record.last_non_draft_computation_date:
-                    old_order_ids[record] = record.order_ids
-
-        update_important_fields = bool(
-            set(vals) - set({"name", "model_invoice_id", "order_ids"})
+        important_fields_updated = bool(
+            set(vals) & {"partner_id", "product_template_id"}
         )
         for record in self:
-            if record.last_non_draft_computation_date and update_important_fields:
+            if record.last_non_draft_computation_date and important_fields_updated:
                 raise ValidationError(
                     _(
                         "Some non-draft computations use this fees definition."
@@ -133,26 +127,7 @@ class RentalFeesDefinition(models.Model):
                     )
                 )
 
-        result = super().write(vals)
-
-        for fees_def in old_order_ids:
-            removed_orders = old_order_ids[fees_def] - fees_def.order_ids
-            product, def_id = fees_def.product_template_id, fees_def.id
-            removed_order_devices = removed_orders.mapped(
-                "picking_ids.move_line_ids.lot_id"
-            ).filtered(lambda d: d.product_id.product_tmpl_id == product)
-            if self.env["rental_fees.computation.detail"].search_count(
-                [
-                    ("lot_id", "in", removed_order_devices.ids),
-                    ("fees_computation_id.fees_definition_id", "=", def_id),
-                    ("fees", ">", 0),
-                ]
-            ):
-                raise ValidationError(
-                    _("Removed orders affect existing computation results.")
-                )
-
-        return result
+        return super().write(vals)
 
     @api.constrains("partner_id")
     def _check_partner_coherency(self):
@@ -288,19 +263,6 @@ class RentalFeesDefinitionLine(models.Model):
         help="This value is to be interpreted using fees type",
         required=True,
     )
-
-    @api.multi
-    def write(self, vals):
-        "Deny updates when there are already non draft computations"
-        for record in self:
-            if record.fees_definition_id.last_non_draft_computation_date:
-                raise ValidationError(
-                    _(
-                        "Some non-draft computations use this fees definition."
-                        " Please remove or set them draft to modify the definition."
-                    )
-                )
-        return super().write(vals)
 
     def name_get(self):
         result = []
