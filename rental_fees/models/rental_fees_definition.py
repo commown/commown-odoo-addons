@@ -109,11 +109,7 @@ class RentalFeesDefinition(models.Model):
 
     @api.multi
     def write(self, vals):
-        """Deny updates which would change the result of existing computations like:
-
-        - removing an order which already generated fees
-        - changing a non-aesthetic field (any other but name, model_invoice_id)
-        """
+        "Deny changing an important field (like partner_id or product_template_id)"
 
         important_fields_updated = bool(
             set(vals) & {"partner_id", "product_template_id"}
