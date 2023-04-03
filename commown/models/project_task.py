@@ -19,13 +19,6 @@ class ProjectTask(models.Model):
     )
     internal_followup = fields.Html(groups="base.group_user")
 
-    def slimpay_payment_issue_process_automatically(self):
-        """Handle a payment issue automatically only when it comes from a
-        contract generated invoice.
-        """
-        self.ensure_one()
-        return bool(self.invoice_id.mapped("invoice_line_ids.contract_line_id"))
-
     def has_no_partner_message(self):
         "Return True if the author of one of task's messages is not an employee"
         self.ensure_one()

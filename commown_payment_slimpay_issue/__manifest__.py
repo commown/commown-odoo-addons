@@ -8,6 +8,7 @@
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [
+        "contract",
         "payment_slimpay_issue",
     ],
     "external_dependencies": {},
