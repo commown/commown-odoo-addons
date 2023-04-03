@@ -69,6 +69,11 @@ msgid "- Changement d'écran et/ou vitre de protection"
 msgstr "- Bildschirm und/oder Schutzglas austauschen"
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
+msgid "- Fin de la période d'engagement :"
+msgstr "- Ende der Bindungsfrist:"
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commown-signature
 msgid ""
 "--\n"
@@ -374,6 +379,11 @@ msgstr ""
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
 msgid "<i class=\"fas fa-sim-card\"/> Test d'une autre carte SIM"
 msgstr "<i class=\"fas fa-sim-card\"/> Test einer anderen SIM-Karte"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
+msgid "<span>- Date de début :</span>"
+msgstr "<span>- Startdatum:</span>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
