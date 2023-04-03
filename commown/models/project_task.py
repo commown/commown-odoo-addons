@@ -53,8 +53,11 @@ class ProjectTask(models.Model):
             # Send the SMS
             template = self.env.ref("commown.sms_template_issue_reminder")
             layout = "commown_payment_slimpay_issue.message_nowrap_template"
-            self.with_context(custom_layout=layout).message_post_with_template(
-                template.id, message_type="comment"
+            self.with_context(
+                custom_layout=layout, lang=self.partner_id.lang
+            ).message_post_with_template(
+                template.id,
+                message_type="comment",
             )
 
             # Put followers back

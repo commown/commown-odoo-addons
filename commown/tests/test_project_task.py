@@ -120,7 +120,7 @@ class ProjectTaskActionTC(TransactionCase):
     def assertIsStageChangeMessage(self, message):
         self.assertEqual(message.subtype_id, self.env.ref("project.mt_task_new"))
 
-    def _test_send_reminders(self):
+    def test_send_reminders(self):
         """A reminder mail to followers and SMS to partner must be sent
         when task is put in the dedicated column.
         """
@@ -140,7 +140,7 @@ class ProjectTaskActionTC(TransactionCase):
         )
         self.assertIsReminderEmail(self.task.message_ids[2])
 
-    def _test_send_reminder_no_sms(self):
+    def test_send_reminder_no_sms(self):
         """A reminder SMS must not be sent when a non-employee message
         (interpreted as a message from the partner) has already been sent.
         """
@@ -160,7 +160,7 @@ class ProjectTaskActionTC(TransactionCase):
         self.assertIsStageChangeMessage(self.task.message_ids[0])
         self.assertIsReminderEmail(self.task.message_ids[1])
 
-    def _test_move_task_after_expiry(self):
+    def test_move_task_after_expiry(self):
         """After 10 days spent in the reminder stage, crontab should
         automatically move the task into the 'end-ok' stage."""
 
@@ -263,7 +263,7 @@ class ProjectTaskActionTC(TransactionCase):
             self.task.stage_id, self.stage_pending, self.task.stage_id.name
         )
 
-    def _test_payment_task_process_automatically(self):
+    def test_payment_task_process_automatically(self):
         inv = (
             self.env["account.invoice"]
             .search([])
