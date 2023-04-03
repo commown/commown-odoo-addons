@@ -1,5 +1,7 @@
 import datetime
 
+from odoo.exceptions import ValidationError
+
 from .common import DeviceAsAServiceTC
 
 
@@ -29,6 +31,14 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self._create_and_send_device("cc1", self.c1, cc)
         self._create_and_send_device("cc2", None, cc)
         self._create_and_send_device("cc3", self.c3, cc, do_transfer=False)
+
+        self.task_test_checks = self.env["project.task"].create(
+            {
+                "name": "test task",
+                "project_id": self.project.id,
+                "contract_id": self.c1.id,
+            }
+        )  # for checks on stage change tests
 
         # Create a unused product and an unused service
         self.env["product.template"].create(
@@ -324,3 +334,34 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.assertNotIn(self.task.lot_id, self.c1.mapped("quant_ids.lot_id"))
         self.assertIn(self.task.lot_id, self.c2.mapped("quant_ids.lot_id"))
+
+    def test_contract_resiliation_with_devices(self):
+        diagnostic_stage = self.env.ref("commown_devices.diagnostic_stage")
+        resiliated_stage = self.env.ref("commown_devices.resiliated_stage")
+
+        self.assertTrue(self.c1.quant_nb > 0)
+
+        with self.assertRaises(ValidationError) as err1:
+            self.task_test_checks.stage_id = diagnostic_stage
+        self.assertEqual(
+            "Error while validating constraint\n\nThis task can not be moved forward. There are still %s device(s) associated with the contract\n"
+            % self.task_test_checks.contract_id.quant_nb,
+            err1.exception.name,
+        )
+
+        with self.assertRaises(ValidationError) as err2:
+            self.task_test_checks.stage_id = resiliated_stage
+        self.assertEqual(
+            "Error while validating constraint\n\nThis task can not be moved forward. There are still %s device(s) associated with the contract\n"
+            % self.task_test_checks.contract_id.quant_nb,
+            err2.exception.name,
+        )
+
+        self.task_test_checks.contract_id.quant_ids.unlink()
+        self.task_test_checks.contract_id._compute_quant_ids()
+
+        self.task_test_checks.stage_id = diagnostic_stage
+        self.assertTrue(self.task_test_checks.stage_id == diagnostic_stage)
+
+        self.task_test_checks.stage_id = resiliated_stage
+        self.assertTrue(self.task_test_checks.stage_id == resiliated_stage)

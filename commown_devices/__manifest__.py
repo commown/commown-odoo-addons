@@ -20,6 +20,7 @@
         "data/action_crm_lead.xml",
         "data/action_picking.xml",
         "data/action_project_task.xml",
+        "data/project_task.xml",
         "data/stock_location.xml",
         "views/contract.xml",
         "views/product.xml",

@@ -2,8 +2,8 @@ from odoo import _, api, fields, models
 from odoo.exceptions import Warning
 
 CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
-    "commown_device.diagnostic_stage",
-    "commown_device.resiliated_stage",
+    "commown_devices.diagnostic_stage",
+    "commown_devices.resiliated_stage",
 ]
 
 
