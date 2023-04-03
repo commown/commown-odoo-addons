@@ -78,6 +78,16 @@ function setUpWizard($container) {
   let contactStep = null;
   const extraButtons = [];
   const requiredFields = computeRequiredFields();
+  const buttonI18n = {
+    fr: {
+      next: 'Suivant',
+      previous: 'Précédent',
+    },
+    de: {
+      next: 'Vorherige',
+      previous: 'Nächste',
+    }
+  };
 
   const $humanContactButton = $container.find('button[value="contact"]');
   if ($humanContactButton.length) {
@@ -97,10 +107,7 @@ function setUpWizard($container) {
       toolbarExtraButtons: extraButtons,
     },
     theme: 'arrows',
-    lang: {
-      next: 'Suivant',
-      previous: 'Précédent',
-    },
+    lang: buttonI18n[$("html").attr("lang").split("-")[0]],
     anchorSettings: {
       markDoneStep: true,
       markAllPreviousStepsAsDone: false,

@@ -26,7 +26,13 @@
         <div id="form-step-0" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="device_contract">Contrat de votre appareil :</label>
-            <select class="form-control" required="required" id="device_contract" name="device_contract" data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus.">
+            <select
+                class="form-control"
+                required="required"
+                id="device_contract"
+                name="device_contract"
+                data-required-error="Veuillez sélectionner un contrat dans la liste ci-dessus."
+            >
               <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
               <t t-foreach="contracts" t-as="c">
                 <t t-set="s_date" t-value="c.date_start.strftime(date_format)" />

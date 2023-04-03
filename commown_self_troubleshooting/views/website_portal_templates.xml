@@ -50,7 +50,7 @@
 
       <t name="Web layout for self troubleshooting pages" t-name="commown-self-troubleshoot.web-layout">
         &lt;!DOCTYPE html&gt;
-        <html t-att="html_data or {}">
+        <html t-att="html_data or {}" t-att-lang="lang and lang.replace('_', '-')">
           <head>
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
