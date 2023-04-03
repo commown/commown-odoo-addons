@@ -10,9 +10,11 @@
     "depends": [
         "contract",
         "payment_slimpay_issue",
+        "queue_job",
     ],
     "external_dependencies": {},
     "data": [
+        "data/action.xml",
         "data/mail_template.xml",
         "data/project.xml",
     ],

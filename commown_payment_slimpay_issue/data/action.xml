@@ -1,0 +1,8 @@
+<odoo>
+
+  <!-- Retry issue payments in jobs -->
+  <record id="payment_slimpay_issue.action_retry_payment" model="ir.actions.server">
+    <field name="code">record.with_delay(max_retries=1)._slimpay_payment_issue_retry_payment()</field>
+  </record>
+
+</odoo>
