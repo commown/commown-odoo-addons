@@ -21,7 +21,7 @@
         "website_sale_payment_slimpay",
         "commown_contract_variable_discount",
         "commown_self_troubleshooting",
-        "payment_slimpay_issue",
+        "commown_payment_slimpay_issue",
         "payment_token_uniquify",
         "product_rental",
         "project_rating_nps",
