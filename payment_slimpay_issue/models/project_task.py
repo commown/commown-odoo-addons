@@ -80,9 +80,7 @@ class ProjectTask(models.Model):
                     issue_doc.get("rejectReason", None)
                     != "sepaReturnReasonCode.focr.reason"
                 ):
-                    task = self._slimpay_payment_issue_handle(
-                        project, client, issue_doc
-                    )
+                    self._slimpay_payment_issue_handle(project, client, issue_doc)
                 else:
                     _logger.info(
                         "Slimpay payment cancelled by creditor id %s: will be"
@@ -265,10 +263,10 @@ class ProjectTask(models.Model):
         return bool(self.invoice_id)
 
     @api.model
-    def _slimpay_payment_issue_fees_product(self, type):
+    def _slimpay_payment_issue_fees_product(self, fees_name):
         try:
             return self.env.ref(
-                "payment_slimpay_issue." "%s_fees_product" % type
+                "payment_slimpay_issue." "%s_fees_product" % fees_name
             ).product_variant_id
         except ValueError:
             _logger.info("No %s fees product found", fees_name)
