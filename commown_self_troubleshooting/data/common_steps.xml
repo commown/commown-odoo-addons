@@ -38,6 +38,7 @@
                 <t t-set="s_date" t-value="c.date_start.strftime(date_format)" />
                 <t t-set="c_date" t-value="c.commitment_end_date.strftime(date_format)" />
                 <t t-set="in_commitment" t-value="datetime.date.today() &lt; c.commitment_end_date" />
+                <t t-set="devices" t-value="c.quant_ids.mapped('lot_id')"/>
                 <option
                     t-att-value="c.id"
                     t-att-data-contract-name="c.name"
@@ -50,6 +51,13 @@
                  <t t-esc="s_date"/>
                  <span t-if="in_commitment">- Fin de la période d'engagement :</span>
                  <t t-esc="c_date"/>
+                 <span class="devices" t-if="len(devices) > 1">- Appareils n° : </span>
+                 <span class="devices" t-if="len(devices) == 1">- Appareil n° : </span>
+                 <t t-foreach="devices" t-as="device">
+                   <span>
+                     <t t-esc="device.name"/><t t-if="device_index + 1 &lt; device_size"> / </t>
+                   </span>
+                 </t>
                 </option>
               </t>
             </select>
