@@ -80,12 +80,12 @@ function setUpWizard($container) {
   const requiredFields = computeRequiredFields();
   const buttonI18n = {
     fr: {
-      next: 'Suivant',
       previous: 'Précédent',
+      next: 'Suivant',
     },
     de: {
-      next: 'Vorherige',
-      previous: 'Nächste',
+      previous: 'Vorheriger Schritt',
+      next: 'Nächster Schritt',
     }
   };
 
