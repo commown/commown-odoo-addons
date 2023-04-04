@@ -22,7 +22,20 @@
           <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
           <h2>Appareil concerné</h2>
         </div>
-        <p>Choisissez ci-dessous le contrat lié à l'appareil concerné.</p>
+        <p class="text-danger bg-danger" style="padding: 1em; margin: 1em">
+          Choisissez ci-dessous le contrat lié à l'appareil concerné.<br/>
+          <br/>
+          Le numéro de série (ou code IMEI pour les téléphones) sont indiqués pour vous permettre
+          d'associer le bon contrat.<br/>
+          Si vous ne savez pas où trouver ce numéro, allez voir
+          <a target="_blank" href="https://forum.commown.coop/t/trouver-le-numero-de-serie-de-son-ordinateur/2677">ici pour les ordinateurs</a>, et
+          <a target="_blank" href="https://forum.commown.coop/t/trouver-le-numero-imei-de-son-smartphone/2678">là pour les téléphones</a>.<br/>
+          <br/>
+          Si vous ne trouvez pas le bon numéro, pas de panique,
+          sélectionnez ici le 1er contrat de la liste et précisez-nous
+          en introduction de votre message que vous ne le trouvez pas,
+          nous nous en occuperons !
+        </p>
         <div id="form-step-0" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="device_contract">Contrat de votre appareil :</label>
@@ -51,11 +64,12 @@
                  <t t-esc="s_date"/>
                  <span t-if="in_commitment">- Fin de la période d'engagement :</span>
                  <t t-esc="c_date"/>
-                 <span class="devices" t-if="len(devices) > 1">- Appareils n° : </span>
-                 <span class="devices" t-if="len(devices) == 1">- Appareil n° : </span>
+                 <span class="devices" t-if="len(devices) > 1">- Appareils : </span>
+                 <span class="devices" t-if="len(devices) == 1">- Appareil : </span>
                  <t t-foreach="devices" t-as="device">
                    <span>
-                     <t t-esc="device.name"/><t t-if="device_index + 1 &lt; device_size"> / </t>
+                     <t t-esc="device.product_id.name"/> n°<t t-esc="device.name"/>
+                     <t t-if="device_index + 1 &lt; device_size"> / </t>
                    </span>
                  </t>
                 </option>
