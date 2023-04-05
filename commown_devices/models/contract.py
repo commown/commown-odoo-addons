@@ -1,7 +1,7 @@
 import logging
 from collections import OrderedDict
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 from .common import internal_picking
 
@@ -114,3 +114,24 @@ class Contract(models.Model):
         return self.env["stock.production.lot"].browse(
             [l_id for (l_id, total) in list(lot_ids.items()) if total > 0]
         )
+
+    @api.multi
+    def displayable_description(self):
+        "Override self troubleshooting method to add device data to the description"
+
+        result = super().displayable_description()
+        devices = self.quant_ids.mapped("lot_id")
+
+        if devices:
+            devices_descr = " / ".join(
+                _("%(product)s n°%(serial)s")
+                % {"product": device.product_id.name, "serial": device.name}
+                for device in devices
+            )
+            if len(devices) > 1:
+                key = _("Devices")
+            else:
+                key = _("Device")
+            result["descr"] += self.displayable_key_value(key, devices_descr)
+
+        return result
