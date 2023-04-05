@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="issue-description-fp2-battery" model="ir.ui.view">
-      <field name="name">self-troubleshoot-issue-description-fp2-battery</field>
-      <field name="type">qweb</field>
-      <field name="key">commown_self_troubleshooting.issue-description-fp2-battery</field>
-      <field name="arch" type="xml">
-        <t t-name="self-troubleshoot-issue-description-fp2-batterie">
-Bonjour,
-<t t-if="action=='ship'">
-après avoir effectué un auto-dépannage, il ressort que ma batterie de mon FP2 doit être changée.
+  <record id="issue-description-fp2-battery" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-fp2-battery</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-fp2-battery</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-fp2-batterie">
+          <t t-if="action=='ship'">
+            <p>
+              Après avoir effectué un auto-dépannage, il ressort que ma batterie de mon FP2 doit être changée.
+            </p><br/>
+            <p>
+              L'adresse d'expédition est la suivante : <br/>
 
-L'adresse d'expédition est la suivante :
-<t t-esc="name"/>
-<t t-esc="u'\n'.join((street, street2)).strip()"/>
-<t t-esc="zipcode"/> <t t-esc="city"/>
-<t t-esc="country"/>
+              <ul>
+                <li t-if="name.strip()" t-esc="name.strip()"/>
+                <li t-if="street.strip()" t-esc="street.strip()"/>
+                <li t-if="street2.strip()" t-esc="street2.strip()"/>
+                <li t-if="zipcode.strip()" t-esc="zipcode.strip()"/>
+                <li t-if="city.strip()" t-esc="city.strip()"/>
+                <li t-if="country.strip()" t-esc="country.strip()"/>
+              </ul>
 
-Informations supplémentaires utiles à la livraison :
-Numéro de téléphone : <t t-esc="phone"/>
-Adresse de courriel : <t t-esc="email"/></t>
+              Informations supplémentaires utiles à la livraison :<br/>
+              <ul>
+                <li>Numéro de téléphone : <t t-if="phone.strip()" t-esc="phone.strip()"/></li><br/>
+                <li>Adresse de courriel : <t t-if="email.strip()" t-esc="email.strip()"/></li>
+              </ul>
+            </p>
+          </t>
 
-<t t-elif="action=='pb_logiciel'">
-Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
-</t>
+          <p t-elif="action=='pb_logiciel'">
+          Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
+          </p>
 
-<t t-if="more_info">
-J'ai porté à votre connaissance les informations complémentaires suivantes :
----
-<t t-esc="more_info"/>
----</t>
-        </t>
-      </field>
-    </record>
-
+          <p t-if="more_info">
+          J'ai porté à votre connaissance les informations complémentaires suivantes :
+          </p>
+          <div t-if="more_info">
+            <pre><t t-esc="more_info"/></pre>
+          </div>
+      </t>
+    </field>
+  </record>
 </odoo>

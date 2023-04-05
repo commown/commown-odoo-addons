@@ -7,32 +7,54 @@
   <field name="key">commown_self_troubleshooting.issue-description-fp3-display</field>
   <field name="arch" type="xml">
     <t t-name="self-troubleshoot-issue-description-fp3-display">
-Bonjour,
-<t t-if="action=='ship'">
-<t t-if="type_contrat=='me'">
-après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé.</t>
-<t t-else="">
-mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)</t>
+      <t t-if="action=='ship'">
+        <t t-if="type_contrat=='me'">
+          <p>
+          Après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé.
+          </p>
+        </t>
 
-L'adresse d'expédition est la suivante :
-<t t-esc="name"/>
-<t t-esc="u'\n'.join((street, street2)).strip()"/>
-<t t-esc="zipcode"/> <t t-esc="city"/>
-<t t-esc="country"/>
+        <p t-else="">
+          Mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)
+        </p><br/>
 
-Informations supplémentaires utiles à la livraison :
-Numéro de téléphone : <t t-esc="phone"/>
-Adresse de courriel : <t t-esc="email"/></t>
+        <p>
+          L'adresse d'expédition est la suivante :<br/>
 
-<t t-elif="action=='inform'">
-Suite à l'auto-dépannage, le nettoyage des contacts a permis de résoudre le problème !</t>
+          <ul>
+            <li t-if="name.strip()" t-esc="name.strip()"/>
+            <li t-if="street.strip()" t-esc="street.strip()"/>
+            <li t-if="street2.strip()" t-esc="street2.strip()"/>
+            <li t-if="zipcode.strip()" t-esc="zipcode.strip()"/>
+            <li t-if="city.strip()" t-esc="city.strip()"/>
+            <li t-if="country.strip()" t-esc="country.strip()"/>
+          </ul>
 
-<t t-if="more_info">
-J'ai porté à votre connaissance les informations complémentaires suivantes :
-----
-<t t-esc="more_info">
-----</t></t>
+          Informations supplémentaires utiles à la livraison : <br/>
+
+          <ul>
+            <li>
+              Numéro de téléphone : <t t-if="phone.strip()" t-esc="phone.strip()"/>
+            </li>
+            <li>
+              Adresse de courriel : <t t-if="email.strip()" t-esc="email.strip()"/>
+            </li>
+          </ul>
+        </p>
       </t>
+
+      <p t-elif="action=='inform'">
+        Suite à l'auto-dépannage, le nettoyage des contacts a permis de résoudre le problème !
+      </p>
+
+      <p t-if="more_info">
+        J'ai porté à votre connaissance les informations complémentaires suivantes :
+      </p>
+
+      <div t-if="more_info">
+        <pre><t t-esc="more_info" /></pre>
+      </div>
+    </t>
   </field>
 </record>
 
