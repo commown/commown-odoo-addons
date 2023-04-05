@@ -32,15 +32,9 @@ class Contract(models.Model):
 
         fields = self.fields_get()
 
-        result["descr"] = self.name + self.displayable_key_value(
+        result["descr"] = self.displayable_key_value(
             fields["date_start"]["string"],
             result["start_date"],
         )
-
-        if result["in_commitment"]:
-            result["descr"] += self.displayable_key_value(
-                fields["commitment_end_date"]["string"],
-                result["commitment_end_date"],
-            )
 
         return result
