@@ -123,15 +123,16 @@ class Contract(models.Model):
         devices = self.quant_ids.mapped("lot_id")
 
         if devices:
-            devices_descr = " / ".join(
-                _("%(product)s n°%(serial)s")
-                % {"product": device.product_id.name, "serial": device.name}
-                for device in devices
+            result["descr"] = (
+                self.displayable_key_value(
+                    _("Devices") if len(devices) > 1 else _("Device"),
+                    " / ".join(
+                        _("%(product)s n°%(serial)s")
+                        % {"product": device.product_id.name, "serial": device.name}
+                        for device in devices
+                    ),
+                )
+                + result["descr"]
             )
-            if len(devices) > 1:
-                key = _("Devices")
-            else:
-                key = _("Device")
-            result["descr"] += self.displayable_key_value(key, devices_descr)
 
         return result
