@@ -17,7 +17,7 @@ class ResPartner(models.Model):
         contract_model = self.env["contract.contract"]
         today = datetime.date.today()
         base_domain = [
-            ("partner_id", "=", self.id),
+            ("partner_id.commercial_partner_id", "=", self.commercial_partner_id.id),
             ("date_start", "<=", today),
             "|",
             ("date_end", "=", False),

@@ -15,7 +15,7 @@ def _normalize_all_data(data):
 class TroubleshootingDataTC(RentalSaleOrderTC):
     def setUp(self):
         super().setUp()
-        self.partner = self.env.ref("base.res_partner_3")
+        self.partner = self.env.ref("base.res_partner_address_15")
         self.contract_fp2 = self._rental_contract("FP2")
         self.contract_serenity = self._rental_contract("FP4", "Option Sérénité")
 
@@ -111,3 +111,21 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
     def test_serenity(self):
         get_contracts = self.partner.self_troubleshooting_contracts
         self.assertEqual(get_contracts("serenity"), self.contract_serenity)
+
+    def test_b2b(self):
+        "Two partners of the same customer company should see the same contracts"
+
+        partner2 = self.env.ref("base.res_partner_address_16")
+
+        # Check test prerequisites
+        assert self.partner.commercial_partner_id == partner2.commercial_partner_id
+        self.assertEqual(
+            self.partner.self_troubleshooting_contracts("fp2-battery"),
+            self.contract_fp2,
+        )
+
+        # Real test
+        self.assertEqual(
+            partner2.self_troubleshooting_contracts("fp2-battery"),
+            self.contract_fp2,
+        )
