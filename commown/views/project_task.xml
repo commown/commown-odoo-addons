@@ -17,6 +17,18 @@
     </field>
   </record>
 
+  <!--Add internal follow-up to quick search-->
+  <record id="project_task_inherit_search" model="ir.ui.view">
+    <field name="name">project.task.search.expand</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_search_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//search" position="inside">
+        <field name="internal_followup"/>
+      </xpath>
+    </field>
+  </record>
+
   <!-- Edit task type form -->
   <record model="ir.ui.view" id="task_type_edit">
     <field name="name">project.task.type.form</field>
