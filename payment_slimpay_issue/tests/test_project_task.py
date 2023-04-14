@@ -2,11 +2,9 @@ from datetime import datetime, timedelta
 
 import mock
 
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import SavepointCase, at_install, post_install
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
-
-from ..models.project_task import ProjectTask as SlimpayIssuePT
 
 
 class FakeDoc(dict):
@@ -92,37 +90,7 @@ def fake_issue_doc(
 
 @at_install(False)
 @post_install(True)
-class ProjectTC(TransactionCase):
-    @classmethod
-    def setUpClass(cls):
-        """If the commown module is loaded (in the CI), monkey patch its ProjectTask
-        class to let current module's slimpay_payment_issue_process_automatically
-        method show its effects. This makes tests easier and faster, avoiding to
-        create invoices from contracts.
-        """
-        try:
-            from odoo.addons.commown.models.project_task import ProjectTask
-        except ImportError:
-            pass
-        else:
-            cls._old_pt_slimpay_payment_issue_process_automatically = (
-                ProjectTask.slimpay_payment_issue_process_automatically
-            )
-            ProjectTask.slimpay_payment_issue_process_automatically = (
-                SlimpayIssuePT.slimpay_payment_issue_process_automatically
-            )
-
-    @classmethod
-    def tearDownClass(cls):
-        try:
-            from odoo.addons.commown.models.project_task import ProjectTask
-        except ImportError:
-            pass
-        else:
-            ProjectTask.slimpay_payment_issue_process_automatically = (
-                cls._old_pt_slimpay_payment_issue_process_automatically
-            )
-
+class ProjectTC(SavepointCase):
     def setUp(self):
         patcher = mock.patch(
             "odoo.addons.account_payment_slimpay" ".models.slimpay_utils.get_client"
