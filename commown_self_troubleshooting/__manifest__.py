@@ -17,6 +17,7 @@
         "web",
     ],
     "data": [
+        "data/CC/screen/form.xml",
         "data/ContractManagement/termination/form.xml",
         "data/ContractManagement/termination/issue_template.xml",
         "data/Smartphone/screen/form.xml",
@@ -33,6 +34,7 @@
         "data/FP4/screen/form.xml",
         "data/GS/form_day.xml",
         "data/GS/issue_template.xml",
+        "data/Shiftphone/screen/form.xml",
         "data/Assistance/Serenity/form.xml",
         "data/Assistance/Serenity/issue_template.xml",
         "data/Assistance/Generic Issue/form.xml",
