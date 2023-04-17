@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="crosscall-screen" model="ir.ui.view">
+    <field name="name">Self-troubleshoot a Crosscall screen</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-crosscall-screen</field>
+    <field name="arch" type="xml">
+      <t t-name="website.self-troubleshoot-crosscall-screen">
+        <t t-call="website.self-troubleshoot-smartphone-screen">
+          <t t-set="model">Crosscall</t>
+        </t>
+      </t>
+    </field>
+  </record>
+
+  <record id="crosscall-screen-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-crosscall-screen</field>
+    <field name="view_id" ref="crosscall-screen"/>
+    <field name="website_meta_title">Crosscall</field>
+    <field name="website_meta_description">Mon écran (ou sa protection) est fissuré</field>
+  </record>
+
+</odoo>

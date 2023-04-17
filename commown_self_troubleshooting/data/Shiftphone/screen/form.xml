@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="shiftphone-screen" model="ir.ui.view">
+    <field name="name">Self-troubleshoot a Shiftphone screen</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-shiftphone-screen</field>
+    <field name="arch" type="xml">
+      <t t-name="website.self-troubleshoot-shiftphone-screen">
+        <t t-call="website.self-troubleshoot-smartphone-screen">
+          <t t-set="model">Shiftphone</t>
+        </t>
+      </t>
+    </field>
+  </record>
+
+  <record id="shiftphone-screen-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-shiftphone-screen</field>
+    <field name="view_id" ref="shiftphone-screen"/>
+    <field name="website_meta_title">Shiftphone</field>
+    <field name="website_meta_description">Mon écran (ou sa protection) est fissuré</field>
+  </record>
+
+</odoo>
