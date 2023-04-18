@@ -7,7 +7,7 @@
     <field name="key">website.self-troubleshoot-fp3-screen</field>
     <field name="arch" type="xml">
       <t t-name="website.self-troubleshoot-fp3-screen">
-        <t t-call="website.self-troubleshoot-fp-screen">
+        <t t-call="website.self-troubleshoot-smartphone-screen">
           <t t-set="model">FP3</t>
         </t>
       </t>

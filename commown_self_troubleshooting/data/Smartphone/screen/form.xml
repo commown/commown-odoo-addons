@@ -1,13 +1,13 @@
 <odoo>
-  <record id="fp-screen" model="ir.ui.view">
-    <field name="name">Self-troubleshoot an FP screen</field>
+  <record id="smartphone-screen" model="ir.ui.view">
+    <field name="name">Self-troubleshoot a Smartphone screen</field>
     <field name="type">qweb</field>
-    <field name="key">website.self-troubleshoot-fp-screen</field>
+    <field name="key">website.self-troubleshoot-smartphone-screen</field>
     <field name="arch" type="xml">
 
-    <t t-name="website.self-troubleshoot-fp-screen">
+    <t t-name="website.self-troubleshoot-smartphone-screen">
       <t t-call="commown-self-troubleshoot.web-layout">
-        <t t-set="title">Commown - Auto-dépannage - Fairphone : Mon écran (ou sa protection) est fissuré</t>
+        <t t-set="title">Commown - Auto-dépannage - Smartphone : Mon écran (ou sa protection) est fissuré</t>
         <t t-set="head">
           <script type="text/javascript">
 
@@ -32,11 +32,11 @@
         <!-- Variables à modifier ici -->
         <t t-set="tag_names">Appareil <t t-esc="model" /></t>
         <t t-set="issue_title"><t t-esc="model" /> - Changement d'écran et/ou vitre de protection</t>
-        <t t-set="issue_description_template">issue-description-fp-screen</t>
+        <t t-set="issue_description_template">issue-description-smartphone-screen</t>
         <!-- Fin des variables à modifier -->
 
         <div class="container">
-          <h1>Auto-dépannage : Fairphone</h1>
+          <h1>Auto-dépannage : Smartphone</h1>
           <h2>Mon écran (ou sa protection) est fissuré </h2>
           <br/>
           <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
@@ -69,9 +69,9 @@
                   <h2><i class="fas fa-cogs"/>Type de problème</h2>
                   <p>Commown fournit sans frais supplémentaires une protection d'écran afin de maximiser la
                   durée de vie de l'appareil.</p>
-                  <p>Ainsi, votre Fairphone doit déjà avoir une vitre de protection posée
+                  <p>Ainsi, votre Smartphone doit déjà avoir une vitre de protection posée
                   par nos soins avant de vous l'envoyer.</p>
-                  <p>Commençons par vérifier que la vitre de protection est bien présente sur votre Fairphone :
+                  <p>Commençons par vérifier que la vitre de protection est bien présente sur votre Smartphone :
                   cela se remarque facilement dans les coins de l'écran grâce à un relief visible
                   (cf. photo ci-dessous) et détectable au toucher.</p>
                   <img
