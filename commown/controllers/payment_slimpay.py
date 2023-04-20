@@ -17,7 +17,7 @@ class CommownSlimpayController(SlimpayControllerWebsiteSale):
         auth="public",
         website=True,
     )
-    def payment_slimpay_transaction(self, acquirer_id):
+    def payment_slimpay_transaction(self, acquirer_id, tx_ref=None):
         """This method reuses the partner's token unless the SEPA mandate
         product is in current sale order. Note this plays well with
         the `commown.payment` template (in website_sale_templates.xml)
@@ -26,13 +26,18 @@ class CommownSlimpayController(SlimpayControllerWebsiteSale):
         """
         _logger.debug("Examine if partner's mandate can be reused...")
 
-        so_id = request.session["sale_order_id"]
-        so = request.env["sale.order"].sudo().browse(so_id)
-        sepa_id = request.env.ref("commown.sepa_mandate").id
+        env = request.env
+
+        transaction = env["payment.transaction"].search([("reference", "=", tx_ref)])
+        so = transaction.sudo().sale_order_ids[0]
+        assert (
+            env.user.partner_id.commercial_partner_id
+            == so.partner_id.commercial_partner_id
+        )
+        sepa_id = env.ref("commown.sepa_mandate").id
 
         reuse_token = bool(
-            request.env.user.partner_id == so.partner_id
-            and so.partner_id.payment_token_id
+            so.partner_id.payment_token_id
             and so.partner_id.payment_token_id.active
             and sepa_id not in so.mapped("order_line.product_id.product_tmpl_id").ids
         )
@@ -42,13 +47,10 @@ class CommownSlimpayController(SlimpayControllerWebsiteSale):
                 "Token not reused: SEPA mandate found in the so"
                 " or partner has no active token."
             )
-            return super().payment_slimpay_transaction(acquirer_id)
+            return super().payment_slimpay_transaction(acquirer_id, tx_ref)
 
         token = so.partner_id.payment_token_id
         _logger.info("Token %s reused!", token.id)
-
-        transaction_id = request.session["__website_sale_last_tx_id"]
-        transaction = request.env["payment.transaction"].browse(transaction_id)
 
         assert (
             not transaction.payment_token_id
