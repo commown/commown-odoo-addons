@@ -10,8 +10,5 @@ class CrmLead(models.Model):
         test_lead = self[0]
         changes, tracking_value_ids = tracking[test_lead.id]
         if "stage_id" in changes and test_lead.stage_id.mail_template_id:
-            res["stage_id"] = (
-                test_lead.stage_id.mail_template_id,
-                {"composition_mode": "mass_mail"},
-            )
+            res["stage_id"] = test_lead.stage_id.mail_template_id, {}
         return res
