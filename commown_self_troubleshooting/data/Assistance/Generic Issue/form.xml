@@ -121,8 +121,8 @@
                         l'option <strong>Casse</strong>
                       </li>
                       <li>
-                        Vous voulez faire valoir votre droit de formation Linux d'une heure
-                        avec notre équipe, choisissez l'option <strong>Formation</strong>
+                        Vous avez souscrit à un contrat PC et vous voulez faire valoir votre droit de formation
+                        Linux d'une heure avec notre équipe, choisissez l'option <strong>Formation</strong>
                       </li>
                       <li>
                         Vous souhaitez faire évoluer votre matériel (espace de stockage
@@ -159,7 +159,8 @@
                     <ol>
                       <li>
                         Décrivez avec précision ce que vous observez
-                        (ex: copie des messages d'erreur est utile et bienvenue)
+                        (toute photo, capture d'écran des éléments
+                        ou copie des messages d'erreur est utile et bienvenue)
                       </li>
                       <li>
                         Le cas échéant décrivez avec précision les opérations
@@ -174,6 +175,14 @@
                         L'objectif est d'être bien sûr qu'on obtient la même chose que vous.
                       </li>
                     </ol>
+
+                    <p>
+                      Pour ajouter une pièce jointe (capture d'écran, photo, vidéo) à l'aide de <strong>Drop sans nuage</strong>,
+                      veuillez suivre
+                      <a href="https://forum.commown.coop/t/ajouter-une-piece-jointe-a-lauto-depannage-de-commown/2689" target="_blank">
+                        ce tutoriel</a>.
+                    </p>
+
                     <p class="text-danger">
                       <strong>
                         NB: Adopter ce formalisme vous garantit une meilleure prise en charge
