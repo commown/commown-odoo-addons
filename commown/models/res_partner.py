@@ -93,8 +93,17 @@ class CommownPartner(models.Model):
         final value is still too big.
         """
         for field in self.auto_widget_binary_fields:
-            b64value = vals.get(field)
-            if b64value:
+            posted_value = vals.get(field)
+            if posted_value:
+                if isinstance(posted_value, str):
+                    b64value = posted_value.encode("ascii")
+                elif isinstance(posted_value, bytes):
+                    b64value = posted_value
+                else:
+                    raise ValueError(
+                        "The type %s is not covered by this function"
+                        % type(posted_value)
+                    )
                 value = b64decode(b64value)
                 if magic.from_buffer(value, mime=True).startswith("image"):
                     vals[field] = tools.image_resize_image(
