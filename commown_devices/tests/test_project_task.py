@@ -340,22 +340,18 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         resiliated_stage = self.env.ref("commown_devices.resiliated_stage")
 
         self.assertTrue(self.c1.quant_nb > 0)
+        expected_message = (
+            "Error while validating constraint\n\nThese tasks can not be moved forward. There are still device(s) "
+            "associated with their contract: %s\n" % self.task_test_checks.ids
+        )
 
         with self.assertRaises(ValidationError) as err1:
             self.task_test_checks.stage_id = diagnostic_stage
-        self.assertEqual(
-            "Error while validating constraint\n\nThis task can not be moved forward. There are still %s device(s) associated with the contract\n"
-            % self.task_test_checks.contract_id.quant_nb,
-            err1.exception.name,
-        )
+        self.assertEqual(expected_message, err1.exception.name)
 
         with self.assertRaises(ValidationError) as err2:
             self.task_test_checks.stage_id = resiliated_stage
-        self.assertEqual(
-            "Error while validating constraint\n\nThis task can not be moved forward. There are still %s device(s) associated with the contract\n"
-            % self.task_test_checks.contract_id.quant_nb,
-            err2.exception.name,
-        )
+        self.assertEqual(expected_message, err2.exception.name)
 
         self.task_test_checks.contract_id.quant_ids.unlink()
         self.task_test_checks.contract_id._compute_quant_ids()
