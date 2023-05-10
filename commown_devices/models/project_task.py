@@ -159,8 +159,9 @@ class ProjectTask(models.Model):
             raise Warning(
                 _(
                     "These tasks can not be moved forward. There are still device(s) "
-                    "associated with their contract: %s" % erroneous_task.ids
+                    "associated with their contract: %s"
                 )
+                % erroneous_task.ids
             )
 
     def action_scrap_device(self):
