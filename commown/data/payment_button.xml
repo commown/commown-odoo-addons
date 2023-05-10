@@ -1,0 +1,30 @@
+<odoo>
+
+  <template id="slimpay_acquirer_button">
+    <div style="text-align: center;">
+      <p class="alert alert-warning">En cliquant sur "Valider et payer", je reconnais avoir pris connaissance des <a class="fr lang" href="https://commown.coop/mentions-legales" target="_blank" data-original-title="" title="">conditions de services et informations légales</a><a class="de lang" target="_blank" data-original-title="" title="" href="https://commown.coop/de/allgemeine_gesch%C3%A4ftsbedingungen/">conditions de services et informations légales</a> et je les accepte. </p>
+      <form t-if="acquirer" t-att-action="tx_url" method="post" target="_self">
+        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+        <t t-if="return_url">
+          <input type="hidden" name="return_url" t-att-value="return_url"/>
+        </t>
+        <input id="acquirer_slimpay" type="hidden" name="acquirer" t-att-value="acquirer.id"/>
+        <!-- Submit-->
+        <button id="pay_slimpay" type="submit" width="100px" t-att-class="submit_class">
+          <img t-if="not submit_txt" src="/payment_slimpay/static/src/img/slimpay_icon.png"/>
+          <span t-if="submit_txt">
+              Valider et payer
+              <span class="fa fa-long-arrow-right"/>
+            </span>
+        </button>
+        <script type="text/javascript">
+          odoo.define(function (require) {
+            var ajax = require('web.ajax');
+            ajax.loadJS("/account_payment_slimpay/static/src/js/slimpay.js");
+          });
+        </script>
+      </form>
+    </div>
+  </template>
+
+</odoo>
