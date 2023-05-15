@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-05 12:40+0000\n"
-"PO-Revision-Date: 2023-04-05 12:40+0000\n"
+"POT-Creation-Date: 2023-05-10 09:06+0000\n"
+"PO-Revision-Date: 2023-05-10 09:06+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:127
+#: code:addons/commown_devices/models/contract.py:130
 #, python-format
 msgid "%(product)s n°%(serial)s"
 msgstr "%(product)s n°%(serial)s"
@@ -25,6 +25,11 @@ msgstr "%(product)s n°%(serial)s"
 #: model:ir.model,name:commown_devices.model_project_task_abstract_picking_wizard
 msgid "Abstract model to create a picking from a task"
 msgstr "Modèle abstrait pour la génération d'expéditions depuis une tâche"
+
+#. module: commown_devices
+#: model:project.task.type,name:commown_devices.diagnostic_stage
+msgid "App reçu, diag FAIT"
+msgstr "App reçu, diag FAIT"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task__storable_product_id
@@ -69,6 +74,11 @@ msgstr "Contrat"
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__quant_ids
 msgid "Contract-related stock"
 msgstr "Stock lié au contrat"
+
+#. module: commown_devices
+#: model:project.task.type,name:commown_devices.resiliated_stage
+msgid "Contrat résilié, mail envoyé"
+msgstr "Contrat résilié, mail envoyé"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_crm_lead_picking_wizard
@@ -124,7 +134,7 @@ msgid "Destination contract"
 msgstr "Contrat de destination"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:134
+#: code:addons/commown_devices/models/contract.py:128
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__lot_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task__lot_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__lot_id
@@ -139,7 +149,7 @@ msgid "Device number"
 msgstr "Nb appareils"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:132
+#: code:addons/commown_devices/models/contract.py:128
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
 #: model_terms:ir.ui.view,arch_db:commown_devices.edit_project
 #, python-format
@@ -147,9 +157,9 @@ msgid "Devices"
 msgstr "Appareils"
 
 #. module: commown_devices
-#: model:project.task.type,name:commown_devices.diagnostic_stage
-msgid "Diagnostic stage"
-msgstr "Diagnostique"
+#: model:project.task.type,portal_displayed_name:commown_devices.diagnostic_stage
+msgid "Diagnostic en cours"
+msgstr "Diagnostic en cours"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__display_name
@@ -175,7 +185,7 @@ msgstr "ID"
 #: model:project.task.type,legend_normal:commown_devices.diagnostic_stage
 #: model:project.task.type,legend_normal:commown_devices.resiliated_stage
 msgid "In Progress"
-msgstr "En cours"
+msgstr "En Cours"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard____last_update
@@ -283,12 +293,12 @@ msgid "Receive a device"
 msgstr "Rapatrier un appareil"
 
 #. module: commown_devices
-#: model:project.task.type,name:commown_devices.resiliated_stage
-msgid "Resiliated stage"
-msgstr "Résilié"
+#: model:project.task.type,portal_displayed_name:commown_devices.resiliated_stage
+msgid "Résiliation traitée"
+msgstr "Résiliation traitée"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:187
+#: code:addons/commown_devices/models/project_task.py:192
 #, python-format
 msgid "Scrap device"
 msgstr "Mise au rebut"
@@ -333,10 +343,10 @@ msgstr "Cette action ne doit pas être utilisée dans le projet résiliation.\n"
 "Utilisez plutôt l'action 'Rapatrier un appareil'"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:154
+#: code:addons/commown_devices/models/project_task.py:160
 #, python-format
-msgid "This task can not be moved forward. There are still %s device(s) associated with the contract"
-msgstr "Cette carte ne peut pas être déplacée à cette étape. Il y a encore %s appareil(s) associé(s) au contrat"
+msgid "These tasks can not be moved forward. There are still device(s) associated with their contract: %s"
+msgstr "Ces tâches ne peuvent pas être avancées à cette étape. Il y a encore un ou plusieurs appareils associé au(x) contrat(s) : %s"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_picking
@@ -365,6 +375,17 @@ msgstr "Suivi des appareils ?"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__variant_id
 msgid "Variant"
 msgstr "Variante"
+
+#. module: commown_devices
+#: model:project.task.type,description:commown_devices.diagnostic_stage
+msgid "Vérifier qu'il n'y a plus de tickets ouverts - Support et/ou Transfert et/ou Casse-Perte-Vol (car ça n'a pas de sens si le contrat est résilié, ou pour aider à la facturation de fin de contrat le cas échéant ;)"
+msgstr "Ici on met les cartes des appareils qui ont été réceptionnés ET pré-diagnostiqués\n"
+"Vérifier les watermarks, ainsi que l'état visuel de l'appareil (écran , coque, etc.)\n"
+"Si casse, ouvrir un ticket.\n"
+"Vérifier qu'il ne manque pas des accessoires.\n"
+"Mettre la date et un commentaire complet des observations pour la suite du process .\n"
+"\n"
+"NB :  en cas de casse constatée lors d'une réception pour résiliation, si on ne sait pas de quand date la casse, plutôt que d'inventer une date, il faut mettre la date où on le découvre (donc date de la réception)"
 
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_set_picking_date_done_to_scheduled
@@ -433,3 +454,4 @@ msgstr "project.task.inward.picking.wizard"
 #: model:ir.model,name:commown_devices.model_project_task_outward_picking_wizard
 msgid "project.task.outward.picking.wizard"
 msgstr "project.task.outward.picking.wizard"
+

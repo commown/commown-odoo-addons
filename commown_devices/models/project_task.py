@@ -145,18 +145,24 @@ class ProjectTask(models.Model):
 
     @api.constrains("stage_id")
     def onchange_stage_id_prevent_contract_resiliation_with_device(self):
-        if self.stage_id and self.contract_id and self.contract_id.quant_nb > 0:
-            check_stage_ids = tuple(
-                self.env.ref(ref).id for ref in CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS
-            )
-            if self.stage_id.id in check_stage_ids:
-                raise Warning(
-                    _(
-                        "This task can not be moved forward. There are still %s device(s) "
-                        "associated with the contract"
-                    )
-                    % self.contract_id.quant_nb
+        check_stage_ids = tuple(
+            self.env.ref(ref).id for ref in CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS
+        )
+        erroneous_task = self.search(
+            [
+                ("id", "in", self.ids),
+                ("contract_id.quant_nb", ">", 0),
+                ("stage_id", "in", check_stage_ids),
+            ]
+        )
+        if erroneous_task:
+            raise Warning(
+                _(
+                    "These tasks can not be moved forward. There are still device(s) "
+                    "associated with their contract: %s"
                 )
+                % erroneous_task.ids
+            )
 
     def action_scrap_device(self):
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
