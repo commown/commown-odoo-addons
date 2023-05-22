@@ -119,15 +119,14 @@ class CustomerPortalTC(RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase):
         resp = test_client.get(hrefs[0])
         self.assertEqual(resp.headers["Content-Type"], "application/pdf")
 
-    def _create_attachment(self, name, lang, target_obj):
-        return self.env["ir.attachment"].create(
+    def _create_attachment(self, env, name, lang):
+        return env["ir.attachment"].create(
             {
                 "name": name,
                 "type": "binary",
                 "datas": "toto",
-                "res_model": target_obj._name,
-                "res_id": target_obj.id,
                 "lang": lang,
+                "public": True,
             }
         )
 
@@ -138,11 +137,12 @@ class CustomerPortalTC(RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase):
         with self.registry.cursor() as test_cursor:
             env = self.env(test_cursor)
             partner = env["res.partner"].browse(self.partner.id)
-            so = self.create_sale_order(partner)
+            so = self.create_sale_order(partner, env=env)
             # Add contractual documents to test the corresponding section
             ct = so.mapped("order_line.product_id.property_contract_template_id")[0]
-            self._create_attachment("doc 1", False, ct)
-            self._create_attachment("doc 2", False, ct)
+            doc1 = self._create_attachment(env, "doc 1", False)
+            doc2 = self._create_attachment(env, "doc 2", False)
+            ct.contractual_documents |= doc1 | doc2
             # > Remove report from default template to add ours:
             env.ref("sale.email_template_edi_sale").report_template = False
             # Add a coupon to test the corresponding section
@@ -159,7 +159,7 @@ class CustomerPortalTC(RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase):
                     "used_for_sale_id": so.id,
                 }
             )
-            so.with_context(send_email=True).action_confirm()
+            so.action_confirm()
 
         doc = self.get_page(test_client, "/my/orders/%d" % so.id)
 
