@@ -370,22 +370,21 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
         self.env["res.lang"].pool.cache.clear()
         self.so = self.create_sale_order(self.partner)
         ct = self.so.mapped("order_line.product_id.property_contract_template_id")[0]
-        self.create_attachment("doc1_fr.txt", "fr_FR", ct)
-        self.create_attachment("doc2_fr.txt", "fr_FR", ct)
-        self.create_attachment("doc1_en.txt", "en_US", ct)
-        self.create_attachment("doc_no_lang.txt", False, ct)
+        ct.contractual_documents |= self.create_attachment("doc1_fr.txt", "fr_FR")
+        ct.contractual_documents |= self.create_attachment("doc2_fr.txt", "fr_FR")
+        ct.contractual_documents |= self.create_attachment("doc1_en.txt", "en_US")
+        ct.contractual_documents |= self.create_attachment("doc_no_lang.txt", False)
         # Remove report from default template to make it possible to add ours:
         self.env.ref("sale.email_template_edi_sale").report_template = False
 
-    def create_attachment(self, name, lang, target_obj):
+    def create_attachment(self, name, lang):
         return self.env["ir.attachment"].create(
             {
                 "name": name,
                 "type": "binary",
                 "datas": "toto",
-                "res_model": target_obj._name,
-                "res_id": target_obj.id,
                 "lang": lang,
+                "public": True,
             }
         )
 
