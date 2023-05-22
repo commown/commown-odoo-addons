@@ -4,6 +4,12 @@ from odoo import api, fields, models
 class ContractTemplate(models.Model):
     _inherit = "contract.template"
 
+    contractual_documents = fields.Many2many(
+        string="Contractual documents",
+        comodel_name="ir.attachment",
+        domain=[("public", "=", True), ("res_model", "=", False)],
+    )
+
     commitment_period_number = fields.Integer(
         string="Commitment period number",
         help="Commitment duration in number of periods",

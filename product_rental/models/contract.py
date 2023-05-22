@@ -30,6 +30,12 @@ def _rental_products(contract_descr):
 class Contract(models.Model):
     _inherit = "contract.contract"
 
+    contractual_documents = fields.Many2many(
+        string="Contractual documents",
+        comodel_name="ir.attachment",
+        domain=[("public", "=", True), ("res_model", "=", False)],
+    )
+
     commitment_period_number = fields.Integer(
         string="Commitment period number",
         help="Commitment duration in number of periods",
@@ -141,7 +147,15 @@ class Contract(models.Model):
     @api.onchange("contract_template_id")
     def _onchange_contract_template_id(self):
         """ """
+        if "contractual_documents" not in self.NO_SYNC:
+            self.NO_SYNC.append("contractual_documents")
+
         super()._onchange_contract_template_id()
+
+        docs = self.mapped("contract_template_id.contractual_documents")
+        if self.partner_id.lang:
+            docs = docs.filtered(lambda d: d.lang in (False, self.partner_id.lang))
+        self.update({"contractual_documents": [(6, 0, docs.ids)]})
 
         contract_descr = self.env.context.get("contract_descr")
         if contract_descr:

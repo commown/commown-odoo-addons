@@ -10,7 +10,7 @@ class ProductRentalSaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.multi
-    def contractual_documents(self):
+    def contractual_documents(self, allow_from_template=False):
         """Return the contractual docs of the products' contract template
 
         These are the docs attached to the contract template filtered according
@@ -19,11 +19,14 @@ class ProductRentalSaleOrder(models.Model):
         - docs with the same language as the partner are returned
         """
         self.ensure_one()
-        cts = self.mapped("order_line.product_id.property_contract_template_id")
-        domain = [
-            ("res_model", "=", "contract.template"),
-            ("res_id", "in", cts.ids),
-        ]
+
+        contracts = self.env["contract.contract"].of_sale(self)
+        if contracts or not allow_from_template:
+            docs = contracts.mapped("contractual_documents")
+        else:
+            cts = self.mapped("order_line.product_id.property_contract_template_id")
+            docs = cts.mapped("contractual_documents")
+
         if self.partner_id.lang:
             _logger.debug(
                 "Partner %s (%d) lang is %s. Restricting contractual documents"
@@ -32,21 +35,16 @@ class ProductRentalSaleOrder(models.Model):
                 self.partner_id.id,
                 self.partner_id.lang,
             )
-            domain.extend(
-                [
-                    "|",
-                    ("lang", "=", False),
-                    ("lang", "=", self.partner_id.lang),
-                ]
-            )
-        return self.env["ir.attachment"].search(domain)
+            docs = docs.filtered(lambda d: d.lang in (False, self.partner_id.lang))
+
+        return docs
 
     @api.multi
     def action_quotation_send(self):
         "Add contractual documents to the quotation email"
         self.ensure_one()
         email_act = super().action_quotation_send()
-        order_attachments = self.contractual_documents()
+        order_attachments = self.contractual_documents(allow_from_template=True)
         if order_attachments:
             _logger.info(
                 "Prepare sending %s with %d attachment(s): %s",
