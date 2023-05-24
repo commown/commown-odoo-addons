@@ -159,33 +159,29 @@ class ProductRentalSaleOrder(models.Model):
         contract.contract_line_ids.update({"analytic_account_id": aa.id})
 
     @api.multi
-    def _create_rental_contract(self, contract_template, num):
-        self.ensure_one()
-        values = self._prepare_contract_value(contract_template)
-        values["name"] = "%s-%02d" % (self.name, num)
-        contract = self.env["contract.contract"].create(values)
-        contract._onchange_contract_template_id()
-        contract._onchange_contract_type()
-        return contract
-
-    @api.multi
     def action_create_contract(self):
         contracts = self.env["contract.contract"]
         contract_descrs = self.assign_contract_products()
-        order_line_model = self.env["sale.order.line"]
 
         for count, contract_descr in enumerate(contract_descrs, 1):
-            ctemplate = (
+            contract_template = (
                 contract_descr["main"]
                 .with_context(force_company=self.company_id.id)
                 .property_contract_template_id
             )
-            contract = self._create_rental_contract(ctemplate, count)
-            contracts |= contract
-            clines = order_line_model._product_rental_create_contract_line(
-                contract, contract_descr
-            )
+
+            values = self._prepare_contract_value(contract_template)
+            values["name"] = "%s-%02d" % (self.name, count)
+
+            env = self.with_context(contract_descr=contract_descr).env
+            contract = env["contract.contract"].create(values)
+            contract._onchange_contract_template_id()
+            contract._onchange_contract_type()
+            contract._compute_date_end()
+
             self._add_analytic_account(contract)
+
+            contracts |= contract
 
         return contracts
 
