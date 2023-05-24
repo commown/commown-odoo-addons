@@ -1,6 +1,6 @@
 import datetime
 
-from odoo.addons.product_rental.models.sale_order_line import NO_DATE
+from odoo.addons.product_rental.models.contract import NO_DATE
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
