@@ -2,7 +2,7 @@ from mock import patch
 
 from odoo.tests.common import SavepointCase
 
-from ..models.sale_order_line import NO_DATE
+from ..models.contract import NO_DATE
 
 
 class MockedEmptySessionMixin(object):
