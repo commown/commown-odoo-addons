@@ -10,7 +10,7 @@
         <p>Numéro de téléphone à appeler : <b t-esc="phone"></b></p>
         <p t-if="more_info">Informations complémentaires :</p>
         <div t-if="more_info">
-          <pre><t t-esc="more_info" /></pre>
+          <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
         </div>
       </t>
     </field>
