@@ -49,7 +49,7 @@
         </p>
 
         <div t-if="more_info">
-          <pre><t t-esc="more_info" /></pre>
+          <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
         </div>
       </t>
     </field>

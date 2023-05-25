@@ -39,7 +39,7 @@
         </t>
         <t t-if="more_info">
           <p>J'ai porté à votre connaissance les informations complémentaires suivantes:</p>
-          <pre><t t-esc="more_info"/></pre>
+          <pre style="white-space: pre-wrap;"><t t-esc="more_info"/></pre>
         </t>
       </t>
     </field>
