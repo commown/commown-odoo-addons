@@ -3,7 +3,7 @@ import shutil
 import subprocess
 import tempfile
 
-from odoo import models
+from odoo import fields, models
 
 COUPON_DEFAULTS = {
     "page_width_mm": 210,
@@ -66,6 +66,8 @@ def convert_svg_to_pdf(svg_content, settings):
 
 class Campaign(models.Model):
     _inherit = "coupon.campaign"
+
+    description = fields.Text(translate=True)
 
     def _generate_svg(self):
         self.ensure_one()
