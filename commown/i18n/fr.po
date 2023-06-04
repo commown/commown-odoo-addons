@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-17 12:33+0000\n"
-"PO-Revision-Date: 2023-02-17 12:33+0000\n"
+"POT-Creation-Date: 2023-06-04 19:53+0000\n"
+"PO-Revision-Date: 2023-06-04 19:53+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -241,6 +241,11 @@ msgid "Acompte 10% Reçu"
 msgstr "Acompte 10% Reçu Web"
 
 #. module: commown
+#: model:ir.model,name:commown.model_payment_token_uniquify_obsolescence_action
+msgid "Action to be taken when a payment token becomes obsolete"
+msgstr ""
+
+#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment
 msgid "Adresse de livraison"
 msgstr "Adresse de livraison"
@@ -323,6 +328,11 @@ msgid "Contract Template"
 msgstr "Modèle de contrat"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.sale_order_portal_content
+msgid "Contractual documents"
+msgstr "Documents contractuels (CGS/CP)"
+
+#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
 msgid "Contrat"
 msgstr "Contrat"
@@ -354,6 +364,16 @@ msgid "De quoi ai-je besoin ?<br>"
 msgstr "De quoi ai-je besoin ?<br>"
 
 #. module: commown
+#: selection:payment_token_uniquify.obsolescence_action,technical_name:0
+msgid "Deactivate"
+msgstr "Désactiver"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_coupon_campaign__description
+msgid "Description"
+msgstr "Description"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__display_name
 #: model:ir.model.fields,field_description:commown.field_utm_commown_utils_mixin__display_name
 msgid "Display Name"
@@ -376,6 +396,11 @@ msgid "En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissan
 msgstr "En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance des"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
+msgid "En cliquant sur \"Valider et payer\", je reconnais avoir pris connaissance des"
+msgstr ""
+
+#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
 msgid "FAQ"
 msgstr "FAQ"
@@ -386,7 +411,7 @@ msgid "Fermer"
 msgstr "Fermer"
 
 #. module: commown
-#: code:addons/commown/models/res_partner.py:106
+#: code:addons/commown/models/res_partner.py:115
 #, python-format
 msgid "File too big (limit is %dMo)"
 msgstr "Fichier trop gros (la limite est %d Mo)"
@@ -406,6 +431,11 @@ msgstr "Fin des périodes d'engagement :"
 #: model_terms:ir.ui.view,arch_db:commown.signup_field
 msgid "First name"
 msgstr "Prénom"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_account_move_line__full_reconcile_id
+msgid "Full Reconcile"
+msgstr "Lettrage complet"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__income_exchange_account_id
@@ -439,6 +469,12 @@ msgstr "Carte d'identité (verso, si besoin)"
 #: model:project.task.type,legend_normal:commown.investment_followup_start_stage
 msgid "In Progress"
 msgstr "En cours"
+
+#. module: commown
+#: code:addons/commown/controllers/payment_slimpay.py:58
+#, python-format
+msgid "Incoherent transaction/token partners"
+msgstr ""
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_task__internal_followup
@@ -570,6 +606,12 @@ msgid "Mes identifiants Commown"
 msgstr "Mes identifiants Commown"
 
 #. module: commown
+#: model:ir.model.fields,field_description:commown.field_product_product__sale_line_warn_msg
+#: model:ir.model.fields,field_description:commown.field_product_template__sale_line_warn_msg
+msgid "Message for Sales Order Line"
+msgstr "Message à la ligne de commande de vente"
+
+#. module: commown
 #: model:ir.model,name:commown.model_utm_commown_utils_mixin
 msgid "Mixin for utm classes, to easily merge/ safely remove them"
 msgstr "Mixin pour les classes utm, pour les fusionner et les effacer en toute sécurité"
@@ -693,6 +735,16 @@ msgid "Ready for Next Stage"
 msgstr "Prêt pour l'étape suivante"
 
 #. module: commown
+#: selection:payment_token_uniquify.obsolescence_action,technical_name:0
+msgid "Reattribute contracts"
+msgstr ""
+
+#. module: commown
+#: selection:payment_token_uniquify.obsolescence_action,technical_name:0
+msgid "Reattribute draft contract invoices"
+msgstr ""
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__partner_ids
 msgid "Restrict on partners"
 msgstr "Filtrer sur des partenaires"
@@ -711,6 +763,11 @@ msgstr "Voir les détails dans une nouvelle fenêtre <i class=\"fa fa-external-l
 #: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
 msgid "See product details"
 msgstr "Voir les détails du produit"
+
+#. module: commown
+#: selection:payment_token_uniquify.obsolescence_action,technical_name:0
+msgid "Set partner invoice merge preferences"
+msgstr ""
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_project__show_internal_followup
@@ -748,6 +805,11 @@ msgstr "Étape de tâche"
 #: model:project.project,label_tasks:commown.investment_followup_project
 msgid "Tasks"
 msgstr "Tâches"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_payment_token_uniquify_obsolescence_action__technical_name
+msgid "Technical name"
+msgstr "Nom technique"
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner__company_record
@@ -812,6 +874,12 @@ msgstr "Utilisateurs"
 #: model_terms:ir.ui.view,arch_db:commown.address
 msgid "VAT"
 msgstr "TVA"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
+msgid "Valider et payer\n"
+"              <span class=\"fa fa-long-arrow-right\"/>"
+msgstr ""
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
