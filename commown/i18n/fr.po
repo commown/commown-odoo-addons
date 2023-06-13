@@ -319,6 +319,7 @@ msgstr "Contactez-nous"
 
 #. module: commown
 #: model:ir.model,name:commown.model_contract_contract
+#: model_terms:ir.ui.view,arch_db:commown.sale_order_portal_content
 msgid "Contract"
 msgstr "Contrat"
 
