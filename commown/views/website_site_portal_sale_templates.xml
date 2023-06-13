@@ -6,20 +6,25 @@
     <!-- Replace the terms section by the documents sent by email -->
     <xpath expr="//section[@id='terms']" position="replace">
 
-      <t t-set="docs" t-value="sale_order.contractual_documents()"/>
-      <section t-if="docs" id="sent_docs" class="mt-5">
+      <t t-set="by_contract_docs" t-value="sale_order.contractual_documents()"/>
+      <section t-if="by_contract_docs" id="sent_docs" class="mt-5">
         <h3>Contractual documents</h3>
         <hr class="mt-0 mb-1"/>
-        <ul style="list-style-type: none; padding-left: 0">
-          <t t-foreach="docs" t-as="doc">
-            <t t-set="image_fname"
-               t-value="'/web/static/src/img/mimetypes/' + (doc.mimetype=='application/pdf' and 'pdf.svg' or 'document.svg')"/>
-            <li>
-              <a t-attf-href='/web/content/#{doc.id}?download=true'
-                 target="_blank">
-                <img t-att-src="image_fname"/>
-                <span><t t-esc="doc.name"/></span>
-              </a>
+        <ul class="pl-0" style="list-style-type: none;">
+          <t t-foreach="by_contract_docs" t-as="contract">
+            <li class="mb-3"><h4>Contract <t t-esc="contract.name"/></h4>
+              <ul>
+                <t t-foreach="by_contract_docs[contract]" t-as="doc">
+                  <t t-set="image_fname"
+                     t-value="'/web/static/src/img/mimetypes/' + (doc.mimetype=='application/pdf' and 'pdf.svg' or 'document.svg')"/>
+                  <li>
+                    <a t-attf-href='/web/content/#{doc.id}?download=true' target="_blank">
+                      <img t-att-src="image_fname"/>
+                      <span><t t-esc="doc.name"/></span>
+                    </a>
+                  </li>
+                </t>
+              </ul>
             </li>
           </t>
         </ul>

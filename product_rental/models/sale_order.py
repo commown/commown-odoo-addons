@@ -22,10 +22,10 @@ class ProductRentalSaleOrder(models.Model):
 
         contracts = self.env["contract.contract"].of_sale(self)
         if contracts or not allow_from_template:
-            docs = contracts.mapped("contractual_documents")
+            docs = {c: c.contractual_documents for c in contracts}
         else:
             cts = self.mapped("order_line.product_id.property_contract_template_id")
-            docs = cts.mapped("contractual_documents")
+            docs = {ct: ct.contractual_documents for ct in cts}
 
         if self.partner_id.lang:
             _logger.debug(
@@ -35,7 +35,10 @@ class ProductRentalSaleOrder(models.Model):
                 self.partner_id.id,
                 self.partner_id.lang,
             )
-            docs = docs.filtered(lambda d: d.lang in (False, self.partner_id.lang))
+            docs = {
+                k: v.filtered(lambda d: d.lang in (False, self.partner_id.lang))
+                for k, v in docs.items()
+            }
 
         return docs
 
@@ -44,7 +47,9 @@ class ProductRentalSaleOrder(models.Model):
         "Add contractual documents to the quotation email"
         self.ensure_one()
         email_act = super().action_quotation_send()
-        order_attachments = self.contractual_documents(allow_from_template=True)
+        order_attachments = self.env["ir.attachment"]
+        for atts in self.contractual_documents(allow_from_template=True).values():
+            order_attachments |= atts
         if order_attachments:
             _logger.info(
                 "Prepare sending %s with %d attachment(s): %s",
