@@ -7,6 +7,12 @@
     <field name="inherit_id" ref="contract.contract_template_form_view" />
     <field name="arch" type="xml">
 
+      <xpath expr="//group[@name='group_main']" position="after">
+        <group name="contractual_docs">
+          <field name="contractual_documents" widget="many2many_tags" options="{'open': true, 'create': true}" context="{'default_public': True}"/>
+        </group>
+      </xpath>
+
       <xpath expr="//group[@name='group_main_left']" position="inside">
         <field name="payment_mode_id" />
       </xpath>
@@ -21,12 +27,6 @@
       <xpath expr="//group[@name='group_legend']" position="inside">
         <p> <strong>##PRODUCT##</strong> (in the description): mark the rental product template line; substituted by the actual product name</p>
         <p> <strong>##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name</p>
-      </xpath>
-
-      <xpath expr="//form" position="inside">
-        <div class="o_horizontal_separator">Contractual documents</div>
-        <div class="oe_chatter"></div>
-        <script>$("button.o_chatter_button_attachment").click();</script>
       </xpath>
 
     </field>
@@ -52,6 +52,7 @@
 
       <xpath expr="//field[@name='date_end']" position="after">
         <field name="commitment_end_date" />
+        <field name="contractual_documents" widget="many2many_tags" options="{'open': true, 'create': true}" context="{'default_public': True}"/>
       </xpath>
 
     </field>

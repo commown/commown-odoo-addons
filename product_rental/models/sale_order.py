@@ -10,7 +10,7 @@ class ProductRentalSaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.multi
-    def contractual_documents(self):
+    def contractual_documents(self, allow_from_template=False):
         """Return the contractual docs of the products' contract template
 
         These are the docs attached to the contract template filtered according
@@ -19,11 +19,14 @@ class ProductRentalSaleOrder(models.Model):
         - docs with the same language as the partner are returned
         """
         self.ensure_one()
-        cts = self.mapped("order_line.product_id.property_contract_template_id")
-        domain = [
-            ("res_model", "=", "contract.template"),
-            ("res_id", "in", cts.ids),
-        ]
+
+        contracts = self.env["contract.contract"].of_sale(self)
+        if contracts or not allow_from_template:
+            docs = {c: c.contractual_documents for c in contracts}
+        else:
+            cts = self.mapped("order_line.product_id.property_contract_template_id")
+            docs = {ct: ct.contractual_documents for ct in cts}
+
         if self.partner_id.lang:
             _logger.debug(
                 "Partner %s (%d) lang is %s. Restricting contractual documents"
@@ -32,21 +35,21 @@ class ProductRentalSaleOrder(models.Model):
                 self.partner_id.id,
                 self.partner_id.lang,
             )
-            domain.extend(
-                [
-                    "|",
-                    ("lang", "=", False),
-                    ("lang", "=", self.partner_id.lang),
-                ]
-            )
-        return self.env["ir.attachment"].search(domain)
+            docs = {
+                k: v.filtered(lambda d: d.lang in (False, self.partner_id.lang))
+                for k, v in docs.items()
+            }
+
+        return docs
 
     @api.multi
     def action_quotation_send(self):
         "Add contractual documents to the quotation email"
         self.ensure_one()
         email_act = super().action_quotation_send()
-        order_attachments = self.contractual_documents()
+        order_attachments = self.env["ir.attachment"]
+        for atts in self.contractual_documents(allow_from_template=True).values():
+            order_attachments |= atts
         if order_attachments:
             _logger.info(
                 "Prepare sending %s with %d attachment(s): %s",
@@ -159,33 +162,29 @@ class ProductRentalSaleOrder(models.Model):
         contract.contract_line_ids.update({"analytic_account_id": aa.id})
 
     @api.multi
-    def _create_rental_contract(self, contract_template, num):
-        self.ensure_one()
-        values = self._prepare_contract_value(contract_template)
-        values["name"] = "%s-%02d" % (self.name, num)
-        contract = self.env["contract.contract"].create(values)
-        contract._onchange_contract_template_id()
-        contract._onchange_contract_type()
-        return contract
-
-    @api.multi
     def action_create_contract(self):
         contracts = self.env["contract.contract"]
         contract_descrs = self.assign_contract_products()
-        order_line_model = self.env["sale.order.line"]
 
         for count, contract_descr in enumerate(contract_descrs, 1):
-            ctemplate = (
+            contract_template = (
                 contract_descr["main"]
                 .with_context(force_company=self.company_id.id)
                 .property_contract_template_id
             )
-            contract = self._create_rental_contract(ctemplate, count)
-            contracts |= contract
-            clines = order_line_model._product_rental_create_contract_line(
-                contract, contract_descr
-            )
+
+            values = self._prepare_contract_value(contract_template)
+            values["name"] = "%s-%02d" % (self.name, count)
+
+            env = self.with_context(contract_descr=contract_descr).env
+            contract = env["contract.contract"].create(values)
+            contract._onchange_contract_template_id()
+            contract._onchange_contract_type()
+            contract._compute_date_end()
+
             self._add_analytic_account(contract)
+
+            contracts |= contract
 
         return contracts
 

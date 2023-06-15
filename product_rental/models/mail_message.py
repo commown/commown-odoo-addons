@@ -16,6 +16,6 @@ class Message(models.Model):
         See https://github.com/odoo/odoo/blob/12.0/addons/mail/models/mail_message.py#L961
         """
 
-        if not "attachment_ids" in values and "default_attachment_ids" in self._context:
+        if "attachment_ids" not in values and "default_attachment_ids" in self._context:
             values["attachment_ids"] = self._context["default_attachment_ids"]
         return super().create(values)
