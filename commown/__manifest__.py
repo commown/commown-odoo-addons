@@ -54,6 +54,7 @@
         "bin": ["rsvg-convert"],
     },
     "data": [
+        "data/account_payment_term.xml",
         "data/mail_templates.xml",
         "data/obsolescence_action.xml",
         "data/product.xml",
