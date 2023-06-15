@@ -33,6 +33,18 @@
           </t>
         </div>
       </div>
+      <hr class="mt-1 mb-0"/>
+      <div class="mt-4" t-if="st_data">
+        <h4>L'espace client a changé !</h4>
+        <hr class="mt-1 mb-0"/>
+      </div>
+      <div class="list-group">
+        Vous pouvez échanger avec la communauté sur le
+        <a href="https://forum.commown.coop/" class="list-group-item mt-2 mr-2 ml-2 text-center">Forum Commown</a>
+      </div>
+      <div class="mt-4" t-if="st_data">
+        <p>Pour contacter l'équipe parcourez la section "Auto-dépannage" à gauche.</p>
+      </div>
     </xpath>
 
   </template>
