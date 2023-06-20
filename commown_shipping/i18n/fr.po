@@ -311,7 +311,7 @@ msgstr "Aucun modèle de courriel paramétré pour %s (ni sur le doc courant ni 
 #: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_crm_lead_print_label_form
 #: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_project_task_print_label_form
 msgid "OK"
-msgstr "OK
+msgstr "OK"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_commown_shipping_parent_mixin
