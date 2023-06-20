@@ -1,0 +1,10 @@
+<odoo>
+
+  <!-- Below should not be necessary in v14 anymore as mail_debrand should do a better job
+       To check this, notify an external user from a channel and see if there is odoo.com
+       in the email's signature -->
+  <template id="message_notification_email" inherit_id="mail.message_notification_email">
+    <xpath expr="div/p[last()]" position="replace"/>
+  </template>
+
+</odoo>
