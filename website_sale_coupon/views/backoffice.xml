@@ -8,9 +8,9 @@
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
 
-        <field name="payment_mode_id" position="after">
+        <xpath expr="//field[@name='payment_term_id']/ancestor::group[1]" position="inside">
           <field name="used_coupon_ids" widget="many2many_tags" options="{'open': true, 'create': true}"/>
-        </field>
+        </xpath>
 
       </field>
     </record>
