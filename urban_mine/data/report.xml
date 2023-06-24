@@ -13,7 +13,6 @@
     <field name="attachment_use">True</field>
     <field name="attachment">"Facture%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
     <field name="print_report_name">"Facture%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
-    <field name="binding_model_id" ref="crm.model_crm_lead" />
     <field name="binding_type">report</field>
   </record>
 

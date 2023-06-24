@@ -13,7 +13,7 @@ HERE = (Path(__file__) / "..").resolve()
 class TestRegistration(TransactionCase):
     def setUp(self):
         super(TestRegistration, self).setUp()
-        self.team = self.env.ref("urban_mine.urban_mine_managers")
+        self.project = self.env.ref("urban_mine.project")
         self.partner = self.env["res.partner"].create(
             {
                 "name": "Elie A",
@@ -26,27 +26,53 @@ class TestRegistration(TransactionCase):
                 "from_urban_mine": True,
             }
         )
+        self.env["commown.parcel.type"].create(
+            {
+                "name": "test parcel",
+                "technical_name": "return-0,75-ins300",
+                "weight": 0.75,
+                "insurance_value": 300,
+                "is_return": True,
+            }
+        )
 
-    def get_leads(self, partner_id):
-        return self.env["crm.lead"].search(
+    def get_tasks(self, partner_id):
+        return self.env["project.task"].search(
             [
-                ("team_id", "=", self.team.id),
+                ("project_id", "=", self.project.id),
                 ("partner_id", "=", partner_id),
             ]
         )
 
-    def get_last_note_message(self, lead):
+    def get_last_note_message(self, task):
         return [
             m
-            for m in lead.message_ids
+            for m in task.message_ids
             if list(m.subtype_id.get_xml_id().values()) == ["mail.mt_comment"]
         ][0]
 
-    def test_opportunity_creation(self):
-        self.assertEqual(len(self.get_leads(self.partner.id)), 1)
+    def check_coupon_message(self, task, campaign):
+        "Check message title and the coupon included in the message"
+        last_note_msg = self.get_last_note_message(task)
+        self.assertIn("Accord de reprise", last_note_msg.subject)
+        self.assertIn("COMMOWN-MU-%d" % task.id, last_note_msg.subject)
+        last_coupon = self.env["coupon.coupon"].search([], limit=1)
+        self.assertIn(last_coupon.code, last_note_msg.body)
+        self.assertEqual(
+            last_coupon.campaign_id,
+            self.env.ref("urban_mine." + campaign),
+        )
 
-    def test_opportunity_ok(self):
-        lead = self.get_leads(self.partner.id)
+    def test_task_creation(self):
+        self.assertEqual(len(self.get_tasks(self.partner.id)), 1)
+
+    def test_task_ok_coupon_only(self):
+        task = self.get_tasks(self.partner.id)
+        task.update({"stage_id": self.env.ref("urban_mine.stage6")})
+        self.check_coupon_message(task, "campaign_coupon_only")
+
+    def test_task_ok_payment(self):
+        task = self.get_tasks(self.partner.id)
 
         fake_meta_data = {"labelResponse": {"parcelNumber": "8R0000000000"}}
         with open(HERE / "fake_label.pdf", "rb") as fobj:
@@ -56,18 +82,18 @@ class TestRegistration(TransactionCase):
             "odoo.addons.commown_shipping.models.parcel.ship",
             return_value=(fake_meta_data, fake_label_data),
         ) as mocked_ship:
-            lead.update({"stage_id": self.env.ref("urban_mine.stage2")})
+            task.update({"stage_id": self.env.ref("urban_mine.stage2")})
 
         # Check a return label was created:
-        # - the expedition reference is set on the lead
+        # - the expedition reference is set on the task
         # - the `is_return` arg of the ship function call was `True`
         self.assertEqual(mocked_ship.call_count, 1)
         self.assertIs(mocked_ship.call_args[1]["is_return"], True)
-        # A message attached to the lead was sent, with the PDF attached
-        self.assertTrue(lead.message_ids)
-        last_note_msg = self.get_last_note_message(lead)
+        # A message attached to the task was sent, with the PDF attached
+        self.assertTrue(task.message_ids)
+        last_note_msg = self.get_last_note_message(task)
         self.assertIn("Accusé Réception", last_note_msg.subject)
-        self.assertIn("COMMOWN-MU-%d" % lead.id, last_note_msg.subject)
+        self.assertIn("COMMOWN-MU-%d" % task.id, last_note_msg.subject)
         attachment = last_note_msg.attachment_ids
         self.assertEqual(len(attachment), 1)
         self.assertEqual(attachment.mimetype, "application/pdf")
@@ -81,11 +107,11 @@ class TestRegistration(TransactionCase):
         report.py3o_template_fallback = "tests/fake_report.odt"
 
         # Launch test
-        lead.update({"stage_id": self.env.ref("urban_mine.stage4")})
+        task.update({"stage_id": self.env.ref("urban_mine.stage4")})
 
         # Check results
         invoice = self.env["account.invoice"].search(
-            [("reference", "=", "COMMOWN-MU-%d" % lead.id)]
+            [("reference", "=", "COMMOWN-MU-%d" % task.id)]
         )
         self.assertEqual(len(invoice), 1)
         self.assertEqual(invoice.state, "open")
@@ -96,8 +122,4 @@ class TestRegistration(TransactionCase):
             ]
         )
         self.assertEqual(len(attachments), 1)
-        last_note_msg = self.get_last_note_message(lead)
-        self.assertIn("Accord de reprise", last_note_msg.subject)
-        self.assertIn("COMMOWN-MU-%d" % lead.id, last_note_msg.subject)
-        last_coupon = self.env["coupon.coupon"].search([])[0]
-        self.assertIn(last_coupon.code, last_note_msg.body)
+        self.check_coupon_message(task, "campaign_payment")

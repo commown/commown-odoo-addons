@@ -2,11 +2,18 @@
 <odoo>
   <data noupdate="1">
 
-    <record id="campaing" model="coupon.campaign">
-      <field name="name">Mine urbaine : campagne de test</field>
+    <record id="campaign_payment" model="coupon.campaign">
+      <field name="name">Mine urbaine - Première mensualité</field>
       <field name="description">Vous avez la première mensualité offerte grâce à votre code !</field>
       <field name="seller_id" ref="base.main_partner"/>
       <field name="can_cumulate">False</field>
+    </record>
+
+    <record id="campaign_coupon_only" model="coupon.campaign">
+      <field name="name">Mine urbaine - Coupon</field>
+      <field name="description">Grâce à ce Coupon "Mine Urbaine", vous bénéficiez d'une remise de 120€ sur les premières mensualités !</field>
+      <field name="seller_id" ref="base.main_partner"/>
+      <field name="can_cumulate">True</field>
     </record>
 
   </data>

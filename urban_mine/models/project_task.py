@@ -1,26 +1,27 @@
-from odoo import api, models
+from odoo import models
 
 
-class CrmLead(models.Model):
-    _inherit = "crm.lead"
+class ProjectTask(models.Model):
+    _inherit = "project.task"
 
-    @api.model
-    def urban_mine_send_label(self, label_name):
-        # Send the message as the user of the lead
-        if self.user_id:
+    def urban_mine_send_mail(self, email_xmlid, coupon_campaign_xmlid, *attachments):
+        if self.user_id and self.env.user != self.user_id:
             self = self.sudo(self.user_id)
 
-        label = self.parcel_labels(label_name, force_single=True)
-        email_template = self.env.ref("urban_mine.email_template_with_label")
+        ref = lambda name: self.env.ref("urban_mine.%s" % name)
+
+        if coupon_campaign_xmlid:
+            campaign = ref(coupon_campaign_xmlid)
+            coupon = self.env["coupon.coupon"].create({"campaign_id": campaign.id})
+            self = self.with_context({"coupon": coupon.code})
 
         self.message_post_with_template(
-            email_template.id,
-            attachment_ids=[(4, label.id)],
+            ref(email_xmlid).id,
+            attachment_ids=[(4, att.id) for att in attachments],
         )
 
-    def urban_mine_payment(
+    def urban_mine_build_autoinvoice(
         self,
-        campaign,
         product,
         journal,
         tags,
@@ -28,7 +29,7 @@ class CrmLead(models.Model):
         report_name="urban_mine.report_autoinvoice",
     ):
 
-        # Use lead's user to perform all actions: invoice, payment, a.s.o.
+        # Use task's user to perform all actions: invoice, payment, a.s.o.
         if self.user_id:
             self = self.sudo(self.user_id)
 
@@ -81,17 +82,9 @@ class CrmLead(models.Model):
             report_name
         ).ensure_one().render(invoice.ids)
 
-        attachments = self.env["ir.attachment"].search(
+        return self.env["ir.attachment"].search(
             [
                 ("res_model", "=", invoice._name),
                 ("res_id", "=", invoice.id),
             ]
-        )
-
-        email_template = ref("urban_mine.email_template_with_auto_invoice")
-        coupon = self.env["coupon.coupon"].create({"campaign_id": campaign.id})
-
-        self.with_context({"coupon": coupon.code}).message_post_with_template(
-            email_template.id,
-            attachment_ids=[(4, att.id) for att in attachments],
         )
