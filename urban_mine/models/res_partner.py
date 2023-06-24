@@ -15,21 +15,15 @@ class UrbanMinePartner(models.Model):
 
         if vals.get("from_urban_mine", False):
 
-            lead = self.env["crm.lead"].create(
+            task = self.env["project.task"].create(
                 {
                     "name": result.name + " - " + result.city,
                     "partner_id": result.id,
-                    "type": "opportunity",
+                    "project_id": self.env.ref("urban_mine.project").id,
                     "stage_id": self.env.ref("urban_mine.stage1").id,
                 }
             )
 
-            # Override post-create behaviour that auto-assigns team_id
-            lead.update(
-                {
-                    "team_id": self.env.ref("urban_mine.urban_mine_managers").id,
-                    "name": ("[COMMOWN-MU-%d] " % lead.id) + lead.name,
-                }
-            )
+            task.name = ("[COMMOWN-MU-%d] " % task.id) + task.name
 
         return result

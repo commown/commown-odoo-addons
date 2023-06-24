@@ -9,7 +9,7 @@
     "website": "https://commown.coop",
     "depends": [
         "commown_shipping",
-        "crm",
+        "project",
         "l10n_fr",
         "report_py3o",
         "website_sale_coupon",
@@ -18,14 +18,14 @@
     ],
     "external_dependencies": {},
     "data": [
+        "data/mail_templates.xml",
         "data/model.xml",
         "data/product.xml",
-        "data/crm.xml",
+        "data/project.xml",
         "data/coupon.xml",
         "data/report.xml",
         "data/registration_page.xml",
         "data/actions.xml",
-        "data/mail_templates.xml",
     ],
     "installable": True,
 }
