@@ -18,6 +18,7 @@
     ],
     "external_dependencies": {},
     "data": [
+        "data/assets.xml",
         "data/mail_templates.xml",
         "data/model.xml",
         "data/product.xml",
