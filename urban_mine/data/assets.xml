@@ -1,0 +1,10 @@
+<odoo>
+
+  <template id="assets_hcaptcha" name="Website form hcaptcha assets"
+            inherit_id="website_form_recaptcha.assets_recaptcha">
+    <xpath expr="." position="inside">
+      <script src="/urban_mine/static/src/js/field_hcaptcha.js" />
+    </xpath>
+  </template>
+
+</odoo>
