@@ -13,6 +13,7 @@
     <field name="state">code</field>
     <field name="code">
 label = record.parcel_labels("return-0,75-ins300", force_single=True)
+label.update({"name": "COMMOWN-MU-%d" % record.id})
 record.urban_mine_send_mail("email_template_with_label", None, label)
     </field>
   </record>
