@@ -115,6 +115,14 @@ class TestRegistration(TransactionCase):
         )
         self.assertEqual(len(invoice), 1)
         self.assertEqual(invoice.state, "open")
+        self.assertEqual(
+            invoice.payment_term_id,
+            self.env.ref("account.account_payment_term_15days"),
+        )
+        self.assertEqual(
+            invoice.amount_untaxed,
+            self.env.ref("urban_mine.product").standard_price,
+        )
         attachments = self.env["ir.attachment"].search(
             [
                 ("res_model", "=", invoice._name),
