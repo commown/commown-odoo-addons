@@ -33,16 +33,25 @@
           </t>
         </div>
       </div>
-      <hr class="mt-1 mb-0"/>
-      <div class="mt-4" t-if="st_data">
-        <h4>L'espace client a changé !</h4>
+      <div class="mt-4">
+        <h4>Documentation - Tutoriels</h4>
         <hr class="mt-1 mb-0"/>
+        <div class="list-group">
+          Retrouvez nos tutoriels et toute la documentation de Commown...
+          <a href="https://forum.commown.coop/c/base-connaissances/9" class="list-group-item text-center mt-2">Base de connaissance Commown</a>
+        </div>
       </div>
-      <div class="list-group">
-        Vous pouvez échanger avec la communauté sur le
-        <a href="https://forum.commown.coop/" class="list-group-item mt-2 mr-2 ml-2 text-center">Forum Commown</a>
+
+      <div class="mt-4">
+        <h4>Entraide - Communauté</h4>
+        <hr class="mt-1 mb-0"/>
+        <div class="list-group">
+          Rejoignez la communauté pour résoudre vos problèmes, échanger des astuces...
+          <a href="https://forum.commown.coop/c/entraide/5" class="list-group-item text-center mt-2">Forum Commown</a>
+        </div>
       </div>
       <div class="mt-4" t-if="st_data">
+        <hr class="mt-1 mb-0"/>
         <p>Pour contacter l'équipe parcourez la section "Auto-dépannage" à gauche.</p>
       </div>
     </xpath>
