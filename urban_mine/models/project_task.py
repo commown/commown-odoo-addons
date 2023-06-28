@@ -24,6 +24,7 @@ class ProjectTask(models.Model):
         self,
         product,
         tags,
+        payment_term,
         description,
         report_name="urban_mine.report_autoinvoice",
     ):
@@ -40,6 +41,7 @@ class ProjectTask(models.Model):
                 "currency_id": ref("base.EUR").id,
                 "reference": "COMMOWN-MU-%d" % self.id,
                 "account_id": self.partner_id.property_account_payable_id.id,
+                "payment_term_id": payment_term.id,
                 "invoice_line_ids": [
                     (
                         0,
