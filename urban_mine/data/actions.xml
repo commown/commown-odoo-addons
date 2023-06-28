@@ -30,7 +30,6 @@ record.urban_mine_send_mail("email_template_with_label", None, label)
     <field name="code"><![CDATA[
 inv = record.urban_mine_build_autoinvoice(
     env['product.product'].search([('default_code', '=', "urban-mine")])[0],
-    env['account.journal'].search([('code', '=', 'AC')]),
     env['account.analytic.tag'].search([('name', 'in', ["EXPL"])]),
     "Vente Fairphone 3",
 )

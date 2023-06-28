@@ -23,7 +23,6 @@ class ProjectTask(models.Model):
     def urban_mine_build_autoinvoice(
         self,
         product,
-        journal,
         tags,
         description,
         report_name="urban_mine.report_autoinvoice",
@@ -62,21 +61,6 @@ class ProjectTask(models.Model):
             }
         )
         invoice.action_invoice_open()
-
-        if journal:
-            method = ref("account.account_payment_method_manual_out")
-            payment = self.env["account.payment"].create(
-                {
-                    "partner_id": invoice.partner_id.id,
-                    "partner_type": "supplier",
-                    "payment_type": "outbound",
-                    "invoice_ids": [(6, 0, invoice.ids)],
-                    "journal_id": journal.id,
-                    "amount": invoice.residual,
-                    "payment_method_id": method.id,
-                }
-            )
-            payment.post()
 
         self.env["ir.actions.report"]._get_report_from_name(
             report_name
