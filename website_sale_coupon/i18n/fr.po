@@ -130,6 +130,7 @@ msgid "Coupon number"
 msgstr "Le coupon numéro"
 
 #. module: website_sale_coupon
+#: code:addons/website_sale_coupon/models/wizard_create_multiple_coupons.py:29
 #: model:ir.ui.menu,name:website_sale_coupon.coupon_coupon
 #: model:ir.ui.menu,name:website_sale_coupon.coupon_main
 #: model_terms:ir.ui.view,arch_db:website_sale_coupon.sale_order_portal_content
