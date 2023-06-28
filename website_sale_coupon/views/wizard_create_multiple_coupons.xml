@@ -12,7 +12,7 @@
           </group>
         </sheet>
         <footer>
-          <button name="create_multiple_coupons" string="Create" class="btn-primary" type="object"/>
+          <button name="button_create_and_open_coupons" string="Create" class="btn-primary" type="object"/>
           <button string="Cancel" class="btn-default" special="cancel"/>
         </footer>
       </form>
