@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 13:44+0000\n"
-"PO-Revision-Date: 2023-02-13 13:44+0000\n"
+"POT-Creation-Date: 2023-06-28 09:56+0000\n"
+"PO-Revision-Date: 2023-06-28 09:56+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -53,6 +53,16 @@ msgid "A coupon that customers can associate to their shop order"
 msgstr "Un coupon que les clients peuvent associer à leur commande"
 
 #. module: website_sale_coupon
+#: model:ir.ui.menu,name:website_sale_coupon.coupon_actions
+msgid "Actions on coupons"
+msgstr "Actions sur les coupons"
+
+#. module: website_sale_coupon
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__campaign_id
+msgid "Campaign"
+msgstr "Campagne"
+
+#. module: website_sale_coupon
 #: sql_constraint:coupon.campaign:0
 msgid "Campaign already exists!"
 msgstr "Cette campagne existe déjà !"
@@ -76,6 +86,11 @@ msgstr "Peut se cumuler avec d'_autres_ campagnes"
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__can_auto_cumulate
 msgid "Can use more than one coupon by sale"
 msgstr "Plusieurs coupons utilisables simultanément"
+
+#. module: website_sale_coupon
+#: model_terms:ir.ui.view,arch_db:website_sale_coupon.wizard_create_multiple_coupons_form
+msgid "Cancel"
+msgstr "Annuler"
 
 #. module: website_sale_coupon
 #: code:addons/website_sale_coupon/models/sale_order.py:133
@@ -117,7 +132,6 @@ msgstr "Le coupon numéro"
 #. module: website_sale_coupon
 #: model:ir.ui.menu,name:website_sale_coupon.coupon_coupon
 #: model:ir.ui.menu,name:website_sale_coupon.coupon_main
-#: model_terms:ir.ui.view,arch_db:website_sale_coupon.sale_order_form
 #: model_terms:ir.ui.view,arch_db:website_sale_coupon.sale_order_portal_content
 msgid "Coupons"
 msgstr "Coupons"
@@ -128,19 +142,42 @@ msgid "Coupons of the campaign"
 msgstr "Coupons"
 
 #. module: website_sale_coupon
+#: model_terms:ir.ui.view,arch_db:website_sale_coupon.wizard_create_multiple_coupons_form
+msgid "Create"
+msgstr "Créer"
+
+#. module: website_sale_coupon
 #: model:ir.actions.act_window,name:website_sale_coupon.action_coupon_coupon
 msgid "Create Coupon"
 msgstr "Créer un coupon"
 
 #. module: website_sale_coupon
+#: model:ir.actions.act_window,name:website_sale_coupon.create_coupons_action
+#: model:ir.ui.menu,name:website_sale_coupon.create_coupons_menu
+msgid "Create Coupons"
+msgstr "Génerer des coupons"
+
+#. module: website_sale_coupon
+#: model:ir.model,name:website_sale_coupon.model_website_sale_coupon_create_multiple_coupons_wizard
+msgid "Create an arbitrary number of coupon of the same campain"
+msgstr "Génere plusieurs coupons d'une même campagne"
+
+#. module: website_sale_coupon
+#: model_terms:ir.ui.view,arch_db:website_sale_coupon.wizard_create_multiple_coupons_form
+msgid "Create multiple coupons"
+msgstr "Génerer plusieurs coupons"
+
+#. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__create_uid
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__create_uid
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__create_uid
 msgid "Created by"
 msgstr "Créé par"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__create_date
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__create_date
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__create_date
 msgid "Created on"
 msgstr "Créé le"
 
@@ -159,6 +196,7 @@ msgstr "Description"
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__display_name
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__display_name
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__display_name
 msgid "Display Name"
 msgstr "Afficher Nom"
 
@@ -185,6 +223,7 @@ msgstr "Vous avez un coupon ? Saisissez son code ci-dessous :"
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__id
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__id
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__id
 msgid "ID"
 msgstr "ID"
 
@@ -213,18 +252,21 @@ msgstr "Code commun à tous les clients ?"
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign____last_update
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon____last_update
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard____last_update
 msgid "Last Modified on"
 msgstr "Dernière Modification le"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__write_uid
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__write_uid
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__write_uid
 msgid "Last Updated by"
 msgstr "Dernière mise à jour par"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__write_date
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_coupon__write_date
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__write_date
 msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
@@ -245,9 +287,9 @@ msgid "Name"
 msgstr "Nom"
 
 #. module: website_sale_coupon
-#: model_terms:ir.ui.view,arch_db:website_sale_coupon.sale_order_form
-msgid "Open coupon"
-msgstr "Voir le coupon"
+#: model:ir.model.fields,field_description:website_sale_coupon.field_website_sale_coupon_create_multiple_coupons_wizard__coupon_nb
+msgid "Number of coupon to create"
+msgstr "Nombre de coupons à générer"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__seller_id
