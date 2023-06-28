@@ -30,6 +30,7 @@
         "security/ir.model.access.csv",
         "views/backoffice.xml",
         "views/website.xml",
+        "views/wizard_create_multiple_coupons.xml",
     ],
     "installable": True,
 }
