@@ -22,7 +22,6 @@ class ProjectTask(models.Model):
 
     def urban_mine_build_autoinvoice(
         self,
-        product,
         tags,
         payment_term,
         description,
@@ -34,6 +33,7 @@ class ProjectTask(models.Model):
             self = self.sudo(self.user_id)
 
         ref = self.env.ref
+        product = ref("urban_mine.product")
         invoice = self.env["account.invoice"].create(
             {
                 "type": "in_invoice",
