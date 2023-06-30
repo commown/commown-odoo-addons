@@ -50,6 +50,7 @@ record.urban_mine_send_mail("email_template_with_auto_invoice", "campaign_paymen
     <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: coupon-only]')]</field>
     <field name="state">code</field>
     <field name="code"><![CDATA[
+record.urban_mine_create_po()
 record.urban_mine_send_mail("email_template_with_coupon_only", "campaign_coupon_only")
 ]]>
     </field>

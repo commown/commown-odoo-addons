@@ -5,7 +5,7 @@
 
     <record id="product" model="product.template">
       <field name="name">Reprise Fairphone</field>
-      <field name="type">consu</field>
+      <field name="type">service</field>
       <field name="default_code">urban-mine</field>
       <field name="sale_ok">False</field>
       <field name="purchase_ok">True</field>
