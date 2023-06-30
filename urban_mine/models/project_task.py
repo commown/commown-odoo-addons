@@ -1,4 +1,7 @@
-from odoo import models
+from datetime import date
+
+from odoo import _, models
+from odoo.exceptions import UserError
 
 
 class ProjectTask(models.Model):
@@ -23,6 +26,43 @@ class ProjectTask(models.Model):
             attachment_ids=[(4, att.id) for att in attachments],
         )
 
+    def urban_mine_create_po(self, price=0.0, invoice=False):
+        """Create and return the purchase order of given storable at given price
+
+        If invoice is passed, it is attached to the po.
+        """
+        storable_product = self.storable_product_id
+        if not storable_product:
+            raise UserError(_("Please fill-in the storable product field of the task!"))
+
+        ptype = self.env.ref("urban_mine.picking_type_receive_to_diagnose")
+
+        po = self.env["purchase.order"].create(
+            {
+                "partner_id": self.partner_id.id,
+                "partner_ref": self.urban_mine_name(),
+                "picking_type_id": ptype.id,
+            }
+        )
+
+        po.order_line |= self.env["purchase.order.line"].create(
+            {
+                "name": storable_product.name,
+                "product_id": storable_product.id,
+                "product_qty": 1,
+                "product_uom": storable_product.uom_id.id,
+                "price_unit": price,
+                "date_planned": date.today(),
+                "order_id": po.id,
+            }
+        )
+
+        if invoice:
+            po.order_line.invoice_lines |= invoice.invoice_line_ids
+
+        po.button_confirm()
+        return po
+
     def urban_mine_build_autoinvoice(
         self,
         tags,
@@ -37,6 +77,9 @@ class ProjectTask(models.Model):
 
         ref = self.env.ref
         product = ref("urban_mine.product")
+
+        price = product.standard_price  # purchase at the urban mine product price!
+
         invoice = self.env["account.invoice"].create(
             {
                 "type": "in_invoice",
@@ -54,7 +97,7 @@ class ProjectTask(models.Model):
                             "name": description,
                             "account_id": product.property_account_expense_id.id,
                             "analytic_tag_ids": [(6, 0, tags.ids)] if tags else False,
-                            "price_unit": product.standard_price,
+                            "price_unit": price,
                             "invoice_line_tax_ids": [
                                 (6, 0, product.supplier_taxes_id.ids)
                             ],
@@ -65,6 +108,10 @@ class ProjectTask(models.Model):
                 "partner_id": self.partner_id.id,
             }
         )
+
+        po = self.urban_mine_create_po(price, invoice)
+        invoice.origin = po.name
+
         invoice.action_invoice_open()
 
         self.env["ir.actions.report"]._get_report_from_name(

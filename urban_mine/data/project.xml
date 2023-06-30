@@ -6,6 +6,7 @@
     <record id="project" model="project.project">
       <field name="name">Mine urbaine</field>
       <field name="shipping_account_id" ref="commown_shipping.shipping-account-colissimo-std-account"/>
+      <field name="device_tracking" eval="True"/>
     </record>
 
     <record id="stage1" model="project.task.type">
