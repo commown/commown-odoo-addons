@@ -55,7 +55,7 @@ class TestRegistration(TransactionCase):
         "Check message title and the coupon included in the message"
         last_note_msg = self.get_last_note_message(task)
         self.assertIn("Accord de reprise", last_note_msg.subject)
-        self.assertIn("COMMOWN-MU-%d" % task.id, last_note_msg.subject)
+        self.assertIn(task.urban_mine_name(), last_note_msg.subject)
         last_coupon = self.env["coupon.coupon"].search([], limit=1)
         self.assertIn(last_coupon.code, last_note_msg.body)
         self.assertEqual(
@@ -93,7 +93,7 @@ class TestRegistration(TransactionCase):
         self.assertTrue(task.message_ids)
         last_note_msg = self.get_last_note_message(task)
         self.assertIn("Accusé Réception", last_note_msg.subject)
-        self.assertIn("COMMOWN-MU-%d" % task.id, last_note_msg.subject)
+        self.assertIn(task.urban_mine_name(), last_note_msg.subject)
         attachment = last_note_msg.attachment_ids
         self.assertEqual(len(attachment), 1)
         self.assertEqual(attachment.mimetype, "application/pdf")
@@ -111,7 +111,7 @@ class TestRegistration(TransactionCase):
 
         # Check results
         invoice = self.env["account.invoice"].search(
-            [("reference", "=", "COMMOWN-MU-%d" % task.id)]
+            [("reference", "=", task.urban_mine_name())]
         )
         self.assertEqual(len(invoice), 1)
         self.assertEqual(invoice.state, "open")

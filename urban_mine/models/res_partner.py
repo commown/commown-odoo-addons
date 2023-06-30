@@ -24,6 +24,6 @@ class UrbanMinePartner(models.Model):
                 }
             )
 
-            task.name = ("[COMMOWN-MU-%d] " % task.id) + task.name
+            task.name = task.urban_mine_name() + " " + task.name
 
         return result

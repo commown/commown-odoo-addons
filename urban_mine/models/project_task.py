@@ -4,6 +4,9 @@ from odoo import models
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
+    def urban_mine_name(self):
+        return "COMMOWN-MU-%d" % self.id
+
     def urban_mine_send_mail(self, email_xmlid, coupon_campaign_xmlid, *attachments):
         if self.user_id and self.env.user != self.user_id:
             self = self.sudo(self.user_id)
@@ -39,7 +42,7 @@ class ProjectTask(models.Model):
                 "type": "in_invoice",
                 "company_id": ref("base.main_company").id,
                 "currency_id": ref("base.EUR").id,
-                "reference": "COMMOWN-MU-%d" % self.id,
+                "reference": self.urban_mine_name(),
                 "account_id": self.partner_id.property_account_payable_id.id,
                 "payment_term_id": payment_term.id,
                 "invoice_line_ids": [
