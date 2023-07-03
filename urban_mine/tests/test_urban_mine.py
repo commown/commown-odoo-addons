@@ -144,6 +144,10 @@ class TestRegistration(TransactionCase):
             self.env.ref("account.account_payment_term_15days"),
         )
         self.assertEqual(
+            self.env.ref("urban_mine.product").product_variant_id,
+            invoice.mapped("invoice_line_ids.product_id"),
+        )
+        self.assertEqual(
             invoice.amount_untaxed,
             self.env.ref("urban_mine.product").standard_price,
         )

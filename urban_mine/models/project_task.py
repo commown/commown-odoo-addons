@@ -76,7 +76,7 @@ class ProjectTask(models.Model):
             self = self.sudo(self.user_id)
 
         ref = self.env.ref
-        product = ref("urban_mine.product")
+        product = ref("urban_mine.product").product_variant_id
 
         price = product.standard_price  # purchase at the urban mine product price!
 
