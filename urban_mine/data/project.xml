@@ -25,7 +25,18 @@
 
     <record id="stage3" model="project.task.type">
       <field name="name">Vérification appareil à faire</field>
-      <field name="description">Glisser la carte dans cette colonne à réception physique du colis, en attente de vérifier l'appareil.</field>
+      <field name="description">
+Glisser l'appareil dans cette colonne à réception physique du colis, en attente de vérifier l'appareil.
+
+Les 2 points importants à vérifier sont :
+- qu'il y a bien tous les éléments
+- que les watermarks sont clean
+
+Si ces 2 points sont OK, l'équipe DIAG/RECO peut :
+- remplir le champ Article (Fairphone 3 ou Fairphone 3 PLUS)
+- indiquer le numéro de série de l'appareil dans la description du ticket pour création ultérieure dans Odoo ; attention aux fautes de frappe !
+- passer la carte dans la colonne "Reprise éligible".
+      </field>
       <field name="project_ids" eval="[(4, ref('project'))]"/>
       <field name="sequence">30</field>
     </record>
@@ -59,6 +70,24 @@
       <field name="sequence">35</field>
     </record>
 
+
+    <record id="stage8" model="project.task.type">
+      <field name="name">Entrée en stock + Diag / Reco</field>
+      <field name="description">
+Ici, il faut effectuer l'entrée en stock de l'appareil et changer de projet la tâche :
+
+- copier le N/S depuis la description et naviguer vers le partenaire > Achat > Ligne de l'achat > Reçu > Ligne de mouvement > Bouton ≡ et coller le N/S puis le bouton Confirmer et enfin Valider le transfert
+- revenir sur la tâche depuis le chemin de fer, faire F5 et insérer le numéro de série dans le champ Appareil (sans F5 il n'apparaît pas dans la liste des propositions)
+- changer le projet de la tâche et sauvegarder
+      </field>
+      <field name="project_ids" eval="[(4, ref('project'))]"/>
+      <field name="sequence">80</field>
+    </record>
+
+Ici, il faut effectuer l'entrée en stock de l'appareil et changer de projet la tâche :
+- copier le N/S depuis la description et naviguer vers le partenaire > Achat > Reçu > Ligne de mouvement > Bouton ≡ et coller le N/S puis le bouton Confirmer et enfin Valider le transfert
+- revenir sur la tâche, faire F5 et insérer le numéro de série dans le champ Appareil
+- changer le projet de la tâche et sauvegarder
   </data>
 
 </odoo>
