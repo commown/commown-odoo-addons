@@ -3,6 +3,7 @@ from pathlib import Path
 
 import mock
 
+from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase, at_install, post_install
 
 HERE = (Path(__file__) / "..").resolve()
@@ -13,6 +14,11 @@ HERE = (Path(__file__) / "..").resolve()
 class TestRegistration(TransactionCase):
     def setUp(self):
         super(TestRegistration, self).setUp()
+        self.fp3 = (
+            self.env["product.template"]
+            .create({"name": "FP3", "purchase_ok": True})
+            .product_variant_id
+        )
         self.project = self.env.ref("urban_mine.project")
         self.partner = self.env["res.partner"].create(
             {
@@ -55,7 +61,7 @@ class TestRegistration(TransactionCase):
         "Check message title and the coupon included in the message"
         last_note_msg = self.get_last_note_message(task)
         self.assertIn("Accord de reprise", last_note_msg.subject)
-        self.assertIn("COMMOWN-MU-%d" % task.id, last_note_msg.subject)
+        self.assertIn(task.urban_mine_name(), last_note_msg.subject)
         last_coupon = self.env["coupon.coupon"].search([], limit=1)
         self.assertIn(last_coupon.code, last_note_msg.body)
         self.assertEqual(
@@ -66,13 +72,31 @@ class TestRegistration(TransactionCase):
     def test_task_creation(self):
         self.assertEqual(len(self.get_tasks(self.partner.id)), 1)
 
+    def test_missing_storable_product(self):
+        task = self.get_tasks(self.partner.id)
+        task.storable_product_id = False
+        with self.assertRaises(UserError) as err:
+            task.update({"stage_id": self.env.ref("urban_mine.stage6")})
+        self.assertEqual(
+            err.exception.name,
+            "Please fill-in the storable product field of the task!",
+        )
+
     def test_task_ok_coupon_only(self):
         task = self.get_tasks(self.partner.id)
+        task.storable_product_id = self.fp3.id
         task.update({"stage_id": self.env.ref("urban_mine.stage6")})
         self.check_coupon_message(task, "campaign_coupon_only")
+        po = self.env["purchase.order"].search(
+            [("partner_ref", "=", task.urban_mine_name())]
+        )
+        self.assertEqual(len(po), 1)
+        self.assertEqual(po.partner_id, self.partner)
+        self.assertEqual(po.state, "purchase")
 
     def test_task_ok_payment(self):
         task = self.get_tasks(self.partner.id)
+        task.storable_product_id = self.fp3.id
 
         fake_meta_data = {"labelResponse": {"parcelNumber": "8R0000000000"}}
         with open(HERE / "fake_label.pdf", "rb") as fobj:
@@ -93,7 +117,7 @@ class TestRegistration(TransactionCase):
         self.assertTrue(task.message_ids)
         last_note_msg = self.get_last_note_message(task)
         self.assertIn("Accusé Réception", last_note_msg.subject)
-        self.assertIn("COMMOWN-MU-%d" % task.id, last_note_msg.subject)
+        self.assertIn(task.urban_mine_name(), last_note_msg.subject)
         attachment = last_note_msg.attachment_ids
         self.assertEqual(len(attachment), 1)
         self.assertEqual(attachment.mimetype, "application/pdf")
@@ -111,13 +135,17 @@ class TestRegistration(TransactionCase):
 
         # Check results
         invoice = self.env["account.invoice"].search(
-            [("reference", "=", "COMMOWN-MU-%d" % task.id)]
+            [("reference", "=", task.urban_mine_name())]
         )
         self.assertEqual(len(invoice), 1)
         self.assertEqual(invoice.state, "open")
         self.assertEqual(
             invoice.payment_term_id,
             self.env.ref("account.account_payment_term_15days"),
+        )
+        self.assertEqual(
+            self.env.ref("urban_mine.product").product_variant_id,
+            invoice.mapped("invoice_line_ids.product_id"),
         )
         self.assertEqual(
             invoice.amount_untaxed,
@@ -131,3 +159,17 @@ class TestRegistration(TransactionCase):
         )
         self.assertEqual(len(attachments), 1)
         self.check_coupon_message(task, "campaign_payment")
+
+        po = self.env["purchase.order"].search(
+            [("partner_ref", "=", task.urban_mine_name())]
+        )
+        self.assertEqual(len(po), 1)
+        self.assertEqual(po.partner_ref, invoice.reference)
+        self.assertEqual(po.partner_id, self.partner)
+        self.assertEqual(po.state, "purchase")
+        self.assertEqual(po.invoice_ids, invoice)
+        self.assertEqual(
+            po.picking_type_id,
+            self.env.ref("urban_mine.picking_type_receive_to_diagnose"),
+        )
+        self.assertEqual(invoice.origin, po.name)

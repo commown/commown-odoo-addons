@@ -14,11 +14,9 @@ Setup
 - set recaptcha.key.* system parameters in
   Configuration > Parameters > System parameters
 
-- there is an example campaign for coupons, which name must contain
-  "mine urbaine"; the last created campaign matching this criterion
-  will be used to generate the coupons into
+- setup the module campaigns' names and descriptions (using their external ids)
 
-- there is an example product with default_code field valued
-  "urban-mine";
+- setup the module's product price
 
-- check there is a colissimo account 970066 configured in keychain
+- setup the module's project, in particular the shipping_account_id field, for the label
+  creation to work
