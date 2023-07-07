@@ -4,7 +4,11 @@ from collections import OrderedDict
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from .common import internal_picking, internal_picking_tracking_none
+from .common import (
+    internal_picking,
+    internal_picking_mixt,
+    internal_picking_tracking_none,
+)
 
 _logger = logging.getLogger(__name__)
 
@@ -95,6 +99,25 @@ class Contract(models.Model):
             do_transfer=do_transfer,
         )
 
+    def send_devices_mixt(
+        self, lots, products, origin=None, date=None, do_transfer=False
+    ):
+
+        self.env.ref("stock.stock_location_stock")
+        dest_location = self.partner_id.get_or_create_customer_location()
+
+        if not origin:
+            origin = self.name
+
+        return self._create_picking_mixt(
+            lots,
+            products,
+            dest_location,
+            origin=origin,
+            date=None,
+            do_transfer=False,
+        )
+
     @api.multi
     def receive_device(
         self, lot, dest_location, origin=None, date=False, do_transfer=False
@@ -182,6 +205,27 @@ class Contract(models.Model):
             lots,
             orig_location,
             dest_location,
+            date=date,
+            do_transfer=do_transfer,
+        )
+        self.picking_ids |= picking
+        return picking
+
+    def _create_picking_mixt(
+        self,
+        lots,
+        products,
+        dest_location,
+        origin,
+        date=None,
+        do_transfer=False,
+    ):
+        self.ensure_one()
+        picking = internal_picking_mixt(
+            lots,
+            products,
+            dest_location,
+            origin,
             date=date,
             do_transfer=do_transfer,
         )
