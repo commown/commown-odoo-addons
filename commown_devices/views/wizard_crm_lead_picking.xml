@@ -9,9 +9,8 @@
           <group>
             <field name="lead_id" invisible="1"/>
             <field name="date"/>
-            <field name="product_tmpl_id" options="{'no_create': True}"/>
-            <field name="variant_id" options="{'no_create': True}"/>
-            <field name="lot_id" options="{'no_create': True}"/>
+            <field name="all_products" widget="many2many_tags" options="{'no_create_edit': True, 'open': true}" readonly="1" context="{'default_public': True}"/>
+            <field name="lot_ids" widget="many2many_tags"/>
           </group>
         </sheet>
         <footer>
@@ -20,6 +19,18 @@
           <button string="Cancel" class="btn-default" special="cancel"/>
         </footer>
       </form>
+    </field>
+  </record>
+
+  <record id="wizard_crm_lead_picking_form_allow_edit" model="ir.ui.view">
+    <field name="name">[commown] Crm lead picking creation form view</field>
+    <field name="model">crm.lead.picking.wizard</field>
+    <field name="inherit_id" ref="commown_devices.wizard_crm_lead_picking_form" />
+    <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='all_products']" position="attributes">
+        <attribute name="readonly">False</attribute>
+      </xpath>
     </field>
   </record>
 

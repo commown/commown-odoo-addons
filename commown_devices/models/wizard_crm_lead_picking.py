@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class CrmLeadPickingWizard(models.TransientModel):
@@ -16,55 +16,68 @@ class CrmLeadPickingWizard(models.TransientModel):
         help="Defaults to now - To be set only to force a date",
     )
 
-    product_tmpl_id = fields.Many2one(
-        "product.template",
-        string="Product",
-        domain="[('tracking', '=', 'serial')]",
-        required=True,
-        default=lambda self: self._compute_default_product_tmpl_id(),
-    )
-
-    variant_id = fields.Many2one(
+    all_products = fields.Many2many(
         "product.product",
-        string="Variant",
-        domain=(
-            "[('tracking', '=', 'serial'),"
-            " ('product_tmpl_id', '=', product_tmpl_id)]"
-        ),
+        string="All product to send",
         required=True,
+        domain=[("type", "=", "product")],
+        default=lambda self: self._compute_default_product_ids(),
     )
 
-    lot_id = fields.Many2one(
+    lot_ids = fields.Many2many(
         "stock.production.lot",
-        string="Device",
-        domain=lambda self: (
-            '[("product_id", "=", variant_id),'
-            ' ("quant_ids.location_id", "child_of", %d)]'
-            % self.env.ref("commown_devices.stock_location_available_for_rent").id
-        ),
+        string="Tracked Devices",
         required=True,
     )
 
-    def _compute_default_product_tmpl_id(self):
+    @api.multi
+    @api.onchange("all_products", "lot_ids")
+    def _compute_lot_domain(self):
+        """The lots domain are products from all_products that
+        are tracked by serial number (tracking = 'serial')
+        and with no lot already selected in lot_ids
+        """
+        avail_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
+        for rec in self:
+            picked_product_ids = rec.lot_ids.mapped("product_id").ids
+            ids_to_include = rec.all_products.filtered(
+                lambda p: p.tracking == "serial" and p.id not in picked_product_ids
+            ).ids
+            quant_domain = [
+                ("location_id", "child_of", avail_loc.id),
+                ("product_id.id", "in", ids_to_include),
+            ]
+            quants = (
+                self.env["stock.quant"]
+                .search(quant_domain)
+                .filtered(lambda q: q.quantity > q.reserved_quantity)
+            )
+            return {"domain": {"lot_ids": [("id", "in", quants.mapped("lot_id").ids)]}}
+
+    def _compute_untracked_products(self):
+        return self.all_products.filtered(lambda p: p.tracking == "none")
+
+    def _compute_default_product_ids(self):
         if not self.lead_id and "default_lead_id" in self.env.context:
             lead = self.env["crm.lead"].browse(self.env.context["default_lead_id"])
         else:
             lead = self.lead_id
-        possible_products = lead.contract_id.mapped(
-            "contract_line_ids.sale_order_line_id"
-            ".product_id.product_tmpl_id.storable_product_id"
+        services = lead.contract_id.mapped(
+            "contract_line_ids.sale_order_line_id.product_id"
         )
-        return possible_products and possible_products[0]
-
-    @api.onchange("product_tmpl_id")
-    def onchange_product_tmpl_id(self):
-        if self.product_tmpl_id:
-            if len(self.product_tmpl_id.product_variant_ids) == 1:
-                self.variant_id = self.product_tmpl_id.product_variant_id
-            else:
-                self.variant_id = False
+        default_products = services.mapped("primary_storable_variant_id")
+        default_products |= services.mapped("secondary_storable_variant_ids")
+        return default_products
 
     @api.multi
     def create_picking(self):
-        quant = self.lot_id.quant_ids.filtered(lambda q: q.quantity > 0).ensure_one()
-        return self.lead_id.contract_id.send_device(quant, date=self.date)
+        nb_of_tracked_product = len(
+            self.all_products.filtered(lambda p: p.tracking == "serial")
+        )
+        assert len(self.lot_ids) == nb_of_tracked_product, _(
+            "You have to select a lot for each tracked product"
+        )
+        products = {u: 1 for u in self._compute_untracked_products()}
+        return self.lead_id.contract_id.send_devices_mixt(
+            self.lot_ids, products, date=self.date
+        )
