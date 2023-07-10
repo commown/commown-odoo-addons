@@ -2,6 +2,7 @@ import datetime
 
 from odoo.exceptions import ValidationError
 
+from ..models.common import do_new_transfer
 from .common import DeviceAsAServiceTC
 
 
@@ -39,6 +40,23 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
                 "contract_id": self.c1.id,
             }
         )  # for checks on stage change tests
+        self.task_test_checks2 = self.env["project.task"].create(
+            {
+                "name": "test task 2",
+                "project_id": self.project.id,
+                "contract_id": self.c2.id,
+            }
+        )  # for checks on stage change tests
+
+        # Create stage to assign xml_ids so constrains on stage_id pass
+        t1, t2 = self.env["project.task.type"].create(
+            [
+                {"name": "t1"},
+                {"name": "t2"},
+            ]
+        )
+        self.ongoing_stage = self.env.ref("commown_devices.sup_picking_ongoing_stage")
+        self.picking_sent_stage = self.env.ref("commown_devices.picking_sent")
 
         # Create a unused product and an unused service
         self.env["product.template"].create(
@@ -49,6 +67,27 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
         self.env["product.template"].create(
             {"name": "unused service", "type": "service"}
+        )
+
+        self.nontracked_product = self.env["product.template"].create(
+            {
+                "name": "non tracked product (Module)",
+                "type": "product",
+                "tracking": "none",
+            }
+        )
+        location = self.env["stock.location"].create(
+            {
+                "name": "Test Module stock location",
+                "usage": "internal",
+                "partner_id": 1,
+                "location_id": self.env.ref(
+                    "commown_devices.stock_location_new_devices"
+                ).id,
+            }
+        )
+        self.adjust_stock_notracking(
+            self.nontracked_product.product_variant_id, location
         )
 
     def _create_and_send_device(self, serial, contract, product=None, do_transfer=True):
@@ -361,3 +400,98 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.task_test_checks.stage_id = resiliated_stage
         self.assertTrue(self.task_test_checks.stage_id == resiliated_stage)
+
+    def test_outward_inward_notracking(self):
+        def get_present_location(pt_variant):
+            return (
+                self.env["stock.quant"]
+                .search(
+                    [
+                        ("product_id.id", "=", pt_variant.id),
+                        ("quantity", ">", "0"),
+                    ]
+                )
+                .location_id
+            )
+
+        self.task.contract_id = self.c1
+        date = datetime.datetime(2020, 1, 10, 16, 2, 34)
+        pt_variant = self.nontracked_product.product_variant_id
+
+        initial_location = get_present_location(pt_variant)
+        wizard_outward = self.env[
+            "project.task.notracking.outward.picking.wizard"
+        ].create({"task_id": self.task.id, "date": date, "variant_id": pt_variant.id})
+
+        picking = wizard_outward.create_picking()
+        do_new_transfer(picking, date)
+
+        client_location = get_present_location(pt_variant)
+        self.assertNotEqual(initial_location, client_location)
+
+        wizard_inward = self.env[
+            "project.task.notracking.inward.picking.wizard"
+        ].create({"task_id": self.task.id, "date": date, "variant_id": pt_variant.id})
+
+        picking = wizard_inward.create_picking()
+        do_new_transfer(picking, date)
+
+        final_location = get_present_location(pt_variant)
+        self.assertEqual(
+            final_location,
+            self.env.ref("commown_devices.stock_location_devices_to_check"),
+        )
+
+    def test_change_stage_check(self):
+
+        with self.assertRaises(ValidationError) as err:
+            self.task_test_checks.stage_id = self.ongoing_stage
+        self.assertEqual(
+            "Error while validating constraint\n\nThese tasks can not be moved forward. There are no picking linked to those tasks: [%s]\n"
+            % self.task_test_checks.id,
+            err.exception.name,
+        )
+        with self.assertRaises(ValidationError) as err2:
+            self.task_test_checks2.stage_id = self.ongoing_stage
+        self.assertEqual(
+            "Error while validating constraint\n\nThese tasks can not be moved forward. There are no picking linked to those tasks: [%s]\n"
+            % self.task_test_checks2.id,
+            err2.exception.name,
+        )
+        with self.assertRaises(ValidationError) as err3:
+            self.task_test_checks.stage_id = self.picking_sent_stage
+        self.assertEqual(
+            "Error while validating constraint\n\nThese tasks can not be moved forward. There are no picking linked to those tasks: [%s]\n"
+            % self.task_test_checks.id,
+            err3.exception.name,
+        )
+
+        module = self.nontracked_product.product_variant_id
+        lot = self.storable_product.product_variant_id
+
+        stock_location = self.env.ref("stock.stock_location_stock")
+        quant = self.env["stock.quant"].search(
+            [
+                ("product_id", "=", lot.id),
+                ("quantity", ">", 0),
+                ("location_id", "child_of", stock_location.id),
+            ]
+        )[0]
+
+        self.task_test_checks.contract_id.send_device_tracking_none(
+            module,
+            origin=self.task_test_checks.get_name_for_origin(),
+        )
+
+        self.task_test_checks.stage_id = self.ongoing_stage
+        self.assertTrue(self.task_test_checks.stage_id == self.ongoing_stage)
+
+        self.task_test_checks2.contract_id.send_device(
+            quant,
+            origin=self.task_test_checks2.get_name_for_origin(),
+        )
+        self.task_test_checks2.stage_id = self.ongoing_stage
+        self.assertTrue(self.task_test_checks2.stage_id == self.ongoing_stage)
+
+        self.task_test_checks.stage_id = self.picking_sent_stage
+        self.assertTrue(self.task_test_checks.stage_id == self.picking_sent_stage)

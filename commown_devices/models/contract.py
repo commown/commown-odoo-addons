@@ -2,8 +2,9 @@ import logging
 from collections import OrderedDict
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
-from .common import internal_picking
+from .common import internal_picking, internal_picking_tracking_none
 
 _logger = logging.getLogger(__name__)
 
@@ -44,40 +45,140 @@ class Contract(models.Model):
             record.quant_nb = len(record.quant_ids)
 
     @api.multi
-    def send_device(self, quant, date=None, do_transfer=False):
+    def send_device(self, quant, origin=None, date=None, do_transfer=False):
         """Create a picking of quant to partner's location.
         If given `date` is falsy (the default), it is set to now.
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
         dest_location = self.partner_id.get_or_create_customer_location()
+        if origin is None:
+            origin = self.name
         return self._create_picking(
             [quant.lot_id],
             quant.location_id,
             dest_location,
+            origin=origin,
             date=date,
             do_transfer=do_transfer,
         )
 
     @api.multi
-    def receive_device(self, lot, dest_location, date=False, do_transfer=False):
+    def send_device_tracking_none(
+        self, product, origin=None, date=None, do_transfer=False
+    ):
+        """Create a picking of quant to partner's location.
+        If given `date` is falsy (the default), it is set to now.
+        If `do_transfer` is True (default: False), execute the picking
+        at the previous date.
+        """
+        stock = self.env.ref("stock.stock_location_stock")
+        dest_location = self.partner_id.get_or_create_customer_location()
+        quant = self.env["stock.quant"].search(
+            [
+                ("product_id", "=", product.id),
+                ("location_id", "child_of", stock.id),
+                ("quantity", ">", 0),
+            ]
+        )
+        if origin is None:
+            origin = self.name
+        if not quant:
+            raise UserError(_("No product %s found in stock") % product.name)
+
+        return self._create_picking_tracking_none(
+            {product: 1},
+            quant.location_id,
+            dest_location,
+            origin=origin,
+            date=date,
+            do_transfer=do_transfer,
+        )
+
+    @api.multi
+    def receive_device(
+        self, lot, dest_location, origin=None, date=False, do_transfer=False
+    ):
+        """Create a picking from partner's location to `dest_location`.
+        If given `date` is falsy (the default), it is set to now.
+        If `do_transfer` is True (default: False), execute the picking
+        at the previous date.
+        """
+        if origin is None:
+            origin = self.name
+
+        orig_location = self.partner_id.get_or_create_customer_location()
+        return self._create_picking(
+            [lot],
+            orig_location,
+            dest_location,
+            origin=origin,
+            date=date,
+            do_transfer=do_transfer,
+        )
+
+    @api.multi
+    def receive_device_tracking_none(
+        self, product, dest_location, origin=None, date=False, do_transfer=False
+    ):
         """Create a picking from partner's location to `dest_location`.
         If given `date` is falsy (the default), it is set to now.
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
 
+        if origin is None:
+            origin = self.name
+
         orig_location = self.partner_id.get_or_create_customer_location()
-        return self._create_picking(
-            [lot], orig_location, dest_location, date=date, do_transfer=do_transfer
+        return self._create_picking_tracking_none(
+            {product: 1},
+            orig_location,
+            dest_location,
+            origin=origin,
+            date=date,
+            do_transfer=do_transfer,
         )
 
-    def _create_picking(
-        self, lots, orig_location, dest_location, date=None, do_transfer=False
+    def _create_picking_tracking_none(
+        self,
+        products,
+        orig_location,
+        dest_location,
+        origin=None,
+        date=None,
+        do_transfer=False,
     ):
         self.ensure_one()
+
+        if origin is None:
+            origin = self.name
+        picking = internal_picking_tracking_none(
+            origin,
+            products,
+            orig_location,
+            dest_location,
+            date=date,
+            do_transfer=do_transfer,
+        )
+        self.picking_ids |= picking
+
+        return picking
+
+    def _create_picking(
+        self,
+        lots,
+        orig_location,
+        dest_location,
+        origin=None,
+        date=None,
+        do_transfer=False,
+    ):
+        self.ensure_one()
+        if origin is None:
+            origin = self.name
         picking = internal_picking(
-            self.name,
+            origin,
             lots,
             orig_location,
             dest_location,

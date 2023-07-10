@@ -17,7 +17,7 @@ class ProjectTaskAbstractPickingWizard(models.AbstractModel):
     )
 
     date = fields.Datetime(
-        string="date",
+        string="Date",
         help="Defaults to now - To be set only to force a date",
     )
 
@@ -91,7 +91,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             raise UserError(_("Can't move device: no device set on this task!"))
 
         return internal_picking(
-            "Task-%s" % self.task_id.id,
+            self.task_id.get_name_for_origin(),
             [lot],
             self.present_location_id,
             self.location_dest_id,
@@ -190,7 +190,9 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
     @api.multi
     def create_picking(self):
         quant = self.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
-        return self.task_id.contract_id.send_device(quant, date=self.date)
+        return self.task_id.contract_id.send_device(
+            quant, origin=self.task_id.get_name_for_origin(), date=self.date
+        )
 
 
 class ProjectTaskInwardPickingWizard(models.TransientModel):
@@ -216,6 +218,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
         return self.task_id.contract_id.receive_device(
             self.lot_id,
             self.env.ref("commown_devices.stock_location_devices_to_check"),
+            origin=self.task_id.get_name_for_origin(),
             date=self.date,
         )
 
@@ -248,3 +251,46 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
 
         quant = self.task_id.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
         self.contract_id.send_device(quant, date=self.date, do_transfer=True)
+
+
+class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
+    _name = "project.task.notracking.outward.picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    variant_id = fields.Many2one(
+        "product.product",
+        string="Product",
+        domain="[('tracking', '=', 'none'), ('type', '=', 'product')]",
+        required=True,
+    )
+
+    @api.multi
+    def create_picking(self):
+        return self.task_id.contract_id.send_device_tracking_none(
+            self.variant_id,
+            origin=self.task_id.get_name_for_origin(),
+            date=self.date,
+            do_transfer=False,
+        )
+
+
+class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
+    _name = "project.task.notracking.inward.picking.wizard"
+    _inherit = "project.task.abstract.picking.wizard"
+
+    variant_id = fields.Many2one(
+        "product.product",
+        string="Product",
+        domain="[('tracking', '=', 'none'), ('type', '=', 'product')]",
+        required=True,
+    )
+
+    @api.multi
+    def create_picking(self):
+        return self.task_id.contract_id.receive_device_tracking_none(
+            self.variant_id,
+            self.env.ref("commown_devices.stock_location_devices_to_check"),
+            origin=self.task_id.get_name_for_origin(),
+            date=self.date,
+            do_transfer=False,
+        )

@@ -17,7 +17,7 @@ class CrmLead(models.Model):
     def action_generate_picking(self):
         contract = self.contract_id
 
-        if contract.picking_ids.filtered(lambda p: p.state == "assigned"):
+        if contract.picking_ids.filtered(_assigned):
             raise UserError(
                 _(
                     "The contract has already assigned picking(s)!\n"
@@ -36,15 +36,11 @@ class CrmLead(models.Model):
             "context": {"default_lead_id": self.id},
         }
 
-    @api.multi
-    def write(self, values):
-        res = super().write(values)
-        stage_id = values.get("stage_id")
-        if stage_id:
-            stage = self.env["crm.stage"].browse(stage_id)
-            if "[stock: check-has-picking]" in stage.name:
+    @api.constrains("stage_id")
+    def _check_picking_on_stage_change(self):
+        if self.stage_id.name:
+            if "[stock: check-has-picking]" in self.stage_id.name:
                 self.action_check_waiting_picking()
-        return res
 
     def action_check_waiting_picking(self):
         if self.so_line_id.product_id.product_tmpl_id.storable_product_id:

@@ -1,3 +1,5 @@
+import dateutil.parser
+
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
@@ -100,6 +102,38 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
         return lot
 
+    def adjust_stock_notracking(self, product, location, qty=1.0, date="2000-01-01"):
+
+        inventory = self.env["stock.inventory"].create(
+            {
+                "name": "test stock %s" % product.name,
+                "location_id": location.id,
+                "filter": "product",
+                "product_id": product.id,
+                "date": dateutil.parser.parse(date),
+            }
+        )
+        inventory.action_start()
+        inventory.line_ids |= self.env["stock.inventory.line"].create(
+            {
+                "product_id": product.id,
+                "location_id": location.id,
+                "product_qty": qty,
+            }
+        )
+        inventory.action_validate()
+        assert inventory.state == "done", (
+            "Unexpected inventory state %s" % inventory.state
+        )
+
+        self.env.cache.invalidate()
+        quant = self.env["stock.quant"].search(
+            [("product_id.id", "=", product.id), ("location_id.id", "=", location.id)]
+        )
+        quant.in_date = dateutil.parser.parse(date)
+
+        return product
+
     def send_device(self, serial, contract=None, date=None):
         contract = contract or self.so.order_line.contract_id
         quant = self.env["stock.quant"].search(
@@ -108,7 +142,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 ("quantity", ">", 0),
             ]
         )
-        contract.send_device(quant, date, True)
+        contract.send_device(quant, date=date, do_transfer=True)
 
     def prepare_ui(
         self, created_model_name, related_entity, relation_field, user_choices=None

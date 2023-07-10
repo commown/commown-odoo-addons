@@ -6,6 +6,17 @@ CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.resiliated_stage",
 ]
 
+STOCK_XML_ID = "stock.stock_location_stock"
+
+
+class ProjectTaskType(models.Model):
+    _inherit = "project.task.type"
+
+    check_picking_assigned = fields.Boolean(
+        "Check picking assigned when entering stage?",
+        default=False,
+    )
+
 
 class ProjectTask(models.Model):
     _inherit = "project.task"
@@ -164,13 +175,41 @@ class ProjectTask(models.Model):
                 % erroneous_task.ids
             )
 
+    @api.constrains("stage_id")
+    def onchange_stage_id_check_assigned_picking(self):
+        stock_location = self.env.ref(STOCK_XML_ID)
+        erroneous_task = self.search(
+            [
+                ("id", "in", self.ids),
+                ("stage_id.check_picking_assigned", "=", True),
+            ]
+        ).filtered(
+            lambda task: not any(
+                [
+                    picking["origin"] == task.get_name_for_origin()
+                    and picking.state == "assigned"
+                    and "/" + str(stock_location.id) + "/"
+                    in picking.location_id.parent_path
+                    for picking in task.contract_id.picking_ids
+                ]
+            )
+        )
+        if erroneous_task:
+            raise Warning(
+                _(
+                    "These tasks can not be moved forward. There are no picking "
+                    "linked to those tasks: %s"
+                )
+                % erroneous_task.ids
+            )
+
     def action_scrap_device(self):
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
 
         ctx = {
             "default_product_id": self.lot_id.product_id.id,
             "default_lot_id": self.lot_id.id,
-            "default_origin": "Task-%s" % self.id,
+            "default_origin": self.get_name_for_origin(),
             "default_scrap_location_id": scrap_loc.id,
         }
 
@@ -195,3 +234,6 @@ class ProjectTask(models.Model):
             "view_type": "form",
             "context": ctx,
         }
+
+    def get_name_for_origin(self):
+        return "Task-%s" % self.id
