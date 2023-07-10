@@ -186,7 +186,7 @@ class ProjectTask(models.Model):
         ).filtered(
             lambda task: not any(
                 [
-                    picking["origin"] == task.get_id_name()
+                    picking["origin"] == task.get_name_for_origin()
                     and picking.state == "assigned"
                     and "/" + str(stock_location.id) + "/"
                     in picking.location_id.parent_path
@@ -209,7 +209,7 @@ class ProjectTask(models.Model):
         ctx = {
             "default_product_id": self.lot_id.product_id.id,
             "default_lot_id": self.lot_id.id,
-            "default_origin": self.get_id_name(),
+            "default_origin": self.get_name_for_origin(),
             "default_scrap_location_id": scrap_loc.id,
         }
 
@@ -235,5 +235,5 @@ class ProjectTask(models.Model):
             "context": ctx,
         }
 
-    def get_id_name(self):
+    def get_name_for_origin(self):
         return "Task-%s" % self.id
