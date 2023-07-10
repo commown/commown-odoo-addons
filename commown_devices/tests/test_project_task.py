@@ -480,7 +480,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.task_test_checks.contract_id.send_device_tracking_none(
             module,
-            origin=self.task_test_checks.get_id_name(),
+            origin=self.task_test_checks.get_name_for_origin(),
         )
 
         self.task_test_checks.stage_id = self.ongoing_stage
@@ -488,7 +488,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.task_test_checks2.contract_id.send_device(
             quant,
-            origin=self.task_test_checks2.get_id_name(),
+            origin=self.task_test_checks2.get_name_for_origin(),
         )
         self.task_test_checks2.stage_id = self.ongoing_stage
         self.assertTrue(self.task_test_checks2.stage_id == self.ongoing_stage)
