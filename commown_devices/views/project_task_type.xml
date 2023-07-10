@@ -1,0 +1,14 @@
+<odoo>
+
+  <record model="ir.ui.view" id="task_type_edit">
+    <field name="name">project.task.type.form (in commown_devices)</field>
+    <field name="model">project.task.type</field>
+    <field name="inherit_id" ref="project.task_type_edit"/>
+    <field name="arch" type="xml">
+      <field name="sequence" position="after">
+        <field name="check_picking_assigned"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>

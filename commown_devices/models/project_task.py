@@ -7,6 +7,15 @@ CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
 ]
 
 
+class ProjectTaskType(models.Model):
+    _inherit = "project.task.type"
+
+    check_picking_assigned = fields.Boolean(
+        "Check picking assigned when entering stage?",
+        default=False,
+    )
+
+
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
