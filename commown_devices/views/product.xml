@@ -18,7 +18,7 @@
           <page name="storable_configs" string="Storable Configurations" groups="product.group_product_variant" attrs="{'invisible': [('type', '!=', 'service')]}">
             <field name="storable_config_ids" context="{'default_service_tmpl_id': id}" widget="one2many_list">
               <tree editable="bottom">
-                  <field name="service_tmpl_id" invisible="1"/> <!-- Here to trigger onchange -->
+                <field name="service_tmpl_id" invisible="1"/> <!-- Here to trigger onchange -->
                 <field name="storable_type"/>
                 <field name="attribute_value_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
                 <field name="storable_tmpl_id"/>
@@ -27,6 +27,18 @@
             </field>
           </page>
         </xpath>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_primary_and_secondary_products">
+      <field name="name">product.product.commown_device</field>
+      <field name="model">product.product</field>
+      <field name="inherit_id" ref="product.product_normal_form_view"/>
+      <field name="arch" type="xml">
+        <field name="categ_id" position="after">
+          <field name="primary_storable_variant_id" attrs="{'invisible': [('type', '!=', 'service')]}" readonly="1"/>
+          <field name="secondary_storable_variant_ids" widget="many2many_tags" attrs="{'invisible': [('type', '!=', 'service')]}" readonly="1"/>
+        </field>
       </field>
     </record>
 
