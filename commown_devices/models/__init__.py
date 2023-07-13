@@ -2,6 +2,7 @@ from . import contract
 from . import crm_lead
 from . import picking
 from . import product
+from . import product_service_config
 from . import project_project
 from . import project_task
 from . import res_partner
