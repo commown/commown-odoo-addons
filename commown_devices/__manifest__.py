@@ -21,6 +21,7 @@
         "data/action_project_task.xml",
         "data/project_task.xml",
         "data/stock_location.xml",
+        "security/ir.model.access.csv",
         "views/contract.xml",
         "views/product.xml",
         "views/project_project.xml",
