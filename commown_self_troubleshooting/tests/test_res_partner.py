@@ -87,6 +87,10 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
                     "title": "Option Sérénité",
                     "pages": [{"url_path": "/page/self-troubleshoot-serenity"}],
                 },
+                {
+                    "title": "Autres demandes",
+                    "pages": [{"url_path": "/page/self-troubleshoot-other"}],
+                },
             ],
         )
 
@@ -129,3 +133,6 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
             partner2.self_troubleshooting_contracts("fp2-battery"),
             self.contract_fp2,
         )
+
+    def test_other_page(self):
+        self.assertFalse(self.partner.self_troubleshooting_contracts("other-page"))

@@ -1,0 +1,16 @@
+<odoo>
+
+  <record id="issue-description-other" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-other</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-other</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-other">
+        <div t-if="more_info">
+          <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
+        </div>
+      </t>
+    </field>
+  </record>
+
+</odoo>

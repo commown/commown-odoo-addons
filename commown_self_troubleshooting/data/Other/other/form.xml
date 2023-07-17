@@ -1,0 +1,87 @@
+<odoo>
+
+  <record id="other" model="ir.ui.view">
+    <field name="name">Self-troubleshoot - Other</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-other</field>
+    <field name="arch" type="xml">
+
+      <t t-name="website.self-troubleshoot-other">
+        <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-set="title">Commown - Autres demandes</t>
+          <t t-set="head">
+            <script type="text/javascript">
+              $(document).ready(function() {setUpWizard($('#smartwizard'))});
+            </script>
+          </t>
+          <t t-set="issue_title">Autres demandes</t>
+          <t t-set="issue_description_template">issue-description-other</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="container">
+            <h1>Autres demandes</h1>
+            <br />
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+
+              <div id="smartwizard">
+                <ul>
+                  <li>
+                    <a href="#step-0">
+                      Votre demande
+                      <br />
+                    </a>
+                  </li>
+                </ul>
+
+                <div>
+                  <div id="step-0">
+                    <h2>
+                      <i class="fas fa-hands-helping" />
+                      Contacter un humain
+                    </h2>
+                    <p>Vous pouvez ici
+                    directement créer une demande d'assistance à
+                    notre intention en expliquant au mieux le souci
+                    que vous rencontrez ci-dessous.</p>
+
+                    <t t-call="commown_self_troubleshooting.commown-signature" />
+
+                    <div id="form-step-0" role="form" data-toggle="validator">
+
+                      <div class="form-group">
+                        <label for="more_info_step_0">En quoi pouvons-nous vous aider ?</label>
+                        <textarea class="form-control" rows="3" required="required" id="more_info_step_0" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="stage_ref" value="stage_received" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+  <record id="other-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-other</field>
+    <field name="view_id" ref="other" />
+    <field name="website_meta_title">Autres demandes</field>
+    <field name="website_meta_description">J'ai une demande qui ne rentre dans aucune de ces cases !</field>
+  </record>
+
+</odoo>
