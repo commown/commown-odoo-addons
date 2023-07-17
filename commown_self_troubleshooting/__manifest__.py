@@ -39,6 +39,8 @@
         "data/Shiftphone/screen/form.xml",
         "data/Smartphone/screen/form.xml",
         "data/Smartphone/screen/issue_template.xml",
+        "data/Other/other/form.xml",
+        "data/Other/other/issue_template.xml",
         "data/common_steps.xml",
         "data/project.xml",
         "data/tags.xml",
