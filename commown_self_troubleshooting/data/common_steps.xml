@@ -247,7 +247,6 @@
     </template>
 
     <template id="step-contact-human">
-      <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), '|', ('date_end', '=', False), ('date_end', '&gt;', datetime.date.today())])" />
       <div t-attf-id="step-{{ step }}">
         <h2>
           <i class="fas fa-hands-helping" />
