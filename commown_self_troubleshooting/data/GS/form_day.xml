@@ -75,10 +75,12 @@
                     <li><a href="#step-8">Étape 8<br/><small>Contacter un humain</small></a></li>
                   </ul>
 
+                  <t t-set="contracts"
+                     t-value="env.user.partner_id.self_troubleshooting_contracts('gs-day-page')"/>
+
                   <div>
                     <t t-call="commown_self_troubleshooting.step-contract-choice">
-                      <t t-set="contracts"
-                         t-value="env.user.partner_id.self_troubleshooting_contracts('gs-day-page')"/>
+                      <t t-set="contracts" t-value="contracts"/>
                     </t>
 
                   <div id="step-1">
@@ -178,6 +180,7 @@
 
                     <t t-call="commown_self_troubleshooting.step-contact-human">
                       <t t-set="step">8</t>
+                      <t t-set="contracts" t-value="contracts"/>
                     </t>
 
                     </div>

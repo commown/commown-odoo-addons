@@ -54,10 +54,12 @@ $(document).ready(function() {
                     <li><a href="#step-5">Étape 5<br/><small>Contacter un humain</small></a></li>
                   </ul>
 
+                  <t t-set="contracts"
+                     t-value="env.user.partner_id.self_troubleshooting_contracts('fp2-battery-page')"/>
+
                   <div>
                     <t t-call="commown_self_troubleshooting.step-contract-choice">
-                      <t t-set="contracts"
-                         t-value="env.user.partner_id.self_troubleshooting_contracts('fp2-battery-page')"/>
+                      <t t-set="contracts" t-value="contracts"/>
                     </t>
 
                     <div id="step-1">
@@ -128,6 +130,7 @@ $(document).ready(function() {
 
                     <t t-call="commown_self_troubleshooting.step-contact-human">
                       <t t-set="step">5</t>
+                      <t t-set="contracts" t-value="contracts"/>
                     </t>
 
                   </div>
