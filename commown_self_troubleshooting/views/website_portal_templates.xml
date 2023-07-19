@@ -10,7 +10,7 @@
               flex-direction: column-reverse;
             }
           }
-</style>
+      </style>
     </xpath>
   </template>
 
@@ -64,9 +64,7 @@
 
             <script type="text/javascript">
               var odoo = {
-              csrf_token: "
-              <t t-esc="request.csrf_token(None)" />
-              ",
+                  csrf_token: '<t t-esc="request.csrf_token(None)" />',
               };
             </script>
 
