@@ -13,7 +13,6 @@
         "commown_contractual_issue",
         "commown_shipping",
         "commown_lead_risk_analysis",
-        "commown_self_troubleshooting",
         "stock",
     ],
     "data": [
