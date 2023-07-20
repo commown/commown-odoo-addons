@@ -47,8 +47,8 @@ class SelfHelp(http.Controller):
         partner = env.user.partner_id
         post = request.params.copy()
 
-        project_ref = "commown_self_troubleshooting." + post.get(
-            "project_ref", "support_project"
+        project_ref = post.get(
+            "project_ref", "commown_self_troubleshooting.support_project"
         )
 
         task_data = {

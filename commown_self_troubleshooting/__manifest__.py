@@ -12,7 +12,7 @@
     "external_dependencies": {},
     "depends": [
         "project",
-        "commown_shipping",
+        "commown_devices",
         "product_rental",
         "web",
     ],
