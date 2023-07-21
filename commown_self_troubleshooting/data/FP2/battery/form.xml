@@ -8,23 +8,22 @@
       <field name="arch" type="xml">
 
         <t t-name="website.self-troubleshoot-fp2-battery">
-          <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-call="portal.portal_layout">
             <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Batterie</t>
-            <t t-set="head">
-              <script type="text/javascript">
-$(document).ready(function() {
 
-    const wizard = setUpWizard($('#smartwizard'));
+            <script type="text/javascript">
+              $(document).ready(function() {
 
-    $('#accu_battery').change(function () {
-         wizard.toggleStep(2, this.value==='sup');
-         wizard.toggleStep(3, this.value==='inf');
-         wizard.toggleStep(4, this.value==='inf');
-    });
+                  const wizard = setUpWizard($('#smartwizard'));
 
-});
-              </script>
-            </t>
+                  $('#accu_battery').change(function () {
+                       wizard.toggleStep(2, this.value==='sup');
+                       wizard.toggleStep(3, this.value==='inf');
+                       wizard.toggleStep(4, this.value==='inf');
+                  });
+
+              });
+            </script>
 
             <!-- Variables à modifier ici -->
             <t t-set="tag_names">Appareil FP2,FP MOD batterie</t>
@@ -32,10 +31,18 @@ $(document).ready(function() {
             <t t-set="issue_description_template">issue-description-fp2-battery</t>
             <!-- Fin des variables à modifier -->
 
-            <div class="container">
-              <h1>Auto-dépannage : Fairphone 2</h1>
-              <h2>Ma batterie se décharge rapidement</h2>
-              <br/>
+            <div class="bg-white border m-0 p-3 rounded">
+
+              <div class="d-flex flex-row" style="justify-content: space-between;">
+                <div class="d-flex flex-column">
+                  <h1>Auto-dépannage : Fairphone 2</h1>
+                  <h2>Ma batterie se décharge rapidement</h2>
+                </div>
+                <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
+                  Contacter un humain
+                </button>
+              </div>
+
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
                     id="myForm" role="form">
 
@@ -45,24 +52,24 @@ $(document).ready(function() {
                 <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
 
                 <div id="smartwizard">
-                  <ul>
-                    <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
-                    <li><a href="#step-1">Étape 1<br/><small>AccuBattery</small></a></li>
-                    <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Problème logiciel</small></a></li>
-                    <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
-                    <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
-                    <li><a href="#step-5">Étape 5<br/><small>Contacter un humain</small></a></li>
+                  <ul class="nav">
+                    <li class="nav-item"><a class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#step-1">Étape 1<br/><small>AccuBattery</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Problème logiciel</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#step-5">Étape 5<br/><small>Contacter un humain</small></a></li>
                   </ul>
 
                   <t t-set="contracts"
                      t-value="env.user.partner_id.self_troubleshooting_contracts('fp2-battery-page')"/>
 
-                  <div>
+                  <div class="tab-content">
                     <t t-call="commown_self_troubleshooting.step-contract-choice">
                       <t t-set="contracts" t-value="contracts"/>
                     </t>
 
-                    <div id="step-1">
+                    <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                       <div class="clearfix">
                         <h2>AccuBattery</h2>
                         <p>Avant de répondre, veuillez effectuer le test batterie sur notre  <a target="_blank" href="https://wiki.commown.coop/La-gestion-des-batteries"> wiki </a>,
@@ -83,8 +90,8 @@ $(document).ready(function() {
 
                     </div>
 
-                    <div id="step-2">
-                      <h2><i class="fas fa-pb-log"/> Problème logiciel </h2>
+                    <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                      <h2><i class="fas fa-bug"/> Problème logiciel</h2>
                       <p>Dans ce cas, nous vous invitons à démarrer votre FP2 en mode "sans échec" afin de
                       voir si le problème est dû à une application instable. </p>
                       <p>Pour passer en mode sans échec :

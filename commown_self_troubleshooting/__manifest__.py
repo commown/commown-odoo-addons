@@ -20,8 +20,8 @@
     "data": [
         "data/Assistance/Serenity/form.xml",
         "data/Assistance/Serenity/issue_template.xml",
-        "data/Assistance/Generic Issue/form.xml",
-        "data/Assistance/Generic Issue/issue_template.xml",
+        "data/Assistance/Generic_Issue/form.xml",
+        "data/Assistance/Generic_Issue/issue_template.xml",
         "data/CC/screen/form.xml",
         "data/ContractManagement/termination/form.xml",
         "data/ContractManagement/termination/issue_template.xml",

@@ -13,12 +13,12 @@
     </template>
 
     <template id="step-contract-choice">
-      <div id="step-0">
-        <div class="clearfix">
-          <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
+      <div id="step-0" class="tab-pane" role="tabpanel" aria-labelledby="step-0">
+        <div class="row align-items-center">
+          <img src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
           <h2>Appareil concerné</h2>
         </div>
-        <p class="text-danger bg-danger" style="padding: 1em; margin: 1em">
+        <p class="alert alert-danger" style="padding: 1em; margin: 1em">
           Choisissez ci-dessous le contrat lié à l'appareil concerné.<br/>
           <br/>
           Le numéro de série (ou code IMEI pour les téléphones) sont indiqués pour vous permettre
@@ -32,7 +32,7 @@
           en introduction de votre message que vous ne le trouvez pas,
           nous nous en occuperons !
         </p>
-        <div id="form-step-0" role="form" data-toggle="validator">
+        <div id="form-step-0" class="p-3" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="device_contract">Contrat de votre appareil :</label>
             <select
@@ -63,7 +63,7 @@
     </template>
 
     <template id="step-manipulation-option">
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <div class="clearfix">
           <h2>Option lors de la souscription</h2>
           <br />
@@ -112,7 +112,7 @@
       <t t-set="delivery" t-value="partner.colissimo_delivery_data()" />
       <t t-set="_countries" t-value="env['res.country'].search([('code', 'in', ('FR', 'BE', delivery['countryCode']))])" />
       <t t-set="countries" t-value="[(c.code, c.name) for c in _countries]" />
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="fas fa-shipping-fast" />
           Informations d'expédition
@@ -157,8 +157,8 @@
             <div class="help-block with-errors" />
           </div>
 
-          <div class="row">
-            <div class="col-xs-4 form-group">
+          <div class="form-row">
+            <div class="col form-group">
               <label for="zipcode">
                 <i class="fas fa-map-marker-alt" />
                 C. Postal
@@ -166,7 +166,7 @@
               <input class="form-control" name="zipcode" id="zipcode" required="required" t-att-value="delivery['zipCode']" data-required-error="Saisissez un code postal pour la livraison." />
               <div class="help-block with-errors" />
             </div>
-            <div class="col-xs-4 form-group">
+            <div class="col form-group">
               <label for="city">
                 <i class="fas fa-map-marker-alt" />
                 Ville
@@ -174,7 +174,7 @@
               <input class="form-control" name="city" id="city" required="required" t-att-value="delivery['city']" data-required-error="Saisissez une ville pour la livraison." />
               <div class="help-block with-errors" />
             </div>
-            <div class="col-xs-4 form-group">
+            <div class="col form-group">
               <label for="country">
                 <i class="fas fa-map-marker-alt" />
                 Pays
@@ -190,8 +190,8 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-xs-6 form-group">
+          <div class="form-row">
+            <div class="col form-group">
               <label for="phone">
                 <i class="fas fa-phone-alt" />
                 N° de mobile
@@ -199,7 +199,7 @@
               <input class="form-control" name="phone" id="phone" type="tel" required="required" t-att-value="delivery.get('phoneNumber') or delivery.get('mobileNumber', '')" data-required-error="Saisissez un numéro de téléphone pour la livraison." />
               <div class="help-block with-errors" />
             </div>
-            <div class="col-xs-6 form-group">
+            <div class="col form-group">
               <label for="email">
                 <i class="fas fa-envelope" />
                 Adresse email
@@ -214,7 +214,7 @@
     </template>
 
     <template id="step-self-solved">
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="far fa-thumbs-up" aria-hidden="true" />
           Problème résolu
@@ -247,7 +247,7 @@
     </template>
 
     <template id="step-contact-human">
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="fas fa-hands-helping" />
           Contacter un humain
@@ -288,7 +288,7 @@
     </template>
 
     <template id="step-confirm-change">
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="fas fa-check-double" />
           Confirmation de votre demande

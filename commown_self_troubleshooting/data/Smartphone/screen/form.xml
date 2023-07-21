@@ -6,28 +6,26 @@
     <field name="arch" type="xml">
 
     <t t-name="website.self-troubleshoot-smartphone-screen">
-      <t t-call="commown-self-troubleshoot.web-layout">
+      <t t-call="portal.portal_layout">
         <t t-set="title">Commown - Auto-dépannage - Smartphone : Mon écran (ou sa protection) est fissuré</t>
-        <t t-set="head">
-          <script type="text/javascript">
 
-            $(document).ready(function() {
+        <script type="text/javascript">
+          $(document).ready(function() {
 
-              const wizard = setUpWizard($('#smartwizard'));
+            const wizard = setUpWizard($('#smartwizard'));
 
-              $('#has_protection').change(function () {
-                  wizard.toggleStep(2, this.value==='yes');
-                  wizard.toggleStep(3, this.value==='no');
-              });
-
-              $('input[type=radio][name=replace_screen]').change(function () {
-                   wizard.toggleStep(4, this.value==='yes');
-              });
-
+            $('#has_protection').change(function () {
+                wizard.toggleStep(2, this.value==='yes');
+                wizard.toggleStep(3, this.value==='no');
             });
 
-          </script>
-        </t>
+            $('input[type=radio][name=replace_screen]').change(function () {
+                 wizard.toggleStep(4, this.value==='yes');
+            });
+
+          });
+        </script>
+
 
         <!-- Variables à modifier ici -->
         <t t-set="tag_names">Appareil <t t-esc="model" /></t>
@@ -35,10 +33,17 @@
         <t t-set="issue_description_template">issue-description-smartphone-screen</t>
         <!-- Fin des variables à modifier -->
 
-        <div class="container">
-          <h1>Auto-dépannage : Smartphone</h1>
-          <h2>Mon écran (ou sa protection) est fissuré </h2>
-          <br/>
+        <div class="bg-white border m-0 p-3 rounded">
+          <div class="d-flex flex-row" style="justify-content: space-between;">
+            <div class="d-flex flex-column">
+              <h1>Auto-dépannage : Smartphone</h1>
+              <h2>Mon écran (ou sa protection) est fissuré </h2>
+            </div>
+            <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
+              Contacter un humain
+            </button>
+          </div>
+
           <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
                 id="myForm" role="form">
 
@@ -48,19 +53,18 @@
             <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
 
             <div id="smartwizard">
-              <ul>
-                <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
-                <li><a href="#step-1">Étape 1<br/><small>Type de problème</small></a></li>
-                <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Vérification de l'écran</small></a></li>
-                <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>État de l'écran</small></a></li>
-                <li><a href="#step-4">Étape 4<br/><small>Option souscrite</small></a></li>
-                <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Expédition</small></a></li>
-                <li disabled="disabled"><a href="#step-6">Étape 6<br/><small>Confirmation</small></a></li>
-                <li><a href="#step-7">Étape 7<br/><small>Contacter un humain</small></a></li>
+              <ul class="nav">
+                <li class="nav-item"><a class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                <li class="nav-item"><a class="nav-link" href="#step-1">Étape 1<br/><small>Type de problème</small></a></li>
+                <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Vérification de l'écran</small></a></li>
+                <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>État de l'écran</small></a></li>
+                <li class="nav-item"><a class="nav-link" href="#step-4">Étape 4<br/><small>Option souscrite</small></a></li>
+                <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-5">Étape 5<br/><small>Expédition</small></a></li>
+                <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-6">Étape 6<br/><small>Confirmation</small></a></li>
+                <li class="nav-item"><a class="nav-link" href="#step-7">Étape 7<br/><small>Contacter un humain</small></a></li>
               </ul>
 
-              <div>
-
+              <div class="tab-content">
                 <t t-set="contracts"
                    t-value="env.user.partner_id.self_troubleshooting_contracts(model.lower() + '-screen-page')"/>
 
@@ -68,7 +72,7 @@
                   <t t-set="contracts" t-value="contracts"/>
                 </t>
 
-                <div id="step-1">
+                <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                   <h2><i class="fas fa-cogs"/>Type de problème</h2>
                   <p>Commown fournit sans frais supplémentaires une protection d'écran afin de maximiser la
                   durée de vie de l'appareil.</p>
@@ -96,7 +100,7 @@
                   </div>
                 </div>
 
-                <div id="step-2">
+                <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                   <h2><i class="fas fa-airglass-slash"/>Vérification de l'écran</h2>
                   <div id="form-step-2" role="form" data-toggle="validator">
                     <div class="form-group">
@@ -121,7 +125,7 @@
                   </div>
                 </div>
 
-                <div id="step-3">
+                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                   <h2><i class="fas fa-airglass-slash"/>État de l'écran</h2>
                   <div id="form-step-3" role="form" data-toggle="validator">
                     <div class="form-group">

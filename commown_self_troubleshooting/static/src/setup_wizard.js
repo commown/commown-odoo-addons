@@ -25,7 +25,7 @@ function setUpWizard($container) {
   function setupHumanContactButton(contactStep) {
 
     function isStepEnabled(wizard, stepNumber) {
-      return ! wizard.steps.eq(stepNumber).parent('li').hasClass('disabled');
+      return ! wizard.steps.eq(stepNumber).hasClass('disabled');
     }
 
     function getCurrentState(wizard, $button) {
@@ -53,6 +53,9 @@ function setUpWizard($container) {
         event.preventDefault();
         const $button = $(this);
         const wizard = $container.data('smartWizard');
+        $container.toggleClass('contact-human');
+        // Important when coming from an invalid form step:
+        $container.toggleClass('was-validated', false);
 
         if (!isStepEnabled(wizard, contactStep)) {
           previousState = getCurrentState(wizard, $button);
@@ -111,17 +114,25 @@ function setUpWizard($container) {
     },
   });
 
+  function _validateFields($parent) {
+    let isValid = true;
+    $parent.closest(".tab-pane").find('input,select,textarea').each(
+      function(idx, elm) {
+        isValid = isValid && elm.reportValidity();
+      }
+    );
+    $parent.closest("form").toggleClass("was-validated", !isValid);
+    return isValid;
+  }
+
+  $container.find("button[type=submit]").click(function() {
+    return _validateFields($(this));
+  });
+
   $container.on('leaveStep', function(e, curStep, curIndex, nextIndex, stepDirection) {
-    const elmForm = $('#' + formStepIdPrefix + curIndex);
-    if (stepDirection === 'forward' && elmForm) {
-      let isValid = true;
-      elmForm.find('input,select,textarea').each(
-        function(idx, elm) {
-          isValid = isValid && elm.reportValidity();
-        }
-      )
-      elmForm.closest("form").toggleClass("was-validated", !isValid);
-      return isValid;
+    const $elmForm = $('#' + formStepIdPrefix + curIndex);
+    if (stepDirection === 'forward' && $elmForm.length) {
+      return _validateFields($elmForm);
     }
     return true;
   });

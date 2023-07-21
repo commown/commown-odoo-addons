@@ -7,20 +7,20 @@
     <field name="arch" type="xml">
 
       <t t-name="website.self-troubleshoot-other">
-        <t t-call="commown-self-troubleshoot.web-layout">
+        <t t-call="portal.portal_layout">
           <t t-set="title">Commown - Autres demandes</t>
-          <t t-set="head">
-            <script type="text/javascript">
-              $(document).ready(function() {setUpWizard($('#smartwizard'))});
-            </script>
-          </t>
+
+          <script type="text/javascript">
+            $(document).ready(function() {setUpWizard($('#smartwizard'))});
+          </script>
+
           <t t-set="issue_title">Autres demandes</t>
           <t t-set="issue_description_template">issue-description-other</t>
           <!-- Fin des variables à modifier -->
 
-          <div class="container">
+          <div class="bg-white border m-0 p-3 rounded">
             <h1>Autres demandes</h1>
-            <br />
+
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
               <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
@@ -28,17 +28,17 @@
               <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
 
               <div id="smartwizard">
-                <ul>
-                  <li>
-                    <a href="#step-0">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-0">
                       Votre demande
                       <br />
                     </a>
                   </li>
                 </ul>
 
-                <div>
-                  <div id="step-0">
+                <div class="tab-content">
+                  <div id="step-0" class="tab-pane" role="tabpanel" aria-labelledby="step-0">
                     <h2>
                       <i class="fas fa-hands-helping" />
                       Contacter un humain
