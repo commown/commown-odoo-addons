@@ -8,43 +8,42 @@
     <field name="arch" type="xml">
 
       <t t-name="website.self-troubleshoot-generic-issue">
-        <t t-call="commown-self-troubleshoot.web-layout">
+        <t t-call="portal.portal_layout">
           <t t-set="title">Commown - Demande d'assistance</t>
-          <t t-set="head">
 
-            <script type="text/javascript">
-              $(document).ready(function() {
+          <script type="text/javascript">
+            $(document).ready(function() {
 
-                const wizard = setUpWizard($('#smartwizard'));
+              const wizard = setUpWizard($('#smartwizard'));
 
-                function contractChanged() {
-                  let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
-                  if (contractData.orderId) {
-                    $("#order_link").attr("href", "/my/orders/" + contractData.orderId);
-                  }
+              function contractChanged() {
+                let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
+                if (contractData.orderId) {
+                  $("#order_link").attr("href", "/my/orders/" + contractData.orderId);
                 }
+              }
 
-                $('select[name=device_contract]').change(contractChanged);
+              $('select[name=device_contract]').change(contractChanged);
 
-                $('input[type=radio][name=net_generic_issue]').change(function () {
-                  wizard.toggleStep(2, this.value==='bug');
-                  wizard.toggleStep(3, this.value==='broken');
-                  wizard.toggleStep(4, this.value==='course');
-                  wizard.toggleStep(5, this.value==='upgrade');
-                  wizard.toggleStep(6, this.id==='net_confirm');
-                });
-
+              $('input[type=radio][name=net_generic_issue]').change(function () {
+                wizard.toggleStep(2, this.value==='bug');
+                wizard.toggleStep(3, this.value==='broken');
+                wizard.toggleStep(4, this.value==='course');
+                wizard.toggleStep(5, this.value==='upgrade');
+                wizard.toggleStep(6, this.id==='net_confirm');
               });
-            </script>
-          </t>
+
+            });
+          </script>
+
           <t t-set="issue_title">Demande d'assistance</t>
           <t t-set="issue_description_template">issue-description-generic-issue</t>
           <!-- Fin des variables à modifier -->
 
-          <div class="container">
+          <div class="bg-white border m-0 p-3 rounded">
             <h1>Demande d'assistance</h1>
             <h2>Je rencontre un incident ou souhaite obtenir de l'assistance sur mon appareil</h2>
-            <br />
+
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
               <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
@@ -52,61 +51,60 @@
               <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
 
               <div id="smartwizard">
-                <ul>
-                  <li>
-                    <a href="#step-0">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-0">
                       Contexte
                       <br />
                       <small>Appareil concerné</small>
                     </a>
                   </li>
-                  <li>
-                    <a href="#step-1">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-1">
                       Étape 1
                       <br />
                       <small>Demande d'assistance</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-2">Étape 2
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-2">Étape 2
                       <br/>
                       <small>Incident, assistance</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-3">Étape 3
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-3">Étape 3
                       <br/>
                       <small>Casse</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-4">Étape 4
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-4">Étape 4
                       <br/>
                       <small>Formation</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-5">Étape 5
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-5">Étape 5
                       <br/>
                       <small>Demande de matériel</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-6">Étape 6
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-6">Étape 6
                       <br/>
                       <small>Confirmation</small>
                     </a>
                   </li>
                 </ul>
 
-                <div>
-
+                <div class="tab-content">
                   <t t-call="commown_self_troubleshooting.step-contract-choice">
                       <t t-set="contracts"
                          t-value="env.user.partner_id.self_troubleshooting_contracts('generic-issue-page')"/>
                   </t>
 
-                  <div id="step-1">
+                  <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                     <h2>
                       Vous avez besoin d'une assistance car
                     </h2>
@@ -151,7 +149,7 @@
                     </div>
                   </div>
 
-                  <div id="step-2">
+                  <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                     <p>Afin de traiter au mieux votre demande, nous vous invitons à adopter le formalisme
                       ci-dessous qui permet d'obtenir une aide optimale. Il consiste à répondre aux 4 questions
                       suivantes pour bien nous faire comprendre le problème que vous rencontrez :
@@ -202,7 +200,7 @@
 
                   </div>
 
-                  <div id="step-3">
+                  <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                     <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
                       La prise en charge d'une casse est différente selon les contrats souscrit chez Commown.
                       Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
@@ -219,7 +217,7 @@
                     </t>
                   </div>
 
-                  <div id="step-4">
+                  <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
                     <img src="/commown_self_troubleshooting/static/images/logo_linux.png"
                          alt="Logo Linux" />
                     <h2>
@@ -275,7 +273,7 @@
                     <t t-set="new_module">une nouvelle pièce</t>
                   </t>
 
-                  <div id="step-6">
+                  <div id="step-6" class="tab-pane" role="tabpanel" aria-labelledby="step-6">
                     <t t-call="commown_self_troubleshooting.step-confirm-change">
                       <t t-set="step">6</t>
                     </t>

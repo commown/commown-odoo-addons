@@ -7,27 +7,26 @@
     <field name="key">website.self-troubleshoot-fp3-display</field>
     <field name="arch" type="xml">
       <t t-name="website.self-troubleshoot-fp3-display">
-        <t t-call="commown-self-troubleshoot.web-layout">
+        <t t-call="portal.portal_layout">
           <t t-set="title">Commown - Auto-dépannage - Fairphone 3 : Écran</t>
-          <t t-set="head">
-            <script type="text/javascript">
-              $(document).ready(function() {
 
-                const wizard = setUpWizard($('#smartwizard'));
+          <script type="text/javascript">
+            $(document).ready(function() {
 
-                $('#type_contrat').change(function () {
-                   wizard.toggleStep(2, this.value==='me');
-                   wizard.toggleStep(5, this.value==='me');
-                });
+              const wizard = setUpWizard($('#smartwizard'));
 
-                $('input[type=radio][name=net_contact]').change(function () {
-                   wizard.toggleStep(3, this.value==='not_solved');
-                   wizard.toggleStep(4, this.value==='not_solved');
-                   wizard.toggleStep(5, this.value==='solved');
-                });
+              $('#type_contrat').change(function () {
+                 wizard.toggleStep(2, this.value==='me');
+                 wizard.toggleStep(5, this.value==='me');
               });
-            </script>
-          </t>
+
+              $('input[type=radio][name=net_contact]').change(function () {
+                 wizard.toggleStep(3, this.value==='not_solved');
+                 wizard.toggleStep(4, this.value==='not_solved');
+                 wizard.toggleStep(5, this.value==='solved');
+              });
+            });
+          </script>
 
           <!-- Variables à modifier ici -->
           <t t-set="tag_names">FP MOD ecran</t>
@@ -35,10 +34,17 @@
           <t t-set="issue_description_template">issue-description-fp3-display</t>
           <!-- Fin des variables à modifier -->
 
-          <div class="container">
-            <h1>Auto-dépannage : Fairphone 3</h1>
-            <h2>Mon écran ne fonctionne plus</h2>
-            <br/>
+          <div class="bg-white border m-0 p-3 rounded">
+            <div class="d-flex flex-row" style="justify-content: space-between;">
+              <div class="d-flex flex-column">
+                <h1>Auto-dépannage : Fairphone 3</h1>
+                <h2>Mon écran ne fonctionne plus</h2>
+              </div>
+              <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
+                Contacter un humain
+              </button>
+            </div>
+
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
               <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -47,20 +53,20 @@
               <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
 
               <div id="smartwizard">
-                <ul>
-                  <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
-                  <li><a href="#step-1">Étape 1<br/><small>Option lors de la souscription</small></a></li>
-                  <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Nettoyage des contacts</small></a></li>
-                  <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
-                  <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
-                  <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Problème résolu</small></a></li>
-                  <li><a href="#step-6">Étape 6<br/><small>Contacter un humain</small></a></li>
+                <ul class="nav">
+                  <li class="nav-item"><a class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                  <li class="nav-item"><a class="nav-link" href="#step-1">Étape 1<br/><small>Option lors de la souscription</small></a></li>
+                  <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Nettoyage des contacts</small></a></li>
+                  <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                  <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
+                  <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-5">Étape 5<br/><small>Problème résolu</small></a></li>
+                  <li class="nav-item"><a class="nav-link" href="#step-6">Étape 6<br/><small>Contacter un humain</small></a></li>
                 </ul>
 
                 <t t-set="contracts"
                    t-value="env.user.partner_id.self_troubleshooting_contracts('fp3-display-page')"/>
 
-                <div>
+                <div class="tab-content">
                   <t t-call="commown_self_troubleshooting.step-contract-choice">
                       <t t-set="contracts" t-value="contracts"/>
                   </t>
@@ -69,8 +75,8 @@
                     <t t-set="step">1</t>
                   </t>
 
-                    <div id="step-2">
-                      <h2><i class="fas fa-pb-log"/> Nettoyage des contacts </h2>
+                    <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                      <h2>Nettoyage des contacts</h2>
                       <br />
                       <p> La cause la plus fréquente des problèmes d'écran est l'état des contacts entre le corps de l'appareil et l'écran.
                           Il faut donc démonter l'écran et nettoyer les contacts.

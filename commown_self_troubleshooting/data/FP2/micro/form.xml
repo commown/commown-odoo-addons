@@ -7,33 +7,32 @@
       <field name="key">website.self-troubleshoot-fp2-micro</field>
       <field name="arch" type="xml">
         <t t-name="website.self-troubleshoot-fp2-micro">
-          <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-call="portal.portal_layout">
             <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : mon interlocuteur ne m'entend pas</t>
-            <t t-set="head">
-              <script type="text/javascript">
-                $(document).ready(function() {
 
-                  const wizard = setUpWizard($('#smartwizard'));
+            <script type="text/javascript">
+              $(document).ready(function() {
 
-                  $('input[type="radio"][name="mute_solved"]').change(function () {
-                    const isNo = this.value!=='yes';
-                    wizard.toggleStep(2, isNo);
-                    wizard.toggleStep(3, isNo);
-                    wizard.toggleStep(4, isNo);
-                    wizard.toggleStep(5, isNo);
-                    wizard.toggleStep(6, !isNo);
-                  });
+                const wizard = setUpWizard($('#smartwizard'));
 
-                  $('#is_micro_test_ok').change(function () {
-                    const isNo = this.value!=='yes';
-                    wizard.toggleStep(3, !isNo);
-                    wizard.toggleStep(4, isNo);
-                    wizard.toggleStep(5, isNo);
-                  });
-
+                $('input[type="radio"][name="mute_solved"]').change(function () {
+                  const isNo = this.value!=='yes';
+                  wizard.toggleStep(2, isNo);
+                  wizard.toggleStep(3, isNo);
+                  wizard.toggleStep(4, isNo);
+                  wizard.toggleStep(5, isNo);
+                  wizard.toggleStep(6, !isNo);
                 });
-              </script>
-            </t>
+
+                $('#is_micro_test_ok').change(function () {
+                  const isNo = this.value!=='yes';
+                  wizard.toggleStep(3, !isNo);
+                  wizard.toggleStep(4, isNo);
+                  wizard.toggleStep(5, isNo);
+                });
+
+              });
+            </script>
 
             <!-- Variables à modifier ici -->
             <t t-set="tag_names">Appareil FP2,FP MOD micro</t>
@@ -42,10 +41,17 @@
             <t t-set="stage_long_term_followup" t-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"/>
             <!-- Fin des variables à modifier -->
 
-            <div class="container">
-              <h1>Auto-dépannage : Fairphone 2</h1>
-              <h2>Mon interlocuteur ne m'entend pas</h2>
-              <br/>
+            <div class="bg-white border m-0 p-3 rounded">
+              <div class="d-flex flex-row" style="justify-content: space-between;">
+                <div class="d-flex flex-column">
+                  <h1>Auto-dépannage : Fairphone 2</h1>
+                  <h2>Mon interlocuteur ne m'entend pas</h2>
+                </div>
+                <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
+                  Contacter un humain
+                </button>
+              </div>
+
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -54,26 +60,26 @@
                 <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
 
                 <div id="smartwizard">
-                  <ul>
-                    <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
-                    <li><a href="#step-1">Étape 1<br/><small>Mode micro coupé</small></a></li>
-                    <li disabled="disabled"><a href="#step-2">Étape 2<br/><small>Test de maintenance</small></a></li>
-                    <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Test autre SIM</small></a></li>
-                    <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Expédition</small></a></li>
-                    <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Confirmation</small></a></li>
-                    <li disabled="disabled"><a href="#step-6">Étape 6<br/><small>Problème résolu</small></a></li>
-                    <li><a href="#step-7">Étape 7<br/><small>Contacter un humain</small></a></li>
+                  <ul class="nav">
+                    <li class="nav-item"><a class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#step-1">Étape 1<br/><small>Mode micro coupé</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Test de maintenance</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Test autre SIM</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-4">Étape 4<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-5">Étape 5<br/><small>Confirmation</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-6">Étape 6<br/><small>Problème résolu</small></a></li>
+                    <li class="nav-item"><a class="nav-link" href="#step-7">Étape 7<br/><small>Contacter un humain</small></a></li>
                   </ul>
 
                   <t t-set="contracts"
                      t-value="env.user.partner_id.self_troubleshooting_contracts('fp2-micro-page')"/>
 
-                  <div>
+                  <div class="tab-content">
                     <t t-call="commown_self_troubleshooting.step-contract-choice">
                       <t t-set="contracts" t-value="contracts"/>
                     </t>
 
-                    <div id="step-1">
+                    <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                       <h2><i class="fas fa-microphone-slash"/> Mode micro coupé</h2>
                       <p> Tout d'abord, veuillez vérifier que vous n'avez pas activé le mode "micro coupé" ("mute" en anglais) lors des appels. Vous pouvez vérifier cela pendant un appel en jetant un oeil sur l'icône du micro.
                       </p>
@@ -89,7 +95,7 @@
                       </div>
                     </div>
 
-                    <div id="step-2">
+                    <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                       <h2><i class="fas fa-cogs"/> Test de maintenance</h2>
                       <p> Afin de voir si le problème provient bien du micro (et non d’un problème logiciel / réseau ou haut parleur), veuillez vous rendre dans le menu <i>Paramètres &gt; Maintenance &gt; Checkup &gt; Primary Microphone &gt; Start test</i>.</p>
                       <p>Pendant le test, tenez le téléphone comme si vous appeliez, et parlez. Vous devez vous entendre en écho avec une demi-seconde de décalage. Si vous n’entendez rien ou que le son est mauvais, avec des grésillements par exemple, c’est que le micro est en panne et nous vous aiderons à le changer.</p>
@@ -110,7 +116,7 @@
                       </div>
                     </div>
 
-                    <div id="step-3">
+                    <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                       <h2><i class="fas fa-sim-card"/> Test d'une autre carte SIM</h2>
                       <p> Si le test de maintenance montre que le
                       micro principal est fonctionnel mais que

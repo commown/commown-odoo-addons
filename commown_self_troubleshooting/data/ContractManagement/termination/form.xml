@@ -8,47 +8,46 @@
     <field name="arch" type="xml">
 
       <t t-name="website.self-troubleshoot-contract-termination">
-        <t t-call="commown-self-troubleshoot.web-layout">
+        <t t-call="portal.portal_layout">
           <t t-set="title">Commown - Vie de mes contrats - Changement d'appareil</t>
-          <t t-set="head">
 
-            <script type="text/javascript">
-              $(document).ready(function() {
+          <script type="text/javascript">
+            $(document).ready(function() {
 
-                const wizard = setUpWizard($('#smartwizard'));
+              const wizard = setUpWizard($('#smartwizard'));
 
-                function contractChanged() {
-                  let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
-                  let $details = $('#contract_details').show();
-                  $details.find('#contract_name').text(contractData.contractName);
-                  $details.find('#contract_commitment_end_date').text(contractData.commitmentEndDate);
-                  $('#self-troubleshoot-type').val('Résiliation - ' + contractData.contractName);
-                  wizard.toggleStep(1, contractData.inCommitment === "true");
-                  wizard.toggleStep(2, contractData.inCommitment === "true");
-                  wizard.toggleStep(3, contractData.inCommitment === "true");
-                  wizard.toggleStep(4, contractData.inCommitment !== "true");
-                }
+              function contractChanged() {
+                let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
+                let $details = $('#contract_details').show();
+                $details.find('#contract_name').text(contractData.contractName);
+                $details.find('#contract_commitment_end_date').text(contractData.commitmentEndDate);
+                $('#self-troubleshoot-type').val('Résiliation - ' + contractData.contractName);
+                wizard.toggleStep(1, contractData.inCommitment === "true");
+                wizard.toggleStep(2, contractData.inCommitment === "true");
+                wizard.toggleStep(3, contractData.inCommitment === "true");
+                wizard.toggleStep(4, contractData.inCommitment !== "true");
+              }
 
-                $('select[name=device_contract]').change(contractChanged);
+              $('select[name=device_contract]').change(contractChanged);
 
-                $('input[type=radio][name=net_contract_termination]').change(function () {
-                  wizard.toggleStep(2, this.value==='pay');
-                  wizard.toggleStep(3, this.value==='no');
-                });
-
-                contractChanged();
-
+              $('input[type=radio][name=net_contract_termination]').change(function () {
+                wizard.toggleStep(2, this.value==='pay');
+                wizard.toggleStep(3, this.value==='no');
               });
-            </script>
-          </t>
+
+              contractChanged();
+
+            });
+          </script>
+
           <t t-set="issue_title">Résiliation</t>
           <t t-set="issue_description_template">issue-description-contract-termination</t>
           <!-- Fin des variables à modifier -->
 
-          <div class="container">
+          <div class="bg-white border m-0 p-3 rounded">
             <h1>Vie de mes contrats - Changement d'appareil</h1>
             <h2>Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</h2>
-            <br />
+
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
               <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
@@ -56,53 +55,52 @@
               <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
 
               <div id="smartwizard">
-                <ul>
-                  <li>
-                    <a href="#step-0">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-0">
                       Contexte
                       <br />
                       <small>Appareil concerné</small>
                     </a>
                   </li>
-                  <li>
-                    <a href="#step-1">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-1">
                       Étape 1
                       <br />
                       <small>Période d'engagement</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-2">Étape 2
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-2">Étape 2
                       <br/>
                       <small>Régler les loyers</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-3">Étape 3
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-3">Étape 3
                       <br/>
                       <small>Transfert de contrat</small>
                     </a>
                   </li>
-                  <li disabled="disabled">
-                    <a href="#step-4">Étape 4
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-4">Étape 4
                       <br/>
                       <small>Résiliation</small>
                     </a>
                   </li>
                 </ul>
 
-                <div>
-
+                <div class="tab-content">
                   <t t-call="commown_self_troubleshooting.step-contract-choice">
                     <t t-set="contracts"
                        t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
                   </t>
 
-                  <div id="step-1">
+                  <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                     <h2>
                       Je suis toujours engagé
                     </h2>
-                    <p class="text-danger bg-danger" style="display:none ; padding: 1em; margin: 1em 0" id="contract_details">
+                    <p class="alert alert-danger" id="contract_details">
                       La fin de la période d'engagement du contrat que vous avez sélectionné (<b id="contract_name"></b>)
                       est : <b id="contract_commitment_end_date"></b>.
                     </p>
@@ -135,7 +133,7 @@
                     </div>
                   </div>
 
-                  <div id="step-2">
+                  <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
@@ -164,7 +162,7 @@
                     </div>
                   </div>
 
-                  <div id="step-3">
+                  <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
@@ -192,7 +190,7 @@
                     </div>
                   </div>
 
-                  <div id="step-4">
+                  <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
