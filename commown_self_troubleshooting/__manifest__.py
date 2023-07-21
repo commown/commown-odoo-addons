@@ -46,7 +46,11 @@
         "data/project.xml",
         "data/tags.xml",
         "views/assets.xml",
+        "views/tours.xml",
         "views/website_portal_templates.xml",
+    ],
+    "demo": [
+        "demo/assets.xml",
     ],
     "installable": True,
     "application": False,

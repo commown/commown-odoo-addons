@@ -13,6 +13,8 @@ def _normalize_all_data(data):
 
 
 class TroubleshootingDataTC(RentalSaleOrderTC):
+    maxDiff = None
+
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.res_partner_address_15")
@@ -62,12 +64,6 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
             _normalize_all_data(data),
             [
                 {
-                    "title": "Vie de mes contrats",
-                    "pages": [
-                        {"url_path": "/page/self-troubleshoot-contract-termination"},
-                    ],
-                },
-                {
                     "title": "Fairphone 2",
                     "pages": [
                         {"url_path": "/page/self-troubleshoot-fp2-battery"},
@@ -80,15 +76,21 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
                     "pages": [{"url_path": "/page/self-troubleshoot-fp4-screen"}],
                 },
                 {
-                    "title": "Demande d'assistance",
-                    "pages": [{"url_path": "/page/self-troubleshoot-generic-issue"}],
-                },
-                {
                     "title": "Option Sérénité",
                     "pages": [{"url_path": "/page/self-troubleshoot-serenity"}],
                 },
                 {
-                    "title": "Autres demandes",
+                    "title": "Demande d'assistance",
+                    "pages": [{"url_path": "/page/self-troubleshoot-generic-issue"}],
+                },
+                {
+                    "title": "Vie de mes contrats",
+                    "pages": [
+                        {"url_path": "/page/self-troubleshoot-contract-termination"},
+                    ],
+                },
+                {
+                    "title": "Demandes spéciales",
                     "pages": [{"url_path": "/page/self-troubleshoot-other"}],
                 },
             ],
