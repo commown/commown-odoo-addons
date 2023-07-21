@@ -11,6 +11,7 @@
     "website": "https://commown.coop",
     "external_dependencies": {},
     "depends": [
+        "base_fontawesome",
         "project",
         "commown_devices",
         "product_rental",
@@ -44,6 +45,7 @@
         "data/common_steps.xml",
         "data/project.xml",
         "data/tags.xml",
+        "views/assets.xml",
         "views/website_portal_templates.xml",
     ],
     "installable": True,

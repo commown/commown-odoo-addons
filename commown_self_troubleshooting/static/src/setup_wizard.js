@@ -22,7 +22,7 @@ function setUpWizard($container) {
     return requiredFields;
   }
 
-  function createHumanContactButton(contactStep) {
+  function setupHumanContactButton(contactStep) {
 
     function isStepEnabled(wizard, stepNumber) {
       return ! wizard.steps.eq(stepNumber).parent('li').hasClass('disabled');
@@ -48,8 +48,7 @@ function setUpWizard($container) {
 
     var previousState;
 
-    return $('<button/>').text('Contacter un humain')
-      .addClass('btn btn-warning')
+    return $('button#contactAHuman')
       .on('click', function(event) {
         event.preventDefault();
         const $button = $(this);
@@ -76,7 +75,6 @@ function setUpWizard($container) {
   // Let's setup the wizard
 
   let contactStep = null;
-  const extraButtons = [];
   const requiredFields = computeRequiredFields();
   const buttonI18n = {
     fr: {
@@ -92,38 +90,38 @@ function setUpWizard($container) {
   const $humanContactButton = $container.find('button[value="contact"]');
   if ($humanContactButton.length) {
     contactStep = stepNumber($humanContactButton.closest(allStepsSelector)[0]);
-    extraButtons.push(createHumanContactButton(contactStep));
+    setupHumanContactButton(contactStep);
   }
 
   $container.smartWizard({
     selected: 0,
+    autoAdjustHeight: false,
     keyNavigation: false,
-    useURLhash: false,
-    showStepURLhash: false,
-    transitionEffect: 'slide',
+    enableURLhash: false,
     toolbarSettings: {
-      toolbarPosition: 'top',
-      toolbarButtonPosition: 'end', // does not work with bootstrap 3!
-      toolbarExtraButtons: extraButtons,
+      toolbarPosition: 'both',
+    },
+    transition: {
+      animation: 'fade',
     },
     theme: 'arrows',
     lang: buttonI18n[$("html").attr("lang").split("-")[0]],
     anchorSettings: {
-      markDoneStep: true,
-      markAllPreviousStepsAsDone: false,
       removeDoneStepOnNavigateBack: true,
-      enableAnchorOnDoneStep: true,
     },
   });
 
-  $container.on('leaveStep', function(e, anchorObject, stepNum, stepDirection) {
-    const elmForm = $('#' + formStepIdPrefix + stepNum);
+  $container.on('leaveStep', function(e, curStep, curIndex, nextIndex, stepDirection) {
+    const elmForm = $('#' + formStepIdPrefix + curIndex);
     if (stepDirection === 'forward' && elmForm) {
-      elmForm.validator('validate');
-      const elmErr = elmForm.find('.form-group.has-error');
-      if (elmErr && elmErr.length > 0) {
-        return false;
-      }
+      let isValid = true;
+      elmForm.find('input,select,textarea').each(
+        function(idx, elm) {
+          isValid = isValid && elm.reportValidity();
+        }
+      )
+      elmForm.closest("form").toggleClass("was-validated", !isValid);
+      return isValid;
     }
     return true;
   });
@@ -138,7 +136,7 @@ function setUpWizard($container) {
    */
   const wizard = $container.data('smartWizard');
   wizard.toggleStep = function(number, enabled) {
-    $container.find('li').eq(number).toggleClass('disabled', !enabled);
+    $container.smartWizard("stepState", [number], enabled ? "enable" : "disable");
     if (requiredFields[number] !== undefined) {
       requiredFields[number].attr('required', enabled ? 'required' : null);
     }

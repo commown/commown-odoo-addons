@@ -28,7 +28,7 @@
         <div class="mt-3" t-foreach="st_data" t-as="st_item">
           <h4><t t-esc="st_item['title']"/></h4>
           <div class="list-group">
-            <a t-foreach="st_item['pages']" t-as="st_page" target="_blank" class="list-group-item"
+            <a t-foreach="st_item['pages']" t-as="st_page" class="list-group-item"
                t-att-href="st_page['url_path']">
               <t t-esc="st_page['description']"/>
             </a>
@@ -40,56 +40,5 @@
     </xpath>
 
   </template>
-
-
-  <record id="self-troubleshoot-web-layout" model="ir.ui.view">
-    <field name="name">Web layout for self troubleshooting pages</field>
-    <field name="type">qweb</field>
-    <field name="key">commown-self-troubleshoot.web-layout</field>
-    <field name="arch" type="xml">
-
-      <t name="Web layout for self troubleshooting pages" t-name="commown-self-troubleshoot.web-layout">
-        &lt;!DOCTYPE html&gt;
-        <html t-att="html_data or {}" t-att-lang="lang and lang.replace('_', '-')">
-          <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-            <title t-esc="title or 'Odoo'" />
-            <link type="image/x-icon" rel="shortcut icon" t-att-href="x_icon or '/web/static/src/img/favicon.ico'" />
-
-            <style>
-              .btn-toolbar .btn-group.sw-btn-group-extra {float: right;}
-</style>
-
-            <script type="text/javascript">
-              var odoo = {
-                  csrf_token: '<t t-esc="request.csrf_token(None)" />',
-              };
-            </script>
-
-            <link rel="stylesheet" type="text/css" href="/commown_self_troubleshooting/static/lib/bootstrap_3.4.1/bootstrap.min.css" />
-            <link rel="stylesheet" type="text/css" href="/commown_self_troubleshooting/static/lib/smartwizard/css/smart_wizard.min.css" />
-            <link rel="stylesheet" type="text/css" href="/commown_self_troubleshooting/static/lib/smartwizard/css/smart_wizard_theme_arrows.min.css" />
-            <link rel="stylesheet" type="text/css" href="/commown_self_troubleshooting/static/lib/fontawesome-5.13.0/css/all.min.css" />
-
-            <script src="/commown_self_troubleshooting/static/lib/jquery-3.3.1.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/lib/1000hz-bootstrap-validator_0.11.5/validator.min.js"></script>
-            <script src="/commown_self_troubleshooting/static/lib/smartwizard/js/jquery.smartWizard.js"></script>
-            <script src="/commown_self_troubleshooting/static/src/setup_wizard.js"></script>
-
-            <t t-raw="head or ''" />
-
-          </head>
-
-          <body t-att-class="body_classname">
-            <t t-raw="0" />
-          </body>
-
-        </html>
-      </t>
-
-    </field>
-  </record>
 
 </odoo>
