@@ -72,8 +72,12 @@
                     <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                       <div class="clearfix">
                         <h2>AccuBattery</h2>
-                        <p>Avant de répondre, veuillez effectuer le test batterie sur notre  <a target="_blank" href="https://wiki.commown.coop/La-gestion-des-batteries"> wiki </a>,
-                        puis revenez sur l'auto-dépannage afin de nous indiquer votre réponse à la question ci-dessous !
+                        <p>
+                          Avant de répondre, veuillez effectuer le test batterie décrit sur
+                          <a target="_blank" href="https://forum.commown.coop/t/la-gestion-des-batteries/2453">
+                            cette page <i class="fas fa-external-link-alt"></i>
+                          </a>
+                          de notre documentation puis revenez ici répondre à la question ci-dessous !
                         </p>
                       </div>
                       <div id="form-step-1" role="form" data-toggle="validator">
