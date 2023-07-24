@@ -67,6 +67,15 @@ function setUpWizard($container) {
             currentStep: contactStep,
           });
           $('.sw-btn-group').hide();
+          // Copy contact field value (if present) into the one of the contact a human step
+          let step0Contract = $('#form-step-0 select[name=device_contract]').val();
+          // May be undefined (no such field) or null (no option selected):
+          if (step0Contract) {
+            // As of Odoo 12.0 minification removes some spaces in backtick literals
+            // hence the use of the + operator and plain old strings below:
+            $("#form-step-" + contactStep
+              + " select[name=device_contract]").val(step0Contract);
+          }
         }
         else {
           setState(wizard, $button, previousState);
