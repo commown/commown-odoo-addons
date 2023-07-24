@@ -178,7 +178,7 @@
                       Pour ajouter une pièce jointe (capture d'écran, photo, vidéo) à l'aide de <strong>Drop sans nuage</strong>,
                       veuillez suivre
                       <a href="https://forum.commown.coop/t/ajouter-une-piece-jointe-a-lauto-depannage-de-commown/2689" target="_blank">
-                        ce tutoriel</a>.
+                        ce tutoriel <i class="fas fa-external-link-alt"></i></a>.
                     </p>
 
                     <p class="text-danger">
@@ -201,14 +201,14 @@
                   </div>
 
                   <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
-                    <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
+                    <p class="alert alert-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
                       La prise en charge d'une casse est différente selon les contrats souscrit chez Commown.
                       Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
                       <strong>Conditions Particulières</strong> que vous pouvez retrouver dans votre espace-client
-                      <a id="order_link" href="/my/orders" target="_blank">ici</a>.
+                      <a id="order_link" href="/my/orders" target="_blank">ici <i class="fas fa-external-link-alt"></i></a>.
                       <br /><br />
                       Pour un dégât des eaux sur votre Fairphone, veuillez suivre ces instructions de notre
-                      <a href="https://wiki.commown.coop/Fairphone-tomb%C3%A9-dans-l%E2%80%99eau-ou-mouill%C3%A9" target="_blank">WIKI</a>
+                      <a href="https://forum.commown.coop/t/fairphone-tombe-dans-l-eau-ou-mouille/2457" target="_blank">wiki <i class="fas fa-external-link-alt"></i></a>
                       dans l'attente d'un nouvel appareil.
                     </p>
                     <t t-call="commown_self_troubleshooting.step-ship-module">
@@ -258,7 +258,7 @@
                   <t t-call="commown_self_troubleshooting.step-ship-module">
                     <t t-set="step">5</t>
                     <t t-set="header">
-                      <p class="text-danger bg-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
+                      <p class="alert alert-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
                         Ce formulaire permet à l'équipe de Commown de s'assurer que votre adresse d'expédition est la bonne.
                         Si ce n'est pas le cas, merci de la mettre à jour ci-dessous. <br /><br />
 
