@@ -14,17 +14,11 @@
     </xpath>
   </template>
 
-
   <template id="self-troubleshoot-portal-access" inherit_id="portal.portal_my_home">
-
     <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
-
       <t t-set="st_data" t-value="env.user.partner_id.self_troubleshooting_all_data()" />
-
       <div t-if="st_data" id="o_portal_self_troubleshooting" class="mt-4">
-
         <h3>Self troubleshooting</h3>
-
         <div class="mt-3" t-foreach="st_data" t-as="st_item">
           <h4><t t-esc="st_item['title']"/></h4>
           <div class="list-group">
@@ -34,11 +28,18 @@
             </a>
           </div>
         </div>
-
       </div>
-
     </xpath>
+  </template>
 
+  <template id="portal_breadcrumbs" inherit_id="portal.portal_breadcrumbs">
+    <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+      <li t-if="main_object.get_xml_id().get(main_object.id, '').startswith('commown_self_troubleshooting.')"
+          class="breadcrumb-item active">
+        <span>Mes besoins d'assistance</span> :
+        <t t-esc="main_object.website_meta_title"/> - <t t-esc="main_object.website_meta_description"/>
+      </li>
+    </xpath>
   </template>
 
 </odoo>
