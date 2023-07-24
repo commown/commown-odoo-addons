@@ -4,6 +4,11 @@
     <xpath expr="link[last()]" position="after">
       <link rel="stylesheet" type="text/css" href="/commown_self_troubleshooting/static/lib/smartwizard/css/smart_wizard.min.css"/>
       <link rel="stylesheet" type="text/css" href="/commown_self_troubleshooting/static/lib/smartwizard/css/smart_wizard_arrows.min.css"/>
+      <style>
+        #o_portal_self_troubleshooting h4 {
+          color: gray;
+        }
+      </style>
     </xpath>
     <xpath expr="script[last()]" position="after">
       <script type="text/javascript" src="/commown_self_troubleshooting/static/lib/smartwizard/js/jquery.smartWizard.js"></script>
