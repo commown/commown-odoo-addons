@@ -168,10 +168,16 @@
                     </ol>
 
                     <p>
-                      Pour ajouter une pièce jointe (capture d'écran, photo, vidéo) à l'aide de <strong>Drop sans nuage</strong>,
-                      veuillez suivre
+                      Pour ajouter une pièce jointe (capture d'écran, photo, vidéo), nous vous proposons d'utiliser
+                      un service éthique dédié comme celui de
+                      <a href="https://drop.sans-nuage.fr/">Sans nuage <i class="fas fa-external-link-alt"></i></a>,
+                      <a href="https://lufi.ethibox.fr/">Ethibox <i class="fas fa-external-link-alt"></i></a>,
+                      ou toute autre alternative éthique listée sur
+                      <a href="https://alt.framasoft.org/fr/framadrop">la page dédiée <i class="fas fa-external-link-alt"></i></a>
+                      de l'association Framasoft. Si vous avez besoin d'aide pour utiliser ces services, veuillez suivre
                       <a href="https://forum.commown.coop/t/ajouter-une-piece-jointe-a-lauto-depannage-de-commown/2689" target="_blank">
                         ce tutoriel <i class="fas fa-external-link-alt"></i></a>.
+                        <span class="text-danger">N'oubliez pas de copier le lien vers les fichiers déposés que le service choisi vous a fourni !</span>
                     </p>
 
                     <p class="text-danger">
@@ -182,6 +188,7 @@
 
                     <div id="form-step-2" role="form" data-toggle="validator">
                       <div class="form-group">
+                        <label for="more_info_step_2">Saisissez les informations ici :</label>
                         <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" required="required" />
                       </div>
 
