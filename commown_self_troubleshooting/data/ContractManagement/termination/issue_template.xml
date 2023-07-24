@@ -9,9 +9,9 @@
       <t t-name="self-troubleshoot-issue-description-contract-termination">
 
         <p>
-          <t t-if="net_contract_termination=='pay'">Je souhaite régler la totalité de mes loyers.</t>
+          <t t-if="contract_termination=='pay'">Je souhaite régler la totalité de mes loyers.</t>
           <t t-else="">
-            <t t-if="net_contract_termination=='no'">Je souhaite effectuer un transfert de contrat.</t>
+            <t t-if="contract_termination=='no'">Je souhaite effectuer un transfert de contrat.</t>
             <t t-else="">Je souhaite résilier.</t>
           </t>
         </p>
