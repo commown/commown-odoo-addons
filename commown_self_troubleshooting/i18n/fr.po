@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-05 10:02+0000\n"
-"PO-Revision-Date: 2023-04-05 10:02+0000\n"
+"POT-Creation-Date: 2023-07-24 10:28+0000\n"
+"PO-Revision-Date: 2023-07-24 10:28+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,10 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_self_troubleshooting
-#: code:addons/commown_self_troubleshooting/models/contract.py:11
+#: code:addons/commown_self_troubleshooting/models/contract.py:12
 #, python-format
 msgid " - %(descr_key)s: %(descr_value)s"
 msgstr " - %(descr_key)s : %(descr_value)s"
+
+#. module: commown_self_troubleshooting
+#: code:addons/commown_self_troubleshooting/models/contract.py:46
+#, python-format
+msgid "%(product)s n°%(serial)s"
+msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
@@ -33,13 +39,6 @@ msgstr ""
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.contract-termination-page
 msgid ",\n"
 "                          ce qui vous laissera le temps d'effectuer le transfert de données entre vos 2 appareils)"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
-#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
-msgid ",\n"
-"                        puis revenez sur l'auto-dépannage afin de nous indiquer votre réponse à la question ci-dessous !"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -60,7 +59,7 @@ msgid ", via la section\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "- Changement d'écran et/ou vitre de protection"
 msgstr ""
 
@@ -74,11 +73,11 @@ msgid "--\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contact-human
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-manipulation-option
@@ -141,31 +140,18 @@ msgid "<br/>\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-generic-issue
-msgid "<br/>\n"
-"            Adresse de courriel :"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-generic-issue
-msgid "<br/>\n"
-"            Informations supplémentaires utiles à la livraison :<br/>\n"
-"            Numéro de téléphone :"
-msgstr ""
-
-#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-self-solved
 msgid "<i class=\"far fa-thumbs-up\" aria-hidden=\"true\"/>\n"
 "          Problème résolu"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "<i class=\"fas fa-airglass-slash\"/>Vérification de l'écran"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "<i class=\"fas fa-airglass-slash\"/>État de l'écran"
 msgstr ""
 
@@ -173,6 +159,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "<i class=\"fas fa-branchement-slash\"/> Sens du câble jack"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
+msgid "<i class=\"fas fa-bug\"/> Problème logiciel"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -205,7 +197,7 @@ msgid "<i class=\"fas fa-cogs\"/> Test de maintenance"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "<i class=\"fas fa-cogs\"/>Type de problème"
 msgstr ""
 
@@ -219,6 +211,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
 msgid "<i class=\"fas fa-envelope\"/>\n"
 "                Adresse email"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
+msgid "<i class=\"fas fa-hands-helping\"/>\n"
+"                      Contacter un humain"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -270,18 +269,6 @@ msgid "<i class=\"fas fa-microphone-slash\"/> Mode micro coupé"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
-#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
-msgid "<i class=\"fas fa-pb-log\"/> Nettoyage des contacts"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
-#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
-msgid "<i class=\"fas fa-pb-log\"/> Problème logiciel"
-msgstr ""
-
-#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.serenity
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.serenity-page
 msgid "<i class=\"fas fa-phone-alt\"/>\n"
@@ -321,9 +308,9 @@ msgid "AccuBattery"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
 msgid "Adresse de courriel :"
 msgstr ""
 
@@ -331,6 +318,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-generic-issue
 msgid "Adresse de courriel :"
 msgstr ""
 
@@ -349,8 +337,8 @@ msgid "Afin de voir si le problème provient bien du micro (et non d’un probl�
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
-msgid "Ainsi, votre Fairphone doit déjà avoir une vitre de protection posée\n"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
+msgid "Ainsi, votre Smartphone doit déjà avoir une vitre de protection posée\n"
 "                  par nos soins avant de vous l'envoyer."
 msgstr ""
 
@@ -381,7 +369,7 @@ msgid "Ancien modèle"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Appareil"
 msgstr ""
 
@@ -422,6 +410,27 @@ msgid "Appuyez et maintenez le bouton ON / OFF. Une fenêtre contextuelle s'ouv
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
+msgid "Après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé."
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
+msgid "Après avoir effectué un auto-dépannage, il ressort que la\n"
+"              caméra ("
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
+msgid "Après avoir effectué un auto-dépannage, il ressort que la batterie de mon FP2 doit être changée."
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
+msgid "Après avoir effectué un auto-dépannage, il ressort que le module micro de mon FP2 doit être changé."
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model:project.project,label_tasks:commown_self_troubleshooting.support_project
 msgid "Assistances"
 msgstr ""
@@ -430,11 +439,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Auto-dépannage : Casque DAY"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
-msgid "Auto-dépannage : Fairphone"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -460,9 +464,22 @@ msgid "Auto-dépannage : Option Sérénité - Être appelé"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
+msgid "Auto-dépannage : Smartphone"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model:ir.ui.view,website_meta_title:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
+#: model:website.page,website_meta_title:commown_self_troubleshooting.other-page
+msgid "Autres demandes"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
-msgid "Avant de répondre, veuillez effectuer le test batterie sur notre"
+msgid "Avant de répondre, veuillez effectuer le test batterie décrit sur"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -480,6 +497,11 @@ msgid "Avez-vous besoin d'un tournevis ?"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_callback
+msgid "Awaiting a sign from you"
+msgstr "En attente d'un signe de votre part"
+
+#. module: commown_self_troubleshooting
 #: model:project.task.type,legend_blocked:commown_self_troubleshooting.stage_callback
 #: model:project.task.type,legend_blocked:commown_self_troubleshooting.stage_long_term_followup
 #: model:project.task.type,legend_blocked:commown_self_troubleshooting.stage_pending
@@ -489,19 +511,14 @@ msgid "Blocked"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
 msgid "Bonjour,"
 msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model:project.task.type,name:commown_self_troubleshooting.stage_callback
 msgid "Callback"
-msgstr ""
+msgstr "À appeler ! "
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
@@ -557,8 +574,8 @@ msgid "Choisissez ci-dessous le contrat lié à l'appareil concerné.<br/>\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
-msgid "Commençons par vérifier que la vitre de protection est bien présente sur votre Fairphone :\n"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
+msgid "Commençons par vérifier que la vitre de protection est bien présente sur votre Smartphone :\n"
 "                  cela se remarque facilement dans les coins de l'écran grâce à un relief visible\n"
 "                  (cf. photo ci-dessous) et détectable au toucher."
 msgstr ""
@@ -594,14 +611,20 @@ msgid "Commown - Auto-dépannage - Fairphone 3 : Écran"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
-msgid "Commown - Auto-dépannage - Fairphone : Mon écran (ou sa protection) est fissuré"
-msgstr ""
-
-#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.serenity
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.serenity-page
 msgid "Commown - Auto-dépannage - Option Sérénité"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
+msgid "Commown - Auto-dépannage - Smartphone : Mon écran (ou sa protection) est fissuré"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
+msgid "Commown - Autres demandes"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -617,7 +640,7 @@ msgid "Commown - Vie de mes contrats - Changement d'appareil"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Commown fournit sans frais supplémentaires une protection d'écran afin de maximiser la\n"
 "                  durée de vie de l'appareil."
 msgstr ""
@@ -633,7 +656,7 @@ msgid "Confirmer ma demande"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Confirmez-vous la présence d'une vitre de protection ?"
 msgstr ""
 
@@ -649,6 +672,21 @@ msgid "Contact"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-camera-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
+msgid "Contacter un humain"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.serenity
@@ -661,12 +699,12 @@ msgid "Contexte\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-camera-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
@@ -684,6 +722,14 @@ msgstr "Contrat"
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contact-human
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
 msgid "Contrat de votre appareil :"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.crosscall-screen
+#: model:ir.ui.view,website_meta_title:commown_self_troubleshooting.crosscall-screen
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.crosscall-screen-page
+#: model:website.page,website_meta_title:commown_self_troubleshooting.crosscall-screen-page
+msgid "Crosscall"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -735,16 +781,23 @@ msgid "Demande de matériel"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model:project.task.type,name:commown_self_troubleshooting.stage_received
-#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_received
-msgid "Demande reçue"
+#: code:addons/commown_self_troubleshooting/models/contract.py:44
+#, python-format
+msgid "Device"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: code:addons/commown_self_troubleshooting/models/contract.py:44
+#, python-format
+msgid "Devices"
 msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid "Décrivez avec précision ce que vous observez\n"
-"                        (ex: copie des messages d'erreur est utile et bienvenue)"
+"                        (toute photo, capture d'écran des éléments\n"
+"                        ou copie des messages d'erreur est utile et bienvenue)"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -785,13 +838,9 @@ msgid "En appuyant sur le bouton ci-dessous vous confirmerez votre\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_callback
-#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_long_term_followup
-msgid "En attente d'un signe de votre part"
-msgstr ""
-
-#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contact-human
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
 msgid "En quoi pouvons-nous vous aider ?"
 msgstr ""
 
@@ -819,8 +868,10 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.contract-termination-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
 msgid "Envoyer la demande"
 msgstr ""
 
@@ -851,6 +902,11 @@ msgstr ""
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Est-ce que le son est revenu à la normale pendant ce test ?"
 msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_long_term_followup
+msgid "Exchanges in progress"
+msgstr "Echanges en cours"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
@@ -890,7 +946,6 @@ msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp4-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp4-screen
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp4-screen-page
 msgid "FP4"
 msgstr ""
@@ -926,6 +981,11 @@ msgid "Fonctionnel"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model:project.task.type,description:commown_self_troubleshooting.stage_callback
+msgid "For cases where the customer has not responded to the ticket once, which suggests that he/she is not receiving the emails!  "
+msgstr "Pour les cas où le client n'a pas répondu une seule fois au ticket, ce qui laisse soupçonner qu'il/elle ne reçoit pas les mails !  "
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid "Formation"
@@ -947,6 +1007,12 @@ msgid "In Progress"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model:project.task.type,description:commown_self_troubleshooting.stage_pending
+msgid "In the case of EXPED A FAIRE for a whole device, the person putting on the tag must print the label and check the address. The aim is to avoid any need for verification by the people preparing the packages."
+msgstr "dans le cas EXPED A FAIRE pour un appareil entier, la personne qui met le tag doit imprimer l'étiquette et vérifier l'adresse. Le but est d'éviter tout besoin de vérifier par les personnes qui préparent les colis.\n"
+""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid "Incident, assistance"
@@ -966,19 +1032,26 @@ msgid "Informations complémentaires :"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
-msgid "Informations supplémentaires utiles à la livraison :\n"
-"Numéro de téléphone :"
+msgid "Informations supplémentaires utiles à la livraison : <br/>"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "Informations supplémentaires utiles à la livraison:"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
+msgid "Informations supplémentaires utiles à la livraison : <br/>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
-msgid "Informations supplémentaires utiles à la livraison :\n"
-"Numéro de téléphone :"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-generic-issue
+msgid "Informations supplémentaires utiles à la livraison :<br/>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -994,35 +1067,38 @@ msgid "Inscrivez vos disponibilités et les sujets à aborder :"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "J'ai juste besoin d'une vitre de protection"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
-msgid "J'ai porté à votre connaissance les informations complémentaires suivantes :\n"
-"---"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
+msgid "J'ai porté à votre connaissance les informations complémentaires suivantes :"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
-msgid "J'ai porté à votre connaissance les informations complémentaires suivantes :\n"
-"----"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "J'ai porté à votre connaissance les informations complémentaires suivantes:"
 msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
-msgid "J'ai porté à votre connaissance les informations complémentaires suivantes :\n"
-"---"
+msgid "J'ai porté à votre connaissance les informations complémentaires suivantes :"
 msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "J'ai un problème de son"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model:ir.ui.view,website_meta_description:commown_self_troubleshooting.other
+#: model:website.page,website_meta_description:commown_self_troubleshooting.other-page
+msgid "J'ai une demande qui ne rentre dans aucune de ces cases !"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1100,38 +1176,40 @@ msgid "Je vous informe que je vais effectuer le test en mode sans échec et vous
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
-msgid "L'adresse d'expédition est la suivante :"
+msgid "L'adresse d'expédition est la suivante :<br/>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
-msgid "L'adresse d'expédition est la suivante :"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "L'adresse d'expédition est la suivante:"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-generic-issue
 msgid "L'adresse d'expédition est la suivante : <br/>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
+msgid "L'adresse d'expédition est la suivante :<br/>"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "L'objectif de cette étape est de savoir si l'écran a été abîmé. Si c'est le cas,\n"
 "                      on vous enverra un écran de remplacement muni d'une vitre de protection.\n"
 "                      Notez que cela sera considéré comme une casse. Pour en savoir plus, voir"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "L'objectif de cette étape est de savoir si l'écran a été touché. Si c'est le cas,\n"
 "                      on vous enverra un écran de remplacement muni d'une vitre de protection.\n"
 "                      Notez que cela sera considéré comme une casse. Pour en savoir plus, voir"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_pending
-msgid "L'équipe s'en occupe !"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1198,11 +1276,6 @@ msgid "Le son perçu est bizarre"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model:project.task.type,description:commown_self_troubleshooting.stage_long_term_followup
-msgid "Les cartes repassent automatiquement dans la colonne \"Attribué en cours\""
-msgstr ""
-
-#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Les connecteurs USB-C sont sûrement mal branchés ! Afin de vérifier cela, veuillez débrancher puis\n"
@@ -1239,17 +1312,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
 msgid "Lors des tests, le micro est il :"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model:project.task.type,description:commown_self_troubleshooting.stage_received
-msgid "Lorsqu'une carte est créée ici par une personne externe à l'équipe Support, il faut :\n"
-"- mettre un titre clair à la demande d'assistance\n"
-"- attribuer la carte à Céline\n"
-"- renseigner le nom /contrat du client concerné\n"
-"- expliquer d'où ça vient + la date / et le message en description\n"
-"\n"
-"PUIS : envoyer le message d'AR d'assistance via la carte => template \"[Commown] SAV : AR de demande d'assistance\""
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1295,16 +1357,25 @@ msgid "Mon interlocuteur ne m'entend pas"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
+#: model:ir.ui.view,website_meta_description:commown_self_troubleshooting.crosscall-screen
 #: model:ir.ui.view,website_meta_description:commown_self_troubleshooting.fp3-screen
 #: model:ir.ui.view,website_meta_description:commown_self_troubleshooting.fp4-screen
+#: model:ir.ui.view,website_meta_description:commown_self_troubleshooting.shiftphone-screen
+#: model:website.page,website_meta_description:commown_self_troubleshooting.crosscall-screen-page
 #: model:website.page,website_meta_description:commown_self_troubleshooting.fp3-screen-page
 #: model:website.page,website_meta_description:commown_self_troubleshooting.fp4-screen-page
+#: model:website.page,website_meta_description:commown_self_troubleshooting.shiftphone-screen-page
 msgid "Mon écran (ou sa protection) est fissuré"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
+msgid "Mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Mon écran doit être remplacé"
 msgstr ""
 
@@ -1352,10 +1423,16 @@ msgid "NB : nous allons vous appeler <b>en numéro masqué</b> dans les heures 
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
+msgid "Nettoyage des contacts"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
@@ -1397,8 +1474,23 @@ msgid "Nouveau modèle"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "Numéro de téléphone :"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-serenity
 msgid "Numéro de téléphone à appeler :"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-generic-issue
+msgid "Numéro de téléphone :"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1424,10 +1516,10 @@ msgid "Option lors de la souscription"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
@@ -1459,14 +1551,16 @@ msgid "Photo du module caméra frontale du Fairphone 2"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
-#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
-msgid "Pour démonter et remonter l’écran, nous vous invitons à visualiser la vidéo ci-dessous :"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
+msgid "Pour ajouter une pièce jointe (capture d'écran, photo, vidéo) à l'aide de <strong>Drop sans nuage</strong>,\n"
+"                      veuillez suivre"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model:project.task.type,description:commown_self_troubleshooting.stage_callback
-msgid "Pour les cas où le client n'a pas répondu une seule fois au ticket, ce qui laisse soupçonner qu'il/elle ne reçoit pas les mails !  "
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
+msgid "Pour démonter et remonter l’écran, nous vous invitons à visualiser la vidéo ci-dessous :"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1503,6 +1597,17 @@ msgid "Ready for Next Stage"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model:project.task.type,name:commown_self_troubleshooting.stage_received
+#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_received
+msgid "Received request"
+msgstr "Demande reçue"
+
+#. module: commown_self_troubleshooting
+#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_solved
+msgid "Resolved"
+msgstr "Résolu"
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-camera-page
 msgid "Resserrage des vis"
@@ -1522,12 +1627,7 @@ msgid "Résiliation"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_solved
-msgid "Résolu"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "S'il est évident que l'écran n'est pas endommagé (seulement des petites rayures sur\n"
 "                      la vitre de protection, des petites bulles...), choisissez l'option correspondante\n"
 "                      et passez à l'étape suivante."
@@ -1536,7 +1636,15 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.self-troubleshoot-portal-access
 msgid "Self troubleshooting"
-msgstr "Auto-dépannage"
+msgstr "Vos besoins d'assistance"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.shiftphone-screen
+#: model:ir.ui.view,website_meta_title:commown_self_troubleshooting.shiftphone-screen
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.shiftphone-screen-page
+#: model:website.page,website_meta_title:commown_self_troubleshooting.shiftphone-screen-page
+msgid "Shiftphone"
+msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
@@ -1559,7 +1667,7 @@ msgid "Si lors de ces tests le micro fonctionne\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Si vous avez un doute, soulevez délicatement la vitre de protection afin de voir\n"
 "                      l'état de l'écran si c'est possible, sinon, enlevez la complètement, mais veillez\n"
 "                      à protéger l'écran le temps de recevoir la nouvelle protection."
@@ -1591,6 +1699,16 @@ msgstr ""
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.serenity-page
 msgid "Sérénité"
 msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model:project.task.type,description:commown_self_troubleshooting.stage_long_term_followup
+msgid "The cards automatically return to the \" Assigned - in progress \" column (after about 10-11 days)"
+msgstr "Les cartes repassent automatiquement dans la colonne \"Attribuée - en cours\" (au bout d'environs 10-11 jours)"
+
+#. module: commown_self_troubleshooting
+#: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_pending
+msgid "The team takes care of it!"
+msgstr "L'équipe s'en occupe !"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
@@ -1677,6 +1795,13 @@ msgid "Votre appareil redémarrera en mode <i>Sans échec</i>. Vous verrez les m
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
+msgid "Votre demande\n"
+"                      <br/>"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
 msgid "Vous aurez besoin d’un tout petit tournevis cruciforme,\n"
 "          de taille #0 (voir"
@@ -1694,9 +1819,25 @@ msgid "Vous avez réussi à résoudre le problème, bravo !"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
+msgid "Vous avez souscrit à un contrat PC et vous voulez faire valoir votre droit de formation\n"
+"                        Linux d'une heure avec notre équipe, choisissez l'option <strong>Formation</strong>"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.contract-termination-page
 msgid "Vous n'êtes plus engagé.e, et vous pouvez donc :"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
+msgid "Vous pouvez ici\n"
+"                    directement créer une demande d'assistance à\n"
+"                    notre intention en expliquant au mieux le souci\n"
+"                    que vous rencontrez ci-dessous."
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1736,15 +1877,25 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
-msgid "Vous voulez faire valoir votre droit de formation Linux d'une heure\n"
-"                        avec notre équipe, choisissez l'option <strong>Formation</strong>"
+msgid "WIKI"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
-#: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
-msgid "WIKI"
-msgstr ""
+#: model:project.task.type,description:commown_self_troubleshooting.stage_received
+msgid "When a card is created here by someone outside the Support team, you must :\n"
+"- give a clear title to the support request\n"
+"- assign the card to Céline\n"
+"- fill in the name/contract of the customer concerned\n"
+"- explain where it comes from + the date / and the message in description\n"
+"\n"
+"THEN : send the support request message via the card => template \"[Commown] SAV : support request AR\""
+msgstr "Lorsqu'une carte est créée ici par une personne externe à l'équipe Support, il faut :\n"
+"- mettre un titre clair à la demande d'assistance\n"
+"- attribuer la carte à Céline\n"
+"- renseigner le nom /contrat du client concerné\n"
+"- expliquer d'où ça vient + la date / et le message en description\n"
+"\n"
+"PUIS : envoyer le message d'AR d'assistance via la carte => template \"[Commown] SAV : AR de demande d'assistance\""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
@@ -1753,43 +1904,18 @@ msgid "YouTube video player"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
-msgid "après avoir effectué un auto-dépannage, il ressort qu'un nouvel appareil () doit m'être envoyé."
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "après avoir effectué un auto-dépannage, il ressort qu'un nouvel appareil doit m'être envoyé."
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
 msgid "après avoir effectué un auto-dépannage, il ressort qu'un écran muni d'une protection doit m'être envoyé."
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
 msgid "après avoir effectué un auto-dépannage, il ressort qu'une vitre de protection doit m'être envoyée."
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
-msgid "après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé."
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
-msgid "après avoir effectué un auto-dépannage, il ressort que la\n"
-"caméra ("
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
-msgid "après avoir effectué un auto-dépannage, il ressort que le module micro de mon FP2 doit être changé.\n"
-"\n"
-"L'adresse d'expédition est la suivante :"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
-msgid "après avoir effectué un auto-dépannage, il ressort que ma batterie de mon FP2 doit être changée.\n"
-"\n"
-"L'adresse d'expédition est la suivante :"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1806,6 +1932,12 @@ msgid "ce\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
+msgid "ce tutoriel"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-camera-page
 msgid "cette\n"
@@ -1814,9 +1946,15 @@ msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.contract-termination-page
 msgid "cette page"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
+msgid "cette page <i class=\"fas fa-external-link-alt\"/>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1838,10 +1976,9 @@ msgid "dans l'attente d'un nouvel appareil."
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model:project.task.type,description:commown_self_troubleshooting.stage_pending
-msgid "dans le cas EXPED A FAIRE pour un appareil entier, la personne qui met le tag doit imprimer l'étiquette et vérifier l'adresse. Le but est d'éviter tout besoin de vérifier par les personnes qui préparent les colis.\n"
-"\n"
-""
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
+msgid "de notre documentation puis revenez ici répondre à la question ci-dessous !"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1851,7 +1988,7 @@ msgid "de notre wiki)."
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "de notre wiki."
 msgstr ""
 
@@ -1879,11 +2016,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.contract-termination-page
 msgid "issue-description-contract-termination"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
-msgid "issue-description-fp-screen"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1923,9 +2055,20 @@ msgid "issue-description-gs"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
+msgid "issue-description-other"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.serenity
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.serenity-page
 msgid "issue-description-serenity"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
+msgid "issue-description-smartphone-screen"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1970,7 +2113,7 @@ msgid "le problème provenait d'un mauvais branchement du câble jack et j'ai do
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "les éléments nécessaires"
 msgstr ""
 
@@ -1988,19 +2131,12 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
 msgid "modèle) de mon FP2 doit être\n"
-"changée.\n"
-"\n"
-"L'adresse d'expédition est la suivante :"
+"              changée."
 msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
 msgid "modèle) de mon FP2 et que cela a résolu mon problème."
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
-msgid "mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -2082,9 +2218,7 @@ msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.contract-termination-page
-#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-battery-page
 msgid "wiki"
 msgstr ""
 
@@ -2102,7 +2236,7 @@ msgid "Éclaté d'un Fairphone 2 avec ses vis"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Écran {{ model }} avec protection"
 msgstr ""
 
@@ -2155,8 +2289,8 @@ msgid "Étape 1<br/><small>Option lors de la souscription</small>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Étape 1<br/><small>Type de problème</small>"
 msgstr ""
@@ -2208,7 +2342,7 @@ msgid "Étape 2<br/><small>Test de maintenance</small>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Étape 2<br/><small>Vérification de l'écran</small>"
 msgstr ""
 
@@ -2251,7 +2385,7 @@ msgid "Étape 3<br/><small>Test autre SIM</small>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Étape 3<br/><small>État de l'écran</small>"
 msgstr ""
 
@@ -2288,7 +2422,7 @@ msgid "Étape 4<br/><small>Expédition</small>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid "Étape 4<br/><small>Option souscrite</small>"
 msgstr ""
 
@@ -2319,8 +2453,8 @@ msgid "Étape 5<br/><small>Contacter un humain</small>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Étape 5<br/><small>Expédition</small>"
 msgstr ""
@@ -2342,8 +2476,8 @@ msgid "Étape 6\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Étape 6<br/><small>Confirmation</small>"
 msgstr ""
@@ -2363,8 +2497,8 @@ msgid "Étape 6<br/><small>Problème résolu</small>"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp-screen
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
 msgid "Étape 7<br/><small>Contacter un humain</small>"
 msgstr ""
