@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-10 10:00+0000\n"
-"PO-Revision-Date: 2023-07-10 10:00+0000\n"
+"POT-Creation-Date: 2023-08-02 12:25+0000\n"
+"PO-Revision-Date: 2023-08-02 12:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:231
+#: code:addons/commown_devices/models/contract.py:275
 #, python-format
 msgid "%(product)s n°%(serial)s"
 msgstr "%(product)s n°%(serial)s"
@@ -25,6 +25,16 @@ msgstr "%(product)s n°%(serial)s"
 #: model:ir.model,name:commown_devices.model_project_task_abstract_picking_wizard
 msgid "Abstract model to create a picking from a task"
 msgstr "Modèle abstrait pour la génération d'expéditions depuis une tâche"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__all_products
+msgid "All product to send"
+msgstr "Tout les produits à envoyer"
+
+#. module: commown_devices
+#: model:project.task.type,name:commown_devices.diagnostic_stage
+msgid "App received, Diagnosis DONE"
+msgstr "App reçu, diag FAIT"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task__storable_product_id
@@ -68,6 +78,16 @@ msgid "Check picking assigned when entering stage?"
 msgstr "Vérifier si un transfert est assigné à la tache?"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__service_tmpl_id
+msgid "Configured product template"
+msgstr "Product template configuré"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_type
+msgid "Is storable primary or secondary"
+msgstr "Le produit stockable est primaire ou secondaire"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_res_partner
 msgid "Contact"
 msgstr "Contact"
@@ -78,6 +98,11 @@ msgstr "Contact"
 #: model:ir.model.fields,field_description:commown_devices.field_stock_quant__contract_id
 msgid "Contract"
 msgstr "Contrat"
+
+#. module: commown_devices
+#: model:project.task.type,name:commown_devices.resiliated_stage
+msgid "Contract terminated, email sent"
+msgstr "Contrat résilié, mail envoyé"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__quant_ids
@@ -96,6 +121,7 @@ msgstr "Faire une expédition de l'appareil lié à une tâche"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__create_uid
@@ -107,6 +133,7 @@ msgstr "Créé par"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__create_date
@@ -141,6 +168,11 @@ msgid "Defaults to now - To be set only to force a date"
 msgstr "Valeur par défaut : maintenant - À ne remplir que pour forcer une date"
 
 #. module: commown_devices
+#: model:ir.model,name:commown_devices.model_product_service_storable_config
+msgid "Describe which storable products comes with a service"
+msgstr "Décrit quel produit stockable est associé à un service"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__location_dest_id
 msgid "Destination"
 msgstr "Destination"
@@ -151,8 +183,7 @@ msgid "Destination contract"
 msgstr "Contrat de destination"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:229
-#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__lot_id
+#: code:addons/commown_devices/models/contract.py:273
 #: model:ir.model.fields,field_description:commown_devices.field_project_task__lot_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__lot_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__lot_id
@@ -166,7 +197,7 @@ msgid "Device number"
 msgstr "Nb appareils"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:229
+#: code:addons/commown_devices/models/contract.py:273
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
 #: model_terms:ir.ui.view,arch_db:commown_devices.edit_project
 #, python-format
@@ -174,12 +205,13 @@ msgid "Devices"
 msgstr "Appareils"
 
 #. module: commown_devices
-#: model:project.task.type,name:commown_devices.diagnostic_stage
-msgid "Diagnostic stage"
-msgstr "Diagnostique en cours"
+#: model:project.task.type,portal_displayed_name:commown_devices.diagnostic_stage
+msgid "Diagnostic en cours"
+msgstr "Contrôle de l'état de l'appareil"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__display_name
@@ -191,7 +223,36 @@ msgid "Display Name"
 msgstr "Nom affiché"
 
 #. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_product_service_storable_config__storable_type
+msgid "Does current config concern the primary storable or the secondary storables of current product variants ?"
+msgstr "Est ce que la configuration concerne un produit stockable primaire ou un des produits stockable secondiare de la variante ?"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/product.py:71
+#, python-format
+msgid "For product %s, two secondary variants derive from the same template, are you sure that there is no configuration mistake ?"
+msgstr "Deux variantes présente dans les secondary_variant_ids du produit %s dérivent des mêmes templates. Êtes vous sur que il n'y a pas d'erreur de configuration ?"
+
+#. module: commown_devices
+#: model:project.task.type,description:commown_devices.diagnostic_stage
+msgid "Here we put the cards of the devices that have been received AND pre-diagnosed\n"
+"Check the watermarks, as well as the visual state of the device (screen, shell, etc.)\n"
+"If broken, open a ticket.\n"
+"Check that no accessories are missing.\n"
+"Put the date and a complete commentary on the observations for the rest of the process.\n"
+"\n"
+"NB: in case of breakage noted during a reception for cancellation, if you do not know when the breakage occurred, rather than inventing a date, you should put the date when you discovered it (i.e. date of reception)"
+msgstr "Ici on met les cartes des apareils qui ont été recptionnés ET pré-diagnostiqués\n"
+"Vérifier les watermarks, ainsi que l'état visuel de l'appareil (écran , coque, etc.)\n"
+"Si casse, ouvrir un ticket.\n"
+"Vérifier qu'il ne manque pas des accessoires.\n"
+"Mettre la date et un commentaire complet des observations pour la suite du process .\n"
+"\n"
+"NB :  en cas de casse constatée lors d'une réception pour résiliation, si on ne sait pas de quand date la casse, plutôt que d'inventer une date, il faut mettre la date où on le découvre (donc date de la réception)"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__id
@@ -211,7 +272,13 @@ msgid "In Progress"
 msgstr "En cours"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_type
+msgid "Is storable primary or secondary"
+msgstr "Le produit stockable est primaire ou secondaire"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard____last_update
@@ -220,10 +287,11 @@ msgstr "En cours"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard____last_update
 msgid "Last Modified on"
-msgstr "Dernière modification le"
+msgstr "Dernière Modification le"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__write_uid
@@ -235,6 +303,7 @@ msgstr "Dernière mise à jour par"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__write_date
@@ -261,9 +330,27 @@ msgid "Lead/Opportunity"
 msgstr "Piste/opportunité"
 
 #. module: commown_devices
+#: code:addons/commown_devices/models/stock_production_lot.py:39
+#, python-format
+msgid "Lot %s is already reserved"
+msgstr "Le lot %s est déjà reservé"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/stock_production_lot.py:37
+#, python-format
+msgid "Lot %s not found in available stock"
+msgstr "Le lot %s n'est pas trouvé dans le stock disponible"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_production_lot
 msgid "Lot/Serial"
 msgstr "Lot/N° série"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/product.py:65
+#, python-format
+msgid "More than one primary variant configured for %s with attributes %s"
+msgstr "Il y a plus d'une variante primaire configurée pour le produit %s (avec les attributs %s)"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_picking_form
@@ -271,10 +358,16 @@ msgid "Move involved device"
 msgstr "Déplacer l'appareil concerné"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:87
+#: code:addons/commown_devices/models/contract.py:91
 #, python-format
 msgid "No product %s found in stock"
 msgstr "Aucun produit %s dans le stock"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/common.py:108
+#, python-format
+msgid "Not enough %s in stock"
+msgstr "Pas suffisament de %s dans le stock"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
@@ -308,7 +401,17 @@ msgid "Present location of the product"
 msgstr "Localisation actuelle"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__product_tmpl_id
+#: selection:product.service_storable_config,storable_type:0
+msgid "Primary product"
+msgstr "Produit stockable primaire"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__primary_storable_variant_id
+msgid "Primary storable variant"
+msgstr "Produits stockables secondaires"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_product_product
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__variant_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__variant_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__product_tmpl_id
@@ -349,15 +452,30 @@ msgid "Receive a not tracked product"
 msgstr "Rapatrier un produit non suivi"
 
 #. module: commown_devices
-#: model:project.task.type,name:commown_devices.resiliated_stage
-msgid "Resiliated stage"
-msgstr "Contrat résilié, mail envoyé"
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__attribute_value_ids
+msgid "Restrict to variants with following attribute values"
+msgstr "S'applique aux variantes ayant ces valeurs d'attribut"
+
+#. module: commown_devices
+#: model:project.task.type,portal_displayed_name:commown_devices.resiliated_stage
+msgid "Résiliation traitée"
+msgstr "Résiliation traitée"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/project_task.py:232
 #, python-format
 msgid "Scrap device"
 msgstr "Mise au rebut"
+
+#. module: commown_devices
+#: selection:product.service_storable_config,storable_type:0
+msgid "Secondary product"
+msgstr "Produit stockable secondaire"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__secondary_storable_variant_ids
+msgid "Secondary storable variants"
+msgstr "Produits stockables secondaires"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/crm_lead.py:33
@@ -371,6 +489,27 @@ msgstr "Envoyer un appareil"
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_notracking_outward_picking_form
 msgid "Send a not tracked product"
 msgstr "Envoyer un produit non suivi"
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_template_property_form
+msgid "Storable Configurations"
+msgstr "Configurations de produits stockable"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_tmpl_id
+msgid "Storable Tmpl"
+msgstr "Template du produit stockable"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_variant_id
+msgid "Storable Variant"
+msgstr "Variante de produit stockable"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__storable_config_ids
+#: model:ir.model.fields,field_description:commown_devices.field_product_template__storable_config_ids
+msgid "Storable configurations"
+msgstr "Configurations de produits stockable"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_product_product__storable_product_id
@@ -423,6 +562,11 @@ msgstr "Cette action ne doit pas être utilisée dans le projet résiliation.\n"
 "Utilisez plutôt l'action 'Rapatrier un appareil'"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__lot_ids
+msgid "Tracked Devices"
+msgstr "Appareils suivis"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_picking
 msgid "Transfer"
 msgstr "Transfert"
@@ -445,7 +589,6 @@ msgid "Use for device tracking?"
 msgstr "Suivi des appareils ?"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__variant_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__variant_id
 msgid "Variant"
 msgstr "Variante"
@@ -460,6 +603,11 @@ msgstr "Ici on met les cartes des appareils qui ont été réceptionnés ET pré
 "Mettre la date et un commentaire complet des observations pour la suite du process .\n"
 "\n"
 "NB :  en cas de casse constatée lors d'une réception pour résiliation, si on ne sait pas de quand date la casse, plutôt que d'inventer une date, il faut mettre la date où on le découvre (donc date de la réception)"
+
+#: code:addons/commown_devices/models/wizard_crm_lead_picking.py:78
+#, python-format
+msgid "You have to select a lot for each tracked product"
+msgstr "Vous devez séléctionner un lot par produit traqué"
 
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_set_picking_date_done_to_scheduled
@@ -510,6 +658,8 @@ msgstr "[commown] Mettre l'appareil concerné au rebut"
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_contract_transfer_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_inward_picking_form
+#: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_notracking_inward_picking_form
+#: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_notracking_outward_picking_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_outward_picking_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_picking_form
 msgid "or"
