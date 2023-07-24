@@ -8,18 +8,18 @@
 
       <t t-name="website.self-troubleshoot-other">
         <t t-call="portal.portal_layout">
-          <t t-set="title">Commown - Autres demandes</t>
+          <t t-set="title">Commown - Demandes spéciales</t>
 
           <script type="text/javascript">
             $(document).ready(function() {setUpWizard($('#smartwizard'))});
           </script>
 
-          <t t-set="issue_title">Autres demandes</t>
+          <t t-set="issue_title">Demande spéciale</t>
           <t t-set="issue_description_template">issue-description-other</t>
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">
-            <h1>Autres demandes</h1>
+            <h1>Demande spéciale</h1>
 
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
@@ -80,8 +80,8 @@
     <field name="website_published">True</field>
     <field name="url">/page/self-troubleshoot-other</field>
     <field name="view_id" ref="other" />
-    <field name="website_meta_title">Autres demandes</field>
-    <field name="website_meta_description">J'ai une demande qui ne rentre dans aucune de ces cases !</field>
+    <field name="website_meta_title">Demandes spéciales</field>
+    <field name="website_meta_description">J'ai une demande qui ne rentre dans aucune case !</field>
   </record>
 
 </odoo>
