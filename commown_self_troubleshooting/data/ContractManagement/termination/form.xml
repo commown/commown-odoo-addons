@@ -30,7 +30,7 @@
 
               $('select[name=device_contract]').change(contractChanged);
 
-              $('input[type=radio][name=net_contract_termination]').change(function () {
+              $('select[name=contract_termination]').change(function () {
                 wizard.toggleStep(2, this.value==='pay');
                 wizard.toggleStep(3, this.value==='no');
               });
@@ -107,7 +107,9 @@
 
                     <p>À ce stade de votre contrat, nous vous invitons à attendre la fin de votre période d'engagement pour
                        soumettre votre demande (retrouvez tous les détails utiles sur
-                       <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">cette page</a>
+                       <a href="https://forum.commown.coop/t/comment-faire-pour-transferer-mon-contrat-avant-la-fin-de-mon-engagement/2528" target="_blank">
+                         cette page <i class="fas fa-external-link-alt"></i>
+                       </a>
                        de notre wiki).
                     </p>
 
@@ -120,15 +122,11 @@
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label>Veuillez choisir entre une des ces deux options</label>
-                        <br />
-                        <label class="radio-inline" for="net_pay-yes">Régler les mensualités restantes</label>
-                        <input type="radio" name="net_contract_termination" id="net_pay-yes" value="pay" required="required"
-                        data-required-error="Veuillez choisir une des trois possibilités."/>
-                        <label class="radio-inline" for="net_pay-no">Transférer mon contrat</label>
-                        <input type="radio" name="net_contract_termination" id="net_pay-no" value="no" required="required"
-                        data-required-error="Veuillez choisir une des trois possibilités."/>
-                        <div class="help-block with-errors"/>
+                        <select class="form-control" name="contract_termination" id="contract_termination" required="required">
+                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                          <option value="pay">Régler les mensualités restantes</option>
+                          <option value="no">Transférer mon contrat</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -150,7 +148,7 @@
                     <div id="form-step-2" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label for="more_info_step_2">
-                          Informations complémentaires :
+                          Informations complémentaires (si besoin) :
                         </label>
                         <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" />
                       </div>
@@ -169,7 +167,10 @@
                     </h2>
                     <p>
                       Toutes les informations relatives au transfert de votre contrat sont décrites sur
-                      notre <a href="https://wiki.commown.coop/Comment+faire+pour+transf%C3%A9rer+mon+contrat+avant+la+fin+de+mon+engagement" target="_blank">wiki</a>.
+                      <a href="https://forum.commown.coop/t/comment-faire-pour-transferer-mon-contrat-avant-la-fin-de-mon-engagement/2528" target="_blank">
+                        cette page <i class="fas fa-external-link-alt"></i>
+                      </a>
+                      de notre wiki.
                       Une fois celui-ci consulté, nous vous invitons à remplir ce champ de texte ci-dessous pour nous exprimer
                       l'identité (adresse mail, nom, prénom...) de votre repreneur s'il est connu.
                     </p>
@@ -203,13 +204,13 @@
                     <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
                     <div id="form-step-4" role="form" data-toggle="validator">
-                      <input type="hidden" name="net_contract_termination" value="termination"/>
+                      <input type="hidden" name="contract_termination" value="termination"/>
 
                       <p>Vous n'êtes plus engagé.e, et vous pouvez donc :</p>
                       <ul>
                         <li>
                           commander un nouveau modèle (directement sur notre
-                          <a href="/shop" target="_blank">magasin en ligne</a>,
+                          <a href="/shop" target="_blank">magasin en ligne <i class="fas fa-external-link-alt"></i></a>,
                           ce qui vous laissera le temps d'effectuer le transfert de données entre vos 2 appareils)
                         </li>
                         <li>
