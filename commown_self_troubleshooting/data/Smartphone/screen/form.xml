@@ -14,7 +14,7 @@
 
             const wizard = setUpWizard($('#smartwizard'));
 
-            $('#has_protection').change(function () {
+            $('input[type=radio][name=has_protection]').change(function () {
                 wizard.toggleStep(2, this.value==='yes');
                 wizard.toggleStep(3, this.value==='no');
             });
@@ -86,18 +86,21 @@
                       t-attf-alt="Écran {{ model }} avec protection"
                       style="display: block; margin: auto;"/>
                   <br />
+
                   <div id="form-step-1" role="form" data-toggle="validator">
+                    <p>Confirmez-vous la présence d'une vitre de protection ?</p>
                     <div class="form-group">
-                      <label for="has_protection">Confirmez-vous la présence d'une vitre de protection ?</label>
-                      <select class="form-control" required="required" id="has_protection" name="has_protection"
-                        data-required-error="Veuillez sélectionner un élément de la liste ci-dessus.">
-                        <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
-                        <option value="yes">Oui</option>
-                        <option value="no">Non</option>
-                      </select>
-                      <div class="help-block with-errors"/>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="has_protection" id="has_protection_yes" value="yes" required="required"/>
+                        <label class="form-check-label" for="has_protection_yes">Oui</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="has_protection" id="has_protection_no" value="no" required="required"/>
+                        <label class="form-check-label" for="has_protection_no">Non</label>
+                      </div>
                     </div>
                   </div>
+
                 </div>
 
                 <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">

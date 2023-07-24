@@ -344,11 +344,14 @@
         <t t-set="tool_form">
           <div class="form-group">
             <p>Avez-vous besoin d'un tournevis ?</p>
-            <label class="radio-inline" for="screwdriver-yes">Oui</label>
-            <input type="radio" name="screwdriver" id="screwdriver-yes" value="yes" required="required" data-required-error="Dites-nous si vous avez besoin d'un tournevis." />
-            <label class="radio-inline" for="screwdriver-no">Non</label>
-            <input type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required" />
-            <div class="help-block with-errors" />
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="screwdriver" id="screwdriver-yes" value="yes" required="required"/>
+              <label class="form-check-label" for="screwdriver-yes">Oui</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required"/>
+              <label class="form-check-label" for="screwdriver-no">Non</label>
+            </div>
           </div>
         </t>
 

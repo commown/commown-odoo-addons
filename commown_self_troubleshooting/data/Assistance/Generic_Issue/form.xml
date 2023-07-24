@@ -25,12 +25,12 @@
 
               $('select[name=device_contract]').change(contractChanged);
 
-              $('input[type=radio][name=net_generic_issue]').change(function () {
+              $('#generic_issue_type').change(function () {
                 wizard.toggleStep(2, this.value==='bug');
                 wizard.toggleStep(3, this.value==='broken');
                 wizard.toggleStep(4, this.value==='course');
                 wizard.toggleStep(5, this.value==='upgrade');
-                wizard.toggleStep(6, this.id==='net_confirm');
+                wizard.toggleStep(6, (this.value == 'broken' || this.value == 'upgrade'));
               });
 
             });
@@ -130,22 +130,15 @@
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label>Veuillez choisir une des ces quatre options</label>
-                        <br />
-                        <label class="radio-inline" for="net_bug">Incident, assistance</label>
-                        <input type="radio" name="net_generic_issue" id="net_bug" value="bug" required="required"
-                        data-required-error="Veuillez choisir une des quatre possibilités."/>
-                        <label class="radio-inline" for="net_broken">Casse</label>
-                        <input type="radio" name="net_generic_issue" id="net_confirm" value="broken" required="required"
-                        data-required-error="Veuillez choisir une des quatre possibilités."/>
-                        <label class="radio-inline" for="net_course">Formation</label>
-                        <input type="radio" name="net_generic_issue" id="net_course" value="course" required="required"
-                        data-required-error="Veuillez choisir une des quatre possibilités."/>
-                        <label class="radio-inline" for="net_upgrade">Demande de matériel</label>
-                        <input type="radio" name="net_generic_issue" id="net_confirm" value="upgrade" required="required"
-                        data-required-error="Veuillez choisir une des quatre possibilités."/>
-                        <div class="help-block with-errors"/>
+                        <select class="form-control" name="generic_issue_type" id="generic_issue_type" required="required">
+                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                          <option value="bug">Incident, assistance</option>
+                          <option value="broken">Casse</option>
+                          <option value="course">Formation</option>
+                          <option value="upgrade">Demande de matériel</option>
+                        </select>
                       </div>
+                      <div class="help-block with-errors"/>
                     </div>
                   </div>
 
@@ -202,7 +195,7 @@
 
                   <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                     <p class="alert alert-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
-                      La prise en charge d'une casse est différente selon les contrats souscrit chez Commown.
+                      La prise en charge d'une casse est différente selon les contrats souscrits chez Commown.
                       Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
                       <strong>Conditions Particulières</strong> que vous pouvez retrouver dans votre espace-client
                       <a id="order_link" href="/my/orders" target="_blank">ici <i class="fas fa-external-link-alt"></i></a>.
