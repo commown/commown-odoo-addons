@@ -7,11 +7,11 @@
     <field name="key">commown_self_troubleshooting.issue-description-generic-issue</field>
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-generic-issue">
-        <t t-if="net_generic_issue=='course'">
+        <t t-if="generic_issue_type=='course'">
             <p>Je souhaite effectuer mon heure de formation Linux.</p>
         </t>
         <t t-if="action=='ship'">
-          <t t-if="net_generic_issue=='upgrade'">
+          <t t-if="generic_issue_type=='upgrade'">
             <p>
               Je souhaite un matériel supplémentaire
             </p>
