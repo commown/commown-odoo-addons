@@ -73,7 +73,7 @@
                 </t>
 
                 <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
-                  <h2><i class="fas fa-cogs"/>Type de problème</h2>
+                  <h2><i class="fas fa-cogs"></i> Type de problème</h2>
                   <p>Commown fournit sans frais supplémentaires une protection d'écran afin de maximiser la
                   durée de vie de l'appareil.</p>
                   <p>Ainsi, votre Smartphone doit déjà avoir une vitre de protection posée
@@ -104,45 +104,63 @@
                 </div>
 
                 <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
-                  <h2><i class="fas fa-airglass-slash"/>Vérification de l'écran</h2>
+                  <h2><i class="fas fa-mobile-alt"></i> Vérification de l'écran</h2>
                   <div id="form-step-2" role="form" data-toggle="validator">
                     <div class="form-group">
-                      <p>L'objectif de cette étape est de savoir si l'écran a été touché. Si c'est le cas,
-                      on vous enverra un écran de remplacement muni d'une vitre de protection.
-                      Notez que cela sera considéré comme une casse. Pour en savoir plus, voir
-                      <a href="https://wiki.commown.coop/Dans+quel+%C3%A9tat+les+appareils+doivent-ils+%C3%AAtre+restitu%C3%A9s+%3F"
-                      target="_blank"> cette page</a> de notre wiki.</p>
+                      <p>
+                        L'objectif de cette étape est de savoir si l'écran a été touché. Si c'est le cas,
+                        on vous enverra un écran de remplacement muni d'une vitre de protection.
+                        Notez que cela sera considéré comme une casse. Pour en savoir plus, voir
+                        <a href="https://forum.commown.coop/t/dans-quel-etat-les-appareils-doivent-ils-etre-restitues/2518" target="_blank">
+                          cette page <i class="fas fa-external-link-alt"></i>
+                        </a> de notre wiki.
+                      </p>
                       <p>S'il est évident que l'écran n'est pas endommagé (seulement des petites rayures sur
                       la vitre de protection, des petites bulles...), choisissez l'option correspondante
                       et passez à l'étape suivante.</p>
                       <p>Si vous avez un doute, soulevez délicatement la vitre de protection afin de voir
                       l'état de l'écran si c'est possible, sinon, enlevez la complètement, mais veillez
                       à protéger l'écran le temps de recevoir la nouvelle protection.</p>
-                      <br/>
-                      <label class="radio-inline" for="replace_screen_yes_step_2">Mon écran doit être remplacé</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_yes_step_2" value="yes" required="required" data-required-error="Dites-nous si vous entendez du son."/>
-                      <label class="radio-inline" for="replace_screen_no_step_2">J'ai juste besoin d'une vitre de protection</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_no_step_2" value="no" required="required"/>
-                      <div class="help-block with-errors"/>
+
+                      <div class="form-group">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="replace_screen" id="replace_screen_yes_step2" value="yes" required="required"/>
+                          <label class="form-check-label" for="replace_screen_yes_step2">Mon écran doit être remplacé</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="replace_screen" id="replace_screen_no_step_2" value="no" required="required"/>
+                          <label class="form-check-label" for="replace_screen_no_step_2">J'ai juste besoin d'une vitre de protection</label>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>
 
                 <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
-                  <h2><i class="fas fa-airglass-slash"/>État de l'écran</h2>
+                  <h2><i class="fas fa-mobile-alt"></i> État de l'écran</h2>
                   <div id="form-step-3" role="form" data-toggle="validator">
                     <div class="form-group">
-                      <p>L'objectif de cette étape est de savoir si l'écran a été abîmé. Si c'est le cas,
-                      on vous enverra un écran de remplacement muni d'une vitre de protection.
-                      Notez que cela sera considéré comme une casse. Pour en savoir plus, voir
-                      <a href="https://wiki.commown.coop/Dans+quel+%C3%A9tat+les+appareils+doivent-ils+%C3%AAtre+restitu%C3%A9s+%3F"
-                      target="_blank"> cette page</a> de notre wiki.</p>
-                      <br/>
-                      <label class="radio-inline" for="replace_screen_yes_step_3">Mon écran doit être remplacé</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_yes_step_3" value="yes" required="required" data-required-error="Dites-nous si vous entendez du son."/>
-                      <label class="radio-inline" for="replace_screen_no_step_3">J'ai juste besoin d'une vitre de protection</label>
-                      <input type="radio" name="replace_screen" id="replace_screen_no_step_3" value="no" required="required"/>
-                      <div class="help-block with-errors"/>
+                      <p>
+                        L'objectif de cette étape est de savoir si l'écran a été abîmé. Si c'est le cas,
+                        on vous enverra un écran de remplacement muni d'une vitre de protection.
+                        Notez que cela sera considéré comme une casse. Pour en savoir plus, voir
+                        <a href="https://forum.commown.coop/t/dans-quel-etat-les-appareils-doivent-ils-etre-restitues/2518" target="_blank">
+                          cette page <i class="fas fa-external-link-alt"></i>
+                        </a> de notre wiki.
+                      </p>
+
+                      <div class="form-group">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="replace_screen" id="replace_screen_yes_step2" value="yes" required="required"/>
+                          <label class="form-check-label" for="replace_screen_yes_step2">Mon écran doit être remplacé</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="replace_screen" id="replace_screen_no_step_2" value="no" required="required"/>
+                          <label class="form-check-label" for="replace_screen_no_step_2">J'ai juste besoin d'une vitre de protection</label>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>
