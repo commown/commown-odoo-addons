@@ -24,7 +24,7 @@
                   wizard.toggleStep(6, !isNo);
                 });
 
-                $('#is_micro_test_ok').change(function () {
+                $('input[type="radio"][name="is_micro_test_ok"]').change(function () {
                   const isNo = this.value!=='yes';
                   wizard.toggleStep(3, !isNo);
                   wizard.toggleStep(4, isNo);
@@ -85,12 +85,15 @@
                       </p>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label>Ce test a t-il permis de résoudre le problème ?</label>
-                          <label class="radio-inline" for="mute_solved-yes">Oui</label>
-                          <input type="radio" name="mute_solved" id="mute_solved-yes" value="yes" required="required" data-required-error="Dites-nous si ce test a permis de régler le problème."/>
-                          <label class="radio-inline" for="mute_solved-no">Non</label>
-                          <input type="radio" name="mute_solved" id="mute_solved-no" value="no" required="required"/>
-                          <div class="help-block with-errors"/>
+                          <p>Ce test a t-il permis de résoudre le problème ?</p>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="mute_solved" id="mute_solved-yes" value="yes" required="required"/>
+                            <label class="form-check-label" for="mute_solved-yes">Oui</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="mute_solved" id="mute_solved-no" value="no" required="required"/>
+                            <label class="form-check-label" for="mute_solved-no">Non</label>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -105,40 +108,39 @@
                       <br />
                       <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
-		          <label for="micro_model">Lors des tests, le micro est il :</label>
-                          <select class="form-control" required="required" id="is_micro_test_ok" name="is_micro_test_ok" data-required-error="Veuillez sélectionner un élément de la liste ci-dessus.">
-                            <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
-                            <option value="yes">Fonctionnel</option>
-                            <option value="no">Pas fonctionnel</option>
-                          </select>
-                          <div class="help-block with-errors"/>
+                          <p for="micro_model">Lors des tests, le micro est-il fonctionnel ?</p>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_micro_test_ok" id="is_micro_test_ok-yes" value="yes" required="required"/>
+                            <label class="form-check-label" for="is_micro_test_ok-yes">Oui</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_micro_test_ok" id="is_micro_test_ok-no" value="no" required="required"/>
+                            <label class="form-check-label" for="is_micro_test_ok-no">Non</label>
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                       <h2><i class="fas fa-sim-card"/> Test d'une autre carte SIM</h2>
-                      <p> Si le test de maintenance montre que le
-                      micro principal est fonctionnel mais que
-                      l'interlocuteur ne vous entend toujours pas,
-                      alors le problème peut venir de votre carte
-                      SIM. Nous vous invitons donc à tester une autre
-                      carte SIM en demandant à une personne de votre
-                      entourage.
+                      <p> Si le test de maintenance montre que le micro principal est
+                      fonctionnel mais que l'interlocuteur ne vous entend toujours pas,
+                      alors le problème peut venir de votre carte SIM. Nous vous
+                      invitons donc à tester une autre carte SIM en demandant à une
+                      personne de votre entourage.
                       </p>
-                      <p>Si lors de ces tests le micro fonctionne
-                      correctement, il vous faudra donc changer de
-                      carte SIM.
+                      <p>Si lors de ces tests le micro fonctionne correctement, il vous
+                      faudra donc changer de carte SIM.
                       </p>
-                      <p>Nous vous invitons à nous informer que vous
-                      allez effectuer ce test de carte SIM. Nous
-                      attendrons alors un retour de votre part et vous
-                      relancerons si vous oubliez :-). Pour ce faire, il
-                      suffit d'appuyer sur le bouton ci-dessous.
+                      <p>Nous vous invitons à nous informer que vous allez effectuer ce
+                      test de carte SIM. Nous attendrons alors un retour de votre part
+                      et vous relancerons si vous oubliez :-). Pour ce faire, il suffit
+                      d'appuyer sur le bouton "Envoyer les informations" ci-dessous.
                       </p>
+
                       <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utile :</label>
+                          <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utiles :</label>
                           <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info"/>
                         </div>
 
