@@ -91,14 +91,15 @@
                       </p>
                       <div id="form-step-2" role="form" data-toggle="validator">
                           <div class="form-group">
-                            <label>Le problème est-il résolu ?</label>
-                            <br />
-                            <br />
-                            <label class="radio-inline" for="net_contact-yes">Oui</label>
-                            <input type="radio" name="net_contact" id="net_contact-yes" value="solved" required="required" data-required-error="Dites-nous si ce démontage a permis de régler le problème."/>
-                            <label class="radio-inline" for="net_contact-no">Non</label>
-                            <input type="radio" name="net_contact" id="net_contact-no" value="not_solved" required="required"/>
-                            <div class="help-block with-errors"/>
+                            <p>Le problème est-il résolu ?</p>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="net_contact" id="net_contact-yes" value="solved" required="required"/>
+                              <label class="form-check-label" for="net_contact-yes">Oui</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="net_contact" id="net_contact-no" value="not_solved" required="required"/>
+                              <label class="form-check-label" for="net_contact-no">Non</label>
+                            </div>
                           </div>
                         </div>
                       </div>
