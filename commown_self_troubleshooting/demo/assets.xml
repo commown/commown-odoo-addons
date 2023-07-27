@@ -1,0 +1,10 @@
+<odoo>
+  <template id="frontend_demo" inherit_id="web.assets_frontend">
+    <xpath expr="//script[last()]" position="after">
+      <script
+          type="text/javascript"
+          src="/commown_self_troubleshooting/static/src/self_troubleshooting_tour.js"
+          />
+    </xpath>
+  </template>
+</odoo>

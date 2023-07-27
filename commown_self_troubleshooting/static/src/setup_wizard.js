@@ -22,10 +22,10 @@ function setUpWizard($container) {
     return requiredFields;
   }
 
-  function createHumanContactButton(contactStep) {
+  function setupHumanContactButton(contactStep) {
 
     function isStepEnabled(wizard, stepNumber) {
-      return ! wizard.steps.eq(stepNumber).parent('li').hasClass('disabled');
+      return ! wizard.steps.eq(stepNumber).hasClass('disabled');
     }
 
     function getCurrentState(wizard, $button) {
@@ -48,12 +48,14 @@ function setUpWizard($container) {
 
     var previousState;
 
-    return $('<button/>').text('Contacter un humain')
-      .addClass('btn btn-warning')
+    return $('button#contactAHuman')
       .on('click', function(event) {
         event.preventDefault();
         const $button = $(this);
         const wizard = $container.data('smartWizard');
+        $container.toggleClass('contact-human');
+        // Important when coming from an invalid form step:
+        $container.toggleClass('was-validated', false);
 
         if (!isStepEnabled(wizard, contactStep)) {
           previousState = getCurrentState(wizard, $button);
@@ -64,7 +66,15 @@ function setUpWizard($container) {
             }),
             currentStep: contactStep,
           });
-          $('.sw-btn-group').hide();
+          // Copy contact field value (if present) into the one of the contact a human step
+          let step0Contract = $('#form-step-0 select[name=device_contract]').val();
+          // May be undefined (no such field) or null (no option selected):
+          if (step0Contract) {
+            // As of Odoo 12.0 minification removes some spaces in backtick literals
+            // hence the use of the + operator and plain old strings below:
+            $("#form-step-" + contactStep
+              + " select[name=device_contract]").val(step0Contract);
+          }
         }
         else {
           setState(wizard, $button, previousState);
@@ -76,7 +86,6 @@ function setUpWizard($container) {
   // Let's setup the wizard
 
   let contactStep = null;
-  const extraButtons = [];
   const requiredFields = computeRequiredFields();
   const buttonI18n = {
     fr: {
@@ -92,38 +101,46 @@ function setUpWizard($container) {
   const $humanContactButton = $container.find('button[value="contact"]');
   if ($humanContactButton.length) {
     contactStep = stepNumber($humanContactButton.closest(allStepsSelector)[0]);
-    extraButtons.push(createHumanContactButton(contactStep));
+    setupHumanContactButton(contactStep);
   }
 
   $container.smartWizard({
     selected: 0,
+    autoAdjustHeight: false,
     keyNavigation: false,
-    useURLhash: false,
-    showStepURLhash: false,
-    transitionEffect: 'slide',
+    enableURLhash: false,
     toolbarSettings: {
-      toolbarPosition: 'top',
-      toolbarButtonPosition: 'end', // does not work with bootstrap 3!
-      toolbarExtraButtons: extraButtons,
+      toolbarPosition: 'both',
+    },
+    transition: {
+      animation: 'fade',
     },
     theme: 'arrows',
     lang: buttonI18n[$("html").attr("lang").split("-")[0]],
     anchorSettings: {
-      markDoneStep: true,
-      markAllPreviousStepsAsDone: false,
       removeDoneStepOnNavigateBack: true,
-      enableAnchorOnDoneStep: true,
     },
   });
 
-  $container.on('leaveStep', function(e, anchorObject, stepNum, stepDirection) {
-    const elmForm = $('#' + formStepIdPrefix + stepNum);
-    if (stepDirection === 'forward' && elmForm) {
-      elmForm.validator('validate');
-      const elmErr = elmForm.find('.form-group.has-error');
-      if (elmErr && elmErr.length > 0) {
-        return false;
+  function _validateFields($parent) {
+    let isValid = true;
+    $parent.closest(".tab-pane").find('input,select,textarea').each(
+      function(idx, elm) {
+        isValid = isValid && elm.reportValidity();
       }
+    );
+    $parent.closest("form").toggleClass("was-validated", !isValid);
+    return isValid;
+  }
+
+  $container.find("button[type=submit]").click(function() {
+    return _validateFields($(this));
+  });
+
+  $container.on('leaveStep', function(e, curStep, curIndex, nextIndex, stepDirection) {
+    const $elmForm = $('#' + formStepIdPrefix + curIndex);
+    if (stepDirection === 'forward' && $elmForm.length) {
+      return _validateFields($elmForm);
     }
     return true;
   });
@@ -138,7 +155,7 @@ function setUpWizard($container) {
    */
   const wizard = $container.data('smartWizard');
   wizard.toggleStep = function(number, enabled) {
-    $container.find('li').eq(number).toggleClass('disabled', !enabled);
+    $container.smartWizard("stepState", [number], enabled ? "enable" : "disable");
     if (requiredFields[number] !== undefined) {
       requiredFields[number].attr('required', enabled ? 'required' : null);
     }

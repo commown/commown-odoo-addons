@@ -47,21 +47,23 @@ class SelfHelp(http.Controller):
         partner = env.user.partner_id
         post = request.params.copy()
 
-        project_ref = "commown_self_troubleshooting." + post.get(
-            "project_ref", "support_project"
+        project_ref = post.get(
+            "project_ref", "commown_self_troubleshooting.support_project"
         )
-
-        contract_id = self._check_posted_contract_id(post["device_contract"])
 
         task_data = {
             "name": post["self-troubleshoot-type"],
             "priority": str(int(post.get("priority", 0))),
-            "contract_id": contract_id,
             "partner_id": partner.id,
             "description": self._description(**post),
             "project_id": env.ref(project_ref).id,
             "tag_ids": [(6, 0, self._tag_ids(**post))],
         }
+
+        if post.get("device_contract", None):
+            task_data["contract_id"] = self._check_posted_contract_id(
+                post["device_contract"]
+            )
 
         if post.get("stage_ref", None):
             stage_ref = "commown_self_troubleshooting." + post["stage_ref"]

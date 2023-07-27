@@ -131,7 +131,7 @@ class PagesTC(HttpCase):
     def test_portal_no_contract(self):
         "Portal home must not crash if user has no or a not-templated contract"
         doc = self.get_page("/my/home")
-        self.assertFalse(ts_link_urls(doc))
+        self.assertEqual(ts_link_urls(doc), {"/page/self-troubleshoot-other"})
 
         # Do not test for absence of troubleshooting links when there
         # is a contract, as there will be one at least, to terminate it
@@ -188,6 +188,6 @@ class PagesTC(HttpCase):
 
                 self.assertEqual(
                     self._contract_options(doc, value2int),
-                    {cid},
+                    set() if page_url == "/page/self-troubleshoot-other" else {cid},
                     "Wrong contract choice list in page '%s'" % page_url,
                 )

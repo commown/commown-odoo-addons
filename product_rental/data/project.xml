@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="contract_termination_project" model="project.project">
+      <field name="name">Termination</field>
+    </record>
+
+  </data>
+</odoo>

@@ -7,7 +7,7 @@
       <field name="key">website.self-troubleshoot-gs-day</field>
       <field name="arch" type="xml">
         <t t-name="website.self-troubleshoot-gs-day">
-          <t t-call="commown-self-troubleshoot.web-layout">
+          <t t-call="portal.portal_layout">
             <t t-set="title">Commown - Auto-dépannage - Casque DAY : Problème de son </t>
             <t t-set="head">
               <script type="text/javascript">
@@ -51,10 +51,17 @@
             <t t-set="issue_description_template">issue-description-gs</t>
             <!-- Fin des variables à modifier -->
 
-            <div class="container">
-              <h1>Auto-dépannage : Casque DAY</h1>
-              <h2>J'ai un problème de son</h2>
-              <br/>
+            <div class="bg-white border m-0 p-3 rounded">
+              <div class="d-flex flex-row" style="justify-content: space-between;">
+                <div class="d-flex flex-column">
+                  <h1>Auto-dépannage : Casque DAY</h1>
+                  <h2>J'ai un problème de son</h2>
+                </div>
+                <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
+                  Contacter un humain
+                </button>
+              </div>
+
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -63,25 +70,27 @@
                 <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
 
                 <div id="smartwizard">
-                  <ul>
-                    <li><a href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
-                    <li><a href="#step-1">Étape 1<br/><small>Type de problème</small></a></li>
-                    <li><a href="#step-2">Étape 2<br/><small>Le câble</small></a></li>
-                    <li disabled="disabled"><a href="#step-3">Étape 3<br/><small>Connecteurs</small></a></li>
-                    <li disabled="disabled"><a href="#step-4">Étape 4<br/><small>Sens du câble </small></a></li>
-                    <li disabled="disabled"><a href="#step-5">Étape 5<br/><small>Expédition</small></a></li>
-                    <li disabled="disabled"><a href="#step-6">Étape 6<br/><small>Confirmation</small></a></li>
-                    <li disabled="disabled"><a href="#step-7">Étape 7<br/><small>Problème résolu</small></a></li>
-                    <li><a href="#step-8">Étape 8<br/><small>Contacter un humain</small></a></li>
+                  <ul class="nav">
+                    <li class="nav-item"><a  class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
+                    <li class="nav-item"><a  class="nav-link" href="#step-1">Étape 1<br/><small>Type de problème</small></a></li>
+                    <li class="nav-item"><a  class="nav-link" href="#step-2">Étape 2<br/><small>Le câble</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a  class="nav-link" href="#step-3">Étape 3<br/><small>Connecteurs</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a  class="nav-link" href="#step-4">Étape 4<br/><small>Sens du câble </small></a></li>
+                    <li class="nav-item" disabled="disabled"><a  class="nav-link" href="#step-5">Étape 5<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a  class="nav-link" href="#step-6">Étape 6<br/><small>Confirmation</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a  class="nav-link" href="#step-7">Étape 7<br/><small>Problème résolu</small></a></li>
+                    <li class="nav-item"><a  class="nav-link" href="#step-8">Étape 8<br/><small>Contacter un humain</small></a></li>
                   </ul>
 
-                  <div>
+                  <t t-set="contracts"
+                     t-value="env.user.partner_id.self_troubleshooting_contracts('gs-day-page')"/>
+
+                  <div class="tab-content">
                     <t t-call="commown_self_troubleshooting.step-contract-choice">
-                      <t t-set="contracts"
-                         t-value="env.user.partner_id.self_troubleshooting_contracts('gs-day-page')"/>
+                      <t t-set="contracts" t-value="contracts"/>
                     </t>
 
-                  <div id="step-1">
+                  <div id="step-1" class="tab-pane">
                     <div class="clearfix">
                       <img class="pull-left" alt="Casque DAY"
                            src="/commown_self_troubleshooting/static/images/GS/day.png"/>
@@ -100,8 +109,8 @@
                     </div>
                   </div>
 
-                  <div id="step-2">
-                    <h2><i class="fas fa-cable-slash"/> Test agitation du câble </h2>
+                  <div id="step-2" class="tab-pane">
+                    <h2><i class="fas fa-wind"></i> Test agitation du câble</h2>
                     <div id="form-step-2" role="form" data-toggle="validator">
                       <div class="form-group">
                         <p>Dans ce cas, il est probable qu'il y ait un faux contact au niveau du câble.
@@ -109,43 +118,43 @@
                         Si vous trouvez une position dans laquelle le son est présent cela confirme qu'il y a un faux contact
                         et nous vous enverrons un nouveau câble. Faites ce test avec les deux extrémités du câble, pour les
                         deux prises <i>jack</i>. L'image ci-dessous représente une extrémité du câble, du côté du casque.</p>
-                        <br/>
-                        <br/>
                         <img alt="câble" src="/commown_self_troubleshooting/static/images/GS/cable.png"/>
-                        <br/>
-                        <br/>
-                        <label>Est-ce que le son est revenu à la normale pendant ce test ?</label>
-                        <label class="radio-inline" for="cable_sound-yes">Oui</label>
-                        <input type="radio" name="cable_sound" id="cable_sound-yes" value="yes" required="required" data-required-error="Le son est-il revenu à la normal ?"/>
-                        <label class="radio-inline" for="cable_sound-no">Non</label>
-                        <input type="radio" name="cable_sound" id="cable_sound-no" value="no" required="required"/>
-                        <div class="help-block with-errors"/>
+                        <p>Est-ce que le son est revenu à la normale pendant ce test ?</p>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="cable_sound" id="cable_sound-yes" value="yes" required="required"/>
+                          <label class="form-check-label" for="cable_sound-yes">Oui</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="cable_sound" id="cable_sound-no" value="no" required="required"/>
+                          <label class="form-check-label" for="cable_sound-no">Non</label>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div id="step-3">
-                    <h2><i class="fas fa-connection-slash"/> Connecteurs USB-C </h2>
+                  <div id="step-3" class="tab-pane">
+                    <h2><i class="fab fa-usb"></i> Connecteurs USB-C </h2>
                     <div id="form-step-3" role="form" data-toggle="validator">
                       <div class="form-group">
                         <p> Les connecteurs USB-C sont sûrement mal branchés ! Afin de vérifier cela, veuillez débrancher puis
                         rebrancher les connecteurs et s'assurer que vous entendez bien un petit "clic" lors du branchement.
                         Si cela ne résout pas votre problème, nous vous enverrons alors un autre casque.</p>
                         <img alt="Connecteur" src="/commown_self_troubleshooting/static/images/GS/connector.png" />
-                        <br />
-                        <br />
-                        <label>Entendez-vous du son dans les deux haut-parleurs ?</label>
-                        <label class="radio-inline" for="connection_solved-yes">Oui</label>
-                        <input type="radio" name="connection_solved" id="connection_solved-yes" value="yes" required="required" data-required-error="Avez-vous du son dans les deux haut-parleurs ?"/>
-                        <label class="radio-inline" for="connection_solved-no">Non</label>
-                        <input type="radio" name="connection_solved" id="connection_solved-no" value="no" required="required"/>
-                        <div class="help-block with-errors"/>
+                        <p>Entendez-vous du son dans les deux haut-parleurs ?</p>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="connection_solved" id="connection_solved-yes" value="yes" required="required"/>
+                          <label class="form-check-label" for="connection_solved-yes">Oui</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="connection_solved" id="connection_solved-no" value="no" required="required"/>
+                          <label class="form-check-label" for="connection_solved-no">Non</label>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <div id="step-4">
-                    <h2><i class="fas fa-branchement-slash"/> Sens du câble jack </h2>
+                  <div id="step-4" class="tab-pane">
+                    <h2><i class="fas fa-exchange-alt"></i> Sens du câble jack</h2>
                     <p>Le câble audio est sûrement mal branché.
                     Veuillez vérifier que le câble est orienté de façon à avoir le microphone en haut et non en bas.
                     Si ce n'est pas le cas, branchez le câble comme sur l'image ci-dessous. Si cela ne résout
@@ -153,12 +162,15 @@
                     <img alt="branchement" src="/commown_self_troubleshooting/static/images/GS/plug.png"/>
                     <div id="form-step-4" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label>Est ce que cela a permis de résoudre le problème ?</label>
-                        <label class="radio-inline" for="branchement_solved-yes">Oui</label>
-                        <input type="radio" name="branchement_solved" id="branchement-solved-yes" value="yes" required="required" data-required-error="Le problème est-il résolu ?"/>
-                        <label class="radio-inline" for="branchement_solved-no">Non</label>
-                        <input type="radio" name="branchement_solved" id="branchement_solved-no" value="no" required="required"/>
-                        <div class="help-block with-errors"/>
+                        <p>Est ce que cela a permis de résoudre le problème ?</p>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="branchement_solved" id="branchement_solved-yes" value="yes" required="required"/>
+                          <label class="form-check-label" for="branchement_solved-yes">Oui</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="branchement_solved" id="branchement_solved-no" value="no" required="required"/>
+                          <label class="form-check-label" for="branchement_solved-no">Non</label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -178,6 +190,7 @@
 
                     <t t-call="commown_self_troubleshooting.step-contact-human">
                       <t t-set="step">8</t>
+                      <t t-set="contracts" t-value="contracts"/>
                     </t>
 
                     </div>

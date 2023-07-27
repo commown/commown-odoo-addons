@@ -3,7 +3,7 @@ from odoo.exceptions import UserError, Warning
 
 from .common import internal_picking
 
-RESILIATION_XML_ID = "commown_self_troubleshooting.contract_termination_project"
+RESILIATION_XML_ID = "product_rental.contract_termination_project"
 
 
 class ProjectTaskAbstractPickingWizard(models.AbstractModel):

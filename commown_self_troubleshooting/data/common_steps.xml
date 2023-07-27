@@ -13,26 +13,26 @@
     </template>
 
     <template id="step-contract-choice">
-      <div id="step-0">
-        <div class="clearfix">
-          <img class="pull-left" src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
+      <div id="step-0" class="tab-pane" role="tabpanel" aria-labelledby="step-0">
+        <div class="row align-items-center">
+          <img src="/commown_self_troubleshooting/static/images/logo_commown.png" alt="Logo de commown" />
           <h2>Appareil concerné</h2>
         </div>
-        <p class="text-danger bg-danger" style="padding: 1em; margin: 1em">
+        <p class="alert alert-danger" style="padding: 1em; margin: 1em">
           Choisissez ci-dessous le contrat lié à l'appareil concerné.<br/>
           <br/>
           Le numéro de série (ou code IMEI pour les téléphones) sont indiqués pour vous permettre
           d'associer le bon contrat.<br/>
           Si vous ne savez pas où trouver ce numéro, allez voir
-          <a target="_blank" href="https://forum.commown.coop/t/trouver-le-numero-de-serie-de-son-ordinateur/2677">ici pour les ordinateurs</a>, et
-          <a target="_blank" href="https://forum.commown.coop/t/trouver-le-numero-imei-de-son-smartphone/2678">là pour les téléphones</a>.<br/>
+          <a target="_blank" href="https://forum.commown.coop/t/trouver-le-numero-de-serie-de-son-ordinateur/2677">ici pour les ordinateurs  <i class="fas fa-external-link-alt"></i></a>, et
+          <a target="_blank" href="https://forum.commown.coop/t/trouver-le-numero-imei-de-son-smartphone/2678">là pour les téléphones <i class="fas fa-external-link-alt"></i></a>.<br/>
           <br/>
           Si vous ne trouvez pas le bon numéro, pas de panique,
           sélectionnez ici le 1er contrat de la liste et précisez-nous
           en introduction de votre message que vous ne le trouvez pas,
           nous nous en occuperons !
         </p>
-        <div id="form-step-0" role="form" data-toggle="validator">
+        <div id="form-step-0" class="p-3" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="device_contract">Contrat de votre appareil :</label>
             <select
@@ -63,7 +63,7 @@
     </template>
 
     <template id="step-manipulation-option">
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <div class="clearfix">
           <h2>Option lors de la souscription</h2>
           <br />
@@ -76,7 +76,7 @@
           </p>
           <p>
             Vous retrouverez cette information dans votre commande
-            <a target="_blank" href="/my/orders">ici</a>
+            <a target="_blank" href="/my/orders">ici <i class="fas fa-external-link-alt"></i></a>
             .
           </p>
           <p class="text-danger">
@@ -112,7 +112,7 @@
       <t t-set="delivery" t-value="partner.colissimo_delivery_data()" />
       <t t-set="_countries" t-value="env['res.country'].search([('code', 'in', ('FR', 'BE', delivery['countryCode']))])" />
       <t t-set="countries" t-value="[(c.code, c.name) for c in _countries]" />
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="fas fa-shipping-fast" />
           Informations d'expédition
@@ -157,8 +157,8 @@
             <div class="help-block with-errors" />
           </div>
 
-          <div class="row">
-            <div class="col-xs-4 form-group">
+          <div class="form-row">
+            <div class="col form-group">
               <label for="zipcode">
                 <i class="fas fa-map-marker-alt" />
                 C. Postal
@@ -166,7 +166,7 @@
               <input class="form-control" name="zipcode" id="zipcode" required="required" t-att-value="delivery['zipCode']" data-required-error="Saisissez un code postal pour la livraison." />
               <div class="help-block with-errors" />
             </div>
-            <div class="col-xs-4 form-group">
+            <div class="col form-group">
               <label for="city">
                 <i class="fas fa-map-marker-alt" />
                 Ville
@@ -174,7 +174,7 @@
               <input class="form-control" name="city" id="city" required="required" t-att-value="delivery['city']" data-required-error="Saisissez une ville pour la livraison." />
               <div class="help-block with-errors" />
             </div>
-            <div class="col-xs-4 form-group">
+            <div class="col form-group">
               <label for="country">
                 <i class="fas fa-map-marker-alt" />
                 Pays
@@ -190,8 +190,8 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-xs-6 form-group">
+          <div class="form-row">
+            <div class="col form-group">
               <label for="phone">
                 <i class="fas fa-phone-alt" />
                 N° de mobile
@@ -199,7 +199,7 @@
               <input class="form-control" name="phone" id="phone" type="tel" required="required" t-att-value="delivery.get('phoneNumber') or delivery.get('mobileNumber', '')" data-required-error="Saisissez un numéro de téléphone pour la livraison." />
               <div class="help-block with-errors" />
             </div>
-            <div class="col-xs-6 form-group">
+            <div class="col form-group">
               <label for="email">
                 <i class="fas fa-envelope" />
                 Adresse email
@@ -214,7 +214,7 @@
     </template>
 
     <template id="step-self-solved">
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="far fa-thumbs-up" aria-hidden="true" />
           Problème résolu
@@ -247,8 +247,7 @@
     </template>
 
     <template id="step-contact-human">
-      <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('partner_id', '=', env.user.partner_id.id), ('contract_template_id.name', 'like', contract_name_like), '|', ('date_end', '=', False), ('date_end', '&gt;', datetime.date.today())])" />
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="fas fa-hands-helping" />
           Contacter un humain
@@ -289,7 +288,7 @@
     </template>
 
     <template id="step-confirm-change">
-      <div t-attf-id="step-{{ step }}">
+      <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
           <i class="fas fa-check-double" />
           Confirmation de votre demande
@@ -302,7 +301,7 @@
         <p>
           Une demande d'assistance va être créée automatiquement lorsque vous aurez soumis ce formulaire.
           Vous pourrez y accéder à tout moment depuis
-          <a href=" /my/tasks" target="_blank">votre espace personnel</a>, via la section
+          <a href=" /my/tasks" target="_blank">votre espace personnel <i class="fas fa-external-link-alt"></i></a>, via la section
           <i>Mes demandes d'assistance</i> pour en suivre l'avancement et en consulter l'historique.
         </p>
 
@@ -335,7 +334,7 @@
           <p>
             Vous aurez besoin d’un tout petit tournevis cruciforme,
           de taille #0 (voir
-            <a target="_blank" href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici</a>
+            <a target="_blank" href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici <i class="fas fa-external-link-alt"></i></a>
             ).
           Nous pouvons vous en prêter un à nous retourner ensuite avec
           le module en panne.
@@ -345,11 +344,14 @@
         <t t-set="tool_form">
           <div class="form-group">
             <p>Avez-vous besoin d'un tournevis ?</p>
-            <label class="radio-inline" for="screwdriver-yes">Oui</label>
-            <input type="radio" name="screwdriver" id="screwdriver-yes" value="yes" required="required" data-required-error="Dites-nous si vous avez besoin d'un tournevis." />
-            <label class="radio-inline" for="screwdriver-no">Non</label>
-            <input type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required" />
-            <div class="help-block with-errors" />
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="screwdriver" id="screwdriver-yes" value="yes" required="required"/>
+              <label class="form-check-label" for="screwdriver-yes">Oui</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required"/>
+              <label class="form-check-label" for="screwdriver-no">Non</label>
+            </div>
           </div>
         </t>
 
