@@ -16,8 +16,7 @@
           </t>
         </p>
 
-        <p t-if="more_info">Informations complémentaires :</p>
-        <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
 
       </t>
 

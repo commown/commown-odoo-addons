@@ -44,12 +44,8 @@
           je vous informe que mon problème était lié à l'activation de la fonction "Couper micro" de mon FP2 et que j'ai pu le résoudre.
         </p>
 
-        <p t-if="more_info">
-          J'ai porté à votre connaissance les informations complémentaires suivantes :
-        </p>
-        <div t-if="more_info">
-          <pre style="white-space: pre-wrap;"><t t-esc="more_info"/></pre>
-        </div>
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
+
       </t>
     </field>
   </record>

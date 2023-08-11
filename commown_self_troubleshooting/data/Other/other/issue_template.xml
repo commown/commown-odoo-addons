@@ -6,9 +6,7 @@
     <field name="key">commown_self_troubleshooting.issue-description-other</field>
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-other">
-        <div t-if="more_info">
-          <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
-        </div>
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
       </t>
     </field>
   </record>

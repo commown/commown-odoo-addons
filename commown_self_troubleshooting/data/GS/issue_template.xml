@@ -44,13 +44,8 @@
           <t t-if="branchement_solved=='yes'"> le problème provenait d'un mauvais branchement du câble jack et j'ai donc pu résoudre le problème.</t>
         </p>
 
-        <p t-if="more_info">
-          J'ai porté à votre connaissance les informations complémentaires suivantes :
-        </p>
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
 
-        <div t-if="more_info">
-          <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
-        </div>
       </t>
     </field>
   </record>

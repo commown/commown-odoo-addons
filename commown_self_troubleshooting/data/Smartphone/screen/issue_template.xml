@@ -37,10 +37,7 @@
             <li>Adresse de courriel : <t t-if="email.strip()" t-esc="email.strip()"/></li>
           </ul>
         </t>
-        <t t-if="more_info">
-          <p>J'ai porté à votre connaissance les informations complémentaires suivantes:</p>
-          <pre style="white-space: pre-wrap;"><t t-esc="more_info"/></pre>
-        </t>
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
       </t>
     </field>
   </record>
