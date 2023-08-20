@@ -216,7 +216,7 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
       },
       ...commonSteps.funcAddMoreInfo("Please call me!\nQuick!"),
       ...commonSteps.funcCreateAndCheckTicket(
-        "informations complémentaires suivantes",
+        "informations complémentaires",
         "Please call me!\nQuick!"
       ),
     ]
