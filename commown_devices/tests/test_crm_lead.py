@@ -17,7 +17,6 @@ class CrmLeadTC(DeviceAsAServiceTC):
         lead = leads[0]
         lead.send_email_on_delivery = False  # avoid setting-up email
         lot = self.adjust_stock()  # have 1 product in stock
-        quant = lot.quant_ids.filtered(lambda q: q.quantity > 0).ensure_one()
 
         # Should not be able to put the lead to a "go" column without a picking:
         stage = self.env["crm.stage"].create({"name": "GO [stock: check-has-picking]"})
@@ -26,7 +25,7 @@ class CrmLeadTC(DeviceAsAServiceTC):
                 lead.stage_id = stage.id
             self.assertEqual("Lead has no assigned picking.", err.exception.name)
 
-        picking = lead.contract_id.send_device(quant)
+        picking = lead.contract_id.send_device(lot)
         self.assertEqual(picking.mapped("move_lines.product_qty"), [1.0])
         self.assertEqual(picking.state, "assigned")
 

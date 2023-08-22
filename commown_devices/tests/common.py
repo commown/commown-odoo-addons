@@ -160,13 +160,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
     def send_device(self, serial, contract=None, date=None):
         contract = contract or self.so.order_line.contract_id
-        quant = self.env["stock.quant"].search(
-            [
-                ("lot_id.name", "=", serial),
-                ("quantity", ">", 0),
-            ]
-        )
-        contract.send_device(quant, date=date, do_transfer=True)
+        lot = self.env["stock.production.lot"].search([("name", "=", serial)])
+        contract.send_device(lot.ensure_one(), date=date, do_transfer=True)
 
     def prepare_ui(
         self, created_model_name, related_entity, relation_field, user_choices=None

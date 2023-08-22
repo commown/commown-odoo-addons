@@ -190,9 +190,8 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        quant = self.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
         return self.task_id.contract_id.send_device(
-            quant, origin=self.task_id.get_name_for_origin(), date=self.date
+            self.lot_id, origin=self.task_id.get_name_for_origin(), date=self.date
         )
 
 
@@ -250,8 +249,9 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             self.task_id.lot_id, transfer_location, date=self.date, do_transfer=True
         )
 
-        quant = self.task_id.lot_id.quant_ids.filtered(lambda q: q.quantity > 0)
-        self.contract_id.send_device(quant, date=self.date, do_transfer=True)
+        self.contract_id.send_device(
+            self.task_id.lot_id, date=self.date, do_transfer=True
+        )
 
 
 class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
