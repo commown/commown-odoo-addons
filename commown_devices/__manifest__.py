@@ -13,6 +13,7 @@
         "commown_contractual_issue",
         "commown_shipping",
         "commown_lead_risk_analysis",
+        "product_rental",
         "stock",
     ],
     "data": [

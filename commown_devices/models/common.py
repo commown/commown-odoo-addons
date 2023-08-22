@@ -1,65 +1,6 @@
 from odoo import _, fields
 
 
-def internal_picking_tracking_none(
-    origin, products, orig_location, dest_location, date=None, do_transfer=False
-):
-    env = orig_location.env
-    picking_type = env.ref("stock.picking_type_internal")
-
-    date = date or fields.Datetime.now()
-
-    picking = env["stock.picking"].create(
-        {
-            "move_type": "direct",
-            "picking_type_id": picking_type.id,
-            "location_id": orig_location.id,
-            "location_dest_id": dest_location.id,
-            "date": date,
-            "date_done": date,
-            "origin": origin,
-        }
-    )
-
-    moves = {}
-    for product, quantity in products.items():
-        moves[product] = env["stock.move"].create(
-            {
-                "name": product.name,
-                "picking_id": picking.id,
-                "picking_type_id": picking_type.id,
-                "location_id": orig_location.id,
-                "location_dest_id": dest_location.id,
-                "product_id": product.id,
-                "product_uom_qty": quantity,
-                "product_uom": product.uom_id.id,
-                "date": date,
-            }
-        )
-
-    picking.scheduled_date = date
-
-    assert picking.move_lines
-    picking.action_confirm()
-    picking.action_assign()
-    assert picking.state == "assigned", (
-        "Cannot assign any device: state keeps: %r" % picking.state
-    )
-
-    for product, move in moves.items():
-        move.move_line_ids.update(
-            {
-                "location_id": orig_location.id,
-                "qty_done": products[product],
-            }
-        )
-
-    if do_transfer:
-        do_new_transfer(picking, date)
-
-    return picking
-
-
 def first_common_location(locs):
     """From a list of locations return the first common parent location.
     Retun a falsy stock.location if there is no common location.
@@ -105,16 +46,19 @@ def find_products_orig_location(env, products, stock=None):
             )
         )
         if not quant:
-            raise Warning(_("Not enough %s in stock") % product.name)
+            raise Warning(
+                _("Not enough %s under location %s") % (product.name, stock.name)
+            )
 
         pts_orig[product] = {"qty": quantity_to_send, "loc": quant[0].location_id}
 
     return pts_orig
 
 
-def internal_picking_mixt(
-    lots,
-    products,
+def internal_picking(
+    lots,  # list of lot
+    products,  # dict {product : quantity}
+    orig_parent_location,
     dest_location,
     origin,
     date=None,
@@ -122,13 +66,13 @@ def internal_picking_mixt(
 ):
     """Create picking with tracked and untracked products"""
     env = dest_location.env
-    located_products = find_products_orig_location(env, products)
+    located_products = find_products_orig_location(env, products, orig_parent_location)
     products_locations = [located_products[p]["loc"] for p in located_products.keys()]
 
     located_lots = {
         lot: {
             "loc": lot.current_location(
-                env.ref("commown_devices.stock_location_available_for_rent"),
+                orig_parent_location,
                 raise_if_not_found=True,
                 raise_if_reserved=True,
             )
@@ -209,66 +153,6 @@ def internal_picking_mixt(
             {
                 "location_id": located_products[product]["loc"].id,
                 "qty_done": products[product],
-            }
-        )
-
-    if do_transfer:
-        do_new_transfer(picking, date)
-
-    return picking
-
-
-def internal_picking(
-    origin, lots, orig_location, dest_location, date=None, do_transfer=False
-):
-    env = orig_location.env
-    picking_type = env.ref("stock.picking_type_internal")
-
-    date = date or fields.Datetime.now()
-
-    picking = env["stock.picking"].create(
-        {
-            "move_type": "direct",
-            "picking_type_id": picking_type.id,
-            "location_id": orig_location.id,
-            "location_dest_id": dest_location.id,
-            "date": date,
-            "date_done": date,
-            "origin": origin,
-        }
-    )
-
-    moves = {}
-    for lot in lots:
-        moves[lot] = env["stock.move"].create(
-            {
-                "name": lot.product_id.name,
-                "picking_id": picking.id,
-                "picking_type_id": picking_type.id,
-                "location_id": orig_location.id,
-                "location_dest_id": dest_location.id,
-                "product_id": lot.product_id.id,
-                "product_uom_qty": lot.product_qty,
-                "product_uom": lot.product_uom_id.id,
-                "date": date,
-            }
-        )
-
-    picking.scheduled_date = date
-
-    assert picking.move_lines
-    picking.action_confirm()
-    picking.action_assign()
-    assert picking.state == "assigned", (
-        "Cannot assign any device: state keeps: %r" % picking.state
-    )
-
-    for lot, move in moves.items():
-        move.move_line_ids.update(
-            {
-                "lot_id": lot.id,
-                "location_id": orig_location.id,
-                "qty_done": lot.product_qty,
             }
         )
 
