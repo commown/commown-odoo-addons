@@ -45,8 +45,8 @@ class Contract(models.Model):
             record.quant_nb = len(record.quant_ids)
 
     @api.multi
-    def send_device(self, quant, origin=None, date=None, do_transfer=False):
-        """Create a picking of quant to partner's location.
+    def send_device(self, lot, origin=None, date=None, do_transfer=False):
+        """Create a picking of lot to partner's location.
         If given `date` is falsy (the default), it is set to now.
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
@@ -55,7 +55,7 @@ class Contract(models.Model):
         if origin is None:
             origin = self.name
         return self._create_picking(
-            [quant.lot_id],
+            [lot],
             {},  # Untracked products
             self.env.ref("commown_devices.stock_location_available_for_rent"),
             dest_location,
@@ -68,7 +68,7 @@ class Contract(models.Model):
     def send_device_tracking_none(
         self, product, origin=None, date=None, do_transfer=False
     ):
-        """Create a picking of quant to partner's location.
+        """Create a picking of product to partner's location.
         If given `date` is falsy (the default), it is set to now.
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
