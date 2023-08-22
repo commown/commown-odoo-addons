@@ -322,15 +322,16 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.task.update(
             {"contract_id": self.c1.id, "lot_id": self.c1.quant_ids[0].lot_id}
         )
+        lot_to_send = possible_values["lot_id"][0]
 
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
         wizard = self.env["project.task.outward.picking.wizard"].create(
             {
                 "task_id": self.task.id,
                 "date": date,
-                "lot_id": self.task.lot_id.id,
-                "variant_id": self.task.lot_id.product_id.id,
-                "product_tmpl_id": self.task.lot_id.product_id.product_tmpl_id.id,
+                "lot_id": lot_to_send.id,
+                "variant_id": lot_to_send.product_id.id,
+                "product_tmpl_id": lot_to_send.product_id.product_tmpl_id.id,
             }
         )
         picking = wizard.create_picking()

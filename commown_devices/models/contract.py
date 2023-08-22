@@ -4,11 +4,7 @@ from collections import OrderedDict
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from .common import (
-    internal_picking,
-    internal_picking_mixt,
-    internal_picking_tracking_none,
-)
+from .common import internal_picking
 
 _logger = logging.getLogger(__name__)
 
@@ -60,7 +56,8 @@ class Contract(models.Model):
             origin = self.name
         return self._create_picking(
             [quant.lot_id],
-            quant.location_id,
+            {},  # Untracked products
+            self.env.ref("commown_devices.stock_location_available_for_rent"),
             dest_location,
             origin=origin,
             date=date,
@@ -90,9 +87,10 @@ class Contract(models.Model):
         if not quant:
             raise UserError(_("No product %s found in stock") % product.name)
 
-        return self._create_picking_tracking_none(
+        return self._create_picking(
+            [],  # Lots
             {product: 1},
-            quant.location_id,
+            self.env.ref("commown_devices.stock_location_available_for_rent"),
             dest_location,
             origin=origin,
             date=date,
@@ -102,16 +100,15 @@ class Contract(models.Model):
     def send_devices_mixt(
         self, lots, products, origin=None, date=None, do_transfer=False
     ):
-
-        self.env.ref("stock.stock_location_stock")
         dest_location = self.partner_id.get_or_create_customer_location()
 
-        if not origin:
+        if origin is not None:
             origin = self.name
 
-        return self._create_picking_mixt(
+        return self._create_picking(
             lots,
             products,
+            self.env.ref("commown_devices.stock_location_available_for_rent"),
             dest_location,
             origin=origin,
             date=None,
@@ -130,10 +127,10 @@ class Contract(models.Model):
         if origin is None:
             origin = self.name
 
-        orig_location = self.partner_id.get_or_create_customer_location()
         return self._create_picking(
             [lot],
-            orig_location,
+            {},  # products
+            self.env.ref("stock.stock_location_locations_partner"),
             dest_location,
             origin=origin,
             date=date,
@@ -153,77 +150,31 @@ class Contract(models.Model):
         if origin is None:
             origin = self.name
 
-        orig_location = self.partner_id.get_or_create_customer_location()
-        return self._create_picking_tracking_none(
+        return self._create_picking(
+            [],  # lots
             {product: 1},
-            orig_location,
+            self.env.ref("stock.stock_location_locations_partner"),
             dest_location,
             origin=origin,
             date=date,
             do_transfer=do_transfer,
         )
 
-    def _create_picking_tracking_none(
-        self,
-        products,
-        orig_location,
-        dest_location,
-        origin=None,
-        date=None,
-        do_transfer=False,
-    ):
-        self.ensure_one()
-
-        if origin is None:
-            origin = self.name
-        picking = internal_picking_tracking_none(
-            origin,
-            products,
-            orig_location,
-            dest_location,
-            date=date,
-            do_transfer=do_transfer,
-        )
-        self.picking_ids |= picking
-
-        return picking
-
     def _create_picking(
         self,
         lots,
-        orig_location,
-        dest_location,
-        origin=None,
-        date=None,
-        do_transfer=False,
-    ):
-        self.ensure_one()
-        if origin is None:
-            origin = self.name
-        picking = internal_picking(
-            origin,
-            lots,
-            orig_location,
-            dest_location,
-            date=date,
-            do_transfer=do_transfer,
-        )
-        self.picking_ids |= picking
-        return picking
-
-    def _create_picking_mixt(
-        self,
-        lots,
         products,
+        orig_parent_location,
         dest_location,
         origin,
         date=None,
         do_transfer=False,
     ):
         self.ensure_one()
-        picking = internal_picking_mixt(
+        picking = internal_picking(
             lots,
             products,
+            orig_parent_location,
             dest_location,
             origin,
             date=date,

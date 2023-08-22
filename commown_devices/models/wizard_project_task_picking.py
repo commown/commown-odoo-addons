@@ -91,10 +91,11 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             raise UserError(_("Can't move device: no device set on this task!"))
 
         return internal_picking(
-            self.task_id.get_name_for_origin(),
             [lot],
+            {},
             self.present_location_id,
             self.location_dest_id,
+            self.task_id.get_name_for_origin(),
             date=self.date,
             do_transfer=True,
         )

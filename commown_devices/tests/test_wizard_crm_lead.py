@@ -66,6 +66,7 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
             self.attribute_usbc,
             usbc_values,
         )
+        self.fp3_plus_service_tmpl._origin = self.fp3_plus_service_tmpl
         self.fp3_plus_storable_tmpl.create_variant_ids()
         self.fp3_plus_service_tmpl.create_variant_ids()
         self.color1 = color_values[0]
@@ -172,7 +173,11 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         with self.assertRaises(Warning) as err:
             picking = wizard.create_picking()
         self.assertEqual(
-            "Not enough %s in stock" % self.protective_screen.name,
+            "Not enough %s under location %s"
+            % (
+                self.protective_screen.name,
+                self.env.ref("commown_devices.stock_location_available_for_rent").name,
+            ),
             err.exception.args[0],
         )
 

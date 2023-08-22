@@ -105,6 +105,8 @@ class ProductTemplateTC(DeviceAsAServiceTC):
             self.fp3_plus_storable_color2,
             att_val_ids=self.color2,
         )
+        # Manualy set _origin to emulate onchange methode
+        self.fp3_plus_service_tmpl._origin = self.fp3_plus_service_tmpl
         # Manually trigger onchange method
         self.fp3_plus_service_tmpl.onchange_storable_config_ids()
         # Check primary variant has been set
@@ -172,6 +174,8 @@ class ProductTemplateTC(DeviceAsAServiceTC):
                 ("attribute_value_ids.id", "ilike", self.color2.id),
             ]
         )
+        # Manualy set _origin to emulate onchange methode
+        self.fp3_plus_service_tmpl._origin = self.fp3_plus_service_tmpl
         create_config(
             self.fp3_plus_service_tmpl,
             "secondary",
@@ -181,6 +185,8 @@ class ProductTemplateTC(DeviceAsAServiceTC):
         )
         self.fp3_plus_service_tmpl.onchange_storable_config_ids()
         with self.assertRaises(Warning) as err2:
+            # Manualy set _origin to emulate onchange methode
+            self.fp3_plus_service_tmpl._origin = self.fp3_plus_service_tmpl
             create_config(
                 self.fp3_plus_service_tmpl,
                 "secondary",
@@ -192,7 +198,7 @@ class ProductTemplateTC(DeviceAsAServiceTC):
         self.assertEqual(
             (
                 "For product %s, two secondary variants derive from the same template,"
-                "are you sure that there is no configuration mistake ?"
+                " are you sure that there is no configuration mistake ?"
                 % fp3_plus_service_color2.name
             ),
             err2.exception.args[0],
