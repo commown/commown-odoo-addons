@@ -215,8 +215,9 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        return self.task_id.contract_id.receive_device(
-            self.lot_id,
+        return self.task_id.contract_id.receive_devices(
+            [self.lot_id],
+            {},
             self.env.ref("commown_devices.stock_location_devices_to_check"),
             origin=self.task_id.get_name_for_origin(),
             date=self.date,
@@ -245,8 +246,12 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             "commown_devices.stock_location_contract_transfer"
         )
 
-        self.task_id.contract_id.receive_device(
-            self.task_id.lot_id, transfer_location, date=self.date, do_transfer=True
+        self.task_id.contract_id.receive_devices(
+            [self.task_id.lot_id],
+            {},
+            transfer_location,
+            date=self.date,
+            do_transfer=True,
         )
 
         self.contract_id.send_devices(
@@ -289,8 +294,9 @@ class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        return self.task_id.contract_id.receive_device_tracking_none(
-            self.variant_id,
+        return self.task_id.contract_id.receive_devices(
+            [],
+            {self.variant_id: 1},
             self.env.ref("commown_devices.stock_location_devices_to_check"),
             origin=self.task_id.get_name_for_origin(),
             date=self.date,
