@@ -14,8 +14,8 @@ class ContractTC(DeviceAsAServiceTC):
 
         contract.send_devices(lot1, {}, date="2021-07-01 17:00:00", do_transfer=True)
         contract.send_devices(lot2, {}, date="2021-07-14", do_transfer=True)
-        return_picking = contract.receive_device(
-            lot1, loc_check, date="2021-07-22", do_transfer=False
+        return_picking = contract.receive_devices(
+            lot1, {}, loc_check, date="2021-07-22", do_transfer=False
         )
 
         self.assertFalse(contract.stock_at_date("2021-07-01 16:59:59"))

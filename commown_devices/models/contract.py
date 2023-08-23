@@ -64,8 +64,8 @@ class Contract(models.Model):
         )
 
     @api.multi
-    def receive_device(
-        self, lot, dest_location, origin=None, date=False, do_transfer=False
+    def receive_devices(
+        self, lots, products, dest_location, origin=None, date=False, do_transfer=False
     ):
         """Create a picking from partner's location to `dest_location`.
         If given `date` is falsy (the default), it is set to now.
@@ -76,31 +76,8 @@ class Contract(models.Model):
             origin = self.name
 
         return self._create_picking(
-            [lot],
-            {},  # products
-            self.env.ref("stock.stock_location_locations_partner"),
-            dest_location,
-            origin=origin,
-            date=date,
-            do_transfer=do_transfer,
-        )
-
-    @api.multi
-    def receive_device_tracking_none(
-        self, product, dest_location, origin=None, date=False, do_transfer=False
-    ):
-        """Create a picking from partner's location to `dest_location`.
-        If given `date` is falsy (the default), it is set to now.
-        If `do_transfer` is True (default: False), execute the picking
-        at the previous date.
-        """
-
-        if origin is None:
-            origin = self.name
-
-        return self._create_picking(
-            [],  # lots
-            {product: 1},
+            lots,
+            products,
             self.env.ref("stock.stock_location_locations_partner"),
             dest_location,
             origin=origin,
