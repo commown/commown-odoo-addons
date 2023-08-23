@@ -1,8 +1,7 @@
 import logging
 from collections import OrderedDict
 
-from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 
 from .common import internal_picking
 
@@ -45,7 +44,7 @@ class Contract(models.Model):
             record.quant_nb = len(record.quant_ids)
 
     @api.multi
-    def send_device(self, lot, origin=None, date=None, do_transfer=False):
+    def send_devices(self, lots, products, origin=None, date=None, do_transfer=False):
         """Create a picking of lot to partner's location.
         If given `date` is falsy (the default), it is set to now.
         If `do_transfer` is True (default: False), execute the picking
@@ -55,64 +54,13 @@ class Contract(models.Model):
         if origin is None:
             origin = self.name
         return self._create_picking(
-            [lot],
-            {},  # Untracked products
-            self.env.ref("commown_devices.stock_location_available_for_rent"),
-            dest_location,
-            origin=origin,
-            date=date,
-            do_transfer=do_transfer,
-        )
-
-    @api.multi
-    def send_device_tracking_none(
-        self, product, origin=None, date=None, do_transfer=False
-    ):
-        """Create a picking of product to partner's location.
-        If given `date` is falsy (the default), it is set to now.
-        If `do_transfer` is True (default: False), execute the picking
-        at the previous date.
-        """
-        stock = self.env.ref("commown_devices.stock_location_modules_and_accessories")
-        dest_location = self.partner_id.get_or_create_customer_location()
-        quant = self.env["stock.quant"].search(
-            [
-                ("product_id", "=", product.id),
-                ("location_id", "child_of", stock.id),
-                ("quantity", ">", 0),
-            ]
-        )
-        if origin is None:
-            origin = self.name
-        if not quant:
-            raise UserError(_("No product %s found in stock") % product.name)
-
-        return self._create_picking(
-            [],  # Lots
-            {product: 1},
-            self.env.ref("commown_devices.stock_location_available_for_rent"),
-            dest_location,
-            origin=origin,
-            date=date,
-            do_transfer=do_transfer,
-        )
-
-    def send_devices_mixt(
-        self, lots, products, origin=None, date=None, do_transfer=False
-    ):
-        dest_location = self.partner_id.get_or_create_customer_location()
-
-        if origin is not None:
-            origin = self.name
-
-        return self._create_picking(
             lots,
             products,
             self.env.ref("commown_devices.stock_location_available_for_rent"),
             dest_location,
             origin=origin,
-            date=None,
-            do_transfer=False,
+            date=date,
+            do_transfer=do_transfer,
         )
 
     @api.multi

@@ -190,8 +190,8 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        return self.task_id.contract_id.send_device(
-            self.lot_id, origin=self.task_id.get_name_for_origin(), date=self.date
+        return self.task_id.contract_id.send_devices(
+            [self.lot_id], {}, origin=self.task_id.get_name_for_origin(), date=self.date
         )
 
 
@@ -249,8 +249,8 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             self.task_id.lot_id, transfer_location, date=self.date, do_transfer=True
         )
 
-        self.contract_id.send_device(
-            self.task_id.lot_id, date=self.date, do_transfer=True
+        self.contract_id.send_devices(
+            [self.task_id.lot_id], {}, date=self.date, do_transfer=True
         )
 
 
@@ -267,8 +267,9 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
 
     @api.multi
     def create_picking(self):
-        return self.task_id.contract_id.send_device_tracking_none(
-            self.variant_id,
+        return self.task_id.contract_id.send_devices(
+            [],  # Lots
+            {self.variant_id: 1},
             origin=self.task_id.get_name_for_origin(),
             date=self.date,
             do_transfer=False,

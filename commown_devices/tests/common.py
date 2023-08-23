@@ -158,10 +158,13 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
         return product
 
-    def send_device(self, serial, contract=None, date=None):
+    def send_device(self, serial, contract=None, date=None, location=None):
         contract = contract or self.so.order_line.contract_id
+        location = location or self.env.ref("stock.stock_location_stock")
         lot = self.env["stock.production.lot"].search([("name", "=", serial)])
-        contract.send_device(lot.ensure_one(), date=date, do_transfer=True)
+        contract.send_devices(
+            [lot.ensure_one()], {}, send_lots_from=location, date=date, do_transfer=True
+        )
 
     def prepare_ui(
         self, created_model_name, related_entity, relation_field, user_choices=None

@@ -93,7 +93,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
     def _create_and_send_device(self, serial, contract, product=None, do_transfer=True):
         lot = self.adjust_stock(product, serial=serial)
         if contract is not None:
-            contract.send_device(lot, do_transfer=do_transfer)
+            contract.send_devices(lot, {}, do_transfer=do_transfer)
 
     def get_form(self, **user_choices):
         return self.prepare_ui(
@@ -478,16 +478,18 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             ]
         )[0]
 
-        self.task_test_checks.contract_id.send_device_tracking_none(
-            module,
+        self.task_test_checks.contract_id.send_devices(
+            [],
+            {module: 1},
             origin=self.task_test_checks.get_name_for_origin(),
         )
 
         self.task_test_checks.stage_id = self.ongoing_stage
         self.assertTrue(self.task_test_checks.stage_id == self.ongoing_stage)
 
-        self.task_test_checks2.contract_id.send_device(
-            quant.lot_id,
+        self.task_test_checks2.contract_id.send_devices(
+            [quant.lot_id],
+            {},
             origin=self.task_test_checks2.get_name_for_origin(),
         )
         self.task_test_checks2.stage_id = self.ongoing_stage
