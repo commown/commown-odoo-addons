@@ -25,7 +25,7 @@ class CrmLeadTC(DeviceAsAServiceTC):
                 lead.stage_id = stage.id
             self.assertEqual("Lead has no assigned picking.", err.exception.name)
 
-        picking = lead.contract_id.send_device(lot)
+        picking = lead.contract_id.send_devices([lot], {})
         self.assertEqual(picking.mapped("move_lines.product_qty"), [1.0])
         self.assertEqual(picking.state, "assigned")
 

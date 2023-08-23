@@ -78,6 +78,6 @@ class CrmLeadPickingWizard(models.TransientModel):
             "You have to select a lot for each tracked product"
         )
         products = {u: 1 for u in self._compute_untracked_products()}
-        return self.lead_id.contract_id.send_devices_mixt(
+        return self.lead_id.contract_id.send_devices(
             self.lot_ids, products, date=self.date
         )
