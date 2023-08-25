@@ -16,6 +16,13 @@
       <field name="location_id" ref="stock_location_available_for_rent"/>
     </record>
 
+    <record id="stock_location_modules_and_accessories" model="stock.location">
+      <field name="name">New Modules and accessories</field>
+      <field name="usage">internal</field>
+      <field name="partner_id">1</field>
+      <field name="location_id" ref="stock_location_available_for_rent"/>
+    </record>
+
     <record id="stock_location_repackaged_devices" model="stock.location">
       <field name="name">Repackaged devices</field>
       <field name="usage">view</field>
