@@ -72,7 +72,7 @@ class Contract(models.Model):
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
-        stock = self.env.ref("stock.stock_location_stock")
+        stock = self.env.ref("commown_devices.stock_location_modules_and_accessories")
         dest_location = self.partner_id.get_or_create_customer_location()
         quant = self.env["stock.quant"].search(
             [

@@ -82,7 +82,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
                 "usage": "internal",
                 "partner_id": 1,
                 "location_id": self.env.ref(
-                    "commown_devices.stock_location_new_devices"
+                    "commown_devices.stock_location_modules_and_accessories"
                 ).id,
             }
         )
