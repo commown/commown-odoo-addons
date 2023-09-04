@@ -64,7 +64,7 @@ class SelfHelp(http.Controller):
             )
 
         if post.get("stage_ref", None):
-            stage_ref = "commown_self_troubleshooting." + post["stage_ref"]
+            stage_ref = post["stage_ref"]
             task_data["stage_id"] = env.ref(stage_ref).id
 
         task = env["project.task"].sudo().create(task_data)

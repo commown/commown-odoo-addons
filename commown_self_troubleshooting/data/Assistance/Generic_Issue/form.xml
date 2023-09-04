@@ -194,7 +194,7 @@
                       </div>
 
                       <div class="form-group">
-                        <input type="hidden" name="stage_ref" value="stage_received" />
+                        <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_received" />
                         <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
                       </div>
                     </div>
@@ -249,7 +249,7 @@
                       </div>
 
                       <div class="form-group">
-                        <input type="hidden" name="stage_ref" value="stage_received" />
+                        <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_received" />
                         <button type="submit" class="btn btn-primary" name="action">Envoyer ma demande</button>
                       </div>
                     </div>
