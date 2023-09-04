@@ -59,6 +59,8 @@
                     t-att-data-commitment-end-date="c_descr['commitment_end_date']"
                     t-att-data-in-commitment="c_descr['in_commitment'] and 'true' or 'false'"
                     t-att-data-order-id="c_descr['order_id']"
+                    t-att-data-product="c_descr.get('product')"
+                    t-att-data-serial="c_descr.get('serial')"
                 ><t t-esc="c.name + c_descr['descr']"/>
                 </option>
               </t>
