@@ -47,16 +47,14 @@ class SelfHelp(http.Controller):
         partner = env.user.partner_id
         post = request.params.copy()
 
-        project_ref = post.get(
-            "project_ref", "commown_self_troubleshooting.support_project"
-        )
+        project = env.ref(post["project_ref"])
 
         task_data = {
             "name": post["self-troubleshoot-type"],
             "priority": str(int(post.get("priority", 0))),
             "partner_id": partner.id,
             "description": self._description(**post),
-            "project_id": env.ref(project_ref).id,
+            "project_id": project.id,
             "tag_ids": [(6, 0, self._tag_ids(**post))],
         }
 
