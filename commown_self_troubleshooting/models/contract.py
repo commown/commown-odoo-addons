@@ -51,4 +51,8 @@ class Contract(models.Model):
                 + result["descr"]
             )
 
+            if len(devices) == 1:
+                result["product"] = devices[0].product_id.name
+                result["serial"] = devices[0].name
+
         return result
