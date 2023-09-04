@@ -25,6 +25,8 @@
         "data/CC/screen/form.xml",
         "data/ContractManagement/termination/form.xml",
         "data/ContractManagement/termination/issue_template.xml",
+        "data/ContractManagement/theftandloss/form.xml",
+        "data/ContractManagement/theftandloss/issue_template.xml",
         "data/FP2/camera/form.xml",
         "data/FP2/camera/issue_template.xml",
         "data/FP2/micro/form.xml",

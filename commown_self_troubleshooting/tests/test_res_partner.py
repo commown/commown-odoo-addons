@@ -81,12 +81,15 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
                 },
                 {
                     "title": "Demande d'assistance",
-                    "pages": [{"url_path": "/page/self-troubleshoot-generic-issue"}],
+                    "pages": [
+                        {"url_path": "/page/self-troubleshoot-theft-and-loss"},
+                        {"url_path": "/page/self-troubleshoot-generic-issue"},
+                    ],
                 },
                 {
                     "title": "Vie de mes contrats",
                     "pages": [
-                        {"url_path": "/page/self-troubleshoot-contract-termination"},
+                        {"url_path": "/page/self-troubleshoot-contract-termination"}
                     ],
                 },
                 {
