@@ -24,8 +24,16 @@ def chrome_suppress_origin():
         ChromeBrowser._open_websocket = old_open_websocket
 
 
+class RunTourMixin:
+    def _run_tour(self, name):
+        js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name
+        js_ready = "odoo.__DEBUG__.services['web_tour.tour'].tours.%s.ready" % name
+        with chrome_suppress_origin():
+            self.phantom_js("/my", js, js_ready, login="portal")
+
+
 @odoo.tests.tagged("post_install", "-at_install")
-class TestPageTC(odoo.tests.HttpCase):
+class TestPageTC(RunTourMixin, odoo.tests.HttpCase):
     "Base class to ease tour test writting"
 
     contract_name = None  # Override me!
@@ -66,12 +74,6 @@ class TestPageTC(odoo.tests.HttpCase):
                 product,
                 user_portal,
             )
-
-    def _run_tour(self, name):
-        js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name
-        js_ready = "odoo.__DEBUG__.services['web_tour.tour'].tours.%s.ready" % name
-        with chrome_suppress_origin():
-            self.phantom_js("/my", js, js_ready, login="portal")
 
 
 class TestPageFP2(TestPageTC):
