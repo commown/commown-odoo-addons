@@ -86,6 +86,18 @@ class TestPageFP2(TestPageTC):
         self._run_tour("commown_self_troubleshooting_tour_fp2_battery_contact_human")
 
 
+class TestPageSmartphone(TestPageTC):
+    contract_name = "FP3/B2C"
+
+    def test_smartphone_need_screen_protection(self):
+        self._run_tour("commown_self_troubleshooting_smartphone_need_screen_protection")
+
+    def test_smartphone_need_display_with_protection(self):
+        self._run_tour(
+            "commown_self_troubleshooting_smartphone_need_display_with_protection"
+        )
+
+
 class TestPageContractManagement(TestPageTC):
     contract_name = "NO/MATTER"
 

@@ -21,6 +21,19 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
 
     // Constant steps
 
+    checkInputNamesMatchesUser: {
+      content: "Check name",
+      trigger: "input[name=name]",
+      run: function() {
+        const user = $("#top_menu li:last-child a b span:eq(0)").text();
+        if (this.$anchor.val() !== user) {
+          console.log("Field 'name' value should equal the logged-in user name:")
+          console.log("Got: '" + this.$anchor.val() + "' instead of '" + user + "'.");
+          console.log("Error (see above)");
+        }
+      },
+    },
+
     gotoNextStep: {
       content: "Go to next wizard step",
       trigger: "button.sw-btn-next",
@@ -97,18 +110,7 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
         run: function() {},
       },
       commonSteps.gotoNextStep,
-      {
-        content: "Check name",
-        trigger: "input[name=name]",
-        run: function() {
-          const user = $("#top_menu li:last-child a b span:eq(0)").text();
-          if (this.$anchor.val() !== user) {
-            console.log("Field 'name' value should equal the logged-in user name:")
-            console.log("Got: '" + this.$anchor.val() + "' instead of '" + user + "'.");
-            console.log("Error (see above)");
-          }
-        },
-      },
+      commonSteps.checkInputNamesMatchesUser,
       commonSteps.gotoNextStep,
       ...commonSteps.funcAddMoreInfo("Hello!\nAre you OK?"),
       ...commonSteps.funcCreateAndCheckTicket(
@@ -219,6 +221,110 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
         "nformations complémentaires",
         "Please call me!\nQuick!"
       ),
+    ]
+  );
+
+  tour.register(
+    "commown_self_troubleshooting_smartphone_need_screen_protection",
+    { url: "/my" },
+    [
+      {
+        content: "Go to any screen protection page (FP3 in this example)",
+        trigger: 'a[href="/page/self-troubleshoot-fp3-screen"]',
+      },
+      commonSteps.fillInContract,
+      commonSteps.gotoNextStep,
+      {
+        content: "Select no on the presence of screen protection on this device",
+        trigger: "input[id=has_protection_no]",
+        run: "text Non",
+      },
+      {
+        content: "Check step 2 nav link is disabled",
+        trigger: "#smartwizard a.nav-link:eq(2).disabled",
+        run: function() {},
+      },
+      {
+        content: "Check step 3 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(3):not(.disabled)",
+        run: function() {},
+      },
+      commonSteps.gotoNextStep,
+      {
+        content: "Select I just need a screen protection on my device",
+        trigger: "input[id=replace_screen_no_step_2]",
+        run: "text J'ai juste besoin d'une vitre de protection",
+      },
+      {
+        content: "Check step 4 nav link is disabled",
+        trigger: "#smartwizard a.nav-link:eq(4).disabled",
+        run: function() {},
+      },
+      {
+        content: "Check step 5 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(5):not(.disabled)",
+        run: function() {},
+      },
+      commonSteps.gotoNextStep,
+      commonSteps.checkInputNamesMatchesUser,
+      commonSteps.gotoNextStep,
+      ...commonSteps.funcAddMoreInfo("text My screen protection need to be replaced!"),
+      ...commonSteps.funcCreateAndCheckTicket("vitre de protection doit"),
+    ]
+  );
+
+  tour.register(
+    "commown_self_troubleshooting_smartphone_need_display_with_protection",
+    { url: "/my" },
+    [
+      {
+        content: "Go to any screen protection page (FP3 in this example)",
+        trigger: 'a[href="/page/self-troubleshoot-fp3-screen"]',
+      },
+      commonSteps.fillInContract,
+      commonSteps.gotoNextStep,
+      {
+        content: "Select yes on the presence of screen protection on this device",
+        trigger: "input[id=has_protection_yes]",
+        run: "text Non",
+      },
+      {
+        content: "Check step 2 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(2):not(.disabled)",
+        run: function() {},
+      },
+      {
+        content: "Check step 3 nav link is disabled",
+        trigger: "#smartwizard a.nav-link:eq(3).disabled",
+        run: function() {},
+      },
+      commonSteps.gotoNextStep,
+      {
+        content: "Select my display needs to be replaced",
+        trigger: "input[id=replace_screen_yes_step2]",
+        run: "text Mon écran doit être remplacé",
+      },
+      {
+        content: "Check step 4 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(4):not(.disabled)",
+        run: function() {},
+      },
+      {
+        content: "Check step 5 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(5):not(.disabled)",
+        run: function() {},
+      },
+      commonSteps.gotoNextStep,
+      {
+        content: "Select I manipulate modules",
+        trigger: "select[id=type_contrat]",
+        run: "text Je manipule les modules en cas de panne",
+      },
+      commonSteps.gotoNextStep,
+      commonSteps.checkInputNamesMatchesUser,
+      commonSteps.gotoNextStep,
+      ...commonSteps.funcAddMoreInfo("text My display need to be replaced!"),
+      ...commonSteps.funcCreateAndCheckTicket("écran muni"),
     ]
   );
 
