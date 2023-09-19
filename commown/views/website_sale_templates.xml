@@ -22,12 +22,13 @@
     <xpath expr="//td[@id='product_name']" position="inside">
         <div t-if="line.product_id.is_rental" class="rent">
 
+          <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
           <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
 
           <p class="mb-0">Loyer unitaire :
-            <span t-esc="line.price_unit * line.product_id.rental_price / (line.product_id.list_price or 1)"
+            <span t-esc="first_cline.price_unit * first_cline.quantity"
                   t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
-            <span t-field="line.product_id.rental_frequency"/>
+            / <span t-field="first_cline.recurring_rule_type"/>
           </p>
 
           <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :
