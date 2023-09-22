@@ -235,5 +235,24 @@ class ProjectTask(models.Model):
             "context": ctx,
         }
 
+    def action_move_involved_product(self):
+        """Choose the right picking creation wizard depending
+        on product tracking mode
+        """
+        if self.storable_product_id.tracking == "serial":
+            wizard = "project.task.involved_device_picking.wizard"
+        else:
+            wizard = "project.task.involved_nonserial_product_picking.wizard"
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": wizard,
+            "name": _("Move involved product"),
+            "view_mode": "form",
+            "view_type": "form",
+            "target": "new",
+            "context": {"default_task_id": self.id},
+        }
+
     def get_name_for_origin(self):
         return "Task-%s" % self.id

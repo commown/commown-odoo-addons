@@ -70,13 +70,15 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
 
         return result
 
+    def _set_present_location(self):
+        self.present_location_id = self.task_id.lot_id.quant_ids.filtered(
+            lambda q: q.quantity > 0
+        ).location_id
+
     @api.onchange("task_id")
     def onchange_task_id(self):
         if self.task_id:
-
-            self.present_location_id = self.task_id.lot_id.quant_ids.filtered(
-                lambda q: q.quantity > 0
-            ).location_id
+            self._set_present_location()
             dest_locations = self._possible_dest_locations()
             return {"domain": {"location_dest_id": [("id", "in", dest_locations.ids)]}}
 
@@ -93,10 +95,44 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         return internal_picking(
             [lot],
             {},
-            self.present_location_id,
             self.env[
                 "stock.location"
             ],  # No nonserial products are sent so location doesn't matter
+            self.present_location_id,
+            self.location_dest_id,
+            self.task_id.get_name_for_origin(),
+            date=self.date,
+            do_transfer=True,
+        )
+
+
+class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
+    _name = "project.task.involved_nonserial_product_picking.wizard"
+    _inherit = "project.task.involved_device_picking.wizard"
+    _description = "Create a picking of the nonserial product attached to a task"
+
+    destination_refs = (
+        "stock_location_outsourced_repair",
+        "stock_repackaged_modules_and_accessories",
+        "stock_location_devices_to_check",
+        "stock_location_repairer",
+    )
+
+    def _set_present_location(self):
+        self.present_location_id = self.env.ref(
+            "commown_devices.stock_location_devices_to_check"
+        ).id
+
+    @api.multi
+    def create_picking(self):
+        if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
+            raise Warning(_("This action should not be used in resiliation project"))
+
+        return internal_picking(
+            [],
+            {self.task_id.storable_product_id: 1},
+            self.present_location_id,
+            self.env["stock.location"],  # No lot are sent so location doesn't matter
             self.location_dest_id,
             self.task_id.get_name_for_origin(),
             date=self.date,

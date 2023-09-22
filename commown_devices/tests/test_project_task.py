@@ -1,6 +1,6 @@
 import datetime
 
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 from ..models.common import do_new_transfer
 from .common import DeviceAsAServiceTC
@@ -213,14 +213,18 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         lot_names = set(choices["lot_id"].mapped("name"))
         self.assertEqual(lot_names, {"cc2", "cc3"})
 
-    def test_wizard_involved(self):
+    def test_wizard_involved_device(self):
 
         self.task.contract_id = self.c1
         self.task.lot_id = self.task.contract_id.quant_ids[0].lot_id
+        self.task.storable_product_id = self.task.lot_id.product_id.id
 
-        values, possible_values = self.prepare_ui(
-            "project.task.involved_device_picking.wizard", self.task, "task_id"
+        wizard_model = "project.task.involved_device_picking.wizard"
+        self.assertEqual(
+            self.task.action_move_involved_product().get("res_model"), wizard_model
         )
+
+        values, possible_values = self.prepare_ui(wizard_model, self.task, "task_id")
 
         self.assertEqual(
             values["present_location_id"],
@@ -231,7 +235,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         # Create a picking and check the lot location at the end of the picking
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
-        wizard = self.env["project.task.involved_device_picking.wizard"].create(
+        wizard = self.env[wizard_model].create(
             {
                 "task_id": self.task.id,
                 "date": date,
@@ -329,6 +333,9 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(
             self._count_product_at_location(product, picking.location_dest_id), 1
         )
+
+        # Check that the new location of the lot is no longer available as destination
+        values, possible_values = self.prepare_ui(wizard_model, self.task, "task_id")
 
         self.assertNotIn(
             values["present_location_id"],
