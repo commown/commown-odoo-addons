@@ -11,6 +11,8 @@
             <field name="date"/>
             <field name="all_products" widget="many2many_tags" options="{'no_create_edit': True, 'open': true}" readonly="1" context="{'default_public': True}"/>
             <field name="lot_ids" widget="many2many_tags"/>
+            <field name="prioritize_repackaged"/>
+            <field name="products_locations" readonly="1"/>
           </group>
         </sheet>
         <footer>

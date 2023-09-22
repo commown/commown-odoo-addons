@@ -44,19 +44,36 @@ class Contract(models.Model):
             record.quant_nb = len(record.quant_ids)
 
     @api.multi
-    def send_devices(self, lots, products, origin=None, date=None, do_transfer=False):
+    def send_devices(
+        self,
+        lots,
+        products,
+        send_nonserial_products_from=None,
+        send_lots_from=None,
+        origin=None,
+        date=None,
+        do_transfer=False,
+    ):
         """Create a picking of lot to partner's location.
         If given `date` is falsy (the default), it is set to now.
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
         dest_location = self.partner_id.get_or_create_customer_location()
+        default_stock = self.env.ref(
+            "commown_devices.stock_location_available_for_rent"
+        )
+        if send_nonserial_products_from is None:
+            send_nonserial_products_from = default_stock
+        if send_lots_from is None:
+            send_lots_from = default_stock
         if origin is None:
             origin = self.name
         return self._create_picking(
             lots,
             products,
-            self.env.ref("commown_devices.stock_location_available_for_rent"),
+            send_nonserial_products_from,
+            send_lots_from,
             dest_location,
             origin=origin,
             date=date,
@@ -79,6 +96,7 @@ class Contract(models.Model):
             lots,
             products,
             self.env.ref("stock.stock_location_locations_partner"),
+            self.env.ref("stock.stock_location_locations_partner"),
             dest_location,
             origin=origin,
             date=date,
@@ -89,7 +107,8 @@ class Contract(models.Model):
         self,
         lots,
         products,
-        orig_parent_location,
+        send_products_from,
+        send_lots_from,
         dest_location,
         origin,
         date=None,
@@ -99,7 +118,8 @@ class Contract(models.Model):
         picking = internal_picking(
             lots,
             products,
-            orig_parent_location,
+            send_products_from,
+            send_lots_from,
             dest_location,
             origin,
             date=date,

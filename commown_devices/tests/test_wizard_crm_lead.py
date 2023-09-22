@@ -1,5 +1,7 @@
 import datetime
 
+from odoo.exceptions import UserError
+
 from .common import DeviceAsAServiceTC, add_attributes_to_product, create_config
 
 
@@ -23,18 +25,11 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
                 "tracking": "none",
             }
         )
-        self.location_untracked = self.env["stock.location"].create(
-            {
-                "name": "Test Module stock location",
-                "usage": "internal",
-                "partner_id": 1,
-                "location_id": self.env.ref(
-                    "commown_devices.stock_location_new_devices"
-                ).id,
-            }
+        self.loc_new_untracked = self.env.ref(
+            "commown_devices.stock_location_modules_and_accessories"
         )
         self.adjust_stock_notracking(
-            self.usbc_cable.product_variant_id, self.location_untracked
+            self.usbc_cable.product_variant_id, self.loc_new_untracked
         )
         # We don't ajdust stock of protective screen because lack of stock case is
         # tested
@@ -107,7 +102,6 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         self.so.order_line[0].product_id = self.fp3_plus_service_color1_with_usb
         self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-1")
         self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
-        self.fp3_plus_service_tmpl.onchange_storable_config_ids()
 
     def prepare_wizard(self, related_entity, relation_field, user_choices=None):
         wizard_name = "%s.picking.wizard" % related_entity._name
@@ -122,10 +116,82 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
             ]
         )[0]
 
+    def test_find_nonserial_product_orig_location(self):
+
+        lead = self.get_lead()
+
+        loc_repackaged_modules = self.env.ref(
+            "commown_devices.stock_repackaged_modules_and_accessories"
+        )
+
+        with self.assertRaises(UserError) as err:
+            defaults, possibilities = self.prepare_wizard(lead, "lead_id")
+        locations = loc_repackaged_modules + self.loc_new_untracked
+        self.assertEqual(
+            "Not enough %s under location(s) %s"
+            % (
+                self.protective_screen.name,
+                ", ".join(locations.mapped("name")),
+            ),
+            err.exception.name,
+        )
+        self.adjust_stock_notracking(
+            self.protective_screen.product_variant_id, self.loc_new_untracked
+        )
+        date = datetime.datetime(2020, 1, 10, 16, 2, 34)
+        wizard = (
+            self.env["crm.lead.picking.wizard"]
+            .with_context({"default_lead_id": lead.id})
+            .create(
+                {
+                    "lead_id": lead.id,
+                    "date": date,
+                }
+            )
+        )
+        self.assertEqual(
+            wizard._compute_products_locations(),
+            "%s: %s, %s\n"
+            % (
+                self.loc_new_untracked.name,
+                self.protective_screen.name,
+                self.usbc_cable.name,
+            ),
+        )
+
+        self.adjust_stock_notracking(
+            self.protective_screen.product_variant_id, loc_repackaged_modules
+        )
+
+        self.assertEqual(
+            wizard._compute_products_locations(),
+            "%s: %s\n%s: %s\n"
+            % (
+                loc_repackaged_modules.name,
+                self.protective_screen.name,
+                self.loc_new_untracked.name,
+                self.usbc_cable.name,
+            ),
+        )
+
+        wizard.prioritize_repackaged = False
+        self.assertEqual(
+            wizard._compute_products_locations(),
+            "%s: %s, %s\n"
+            % (
+                self.loc_new_untracked.name,
+                self.protective_screen.name,
+                self.usbc_cable.name,
+            ),
+        )
+
     def test_ui(self):
 
         lead = self.get_lead()
 
+        self.adjust_stock_notracking(
+            self.protective_screen.product_variant_id, self.loc_new_untracked
+        )
         # Get values to test
         defaults, possibilities = self.prepare_wizard(lead, "lead_id")
 
@@ -154,8 +220,11 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         # Prepare test data
         lead = self.get_lead()
 
-        defaults, possibilities = self.prepare_wizard(lead, "lead_id")
+        self.adjust_stock_notracking(
+            self.protective_screen.product_variant_id, self.loc_new_untracked
+        )
 
+        defaults, possibilities = self.prepare_wizard(lead, "lead_id")
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
         wizard = (
             self.env["crm.lead.picking.wizard"]
@@ -170,25 +239,10 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         lot = possibilities["lot_ids"][0]
         wizard.lot_ids = lot
 
-        with self.assertRaises(Warning) as err:
-            picking = wizard.create_picking()
-        self.assertEqual(
-            "Not enough %s under location %s"
-            % (
-                self.protective_screen.name,
-                self.env.ref("commown_devices.stock_location_available_for_rent").name,
-            ),
-            err.exception.args[0],
-        )
-
-        self.adjust_stock_notracking(
-            self.protective_screen.product_variant_id, self.location_untracked
-        )
-
         picking = wizard.create_picking()
 
         # Check the result
-        loc_new = self.env.ref("commown_devices.stock_location_new_devices")
+        loc_new = self.env.ref("commown_devices.stock_location_available_for_rent")
 
         self.assertIn(picking.id, lead.contract_id.picking_ids.ids)
         self.assertEqual(picking.state, "assigned")
@@ -200,7 +254,7 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         loc_partner = self.so.partner_id.get_or_create_customer_location()
         self.assertEqual(
             sorted(move_lines.mapped("location_id").ids),
-            sorted([self.location_fp3_new.id, self.location_untracked.id]),
+            sorted([self.location_fp3_new.id, self.loc_new_untracked.id]),
         )
         self.assertEqual(move_lines.mapped("location_dest_id"), loc_partner)
 

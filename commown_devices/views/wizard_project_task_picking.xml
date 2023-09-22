@@ -32,6 +32,8 @@
             <field name="task_id" invisible="1"/>
             <field name="date"/>
             <field name="variant_id" options="{'no_create': True}"/>
+            <field name="prioritize_repackaged"/>
+            <field name="product_location" readonly="1"/>
           </group>
         </sheet>
         <footer>

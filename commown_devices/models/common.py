@@ -1,4 +1,7 @@
+from functools import partial
+
 from odoo import _, fields
+from odoo.exceptions import UserError
 
 
 def first_common_location(locs):
@@ -25,40 +28,64 @@ def first_common_location(locs):
             return env["stock.location"]
 
 
-def find_products_orig_location(env, products, stock=None):
-    """From a dictionary {product: quantity}
-    find the location from where product
-    can be sent"""
-    if stock == None:
-        stock = env.ref("stock.stock_location_stock")
+def find_products_orig_location(env, products, stocks=None, compute_summary=False):
+    """From a dictionary {product: quantity} find the location from where product can be
+    sent and produce a summary to tell user where each product should be sent from.
+    `stocks` parameter is a list of stock.location to look in for `products` ordered by
+    preference"""
+    if stocks is None:
+        stocks = self.env.ref("commown_devices.stock_location_available_for_rent")
     pts_orig = {}
+    enough_to_send = lambda q, to_send: q.quantity - q.reserved_quantity >= to_send
     for product, quantity_to_send in products.items():
-        quant = (
-            env["stock.quant"]
-            .search(
-                [
-                    ("product_id", "=", product.id),
-                    ("location_id", "child_of", stock.id),
-                ]
+        enough_in_quant = partial(enough_to_send, to_send=quantity_to_send)
+        quants = env["stock.quant"]
+        for stock in stocks:
+            quants += (
+                env["stock.quant"]
+                .search(
+                    [
+                        ("product_id", "=", product.id),
+                        ("location_id", "child_of", stock.id),
+                    ]
+                )
+                .filtered(enough_in_quant)
             )
-            .filtered(
-                lambda q, qts=quantity_to_send: q.quantity - q.reserved_quantity >= qts
-            )
-        )
-        if not quant:
-            raise Warning(
-                _("Not enough %s under location %s") % (product.name, stock.name)
+            if quants:
+                break
+        else:
+            raise UserError(
+                _("Not enough %s under location(s) %s")
+                % (
+                    product.name,
+                    ", ".join(stocks.mapped("name")),
+                )
             )
 
-        pts_orig[product] = {"qty": quantity_to_send, "loc": quant[0].location_id}
+        pts_orig[product] = {"qty": quantity_to_send, "loc": quants[0].location_id}
+    if compute_summary:
+        location_summary_dict = {}
+        for pt, pt_infos in pts_orig.items():
+            location_summary_dict.setdefault(pt_infos["loc"], []).append(pt)
+        location_summary = ""
+        for loc in location_summary_dict.keys():
+            location_summary += (
+                loc.name
+                + ": "
+                + ", ".join(pt.name for pt in location_summary_dict[loc])
+                + "\n"
+            )
+    else:
+        location_summary = "Summary hasn't been computed"
 
-    return pts_orig
+    return {"pts_orig": pts_orig, "text_summary": location_summary}
 
 
 def internal_picking(
     lots,  # list of lot
     products,  # dict {product : quantity}
-    orig_parent_location,
+    send_nonserial_products_from,
+    send_lots_from,
     dest_location,
     origin,
     date=None,
@@ -66,13 +93,15 @@ def internal_picking(
 ):
     """Create picking with tracked and untracked products"""
     env = dest_location.env
-    located_products = find_products_orig_location(env, products, orig_parent_location)
+    located_products = find_products_orig_location(
+        env, products, send_nonserial_products_from
+    )["pts_orig"]
     products_locations = [located_products[p]["loc"] for p in located_products.keys()]
 
     located_lots = {
         lot: {
             "loc": lot.current_location(
-                orig_parent_location,
+                send_lots_from,
                 raise_if_not_found=True,
                 raise_if_reserved=True,
             )
