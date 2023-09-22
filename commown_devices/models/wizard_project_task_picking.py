@@ -336,6 +336,7 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
                 self.env,
                 {self.variant_id: 1},
                 self._compute_send_from(),
+                compute_summary=True,
             )["text_summary"]
         else:
             loc = ""
@@ -346,14 +347,15 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
         self.product_location = self._compute_product_location()
 
     def _compute_send_from(self):
+        loc_new = self.env.ref("commown_devices.stock_location_modules_and_accessories")
+        loc_repackaged = self.env.ref(
+            "commown_devices.stock_repackaged_modules_and_accessories"
+        )
+
         if self.prioritize_repackaged:
-            send_nonserial_products_from = self.env.ref(
-                "commown_devices.stock_location_repackaged_devices"
-            ) + self.env.ref("commown_devices.stock_location_modules_and_accessories")
+            send_nonserial_products_from = loc_repackaged + loc_new
         else:
-            send_nonserial_products_from = self.env.ref(
-                "commown_devices.stock_location_modules_and_accessories"
-            ) + self.env.ref("commown_devices.stock_location_repackaged_devices")
+            send_nonserial_products_from = loc_new + loc_repackaged
         return send_nonserial_products_from
 
     @api.multi
