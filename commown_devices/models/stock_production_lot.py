@@ -22,13 +22,7 @@ class StockProductionLot(models.Model):
         """Search if a lot if present in a stock location or its children and return the location"""
 
         searched_stock_locations = self.env["stock.location"].search(
-            [
-                (
-                    "id",
-                    "child_of",
-                    search_in.id,
-                )
-            ]
+            [("id", "child_of", search_in.ids)]
         )
 
         quant = self.quant_ids.filtered(lambda q: q.quantity > 0)

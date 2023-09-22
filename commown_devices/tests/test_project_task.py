@@ -249,8 +249,85 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
 
         # Check that the new location of the lot is no longer available as destination
-        values, possible_values = self.prepare_ui(
-            "project.task.involved_device_picking.wizard", self.task, "task_id"
+        values, possible_values = self.prepare_ui(wizard_model, self.task, "task_id")
+
+        self.assertNotIn(
+            values["present_location_id"],
+            possible_values["location_dest_id"].mapped("id"),
+        )
+
+    def _count_product_at_location(self, product, location):
+        return sum(
+            self.env["stock.quant"]
+            .search(
+                [
+                    ("product_id", "=", product.id),
+                    ("location_id", "=", location.id),
+                ]
+            )
+            .mapped("quantity")
+            or [0]
+        )
+
+    def test_wizard_involved_nonserial_product(self):
+        def build_wizard():
+            self.assertEqual(
+                self.task.action_move_involved_product().get("res_model"), wizard_model
+            )
+
+            values, possible_values = self.prepare_ui(
+                wizard_model, self.task, "task_id"
+            )
+
+            self.assertEqual(values["present_location_id"], to_check_loc.id)
+
+            # Create a picking and check the lot location at the end of the picking
+            date = datetime.datetime(2020, 1, 10, 16, 2, 34)
+            return self.env[wizard_model].create(
+                {
+                    "task_id": self.task.id,
+                    "date": date,
+                    "location_dest_id": possible_values["location_dest_id"][0].id,
+                    "present_location_id": values["present_location_id"],
+                }
+            )
+
+        to_check_loc = self.env.ref("commown_devices.stock_location_devices_to_check")
+        wizard_model = "project.task.involved_nonserial_product_picking.wizard"
+        product = self.nontracked_product.product_variant_id
+        self.task.storable_product_id = product.id
+
+        # Check an error is raised when there is no product in stock
+        # - Check prerequisite
+        self.assertEqual(
+            self._count_product_at_location(product, to_check_loc),
+            0,
+        )
+
+        # - Do the job
+        wizard = build_wizard()
+
+        # - Check error
+        with self.assertRaises(UserError) as error:
+            wizard.create_picking()
+        self.assertEqual(
+            error.exception.name,
+            "Not enough non tracked product (Module) under location(s) Devices to check/ diagnose",
+        )
+
+        # Check the product is moved
+        # - Check prerequisite
+
+        self.adjust_stock_notracking(product, to_check_loc)
+        self.assertEqual(self._count_product_at_location(product, to_check_loc), 1)
+
+        # - Do the job
+        wizard = build_wizard()
+        picking = wizard.create_picking()
+
+        # - Check product quantity at destination
+        self.assertEqual(
+            self._count_product_at_location(product, picking.location_dest_id), 1
         )
 
         self.assertNotIn(

@@ -1,4 +1,5 @@
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class ProductTemplate(models.Model):
@@ -46,6 +47,8 @@ class ProductProduct(models.Model):
         for rec in self:
             if template_configs is None:
                 template_configs = rec.product_tmpl_id.storable_config_ids
+            # Select applicable product service configs: those which attribute values
+            # all match current product attribute values
             configs = template_configs.filtered(
                 lambda c: set(c.attribute_value_ids.ids).issubset(
                     rec.attribute_value_ids.ids
@@ -58,19 +61,22 @@ class ProductProduct(models.Model):
                     primary_variant |= c.storable_variant_id
                 elif c.storable_type == "secondary":
                     secondary_variants |= c.storable_variant_id
-            assert len(primary_variant) <= 1, _(
-                "More than one primary variant configured for %s with attributes %s"
-                % (rec.name, rec.attribute_value_ids.mapped("name"))
-            )
+            if len(primary_variant) > 1:
+                msg = _(
+                    "More than one primary variant configured for %s with attributes %s"
+                )
+                raise UserError(
+                    msg % (rec.name, rec.attribute_value_ids.mapped("name"))
+                )
             if len(secondary_variants) > len(
                 secondary_variants.mapped("product_tmpl_id")
             ):
-                raise Warning(
+                raise UserError(
                     _(
                         "For product %s, two secondary variants derive from the same template,"
                         " are you sure that there is no configuration mistake ?"
-                        % rec.name
                     )
+                    % rec.name
                 )
             rec.update(
                 {

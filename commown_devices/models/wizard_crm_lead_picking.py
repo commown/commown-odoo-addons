@@ -1,5 +1,7 @@
 from odoo import _, api, fields, models
 
+from .common import find_products_orig_location
+
 
 class CrmLeadPickingWizard(models.TransientModel):
     _name = "crm.lead.picking.wizard"
@@ -30,6 +32,16 @@ class CrmLeadPickingWizard(models.TransientModel):
         required=True,
     )
 
+    prioritize_repackaged = fields.Boolean(
+        "Send from repackaged devices if possible",
+        default=True,
+    )
+
+    products_locations = fields.Text(
+        "Products will be sent from",
+        default=lambda self: self._compute_products_locations(),
+    )
+
     @api.multi
     @api.onchange("all_products", "lot_ids")
     def _compute_lot_domain(self):
@@ -57,6 +69,30 @@ class CrmLeadPickingWizard(models.TransientModel):
     def _compute_untracked_products(self):
         return self.all_products.filtered(lambda p: p.tracking == "none")
 
+    def _compute_send_from(self):
+        loc_new = self.env.ref("commown_devices.stock_location_modules_and_accessories")
+        loc_repackaged = self.env.ref(
+            "commown_devices.stock_repackaged_modules_and_accessories"
+        )
+
+        if self.prioritize_repackaged:
+            send_nonserial_products_from = loc_repackaged + loc_new
+        else:
+            send_nonserial_products_from = loc_new + loc_repackaged
+        return send_nonserial_products_from
+
+    def _compute_products_locations(self):
+        return find_products_orig_location(
+            self.env,
+            {pt: 1 for pt in self._compute_untracked_products()},
+            self._compute_send_from(),
+            compute_summary=True,
+        )["text_summary"]
+
+    @api.onchange("all_products", "prioritize_repackaged")
+    def onchange_all_products_or_priority(self):
+        self.products_locations = self._compute_products_locations()
+
     def _compute_default_product_ids(self):
         if not self.lead_id and "default_lead_id" in self.env.context:
             lead = self.env["crm.lead"].browse(self.env.context["default_lead_id"])
@@ -79,5 +115,8 @@ class CrmLeadPickingWizard(models.TransientModel):
         )
         products = {u: 1 for u in self._compute_untracked_products()}
         return self.lead_id.contract_id.send_devices(
-            self.lot_ids, products, date=self.date
+            self.lot_ids,
+            products,
+            send_nonserial_products_from=self._compute_send_from(),
+            date=self.date,
         )
