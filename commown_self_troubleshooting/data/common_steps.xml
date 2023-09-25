@@ -2,6 +2,13 @@
 <odoo>
   <data>
 
+    <template id="more_customer_info">
+      <p t-if="more_info">Informations complémentaires :</p>
+      <div t-if="more_info">
+        <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
+      </div>
+    </template>
+
     <template id="commown-signature">
       <p>
         --

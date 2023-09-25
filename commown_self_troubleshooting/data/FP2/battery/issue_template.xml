@@ -35,13 +35,9 @@
           Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
           </p>
 
-          <p t-if="more_info">
-          J'ai porté à votre connaissance les informations complémentaires suivantes :
-          </p>
-          <div t-if="more_info">
-            <pre><t t-esc="more_info"/></pre>
-          </div>
-      </t>
+          <t t-call="commown_self_troubleshooting.more_customer_info" />
+
+        </t>
     </field>
   </record>
 </odoo>

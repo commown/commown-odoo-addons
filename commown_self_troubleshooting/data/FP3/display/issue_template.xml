@@ -47,13 +47,8 @@
         Suite à l'auto-dépannage, le nettoyage des contacts a permis de résoudre le problème !
       </p>
 
-      <p t-if="more_info">
-        J'ai porté à votre connaissance les informations complémentaires suivantes :
-      </p>
+      <t t-call="commown_self_troubleshooting.more_customer_info" />
 
-      <div t-if="more_info">
-        <pre><t t-esc="more_info" /></pre>
-      </div>
     </t>
   </field>
 </record>
