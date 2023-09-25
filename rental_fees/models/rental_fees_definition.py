@@ -74,6 +74,14 @@ class RentalFeesDefinition(models.Model):
         ),
     )
 
+    invoice_line_ids = fields.One2many(
+        comodel_name="account.invoice.line",
+        string="Invoice lines",
+        inverse_name="fees_definition_id",
+        help=("The invoice lines related to present fees definition."),
+        copy=False,
+    )
+
     order_ids = fields.Many2many(
         comodel_name="purchase.order",
         string="Purchase orders",
@@ -87,25 +95,8 @@ class RentalFeesDefinition(models.Model):
         copy=False,
     )
 
-    computation_ids = fields.One2many(
-        comodel_name="rental_fees.computation",
-        string="Fees computations",
-        inverse_name="fees_definition_id",
-        copy=False,
-    )
-
-    last_non_draft_computation_date = fields.Date(
-        default=False,
-        compute="_compute_last_non_draft_computation_date",
-    )
-
-    @api.depends("computation_ids.state")
-    def _compute_last_non_draft_computation_date(self):
-        for record in self:
-            cs = record.computation_ids.filtered(lambda r: r.state != "draft")
-            record.last_non_draft_computation_date = (
-                max(cs.mapped("until_date")) if cs else False
-            )
+    # Computed on computation's state change
+    last_non_draft_computation_date = fields.Date(default=False)
 
     @api.multi
     def write(self, vals):

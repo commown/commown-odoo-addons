@@ -7,9 +7,8 @@
     <field name="model">rental_fees.computation</field>
     <field name="arch" type="xml">
       <tree string="Rental fees computations">
-        <field name="fees_definition_id"/>
+        <field name="fees_definition_ids" widget="many2many_tags"/>
         <field name="partner_id" invisible="True"/>
-        <field name="product_template_id" invisible="True"/>
         <field name="fees" string="Fees until date"/>
         <field name="until_date" string="Date"/>
         <field name="state"/>
@@ -22,10 +21,9 @@
     <field name="model">rental_fees.computation</field>
     <field name="arch" type="xml">
       <search string="Rental Fees Computation">
-        <field name="fees_definition_id" string="Fees definition"/>
+        <field name="fees_definition_ids" string="Fees definition"/>
         <field name="invoice_ids" string="Invoices"/>
         <field name="partner_id" string="Supplier"/>
-        <field name="product_template_id" string="Product"/>
         <group name="invoices">
           <filter string="Invoiced" name="invoiced"
                   domain="[('invoice_ids', '!=', False)]"/>
@@ -34,12 +32,8 @@
                   domain="[('invoice_ids', '=', False)]"/>
         </group>
         <group expand="0" string="Group By">
-          <filter string="Fees definition" name="fees_definition"
-                  context="{'group_by': 'fees_definition_id'}"/>
           <filter string="Supplier" name="supplier"
                   context="{'group_by': 'partner_id'}"/>
-          <filter string="Product" name="product"
-                  context="{'group_by': 'product_template_id'}"/>
         </group>
       </search>
     </field>
@@ -58,7 +52,7 @@
         </header>
         <sheet>
           <group name="main">
-            <field name="fees_definition_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+            <field name="fees_definition_ids" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
             <field name="until_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
           </group>
           <group name="invoices" attrs="{'invisible': [('state', '!=', 'done')]}">
