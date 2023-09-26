@@ -16,12 +16,30 @@
     </field>
   </record>
 
+  <record id="rental_fees_computation_detail_view_tree" model="ir.ui.view">
+    <field name="name">rental.fees.computation.detail.tree</field>
+    <field name="model">rental_fees.computation.detail</field>
+    <field name="arch" type="xml">
+      <tree string="Rental fees computation details">
+        <field name="fees_computation_id"/>
+        <field name="fees" string="Amount" sum="Total"/>
+        <field name="fees_type"/>
+        <field name="lot_id"/>
+        <field name="contract_id"/>
+        <field name="from_date"/>
+        <field name="to_date"/>
+        <field name="fees_definition_id"/>
+        <field name="fees_definition_line_id" string="Def line nb"/>
+      </tree>
+    </field>
+  </record>
+
   <record id="rental_fees_computation_view_search" model="ir.ui.view">
     <field name="name">rental_fees.computation.search</field>
     <field name="model">rental_fees.computation</field>
     <field name="arch" type="xml">
       <search string="Rental Fees Computation">
-        <field name="fees_definition_ids" string="Fees definition"/>
+        <field name="fees_definition_ids"/>
         <field name="invoice_ids" string="Invoices"/>
         <field name="partner_id" string="Supplier"/>
         <group name="invoices">
@@ -39,6 +57,28 @@
     </field>
   </record>
 
+  <record id="rental_fees_computation_detail_view_search" model="ir.ui.view">
+    <field name="name">rental_fees.computation.detail.search</field>
+    <field name="model">rental_fees.computation.detail</field>
+    <field name="arch" type="xml">
+      <search string="Rental Fees Computation Details">
+        <field name="lot_id"/>
+        <group name="Fees type">
+          <filter string="Rental fees" name="rental_fees"
+                  domain="[('fees_type', '=', 'fees')]"/>
+          <filter string="Compensations" name="compensations"
+                  domain="[('fees_type', '!=', 'fees')]"/>
+        </group>
+        <group expand="0" string="Group By">
+          <filter string="Fees type" name="fees_type"
+                  context="{'group_by': 'fees_type'}"/>
+          <filter string="Fees definition" name="fees_def"
+                  context="{'group_by': 'fees_definition_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
   <record id="rental_fees_computation_view_form" model="ir.ui.view">
     <field name="name">rental_fees.computation.form</field>
     <field name="model">rental_fees.computation</field>
@@ -51,7 +91,18 @@
           <field name="state" widget="statusbar" readonly="1"/>
         </header>
         <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button type="object" name="button_open_details"
+                    icon="fa-search-plus" string="Details"
+                    attrs="{'invisible':[('state', '!=', 'done')]}">
+            </button>
+            <button type="object" name="button_open_job"
+                    icon="fa-list-alt" string="Job"
+                    attrs="{'invisible':[('state', '=', 'draft')]}">
+            </button>
+          </div>
           <group name="main">
+            <field name="partner_id" string="Supplier"/>
             <field name="fees_definition_ids" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
             <field name="until_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
           </group>
@@ -75,17 +126,6 @@
           </group>
           <group name="results" attrs="{'invisible': [('state', '!=', 'done')]}" >
             <field name="fees" readonly="1"/>
-            <field name="detail_ids" readonly="1">
-              <tree>
-                <field name="fees"/>
-                <field name="fees_type"/>
-                <field name="lot_id"/>
-                <field name="contract_id"/>
-                <field name="from_date"/>
-                <field name="to_date"/>
-                <field name="fees_definition_line_id"/>
-              </tree>
-            </field>
           </group>
         </sheet>
         <div class="oe_chatter">
