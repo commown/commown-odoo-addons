@@ -254,8 +254,7 @@ class RentalFeesDefinitionLine(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            name = record.fees_definition_id.name + " / %d" % record.sequence
-            result.append((record.id, name))
+            result.append((record.id, str(record.sequence)))
         return result
 
     @api.multi

@@ -325,6 +325,31 @@ class RentalFeesComputation(models.Model):
         }
 
     @api.multi
+    def button_open_details(self):
+        self.ensure_one()
+        return {
+            "name": _("Fees computation details"),
+            "domain": [("fees_computation_id", "=", self.id)],
+            "type": "ir.actions.act_window",
+            "view_mode": "tree,form",
+            "res_model": "rental_fees.computation.detail",
+        }
+
+    @api.multi
+    def button_open_job(self):
+        self.ensure_one()
+        domain = [("func_string", "=", "rental_fees.computation(%s,)._run()" % self.id)]
+        job = self.env["queue.job"].search(domain, limit=1)
+        if job:
+            return {
+                "name": _("Fees computation job"),
+                "type": "ir.actions.act_window",
+                "view_mode": "form",
+                "res_model": "queue.job",
+                "res_id": job.id,
+            }
+
+    @api.multi
     def action_invoice(self):
         """Generate a draft invoice based on the invoice model of the fees def
 
