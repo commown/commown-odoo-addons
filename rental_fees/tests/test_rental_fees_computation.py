@@ -67,9 +67,11 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
 
     def compute(self, until_date, fees_def=None, run=True, invoice=False):
+        fees_def = fees_def or self.fees_def
+
         computation = self.env["rental_fees.computation"].create(
             {
-                "fees_definition_id": (fees_def or self.fees_def).id,
+                "fees_definition_ids": [(6, 0, fees_def.ids)],
                 "until_date": until_date,
             }
         )
@@ -285,7 +287,9 @@ class RentalFeesComputationTC(RentalFeesTC):
                 date(2021, 6, 10): self.fees_def.line_ids[1],
                 None: self.fees_def.line_ids[2],
             },
-            self.compute("2100-01-01")._fees_def_split_dates(date(2021, 1, 10)),
+            self.compute("2100-01-01")._fees_def_split_dates(
+                self.fees_def, date(2021, 1, 10)
+            ),
         )
 
     def test_split_periods_wrt_fees_def_1(self):
@@ -311,7 +315,9 @@ class RentalFeesComputationTC(RentalFeesTC):
                     "fees_def_line": self.fees_def.line_ids[1],
                 },
             ],
-            self.compute("2100-01-01").split_periods_wrt_fees_def(periods),
+            self.compute("2100-01-01").split_periods_wrt_fees_def(
+                self.fees_def, periods
+            ),
         )
 
     def test_split_periods_wrt_fees_def_2(self):
@@ -349,5 +355,7 @@ class RentalFeesComputationTC(RentalFeesTC):
                     "fees_def_line": self.fees_def.line_ids[2],
                 },
             ],
-            self.compute("2100-01-01").split_periods_wrt_fees_def(periods),
+            self.compute("2100-01-01").split_periods_wrt_fees_def(
+                self.fees_def, periods
+            ),
         )
