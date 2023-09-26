@@ -12,7 +12,6 @@
         <field name="product_template_id" invisible="True"/>
         <field name="fees" string="Fees until date"/>
         <field name="until_date" string="Date"/>
-        <field name="invoiced_amount" sum="1"/>
         <field name="state"/>
       </tree>
     </field>

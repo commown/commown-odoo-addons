@@ -83,11 +83,6 @@ class RentalFeesComputation(models.Model):
         copy=False,
     )
 
-    invoiced_amount = fields.Float(
-        compute="_compute_invoiced_amount",
-        store=True,
-    )
-
     def details(self, *fees_types):
         return self.detail_ids.filtered(lambda d: d.fees_type in fees_types)
 
@@ -139,43 +134,17 @@ class RentalFeesComputation(models.Model):
             ):
                 return True
 
-    @api.depends("invoice_ids.state", "invoice_ids.amount_total")
-    def _compute_invoiced_amount(self):
-        """Compute invoiced amount as the sum of non-canceled invoices amounts
-
-        Raises a ValidationError if this amount changed while there are future
-        invoices, which amount should have been impacted.
-
-        Note that an Odoo bug (invoiced_amount is zero before recompute in
-        payment post of an invoice), the old amount is fetched directly from
-        the database (a payment test checks this).
-        """
+    @api.constrains("invoice_ids")
+    def _check_future_invoices(self):
         for record in self:
-            invs = record.invoice_ids.filtered(_not_canceled)
-            new_amount = 0.0
-            for inv in invs:
-                # We count here positively the amounts invoices by the partner to us
-                if inv.type in ("in_invoice", "out_refund"):
-                    new_amount += inv.amount_total
-                else:
-                    new_amount -= inv.amount_total
-
-            self.env.cr.execute(
-                "SELECT invoiced_amount FROM rental_fees_computation"
-                " WHERE id = %d" % record.id
-            )
-            db_amount = self.env.cr.fetchall()[0][0] or 0.0
-
-            if new_amount != db_amount:
-                if record._has_later_invoiced_computation():
-                    raise ValidationError(
-                        _(
-                            "Operation not allowed: there are later fees"
-                            " computations with invoices which amount would"
-                            " become invalid."
-                        )
+            if record._has_later_invoiced_computation():
+                raise ValidationError(
+                    _(
+                        "Operation not allowed: there are later fees"
+                        " computations with invoices which amount would"
+                        " become invalid."
                     )
-                record.invoiced_amount = new_amount
+                )
 
     def name_get(self):
         result = []
@@ -346,7 +315,7 @@ class RentalFeesComputation(models.Model):
         return self.fees - sum(
             self.fees_definition_id.computation_ids.filtered(
                 lambda c: c.until_date < self.until_date
-            ).mapped("invoiced_amount")
+            ).mapped("invoice_ids.amount_total")
         )
 
     @api.multi
