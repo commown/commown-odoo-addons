@@ -175,9 +175,10 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
 
         # Check the summary sheet:
+        s_sum = ods.sheet_by_name("Global figures")
 
         # - Until date
-        self.assertEquals(ods[0][8, 2], "Situation at date: 04/30/2021")
+        self.assertEquals(s_sum[8, 2], "Situation at date: 04/30/2021")
 
         # - Amounts per fees definition
         expected = {
@@ -187,10 +188,10 @@ class RentalFeesComputationTC(RentalFeesTC):
             "Already invoiced since the beginning": 7.5,
             "Fees to be invoiced": 312.5,
         }
-        self.assertEquals(dict(zip(ods[0].row[10][2:7], ods[0].row[11][2:7])), expected)
+        self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[11][2:7])), expected)
         # - Amount totals
         expected["Agreement"] = "Totals"
-        self.assertEquals(dict(zip(ods[0].row[10][2:7], ods[0].row[12][2:7])), expected)
+        self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[12][2:7])), expected)
 
         # - Devices per fees def
         expected = {
@@ -200,10 +201,14 @@ class RentalFeesComputationTC(RentalFeesTC):
             "Nb of devices no longer operable": 1,
             "Nb of devices generating fees": 1,
         }
-        self.assertEquals(dict(zip(ods[0].row[14][2:7], ods[0].row[15][2:7])), expected)
+        self.assertEquals(dict(zip(s_sum.row[14][2:7], s_sum.row[15][2:7])), expected)
         # - Devices totals
         expected["Agreement"] = "Totals"
-        self.assertEquals(dict(zip(ods[0].row[14][2:7], ods[0].row[16][2:7])), expected)
+        self.assertEquals(dict(zip(s_sum.row[14][2:7], s_sum.row[16][2:7])), expected)
+
+        s_dev = ods.sheet_by_name("Per device revenues")
+        product_col = [c for c in s_dev.column[3] if c != "" and type(c) == str]
+        self.assertEquals(product_col, ["Product"] + 3 * ["Fairphone 3"])
 
     def test_cannot_modify_important_def_fields_with_computation(self):
         "Cannot modify a fees def which has a non-draft computation"

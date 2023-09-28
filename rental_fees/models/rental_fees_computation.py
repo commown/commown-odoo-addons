@@ -109,10 +109,9 @@ class RentalFeesComputation(models.Model):
         }
 
         purchase_data = {
-            device: (fees_def, ol)
+            device: (fees_def, delivery_data["order_line"])
             for fees_def in self.fees_definition_ids
-            for ol in fees_def.mapped("order_ids.order_line")
-            for device in ol.mapped("move_ids.move_line_ids.lot_id")
+            for device, delivery_data in fees_def.devices_delivery().items()
         }
 
         result = {}
@@ -589,7 +588,8 @@ class RentalFeesComputation(models.Model):
 
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
 
-        for device, delivery_date in fees_def.devices_delivery().items():
+        for device, delivery_data in fees_def.devices_delivery().items():
+            delivery_date = delivery_data["date"]
 
             periods = self.rental_periods(device)
             no_rental_limit, periods = self.scan_no_rental(
