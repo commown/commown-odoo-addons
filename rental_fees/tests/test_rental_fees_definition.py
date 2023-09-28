@@ -34,7 +34,9 @@ class RentalFeesDefinitionTC(RentalFeesTC):
 
     def test_purchase_order_no_override(self):
         "Check fees def cannot have partner & product & po in common"
-        po2 = self.create_po_and_picking(("N/S 4", "N/S 5"))
+        po2 = self.create_po_and_picking(
+            {self.storable_product.product_variant_id: ("N/S 4", "N/S 5")}
+        )
         fees_def2 = self.env["rental_fees.definition"].create(
             {
                 "name": "fees_def 2",
@@ -62,7 +64,10 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             ["N/S 1", "N/S 2", "N/S 3"],
         )
 
-        fees_def.order_ids |= self.create_po_and_picking(("N/S 4", "N/S 5"))
+        fees_def.order_ids |= self.create_po_and_picking(
+            {self.storable_product.product_variant_id: ("N/S 4", "N/S 5")}
+        )
+
         self.assertEqual(
             sorted(d.name for d in fees_def.devices_delivery()),
             ["N/S 1", "N/S 2", "N/S 3", "N/S 4", "N/S 5"],
