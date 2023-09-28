@@ -149,9 +149,12 @@ class RentalFeesDefinition(models.Model):
 
     def devices_delivery(self):
         result = {}
-        for ml in self.mapped("order_ids.picking_ids.move_line_ids"):
-            if ml.lot_id.product_id.product_tmpl_id == self.product_template_id:
-                result[ml.lot_id] = ml.date.date()
+        for ol in self.mapped("order_ids.order_line").filtered(
+            lambda ol: ol.product_id.product_tmpl_id == self.product_template_id
+        ):
+            for ml in ol.mapped("move_ids.move_line_ids"):
+                for device in ml.mapped("lot_id"):
+                    result[device] = {"order_line": ol, "date": ml.date.date()}
         return result
 
     def scrapped_devices(self, date):
