@@ -19,6 +19,18 @@ def _not_canceled(invoice):
     return invoice.state != "cancel"
 
 
+def _filter_by_def(fees_def, detail):
+    return detail.fees_definition_id == fees_def
+
+
+def _with_fees(detail):
+    return detail.fees_type == "fees" and detail.fees > 0.0
+
+
+def _compensated(detail):
+    return detail.fees_type != "fees"
+
+
 class RentalFeesComputation(models.Model):
     _name = "rental_fees.computation"
     _description = "Computation of rental fees"
@@ -112,8 +124,8 @@ class RentalFeesComputation(models.Model):
 
             fees = fees_data.get(device.id, 0.0)
             result[device] = {
-                "purchase": purchase_data[device].order_id,
-                "purchase_line": purchase_data[device],
+                "purchase": ol.order_id,
+                "purchase_line": ol,
                 "purchase_price": purchase_price,
                 "without_agreement": purchase_price / price_ratio,
                 "fees": fees,
@@ -309,20 +321,118 @@ class RentalFeesComputation(models.Model):
         if no_rental_limit <= new_rental_date and no_rental_limit <= penalty_period_end:
             return no_rental_limit
 
-    def amounts_to_be_invoiced(self):
-        "Return the amount to be invoiced for each fees def of present computation"
+    def devices_summary(self):
+        """Return the total and by fees def device number summary of present computation
 
-        def filter_by_def(fees_def, detail):
-            return detail.fees_definition_id == fees_def
-
-        details = self.detail_ids
-        return {
-            fees_def: (
-                sum(details.filtered(partial(filter_by_def, fees_def)).mapped("fees"))
-                - sum(fees_def.invoice_line_ids.mapped("price_subtotal"))
-            )
-            for fees_def in self.fees_definition_ids
+        Return value is of the form:
+        {
+            "by_fees_def": {
+                <fees_def>: {
+                    "rental_fees": <rental fees amount>,
+                    "compensations": <compensation fees amount>,
+                    "fees": <sum of both types above>,
+                    "invoiced": <already invoiced fees for this definition>,
+                    "to_invoice": <fees - invoiced>,
+                },
+            },
+            "totals": {
+                "rental_fees": <total rental fees amount>,
+                "compensations": <total compensation fees amount>,
+                "fees": <sum of both types above>,
+                "invoiced": <total already invoiced fees>,
+                "to_invoice": <fees - invoiced>,
+            },
         }
+        """
+
+        def nb_rented(fees_def):
+            return self.env["rental_fees.computation.detail"].search_count(
+                [
+                    ("fees_computation_id", "=", self.id),
+                    ("to_date", "=", self.until_date),
+                    ("fees_definition_id", "=", fees_def.id),
+                    ("fees_type", "=", "fees"),
+                    ("fees", ">", 0.0),
+                ]
+            )
+
+        result = {"by_fees_def": {}, "totals": {}}
+        for fees_def in self.fees_definition_ids:
+            details = self.detail_ids.filtered(partial(_filter_by_def, fees_def))
+            with_fees = details.filtered(_with_fees)
+            compensated = details.filtered(_compensated)
+
+            result["by_fees_def"][fees_def] = {
+                "bought": len(fees_def.devices_delivery()),
+                "rented": nb_rented(fees_def),
+                "with_fees": len(with_fees.mapped("lot_id")),
+                "compensated": len(compensated.mapped("lot_id")),
+            }
+
+        # Add totals
+        keys = list(result["by_fees_def"][fees_def].keys())
+        result["totals"] = {
+            key: sum(values[key] for values in result["by_fees_def"].values())
+            for key in keys
+        }
+
+        return result
+
+    def amounts_summary(self):
+        """Return the total and by fees def amounts summary of present computation
+
+        Return value is of the form:
+        {
+            "by_fees_def": {
+                <fees_def>: {
+                    "rental_fees": <rental fees amount>,
+                    "compensations": <compensation fees amount>,
+                    "fees": <sum of both types above>,
+                    "invoiced": <already invoiced fees for this definition>,
+                    "to_invoice": <fees - invoiced>,
+                },
+            },
+            "totals": {
+                "rental_fees": <total rental fees amount>,
+                "compensations": <total compensation fees amount>,
+                "fees": <sum of both types above>,
+                "invoiced": <total already invoiced fees>,
+                "to_invoice": <fees - invoiced>,
+            },
+        }
+        """
+
+        def fees_type(detail):
+            return "rental_fees" if detail.fees_type == "fees" else "compensations"
+
+        self_invl = self.invoice_ids.filtered(_not_canceled).mapped("invoice_line_ids")
+
+        result = {"by_fees_def": {}, "totals": {}}
+        for fees_def in self.fees_definition_ids:
+            details = self.detail_ids.filtered(partial(_filter_by_def, fees_def))
+
+            fees_by_type = {"rental_fees": 0.0, "compensations": 0.0}
+            for detail in details:
+                fees_by_type[fees_type(detail)] += detail.fees
+
+            fees = sum(fees_by_type.values())
+            fees_def_invl = fees_def.invoice_line_ids.filtered(
+                lambda invl: invl.invoice_id.state != "cancel"
+                and invl.invoice_id.date_invoice < self.until_date
+            )
+            invoiced = sum((fees_def_invl - self_invl).mapped("price_subtotal"))
+            result["by_fees_def"][fees_def] = dict(
+                fees_by_type, fees=fees, invoiced=invoiced, to_invoice=fees - invoiced
+            )
+
+        # Add totals
+        keys = list(result["by_fees_def"][fees_def].keys())
+        result["totals"] = {
+            key: sum(values[key] for values in result["by_fees_def"].values())
+            for key in keys
+        }
+
+        return result
 
     @api.multi
     def button_open_details(self):
@@ -365,7 +475,7 @@ class RentalFeesComputation(models.Model):
         inv, inv_line_name = None, None
         until_date = format_date(self.env, self.until_date)
 
-        for fees_def, amount in self.amounts_to_be_invoiced().items():
+        for fees_def, amounts in self.amounts_summary()["by_fees_def"].items():
 
             if self._has_later_invoiced_computation():
                 raise UserError(
@@ -384,7 +494,7 @@ class RentalFeesComputation(models.Model):
                     inv_line_name = inv_line_name.replace(marker, value)
 
             inv_line_data = {
-                "price_unit": amount,
+                "price_unit": amounts["to_invoice"],
                 "quantity": 1.0,
                 "fees_definition_id": fees_def.id,
                 "name": inv_line_name,

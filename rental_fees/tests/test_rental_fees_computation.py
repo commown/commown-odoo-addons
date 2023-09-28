@@ -1,5 +1,7 @@
 from datetime import date
 
+import pyexcel
+
 from odoo.exceptions import ValidationError
 
 from .common import RentalFeesTC
@@ -101,7 +103,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         ).post()
 
-    def test_compute_and_invoicing(self):
+    def test_compute_and_invoicing_and_reporting(self):
         contract1 = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract1, date="2021-02-15")
         contract1.date_start = "2021-02-15"
@@ -157,6 +159,51 @@ class RentalFeesComputationTC(RentalFeesTC):
             " invoices which amount would become invalid.",
             err.exception.name,
         )
+
+        # Generate an ods report
+        ref = self.env.ref
+        action = ref("rental_fees.action_py3o_spreadsheet_fees_rental_computation")
+        ods = pyexcel.get_book(file_content=action.render(c4.ids)[0], file_type="ods")
+        self.assertEquals(
+            ods.sheet_names(),
+            [
+                "Global figures",
+                "Detailed rental fees",
+                "Detailed compensations",
+                "Per device revenues",
+            ],
+        )
+
+        # Check the summary sheet:
+
+        # - Until date
+        self.assertEquals(ods[0][8, 2], "Situation at date: 04/30/2021")
+
+        # - Amounts per fees definition
+        expected = {
+            "Agreement": "Test fees_def",
+            "Rental fees since the beginning": 20,
+            "Compensation fees since the beginning": 300,
+            "Already invoiced since the beginning": 7.5,
+            "Fees to be invoiced": 312.5,
+        }
+        self.assertEquals(dict(zip(ods[0].row[10][2:7], ods[0].row[11][2:7])), expected)
+        # - Amount totals
+        expected["Agreement"] = "Totals"
+        self.assertEquals(dict(zip(ods[0].row[10][2:7], ods[0].row[12][2:7])), expected)
+
+        # - Devices per fees def
+        expected = {
+            "Agreement": "Test fees_def",
+            "Nb of devices under agreement": 3,
+            "Nb of devices that generated fees": 1,
+            "Nb of devices no longer operable": 1,
+            "Nb of devices generating fees": 1,
+        }
+        self.assertEquals(dict(zip(ods[0].row[14][2:7], ods[0].row[15][2:7])), expected)
+        # - Devices totals
+        expected["Agreement"] = "Totals"
+        self.assertEquals(dict(zip(ods[0].row[14][2:7], ods[0].row[16][2:7])), expected)
 
     def test_cannot_modify_important_def_fields_with_computation(self):
         "Cannot modify a fees def which has a non-draft computation"
