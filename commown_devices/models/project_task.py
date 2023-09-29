@@ -1,10 +1,11 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError, Warning
 
 CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.diagnostic_stage",
     "commown_devices.resiliated_stage",
 ]
+
 
 STOCK_XML_ID = "stock.stock_location_stock"
 
@@ -204,6 +205,9 @@ class ProjectTask(models.Model):
             )
 
     def action_scrap_device(self):
+        if not self.lot_id:
+            raise UserError(_("Device field is not set"))
+
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
 
         ctx = {
