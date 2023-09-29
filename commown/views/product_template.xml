@@ -17,8 +17,14 @@
 
         <xpath expr="//page[@name='website']" position="inside">
             <group name="website">
-              <field name="website_description"/>
+              <field name="is_user_lang_fr" invisible="1"/>
+              <field name="website_description"
+                     attrs="{'readonly': [('is_user_lang_fr', '=', False)]}"/>
             </group>
+        </xpath>
+
+        <xpath expr="//button[@name='website_publish_button']" position="attributes">
+          <attribute name="attrs">{'invisible': ['|', ('sale_ok','=',False), ('is_user_lang_fr', '=', False)]}</attribute>
         </xpath>
 
       </field>

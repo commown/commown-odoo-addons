@@ -13,3 +13,11 @@ class SupportedProductTemplate(models.Model):
     )
 
     sale_line_warn_msg = fields.Text(translate=True)
+
+    is_user_lang_fr = fields.Boolean(
+        compute="_compute_is_user_lang_fr",
+        store=False,
+    )
+
+    def _compute_is_user_lang_fr(self):
+        self.update({"is_user_lang_fr": self.env.user.lang == "fr_FR"})
