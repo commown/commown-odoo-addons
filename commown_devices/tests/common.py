@@ -3,6 +3,30 @@ import dateutil.parser
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
+def create_config(serv_tmpl, type, stor_tmpl, stor_variant, att_val_ids=None):
+    return serv_tmpl.env["product.service_storable_config"].create(
+        {
+            "service_tmpl_id": serv_tmpl.id,
+            "storable_type": type,
+            "attribute_value_ids": [(6, 0, att_val_ids.ids)]
+            if att_val_ids is not None
+            else False,
+            "storable_tmpl_id": stor_tmpl.id,
+            "storable_variant_id": stor_variant.id,
+        }
+    )
+
+
+def add_attributes_to_product(product, attribute, attribute_values):
+    line = product.env["product.template.attribute.line"].create(
+        {
+            "product_tmpl_id": product.id,
+            "attribute_id": attribute.id,
+            "value_ids": [(6, 0, attribute_values.ids)],
+        }
+    )
+
+
 class DeviceAsAServiceTC(RentalSaleOrderTC):
     def setUp(self):
         super(DeviceAsAServiceTC, self).setUp()
@@ -134,15 +158,13 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
         return product
 
-    def send_device(self, serial, contract=None, date=None):
+    def send_device(self, serial, contract=None, date=None, location=None):
         contract = contract or self.so.order_line.contract_id
-        quant = self.env["stock.quant"].search(
-            [
-                ("lot_id.name", "=", serial),
-                ("quantity", ">", 0),
-            ]
+        location = location or self.env.ref("stock.stock_location_stock")
+        lot = self.env["stock.production.lot"].search([("name", "=", serial)])
+        contract.send_devices(
+            [lot.ensure_one()], {}, send_lots_from=location, date=date, do_transfer=True
         )
-        contract.send_device(quant, date=date, do_transfer=True)
 
     def prepare_ui(
         self, created_model_name, related_entity, relation_field, user_choices=None

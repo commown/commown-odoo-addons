@@ -13,6 +13,7 @@
         "commown_contractual_issue",
         "commown_shipping",
         "commown_lead_risk_analysis",
+        "product_rental",
         "stock",
     ],
     "data": [
@@ -21,6 +22,7 @@
         "data/action_project_task.xml",
         "data/project_task.xml",
         "data/stock_location.xml",
+        "security/ir.model.access.csv",
         "views/contract.xml",
         "views/product.xml",
         "views/project_project.xml",

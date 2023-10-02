@@ -1,6 +1,6 @@
 import datetime
 
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 from ..models.common import do_new_transfer
 from .common import DeviceAsAServiceTC
@@ -93,8 +93,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
     def _create_and_send_device(self, serial, contract, product=None, do_transfer=True):
         lot = self.adjust_stock(product, serial=serial)
         if contract is not None:
-            quant = lot.quant_ids.filtered(lambda q: q.quantity > 0)
-            contract.send_device(quant.ensure_one(), do_transfer=do_transfer)
+            contract.send_devices(lot, {}, do_transfer=do_transfer)
 
     def get_form(self, **user_choices):
         return self.prepare_ui(
@@ -214,14 +213,18 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         lot_names = set(choices["lot_id"].mapped("name"))
         self.assertEqual(lot_names, {"cc2", "cc3"})
 
-    def test_wizard_involved(self):
+    def test_wizard_involved_device(self):
 
         self.task.contract_id = self.c1
         self.task.lot_id = self.task.contract_id.quant_ids[0].lot_id
+        self.task.storable_product_id = self.task.lot_id.product_id.id
 
-        values, possible_values = self.prepare_ui(
-            "project.task.involved_device_picking.wizard", self.task, "task_id"
+        wizard_model = "project.task.involved_device_picking.wizard"
+        self.assertEqual(
+            self.task.action_move_involved_product().get("res_model"), wizard_model
         )
+
+        values, possible_values = self.prepare_ui(wizard_model, self.task, "task_id")
 
         self.assertEqual(
             values["present_location_id"],
@@ -232,7 +235,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         # Create a picking and check the lot location at the end of the picking
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
-        wizard = self.env["project.task.involved_device_picking.wizard"].create(
+        wizard = self.env[wizard_model].create(
             {
                 "task_id": self.task.id,
                 "date": date,
@@ -250,9 +253,89 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
 
         # Check that the new location of the lot is no longer available as destination
-        values, possible_values = self.prepare_ui(
-            "project.task.involved_device_picking.wizard", self.task, "task_id"
+        values, possible_values = self.prepare_ui(wizard_model, self.task, "task_id")
+
+        self.assertNotIn(
+            values["present_location_id"],
+            possible_values["location_dest_id"].mapped("id"),
         )
+
+    def _count_product_at_location(self, product, location):
+        return sum(
+            self.env["stock.quant"]
+            .search(
+                [
+                    ("product_id", "=", product.id),
+                    ("location_id", "=", location.id),
+                ]
+            )
+            .mapped("quantity")
+            or [0]
+        )
+
+    def test_wizard_involved_nonserial_product(self):
+        def build_wizard():
+            self.assertEqual(
+                self.task.action_move_involved_product().get("res_model"), wizard_model
+            )
+
+            values, possible_values = self.prepare_ui(
+                wizard_model, self.task, "task_id"
+            )
+
+            self.assertEqual(values["present_location_id"], to_check_loc.id)
+
+            # Create a picking and check the lot location at the end of the picking
+            date = datetime.datetime(2020, 1, 10, 16, 2, 34)
+            return self.env[wizard_model].create(
+                {
+                    "task_id": self.task.id,
+                    "date": date,
+                    "location_dest_id": possible_values["location_dest_id"][0].id,
+                    "present_location_id": values["present_location_id"],
+                }
+            )
+
+        to_check_loc = self.env.ref("commown_devices.stock_location_devices_to_check")
+        wizard_model = "project.task.involved_nonserial_product_picking.wizard"
+        product = self.nontracked_product.product_variant_id
+        self.task.storable_product_id = product.id
+
+        # Check an error is raised when there is no product in stock
+        # - Check prerequisite
+        self.assertEqual(
+            self._count_product_at_location(product, to_check_loc),
+            0,
+        )
+
+        # - Do the job
+        wizard = build_wizard()
+
+        # - Check error
+        with self.assertRaises(UserError) as error:
+            wizard.create_picking()
+        self.assertEqual(
+            error.exception.name,
+            "Not enough non tracked product (Module) under location(s) Devices to check/ diagnose",
+        )
+
+        # Check the product is moved
+        # - Check prerequisite
+
+        self.adjust_stock_notracking(product, to_check_loc)
+        self.assertEqual(self._count_product_at_location(product, to_check_loc), 1)
+
+        # - Do the job
+        wizard = build_wizard()
+        picking = wizard.create_picking()
+
+        # - Check product quantity at destination
+        self.assertEqual(
+            self._count_product_at_location(product, picking.location_dest_id), 1
+        )
+
+        # Check that the new location of the lot is no longer available as destination
+        values, possible_values = self.prepare_ui(wizard_model, self.task, "task_id")
 
         self.assertNotIn(
             values["present_location_id"],
@@ -322,15 +405,16 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.task.update(
             {"contract_id": self.c1.id, "lot_id": self.c1.quant_ids[0].lot_id}
         )
+        lot_to_send = possible_values["lot_id"][0]
 
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
         wizard = self.env["project.task.outward.picking.wizard"].create(
             {
                 "task_id": self.task.id,
                 "date": date,
-                "lot_id": self.task.lot_id.id,
-                "variant_id": self.task.lot_id.product_id.id,
-                "product_tmpl_id": self.task.lot_id.product_id.product_tmpl_id.id,
+                "lot_id": lot_to_send.id,
+                "variant_id": lot_to_send.product_id.id,
+                "product_tmpl_id": lot_to_send.product_id.product_tmpl_id.id,
             }
         )
         picking = wizard.create_picking()
@@ -467,27 +551,29 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
 
         module = self.nontracked_product.product_variant_id
-        lot = self.storable_product.product_variant_id
+        storable_product_variant = self.storable_product.product_variant_id
 
         stock_location = self.env.ref("stock.stock_location_stock")
         quant = self.env["stock.quant"].search(
             [
-                ("product_id", "=", lot.id),
+                ("product_id", "=", storable_product_variant.id),
                 ("quantity", ">", 0),
                 ("location_id", "child_of", stock_location.id),
             ]
         )[0]
 
-        self.task_test_checks.contract_id.send_device_tracking_none(
-            module,
+        self.task_test_checks.contract_id.send_devices(
+            [],
+            {module: 1},
             origin=self.task_test_checks.get_name_for_origin(),
         )
 
         self.task_test_checks.stage_id = self.ongoing_stage
         self.assertTrue(self.task_test_checks.stage_id == self.ongoing_stage)
 
-        self.task_test_checks2.contract_id.send_device(
-            quant,
+        self.task_test_checks2.contract_id.send_devices(
+            [quant.lot_id],
+            {},
             origin=self.task_test_checks2.get_name_for_origin(),
         )
         self.task_test_checks2.stage_id = self.ongoing_stage
