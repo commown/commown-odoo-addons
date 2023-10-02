@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-02 12:25+0000\n"
-"PO-Revision-Date: 2023-08-02 12:25+0000\n"
+"POT-Creation-Date: 2023-10-02 09:34+0000\n"
+"PO-Revision-Date: 2023-10-02 09:34+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -330,13 +330,13 @@ msgid "Lead/Opportunity"
 msgstr "Piste/opportunité"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_production_lot.py:39
+#: code:addons/commown_devices/models/stock_production_lot.py:33
 #, python-format
 msgid "Lot %s is already reserved"
 msgstr "Le lot %s est déjà reservé"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_production_lot.py:37
+#: code:addons/commown_devices/models/stock_production_lot.py:31
 #, python-format
 msgid "Lot %s not found in available stock"
 msgstr "Le lot %s n'est pas trouvé dans le stock disponible"
@@ -364,10 +364,10 @@ msgid "No product %s found in stock"
 msgstr "Aucun produit %s dans le stock"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:108
+#: code:addons/commown_devices/models/common.py:58
 #, python-format
-msgid "Not enough %s in stock"
-msgstr "Pas suffisament de %s dans le stock"
+msgid "Not enough %s under location(s) %s"
+msgstr "Pas assez de %s dans %s"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
