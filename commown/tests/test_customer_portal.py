@@ -219,12 +219,15 @@ class CustomerPortalB2BTC(CustomerPortalMixin, HttpCase):
         self.headers["Host"] = "b2b.local"
 
         with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            partner = env["res.partner"].browse(self.partner.id)
-            partner.website_id = env.ref("website_sale_b2b.b2b_website").id
+            partner = self._partner(test_cursor)
+            partner.website_id = partner.env.ref("website_sale_b2b.b2b_website").id
             partner.website_id.update(
                 {"domain": self.headers["Host"], "login_checkbox_message": "I'm a pro"}
             )
+
+    def _partner(self, test_cursor):
+        env = self.env(test_cursor)
+        return env["res.partner"].browse(self.partner.id)
 
     def test_company_infos_on_account(self):
         account_page = self.get_page(self.portal_client(), "/my/account")
@@ -236,3 +239,38 @@ class CustomerPortalB2BTC(CustomerPortalMixin, HttpCase):
         inputs = [i.get("name") for i in account_page.xpath("//input[not(@disabled)]")]
         self.assertNotIn("company_name", inputs)
         self.assertNotIn("vat", inputs)
+
+    def test_company_infos_on_shop_address(self):
+        "company infos are editable on /shop/address no partner company is set"
+        with self.registry.cursor() as test_cursor:
+            partner = self._partner(test_cursor)
+            so = self.create_sale_order(partner, env=partner.env)
+            so.website_id = partner.website_id.id
+
+        test_client = self.portal_client()
+        account_page = self.get_page(test_client, "/my/account")
+
+        labels = account_page.xpath("//label/@for")
+        self.assertIn("company_name", labels)
+        self.assertIn("vat", labels)
+
+        address_page = self.get_page(
+            test_client, "/shop/address", partner_id=partner.id
+        )
+        inputs = [i.get("name") for i in address_page.xpath("//input[not(@disabled)]")]
+        self.assertIn("company_name", inputs)
+        self.assertIn("vat", inputs)
+
+        with self.registry.cursor() as test_cursor:
+            self._partner(test_cursor).create_company()
+
+        address_page = self.get_page(
+            test_client, "/shop/address", partner_id=partner.id
+        )
+        inputs = {i.get("name"): i for i in address_page.xpath("//input")}
+
+        self.assertIn("company_name", inputs)
+        self.assertIn("disabled", inputs["company_name"].keys())
+
+        self.assertIn("vat", inputs)
+        self.assertIn("disabled", inputs["vat"].keys())
