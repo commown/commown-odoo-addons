@@ -83,12 +83,20 @@
       </div>
     </xpath>
 
-    <!-- Remove company name: once checked and set by us, do not edit on portal -->
-    <xpath expr="//form//input[@name='company_name']/ancestor::div[1]" position="replace">
+    <!-- Fields company name and VAT: on the B2B website, show them, but disabled:
+         once checked and set by us, customers should not edit them on the portal -->
+    <xpath expr="//form//input[@name='company_name']/ancestor::div[1]" position="attributes">
+      <attribute name="t-if">env.user.website_id == env.ref('website_sale_b2b.b2b_website')</attribute>
+    </xpath>
+    <xpath expr="//form//input[@name='company_name']" position="attributes">
+      <attribute name="disabled">1</attribute>
     </xpath>
 
-    <!-- Remove VAT: once checked and set by us, do not edit on portal -->
-    <xpath expr="//form//input[@name='vat']/ancestor::div[1]" position="replace">
+    <xpath expr="//form//input[@name='vat']/ancestor::div[1]" position="attributes">
+      <attribute name="t-if">env.user.website_id == env.ref('website_sale_b2b.b2b_website')</attribute>
+    </xpath>
+    <xpath expr="//form//input[@name='vat']" position="attributes">
+      <attribute name="disabled">1</attribute>
     </xpath>
 
     <!-- Add maxlength to the street field -->
