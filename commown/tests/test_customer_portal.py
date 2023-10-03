@@ -204,3 +204,35 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
             doc.xpath("//*[text()='Assigned to']/.." "//span[@itemprop]/@itemprop"),
             ["name"],
         )
+
+    def test_no_company_infos_on_account(self):
+        account_page = self.get_page(self.portal_client(), "/my/account")
+
+        labels = account_page.xpath("//label/@for")
+        self.assertNotIn("company_name", labels)
+        self.assertNotIn("vat", labels)
+
+
+class CustomerPortalB2BTC(CustomerPortalMixin, HttpCase):
+    def setUp(self):
+        super().setUp()
+        self.headers["Host"] = "b2b.local"
+
+        with self.registry.cursor() as test_cursor:
+            env = self.env(test_cursor)
+            partner = env["res.partner"].browse(self.partner.id)
+            partner.website_id = env.ref("website_sale_b2b.b2b_website").id
+            partner.website_id.update(
+                {"domain": self.headers["Host"], "login_checkbox_message": "I'm a pro"}
+            )
+
+    def test_company_infos_on_account(self):
+        account_page = self.get_page(self.portal_client(), "/my/account")
+
+        labels = account_page.xpath("//label/@for")
+        self.assertIn("company_name", labels)
+        self.assertIn("vat", labels)
+
+        inputs = [i.get("name") for i in account_page.xpath("//input[not(@disabled)]")]
+        self.assertNotIn("company_name", inputs)
+        self.assertNotIn("vat", inputs)
