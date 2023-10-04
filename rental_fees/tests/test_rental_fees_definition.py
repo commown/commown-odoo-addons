@@ -6,6 +6,11 @@ from .common import RentalFeesTC
 
 
 class RentalFeesDefinitionTC(RentalFeesTC):
+    def test_line_order_and_name_get(self):
+        self.assertEquals(
+            self.fees_def.line_ids.mapped("display_name"), ["1", "2", "100"]
+        )
+
     def test_partner_coherency_1(self):
         "Check fees partner is coherent with its orders' - update fees def"
         with self.assertRaises(ValidationError) as err:
