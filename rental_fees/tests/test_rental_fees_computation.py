@@ -1,6 +1,8 @@
 from datetime import date
 
-from odoo.exceptions import ValidationError
+import pyexcel
+
+from odoo.exceptions import UserError, ValidationError
 
 from .common import RentalFeesTC
 
@@ -67,15 +69,17 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
 
     def compute(self, until_date, fees_def=None, run=True, invoice=False):
+        fees_def = fees_def or self.fees_def
+
         computation = self.env["rental_fees.computation"].create(
             {
-                "fees_definition_id": (fees_def or self.fees_def).id,
+                "fees_definition_ids": [(6, 0, fees_def.ids)],
                 "until_date": until_date,
             }
         )
 
         if run:
-            computation._run()
+            computation.action_run()
 
         if invoice:
             computation.action_invoice()
@@ -99,7 +103,26 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         ).post()
 
-    def test_compute_and_invoicing(self):
+    def test_open_job(self):
+        "Method open job should"
+        old_env = self.env
+        try:
+            self.env = self.env(context=dict(test_queue_job_no_delay=False))
+            comp = self.compute("2021-01-31")
+        finally:
+            self.env = old_env
+
+        self.assertEqual(comp.state, "running")
+
+        action1 = comp.button_open_job()
+        self.assertEqual(action1["res_model"], "queue.job")
+        job = self.env[action1["res_model"]].browse(action1["res_id"])
+
+        action2 = job.open_related_action()
+        self.assertEqual(action2["res_model"], "rental_fees.computation")
+        self.assertEqual(comp, self.env[action2["res_model"]].browse(action2["res_id"]))
+
+    def test_compute_and_invoicing_and_reporting(self):
         contract1 = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract1, date="2021-02-15")
         contract1.date_start = "2021-02-15"
@@ -155,6 +178,74 @@ class RentalFeesComputationTC(RentalFeesTC):
             " invoices which amount would become invalid.",
             err.exception.name,
         )
+
+        # Same with the action_invoice method
+        with self.assertRaises(UserError) as err:
+            c2.action_invoice()
+        self.assertEqual(
+            "There is a later invoice for the same fees definition",
+            err.exception.name,
+        )
+
+        # Invoicing requires a model: check this too
+        with self.env.cr.savepoint():
+            self.fees_def.model_invoice_id = False
+            with self.assertRaises(UserError) as err:
+                c5 = self.compute("2021-05-30", invoice=True)
+        self.assertEqual(
+            "Please set the invoice model on the fees definition.",
+            err.exception.name,
+        )
+
+        # Generate an ods report
+        ref = self.env.ref
+        action = ref("rental_fees.action_py3o_spreadsheet_fees_rental_computation")
+        ods = pyexcel.get_book(file_content=action.render(c4.ids)[0], file_type="ods")
+        self.assertEquals(
+            ods.sheet_names(),
+            [
+                "Global figures",
+                "Detailed rental fees",
+                "Detailed compensations",
+                "Per device revenues",
+            ],
+        )
+
+        # Check the summary sheet:
+        s_sum = ods.sheet_by_name("Global figures")
+
+        # - Until date
+        self.assertEquals(s_sum[8, 2], "Situation at date: 04/30/2021")
+
+        # - Amounts per fees definition
+        expected = {
+            "Agreement": "Test fees_def",
+            "Rental fees since the beginning": 20,
+            "Compensation fees since the beginning": 300,
+            "Already invoiced since the beginning": 7.5,
+            "Fees to be invoiced": 312.5,
+        }
+        self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[11][2:7])), expected)
+        # - Amount totals
+        expected["Agreement"] = "Totals"
+        self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[12][2:7])), expected)
+
+        # - Devices per fees def
+        expected = {
+            "Agreement": "Test fees_def",
+            "Nb of devices under agreement": 3,
+            "Nb of devices that generated fees": 1,
+            "Nb of devices no longer operable": 1,
+            "Nb of devices generating fees": 1,
+        }
+        self.assertEquals(dict(zip(s_sum.row[14][2:7], s_sum.row[15][2:7])), expected)
+        # - Devices totals
+        expected["Agreement"] = "Totals"
+        self.assertEquals(dict(zip(s_sum.row[14][2:7], s_sum.row[16][2:7])), expected)
+
+        s_dev = ods.sheet_by_name("Per device revenues")
+        product_col = [c for c in s_dev.column[3] if c != "" and type(c) == str]
+        self.assertEquals(product_col, ["Product"] + 3 * ["Fairphone 3"])
 
     def test_cannot_modify_important_def_fields_with_computation(self):
         "Cannot modify a fees def which has a non-draft computation"
@@ -285,7 +376,9 @@ class RentalFeesComputationTC(RentalFeesTC):
                 date(2021, 6, 10): self.fees_def.line_ids[1],
                 None: self.fees_def.line_ids[2],
             },
-            self.compute("2100-01-01")._fees_def_split_dates(date(2021, 1, 10)),
+            self.compute("2100-01-01")._fees_def_split_dates(
+                self.fees_def, date(2021, 1, 10)
+            ),
         )
 
     def test_split_periods_wrt_fees_def_1(self):
@@ -311,7 +404,9 @@ class RentalFeesComputationTC(RentalFeesTC):
                     "fees_def_line": self.fees_def.line_ids[1],
                 },
             ],
-            self.compute("2100-01-01").split_periods_wrt_fees_def(periods),
+            self.compute("2100-01-01").split_periods_wrt_fees_def(
+                self.fees_def, periods
+            ),
         )
 
     def test_split_periods_wrt_fees_def_2(self):
@@ -349,5 +444,7 @@ class RentalFeesComputationTC(RentalFeesTC):
                     "fees_def_line": self.fees_def.line_ids[2],
                 },
             ],
-            self.compute("2100-01-01").split_periods_wrt_fees_def(periods),
+            self.compute("2100-01-01").split_periods_wrt_fees_def(
+                self.fees_def, periods
+            ),
         )

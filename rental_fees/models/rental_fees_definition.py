@@ -74,6 +74,14 @@ class RentalFeesDefinition(models.Model):
         ),
     )
 
+    invoice_line_ids = fields.One2many(
+        comodel_name="account.invoice.line",
+        string="Invoice lines",
+        inverse_name="fees_definition_id",
+        help=("The invoice lines related to present fees definition."),
+        copy=False,
+    )
+
     order_ids = fields.Many2many(
         comodel_name="purchase.order",
         string="Purchase orders",
@@ -87,25 +95,8 @@ class RentalFeesDefinition(models.Model):
         copy=False,
     )
 
-    computation_ids = fields.One2many(
-        comodel_name="rental_fees.computation",
-        string="Fees computations",
-        inverse_name="fees_definition_id",
-        copy=False,
-    )
-
-    last_non_draft_computation_date = fields.Date(
-        default=False,
-        compute="_compute_last_non_draft_computation_date",
-    )
-
-    @api.depends("computation_ids.state")
-    def _compute_last_non_draft_computation_date(self):
-        for record in self:
-            cs = record.computation_ids.filtered(lambda r: r.state != "draft")
-            record.last_non_draft_computation_date = (
-                max(cs.mapped("until_date")) if cs else False
-            )
+    # Computed on computation's state change
+    last_non_draft_computation_date = fields.Date(default=False)
 
     @api.multi
     def write(self, vals):
@@ -158,9 +149,12 @@ class RentalFeesDefinition(models.Model):
 
     def devices_delivery(self):
         result = {}
-        for ml in self.mapped("order_ids.picking_ids.move_line_ids"):
-            if ml.lot_id.product_id.product_tmpl_id == self.product_template_id:
-                result[ml.lot_id] = ml.date.date()
+        for ol in self.mapped("order_ids.order_line").filtered(
+            lambda ol: ol.product_id.product_tmpl_id == self.product_template_id
+        ):
+            for ml in ol.mapped("move_ids.move_line_ids"):
+                for device in ml.mapped("lot_id"):
+                    result[device] = {"order_line": ol, "date": ml.date.date()}
         return result
 
     def scrapped_devices(self, date):
@@ -263,8 +257,7 @@ class RentalFeesDefinitionLine(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            name = record.fees_definition_id.name + " / %d" % record.sequence
-            result.append((record.id, name))
+            result.append((record.id, str(record.sequence)))
         return result
 
     @api.multi

@@ -1,3 +1,5 @@
+from functools import partial
+
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
@@ -17,27 +19,30 @@ def _not_canceled(invoice):
     return invoice.state != "cancel"
 
 
+def _filter_by_def(fees_def, detail):
+    return detail.fees_definition_id == fees_def
+
+
+def _with_fees(detail):
+    return detail.fees_type == "fees" and detail.fees > 0.0
+
+
+def _compensated(detail):
+    return detail.fees_type != "fees"
+
+
 class RentalFeesComputation(models.Model):
     _name = "rental_fees.computation"
     _description = "Computation of rental fees"
     _inherit = ["mail.thread"]
 
-    fees_definition_id = fields.Many2one(
+    partner_id = fields.Many2one("res.partner", domain=[("is_company", "=", True)])
+
+    fees_definition_ids = fields.Many2many(
         "rental_fees.definition",
-        string="Fees definition",
+        string="Fees definitions",
         required=True,
-    )
-
-    partner_id = fields.Many2one(
-        "res.partner",
-        related="fees_definition_id.partner_id",
-        store=True,
-    )
-
-    product_template_id = fields.Many2one(
-        "product.template",
-        related="fees_definition_id.product_template_id",
-        store=True,
+        domain='[("partner_id", "=", partner_id)]',
     )
 
     until_date = fields.Date(
@@ -104,20 +109,22 @@ class RentalFeesComputation(models.Model):
         }
 
         purchase_data = {
-            device: ol
-            for ol in self.fees_definition_id.mapped("order_ids.order_line")
-            for device in ol.mapped("move_ids.move_line_ids.lot_id")
+            device: (fees_def, delivery_data["order_line"])
+            for fees_def in self.fees_definition_ids
+            for device, delivery_data in fees_def.devices_delivery().items()
         }
 
-        price_ratio = self.fees_definition_id.agreed_to_std_price_ratio
         result = {}
 
         for device in sorted(purchase_data, key=lambda d: d.product_id):
+            fees_def, ol = purchase_data[device]
+            price_ratio = fees_def.agreed_to_std_price_ratio
+            purchase_price = ol.price_unit
+
             fees = fees_data.get(device.id, 0.0)
-            purchase_price = purchase_data[device].price_unit
             result[device] = {
-                "purchase": purchase_data[device].order_id,
-                "purchase_line": purchase_data[device],
+                "purchase": ol.order_id,
+                "purchase_line": ol,
                 "purchase_price": purchase_price,
                 "without_agreement": purchase_price / price_ratio,
                 "fees": fees,
@@ -127,12 +134,15 @@ class RentalFeesComputation(models.Model):
 
     def _has_later_invoiced_computation(self):
         self.ensure_one()
-        for computation in self.fees_definition_id.computation_ids - self:
-            if (
-                computation.until_date > self.until_date
-                and computation.invoice_ids.filtered(_not_canceled)
-            ):
-                return True
+        return bool(
+            self.search(
+                [
+                    ("until_date", ">", self.until_date),
+                    ("fees_definition_ids", "in", self.fees_definition_ids.ids),
+                    ("invoice_ids.state", "!=", "cancel"),
+                ]
+            )
+        )
 
     @api.constrains("invoice_ids")
     def _check_future_invoices(self):
@@ -150,7 +160,7 @@ class RentalFeesComputation(models.Model):
         result = []
         for record in self:
             name = "%s (%s)" % (
-                record.fees_definition_id.name,
+                record.partner_id.name,
                 format_date(self.env, record.until_date),
             )
             result.append((record.id, name))
@@ -211,7 +221,7 @@ class RentalFeesComputation(models.Model):
 
         return result
 
-    def scan_no_rental(self, device, delivery_date, periods):
+    def scan_no_rental(self, fees_def, device, delivery_date, periods):
         """Scan gaps between periods for too long no rental periods
 
         Also mind the gap between the last period and the computation date, if any.
@@ -228,7 +238,7 @@ class RentalFeesComputation(models.Model):
         for period in periods[1:] + [{"fake": True, "from_date": self.until_date}]:
             last_rental_date = result[-1]["to_date"] or self.until_date
             no_rental_limit = self.valid_no_rental_limit(
-                delivery_date, last_rental_date, period["from_date"]
+                fees_def, delivery_date, last_rental_date, period["from_date"]
             )
             if no_rental_limit:
                 break
@@ -237,21 +247,21 @@ class RentalFeesComputation(models.Model):
 
         return no_rental_limit, result
 
-    def _fees_def_split_dates(self, origin_date):
+    def _fees_def_split_dates(self, fees_def, origin_date):
         """Return the end dates defined by all fees def line from given origin_date
 
         The result is a {date: definition_line} dict
         """
         split_dates = {}
 
-        for line in self.fees_definition_id.line_ids:
+        for line in fees_def.line_ids:
             new_date = line.compute_end_date(origin_date)
             split_dates[new_date] = line
             origin_date = new_date
 
         return split_dates
 
-    def split_periods_wrt_fees_def(self, periods):
+    def split_periods_wrt_fees_def(self, fees_def, periods):
         """Split given periods into smaller ones wrt. given fees def
 
         ... and add the corresponding line definition to the resulting
@@ -260,7 +270,7 @@ class RentalFeesComputation(models.Model):
         """
         result = []
 
-        split_dates = self._fees_def_split_dates(periods[0]["from_date"])
+        split_dates = self._fees_def_split_dates(fees_def, periods[0]["from_date"])
 
         for period in periods:
             for split_date, fees_def_line in split_dates.items():
@@ -298,9 +308,8 @@ class RentalFeesComputation(models.Model):
         return result
 
     def valid_no_rental_limit(
-        self, delivery_date, last_rental_date, new_rental_date=None
+        self, fees_def, delivery_date, last_rental_date, new_rental_date=None
     ):
-        fees_def = self.fees_definition_id
         period_duration = relativedelta(years=fees_def.penalty_period_duration)
         no_rental_duration = relativedelta(months=fees_def.no_rental_duration)
 
@@ -311,12 +320,143 @@ class RentalFeesComputation(models.Model):
         if no_rental_limit <= new_rental_date and no_rental_limit <= penalty_period_end:
             return no_rental_limit
 
-    def amount_to_be_invoiced(self):
-        return self.fees - sum(
-            self.fees_definition_id.computation_ids.filtered(
-                lambda c: c.until_date < self.until_date
-            ).mapped("invoice_ids.amount_total")
-        )
+    def devices_summary(self):
+        """Return the total and by fees def device number summary of present computation
+
+        Return value is of the form:
+        {
+            "by_fees_def": {
+                <fees_def>: {
+                    "rental_fees": <rental fees amount>,
+                    "compensations": <compensation fees amount>,
+                    "fees": <sum of both types above>,
+                    "invoiced": <already invoiced fees for this definition>,
+                    "to_invoice": <fees - invoiced>,
+                },
+            },
+            "totals": {
+                "rental_fees": <total rental fees amount>,
+                "compensations": <total compensation fees amount>,
+                "fees": <sum of both types above>,
+                "invoiced": <total already invoiced fees>,
+                "to_invoice": <fees - invoiced>,
+            },
+        }
+        """
+
+        def nb_rented(fees_def):
+            return self.env["rental_fees.computation.detail"].search_count(
+                [
+                    ("fees_computation_id", "=", self.id),
+                    ("to_date", "=", self.until_date),
+                    ("fees_definition_id", "=", fees_def.id),
+                    ("fees_type", "=", "fees"),
+                    ("fees", ">", 0.0),
+                ]
+            )
+
+        result = {"by_fees_def": {}, "totals": {}}
+        for fees_def in self.fees_definition_ids:
+            details = self.detail_ids.filtered(partial(_filter_by_def, fees_def))
+            with_fees = details.filtered(_with_fees)
+            compensated = details.filtered(_compensated)
+
+            result["by_fees_def"][fees_def] = {
+                "bought": len(fees_def.devices_delivery()),
+                "rented": nb_rented(fees_def),
+                "with_fees": len(with_fees.mapped("lot_id")),
+                "compensated": len(compensated.mapped("lot_id")),
+            }
+
+        # Add totals
+        keys = list(result["by_fees_def"][fees_def].keys())
+        result["totals"] = {
+            key: sum(values[key] for values in result["by_fees_def"].values())
+            for key in keys
+        }
+
+        return result
+
+    def amounts_summary(self):
+        """Return the total and by fees def amounts summary of present computation
+
+        Return value is of the form:
+        {
+            "by_fees_def": {
+                <fees_def>: {
+                    "rental_fees": <rental fees amount>,
+                    "compensations": <compensation fees amount>,
+                    "fees": <sum of both types above>,
+                    "invoiced": <already invoiced fees for this definition>,
+                    "to_invoice": <fees - invoiced>,
+                },
+            },
+            "totals": {
+                "rental_fees": <total rental fees amount>,
+                "compensations": <total compensation fees amount>,
+                "fees": <sum of both types above>,
+                "invoiced": <total already invoiced fees>,
+                "to_invoice": <fees - invoiced>,
+            },
+        }
+        """
+
+        def fees_type(detail):
+            return "rental_fees" if detail.fees_type == "fees" else "compensations"
+
+        self_invl = self.invoice_ids.filtered(_not_canceled).mapped("invoice_line_ids")
+
+        result = {"by_fees_def": {}, "totals": {}}
+        for fees_def in self.fees_definition_ids:
+            details = self.detail_ids.filtered(partial(_filter_by_def, fees_def))
+
+            fees_by_type = {"rental_fees": 0.0, "compensations": 0.0}
+            for detail in details:
+                fees_by_type[fees_type(detail)] += detail.fees
+
+            fees = sum(fees_by_type.values())
+            fees_def_invl = fees_def.invoice_line_ids.filtered(
+                lambda invl: invl.invoice_id.state != "cancel"
+                and invl.invoice_id.date_invoice < self.until_date
+            )
+            invoiced = sum((fees_def_invl - self_invl).mapped("price_subtotal"))
+            result["by_fees_def"][fees_def] = dict(
+                fees_by_type, fees=fees, invoiced=invoiced, to_invoice=fees - invoiced
+            )
+
+        # Add totals
+        keys = list(result["by_fees_def"][fees_def].keys())
+        result["totals"] = {
+            key: sum(values[key] for values in result["by_fees_def"].values())
+            for key in keys
+        }
+
+        return result
+
+    @api.multi
+    def button_open_details(self):
+        self.ensure_one()
+        return {
+            "name": _("Fees computation details"),
+            "domain": [("fees_computation_id", "=", self.id)],
+            "type": "ir.actions.act_window",
+            "view_mode": "tree,form",
+            "res_model": "rental_fees.computation.detail",
+        }
+
+    @api.multi
+    def button_open_job(self):
+        self.ensure_one()
+        domain = [("func_string", "=", "rental_fees.computation(%s,)._run()" % self.id)]
+        job = self.env["queue.job"].search(domain, limit=1)
+        if job:
+            return {
+                "name": _("Fees computation job"),
+                "type": "ir.actions.act_window",
+                "view_mode": "form",
+                "res_model": "queue.job",
+                "res_id": job.id,
+            }
 
     @api.multi
     def action_invoice(self):
@@ -325,32 +465,45 @@ class RentalFeesComputation(models.Model):
         The amount of this invoice is equal to the total fees minus the already
         invoiced fees (open and paid invoices of the same fees definition).
 
-        Note that an user error is raised when there exists another computation
-        for the same fees_def with an invoice which date is in the future.
+        Note that a user error is raised when there exists another computation
+        for the same fees_def with an invoice which date is later than current
+        computation's `until_date`.
         """
         self.ensure_one()
-        fees_def = self.fees_definition_id
 
-        if not fees_def.model_invoice_id:
-            raise UserError(
-                _("Please set the invoice model on the fees definition."),
-            )
+        inv, inv_line_name = None, None
+        until_date = format_date(self.env, self.until_date)
 
-        if self._has_later_invoiced_computation():
-            raise UserError(_("There is a later invoice for the same fees definition"))
+        for fees_def, amounts in self.amounts_summary()["by_fees_def"].items():
 
-        amount = self.amount_to_be_invoiced()
-        inv = fees_def.model_invoice_id.copy({"date_invoice": self.until_date})
-        inv.invoice_line_ids[0].update({"price_unit": amount, "quantity": 1.0})
+            if self._has_later_invoiced_computation():
+                raise UserError(
+                    _("There is a later invoice for the same fees definition")
+                )
 
-        markers = {
-            "##DATE##": format_date(self.env, self.until_date),
-        }
+            if not fees_def.model_invoice_id:
+                raise UserError(
+                    _("Please set the invoice model on the fees definition."),
+                )
 
-        for inv_line in inv.invoice_line_ids:
+            inv_line_name = fees_def.model_invoice_id.invoice_line_ids[0].name
+            markers = {"##DATE##": until_date, "##FEES_DEF##": fees_def.name}
             for marker, value in markers.items():
-                if marker in inv_line.name:
-                    inv_line.name = inv_line.name.replace(marker, value)
+                if marker in inv_line_name:
+                    inv_line_name = inv_line_name.replace(marker, value)
+
+            inv_line_data = {
+                "price_unit": amounts["to_invoice"],
+                "quantity": 1.0,
+                "fees_definition_id": fees_def.id,
+                "name": inv_line_name,
+            }
+
+            if inv is None:
+                inv = fees_def.model_invoice_id.copy({"date_invoice": self.until_date})
+                inv.invoice_line_ids[0].update(inv_line_data)
+            else:
+                inv.invoice_line_ids[0].copy(inv_line_data)
 
         self.invoice_ids |= inv
 
@@ -379,9 +532,9 @@ class RentalFeesComputation(models.Model):
             record.with_delay()._run()
 
     def _add_compensation(
-        self, compensation_type, device, delivery_date, device_fees, to_date
+        self, fees_def, compensation_type, device, delivery_date, device_fees, to_date
     ):
-        prices = self.fees_definition_id.prices(device)
+        prices = fees_def.prices(device)
 
         compensation_price = max(
             device_fees,
@@ -396,11 +549,13 @@ class RentalFeesComputation(models.Model):
                 "lot_id": device.id,
                 "from_date": delivery_date,
                 "to_date": to_date,
+                "fees_definition_id": fees_def.id,
             }
         )
 
     def _add_fees_periods(self, device, periods):
         for period in periods:
+            def_line = period["fees_def_line"]
             self.env["rental_fees.computation.detail"].sudo().create(
                 {
                     "fees_computation_id": self.id,
@@ -410,26 +565,39 @@ class RentalFeesComputation(models.Model):
                     "contract_id": period["contract"].id,
                     "from_date": period["from_date"],
                     "to_date": period["to_date"],
-                    "fees_definition_line_id": period["fees_def_line"].id,
+                    "fees_definition_id": def_line.fees_definition_id.id,
+                    "fees_definition_line_id": def_line.id,
                 }
             )
 
     @job(default_channel="root")
     def _run(self):
         self.ensure_one()
+        for fees_def in self.fees_definition_ids:
+            self._run_for_fees_def(fees_def)
+        self.fees = sum(self.detail_ids.mapped("fees"))
 
-        fees_def = self.fees_definition_id
+        self.state = "done"
+        for fees_def in self.fees_definition_ids:
+            fees_def.last_non_draft_computation_date = max(
+                self.until_date,
+                fees_def.last_non_draft_computation_date or self.until_date,
+            )
+
+    def _run_for_fees_def(self, fees_def):
+
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
 
-        for device, delivery_date in fees_def.devices_delivery().items():
+        for device, delivery_data in fees_def.devices_delivery().items():
+            delivery_date = delivery_data["date"]
 
             periods = self.rental_periods(device)
             no_rental_limit, periods = self.scan_no_rental(
-                device, delivery_date, periods
+                fees_def, device, delivery_date, periods
             )
 
             if periods:
-                periods = self.split_periods_wrt_fees_def(periods)
+                periods = self.split_periods_wrt_fees_def(fees_def, periods)
 
             device_fees = 0.0
             for period in periods:
@@ -438,6 +606,7 @@ class RentalFeesComputation(models.Model):
 
             if no_rental_limit:
                 self._add_compensation(
+                    fees_def,
                     "no_rental_compensation",
                     device,
                     delivery_date,
@@ -446,6 +615,7 @@ class RentalFeesComputation(models.Model):
                 )
             elif device in scrapped_devices:
                 self._add_compensation(
+                    fees_def,
                     "lost_device_compensation",
                     device,
                     delivery_date,
@@ -454,9 +624,6 @@ class RentalFeesComputation(models.Model):
                 )
             else:
                 self._add_fees_periods(device, periods)
-
-        self.fees = sum(self.detail_ids.mapped("fees"))
-        self.state = "done"
 
 
 class RentalFeesComputationDetail(models.Model):
@@ -504,6 +671,11 @@ class RentalFeesComputationDetail(models.Model):
     to_date = fields.Date(
         string="To date",
         required=True,
+    )
+
+    fees_definition_id = fields.Many2one(
+        "rental_fees.definition",
+        string="Fees definition",
     )
 
     fees_definition_line_id = fields.Many2one(
