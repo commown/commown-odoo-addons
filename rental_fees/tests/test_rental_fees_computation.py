@@ -2,7 +2,7 @@ from datetime import date
 
 import pyexcel
 
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 from .common import RentalFeesTC
 
@@ -176,6 +176,24 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(
             "Operation not allowed: there are later fees computations with"
             " invoices which amount would become invalid.",
+            err.exception.name,
+        )
+
+        # Same with the action_invoice method
+        with self.assertRaises(UserError) as err:
+            c2.action_invoice()
+        self.assertEqual(
+            "There is a later invoice for the same fees definition",
+            err.exception.name,
+        )
+
+        # Invoicing requires a model: check this too
+        with self.env.cr.savepoint():
+            self.fees_def.model_invoice_id = False
+            with self.assertRaises(UserError) as err:
+                c5 = self.compute("2021-05-30", invoice=True)
+        self.assertEqual(
+            "Please set the invoice model on the fees definition.",
             err.exception.name,
         )
 
