@@ -79,7 +79,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
 
         if run:
-            computation._run()
+            computation.action_run()
 
         if invoice:
             computation.action_invoice()
@@ -102,6 +102,25 @@ class RentalFeesComputationTC(RentalFeesTC):
                 "invoice_ids": [(6, 0, [supplier_invoice.id])],
             }
         ).post()
+
+    def test_open_job(self):
+        "Method open job should"
+        old_env = self.env
+        try:
+            self.env = self.env(context=dict(test_queue_job_no_delay=False))
+            comp = self.compute("2021-01-31")
+        finally:
+            self.env = old_env
+
+        self.assertEqual(comp.state, "running")
+
+        action1 = comp.button_open_job()
+        self.assertEqual(action1["res_model"], "queue.job")
+        job = self.env[action1["res_model"]].browse(action1["res_id"])
+
+        action2 = job.open_related_action()
+        self.assertEqual(action2["res_model"], "rental_fees.computation")
+        self.assertEqual(comp, self.env[action2["res_model"]].browse(action2["res_id"]))
 
     def test_compute_and_invoicing_and_reporting(self):
         contract1 = self.env["contract.contract"].of_sale(self.so)[0]
