@@ -16,6 +16,7 @@
           <input type="checkbox"
                  class="form-check-input"
                  id="b2c_b2b"
+                 name="b2c_b2b"
                  required="required"
                  value="yes"></input>
           <label t-esc="request.website.login_checkbox_message"
