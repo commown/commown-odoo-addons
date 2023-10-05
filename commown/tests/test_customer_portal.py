@@ -15,17 +15,23 @@ from odoo.addons.product_rental.tests.common import (
 HERE = (Path(__file__) / "..").resolve()
 
 
-class CustomerPortalTC(RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase):
+class CustomerPortalMixin(RentalSaleOrderMixin, MockedEmptySessionMixin):
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")
         self.partner.signup_prepare()
         self.env.cr.commit()
         self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
+        self.headers = {}
 
     def get_page(self, test_client, path, **data):
         "Return an lxml doc obtained from the html at given url path"
-        response = test_client.get(path, query_string=data, follow_redirects=True)
+        response = test_client.get(
+            path,
+            query_string=data,
+            follow_redirects=True,
+            headers=self.headers,
+        )
         self.assertEqual(response.status_code, 200, " - ".join((path, response.status)))
         return html.fromstring(response.data)
 
@@ -50,12 +56,17 @@ class CustomerPortalTC(RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase):
             }
         )
         response = test_client.post(
-            "/web/login/", data=login_form, environ_base=self.werkzeug_environ
+            "/web/login/",
+            data=login_form,
+            environ_base=self.werkzeug_environ,
+            headers=self.headers,
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("/my/account", str(response.data))
         return test_client
 
+
+class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
     def test_documents(self):
         """Portal users must be able to post their documents
         ... and see the upload state on their home page
