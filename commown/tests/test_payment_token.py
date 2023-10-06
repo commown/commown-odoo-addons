@@ -7,7 +7,7 @@ def _payment_prefs(interval, rule_type, next_date):
     return {
         "invoice_merge_recurring_interval": interval,
         "invoice_merge_recurring_rule_type": rule_type,
-        "invoice_merge_next_date": fields.Date.to_date(next_date),
+        "invoice_merge_next_date": next_date and fields.Date.to_date(next_date),
     }
 
 
@@ -67,9 +67,9 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         """
         acquirer = self.env.ref("payment.payment_acquirer_transfer")
         for action_ref in action_refs:
-            acquirer.obsolescence_action_ids |= self.env.ref(
-                "commown.obsolescence_action_" + action_ref
-            )
+            if "." not in action_ref:
+                action_ref = "commown.obsolescence_action_" + action_ref
+            acquirer.obsolescence_action_ids |= self.env.ref(action_ref)
 
         company_s1_w3 = self.new_worker(self.company_s1, **new_partner_kwargs)
         cm = self._check_obsolete_token_action_job()
@@ -80,6 +80,28 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
 
     def check_payment_prefs(self, partner, expected_prefs):
         self.assertEqual({f: partner[f] for f in expected_prefs}, expected_prefs)
+
+    def test_reset_payment_token(self):
+        "Check that obsolete token deactivation also resets partner payment prefs"
+
+        # Check or enforce test prerequisites
+        self.assertFalse(self.company_s1.isolated_payment_tokens)
+        self.assertTrue(self.company_s1_w1.payment_token_id)
+        self.assertFalse(self.company_s1_w2.payment_token_id)  # Set on self.contract2
+
+        self.company_s1_w1.update(_payment_prefs(1, "monthly", "2018-02-19"))
+        self.company_s1_w2.update(_payment_prefs(1, "monthly", "2018-01-05"))
+
+        # Trigger the tested code
+        action_ref = "payment_token_uniquify.obsolescence_action_deactivate"
+        self._trigger_obsolescence(action_ref)
+
+        # Check the results
+        self.check_payment_prefs(self.company_s1_w1, _payment_prefs(0, False, False))
+
+        self.check_payment_prefs(
+            self.company_s1_w2, _payment_prefs(1, "monthly", "2018-01-05")
+        )
 
     def test_action_reattribute_contracts(self):
         # Configure acquirer with contract reattribution and trigger obsolescence:

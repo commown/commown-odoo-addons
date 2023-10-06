@@ -47,4 +47,4 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         #   web UI users that the partner has no usable token anymore
         for partner in obsolete_tokens.mapped("partner_id"):
             if partner.payment_token_id in obsolete_tokens:
-                partner.payment_token_id = False
+                partner.reset_payment_token()
