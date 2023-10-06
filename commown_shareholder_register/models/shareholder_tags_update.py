@@ -13,7 +13,7 @@ class ShareholderTagsUpdate(models.TransientModel):
     _name = "commown_shareholder_register.shareholder_tags_update"
     _description = "Utility class to update partner shareholder's tag"
 
-    date = fields.Datetime(
+    date = fields.Date(
         string="Date",
         help="Date of the register",
     )
