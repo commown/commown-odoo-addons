@@ -30,3 +30,7 @@ class ResPartner(models.Model):
                     ("id", "!=", newer_token.id),
                 ]
             )
+
+    def reset_payment_token(self):
+        "Set payment_token_id to False, making it possible to override this behaviour"
+        self.update({"payment_token_id": False})
