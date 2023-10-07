@@ -18,8 +18,8 @@ class ShareholderRegister(models.TransientModel):
     _description = "Utility class to compute a shareholder register"
 
     date = fields.Date(
-        string="Date",
-        help="Date of the register",
+        string="Register at date (included)",
+        help="Shareholder moves at this date will be included.",
     )
     report = fields.Binary("Shareholder Register", readonly=True)
     report_name = fields.Char(string="Filename", size=256, readonly=True)
