@@ -13,12 +13,10 @@
       <xpath expr="//notebook" position="inside">
         <page name="devices" string="Devices">
           <group name="devices" string="Devices">
-            <field name="quant_ids">
+            <field name="lot_ids">
               <tree>
                 <field name="product_id"/>
-                <field name="lot_id"/>
-                <field name="location_id"/>
-                <field name="in_date"/>
+                <field name="name"/>
               </tree>
             </field>
             <field name="move_line_ids">

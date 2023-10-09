@@ -178,7 +178,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.send_device("N/S 2", contract=contract2, date="2021-03-06")
         contract2.date_start = "2021-03-06"
 
-        device2 = contract2.quant_ids.lot_id
+        device2 = contract2.lot_ids
         self.scrap_device(device2, date(2021, 4, 5))
 
         self.create_invoices_until(contract1, "2021-05-01")
@@ -526,7 +526,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         contract = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract, "2021-02-01")
         contract.date_start = "2021-02-01"
-        device = contract.quant_ids.ensure_one().lot_id
+        device = contract.lot_ids.ensure_one()
         while contract.recurring_next_date <= date(2021, 4, 1):
             contract._recurring_create_invoice()
         self.receive_device("N/S 1", contract, "2021-04-01")
