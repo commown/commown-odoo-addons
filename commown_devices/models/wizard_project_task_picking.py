@@ -257,7 +257,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
     @api.onchange("task_id")
     def onchange_task_id(self):
         if self.task_id:
-            lots = self.task_id.contract_id.quant_ids.mapped("lot_id")
+            lots = self.task_id.contract_id.lot_ids
             if len(lots) == 1:
                 self.lot_id = lots.id
             return {"domain": {"lot_id": [("id", "in", lots.ids)]}}

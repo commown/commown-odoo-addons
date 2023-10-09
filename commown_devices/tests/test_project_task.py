@@ -216,7 +216,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
     def test_wizard_involved_device(self):
 
         self.task.contract_id = self.c1
-        self.task.lot_id = self.task.contract_id.quant_ids[0].lot_id
+        self.task.lot_id = self.task.contract_id.lot_ids[0]
         self.task.storable_product_id = self.task.lot_id.product_id.id
 
         wizard_model = "project.task.involved_device_picking.wizard"
@@ -402,9 +402,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(sorted(possible_values["lot_id"].mapped("name")), ["fp4"])
 
         # Actually create a picking
-        self.task.update(
-            {"contract_id": self.c1.id, "lot_id": self.c1.quant_ids[0].lot_id}
-        )
+        self.task.update({"contract_id": self.c1.id, "lot_id": self.c1.lot_ids[0]})
         lot_to_send = possible_values["lot_id"][0]
 
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
@@ -441,11 +439,11 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.task.update(
             {
                 "contract_id": self.c1.id,
-                "lot_id": self.c1.quant_ids[0].lot_id,
+                "lot_id": self.c1.lot_ids[0],
             }
         )
-        self.assertIn(self.task.lot_id, self.c1.mapped("quant_ids.lot_id"))
-        self.assertNotIn(self.task.lot_id, self.c2.mapped("quant_ids.lot_id"))
+        self.assertIn(self.task.lot_id, self.c1.lot_ids)
+        self.assertNotIn(self.task.lot_id, self.c2.lot_ids)
 
         wizard = self.env["project.task.contract_transfer.wizard"].create(
             {
@@ -455,14 +453,14 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
         wizard.create_transfer()
 
-        self.assertNotIn(self.task.lot_id, self.c1.mapped("quant_ids.lot_id"))
-        self.assertIn(self.task.lot_id, self.c2.mapped("quant_ids.lot_id"))
+        self.assertNotIn(self.task.lot_id, self.c1.lot_ids)
+        self.assertIn(self.task.lot_id, self.c2.lot_ids[0])
 
     def test_contract_resiliation_with_devices(self):
         diagnostic_stage = self.env.ref("commown_devices.diagnostic_stage")
         resiliated_stage = self.env.ref("commown_devices.resiliated_stage")
 
-        self.assertTrue(self.c1.quant_nb > 0)
+        self.assertTrue(len(self.c1.lot_ids) > 0)
         expected_message = (
             "Error while validating constraint\n\nThese tasks can not be moved forward. There are still device(s) "
             "associated with their contract: %s\n" % self.task_test_checks.ids
@@ -476,8 +474,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             self.task_test_checks.stage_id = resiliated_stage
         self.assertEqual(expected_message, err2.exception.name)
 
-        self.task_test_checks.contract_id.quant_ids.unlink()
-        self.task_test_checks.contract_id._compute_quant_ids()
+        self.task_test_checks.contract_id.lot_ids = False
 
         self.task_test_checks.stage_id = diagnostic_stage
         self.assertTrue(self.task_test_checks.stage_id == diagnostic_stage)
