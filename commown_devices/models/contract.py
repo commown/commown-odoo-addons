@@ -45,6 +45,8 @@ class Contract(models.Model):
         string="Stock Move",
     )
 
+    lot_ids = fields.One2many("stock.production.lot", "contract_id", string="Lots")
+
     @api.depends("picking_ids.state")
     def _compute_quant_ids(self):
         for record in self:
