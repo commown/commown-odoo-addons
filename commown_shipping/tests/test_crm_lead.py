@@ -7,7 +7,7 @@ from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
-from odoo.addons.queue_job.job import Job
+from odoo.addons.queue_job.tests.common import trap_jobs
 
 from ..models.colissimo_utils import shipping_data
 from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
@@ -338,28 +338,34 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         )
 
     def exec_job_with_status(self, lead_statuses):
-        queued_jobs = self.env["queue.job"].search([])
-        self.assertEqual(queued_jobs.mapped("state"), ["pending"] * len(lead_statuses))
+        """Run the delivery jobs mocking colissimo WS with given status
+        Return the leads in the order of their name in `lead_statuses`.
+        """
+        with trap_jobs() as trap:
+            leads = self.env["crm.lead"]._cron_delivery_auto_track()
 
-        for queued_job in queued_jobs:
-            job = Job.load(self.env, queued_job.uuid)
+        trap.assert_jobs_count(len(lead_statuses))
+
+        for job in trap.enqueued_jobs:
             with patch.object(
                 DeliveryMixin,
                 "_delivery_tracking_colissimo_status",
-                side_effect=lambda *args: lead_statuses[job.recordset],
+                side_effect=lambda *args: lead_statuses[job.recordset.name],
             ):
                 job.perform()
 
+        return leads.sorted(lambda l: list(lead_statuses.keys()).index(l.name))
+
     def test_cron_ok1(self):
-        leads = self.env["crm.lead"]._cron_delivery_auto_track()
-        self.exec_job_with_status({l: _status("LIVCFM") for l in leads})
+        leads = self.exec_job_with_status({l: _status("LIVCFM") for l in ("l1", "l2")})
 
         self.assertEqual(leads.mapped("expedition_status"), ["[LIVCFM] test label"] * 2)
         self.assertEqual(leads.mapped("stage_id"), self.stage_final)
 
     def test_cron_ok2(self):
-        lead1, lead2 = self.env["crm.lead"]._cron_delivery_auto_track()
-        self.exec_job_with_status({lead1: _status("LIVCFM"), lead2: _status("RENLNA")})
+        lead1, lead2 = self.exec_job_with_status(
+            {"l1": _status("LIVCFM"), "l2": _status("RENLNA")}
+        )
 
         self.assertItemsEqual(lead1.expedition_status, "[LIVCFM] test label")
         self.assertItemsEqual(lead2.expedition_status, "[RENLNA] test label")
@@ -368,8 +374,10 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         self.assertItemsEqual(lead2.stage_id, self.stage_track)
 
     def test_cron_ok_mlvars1(self):
-        lead1, lead2 = self.env["crm.lead"]._cron_delivery_auto_track()
-        self.exec_job_with_status({lead1: _status("LIVCFM"), lead2: _status("MLVARS")})
+        self.env["crm.lead"]._cron_delivery_auto_track()
+        lead1, lead2 = self.exec_job_with_status(
+            {"l1": _status("LIVCFM"), "l2": _status("MLVARS")}
+        )
 
         self.assertEqual(lead1.expedition_status, "[LIVCFM] test label")
         self.assertEqual(lead2.expedition_status, "[MLVARS] test label")
@@ -391,7 +399,7 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         )
 
     def test_cron_ok_mlvars2(self):
-        lead1, lead2 = self.env["crm.lead"]._cron_delivery_auto_track()
+        lead1, lead2 = self.lead1, self.lead2
 
         partner_id = self.env.ref("base.res_partner_1").id
         lead2.partner_id = partner_id
@@ -402,7 +410,7 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
 
         date_old = (date.today() - timedelta(days=9)).isoformat()
         self.exec_job_with_status(
-            {lead1: _status("LIVCFM"), lead2: _status("MLVARS", _date=date_old)},
+            {"l1": _status("LIVCFM"), "l2": _status("MLVARS", _date=date_old)},
         )
 
         self.assertEqual(lead1.expedition_status, "[LIVCFM] test label")
