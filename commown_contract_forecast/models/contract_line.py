@@ -1,5 +1,7 @@
 from odoo import _, api, models
 
+from odoo.addons.queue_job.job import identity_exact
+
 
 class ContractLine(models.Model):
 
@@ -9,6 +11,7 @@ class ContractLine(models.Model):
     def _prepare_contract_line_forecast_period(
         self, period_date_start, period_date_end, recurring_next_date
     ):
+        "Take contract variable discounts into account"
         values = super()._prepare_contract_line_forecast_period(
             period_date_start,
             period_date_end,
@@ -29,8 +32,12 @@ class ContractLine(models.Model):
 
         return values
 
-    @api.model
-    def _get_forecast_update_trigger_fields(self):
-        fields = super()._get_forecast_update_trigger_fields()
-        fields.remove("recurring_next_date")
-        return fields
+    @api.multi
+    def generate_forecast_periods(self):
+        "Don't generate forecasts when creating a contract from sale in product_rental"
+        if not "contract_descr" in self.env.context:
+            for contract_line in self:
+                if contract_line.contract_id.company_id.enable_contract_forecast:
+                    contract_line.with_delay(
+                        identity_key=identity_exact
+                    )._generate_forecast_periods()
