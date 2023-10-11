@@ -73,9 +73,60 @@ class CommownContractForecastFunctionalTC(RentalSaleOrderTC):
             self.env["contract.line.forecast.period"].search_count([]),
         )
 
-        # Check forecasts get recomputed on discount addition
-        # (on contract or contract template)
-        # XXX code me
+        # Check forecasts get recomputed on discount addition...
+        cdiscount_model = self.env["contract.discount.line"]
+        ctdiscount_model = self.env["contract.template.discount.line"]
+        discount_data = {
+            "name": "1 year loyalty",
+            "amount_type": "percent",
+            "amount_value": 10.0,
+            "start_reference": "date_start",
+            "start_value": 1,
+            "start_unit": "years",
+            "end_type": "relative",
+            "end_reference": "date_start",
+            "end_value": 2,
+            "end_unit": "years",
+        }
+
+        # - ... to a contract
+        cline0 = contract_lines[0]
+        with trap_jobs() as trap:
+            cline0.specific_discount_line_ids = cdiscount_model.create(
+                dict(discount_data, contract_line_id=cline0.id)
+            )
+
+        self.assertEqual(len(trap.enqueued_jobs), 1)
+        trap.perform_enqueued_jobs()
+        self.assertEqual(
+            cline0.mapped("forecast_period_ids.discount")[-4:],
+            [0.0, 10.0, 10.0, 10.0],
+        )
+
+        # - ... to a contract template
+        # Choose the CT used for the 2 PCs of the `so` sale order and check a forecast
+        # is recomputed for both 2 impacted contract lines prices
+        clines = contract_lines.filtered(
+            lambda cl: cl.sale_order_line_id.product_id.name == "PC"
+        )
+        self.assertEqual(len(clines), 2)
+
+        ctline = clines.mapped("contract_template_line_id")
+        self.assertEqual(len(ctline), 1)
+
+        with trap_jobs() as trap:
+            ctline.discount_line_ids = ctdiscount_model.create(
+                dict(discount_data, contract_template_line_id=ctline.id)
+            )
+
+        self.assertEqual(len(trap.enqueued_jobs), len(clines))
+        trap.perform_enqueued_jobs()
+
+        for cline in clines:
+            self.assertEqual(
+                cline.mapped("forecast_period_ids.discount")[-4:],
+                [0.0, 10.0, 10.0, 10.0],
+            )
 
         # Check forecasts get recomputed on contract programmed end
         new_duration = relativedelta(months=7, days=-1)

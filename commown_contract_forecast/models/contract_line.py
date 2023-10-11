@@ -32,6 +32,12 @@ class ContractLine(models.Model):
 
         return values
 
+    @api.model
+    def _get_forecast_update_trigger_fields(self):
+        result = super()._get_forecast_update_trigger_fields()
+        result.append("specific_discount_line_ids")
+        return result
+
     @api.multi
     def generate_forecast_periods(self):
         "Don't generate forecasts when creating a contract from sale in product_rental"
