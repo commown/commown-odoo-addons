@@ -95,8 +95,8 @@ class Contract(models.Model):
         return self._create_picking(
             lots,
             products,
-            self.env.ref("stock.stock_location_locations_partner"),
-            self.env.ref("stock.stock_location_locations_partner"),
+            self.partner_id.get_or_create_customer_location(),
+            self.partner_id.get_or_create_customer_location(),
             dest_location,
             origin=origin,
             date=date,
