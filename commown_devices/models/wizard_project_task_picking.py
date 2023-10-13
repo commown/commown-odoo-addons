@@ -1,7 +1,7 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, Warning
 
-from .common import find_products_orig_location, internal_picking
+from .common import do_new_transfer, find_products_orig_location, internal_picking
 
 RESILIATION_XML_ID = "product_rental.contract_termination_project"
 
@@ -92,7 +92,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         if not lot:
             raise UserError(_("Can't move device: no device set on this task!"))
 
-        return internal_picking(
+        new_move_lines = internal_picking(
             [lot],
             {},
             self.env[
@@ -102,8 +102,12 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             self.location_dest_id,
             self.task_id.get_name_for_origin(),
             date=self.date,
-            do_transfer=True,
         )
+        do_new_transfer(
+            new_move_lines.mapped("picking_id"),
+            self.date or fields.Datetime.now(),
+        )
+        return new_move_lines
 
 
 class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
@@ -128,7 +132,7 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
         if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
             raise Warning(_("This action should not be used in resiliation project"))
 
-        return internal_picking(
+        new_move_lines = internal_picking(
             [],
             {self.task_id.storable_product_id: 1},
             self.present_location_id,
@@ -136,8 +140,12 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
             self.location_dest_id,
             self.task_id.get_name_for_origin(),
             date=self.date,
-            do_transfer=True,
         )
+        do_new_transfer(
+            new_move_lines.mapped("picking_id"),
+            self.date or fields.Datetime.now(),
+        )
+        return new_move_lines
 
 
 class ProjectTaskOutwardPickingWizard(models.TransientModel):
@@ -254,7 +262,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
     @api.onchange("task_id")
     def onchange_task_id(self):
         if self.task_id:
-            lots = self.task_id.contract_id.quant_ids.mapped("lot_id")
+            lots = self.task_id.contract_id.lot_ids
             if len(lots) == 1:
                 self.lot_id = lots.id
             return {"domain": {"lot_id": [("id", "in", lots.ids)]}}

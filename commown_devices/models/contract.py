@@ -1,9 +1,8 @@
 import logging
-from collections import OrderedDict
 
 from odoo import api, fields, models
 
-from .common import internal_picking
+from .common import do_new_transfer, internal_picking
 
 _logger = logging.getLogger(__name__)
 
@@ -71,6 +70,7 @@ class Contract(models.Model):
         send_lots_from=None,
         origin=None,
         date=None,
+        reuse_picking=None,
         do_transfer=False,
     ):
         """Create a picking of lot to partner's location.
@@ -88,7 +88,7 @@ class Contract(models.Model):
             send_lots_from = default_stock
         if origin is None:
             origin = self.name
-        return self._create_picking(
+        return self._create_or_reuse_picking(
             lots,
             products,
             send_nonserial_products_from,
@@ -96,12 +96,20 @@ class Contract(models.Model):
             dest_location,
             origin=origin,
             date=date,
+            reuse_picking=reuse_picking,
             do_transfer=do_transfer,
         )
 
     @api.multi
     def receive_devices(
-        self, lots, products, dest_location, origin=None, date=False, do_transfer=False
+        self,
+        lots,
+        products,
+        dest_location,
+        origin=None,
+        date=False,
+        reuse_picking=None,
+        do_transfer=False,
     ):
         """Create a picking from partner's location to `dest_location`.
         If given `date` is falsy (the default), it is set to now.
@@ -111,7 +119,7 @@ class Contract(models.Model):
         if origin is None:
             origin = self.name
 
-        return self._create_picking(
+        return self._create_or_reuse_picking(
             lots,
             products,
             self.partner_id.get_or_create_customer_location(),
@@ -119,10 +127,11 @@ class Contract(models.Model):
             dest_location,
             origin=origin,
             date=date,
+            reuse_picking=reuse_picking,
             do_transfer=do_transfer,
         )
 
-    def _create_picking(
+    def _create_or_reuse_picking(
         self,
         lots,
         products,
@@ -131,10 +140,11 @@ class Contract(models.Model):
         dest_location,
         origin,
         date=None,
+        reuse_picking=None,
         do_transfer=False,
     ):
         self.ensure_one()
-        picking = internal_picking(
+        new_moves = internal_picking(
             lots,
             products,
             send_products_from,
@@ -142,10 +152,15 @@ class Contract(models.Model):
             dest_location,
             origin,
             date=date,
-            do_transfer=do_transfer,
+            picking=reuse_picking,
         )
-        self.picking_ids |= picking
-        return picking
+        self.move_ids |= new_moves
+        if do_transfer:
+            do_new_transfer(
+                new_moves.mapped("picking_id"),
+                date or fields.Datetime.now(),
+            )
+        return new_moves
 
     @api.multi
     def stock_at_date(self, date=None):

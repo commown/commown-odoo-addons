@@ -17,7 +17,7 @@ class CrmLead(models.Model):
     def action_generate_picking(self):
         contract = self.contract_id
 
-        if contract.picking_ids.filtered(_assigned):
+        if contract.move_ids.mapped("picking_id").filtered(_assigned):
             raise UserError(
                 _(
                     "The contract has already assigned picking(s)!\n"
@@ -44,16 +44,14 @@ class CrmLead(models.Model):
 
     def action_check_waiting_picking(self):
         if self.so_line_id.product_id.product_tmpl_id.storable_product_id:
-            if not self.contract_id.picking_ids.filtered(_assigned):
+            if not self.contract_id.move_ids.mapped("picking_id").filtered(_assigned):
                 raise UserError(_("Lead has no assigned picking."))
 
     @api.multi
     def delivery_perform_actions(self):
         "Validate shipping"
         super(CrmLead, self).delivery_perform_actions()
-        picking = self.contract_id.move_line_ids.mapped("picking_id").filtered(
-            _assigned
-        )
+        picking = self.contract_id.move_ids.mapped("picking_id").filtered(_assigned)
         if len(picking) == 1:
             # time doesn't really matter for now; ideally
             # deliver_date would become delivery_datetime:

@@ -29,7 +29,7 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
             "commown_devices.stock_location_modules_and_accessories"
         )
         self.adjust_stock_notracking(
-            self.usbc_cable.product_variant_id, self.loc_new_untracked
+            self.usbc_cable.product_variant_id, self.loc_new_untracked, qty=2.0
         )
         # We don't ajdust stock of protective screen because lack of stock case is
         # tested
@@ -101,7 +101,9 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         )
         self.so.order_line[0].product_id = self.fp3_plus_service_color1_with_usb
         self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-1")
-        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
+        self.fp3plus_lot = self.adjust_stock(
+            self.fp3_plus_storable_color1, serial="test-fp3+-2"
+        )
 
     def prepare_wizard(self, related_entity, relation_field, user_choices=None):
         wizard_name = "%s.picking.wizard" % related_entity._name
@@ -239,24 +241,112 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         lot = possibilities["lot_ids"][0]
         wizard.lot_ids = lot
 
-        move_lines = wizard.create_picking()
+        moves = wizard.create_picking()
 
         # Check the result
-        picking = move_lines.mapped("picking_id")
+        picking = moves.mapped("picking_id")
         loc_new = self.env.ref("commown_devices.stock_location_available_for_rent")
 
-        self.assertEqual(move_lines.ids, lead.contract_id.move_line_ids.ids)
+        self.assertEqual(moves, lead.contract_id.move_ids)
         self.assertEqual(picking.state, "assigned")
         self.assertEqual(picking.move_type, "direct")
         self.assertEqual(picking.location_id, loc_new)
 
-        move_lines = picking.move_line_ids
-        self.assertEqual(len(move_lines), 3)
+        moves = picking.move_lines
+        self.assertEqual(len(moves), 3)
         loc_partner = self.so.partner_id.get_or_create_customer_location()
         self.assertEqual(
-            sorted(move_lines.mapped("location_id").ids),
+            sorted(moves.mapped("location_id").ids),
             sorted([self.location_fp3_new.id, self.loc_new_untracked.id]),
         )
-        self.assertEqual(move_lines.mapped("location_dest_id"), loc_partner)
+        self.assertEqual(moves.mapped("location_dest_id"), loc_partner)
 
-        self.assertEqual(move_lines.mapped("lot_id.name"), [lot.name])
+        self.assertEqual(moves.mapped("move_line_ids.lot_id.name"), [lot.name])
+
+    def test_reuse_picking(self):
+
+        # Create first picking
+        lead = self.get_lead()
+
+        self.adjust_stock_notracking(
+            self.protective_screen.product_variant_id, self.loc_new_untracked, qty=2.0
+        )
+        # Create another serial for fp3+ so an actual choice can be made
+        fp3plus_3 = self.adjust_stock(
+            self.fp3_plus_storable_color1, serial="test-fp3+-3"
+        )
+
+        defaults, possibilities = self.prepare_wizard(lead, "lead_id")
+        date_picking1 = datetime.datetime(2020, 1, 10, 16, 2, 34)
+        wizard1 = (
+            self.env["crm.lead.picking.wizard"]
+            .with_context({"default_lead_id": lead.id})
+            .create(
+                {
+                    "date": date_picking1,
+                }
+            )
+        )
+        wizard1.lot_ids = fp3plus_3
+
+        picking1 = wizard1.create_picking().mapped("picking_id")
+
+        # Create a second wizzard and re-use picking
+        defaults, possibilities = self.prepare_wizard(
+            lead,
+            "lead_id",
+            user_choices={
+                "lead_id": lead.id,
+                "update_picking": True,
+            },
+        )
+        self.assertEqual(possibilities["picking_to_update"], picking1)
+
+        product_2 = self.storable_product.product_variant_id
+        lot_product_2 = self.adjust_stock(product_2, qty=1.0, serial="fp-3")
+        date_picking2 = datetime.datetime(2023, 2, 11, 21, 2, 33)
+        wizard2 = (
+            self.env["crm.lead.picking.wizard"]
+            .with_context({"default_lead_id": lead.id})
+            .create(
+                {
+                    "lead_id": lead.id,
+                    "date": date_picking2,
+                }
+            )
+        )
+        wizard2.update_picking = True
+        wizard2.picking_to_update = possibilities["picking_to_update"].id
+        wizard2.all_products |= product_2
+        wizard2.lot_ids = self.fp3plus_lot + lot_product_2
+
+        # Emulate @onchange methods
+        wizard2.update_date()
+
+        # Check results
+        self.assertEqual(wizard2.date, date_picking1)
+
+        picking2 = wizard2.create_picking().mapped("picking_id")
+        picking2.button_validate()
+        self.assertEqual(picking1, picking2)
+
+        # Check a different move has been created each time for the same products
+        nb_of_stock_move = len(
+            picking1.move_lines.filtered(
+                lambda ml: ml.product_id == self.protective_screen.product_variant_id
+            )
+        )
+        self.assertEqual(nb_of_stock_move, 2)
+
+        # Check products have been sent
+        quant = self.env["stock.quant"].search(
+            [
+                (
+                    "location_id",
+                    "=",
+                    lead.partner_id.get_or_create_customer_location().id,
+                ),
+                ("product_id", "=", self.protective_screen.product_variant_id.id),
+            ]
+        )
+        self.assertEqual(quant.quantity, 2.0)
