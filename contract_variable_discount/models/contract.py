@@ -2,7 +2,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import logging
-import uuid
 
 from odoo import _, api, fields, models
 
@@ -171,61 +170,3 @@ class Contract(models.Model):
         ):
             contract_line.contract_template_line_id = contract_template_line
         return new_lines
-
-    @api.multi
-    def simulate_payments(self):
-        self.ensure_one()
-
-        max_date = self.date_start
-
-        for contract_line in self.contract_line_ids:
-            for discount_line in contract_line._applicable_discount_lines():
-                date_start = discount_line._compute_date(contract_line, "start")
-                if date_start > max_date:
-                    max_date = date_start
-                if discount_line.end_type != "empty":
-                    date_end = discount_line._compute_date(contract_line, "end")
-                    if date_end > max_date:
-                        max_date = date_end
-
-        _logger.debug("Contract payment simulation until: %s...", max_date)
-
-        inv_data = []
-        last_amount = None
-
-        point_name = uuid.uuid1().hex
-        self.env.cr.execute('SAVEPOINT "%s"' % point_name)
-
-        # This is ugly (as is_auto_pay is introduced by contract_payment_auto)
-        # BUT it is so dangerous not to unset it in the simulation that we
-        # prefer this over more complex and not so secure solutions...
-        if getattr(self, "is_auto_pay", False):
-            self.is_auto_pay = False
-
-        last_date = self.recurring_next_date
-        try:
-            while last_date < max_date:
-                # Use context to make it possible to avoid external side effects
-                # (cooperative campaign through http api for instance):
-                inv = self.with_context(is_simulation=True).recurring_create_invoice()
-                last_date = inv.date_invoice
-                if last_amount != inv.amount_total:
-                    _logger.debug(
-                        "> KEEP invoice %s (amount %s)",
-                        inv.date_invoice,
-                        inv.amount_total,
-                    )
-                    last_amount = inv.amount_total
-                    data = inv.read()[0]
-                    data["invoice_line_ids"] = inv.invoice_line_ids.read()
-                    inv_data.append(data)
-                else:
-                    _logger.debug(
-                        "> SKIP invoice %s (amount %s)",
-                        inv.date_invoice,
-                        inv.amount_total,
-                    )
-
-            return inv_data
-        finally:
-            self.env.cr.execute('ROLLBACK TO SAVEPOINT "%s"' % point_name)

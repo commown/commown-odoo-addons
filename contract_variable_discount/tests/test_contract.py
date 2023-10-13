@@ -1,6 +1,5 @@
 from datetime import date
 
-import lxml.html
 from mock import patch
 
 from odoo import fields, models
@@ -279,34 +278,4 @@ class ContractTC(TestContractBase):
         self.assertEqual(
             inv3.mapped("invoice_line_ids.name"),
             ["Services from 04/29/2016 to 05/28/2016"],
-        )
-
-    def test_simulate_payments(self):
-        contract = self.contract
-        self.set_cdiscounts(self._discounts_1())
-
-        contract.recurring_next_date = contract.date_start
-        contract.contract_line_ids.recurring_next_date = contract.date_start
-
-        report = self.env.ref(
-            "contract_variable_discount.report_simulate_payments_html"
-        )
-        fragment = report.render({"docs": contract}, "ir.qweb")
-
-        html = (
-            '<html><head><meta charset="utf-8"/></head>'
-            "<body>%s<//body></html>" % fragment
-        )
-        doc = lxml.html.fromstring(html)
-
-        # First column contains dates:
-        self.assertEqual(
-            doc.xpath("//tbody/tr/td[1][not(@colspan)]/text()"),
-            ["2016-02-15", "2018-02-15", "2019-02-15"],
-        )
-
-        # Fourth contains discounts:
-        self.assertEqual(
-            [n.text_content() for n in doc.xpath("//tbody/tr/td[4]")],
-            ["5.0 %", "15.0 %", "25.0 %"],
         )
