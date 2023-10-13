@@ -17,9 +17,9 @@ class ShareholderRegister(models.TransientModel):
     _name = "commown_shareholder_register.register"
     _description = "Utility class to compute a shareholder register"
 
-    date = fields.Datetime(
-        string="Date",
-        help="Date of the register",
+    date = fields.Date(
+        string="Register at date (included)",
+        help="Shareholder moves at this date will be included.",
     )
     report = fields.Binary("Shareholder Register", readonly=True)
     report_name = fields.Char(string="Filename", size=256, readonly=True)
@@ -32,7 +32,7 @@ class ShareholderRegister(models.TransientModel):
             [
                 ("account_id", "in", cats.mapped("account_id.id")),
                 ("partner_id", "!=", False),
-                ("date", "<", self.date),
+                ("date", "<=", self.date),
                 ("partner_id.active", "=", True),
             ],
             ["account_id", "partner_id", "balance:sum"],
