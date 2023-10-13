@@ -95,13 +95,13 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         """Optin if valid and not simulating before computing the actual value
 
         This is because we optin at first contract invoice generation,
-        i.e. when the customer receives is device. The sale could
+        i.e. when the customer receives its device. The sale could
         indeed be canceled before this date.
         """
 
         # Use no_check_coop_ws context to disable optin check in the
         # `is_valid` method here as the aim is... to optin!
-        if not self._context.get("is_simulation") and self.with_context(
+        if not self._context.get("bypass_coop_campaigns") and self.with_context(
             no_check_coop_ws=True
         ).is_valid(contract_line, date):
             campaign = self.coupon_campaign_id
@@ -165,7 +165,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
             # Do not call the cooperative WS if we are simulating
             # future invoices...
-            if not self._context.get("is_simulation"):
+            if not self._context.get("bypass_coop_campaigns"):
                 contract = contract_line.contract_id
                 partner = contract.partner_id
                 campaign = self.coupon_campaign_id

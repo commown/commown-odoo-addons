@@ -5,6 +5,7 @@ import mock
 import pytz
 import requests
 import requests_mock
+from requests_mock.exceptions import NoMockAddress
 
 from odoo.fields import Date
 from odoo.tools import mute_logger
@@ -44,11 +45,23 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         self.so.partner_id.country_id = self.env.ref("base.fr").id
         self.customer_key = self.campaign.coop_partner_identifier(self.so.partner_id)
 
-    def invoice(self, optin, optout=None, mock_optin=False, check_mock_calls=True):
+    def invoice(
+        self,
+        optin,
+        optout=None,
+        mock_optin=False,
+        check_mock_calls=True,
+        env=None,
+    ):
         """Create an invoice from contract mocking the cooperative web service
         with give optin and optout dates generators.
         """
-        date = self.contract.recurring_next_date
+        if env is None:
+            contract = self.contract
+        else:
+            contract = env["contract.contract"].browse(self.contract.id)
+
+        date = contract.recurring_next_date
 
         events = [{"type": "optin", "ts": optin(date)}]
         if optout is not None:
@@ -66,11 +79,11 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                         "id": 1,
                         "campaign": {},
                         "member": {},
-                        "optin_ts": ts_after(self.contract.recurring_next_date, 0),
+                        "optin_ts": ts_after(contract.recurring_next_date, 0),
                         "optout_ts": None,
                     },
                 )
-            invoice = self.contract.recurring_create_invoice()
+            invoice = contract.recurring_create_invoice()
 
         if check_mock_calls:
             reqs = rm.request_history
@@ -190,22 +203,20 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             )
             self.contract.with_context(test_queue_job_no_delay=True).date_end = date_end
 
-    def test_is_simulation(self):
-        "Don't call optin WS when simulating the future invoices"
+    def test_bypass_coop_campaigns(self):
+        "Don't call optin WS when bypass_coop_campaigns is in the context"
 
-        pypath = "odoo.addons.commown_cooperative_campaign.models.discount."
-        optin_path = pypath + "coop_ws_optin"
-        comp_path = pypath + (
-            "ContractTemplateAbstractDiscountLine."
-            "_compute_condition_coupon_from_campaign"
-        )
+        def do_test(env):
+            before1 = partial(ts_before, days=1)
+            self.invoice(before1, mock_optin=False, check_mock_calls=False, env=env)
 
-        with mock.patch(optin_path) as m_optin:
-            with mock.patch(comp_path) as m_compute:
-                report = self.env.ref(
-                    "contract_variable_discount.report_simulate_payments_html"
-                )
-                report.render({"docs": self.contract}, "ir.qweb")
+        # Check test prequisite without modifying the DB, to revert the side effect of
+        # this check (which otherwise would create an invoice and prevent a new optin
+        # call when repeating):
+        with self.env.cr.savepoint():
+            with self.assertRaises(NoMockAddress) as err:
+                do_test(self.env)
 
-        self.assertTrue(m_compute.call_count > 1)
-        self.assertEqual(m_optin.call_count, 0)
+        # Same call with same DB state but with the bypass_coop_campaigns context
+        # variable should not raise:
+        do_test(self.env(context=dict(self.env.context, bypass_coop_campaigns=True)))
