@@ -19,9 +19,9 @@ class ContractLine(models.Model):
         )
 
         # By-pass cooperative campaigns discount computations
-        discount_values = self.with_context(is_simulation=True).compute_discount(
-            period_date_start
-        )
+        discount_values = self.with_context(
+            bypass_coop_campaigns=True
+        ).compute_discount(period_date_start)
 
         values["discount"] = discount_values["total"]
         if discount_values["descriptions"]:
