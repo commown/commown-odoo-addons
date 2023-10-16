@@ -3,7 +3,7 @@
 {
     "name": "Payment Token Uniquify",
     "summary": "Module summary",
-    "version": "12.0.1.0.1",
+    "version": "12.0.1.0.2",
     "development_status": "Alpha",
     "category": "Payment",
     "website": "https://commown.coop",
