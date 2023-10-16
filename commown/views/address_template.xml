@@ -17,17 +17,22 @@
       <attribute name="t-if">True</attribute>
     </xpath>
 
-    <!-- Add company_name and vat as required in b2b -->
+    <!-- Display company_name and vat as required in b2b... -->
     <xpath expr="//div[@id='div_phone']" position="after">
-      <t t-set="is_b2b"
-         t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
+      <t t-set="display_company_infos"
+         t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website') and mode[1] == 'billing'" />
 
-      <t t-if="is_b2b and mode[1] == 'billing'">
+      <!-- ... but disable them if set by ourselves in the backoffice -->
+      <t t-set="edit_company_infos"
+         t-value="display_company_infos and not env.user.partner_id.commercial_partner_id.is_company" />
+
+      <t t-if="display_company_infos">
         <div class="w-100"/>
         <div t-attf-class="form-group #{error.get('company_name') and 'o_has_error' or ''} col-lg-6">
           <label class="col-form-label" for="company_name">Company Name</label>
           <input type="text"
                  name="company_name"
+                 t-att="{} if edit_company_infos else {'disabled': ''}"
                  t-attf-class="form-control #{error.get('company_name') and 'is-invalid' or ''}"
                  t-att-value="'commercial_company_name' in checkout and checkout['commercial_company_name'] or 'company_name' in checkout and checkout['company_name']" />
         </div>
@@ -35,6 +40,7 @@
           <label class="col-form-label label-optional" for="vat">VAT</label>
           <input type="text"
                  name="vat"
+                 t-att="{} if edit_company_infos else {'disabled': ''}"
                  t-attf-class="form-control #{error.get('vat') and 'is-invalid' or ''}"
                  t-att-value="'vat' in checkout and checkout['vat']" />
           <p t-if="'vat' in error" class="text-error">Please enter a valid VAT number</p>
@@ -55,11 +61,9 @@
 
     <!-- * add in field_required hidden input for the controller -->
     <xpath expr="//form//input[@name='field_required']" position="replace">
-      <t t-set="is_b2b"
-         t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
       <input type="hidden"
              name="field_required"
-             t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name' if (is_b2b and mode[1] == 'billing') else '')" />
+             t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name' if edit_company_infos else '')" />
     </xpath>
 
   </template>
