@@ -217,3 +217,14 @@ class CommownPartner(models.Model):
         else:
             res["email"] = res["login"] = partner.email or ""
         return res
+
+    def reset_payment_token(self):
+        "Force the reset on payment preferences on payment token reset"
+        super().reset_payment_token()
+        self.update(
+            {
+                "invoice_merge_recurring_rule_type": False,
+                "invoice_merge_recurring_interval": False,
+                "invoice_merge_next_date": False,
+            }
+        )
