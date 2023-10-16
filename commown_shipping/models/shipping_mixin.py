@@ -41,6 +41,7 @@ class CommownShippingMixin(models.AbstractModel):
     recipient_partner_id = fields.Many2one(
         "res.partner",
         "Delivery partner",
+        domain="[('commercial_partner_id', '=', commercial_partner_id)]",
         help=(
             "If left empty, a delivery partner will be looked-up for specified"
             " partner:\n"

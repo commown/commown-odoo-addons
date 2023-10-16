@@ -11,6 +11,11 @@ class CrmLead(models.Model):
         "commown.track_delivery.mixin",
     ]
 
+    # Used by recipient_partner_id domain
+    commercial_partner_id = fields.Many2one(
+        "res.partner", related="partner_id.commercial_partner_id"
+    )
+
     _delivery_tracking_parent_rel = _shipping_parent_rel = "team_id"
     _delivery_tracking_stage_parent_rel = "team_id"
 

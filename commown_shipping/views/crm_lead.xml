@@ -42,6 +42,7 @@
           </xpath>
 
           <xpath expr="//field[@name='partner_id']" position="after">
+            <field name="commercial_partner_id" invisible="1"/>
             <field name="recipient_partner_id" widget="res_partner_many2one"
                    context="{'show_address': 1}" options='{"always_reload": True}'/>
           </xpath>
