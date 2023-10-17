@@ -179,13 +179,21 @@ class RentalFeesComputation(models.Model):
         current_period = {}
         result = []
 
+        today = fields.Date.today()
+        if self.until_date > today:
+            last_real_date = today
+            has_forecast = True
+        else:
+            last_real_date = self.until_date
+            has_forecast = False
+
         move_lines = (
             self.env["stock.move.line"]
             .search(
                 [
                     ("state", "=", "done"),
                     ("lot_id", "=", device.id),
-                    ("move_id.date", "<", self.until_date + _one_day),
+                    ("move_id.date", "<", last_real_date + _one_day),
                 ]
             )
             .sorted(lambda ml: ml.move_id.date)
@@ -201,6 +209,7 @@ class RentalFeesComputation(models.Model):
 
             if move_line.location_dest_id in customer_locations:
                 if not current_period:
+                    current_period["is_forecast"] = False
                     current_period["from_date"] = move_date
                     current_period["contract"] = move.picking_id.contract_id
                 else:
@@ -218,8 +227,18 @@ class RentalFeesComputation(models.Model):
                 current_period.clear()
 
         if current_period:
-            current_period["to_date"] = self.until_date + _one_day
+            current_period["to_date"] = last_real_date + _one_day
             result.append(current_period)
+
+            if has_forecast:
+                result.append(
+                    dict(
+                        current_period,
+                        from_date=current_period["to_date"],
+                        to_date=self.until_date + _one_day,
+                        is_forecast=True,
+                    )
+                )
 
         return result
 
@@ -290,6 +309,7 @@ class RentalFeesComputation(models.Model):
                     result.append(
                         {
                             "contract": period["contract"],
+                            "is_forecast": period["is_forecast"],
                             "from_date": from_date,
                             "to_date": split_date,
                             "fees_def_line": fees_def_line,
@@ -300,6 +320,7 @@ class RentalFeesComputation(models.Model):
                     result.append(
                         {
                             "contract": period["contract"],
+                            "is_forecast": period["is_forecast"],
                             "from_date": from_date,
                             "to_date": period["to_date"],
                             "fees_def_line": fees_def_line,
@@ -570,6 +591,7 @@ class RentalFeesComputation(models.Model):
                     "to_date": period["to_date"] - _one_day,  # dates included in the DB
                     "fees_definition_id": def_line.fees_definition_id.id,
                     "fees_definition_line_id": def_line.id,
+                    "is_forecast": period["is_forecast"],
                 }
             )
 
@@ -679,6 +701,12 @@ class RentalFeesComputationDetail(models.Model):
     to_date = fields.Date(
         string="To date",
         required=True,
+    )
+
+    is_forecast = fields.Boolean(
+        "Is a forecast?",
+        store=True,
+        index=True,
     )
 
     fees_definition_id = fields.Many2one(

@@ -11,6 +11,7 @@
     "website": "https://commown.coop",
     "depends": [
         "commown_devices",
+        "commown_contract_forecast",
         "purchase",
         "queue_job",
         "report_py3o",
