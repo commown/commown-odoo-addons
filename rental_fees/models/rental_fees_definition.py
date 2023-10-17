@@ -293,10 +293,6 @@ class RentalFeesDefinitionLine(models.Model):
 
         self.ensure_one()
 
-        assert (
-            period["to_date"] <= fields.Date.today()
-        ), "Future fees computations are not supported yet"
-
         if self.fees_type == "fix":
             if self.monthly_fees == 0.0:
                 return 0.0
@@ -307,7 +303,17 @@ class RentalFeesDefinitionLine(models.Model):
                 )
 
         elif self.fees_type == "proportional":
-            return self._get_invoiced_amount(period) * self.monthly_fees
+            if period["is_forecast"]:
+                forecasts = self.env["contract.line.forecast.period"].search(
+                    [
+                        ("contract_id", "=", period["contract"].id),
+                        ("date_invoice", ">=", period["from_date"]),
+                        ("date_invoice", "<", period["to_date"]),
+                    ]
+                )
+                return sum(p.price_subtotal for p in forecasts) * self.monthly_fees
+            else:
+                return self._get_invoiced_amount(period) * self.monthly_fees
 
     def _get_invoiced_amount(self, period):
         """Return the total amount invoiced for the given fees period
