@@ -688,9 +688,36 @@ class RentalFeesComputationDetail(models.Model):
         required=True,
     )
 
+    product_template_id = fields.Many2one(
+        comodel_name="product.template",
+        string="Product",
+        readonly=True,
+        related="lot_id.product_id.product_tmpl_id",
+        store=True,
+        index=True,
+    )
+
     contract_id = fields.Many2one(
         "contract.contract",
         string="Contract",
+    )
+
+    contract_template_id = fields.Many2one(
+        comodel_name="contract.template",
+        string="Contract template",
+        readonly=True,
+        related="contract_id.contract_template_id",
+        store=True,
+        index=True,
+    )
+
+    market = fields.Selection(
+        [("B2C", "B2C"), ("B2B", "B2B")],
+        string="Market",
+        readonly=True,
+        compute="_compute_market",
+        store=True,
+        index=True,
     )
 
     from_date = fields.Date(
@@ -718,3 +745,13 @@ class RentalFeesComputationDetail(models.Model):
         "rental_fees.definition_line",
         string="Fees definition line",
     )
+
+    @api.depends("contract_template_id")
+    def _compute_market(self):
+        for record in self:
+            ct_name = record.contract_template_id.name
+            if ct_name and "/" in ct_name:
+                market = ct_name.split("/", 2)[1]
+                record.market = "B2C" if market == "B2C" else "B2B"
+            else:
+                record.market = False
