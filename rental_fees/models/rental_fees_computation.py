@@ -485,7 +485,7 @@ class RentalFeesComputation(models.Model):
             "name": _("Fees computation details"),
             "domain": [("fees_computation_id", "=", self.id)],
             "type": "ir.actions.act_window",
-            "view_mode": "tree,form",
+            "view_mode": "tree,graph,pivot,form",
             "res_model": "rental_fees.computation.detail",
         }
 

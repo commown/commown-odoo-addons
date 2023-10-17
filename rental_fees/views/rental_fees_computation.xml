@@ -23,14 +23,28 @@
       <tree string="Rental fees computation details">
         <field name="fees_computation_id"/>
         <field name="fees" string="Amount" sum="Total"/>
+        <field name="is_forecast"/>
         <field name="fees_type"/>
         <field name="lot_id"/>
         <field name="contract_id"/>
+        <field name="market"/>
         <field name="from_date"/>
         <field name="to_date"/>
         <field name="fees_definition_id"/>
         <field name="fees_definition_line_id" string="Def line nb"/>
       </tree>
+    </field>
+  </record>
+
+  <record id="rental_fees_computation_detail_view_graph" model="ir.ui.view">
+    <field name="name">rental.fees.computation.detail.graph</field>
+    <field name="model">rental_fees.computation.detail</field>
+    <field name="arch" type="xml">
+      <graph type="bar" stacked="True">
+        <field name="from_date" interval="month" type="row"/>
+        <field name="product_template_id" type="row"/>
+        <field name="fees" type="measure"/>
+      </graph>
     </field>
   </record>
 
@@ -63,6 +77,21 @@
     <field name="arch" type="xml">
       <search string="Rental Fees Computation Details">
         <field name="lot_id"/>
+        <field name="contract_id"/>
+        <group name="Forecasting">
+          <filter string="Actual" name="actual"
+                  domain="[('is_forecast', '=', False)]"/>
+          <filter string="Forecast" name="forecast"
+                  domain="[('is_forecast', '=', True)]"/>
+        </group>
+        <separator/>
+        <group name="Market">
+          <filter string="B2B" name="b2b"
+                  domain="[('market', '=', 'B2B')]"/>
+          <filter string="B2C" name="b2c"
+                  domain="[('market', '=', 'B2C')]"/>
+        </group>
+        <separator/>
         <group name="Fees type">
           <filter string="Rental fees" name="rental_fees"
                   domain="[('fees_type', '=', 'fees')]"/>
@@ -70,6 +99,14 @@
                   domain="[('fees_type', '!=', 'fees')]"/>
         </group>
         <group expand="0" string="Group By">
+          <filter string="Start date" name="from_date"
+                  context="{'group_by': 'from_date'}"/>
+          <filter string="Forecasting" name="is_forecast"
+                  context="{'group_by': 'is_forecast'}"/>
+          <filter string="Product" name="product_template_id"
+                  context="{'group_by': 'product_template_id'}"/>
+          <filter string="Market" name="market"
+                  context="{'group_by': 'market'}"/>
           <filter string="Fees type" name="fees_type"
                   context="{'group_by': 'fees_type'}"/>
           <filter string="Fees definition" name="fees_def"
