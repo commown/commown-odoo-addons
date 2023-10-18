@@ -17,4 +17,7 @@
         "commown_contract_variable_discount",
         "contract_queue_job",  # Make tests behave as when the commown module is installed
     ],
+    "data": [
+        "data/cron.xml",
+    ],
 }

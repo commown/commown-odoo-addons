@@ -61,3 +61,41 @@ class ContractLineComputeForecastTC(TestContractBase):
             clines.mapped("forecast_period_ids").mapped("discount"),
             [0.0] * 12 + [10.0] * 12 + [20.0] * 12,
         )
+
+    def test_cron(self):
+        # Setup test data
+        company = self.contract.partner_id.company_id
+        company.update(
+            {
+                "enable_contract_forecast": True,
+                "contract_forecast_rule_type": "monthly",
+                "contract_forecast_interval": 12,
+            }
+        )
+
+        # Check test prerequisite
+        clines = self.env["contract.line"].search([])
+        self.assertTrue(clines)
+
+        date = fields.Date.today()
+        with trap_jobs() as trap:
+            clines.write({"recurring_next_date": date})
+            self.contract.date_start = date
+
+        trap.assert_jobs_count(len(clines))
+        trap.perform_enqueued_jobs()
+
+        nb_forecasts = self.env["contract.line.forecast.period"].search_count
+        self.assertEqual(nb_forecasts([]), 12 * len(clines))
+
+        # Actual test
+        company.contract_forecast_interval = 3
+
+        with trap_jobs() as trap:
+            # Use batch size 1 to cover all method lines
+            self.env["contract.line"].cron_recompute_forecasts(1)
+
+        trap.assert_jobs_count(len(clines))
+        trap.perform_enqueued_jobs()
+
+        self.assertEqual(nb_forecasts([]), 3 * len(clines))
