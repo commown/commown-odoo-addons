@@ -1,6 +1,6 @@
 from datetime import date
 
-from odoo.models import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 from .common import RentalFeesTC
 
@@ -92,6 +92,17 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         self.assertEqual(
             self.fees_def.prices(device),
             {"standard": 500.0, "purchase": 200.0},
+        )
+
+        # Also check the error case (no invoice found for device)
+        self.po.invoice_ids.action_invoice_cancel()
+
+        with self.assertRaises(UserError) as err:
+            self.fees_def.prices(device)
+        self.assertEqual(
+            err.exception.name,
+            "No price for device N/S 1: its PO line has no invoice, see %s"
+            % self.po.name,
         )
 
     def test_scrapped_devices(self):
