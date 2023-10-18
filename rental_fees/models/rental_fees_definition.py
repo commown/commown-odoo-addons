@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import misc
 
 
@@ -175,15 +175,29 @@ class RentalFeesDefinition(models.Model):
         }
 
     def prices(self, device):
+        "Return device invoiced mean price"
         po_line = self.env["purchase.order.line"].search(
             [
                 ("order_id", "in", self.order_ids.ids),
                 ("move_ids.move_line_ids.lot_id", "=", device.id),
             ]
         )
+        # PO line price is indicative, use the invoice lines mean price
+        inv_lines = po_line.invoice_lines.filtered(
+            lambda il: il.invoice_id.state != "cancel"
+        )
+        if not inv_lines:
+            msg = _(
+                "No price for device %(serial)s: its PO line has no invoice, see %(po)s"
+            )
+            raise UserError(msg % {"serial": device.name, "po": po_line.order_id.name})
+
+        mean_price_unit = sum(l.price_unit * l.quantity for l in inv_lines) / sum(
+            inv_lines.mapped("quantity")
+        )
         return {
-            "purchase": po_line.price_unit,
-            "standard": po_line.price_unit / self.agreed_to_std_price_ratio,
+            "purchase": mean_price_unit,
+            "standard": mean_price_unit / self.agreed_to_std_price_ratio,
         }
 
     @api.multi
