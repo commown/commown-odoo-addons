@@ -66,6 +66,20 @@ class RentalFeesComputation(models.Model):
         readonly=True,
     )
 
+    run_datetime = fields.Datetime(
+        "Run datetime",
+        default=False,
+        copy=False,
+        readonly=True,
+        compute="_compute_run_datetime_and_has_forecast",
+    )
+
+    has_forecast = fields.Boolean(
+        copy=False,
+        readonly=True,
+        compute="_compute_run_datetime_and_has_forecast",
+    )
+
     fees = fields.Float(
         string="Fees",
         copy=False,
@@ -89,6 +103,17 @@ class RentalFeesComputation(models.Model):
         ),
         copy=False,
     )
+
+    @api.depends("until_date", "state")
+    def _compute_run_datetime_and_has_forecast(self):
+        now = fields.Datetime.now()
+        for record in self:
+            if self.state == "running":
+                self.run_datetime = now
+                self.has_forecast = self.until_date > self.run_datetime.date()
+            else:
+                self.run_datetime = False
+                self.has_forecast = self.until_date > now.date()
 
     def details(self, *fees_types):
         return self.detail_ids.filtered(lambda d: d.fees_type in fees_types)
@@ -179,13 +204,10 @@ class RentalFeesComputation(models.Model):
         current_period = {}
         result = []
 
-        today = fields.Date.today()
-        if self.until_date > today:
-            last_real_date = today
-            has_forecast = True
+        if self.has_forecast:
+            last_real_date = self.run_datetime.date()
         else:
             last_real_date = self.until_date
-            has_forecast = False
 
         move_lines = (
             self.env["stock.move.line"]
@@ -230,7 +252,7 @@ class RentalFeesComputation(models.Model):
             current_period["to_date"] = last_real_date + _one_day
             result.append(current_period)
 
-            if has_forecast:
+            if self.has_forecast:
                 result.append(
                     dict(
                         current_period,
