@@ -7,27 +7,23 @@
     <!-- Change link text to the product display name instead of the order
          line name which contains the whole product description, and
          move the latter to a fly-over icon -->
-    <xpath expr="//td[@id='product_name']//*[@t-field='line.name']" position="replace">
-        <t t-if="not line.product_id.website_published">
-          <span t-esc="line.product_id.display_name"/>
-        </t>
-        <t t-else="">
-          <a t-if="line.product_id.website_published"
-             t-att-href="line.product_id.website_url">
-            <span t-esc="line.product_id.display_name"/>
-          </a>
-        </t>
+    <xpath expr="//td[@id='product_name']/a/*[@t-field='line.name']" position="attributes">
+      <attribute name="t-field">line.product_id.display_name</attribute>
+    </xpath>
+    <xpath expr="//td[@id='product_name']/t/*[@t-field='line.name']" position="attributes">
+      <attribute name="t-field">line.product_id.display_name</attribute>
     </xpath>
 
     <xpath expr="//td[@id='product_name']" position="inside">
-        <div t-if="line.product_id.is_rental" class="rent">
+        <div t-if="line.product_id.is_rental" class="rent m-4 p-4 bg-light">
 
+          <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
           <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
 
           <p class="mb-0">Loyer unitaire :
-            <span t-esc="line.price_unit * line.product_id.rental_price / (line.product_id.list_price or 1)"
+            <span t-esc="first_cline.price_unit * first_cline.quantity"
                   t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
-            <span t-field="line.product_id.rental_frequency"/>
+            / <span t-field="first_cline.recurring_rule_type"/>
           </p>
 
           <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :
@@ -79,10 +75,9 @@
           </div>
         </div>
 
-        <!-- Display line templated description sale converted to HTML
-             (without the product name, which is already display above) -->
+        <!-- Display order line description sale converted to HTML -->
         <p class="mx-4 p-4 bg-light"
-           t-raw="env['ir.qweb.field.text'].value_to_html(line.templated_description_sale(with_prefix=False), None)"/>
+           t-raw="env['ir.qweb.field.text'].value_to_html(line.name, None)"/>
 
     </xpath>
 
