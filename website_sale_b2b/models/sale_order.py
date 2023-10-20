@@ -85,28 +85,6 @@ class SaleOrderLine(models.Model):
         unit = rtypes[ct.commitment_period_type].lower()
         return "%d %s" % (ct.commitment_period_number, unit)
 
-    def templated_description_sale(self, with_prefix=True):
-        """Return a description sale of current line, w/ or w/o its product name prefix
-
-        If the line's product has a templated description_sale, it is evaluated as a
-        mako template before returning the result.
-        """
-        descr = False
-        product = self.product_id
-
-        if product:
-            if with_prefix:
-                descr = self.get_sale_order_line_multiline_description_sale(product)
-            else:
-                descr = product.description_sale
-
-            if product.description_sale_is_template:
-                descr = mako_template_env.from_string(descr).render(
-                    {"record": self.with_context(lang=self.order_partner_id.lang)}
-                )
-
-        return descr
-
     @api.depends("price_unit", "product_id")
     def _recompute_name(self):
         """Update the name (=description) on price_unit and product change if
@@ -123,4 +101,19 @@ class SaleOrderLine(models.Model):
         description_sale product in its basket.
         """
         for record in self:
-            record.name = record.templated_description_sale()
+            descr = False
+
+            product = record.product_id
+            if product:
+                descr = record.get_sale_order_line_multiline_description_sale(product)
+
+                if product.description_sale_is_template:
+                    descr = mako_template_env.from_string(descr).render(
+                        {
+                            "record": record.with_context(
+                                lang=record.order_partner_id.lang
+                            )
+                        }
+                    )
+
+            record.name = descr
