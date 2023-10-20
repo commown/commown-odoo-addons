@@ -326,39 +326,47 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-        start_date = date.today() - relativedelta(months=3)
+        start_date = date.today() - relativedelta(months=3, days=-1)
         send_datetime = datetime(*start_date.timetuple()[:-2])
         compute_date = date.today() + relativedelta(months=36)
 
         contract = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract, date=send_datetime)
         contract.date_start = start_date
+        self.create_invoices_until(contract, date.today())
 
         computation = self.compute(compute_date)
 
         def months_from_start(date):
-            delta = relativedelta(date, start_date)
+            "Return number of months between contract start date and given date"
+            delta = relativedelta(date, contract.date_start)
             return delta.years * 12 + delta.months
 
-        self.assertEqual(
-            [
-                (months_from_start(d.from_date), months_from_start(d.to_date))
-                for d in computation.detail_ids
-            ],
-            [(0, 2), (2, 3), (3, 5), (5, 39)],
-        )
+        def fees_descr(details):
+            "Return a short tuple description of given computation details"
+            aday = relativedelta(days=1)
+            for detail in details:
+                yield (
+                    months_from_start(detail.from_date),
+                    months_from_start(detail.to_date + aday),
+                    detail.fees,
+                    detail.fees_definition_line_id.sequence,
+                )
+
+        forecast_fees = computation.detail_ids.filtered("is_forecast")
+        actual_fees = computation.detail_ids - forecast_fees
 
         self.assertEqual(
-            [d.fees for d in computation.detail_ids], [0.0, 0.0, 45.0, 52.5]
+            list(fees_descr(actual_fees)),
+            [(0, 1, 2.50, 1), (1, 2, 2.50, 1), (2, 3, 12.50, 2)],
         )
 
+        # Warning: in the test setup, the contract line tax has price_include=True
+        # As a consequence, the contract forecast are NOT without tax here...
         self.assertEqual(
-            [d.is_forecast for d in computation.detail_ids], [False, False, True, True]
-        )
-
-        self.assertEqual(
-            [d.fees_definition_line_id.sequence for d in computation.detail_ids],
-            [1, 2, 2, 100],
+            list(fees_descr(forecast_fees)),
+            [(3, 4, 15.0, 2), (4, 5, 15.0, 2)]
+            + [(i, i + 1, 1.5, 100) for i in range(5, 39)],
         )
 
     def test_cannot_modify_important_def_fields_with_computation(self):
