@@ -7,16 +7,11 @@
     <!-- Change link text to the product display name instead of the order
          line name which contains the whole product description, and
          move the latter to a fly-over icon -->
-    <xpath expr="//td[@id='product_name']//*[@t-field='line.name']" position="replace">
-        <t t-if="not line.product_id.website_published">
-          <span t-esc="line.product_id.display_name"/>
-        </t>
-        <t t-else="">
-          <a t-if="line.product_id.website_published"
-             t-att-href="line.product_id.website_url">
-            <span t-esc="line.product_id.display_name"/>
-          </a>
-        </t>
+    <xpath expr="//td[@id='product_name']/a/*[@t-field='line.name']" position="attributes">
+      <attribute name="t-field">line.product_id.display_name</attribute>
+    </xpath>
+    <xpath expr="//td[@id='product_name']/t/*[@t-field='line.name']" position="attributes">
+      <attribute name="t-field">line.product_id.display_name</attribute>
     </xpath>
 
     <xpath expr="//td[@id='product_name']" position="inside">
