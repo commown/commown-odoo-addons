@@ -15,7 +15,7 @@
     </xpath>
 
     <xpath expr="//td[@id='product_name']" position="inside">
-        <div t-if="line.product_id.is_rental" class="rent">
+        <div t-if="line.product_id.is_rental" class="rent m-4 p-4 bg-light">
 
           <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
           <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
