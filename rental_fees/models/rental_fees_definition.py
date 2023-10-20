@@ -192,7 +192,7 @@ class RentalFeesDefinition(models.Model):
             )
             raise UserError(msg % {"serial": device.name, "po": po_line.order_id.name})
 
-        mean_price_unit = sum(l.price_unit * l.quantity for l in inv_lines) / sum(
+        mean_price_unit = sum(il.price_unit * il.quantity for il in inv_lines) / sum(
             inv_lines.mapped("quantity")
         )
         return {
