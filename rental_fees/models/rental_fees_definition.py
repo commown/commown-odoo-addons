@@ -316,7 +316,7 @@ class RentalFeesDefinitionLine(models.Model):
                 [
                     ("contract_line_id.contract_id", "=", period["contract"].id),
                     ("date_invoice", ">=", period["from_date"]),
-                    ("date_invoice", "<=", period["to_date"]),
+                    ("date_invoice", "<", period["to_date"]),
                     (_path_to_storable, "=", _pt.id),
                 ],
             )
