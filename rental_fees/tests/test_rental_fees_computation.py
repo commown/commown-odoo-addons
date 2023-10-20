@@ -159,9 +159,9 @@ class RentalFeesComputationTC(RentalFeesTC):
         c3.invoice_ids.action_invoice_open()
 
         c4 = self.compute("2021-04-30", invoice=True)
-        self.assertEqual(c4.fees, 320.0)
+        self.assertEqual(c4.fees, 317.5)
         self.assertIn("04/30/2021", c4.invoice_ids.invoice_line_ids[0].name)
-        self.assertEqual(c4.invoice_ids.amount_total, 312.5)
+        self.assertEqual(c4.invoice_ids.amount_total, 310.0)
         c4.invoice_ids.action_invoice_open()
         compensations = c4.compensation_details()
         self.assertEqual(compensations.mapped("fees"), [300.0])
@@ -220,10 +220,10 @@ class RentalFeesComputationTC(RentalFeesTC):
         # - Amounts per fees definition
         expected = {
             "Agreement": "Test fees_def",
-            "Rental fees since the beginning": 20,
+            "Rental fees since the beginning": 17.5,
             "Compensation fees since the beginning": 300,
             "Already invoiced since the beginning": 7.5,
-            "Fees to be invoiced": 312.5,
+            "Fees to be invoiced": 310.0,
         }
         self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[11][2:7])), expected)
         # - Amount totals
