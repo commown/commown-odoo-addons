@@ -600,22 +600,45 @@ class RentalFeesComputation(models.Model):
         )
 
     def _add_fees_periods(self, device, periods):
-        for period in periods:
-            def_line = period["fees_def_line"]
+        "Insert computation details, further detailing the period in forecast mode"
+
+        def insert_detail(fees, contract, from_date, to_date, def_line, is_forecast):
             self.env["rental_fees.computation.detail"].sudo().create(
                 {
                     "fees_computation_id": self.id,
-                    "fees": period["fees"],
+                    "fees": fees,
                     "fees_type": "fees",
                     "lot_id": device.id,
-                    "contract_id": period["contract"].id,
-                    "from_date": period["from_date"],
-                    "to_date": period["to_date"] - _one_day,  # dates included in the DB
+                    "contract_id": contract.id,
+                    "from_date": from_date,
+                    "to_date": to_date - _one_day,  # dates included in the DB
                     "fees_definition_id": def_line.fees_definition_id.id,
                     "fees_definition_line_id": def_line.id,
-                    "is_forecast": period["is_forecast"],
+                    "is_forecast": is_forecast,
                 }
             )
+
+        for period in periods:
+            if self.has_forecast:
+                # Split by month to get a smooth fees vs. time graph:
+                for from_date, to_date, amount in period["monthly_fees"]:
+                    insert_detail(
+                        amount,
+                        period["contract"],
+                        from_date,
+                        to_date,
+                        period["fees_def_line"],
+                        period["is_forecast"],
+                    )
+            else:
+                insert_detail(
+                    period["fees"],
+                    period["contract"],
+                    period["from_date"],
+                    period["to_date"],
+                    period["fees_def_line"],
+                    period["is_forecast"],
+                )
 
     @job(default_channel="root")
     def _run(self):
@@ -653,7 +676,9 @@ class RentalFeesComputation(models.Model):
 
             device_fees = 0.0
             for period in periods:
-                period["fees"] = period["fees_def_line"].compute_fees(period)
+                monthly_fees = period["fees_def_line"].compute_monthly_fees(period)
+                period["monthly_fees"] = monthly_fees
+                period["fees"] = sum(amount for _ds, _de, amount in monthly_fees)
                 device_fees += period["fees"]
 
             if no_rental_limit:
