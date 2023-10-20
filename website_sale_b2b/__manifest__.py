@@ -2,7 +2,7 @@
     "name": "Website sale B2B",
     "category": "Business",
     "summary": "Adapt website_sale module to mixed B2C/ B2B products",
-    "version": "12.0.1.1.5",
+    "version": "12.0.1.1.6",
     "description": (
         "Add a professional products category and display all"
         " products in it excl. taxes"
