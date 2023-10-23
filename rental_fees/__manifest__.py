@@ -15,6 +15,7 @@
         "queue_job",
         "report_py3o",
         "account_usability",  # for the invoice line's date_invoice field
+        "contract_auto_merge_invoice",
     ],
     "data": [
         "security/ir.model.access.csv",
