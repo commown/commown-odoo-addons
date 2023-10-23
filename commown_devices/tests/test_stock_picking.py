@@ -75,6 +75,20 @@ class StockPickingTC(SavepointCase):
         )
         return picking
 
+    def test_compute_contract_ids(self):
+        lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
+        date = datetime.datetime.now()
+        picking = self.create_picking(lot, date)
+
+        self.assertFalse(picking.contract_ids)
+
+        contract = self.env["contract.contract"].create(
+            {"name": "contract", "partner_id": 1}
+        )
+        picking.move_lines.update({"contract_id": contract.id})
+
+        self.assertEqual(picking.contract_ids, contract)
+
     def test_cron_late_pickings(self):
         lot1 = create_lot_and_quant(self.env, "lot1", self.product, self.orig_location)
         lot2 = create_lot_and_quant(self.env, "lot2", self.product, self.orig_location)

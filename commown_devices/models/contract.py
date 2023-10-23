@@ -10,27 +10,6 @@ _logger = logging.getLogger(__name__)
 class Contract(models.Model):
     _inherit = "contract.contract"
 
-    picking_ids = fields.One2many("stock.picking", "contract_id", string="Pickings")
-
-    quant_ids = fields.One2many(
-        "stock.quant",
-        "contract_id",
-        string="Contract-related stock",
-        compute="_compute_quant_ids",
-        compute_sudo=True,  # as quant.contract_id is not writable
-        store=True,
-        readonly=True,
-    )
-
-    quant_nb = fields.Integer(
-        "Device number",
-        compute="_compute_quant_ids",
-        compute_sudo=True,  # for consistency with quant_ids
-        default=0,
-        store=True,
-        index=True,
-    )
-
     move_line_ids = fields.One2many(
         "stock.move.line",
         string="Move Lines",
@@ -46,16 +25,6 @@ class Contract(models.Model):
 
     lot_ids = fields.One2many("stock.production.lot", "contract_id", string="Lots")
 
-    @api.depends("picking_ids.state")
-    def _compute_quant_ids(self):
-        for record in self:
-            if not record.partner_id:
-                continue
-            loc = record.partner_id.get_customer_location()
-            record.quant_ids = record.picking_ids.mapped(
-                "move_line_ids.lot_id.quant_ids"
-            ).filtered(lambda q: q.quantity > 0 and q.location_id == loc)
-            record.quant_nb = len(record.quant_ids)
 
     def pending_picking(self):
         return self.move_ids.mapped("picking_id").filtered(_assigned)
