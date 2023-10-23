@@ -575,6 +575,11 @@ class RentalFeesComputation(models.Model):
     @job(default_channel="root")
     def _run(self):
         self.ensure_one()
+
+        # Make the job idempotent:
+        self.fees = 0.0
+        self.sudo().detail_ids.unlink()
+
         for fees_def in self.fees_definition_ids:
             self._run_for_fees_def(fees_def)
         self.fees = sum(self.detail_ids.mapped("fees"))
