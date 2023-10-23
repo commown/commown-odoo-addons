@@ -6,7 +6,7 @@
     <field name="inherit_id" ref="stock.view_picking_form"/>
     <field name="arch" type="xml">
       <xpath expr="//field[@name='origin']" position="after">
-        <field name="contract_id" groups="account.group_account_invoice"/>
+        <field name="contract_ids" widget="many2many_tags"  options="{'no_create': True}" groups="account.group_account_invoice"/>
       </xpath>
     </field>
   </record>
