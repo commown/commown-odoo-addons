@@ -215,7 +215,7 @@ class RentalFeesDefinition(models.Model):
 class RentalFeesDefinitionLine(models.Model):
     _name = "rental_fees.definition_line"
     _description = "Define how to compute rental fees value on a period of time"
-    _order = "sequence"
+    _order = "sequence, id"
 
     fees_definition_id = fields.Many2one(
         "rental_fees.definition",
