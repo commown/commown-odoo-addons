@@ -8,6 +8,8 @@ from odoo.tools import format_date
 
 from odoo.addons.queue_job.job import job
 
+_one_day = relativedelta(days=1)
+
 
 def _move_contract(move_line):
     "Helper to return the contract related to a device move"
@@ -183,7 +185,7 @@ class RentalFeesComputation(models.Model):
                 [
                     ("state", "=", "done"),
                     ("lot_id", "=", device.id),
-                    ("move_id.date", "<=", self.until_date),
+                    ("move_id.date", "<", self.until_date + _one_day),
                 ]
             )
             .sorted(lambda ml: ml.move_id.date)
@@ -216,7 +218,7 @@ class RentalFeesComputation(models.Model):
                 current_period.clear()
 
         if current_period:
-            current_period["to_date"] = self.until_date
+            current_period["to_date"] = self.until_date + _one_day
             result.append(current_period)
 
         return result
@@ -548,7 +550,7 @@ class RentalFeesComputation(models.Model):
                 "fees_type": compensation_type,
                 "lot_id": device.id,
                 "from_date": delivery_date,
-                "to_date": to_date,
+                "to_date": to_date - _one_day,  # dates included in the DB
                 "fees_definition_id": fees_def.id,
             }
         )
@@ -564,7 +566,7 @@ class RentalFeesComputation(models.Model):
                     "lot_id": device.id,
                     "contract_id": period["contract"].id,
                     "from_date": period["from_date"],
-                    "to_date": period["to_date"],
+                    "to_date": period["to_date"] - _one_day,  # dates included in the DB
                     "fees_definition_id": def_line.fees_definition_id.id,
                     "fees_definition_line_id": def_line.id,
                 }
@@ -573,6 +575,11 @@ class RentalFeesComputation(models.Model):
     @job(default_channel="root")
     def _run(self):
         self.ensure_one()
+
+        # Make the job idempotent:
+        self.fees = 0.0
+        self.sudo().detail_ids.unlink()
+
         for fees_def in self.fees_definition_ids:
             self._run_for_fees_def(fees_def)
         self.fees = sum(self.detail_ids.mapped("fees"))

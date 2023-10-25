@@ -2,6 +2,7 @@ from datetime import date
 
 import pyexcel
 
+from odoo import fields
 from odoo.exceptions import UserError, ValidationError
 
 from .common import RentalFeesTC
@@ -86,7 +87,7 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         return computation
 
-    def pay(self, supplier_invoice):
+    def pay_supplier_invoice(self, supplier_invoice):
         self.env["account.payment"].create(
             {
                 "company_id": self.env.user.company_id.id,
@@ -99,6 +100,7 @@ class RentalFeesComputationTC(RentalFeesTC):
                     "account.account_payment_method_manual_out"
                 ).id,
                 "amount": supplier_invoice.amount_total,
+                "currency_id": supplier_invoice.currency_id.id,
                 "invoice_ids": [(6, 0, [supplier_invoice.id])],
             }
         ).post()
@@ -122,6 +124,39 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(action2["res_model"], "rental_fees.computation")
         self.assertEqual(comp, self.env[action2["res_model"]].browse(action2["res_id"]))
 
+    def pay_customer_invoice(self, invoice):
+        journal = self.env["account.journal"].search([("type", "=", "sale")], limit=1)
+        apm = self.env.ref("account.account_payment_method_manual_in")
+
+        invoice.action_invoice_open()
+        payment = self.env["account.payment"].create(
+            {
+                "company_id": self.env.user.company_id.id,
+                "partner_id": invoice.partner_id.id,
+                "partner_type": "customer",
+                "state": "draft",
+                "payment_type": "inbound",
+                "journal_id": journal.id,
+                "payment_method_id": apm.id,
+                "amount": invoice.residual,
+                "currency_id": invoice.currency_id.id,
+                "invoice_ids": [(6, 0, [invoice.id])],
+                "payment_date": invoice.date_invoice,
+            }
+        )
+        payment.post()
+        self.assertEqual(invoice.state, "paid")
+
+    def create_invoices_until(self, contract, until_date, pay=True):
+        invoices = self.env["account.invoice"]
+        until_date = fields.Date.from_string(until_date)
+        while contract.recurring_next_date <= until_date:
+            inv = contract._recurring_create_invoice()
+            if pay:
+                self.pay_customer_invoice(inv)
+            invoices |= inv
+        return invoices
+
     def test_compute_and_invoicing_and_reporting(self):
         contract1 = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract1, date="2021-02-15")
@@ -134,11 +169,8 @@ class RentalFeesComputationTC(RentalFeesTC):
         device2 = contract2.quant_ids.lot_id
         self.scrap_device(device2, date(2021, 4, 5))
 
-        while contract1.recurring_next_date <= date(2021, 5, 1):
-            contract1._recurring_create_invoice()
-
-        while contract2.recurring_next_date <= date(2021, 5, 1):
-            contract2._recurring_create_invoice()
+        self.create_invoices_until(contract1, "2021-05-01")
+        self.create_invoices_until(contract2, "2021-05-01")
 
         c1 = self.compute("2021-01-31", invoice=True)
         self.assertEqual(c1.fees, 0.0)
@@ -159,15 +191,15 @@ class RentalFeesComputationTC(RentalFeesTC):
         c3.invoice_ids.action_invoice_open()
 
         c4 = self.compute("2021-04-30", invoice=True)
-        self.assertEqual(c4.fees, 320.0)
+        self.assertEqual(c4.fees, 317.5)
         self.assertIn("04/30/2021", c4.invoice_ids.invoice_line_ids[0].name)
-        self.assertEqual(c4.invoice_ids.amount_total, 312.5)
+        self.assertEqual(c4.invoice_ids.amount_total, 310.0)
         c4.invoice_ids.action_invoice_open()
         compensations = c4.compensation_details()
         self.assertEqual(compensations.mapped("fees"), [300.0])
 
         # Paying an invoice, even after another one was emitted must work
-        self.pay(c2.invoice_ids)
+        self.pay_supplier_invoice(c2.invoice_ids)
         self.assertEqual(c2.invoice_ids.state, "paid")
 
         # Adding an invoice while a later computation exists must raise
@@ -220,10 +252,10 @@ class RentalFeesComputationTC(RentalFeesTC):
         # - Amounts per fees definition
         expected = {
             "Agreement": "Test fees_def",
-            "Rental fees since the beginning": 20,
+            "Rental fees since the beginning": 17.5,
             "Compensation fees since the beginning": 300,
             "Already invoiced since the beginning": 7.5,
-            "Fees to be invoiced": 312.5,
+            "Fees to be invoiced": 310.0,
         }
         self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[11][2:7])), expected)
         # - Amount totals
@@ -247,13 +279,36 @@ class RentalFeesComputationTC(RentalFeesTC):
         product_col = [c for c in s_dev.column[3] if c != "" and type(c) == str]
         self.assertEquals(product_col, ["Product"] + 3 * ["Fairphone 3"])
 
+    def test_merged_invoices(self):
+        contract1 = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract=contract1, date="2021-02-15")
+        contract1.date_start = "2021-02-15"
+
+        contract2 = self.env["contract.contract"].of_sale(self.so)[1]
+        self.send_device("N/S 2", contract=contract2, date="2021-03-06")
+        contract2.date_start = "2021-03-06"
+
+        computation_date = "2021-03-31"
+        invoices = self.create_invoices_until(contract1, computation_date, pay=False)
+        invoices |= self.create_invoices_until(contract2, computation_date, pay=False)
+        invoices_info = invoices.do_merge(date_invoice=computation_date)
+
+        self.assertEqual(len(invoices_info), 1)
+        self.assertEqual(list(invoices_info.values())[0], invoices.ids)
+        merged_inv = self.env["account.invoice"].browse(list(invoices_info))
+        self.pay_customer_invoice(merged_inv)
+
+        c3 = self.compute(computation_date)
+        self.assertEqual(c3.fees, 7.5)
+
     def test_cannot_modify_important_def_fields_with_computation(self):
         "Cannot modify a fees def which has a non-draft computation"
 
         contract = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract, date="2021-02-15")
         contract.date_start = "2021-02-15"
-        contract._recurring_create_invoice()
+        inv = contract._recurring_create_invoice()
+        self.pay_customer_invoice(inv)
 
         # Can modify while computation is draft:
         computation = self.compute("2021-03-01", run=False)
@@ -271,7 +326,8 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
         self.fees_def.line_ids |= new_fees_def_line
 
-        # Modifications are restricted once computation is done:
+        # Modifications are restricted once computation is done,
+        # so check the test prerequisites
         computation._run()
         self.assertEqual(computation.state, "done")
         self.assertTrue(

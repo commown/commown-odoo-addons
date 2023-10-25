@@ -35,10 +35,9 @@ class ResPartner(models.Model):
         """
 
         self.ensure_one()
-        assert (
-            bool(product_template) != bool(product_category),
-            "One of product_template and product_category must be given and non-empty",
-        )
+        assert bool(product_template) != bool(
+            product_category
+        ), "One of product_template and product_category must be given and non-empty"
 
         today = fields.Date.today()
 

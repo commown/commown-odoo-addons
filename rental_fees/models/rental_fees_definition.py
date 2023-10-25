@@ -192,7 +192,7 @@ class RentalFeesDefinition(models.Model):
             )
             raise UserError(msg % {"serial": device.name, "po": po_line.order_id.name})
 
-        mean_price_unit = sum(l.price_unit * l.quantity for l in inv_lines) / sum(
+        mean_price_unit = sum(il.price_unit * il.quantity for il in inv_lines) / sum(
             inv_lines.mapped("quantity")
         )
         return {
@@ -215,7 +215,7 @@ class RentalFeesDefinition(models.Model):
 class RentalFeesDefinitionLine(models.Model):
     _name = "rental_fees.definition_line"
     _description = "Define how to compute rental fees value on a period of time"
-    _order = "sequence"
+    _order = "sequence, id"
 
     fees_definition_id = fields.Many2one(
         "rental_fees.definition",
@@ -307,24 +307,49 @@ class RentalFeesDefinitionLine(models.Model):
                 )
 
         elif self.fees_type == "proportional":
-            _pt = self.fees_definition_id.product_template_id
-            _path_to_storable = (
-                "contract_line_id.sale_order_line_id"
-                ".product_id.product_tmpl_id.storable_product_id"
-            )
-            invoice_lines = self.env["account.invoice.line"].search(
-                [
-                    ("contract_line_id.contract_id", "=", period["contract"].id),
-                    ("date_invoice", ">=", period["from_date"]),
-                    ("date_invoice", "<=", period["to_date"]),
-                    (_path_to_storable, "=", _pt.id),
-                ],
-            )
+            return self._get_invoiced_amount(period) * self.monthly_fees
 
-            return (
-                sum(i.price_total - i.price_tax for i in invoice_lines)
-                * self.monthly_fees
-            )
+    def _get_invoiced_amount(self, period):
+        """Return the total amount invoiced for the given fees period
+
+        This includes invoices directly generated from the contract but also the
+        invoices that have been merged (and thus cancelled). The latter are identified
+        using the merged invoice line analytic account, that must match the period's
+        contract lines one.
+        """
+        _pt = self.fees_definition_id.product_template_id
+        _path_to_storable = (
+            "contract_line_id.sale_order_line_id"
+            ".product_id.product_tmpl_id.storable_product_id"
+        )
+        paid_invoice_lines = self.env["account.invoice.line"].search(
+            [
+                ("contract_line_id.contract_id", "=", period["contract"].id),
+                ("date_invoice", ">=", period["from_date"]),
+                ("date_invoice", "<", period["to_date"]),
+                (_path_to_storable, "=", _pt.id),
+                ("state", "=", "paid"),
+            ]
+        )
+
+        analytic_accounts = period["contract"].mapped(
+            "contract_line_ids.analytic_account_id"
+        )
+        merged_invoice_lines = self.env["account.invoice.line"].search(
+            [
+                ("invoice_type", "=", "out_invoice"),
+                ("date_invoice", ">=", period["from_date"]),
+                ("date_invoice", "<", period["to_date"]),
+                ("state", "=", "paid"),
+                ("contract_line_id", "=", False),
+                ("account_analytic_id", "in", analytic_accounts.ids),
+            ]
+        )
+
+        return sum(
+            paid_invoice_lines.mapped("price_subtotal")
+            + merged_invoice_lines.mapped("price_subtotal")
+        )
 
     def format_fees_amount(self):
         if self.fees_type == "proportional":

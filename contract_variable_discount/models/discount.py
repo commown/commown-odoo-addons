@@ -180,7 +180,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     def _end_date_ok(self, contract_line, date_invoice):
         date_end = self._compute_date(contract_line, "end")
-        return date_end is None or date_end > date_invoice
+        return not date_end or date_end > date_invoice
 
     def _condition_ok(self, contract_line, date_invoice):
         if not self.condition:
