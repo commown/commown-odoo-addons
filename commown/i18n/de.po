@@ -1,19 +1,21 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* commown
+# 	* commown
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-04 19:58+0000\n"
-"PO-Revision-Date: 2023-06-04 19:58+0000\n"
+"POT-Creation-Date: 2023-11-06 14:37+0000\n"
+"PO-Revision-Date: 2023-11-06 16:28+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: de\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #. module: commown
 #: model:mail.template,body_html:commown.mail_template_issue_reminder
@@ -68,7 +70,7 @@ msgstr "\n"
 "    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Ihr Commown-Team, das immer für Sie da ist.\n"
 "    </p>\n"
 "    <br>\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"> Übrigens: Selbst nach Lösung des Problems und Schließung des Tickets können Sie direkt auf diese Nachricht antworten, um das Thema dieser Support-Anfrage zu reaktivieren. Für Anfragen zu anderen Themen bitten wir Sie, sich an Ihren Support zu wenden (Mein Bereich -> Kontaktieren Sie uns).</p>\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"> Übrigens: Selbst nach Lösung des Problems und Schließung des Tickets können Sie direkt auf diese Nachricht antworten, um das Thema dieser Support-Anfrage zu reaktivieren. Für alle anderen Themen bitten wir Sie, die Kategorie \"Selbsthilfe\" in Ihrem Kundenbereich aufzurufen.</p>\n"
 "  </div>\n"
 "  "
 
@@ -179,7 +181,7 @@ msgstr "<em>&amp;nbsp;</em>"
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
 msgid "<font style=\"font-size: 14px;\">Le processus vous demandera de vous connecter à votre espace Commown avec les   </font>"
-msgstr "<font style=\"font-size: 14px;\">Im Laufe des Prozesses werden Sie aufgefordert, sich in Ihrem Commown-Bereich mit</font>"
+msgstr "<font style=\"font-size: 14px;\">Im Laufe des Prozesses werden Sie aufgefordert, sich in Ihrem Commown-Bereich mit Ihren Login-Daten, die Sie im Rahmen der Bestellung gewählt haben, einzuloggen. </font>"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
@@ -238,19 +240,19 @@ msgid "Accueil"
 msgstr "Startseite"
 
 #. module: commown
-#: model:project.task.type,name:commown.investment_followup_start_stage
-msgid "Acompte 10% Reçu"
-msgstr "Anzahlung 10% erhalten"
-
-#. module: commown
 #: model:ir.model,name:commown.model_payment_token_uniquify_obsolescence_action
 msgid "Action to be taken when a payment token becomes obsolete"
-msgstr ""
+msgstr "Maßnahmen, die zu ergreifen sind, wenn ein Zahlungs-Token nicht mehr gültig ist"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment
 msgid "Adresse de livraison"
 msgstr "Liefer- und Rechnungsadresse<br/>"
+
+#. module: commown
+#: model:project.task.type,name:commown.investment_followup_start_stage
+msgid "Advance payment 10% Web receipt"
+msgstr "Anzahlung 10% Erhalten Web"
 
 #. module: commown
 #: model:product.public.category,name:commown.categ_de
@@ -266,6 +268,11 @@ msgstr "Analytische Tags"
 #: model:ir.model,name:commown.model_account_bank_statement
 msgid "Bank Statement"
 msgstr "Bankauszug"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Base de connaissance Commown"
+msgstr "Wissensdatenbank von Commown"
 
 #. module: commown
 #: model:project.task.type,legend_blocked:commown.investment_followup_start_stage
@@ -369,7 +376,7 @@ msgstr "Was benötigen Sie ?<br>"
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Deactivate"
-msgstr ""
+msgstr "Deaktivieren"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_coupon_campaign__description
@@ -381,6 +388,11 @@ msgstr "Beschreibung"
 #: model:ir.model.fields,field_description:commown.field_utm_commown_utils_mixin__display_name
 msgid "Display Name"
 msgstr "Anzeigename"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Documentation - Tutoriels"
+msgstr "Dokumentation - Tutorials"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
@@ -396,7 +408,12 @@ msgstr "Indem ich auf \"Akzeptieren und bezahlen\" klicke, bestätige ich, dass 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
 msgid "En cliquant sur \"Valider et payer\", je reconnais avoir pris connaissance des"
-msgstr ""
+msgstr "Durch Klicken auf "Bestätigen und bezahlen" bestätige ich, dass ich die Allgemeinen Geschäftsbedingungen"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Entraide - Communauté"
+msgstr "Selbsthilfe - Community"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -429,6 +446,11 @@ msgstr "- Ende der Verpflichtungszeiten:"
 #: model_terms:ir.ui.view,arch_db:commown.signup_field
 msgid "First name"
 msgstr "Vorname"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Forum Commown"
+msgstr "Commown Forum"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_account_move_line__full_reconcile_id
@@ -472,7 +494,7 @@ msgstr "In Progress"
 #: code:addons/commown/controllers/payment_slimpay.py:58
 #, python-format
 msgid "Incoherent transaction/token partners"
-msgstr ""
+msgstr "Inkohärente Transaktion/Token Partner"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_task__internal_followup
@@ -487,6 +509,12 @@ msgid "Invoice"
 msgstr "Rechnung"
 
 #. module: commown
+#: model:ir.model.fields,field_description:commown.field_product_product__is_user_lang_fr
+#: model:ir.model.fields,field_description:commown.field_product_template__is_user_lang_fr
+msgid "Is User Lang Fr"
+msgstr "Ist User Lang Fr"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__journal_id
 msgid "Journal"
 msgstr "Journal"
@@ -495,13 +523,6 @@ msgstr "Journal"
 #: model:ir.model,name:commown.model_account_move_line
 msgid "Journal Item"
 msgstr "Journalposten"
-
-#. module: commown
-#: model:project.task.type,description:commown.investment_followup_start_stage
-msgid "La carte se crée ici lorsqu'un investisseur fait une commande en ligne de 10%.\n"
-"Dès qu'il a mis en ligne sa pièce d'identité on passe la carte dans la colonne suivante pour demander le solde (mail auto)."
-msgstr "Die Karte wird hier erstellt, wenn ein Investor eine Online-Bestellung von 10% macht.\n"
-"Sobald er seinen Ausweis online gestellt hat, ziehen wir die Karte in die nächste Spalte, um den Restbetrag anzufordern (Auto-E-Mail)."
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_contract_contract__transaction_label
@@ -540,7 +561,7 @@ msgstr "Nachname"
 #: model_terms:ir.ui.view,arch_db:commown.short_cart_summary
 msgid "Le règlement se fait par prélèvement bancaire. Pour finaliser\n"
 "        la demande, vous aurez donc besoin de l'IBAN de votre compte."
-msgstr "<span style=\"font-size:11pt;font-family:Arial;color:#000000;background-color:transparent;font-weight:400;font-style:normal;font-variant:normal;text-decoration:none;vertical-align:baseline;white-space:pre;white-space:pre-wrap;\" id=\"docs-internal-guid-c22214f6-7fff-6273-8864-41c767bd1fd4\">Die Zahlung erfolgt durch Bankeinzug. Um die Bestellung abzuschließen, brauchen Sie Ihre IBAN.</span>"
+msgstr "Die Zahlung erfolgt durch Bankeinzug. Um die Bestellung abzuschließen, brauchen Sie Ihre IBAN."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.res_partner_risk_form
@@ -659,6 +680,16 @@ msgid "Nous suivre"
 msgstr "Folgen Sie uns"
 
 #. module: commown
+#: model:crm.stage,name:commown.parcel_preparation_stage
+msgid "Package preparation"
+msgstr "Paketvorbereitung"
+
+#. module: commown
+#: model:account.payment.term,name:commown.investment_payment_term
+msgid "Paiement immédiat 10% prélèvement auto + Solde virement"
+msgstr "Sofortige Zahlung 10% per Bankeinzug + Restbetrag per Überweisung"
+
+#. module: commown
 #: model:ir.model,name:commown.model_account_partial_reconcile
 msgid "Partial Reconcile"
 msgstr "Teilabstimmung offener Posten"
@@ -690,6 +721,11 @@ msgid "Pour aller au bout du processus, munissez vous des éléments ci-dessous.
 msgstr "Um alle Schritte ausführen zu können, halten Sie bitte Folgendes bereit: "
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Pour contacter l'équipe parcourez la section \"Auto-dépannage\" à gauche."
+msgstr "Um das Team zu kontaktieren, klicken Sie auf den Abschnitt \"Selbsthilfe\" auf der linken Seite."
+
+#. module: commown
 #: model:product.template,description_sale:commown.sepa_mandate
 msgid "Pour créer le mandat SEPA et le valider, ce processus vous guide dans la signature du mandat en ligne et un premier paiement de test d'une valeur de 1 centime."
 msgstr "Um uns ein SEPA-Lastschriftmandat zu erteilen und dieses zu bestätigen, werden Sie durch alle Schritte begleitet und mit Ihrer Unterschrift, wird am Ende eine Testzahlung von 0,01€ ausgeführt. "
@@ -717,11 +753,6 @@ msgid "Proof of address"
 msgstr "Wohnsitznachweis"
 
 #. module: commown
-#: model:crm.stage,name:commown.parcel_preparation_stage
-msgid "Préparation colis"
-msgstr "Vorbereitung des Pakets"
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
 msgid "Qui sommes-nous ?"
 msgstr "Wer sind wir?"
@@ -734,17 +765,27 @@ msgstr "Bereit für die nächste Stufe"
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Reattribute contracts"
-msgstr ""
+msgstr "Neuvergabe von Verträgen"
 
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Reattribute draft contract invoices"
-msgstr ""
+msgstr "Neuvergabe von Vertragsrechnungen im Entwurfsstatus"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Rejoignez la communauté pour résoudre vos problèmes, échanger des astuces..."
+msgstr "Treten Sie der Gemeinschaft bei, um Ihre Probleme zu lösen oder Tipps auszutauschen..."
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__partner_ids
 msgid "Restrict on partners"
 msgstr "Schränke auf Partner ein"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Retrouvez nos tutoriels et toute la documentation de Commown..."
+msgstr "Hier finden Sie unsere Tutorials und die gesamte Dokumentation von Commown..."
 
 #. module: commown
 #: model:ir.model,name:commown.model_sale_order
@@ -764,7 +805,7 @@ msgstr "Siehe Details zum Produkt"
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Set partner invoice merge preferences"
-msgstr ""
+msgstr "Einstellungen für die Zusammenführung von Partnerrechnungen festlegen"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_project__show_internal_followup
@@ -807,6 +848,15 @@ msgstr "Aufgaben"
 #: model:ir.model.fields,field_description:commown.field_payment_token_uniquify_obsolescence_action__technical_name
 msgid "Technical name"
 msgstr "Technische Bezeichnung"
+
+#. module: commown
+#: model:project.task.type,description:commown.investment_followup_start_stage
+msgid ""
+"The card is created here when an investor places an online order for 10%.\n"
+"As soon as we have checked if the amount of the investment is really the one displayed (!! with the trap of the quantities, we have to go to the Purchase Order as long as Florent has not added the field \"total of the order line\" in the card), we pass the card in the following column (ID dunning and 90% balance request (auto mail)."
+msgstr ""
+"Die Karte wird hier erstellt, wenn ein Investor online eine Bestellung über 10% abgibt.\n"
+"Sobald wir überprüft haben, ob der Investitionsbetrag dem angezeigten Betrag entspricht (!!! in der Mengenfalle müssen wir in den Bestellschein gehen, solange Florent das Feld \"Summe der Bestellzeile\" nicht in die Karte eingefügt hat), geben wir die Karte in die nächste Spalte weiter (ID-Mahnung und 90%-Saldo-Anfrage (Auto-Mail))."
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner__company_record
@@ -876,7 +926,8 @@ msgstr "USt.-ID"
 #: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
 msgid "Valider et payer\n"
 "              <span class=\"fa fa-long-arrow-right\"/>"
-msgstr ""
+msgstr "Bestätigen und bezahlen\n"
+"              <span class=\"fa fa-long-arrow-right\"/>"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
@@ -1039,4 +1090,3 @@ msgstr "mass.reconcile.simple.partner_commown"
 #: model:ir.model,name:commown.model_account_mass_reconcile_method
 msgid "reconcile method for account_mass_reconcile"
 msgstr "Ausgleichsverfahren für account_mass_reconcile"
-
