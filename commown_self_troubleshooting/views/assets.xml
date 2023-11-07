@@ -8,9 +8,6 @@
         #o_portal_self_troubleshooting h4 {
           color: gray;
         }
-        .contact-human .toolbar {
-          visibility: hidden;
-        }
       </style>
     </xpath>
     <xpath expr="script[last()]" position="after">

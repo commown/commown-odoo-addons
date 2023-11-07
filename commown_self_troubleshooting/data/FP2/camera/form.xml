@@ -42,9 +42,6 @@
                   <h1>Auto-dépannage : Fairphone 2</h1>
                   <h2>Ma caméra principale fonctionne mal ou plus du tout</h2>
                 </div>
-                <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
-                  Contacter un humain
-                </button>
               </div>
 
               <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
@@ -133,11 +130,6 @@
 
                     <t t-call="commown_self_troubleshooting.step-self-solved">
                       <t t-set="step">5</t>
-                    </t>
-
-                    <t t-call="commown_self_troubleshooting.step-contact-human">
-                      <t t-set="step">6</t>
-                      <t t-set="contracts" t-value="contracts"/>
                     </t>
 
                   </div>
