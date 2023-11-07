@@ -92,7 +92,7 @@ class ShareholderRegister(models.TransientModel):
                         "total": 0,
                         "college": self.env["commown_shareholder_register.college"],
                         "address": _concatenate_address(partner),
-                        "phone": partner.phone or "",
+                        "phone": partner.mobile or partner.phone or "",
                     },
                 )
                 partner_data["total"] -= item["balance"]
