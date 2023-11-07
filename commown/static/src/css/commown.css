@@ -1,0 +1,4 @@
+/* Fix portal task attachments icons repeating themselves */
+.o_image {
+    background-repeat: no-repeat;
+}

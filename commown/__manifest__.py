@@ -74,6 +74,7 @@
         "views/actions_utm.xml",
         "views/address_template.xml",
         "views/auth_signup.xml",
+        "views/assets.xml",
         "views/contract_contract.xml",
         "views/contract_template.xml",
         "views/crm_lead.xml",

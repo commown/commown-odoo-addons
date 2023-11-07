@@ -1,0 +1,9 @@
+<odoo>
+
+  <template id="assets_frontend" inherit_id="commown_self_troubleshooting.assets_frontend">
+    <xpath expr="." position="inside">
+      <link href="/commown/static/src/css/commown.css" rel="stylesheet" type="text/css"/>
+    </xpath>
+  </template>
+
+</odoo>
