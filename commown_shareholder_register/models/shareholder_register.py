@@ -25,6 +25,33 @@ class ShareholderRegister(models.TransientModel):
     report_name = fields.Char(string="Filename", size=256, readonly=True)
 
     def get_shareholders(self):
+        """Return a dictionnary with following structure to describe the shareholders::
+        {
+            "warnings": [],
+            "partners": {
+                <partner_obj>: {
+                    "total": <total amount of its shares in €>,
+                    "college": <highest college of the partner>,
+                    "address": <partner's postal address>,
+                    "phone": <partner's phone>,
+                    "total_ratio": <total amount / grand total amount>,
+                }
+            },
+            "colleges": {
+                <college_obj>: {
+                    "partners": [<partner_obj>],
+                    "total": <total amount of its partner shares in €>,
+                    "share_number": <number of shares>,
+                    "shareholder_number": <number of shareholders>,
+               }
+            },
+            "total": {
+                "balance": <total amount of all shares in €>,
+                "share_number": <number of shares>,
+                "shareholder_number": <number of shareholders>,
+            },
+        }
+        """
         nominal_share_amount = self.env.user.company_id.nominal_share_amount
         cats = self.env["commown_shareholder_register.category"].search([])
         by_account = {c.account_id: c for c in cats}
