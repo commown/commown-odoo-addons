@@ -14,7 +14,7 @@ class PaymentTransaction(models.Model):
                 if contract.payment_mode_id:
                     payment = self.env["account.payment"].create(
                         {
-                            "company_id": 1,  # ourselves!
+                            "company_id": contract.company_id.id,
                             "partner_id": contract.partner_id.id,
                             "partner_type": "customer",
                             "state": "draft",
