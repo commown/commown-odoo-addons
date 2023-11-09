@@ -181,9 +181,9 @@ class PagesTC(HttpCase):
                         ResPartner,
                         "self_troubleshooting_contracts",
                         return_value=contract,
-                    ) as m:
+                    ):
                         doc = self.get_page(page_url)
-                except:
+                except:  # noqa: E722
                     self.fail("Error loading %s:\n%s" % (page_url, tb.format_exc()))
 
                 self.assertEqual(
