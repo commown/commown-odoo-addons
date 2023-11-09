@@ -45,6 +45,8 @@
         "data/common_steps.xml",
         "data/project.xml",
         "data/tags.xml",
+        "security/res_groups.xml",
+        "security/ir.model.access.csv",
         "views/assets.xml",
         "views/tours.xml",
         "views/website_portal_templates.xml",
