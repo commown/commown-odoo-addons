@@ -1,0 +1,11 @@
+<odoo>
+
+  <record id="group_manager" model="res.groups">
+    <field name="name">Self troubleshooting managers</field>
+    <field name="implied_ids" eval="[(4, ref('website.group_website_designer'))]"/>
+    <field name="comment">
+      The user will be able to manage self troubleshooting categories and items.
+    </field>
+  </record>
+
+</odoo>
