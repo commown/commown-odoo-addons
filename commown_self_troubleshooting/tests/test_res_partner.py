@@ -59,9 +59,9 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
         return contract
 
     def test_all_data(self):
-        data = self.partner.self_troubleshooting_all_data()
+        data = _normalize_all_data(self.partner.self_troubleshooting_all_data())
         self.assertEqual(
-            _normalize_all_data(data),
+            data,
             [
                 {
                     "title": "Fairphone 2",
@@ -99,7 +99,7 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
     def test_fp2_battery(self):
         get_contracts = self.partner.self_troubleshooting_contracts
 
-        self.assertEqual(get_contracts("fp2-battery"), self.contract_fp2)
+        self.assertEqual(get_contracts("fp2-battery-page"), self.contract_fp2)
 
         # Check not started contracts are not returned
         self.contract_fp2.recurring_next_date = NO_DATE
@@ -112,11 +112,11 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
                 "date_end": datetime.date(2021, 1, 1),
             }
         )
-        self.assertFalse(get_contracts("fp2-battery"))
+        self.assertFalse(get_contracts("fp2-battery-page"))
 
     def test_serenity(self):
         get_contracts = self.partner.self_troubleshooting_contracts
-        self.assertEqual(get_contracts("serenity"), self.contract_serenity)
+        self.assertEqual(get_contracts("serenity-page"), self.contract_serenity)
 
     def test_b2b(self):
         "Two partners of the same customer company should see the same contracts"
@@ -126,13 +126,13 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
         # Check test prerequisites
         assert self.partner.commercial_partner_id == partner2.commercial_partner_id
         self.assertEqual(
-            self.partner.self_troubleshooting_contracts("fp2-battery"),
+            self.partner.self_troubleshooting_contracts("fp2-battery-page"),
             self.contract_fp2,
         )
 
         # Real test
         self.assertEqual(
-            partner2.self_troubleshooting_contracts("fp2-battery"),
+            partner2.self_troubleshooting_contracts("fp2-battery-page"),
             self.contract_fp2,
         )
 
