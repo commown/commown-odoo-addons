@@ -137,34 +137,6 @@ class Contract(models.Model):
             )
         return new_moves
 
-    @api.multi
-    def stock_at_date(self, date=None):
-        "Return the lots at partner's location at the given date"
-        self.ensure_one()
-
-        if date is None:
-            date = fields.Datetime.now()
-
-        move_lines = self.env["stock.move.line"].search(
-            [
-                ("picking_id.contract_id", "=", self.id),
-                ("date", "<=", date),
-                ("state", "=", "done"),
-            ],
-            order="date ASC",
-        )
-
-        lot_ids = OrderedDict()
-        partner_loc = self.partner_id.get_or_create_customer_location()
-        for m in move_lines:
-            lot = m.lot_id
-            lot_ids.setdefault(lot.id, 0)
-            lot_ids[lot.id] += m.location_dest_id == partner_loc and 1 or -1
-
-        return self.env["stock.production.lot"].browse(
-            [l_id for (l_id, total) in list(lot_ids.items()) if total > 0]
-        )
-
     def _partner_location_changed(self, old_location=None):
         """Change all present contract stock-related entities customer-side location
         to the one
