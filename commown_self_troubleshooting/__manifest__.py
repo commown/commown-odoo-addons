@@ -50,6 +50,7 @@
         "security/ir.model.access.csv",
         "views/assets.xml",
         "views/tours.xml",
+        "views/troubleshooting.xml",
         "views/website_portal_templates.xml",
     ],
     "demo": [
