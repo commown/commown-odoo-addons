@@ -65,6 +65,13 @@ class SelfTroubleshootingItem(models.Model):
         ),
     )
 
+    def name_get(self):
+        result = []
+        for record in self:
+            name = record.website_page_id.display_name or record.link_text
+            result.append((record.id, name))
+        return result
+
     def get_contracts(self, partner):
         "Return the possible contract resultset for current item (may be empty)"
         self.ensure_one()

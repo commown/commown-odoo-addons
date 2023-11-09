@@ -1,0 +1,97 @@
+<odoo>
+
+  <record id="category_tree" model="ir.ui.view">
+    <field name="name">Self troubleshooting categories</field>
+    <field name="model">commown_self_troubleshooting.category</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="sequence" widget="handle"/>
+        <field name="name" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="category_form" model="ir.ui.view">
+    <field name="name">Self troubleshooting category</field>
+    <field name="model">commown_self_troubleshooting.category</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <field name="name"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="item_tree" model="ir.ui.view">
+    <field name="name">Self troubleshooting items</field>
+    <field name="model">commown_self_troubleshooting.item</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="sequence" widget="handle"/>
+        <field name="display_name"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="item_form" model="ir.ui.view">
+    <field name="name">Self troubleshooting item</field>
+    <field name="model">commown_self_troubleshooting.item</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group name="general">
+            <field name="category_id"/>
+            <field name="website_page_id"/>
+          </group>
+          <group name="link">
+            <field name="link_url"
+                   attrs="{'invisible': [('website_page_id', '!=', False)]}"/>
+            <field name="link_text"
+                   attrs="{'invisible': [('website_page_id', '!=', False)]}"/>
+          </group>
+          <group name="contracts"
+                 attrs="{'invisible': [('website_page_id', '=', False)]}">
+            <field name="requires_contract"/>
+            <field name="contract_domain"
+                   attrs="{'invisible': [('requires_contract', '=', False)]}"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_self_troubleshooting_categories" model="ir.actions.act_window">
+    <field name="name">Self troubleshooting category</field>
+    <field name="res_model">commown_self_troubleshooting.category</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="category_tree"/>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record id="action_self_troubleshooting_items" model="ir.actions.act_window">
+    <field name="name">Self troubleshooting item</field>
+    <field name="res_model">commown_self_troubleshooting.item</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="item_tree"/>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem name="Self troubleshooting" id="self_troubleshooting_main"
+            parent="website.menu_website_configuration"
+            groups="commown_self_troubleshooting.group_manager"
+            sequence="12"/>
+
+  <menuitem name="Categories" id="self_troubleshooting_categories"
+            action="action_self_troubleshooting_categories"
+            parent="self_troubleshooting_main"/>
+
+  <menuitem name="Items" id="self_troubleshooting_items"
+            action="action_self_troubleshooting_items"
+            parent="self_troubleshooting_main"/>
+
+</odoo>
