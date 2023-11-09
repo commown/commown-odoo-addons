@@ -1,0 +1,150 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="fp2-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Fairphone 2</field>
+      <field name="sequence">20</field>
+    </record>
+
+    <record id="fp3-fp3+-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Fairphone 3/3+</field>
+      <field name="sequence">30</field>
+    </record>
+
+    <record id="fp4-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Fairphone 4</field>
+      <field name="sequence">40</field>
+    </record>
+
+    <record id="crosscall-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Crosscall</field>
+      <field name="sequence">50</field>
+    </record>
+
+    <record id="shiftphone-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Shiftphone</field>
+      <field name="sequence">60</field>
+    </record>
+
+    <record id="gs-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Gerrard Street</field>
+      <field name="sequence">70</field>
+    </record>
+
+    <record id="serenity-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Option Sérénité</field>
+      <field name="sequence">800</field>
+    </record>
+
+    <record id="generic-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Demande d'assistance</field>
+      <field name="sequence">900</field>
+    </record>
+
+    <record id="contracts-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Vie de mes contrats</field>
+      <field name="sequence">950</field>
+    </record>
+
+    <record id="other-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Demandes spéciales</field>
+      <field name="sequence">1000</field>
+    </record>
+
+    <record id="fp2-battery-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('fp2-ts-cat')"/>
+      <field name="website_page_id" eval="ref('fp2-battery-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "FP2%")]</field>
+      <field name="sequence">1</field>
+    </record>
+
+    <record id="fp2-camera-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('fp2-ts-cat')"/>
+      <field name="website_page_id" eval="ref('fp2-camera-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "FP2%")]</field>
+      <field name="sequence">2</field>
+    </record>
+
+    <record id="fp2-micro-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('fp2-ts-cat')"/>
+      <field name="website_page_id" eval="ref('fp2-micro-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "FP2%")]</field>
+      <field name="sequence">3</field>
+    </record>
+
+    <record id="fp3-screen-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('fp3-fp3+-ts-cat')"/>
+      <field name="website_page_id" eval="ref('fp3-screen-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "FP3%")]</field>
+    </record>
+
+    <record id="fp3-display-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('fp3-fp3+-ts-cat')"/>
+      <field name="website_page_id" eval="ref('fp3-display-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "FP3%")]</field>
+    </record>
+
+    <record id="fp4-screen-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('fp4-ts-cat')"/>
+      <field name="website_page_id" eval="ref('fp4-screen-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "FP4/%")]</field>
+    </record>
+
+    <record id="crosscall-screen-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('crosscall-ts-cat')"/>
+      <field name="website_page_id" eval="ref('crosscall-screen-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "CC/%")]</field>
+    </record>
+
+    <record id="shiftphone-screen-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('shiftphone-ts-cat')"/>
+      <field name="website_page_id" eval="ref('shiftphone-screen-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "SHIFT/%")]</field>
+    </record>
+
+    <record id="gs-day-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('gs-ts-cat')"/>
+      <field name="website_page_id" eval="ref('gs-day-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "GS/%")]</field>
+    </record>
+
+    <record id="contract-termination-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('contracts-ts-cat')"/>
+      <field name="website_page_id" eval="ref('contract-termination-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain"></field>
+    </record>
+
+    <record id="other-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('other-ts-cat')"/>
+      <field name="website_page_id" eval="ref('other-page')" />
+      <field name="requires_contract" eval="False"/>
+    </record>
+
+    <record id="generic-issue-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('generic-ts-cat')"/>
+      <field name="website_page_id" eval="ref('generic-issue-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain"></field>
+    </record>
+
+    <record id="serenity-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('serenity-ts-cat')"/>
+      <field name="website_page_id" eval="ref('serenity-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_line_ids.sale_order_line_id.name", "ilike", "%sérénité%")]</field>
+    </record>
+
+  </data>
+
+</odoo>
