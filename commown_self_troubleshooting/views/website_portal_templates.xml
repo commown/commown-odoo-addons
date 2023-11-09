@@ -23,7 +23,8 @@
           <h4><t t-esc="st_item['title']"/></h4>
           <div class="list-group">
             <a t-foreach="st_item['pages']" t-as="st_page" class="list-group-item"
-               t-att-href="st_page['url_path']">
+               t-att-href="st_page['url_path']"
+               t-att-target="'_blank' if st_page['url_path'].startswith('http') else None">
               <t t-esc="st_page['description']"/>
             </a>
           </div>
