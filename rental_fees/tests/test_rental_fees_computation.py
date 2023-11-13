@@ -37,6 +37,16 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
+        tax = self.env["account.tax"].create(
+            {
+                "amount": 10.0,
+                "amount_type": "percent",
+                "price_include": False,
+                "name": "Test tax",
+                "type_tax_use": "sale",
+            }
+        )
+
         inv_model = self.env["account.invoice"].create(
             {
                 "type": "in_invoice",
@@ -51,6 +61,7 @@ class RentalFeesComputationTC(RentalFeesTC):
                             "name": "Rental fees until ##DATE##",
                             "price_unit": 0.0,
                             "account_id": expenses_account.id,
+                            "invoice_line_tax_ids": [(6, 0, tax.ids)],
                         },
                     )
                 ],
@@ -181,19 +192,22 @@ class RentalFeesComputationTC(RentalFeesTC):
         c2 = self.compute("2021-02-28", invoice=True)
         self.assertEqual(c2.fees, 2.5)
         self.assertIn("02/28/2021", c2.invoice_ids.invoice_line_ids[0].name)
-        self.assertEqual(c2.invoice_ids.amount_total, 2.5)
+        self.assertEqual(c2.invoice_ids.amount_total, 2.75)
+        self.assertEqual(c2.invoice_ids.amount_tax, 0.25)
         c2.invoice_ids.action_invoice_open()
 
         c3 = self.compute("2021-03-31", invoice=True)
         self.assertEqual(c3.fees, 7.5)
         self.assertIn("03/31/2021", c3.invoice_ids.invoice_line_ids[0].name)
-        self.assertEqual(c3.invoice_ids.amount_total, 5.0)
+        self.assertEqual(c3.invoice_ids.amount_total, 5.5)
+        self.assertEqual(c3.invoice_ids.amount_tax, 0.5)
         c3.invoice_ids.action_invoice_open()
 
         c4 = self.compute("2021-04-30", invoice=True)
         self.assertEqual(c4.fees, 317.5)
         self.assertIn("04/30/2021", c4.invoice_ids.invoice_line_ids[0].name)
-        self.assertEqual(c4.invoice_ids.amount_total, 310.0)
+        self.assertEqual(c4.invoice_ids.amount_total, 341.0)
+        self.assertEqual(c4.invoice_ids.amount_tax, 31.0)
         c4.invoice_ids.action_invoice_open()
         compensations = c4.compensation_details()
         self.assertEqual(compensations.mapped("fees"), [300.0])

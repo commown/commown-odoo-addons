@@ -508,6 +508,7 @@ class RentalFeesComputation(models.Model):
                 inv.invoice_line_ids[0].copy(inv_line_data)
 
         self.invoice_ids |= inv
+        self.invoice_ids._onchange_invoice_line_ids()
 
     @api.multi
     def action_reset(self):
