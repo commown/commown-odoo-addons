@@ -39,10 +39,10 @@ class CouponTestTC(SavepointCase):
         self.paths = {
             "opt-in": "/campaigns/test-campaign/opt-in",
             "important-events": (
-                "/campaigns/test-campaign/subscriptions" "/important-events"
+                "/campaigns/test-campaign/subscriptions/important-events"
             ),
             "subscriptions": (
-                "/campaign/test-campaign/" "subscriptions?customer_key=%s" % self.key
+                "/campaign/test-campaign/subscriptions?customer_key=%s" % self.key
             ),
         }
 
