@@ -173,16 +173,13 @@ class ProjectTask(models.Model):
             tr_ref = payment_doc["reference"]
             tr = (
                 self.env["payment.transaction"]
-                .search(
-                    [
-                        ("acquirer_reference", "=", tr_ref),
-                    ]
-                )
+                .search([("acquirer_reference", "=", tr_ref)])
                 .ensure_one()
             )
         except:
             _logger.warning(
-                "Could not find Odoo transaction for" " Slimpay payment %r", tr_ref
+                "Could not find Odoo transaction for Slimpay payment %r",
+                tr_ref,
             )
         else:
             return tr.invoice_ids and tr.invoice_ids[0]
