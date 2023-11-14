@@ -169,6 +169,58 @@ class CouponTestTC(SavepointCase):
             ),
         )
 
+    def test_action_optin_status_4(self):
+
+        important_events = [
+            {
+                "customer_key": self.key,
+                "details": {
+                    "commown": {
+                        "optin_ts": _date(2021, 12, 31),
+                        "optout_ts": _date(2022, 4, 21),
+                    },
+                    "telecoop": {"optin_ts": _date(2021, 10, 28), "optout_ts": None},
+                },
+                "events": [
+                    {"type": "optin", "ts": _date(2021, 12, 31)},
+                    {"type": "optout", "ts": _date(2022, 4, 21)},
+                ],
+            }
+        ]
+
+        telecoop = {"login": "telecoop", "id": 1}
+        commown = {"login": "commown", "id": 2}
+        subscriptions = [
+            {
+                "customer_key": self.key,
+                "campaign": {"ref": "telecommown", "members": [telecoop, commown]},
+                "member": commown,
+                "optin_ts": _date(2021, 12, 31),
+                "optout_ts": _date(2022, 4, 21),
+            },
+            {
+                "customer_key": self.key,
+                "campaign": {"ref": "telecommown", "members": [telecoop, commown]},
+                "member": telecoop,
+                "optin_ts": _date(2021, 10, 28),
+                "optout_ts": None,
+            },
+        ]
+
+        self.assertEqual(
+            self.optin_status(important_events, subscriptions),
+            "\n".join(
+                [
+                    "Subscription status for Joel Willis is: not fully subscribed",
+                    "--",
+                    "Subscription to commown: 12/31/2021 00:00:00 > 04/21/2022 00:00:00",
+                    "Subscription to telecoop: 10/28/2021 00:00:00",
+                    "--",
+                    "Key: %s" % self.key,
+                ]
+            ),
+        )
+
     def test_wizard_late_optin(self):
         wizard = self.env["coupon.late.optin.wizard"].create(
             {

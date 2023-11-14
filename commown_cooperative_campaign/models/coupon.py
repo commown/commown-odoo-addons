@@ -106,9 +106,11 @@ def coop_human_readable_subscriptions(subscriptions, dt_format):
     for i, sub in enumerate(subscriptions):
         member = sub["member"]["login"]
         if not i:
-            missing = sorted(
-                m["login"] for m in sub["campaign"]["members"] if m["login"] != member
-            )
+            campaign = sub["campaign"]
+            missing = {m["login"] for m in campaign["members"]}
+
+        missing.remove(member)
+
         result.append(
             _("Subscription to %(member)s: %(optinout)s")
             % {
@@ -117,7 +119,7 @@ def coop_human_readable_subscriptions(subscriptions, dt_format):
             }
         )
 
-    if subscriptions:
+    if missing:
         result.append(_("No subscription to %s.") % ",".join(missing))
 
     return "\n".join(result)
