@@ -1,3 +1,4 @@
+import urllib
 from datetime import datetime, timedelta
 from functools import partial
 
@@ -68,9 +69,12 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
             events.append({"type": "optout", "ts": optout(date)})
 
         with requests_mock.Mocker() as rm:
+            is_subscribed = optin(date) <= date.isoformat() and (
+                optout is None or date.isoformat() <= optout(date)
+            )
             rm.get(
-                "/campaigns/test-campaign/subscriptions/important-events",
-                json=[{"events": events}],
+                "/campaign/test-campaign/subscribed",
+                json={self.customer_key: is_subscribed},
             )
             if mock_optin:
                 rm.post(
@@ -79,7 +83,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                         "id": 1,
                         "campaign": {},
                         "member": {},
-                        "optin_ts": ts_after(contract.recurring_next_date, 0),
+                        "optin_ts": ts_after(date, 0),
                         "optout_ts": None,
                     },
                 )
@@ -99,10 +103,14 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                 )
             else:
                 self.assertEqual(len(reqs), 1)
+            self.assertEqual(reqs[-1].path, "/campaign/test-campaign/subscribed")
             self.assertEqual(
-                reqs[-1].path, "/campaigns/test-campaign/subscriptions/important-events"
+                urllib.parse.parse_qs(reqs[-1].query),
+                {
+                    "customer_keys": [self.customer_key],
+                    "at_date": [date.isoformat() + "t12:00:00+00:00"],
+                },
             )
-            self.assertEqual(reqs[-1].query, "customer_key=" + self.customer_key)
 
         return invoice
 
@@ -131,13 +139,9 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                 json={"detail": "Already opt-in"},
             )
 
-            event = {
-                "type": "optin",
-                "ts": ts_before(self.contract.recurring_next_date),
-            }
             rm.get(
-                "/campaigns/test-campaign/subscriptions/important-events",
-                json=[{"events": [event]}],
+                "/campaign/test-campaign/subscribed",
+                json={self.customer_key: True},
             )
 
             invoice = self.contract.recurring_create_invoice()

@@ -1,11 +1,12 @@
-import datetime
 import hashlib
 import logging
 import urllib
+from datetime import datetime
 from pprint import pformat
 
 import iso8601
 import phonenumbers
+import pytz
 import requests
 
 from odoo import _, api, fields, models
@@ -17,63 +18,32 @@ MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 _logger = logging.getLogger(__file__)
 
 
-def coop_ws_important_events(base_url, campaign_ref, customer_key):
-    "Query the cooperative web services to see if a subscription is active"
+def coop_ws_subscribed(base_url, campaign_ref, *customer_keys, date_time=None):
+    if date_time is None:
+        date_time = pytz.UTC.localize(datetime.utcnow())
 
-    _logger.info(
-        "Querying %s, campaign %s, identifier %s", base_url, campaign_ref, customer_key
+    _logger.debug(
+        "Querying subscribed %s, campaign %s, date %s, customer_keys %s",
+        base_url,
+        campaign_ref,
+        date_time.isoformat(),
+        customer_keys,
     )
 
-    url = (
-        base_url
-        + "/campaigns/%s/subscriptions/important-events"
-        % urllib.parse.quote_plus(campaign_ref)
+    url = base_url + "/campaign/%s/subscribed" % urllib.parse.quote_plus(campaign_ref)
+
+    resp = requests.get(
+        url,
+        params={
+            "customer_keys": ",".join(customer_keys),
+            "at_date": date_time.isoformat(),
+        },
     )
-    resp = requests.get(url, params={"customer_key": customer_key})
     resp.raise_for_status()
 
-    subscriptions = resp.json()
-    _logger.debug("Got web services response:\n %s", pformat(subscriptions))
-    return subscriptions
-
-
-def coop_ws_valid_events(events, date, hour=12):
-    events = {e["type"]: parse_ws_date(e["ts"]) for e in events}
-    dt = datetime.datetime(date.year, date.month, date.day, hour=hour)
-    if "optin" not in events or events["optin"] >= dt:
-        return False
-    if "optout" in events and events["optout"] < dt:
-        return False
-    return True
-
-
-def coop_human_readable_important_events(events, dt_format):
-    if not events:
-        return _("No important subscription events")
-
-    result = "" if len(events) == 1 else _("%d subscription events:\n")
-
-    for num, event in enumerate(events):
-        if num:
-            result += "\n\n"
-        ctx = {
-            "key": event["customer_key"],
-            "validity": " >> ".join(
-                sorted(format_ws_date(e["ts"], dt_format) for e in event["events"])
-            ),
-            "details": _hr_details(event["details"], dt_format),
-        }
-        result += (
-            _(
-                "Validity: %(validity)s\n"
-                "--\n"
-                "Key: %(key)s\n"
-                "--\n"
-                "Details:\n%(details)s\n"
-            )
-            % ctx
-        )
-    return result
+    subscribed = resp.json()
+    _logger.debug("Got web services response:\n %s", pformat(subscribed))
+    return subscribed
 
 
 def coop_ws_subscriptions(base_url, campaign_ref, customer_key):
@@ -109,15 +79,16 @@ def coop_human_readable_subscriptions(subscriptions, dt_format):
             campaign = sub["campaign"]
             missing = {m["login"] for m in campaign["members"]}
 
-        missing.remove(member)
+        if member in missing:
+            missing.remove(member)
 
-        result.append(
-            _("Subscription to %(member)s: %(optinout)s")
-            % {
-                "member": member,
-                "optinout": _hr_optin_out(sub["optin_ts"], sub["optout_ts"], dt_format),
-            }
-        )
+        line = _("Subscription to %(member)s: %(optinout)s") % {
+            "member": member,
+            "optinout": _hr_optin_out(sub["optin_ts"], sub["optout_ts"], dt_format),
+        }
+        if sub.get("reason", ""):
+            line += " (%s)" % sub["reason"]
+        result.append(line)
 
     if missing:
         result.append(_("No subscription to %s.") % ",".join(missing))
@@ -187,34 +158,14 @@ class Coupon(models.Model):
         ctx = {"partner": partner.name}
         lang = self.env["res.lang"].search([("code", "=", self.env.user.lang)])
 
-        subscriptions = coop_ws_important_events(base_url, campaign.name, key)
+        valid = coop_ws_subscribed(base_url, campaign.name, key)[key]
+        ctx["result"] = _("fully subscribed") if valid else _("not fully subscribed")
 
-        is_valid = subscriptions and coop_ws_valid_events(
-            subscriptions[0]["events"], datetime.datetime.today()
+        subscriptions = coop_ws_subscriptions(base_url, campaign.name, key)
+        ctx["details"] = coop_human_readable_subscriptions(
+            subscriptions, lang.date_format + " " + lang.time_format
         )
-
-        if is_valid:
-            ctx.update(
-                {
-                    "details": coop_human_readable_important_events(
-                        subscriptions, lang.date_format + " " + lang.time_format
-                    ),
-                    "result": _("fully subscribed"),
-                }
-            )
-
-        else:
-            # Has incomplete subscriptions?
-            subscriptions = coop_ws_subscriptions(base_url, campaign.name, key)
-            ctx.update(
-                {
-                    "details": coop_human_readable_subscriptions(
-                        subscriptions, lang.date_format + " " + lang.time_format
-                    ),
-                    "result": _("not fully subscribed"),
-                }
-            )
-            response.append(_("Key: %(key)s") % {"key": key})
+        response.append(_("Key: %(key)s") % {"key": key})
 
         raise UserError("\n--\n".join(response) % ctx)
 
