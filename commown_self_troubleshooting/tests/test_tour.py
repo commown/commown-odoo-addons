@@ -1,3 +1,4 @@
+import unittest
 from contextlib import contextmanager
 
 import websocket

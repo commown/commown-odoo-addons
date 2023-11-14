@@ -81,7 +81,7 @@
     <field name="url">/page/self-troubleshoot-other</field>
     <field name="view_id" ref="other" />
     <field name="website_meta_title">Demandes spéciales</field>
-    <field name="website_meta_description">J'ai une demande qui ne rentre dans aucune case !</field>
+    <field name="website_meta_description">J'ai une demande qui ne rentre dans aucune des cases précédentes !</field>
   </record>
 
 </odoo>
