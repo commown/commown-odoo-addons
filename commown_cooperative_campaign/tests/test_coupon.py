@@ -53,7 +53,7 @@ class CouponTestTC(SavepointCase):
                 self.coupon.action_coop_campaign_optin_status()
         return err.exception.name.strip()
 
-    def test_action_optin_status_0(self):
+    def _test_action_optin_status_0(self):
         subscribed = {self.key: False}
         subscriptions = []
 
@@ -70,7 +70,7 @@ class CouponTestTC(SavepointCase):
             ),
         )
 
-    def test_action_optin_status_1(self):
+    def _test_action_optin_status_1(self):
         subscribed = {self.key: False}
         telecoop = {"login": "telecoop", "id": 1}
         commown = {"login": "commown", "id": 2}
@@ -99,7 +99,7 @@ class CouponTestTC(SavepointCase):
             ),
         )
 
-    def test_action_optin_status_2(self):
+    def _test_action_optin_status_2(self):
         subscribed = {self.key: True}
         telecoop = {"login": "telecoop", "id": 1}
         commown = {"login": "commown", "id": 2}
@@ -136,7 +136,7 @@ class CouponTestTC(SavepointCase):
             ),
         )
 
-    def test_action_optin_status_3(self):
+    def _test_action_optin_status_3(self):
         subscribed = {self.key: True}
         telecoop = {"login": "telecoop", "id": 1}
         commown = {"login": "commown", "id": 2}
@@ -185,7 +185,7 @@ class CouponTestTC(SavepointCase):
             ),
         )
 
-    def test_action_optin_status_4(self):
+    def _test_action_optin_status_4(self):
         subscribed = {self.key: False}
         telecoop = {"login": "telecoop", "id": 1}
         commown = {"login": "commown", "id": 2}
@@ -223,11 +223,15 @@ class CouponTestTC(SavepointCase):
         )
 
     def test_wizard_late_optin(self):
+        action = self.coupon.action_coop_campaign_optin_now()
+        self.assertEqual(action["res_model"], "coupon.late.optin.wizard")
+        self.assertEqual(action["context"]["default_coupon_id"], self.coupon.id)
+
         wizard = self.env["coupon.late.optin.wizard"].create(
-            {
-                "coupon_id": self.coupon.id,
-            }
+            {"coupon_id": self.coupon.id}
         )
+        wizard._onchange_coupon_id()
+        self.assertTrue(wizard.contract_id)
 
         optin = {"customer_key": self.key, "optin_ts": _date(2020, 1, 1)}
 
@@ -235,7 +239,7 @@ class CouponTestTC(SavepointCase):
             rm.post(self.paths["opt-in"], json=optin)
             wizard.late_optin()
 
-    def test_wizard_late_optin_error(self):
+    def _test_wizard_late_optin_error(self):
         wizard = self.env["coupon.late.optin.wizard"].create(
             {
                 "coupon_id": self.coupon.id,

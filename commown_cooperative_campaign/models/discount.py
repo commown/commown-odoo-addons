@@ -25,7 +25,14 @@ def parse_ws_date(str_date):
 
 
 def coop_ws_optin(
-    base_url, campaign_ref, customer_key, date, tz, hour=9, silent_double_optin=True
+    base_url,
+    campaign_ref,
+    customer_key,
+    reason,
+    date,
+    tz,
+    hour=9,
+    silent_double_optin=True,
 ):
     "Query the cooperative web services to insert a new subscription"
 
@@ -99,7 +106,12 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                         )
                         try:
                             coop_ws_optin(
-                                url, campaign.name, identifier, date, partner.tz
+                                url,
+                                campaign.name,
+                                identifier,
+                                contract.name,
+                                date,
+                                partner.tz,
                             )
                         except requests.HTTPError as exc:
                             # Try to handle double-optin nicely
