@@ -42,6 +42,7 @@
       <form string="Contract discount line">
         <group>
           <group name="general" string="General">
+            <field name="contract_line_id" invisible="1"/>
             <field name="name"/>
             <field name="condition"/>
             <field name="replace_discount_line_id_domain" invisible="1"/>
