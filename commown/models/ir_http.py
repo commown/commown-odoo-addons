@@ -9,10 +9,10 @@ class IrHttp(models.AbstractModel):
 
     @classmethod
     def _handle_exception(cls, exc):
+        request.website = request.env["website"].get_current_website()
         redirect = cls._serve_redirect()
         if redirect:
             return request.redirect(
                 _build_url_w_params(redirect.url_to, request.params), code=redirect.type
             )
-
         return super(IrHttp, cls)._handle_exception(exc)
