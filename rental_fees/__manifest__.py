@@ -2,7 +2,7 @@
     "name": "rental_fees",
     "category": "Business",
     "summary": "Commown module to compute fees to be paid to its device suppliers",
-    "version": "12.0.2.0.4",
+    "version": "12.0.2.0.5",
     "description": """
         Commown module to compute fees to be paid to its device suppliers.
     """,
