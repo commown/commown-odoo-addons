@@ -6,6 +6,16 @@ pyexcel
 # https://github.com/OCA/contract/pull/798 (12.0 port of contract_payment_auto)
 git+https://github.com/fcayre/contract@12.0-mig-contract_payment_auto-fix#subdirectory=setup/contract_payment_auto
 
+# https://github.com/OCA/contract/pull/1003 (commown:12.0-fix-contract_forecast)
+#git+https://github.com/commown/contract@12.0-fix-contract_forecast#subdirectory=setup/contract_forecast
+# https://github.com/OCA/contract/pull/1004 (commown:12.0-imp-contract_forecast)
+#git+https://github.com/commown/contract@12.0-imp-contract_forecast#subdirectory=setup/contract_forecast
+# Preceeding 2 PRs are summed-up in:
+git+https://github.com/commown/contract@12.0-current-contract_forecast#subdirectory=setup/contract_forecast
+
+# https://github.com/OCA/queue/pull/565
+git+https://github.com/commown/queue@12.0-imp-queue_job-handle-identity_key-in-trap_jobs#subdirectory=setup/queue_job
+
 # https://github.com/OCA/account-invoicing/pull/1087
 git+https://github.com/fcayre/account-invoicing@12.0-add-account_invoice_merge_auto#subdirectory=setup/account_invoice_merge_auto
 

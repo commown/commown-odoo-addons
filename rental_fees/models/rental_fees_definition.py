@@ -5,6 +5,15 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools import misc
 
 
+def month_intervals(period):
+    one_month = relativedelta(months=1)
+    from_date = period["from_date"]
+    while from_date < period["to_date"]:
+        to_date = from_date + one_month
+        yield from_date, to_date
+        from_date = to_date
+
+
 class RentalFeesDefinition(models.Model):
     _name = "rental_fees.definition"
     _description = (
@@ -283,34 +292,48 @@ class RentalFeesDefinitionLine(models.Model):
             )
 
     @api.multi
-    def compute_fees(self, period):
-        """Simplist computation of the fees based on the invoiced amounts in
-        the period.
+    def compute_monthly_fees(self, period):
+        """Return a (from_date, to_date, amount) list of monthly fees for the period
 
         When contract periodicity is bigger than a month, the fees may
         be 0 for a while then paid in one big go.
+
+        When the period is a forecast, we use the contract forecast table,
+        otherwise the invoice table is used.
         """
 
         self.ensure_one()
 
-        assert (
-            period["to_date"] <= fields.Date.today()
-        ), "Future fees computations are not supported yet"
+        result = []
 
         if self.fees_type == "fix":
-            if self.monthly_fees == 0.0:
-                return 0.0
-            else:
-                return (
-                    self.monthly_fees
-                    * relativedelta(period["to_date"], period["from_date"]).months
-                )
+            for from_date, to_date in month_intervals(period):
+                result.append((from_date, to_date, self.monthly_fees))
 
         elif self.fees_type == "proportional":
-            return self._get_invoiced_amount(period) * self.monthly_fees
+            if period["is_forecast"]:
+                forecasts = self.env["contract.line.forecast.period"].search(
+                    [
+                        ("contract_id", "=", period["contract"].id),
+                        ("date_invoice", ">=", period["from_date"]),
+                        ("date_invoice", "<", period["to_date"]),
+                    ]
+                )
+                date_amounts = [(p.date_invoice, p.price_subtotal) for p in forecasts]
+            else:
+                date_amounts = self._get_invoiced_amounts(period)
 
-    def _get_invoiced_amount(self, period):
-        """Return the total amount invoiced for the given fees period
+            for from_date, to_date in month_intervals(period):
+                total = 0.0
+                for date, amount in date_amounts:
+                    if from_date <= date < to_date:
+                        total += amount
+                result.append((from_date, to_date, total * self.monthly_fees))
+
+        return result
+
+    def _get_invoiced_amounts(self, period):
+        """Return a (date, amount) list of invoiced amounts for the given fees period
 
         This includes invoices directly generated from the contract but also the
         invoices that have been merged (and thus cancelled). The latter are identified
@@ -346,10 +369,10 @@ class RentalFeesDefinitionLine(models.Model):
             ]
         )
 
-        return sum(
-            paid_invoice_lines.mapped("price_subtotal")
-            + merged_invoice_lines.mapped("price_subtotal")
-        )
+        return [
+            (il.date_invoice, il.price_subtotal)
+            for il in (paid_invoice_lines + merged_invoice_lines)
+        ]
 
     def format_fees_amount(self):
         if self.fees_type == "proportional":

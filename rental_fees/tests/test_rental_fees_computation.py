@@ -1,6 +1,7 @@
-from datetime import date
+from datetime import date, datetime
 
 import pyexcel
+from dateutil.relativedelta import relativedelta
 
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
@@ -315,6 +316,59 @@ class RentalFeesComputationTC(RentalFeesTC):
         c3 = self.compute(computation_date)
         self.assertEqual(c3.fees, 7.5)
 
+    def test_compute_with_forecast(self):
+        company = self.env.user.partner_id.company_id
+        company.update(
+            {
+                "enable_contract_forecast": True,
+                "contract_forecast_interval": 60,
+                "contract_forecast_rule_type": "monthly",
+            }
+        )
+
+        start_date = date.today() - relativedelta(months=3, days=-1)
+        send_datetime = datetime(*start_date.timetuple()[:-2])
+        compute_date = date.today() + relativedelta(months=36)
+
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract=contract, date=send_datetime)
+        contract.date_start = start_date
+        self.create_invoices_until(contract, date.today())
+
+        computation = self.compute(compute_date)
+
+        def months_from_start(date):
+            "Return number of months between contract start date and given date"
+            delta = relativedelta(date, contract.date_start)
+            return delta.years * 12 + delta.months
+
+        def fees_descr(details):
+            "Return a short tuple description of given computation details"
+            aday = relativedelta(days=1)
+            for detail in details:
+                yield (
+                    months_from_start(detail.from_date),
+                    months_from_start(detail.to_date + aday),
+                    detail.fees,
+                    detail.fees_definition_line_id.sequence,
+                )
+
+        forecast_fees = computation.detail_ids.filtered("is_forecast")
+        actual_fees = computation.detail_ids - forecast_fees
+
+        self.assertEqual(
+            list(fees_descr(actual_fees)),
+            [(0, 1, 2.50, 1), (1, 2, 2.50, 1), (2, 3, 12.50, 2)],
+        )
+
+        # Warning: in the test setup, the contract line tax has price_include=True
+        # As a consequence, the contract forecast are NOT without tax here...
+        self.assertEqual(
+            list(fees_descr(forecast_fees)),
+            [(3, 4, 15.0, 2), (4, 5, 15.0, 2)]
+            + [(i, i + 1, 1.5, 100) for i in range(5, 39)],
+        )
+
     def test_cannot_modify_important_def_fields_with_computation(self):
         "Cannot modify a fees def which has a non-draft computation"
 
@@ -452,26 +506,36 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
 
     def test_split_periods_wrt_fees_def_1(self):
-        _d = date
-
         periods = [
-            {"from_date": _d(2021, 1, 10), "to_date": _d(2021, 2, 15), "contract": 0},
-            {"from_date": _d(2021, 3, 15), "to_date": _d(2021, 4, 15), "contract": 1},
+            {
+                "from_date": date(2021, 1, 10),
+                "to_date": date(2021, 2, 15),
+                "contract": 0,
+                "is_forecast": False,
+            },
+            {
+                "from_date": date(2021, 3, 15),
+                "to_date": date(2021, 4, 15),
+                "contract": 1,
+                "is_forecast": False,
+            },
         ]
 
         self.assertEqual(
             [
                 {
                     "contract": 0,
-                    "from_date": _d(2021, 1, 10),
-                    "to_date": _d(2021, 2, 15),
+                    "from_date": date(2021, 1, 10),
+                    "to_date": date(2021, 2, 15),
                     "fees_def_line": self.fees_def.line_ids[0],
+                    "is_forecast": False,
                 },
                 {
                     "contract": 1,
-                    "from_date": _d(2021, 3, 15),
-                    "to_date": _d(2021, 4, 15),
+                    "from_date": date(2021, 3, 15),
+                    "to_date": date(2021, 4, 15),
                     "fees_def_line": self.fees_def.line_ids[1],
+                    "is_forecast": False,
                 },
             ],
             self.compute("2100-01-01").split_periods_wrt_fees_def(
@@ -480,38 +544,50 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
 
     def test_split_periods_wrt_fees_def_2(self):
-        _d = date
-
         periods = [
-            {"from_date": _d(2021, 1, 10), "to_date": _d(2021, 6, 30), "contract": 0},
-            {"from_date": _d(2021, 7, 15), "to_date": _d(2021, 12, 5), "contract": 1},
+            {
+                "from_date": date(2021, 1, 10),
+                "to_date": date(2021, 6, 30),
+                "contract": 0,
+                "is_forecast": False,
+            },
+            {
+                "from_date": date(2021, 7, 15),
+                "to_date": date(2021, 12, 5),
+                "contract": 1,
+                "is_forecast": False,
+            },
         ]
 
         self.assertEqual(
             [
                 {
                     "contract": 0,
-                    "from_date": _d(2021, 1, 10),
-                    "to_date": _d(2021, 3, 10),
+                    "from_date": date(2021, 1, 10),
+                    "to_date": date(2021, 3, 10),
                     "fees_def_line": self.fees_def.line_ids[0],
+                    "is_forecast": False,
                 },
                 {
                     "contract": 0,
-                    "from_date": _d(2021, 3, 10),
-                    "to_date": _d(2021, 6, 10),
+                    "from_date": date(2021, 3, 10),
+                    "to_date": date(2021, 6, 10),
                     "fees_def_line": self.fees_def.line_ids[1],
+                    "is_forecast": False,
                 },
                 {
                     "contract": 0,
-                    "from_date": _d(2021, 6, 10),
-                    "to_date": _d(2021, 6, 30),
+                    "from_date": date(2021, 6, 10),
+                    "to_date": date(2021, 6, 30),
                     "fees_def_line": self.fees_def.line_ids[2],
+                    "is_forecast": False,
                 },
                 {
                     "contract": 1,
-                    "from_date": _d(2021, 7, 15),
-                    "to_date": _d(2021, 12, 5),
+                    "from_date": date(2021, 7, 15),
+                    "to_date": date(2021, 12, 5),
                     "fees_def_line": self.fees_def.line_ids[2],
+                    "is_forecast": False,
                 },
             ],
             self.compute("2100-01-01").split_periods_wrt_fees_def(

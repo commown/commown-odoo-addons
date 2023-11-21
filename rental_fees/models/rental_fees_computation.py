@@ -66,6 +66,20 @@ class RentalFeesComputation(models.Model):
         readonly=True,
     )
 
+    run_datetime = fields.Datetime(
+        "Run datetime",
+        default=False,
+        copy=False,
+        readonly=True,
+        compute="_compute_run_datetime_and_has_forecast",
+    )
+
+    has_forecast = fields.Boolean(
+        copy=False,
+        readonly=True,
+        compute="_compute_run_datetime_and_has_forecast",
+    )
+
     fees = fields.Float(
         string="Fees",
         copy=False,
@@ -89,6 +103,17 @@ class RentalFeesComputation(models.Model):
         ),
         copy=False,
     )
+
+    @api.depends("until_date", "state")
+    def _compute_run_datetime_and_has_forecast(self):
+        now = fields.Datetime.now()
+        for record in self:
+            if self.state == "running":
+                self.run_datetime = now
+                self.has_forecast = self.until_date > self.run_datetime.date()
+            else:
+                self.run_datetime = False
+                self.has_forecast = self.until_date > now.date()
 
     def details(self, *fees_types):
         return self.detail_ids.filtered(lambda d: d.fees_type in fees_types)
@@ -179,13 +204,18 @@ class RentalFeesComputation(models.Model):
         current_period = {}
         result = []
 
+        if self.has_forecast:
+            last_real_date = self.run_datetime.date()
+        else:
+            last_real_date = self.until_date
+
         move_lines = (
             self.env["stock.move.line"]
             .search(
                 [
                     ("state", "=", "done"),
                     ("lot_id", "=", device.id),
-                    ("move_id.date", "<", self.until_date + _one_day),
+                    ("move_id.date", "<", last_real_date + _one_day),
                 ]
             )
             .sorted(lambda ml: ml.move_id.date)
@@ -201,6 +231,7 @@ class RentalFeesComputation(models.Model):
 
             if move_line.location_dest_id in customer_locations:
                 if not current_period:
+                    current_period["is_forecast"] = False
                     current_period["from_date"] = move_date
                     current_period["contract"] = move.picking_id.contract_id
                 else:
@@ -218,8 +249,18 @@ class RentalFeesComputation(models.Model):
                 current_period.clear()
 
         if current_period:
-            current_period["to_date"] = self.until_date + _one_day
+            current_period["to_date"] = last_real_date + _one_day
             result.append(current_period)
+
+            if self.has_forecast:
+                result.append(
+                    dict(
+                        current_period,
+                        from_date=current_period["to_date"],
+                        to_date=self.until_date + _one_day,
+                        is_forecast=True,
+                    )
+                )
 
         return result
 
@@ -290,6 +331,7 @@ class RentalFeesComputation(models.Model):
                     result.append(
                         {
                             "contract": period["contract"],
+                            "is_forecast": period["is_forecast"],
                             "from_date": from_date,
                             "to_date": split_date,
                             "fees_def_line": fees_def_line,
@@ -300,6 +342,7 @@ class RentalFeesComputation(models.Model):
                     result.append(
                         {
                             "contract": period["contract"],
+                            "is_forecast": period["is_forecast"],
                             "from_date": from_date,
                             "to_date": period["to_date"],
                             "fees_def_line": fees_def_line,
@@ -442,7 +485,7 @@ class RentalFeesComputation(models.Model):
             "name": _("Fees computation details"),
             "domain": [("fees_computation_id", "=", self.id)],
             "type": "ir.actions.act_window",
-            "view_mode": "tree,form",
+            "view_mode": "tree,graph,pivot,form",
             "res_model": "rental_fees.computation.detail",
         }
 
@@ -557,21 +600,45 @@ class RentalFeesComputation(models.Model):
         )
 
     def _add_fees_periods(self, device, periods):
-        for period in periods:
-            def_line = period["fees_def_line"]
+        "Insert computation details, further detailing the period in forecast mode"
+
+        def insert_detail(fees, contract, from_date, to_date, def_line, is_forecast):
             self.env["rental_fees.computation.detail"].sudo().create(
                 {
                     "fees_computation_id": self.id,
-                    "fees": period["fees"],
+                    "fees": fees,
                     "fees_type": "fees",
                     "lot_id": device.id,
-                    "contract_id": period["contract"].id,
-                    "from_date": period["from_date"],
-                    "to_date": period["to_date"] - _one_day,  # dates included in the DB
+                    "contract_id": contract.id,
+                    "from_date": from_date,
+                    "to_date": to_date - _one_day,  # dates included in the DB
                     "fees_definition_id": def_line.fees_definition_id.id,
                     "fees_definition_line_id": def_line.id,
+                    "is_forecast": is_forecast,
                 }
             )
+
+        for period in periods:
+            if self.has_forecast:
+                # Split by month to get a smooth fees vs. time graph:
+                for from_date, to_date, amount in period["monthly_fees"]:
+                    insert_detail(
+                        amount,
+                        period["contract"],
+                        from_date,
+                        to_date,
+                        period["fees_def_line"],
+                        period["is_forecast"],
+                    )
+            else:
+                insert_detail(
+                    period["fees"],
+                    period["contract"],
+                    period["from_date"],
+                    period["to_date"],
+                    period["fees_def_line"],
+                    period["is_forecast"],
+                )
 
     @job(default_channel="root")
     def _run(self):
@@ -609,7 +676,9 @@ class RentalFeesComputation(models.Model):
 
             device_fees = 0.0
             for period in periods:
-                period["fees"] = period["fees_def_line"].compute_fees(period)
+                monthly_fees = period["fees_def_line"].compute_monthly_fees(period)
+                period["monthly_fees"] = monthly_fees
+                period["fees"] = sum(amount for _ds, _de, amount in monthly_fees)
                 device_fees += period["fees"]
 
             if no_rental_limit:
@@ -666,9 +735,36 @@ class RentalFeesComputationDetail(models.Model):
         required=True,
     )
 
+    product_template_id = fields.Many2one(
+        comodel_name="product.template",
+        string="Product",
+        readonly=True,
+        related="lot_id.product_id.product_tmpl_id",
+        store=True,
+        index=True,
+    )
+
     contract_id = fields.Many2one(
         "contract.contract",
         string="Contract",
+    )
+
+    contract_template_id = fields.Many2one(
+        comodel_name="contract.template",
+        string="Contract template",
+        readonly=True,
+        related="contract_id.contract_template_id",
+        store=True,
+        index=True,
+    )
+
+    market = fields.Selection(
+        [("B2C", "B2C"), ("B2B", "B2B")],
+        string="Market",
+        readonly=True,
+        compute="_compute_market",
+        store=True,
+        index=True,
     )
 
     from_date = fields.Date(
@@ -681,6 +777,12 @@ class RentalFeesComputationDetail(models.Model):
         required=True,
     )
 
+    is_forecast = fields.Boolean(
+        "Is a forecast?",
+        store=True,
+        index=True,
+    )
+
     fees_definition_id = fields.Many2one(
         "rental_fees.definition",
         string="Fees definition",
@@ -690,3 +792,13 @@ class RentalFeesComputationDetail(models.Model):
         "rental_fees.definition_line",
         string="Fees definition line",
     )
+
+    @api.depends("contract_template_id")
+    def _compute_market(self):
+        for record in self:
+            ct_name = record.contract_template_id.name
+            if ct_name and "/" in ct_name:
+                market = ct_name.split("/", 2)[1]
+                record.market = "B2C" if market == "B2C" else "B2B"
+            else:
+                record.market = False
