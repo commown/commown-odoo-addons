@@ -216,7 +216,8 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         with self.env.cr.savepoint():
             with self.assertRaises(NoMockAddress) as err:
                 do_test(self.env)
+        self.assertTrue(err.exception.request.url.endswith("/opt-in"))
 
         # Same call with same DB state but with the bypass_coop_campaigns context
-        # variable should not raise:
+        # variable should not raise (important-events is mocked here!):
         do_test(self.env(context=dict(self.env.context, bypass_coop_campaigns=True)))
