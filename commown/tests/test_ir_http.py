@@ -1,3 +1,5 @@
+from urllib.parse import parse_qs, urlparse
+
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
@@ -9,6 +11,15 @@ class IrHttpTC(HttpCase):
     def setUp(self):
         super().setUp()
         self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
+
+    def test_redirect_forbiden_page(self):
+        test_client = Client(wsgi_server.application, BaseResponse)
+        response = test_client.get("/my")
+        self.assertEqual(response.status_code, 302)
+        parsed_response = urlparse(response.headers["Location"]).query
+        self.assertEqual(
+            parse_qs(parsed_response), {"redirect": ["http://localhost/my"]}
+        )
 
     def test_redirect(self):
         test_client = Client(wsgi_server.application, BaseResponse)

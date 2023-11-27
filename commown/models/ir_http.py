@@ -9,6 +9,7 @@ class IrHttp(models.AbstractModel):
 
     @classmethod
     def _handle_exception(cls, exc):
+        request.website = request.env["website"].get_current_website()
         redirect = cls._serve_redirect()
         if redirect:
             return request.redirect(
