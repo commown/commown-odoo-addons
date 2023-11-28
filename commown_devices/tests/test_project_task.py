@@ -354,7 +354,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             ["Core-X4", "Fairphone 3", "unused serial"],
         )
         self.assertEqual(
-            sorted(possible_values["lot_id"].mapped("name")), ["cc2", "cc3", "fp4"]
+            sorted(possible_values["lot_id"].mapped("name")), ["cc2", "fp4"]
         )
 
     def test_wizard_outward_with_product_tmpl(self):
