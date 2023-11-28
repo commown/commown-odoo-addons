@@ -1,5 +1,6 @@
 # generated from manifests external_dependencies
 iso8601
+pdfminer.six==20181108
 phonenumbers
 py3o.formats
 py3o.template

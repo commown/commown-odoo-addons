@@ -53,7 +53,7 @@
         "website_sale_require_login",
     ],
     "external_dependencies": {
-        "python": ["magic"],
+        "python": ["magic", "pdfminer"],
         "bin": ["rsvg-convert"],
     },
     "data": [
@@ -77,6 +77,7 @@
         "views/contract_template.xml",
         "views/crm_lead.xml",
         "views/debrand_notification.xml",
+        "views/ir_attachment.xml",
         "views/payment_portal_templates.xml",
         "views/product_template.xml",
         "views/project_project.xml",

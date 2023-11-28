@@ -6,6 +6,7 @@ setuptools.setup(
         'external_dependencies_override': {
             'python': {
                 'magic': 'python-magic',
+                'pdfminer': 'pdfminer.six==20181108',
             },
         },
     },
