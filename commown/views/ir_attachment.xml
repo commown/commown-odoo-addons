@@ -1,0 +1,19 @@
+<odoo>
+
+  <record id="view_attachment_search" model="ir.ui.view">
+    <field name="name">Documents search view: additional filters</field>
+    <field name="model">ir.attachment</field>
+    <field name="inherit_id" ref="base.view_attachment_search"/>
+    <field name="arch" type="xml">
+      <search>
+        <field name="res_model"/>
+        <field name="index_content"/>
+        <group string="Group by">
+          <filter name="group_model" string="Model"
+                  context="{'group_by': 'res_model'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+</odoo>
