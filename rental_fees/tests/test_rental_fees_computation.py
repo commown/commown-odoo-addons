@@ -326,14 +326,21 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-        start_date = date.today() - relativedelta(months=3, days=-1)
+        # Do not choose plain today to make test deterministic:
+        # - always have a last month with no fees
+        # - avoid end of month invoice date shifts
+        base_date = date.today() - relativedelta(days=7)
+        if base_date.day > 27:
+            base_date = date(base_date.year, base_date.month, 27)
+
+        start_date = base_date - relativedelta(months=3, days=-1)
         send_datetime = datetime(*start_date.timetuple()[:-2])
-        compute_date = date.today() + relativedelta(months=36)
+        compute_date = base_date + relativedelta(months=36)
 
         contract = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract, date=send_datetime)
         contract.date_start = start_date
-        self.create_invoices_until(contract, date.today())
+        self.create_invoices_until(contract, base_date)
 
         computation = self.compute(compute_date)
 
@@ -358,14 +365,14 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         self.assertEqual(
             list(fees_descr(actual_fees)),
-            [(0, 1, 2.50, 1), (1, 2, 2.50, 1), (2, 3, 12.50, 2)],
+            [(0, 1, 2.50, 1), (1, 2, 2.50, 1), (2, 3, 12.50, 2), (3, 4, 0.0, 2)],
         )
 
         # Warning: in the test setup, the contract line tax has price_include=True
         # As a consequence, the contract forecast are NOT without tax here...
         self.assertEqual(
             list(fees_descr(forecast_fees)),
-            [(3, 4, 15.0, 2), (4, 5, 15.0, 2)]
+            [(3, 4, 15.0, 2), (4, 5, 0.0, 2)]
             + [(i, i + 1, 1.5, 100) for i in range(5, 39)],
         )
 
