@@ -1,6 +1,8 @@
 # Copyright 2023 Commown SCIC
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0)
 
+from dateutil.relativedelta import relativedelta
+
 from odoo import fields
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
@@ -37,7 +39,13 @@ class ContractLineComputeForecastTC(TestContractBase):
             end_value=False,  # no end
         )
 
-        date = fields.Date.today()
+        # Do not choose plain today to make test deterministic:
+        # - always have a last month with no fees
+        # - avoid end of month invoice date shifts
+        date = fields.Date.today() - relativedelta(days=7)
+        if date.day > 27:
+            date = date(base_date.year, base_date.month, 27)
+
         clines = self.contract.contract_line_ids
         clines.write({"recurring_next_date": date})
 
