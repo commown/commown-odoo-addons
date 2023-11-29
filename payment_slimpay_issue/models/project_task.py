@@ -253,7 +253,10 @@ class ProjectTask(models.Model):
 
         """
         self.ensure_one()
-        return bool(self.invoice_id)
+        return bool(
+            self.invoice_id.payment_mode_id.payment_method_id
+            == self.env.ref("payment.account_payment_method_electronic_in")
+        )
 
     @api.model
     def _slimpay_payment_issue_fees_product(self, fees_name):
@@ -415,7 +418,6 @@ class ProjectTask(models.Model):
         task = self._slimpay_payment_issue_get_or_create(project, client, issue_doc)
         invoice = task.invoice_id
 
-        # No related invoice: move to orphan stage and exit
         if not task.slimpay_payment_issue_process_automatically():
             task.update(
                 {"stage_id": self.env.ref("payment_slimpay_issue.stage_orphan").id}
