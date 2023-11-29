@@ -21,6 +21,21 @@ class LateOptinWizard(models.TransientModel):
         required=True,
     )
 
+    contract_id = fields.Many2one(
+        string="Contract",
+    )
+
+    @api.onchange("coupon_id")
+    def _onchange_coupon_id(self):
+        so = self.coupon_id.used_for_sale_id
+        if so:
+            contracts = self.env["contract.contract"].search(
+                [("contract_line_ids.sale_order_line_id.order_id", "=", so.id)],
+            )
+            if len(contracts) == 1:
+                self.contract_id = contracts.id
+            return {"domain": {"contract_id": [("id", "in", contracts.ids)]}}
+
     @api.multi
     def late_optin(self):
 
@@ -35,6 +50,7 @@ class LateOptinWizard(models.TransientModel):
             base_url,
             campaign.name,
             key,
+            self.contract_id.name,
             self.date,
             partner.tz,
             silent_double_optin=False,

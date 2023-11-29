@@ -13,6 +13,8 @@ import requests
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
+from .coupon import coop_ws_subscribed
+
 _logger = logging.getLogger(__name__)
 
 
@@ -22,39 +24,15 @@ def parse_ws_date(str_date):
     return _date.replace(tzinfo=None) - _date.utcoffset()
 
 
-def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
-    "Query the cooperative web services to see if a subscription is active"
-
-    _logger.info(
-        "Querying %s, campaign %s, identifier %s (date %s)",
-        base_url,
-        campaign_ref,
-        customer_key,
-        date.isoformat(),
-    )
-
-    url = (
-        base_url
-        + "/campaigns/%s/subscriptions/important-events"
-        % urllib.parse.quote_plus(campaign_ref)
-    )
-    resp = requests.get(url, params={"customer_key": customer_key})
-    resp.raise_for_status()
-
-    subscriptions = resp.json()
-    _logger.debug("Got web services response:\n %s", pformat(subscriptions))
-    if subscriptions:
-        events = {e["type"]: parse_ws_date(e["ts"]) for e in subscriptions[0]["events"]}
-        dt = datetime(date.year, date.month, date.day, hour=hour)
-        if "optin" not in events or events["optin"] >= dt:
-            return False
-        if "optout" in events and events["optout"] < dt:
-            return False
-        return True
-
-
 def coop_ws_optin(
-    base_url, campaign_ref, customer_key, date, tz, hour=9, silent_double_optin=True
+    base_url,
+    campaign_ref,
+    customer_key,
+    reason,
+    date,
+    tz,
+    hour=9,
+    silent_double_optin=True,
 ):
     "Query the cooperative web services to insert a new subscription"
 
@@ -128,7 +106,12 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                         )
                         try:
                             coop_ws_optin(
-                                url, campaign.name, identifier, date, partner.tz
+                                url,
+                                campaign.name,
+                                identifier,
+                                contract.name,
+                                date,
+                                partner.tz,
                             )
                         except requests.HTTPError as exc:
                             # Try to handle double-optin nicely
@@ -178,6 +161,14 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                     "commown_cooperative_campaign.base_url"
                 )
 
-                result = coop_ws_query(url, campaign.name, identifier, date)
+                date_time = pytz.UTC.localize(
+                    datetime(date.year, date.month, date.day, 12)
+                )
+                result = coop_ws_subscribed(
+                    url,
+                    campaign.name,
+                    identifier,
+                    date_time=date_time,
+                )[identifier]
 
         return result
