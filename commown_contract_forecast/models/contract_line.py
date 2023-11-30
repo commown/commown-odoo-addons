@@ -56,7 +56,7 @@ class ContractLine(models.Model):
     @api.multi
     def generate_forecast_periods(self):
         "Don't generate forecasts when creating a contract from sale in product_rental"
-        if not "contract_descr" in self.env.context:
+        if "contract_descr" not in self.env.context:
             for contract_line in self:
                 if contract_line.contract_id.company_id.enable_contract_forecast:
                     contract_line.with_delay(
