@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, api, fields, models
+from odoo import _, api, models
 
 from odoo.addons.mail.models.mail_template import format_amount, mako_template_env
 
@@ -51,12 +51,6 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    name = fields.Text(
-        compute="_recompute_name",
-        inverse=lambda self: None,  # Make it updatable through the UI despite compute
-        store=True,
-    )
-
     def display_rental_price(self, amount=None):
         """Format current line's product rental price in the order partner's language
         or given amount if specified.
@@ -85,35 +79,24 @@ class SaleOrderLine(models.Model):
         unit = rtypes[ct.commitment_period_type].lower()
         return "%d %s" % (ct.commitment_period_number, unit)
 
-    @api.depends("price_unit", "product_id")
-    def _recompute_name(self):
-        """Update the name (=description) on price_unit and product change if
-        it is a jinja template.
+    def _render_product_templated_descr(self):
+        self.ensure_one()
+        descr = self.get_sale_order_line_multiline_description_sale(self.product_id)
+        return mako_template_env.from_string(descr).render(
+            {"record": self.with_context(lang=self.order_partner_id.lang)}
+        )
 
-        In the v12 backend UI this is far from perfect, as the
-        description is first loaded when the product is set but the
-        price is not yet computed so the loaded description is wrong
-        at first, but then correct.
+    @api.onchange("price_unit", "product_id")
+    def _onchange_recompute_name(self):
+        "Called by UI on listed field change"
+        if self.product_id.description_sale_is_template:
+            self.name = self._render_product_templated_descr()
 
-        We use a computed field here to make sure the name is updated
-        when using the `write` method too. A simple use case that
-        defeats other approaches is a user that puts a templated
-        description_sale product in its basket.
-        """
-        for record in self:
-            descr = False
-
-            product = record.product_id
-            if product:
-                descr = record.get_sale_order_line_multiline_description_sale(product)
-
-                if product.description_sale_is_template:
-                    descr = mako_template_env.from_string(descr).render(
-                        {
-                            "record": record.with_context(
-                                lang=record.order_partner_id.lang
-                            )
-                        }
-                    )
-
-            record.name = descr
+    @api.multi
+    def write(self, vals):
+        result = super().write(vals)
+        if (
+            "price_unit" in vals or "product_id" in vals
+        ) and self.product_id.description_sale_is_template:
+            self.name = self._render_product_templated_descr()
+        return result

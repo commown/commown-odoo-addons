@@ -19,17 +19,17 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         prefix = so_line.product_id.display_name + "\n"
 
         pt.description_sale = "${record.display_rental_price()}"
-        so_line._recompute_name()
+        so_line.price_unit = 20
 
         company_currency = self.env["res.company"].browse(1).currency_id.name
         expected = {
-            "EUR": "30.00 € excl. taxes Monthly",
-            "USD": "$ excl. taxes\xa030.00 Monthly",
+            "EUR": "10.00 € excl. taxes Monthly",
+            "USD": "$ excl. taxes\xa010.00 Monthly",
         }
         self.assertEqual(so_line.name, prefix + expected[company_currency])
 
         pt.description_sale = "${record.display_commitment_duration()}"
-        so_line._recompute_name()
+        so_line._onchange_recompute_name()
         self.assertEqual(so_line.name, prefix + "12 month(s)")
 
     def test_action_quotation_send(self):
