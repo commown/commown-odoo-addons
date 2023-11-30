@@ -1,5 +1,3 @@
-from datetime import date
-
 from dateutil.relativedelta import relativedelta
 
 from odoo import tools
@@ -8,6 +6,8 @@ from odoo.tests.common import at_install, post_install
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 from odoo.addons.queue_job.tests.common import trap_jobs
+
+from .common import fake_today
 
 
 @at_install(False)
@@ -65,9 +65,8 @@ class CommownContractForecastFunctionalTC(RentalSaleOrderTC):
         contract_lines = contracts.mapped("contract_line_ids")
 
         # Check forecasts get created on contract real start
-        new_date_start = date.today()
         with trap_jobs() as trap:
-            contracts.update({"date_start": new_date_start})
+            contracts.update({"date_start": fake_today()})
 
         self.assertEqual(len(trap.enqueued_jobs), len(contract_lines))
         trap.perform_enqueued_jobs()
