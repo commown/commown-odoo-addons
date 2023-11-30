@@ -13,7 +13,7 @@ class ContractTemplateLine(models.Model):
             clines = self.env["contract.line"].search(
                 [
                     ("contract_template_line_id", "in", self.ids),
-                    ("date_start", ">=", "TODAY"),
+                    ("date_start", "<=", "TODAY"),
                     "|",
                     ("date_end", "=", False),
                     ("date_end", ">", "TODAY"),
