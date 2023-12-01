@@ -272,11 +272,6 @@ msgid "In Progress"
 msgstr "En cours"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_type
-msgid "Is storable primary or secondary"
-msgstr "Le produit stockable est primaire ou secondaire"
-
-#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard____last_update
