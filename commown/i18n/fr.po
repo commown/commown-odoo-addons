@@ -1,15 +1,16 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* commown
+# 	* commown
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-04 19:53+0000\n"
-"PO-Revision-Date: 2023-06-04 19:53+0000\n"
+"POT-Creation-Date: 2023-12-02 15:51+0000\n"
+"PO-Revision-Date: 2023-12-03 14:31+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -17,84 +18,121 @@ msgstr ""
 
 #. module: commown
 #: model:mail.template,body_html:commown.mail_template_issue_reminder
-msgid "\n"
+msgid ""
+"\n"
 "<div>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object.partner_id.firstname},</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object."
+"partner_id.firstname},</p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Pas de nouvelles, bonnes nouvelles&nbsp;?&nbsp;&nbsp;;-)</p>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Pas de nouvelles, "
+"bonnes nouvelles&nbsp;?&nbsp;&nbsp;;-)</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
 "    En effet, nous faisons suite à nos précédents échanges\n"
 "    d’assistance et conseil, pour lesquels nous n’avons pas reçu\n"
 "    d’autres retours de votre part à ce jour.\n"
 "  </p>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
 "    C’est peut-être tout à fait normal, et nous supposons que\n"
 "    l’incident est bien résolu&nbsp;! Nous nous permettrons donc de\n"
 "    vous envoyer un questionnaire de satisfaction dans les prochains\n"
 "    jours.\n"
 "  </p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
 "    Belle journée&nbsp;!\n"
 "  </p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown qui reste à votre écoute.</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown qui "
+"reste à votre écoute.</p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
 "    NB&nbsp;: Bien entendu, si ce n’est pas le cas, contactez-nous au plus\n"
 "    vite en répondant directement à ce message…\n"
 "  </p>\n"
 "</div>\n"
-""
-msgstr "\n"
+msgstr ""
+"\n"
 "<div>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object.partner_id.firstname or \"\"},</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object."
+"partner_id.firstname or \"\"},</p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"  Ceci est un mail envoyé automatiquement car vous avez une demande d'assistance ouverte dans votre espace Commown et nous n'avons plus de nouvelles depuis quelques jours. \n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  Ceci est un mail envoyé automatiquement car vous avez une demande "
+"d'assistance ouverte dans votre espace Commown et nous n'avons plus de "
+"nouvelles depuis quelques jours. \n"
 "  </p>\n"
 "  \n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"  	Si vous avez simplement besoin de plus de temps pour nous répondre ou si certains points ne sont pas clairs, n'hésitez pas à nous le dire par retour de mail. \n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  \tSi vous avez simplement besoin de plus de temps pour nous répondre ou si "
+"certains points ne sont pas clairs, n'hésitez pas à nous le dire par retour "
+"de mail. \n"
 "  </p>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"  	Si au contraire tout est résolu, vous n'avez rien à faire, un questionnaire de satisfaction vous sera envoyé automatiquement dans les prochains jours.\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  \tSi au contraire tout est résolu, vous n'avez rien à faire, un "
+"questionnaire de satisfaction vous sera envoyé automatiquement dans les "
+"prochains jours.\n"
 "  </p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
 "    Belle journée&nbsp;!\n"
 "  </p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown qui reste à votre écoute.</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown qui "
+"reste à votre écoute.</p>\n"
 "  <br>\n"
-"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"> NB : Même après résolution du problème et fermeture du ticket, vous pouvez répondre directement à ce message pour réactiver à tout moment&nbsp;le sujet lié à cette demande d'assistance. Pour tout autre sujet nous vous invitons à passer par votre Support dédié (Mon Espace -&gt; Contactez-nous). </p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"> NB : Même après "
+"résolution du problème et fermeture du ticket, vous pouvez répondre "
+"directement à ce message pour réactiver à tout moment&nbsp;le sujet lié à "
+"cette demande d'assistance. Pour tout autre sujet nous vous invitons à "
+"passer par votre Support dédié (Mon Espace -&gt; Contactez-nous). </p>\n"
 "</div>\n"
-""
 
 #. module: commown
 #: model:mail.template,body_html:commown.mail_template_lead_start_error
-msgid "\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Error is: ${object.env.context.get('error', 'Unknown!')}</p>\n"
-""
-msgstr "\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Error is: ${object.env.context.get('error', 'Unknown!')}</p>\n"
-""
+msgid ""
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Error is: ${object."
+"env.context.get('error', 'Unknown!')}</p>\n"
+msgstr ""
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Error is: ${object."
+"env.context.get('error', 'Unknown!')}</p>\n"
 
 #. module: commown
 #: model:mail.template,body_html:commown.email_send_invoice_from_contract
-msgid "\n"
+msgid ""
+"\n"
 "<p>Bonjour ${object.partner_id.firstname},</p>\n"
 "<br/>\n"
 "<p>Votre facture <strong>${object.number}</strong>\n"
 "% if object.origin:\n"
 "(référence : ${object.origin} )\n"
 "% endif\n"
-"d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre espace Commown.</p>\n"
+"d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</"
+"strong> est disponible dans votre espace Commown.</p>\n"
 "\n"
 "<br><br>\n"
 "<div>\n"
 "  <center>\n"
-"    <a href=\"https://shop.commown.fr/my/invoices\" style=\"background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;\" title=\"\">Accéder à mes factures</a>\n"
+"    <a href=\"https://shop.commown.fr/my/invoices\" style=\"background-"
+"color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-"
+"radius: 5px; font-size: 16px;\" title=\"\">Accéder à mes factures</a>\n"
 "  </center>\n"
 "</div>\n"
 "\n"
@@ -113,49 +151,73 @@ msgid "\n"
 "<div>\n"
 "  <div>L'équipe Commown<br></div>\n"
 "</div>\n"
-""
-msgstr "\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object.partner_id.firstname},</p>\n"
+msgstr ""
+"\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object."
+"partner_id.firstname},</p>\n"
 "<br>\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Votre facture <strong style=\"font-weight:bold;\">${object.number}</strong>\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Votre facture <strong "
+"style=\"font-weight:bold;\">${object.number}</strong>\n"
 "% if object.origin:\n"
 "(contrat : ${object.origin} )\n"
 "% endif\n"
-"d'un montant de <strong style=\"font-weight:bold;\">${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre <a href=\"https://shop.commown.coop/my/invoices\" target=\"_blank\" style=\"text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;\">Espace Personnel</a> en ligne Commown.</p>\n"
+"d'un montant de <strong style=\"font-weight:bold;\">${object.amount_total} "
+"${object.currency_id.symbol}</strong> est disponible dans votre <a href="
+"\"https://shop.commown.coop/my/invoices\" target=\"_blank\" style=\"text-"
+"decoration-thickness:auto;color:rgb(124, 123, 173);background-color:"
+"transparent;\">Espace Personnel</a> en ligne Commown.</p>\n"
 "\n"
 "<br><br>\n"
 "<div>\n"
 "  <center>\n"
-"    <a href=\"https://shop.commown.fr/my/invoices\" style=\"text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;\" title=\"\">Accéder à mes factures</a>\n"
+"    <a href=\"https://shop.commown.fr/my/invoices\" style=\"text-decoration-"
+"thickness:auto;color:rgb(124, 123, 173);background-color: #1abc9c; padding: "
+"20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: "
+"16px;\" title=\"\">Accéder à mes factures</a>\n"
 "  </center>\n"
 "</div>\n"
 "\n"
 "<br><br>\n"
 "\n"
-"&nbsp;<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cette facture est payée par prélèvement automatique.</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"><br></p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Coopérativement,</p>\n"
+"&nbsp;<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;"
+"Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cette facture "
+"est payée par prélèvement automatique.</p><p style=\"margin:0px 0px 9px 0px;"
+"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, "
+"Arial, sans-serif;\"><br></p><p style=\"margin:0px 0px 9px 0px;font-"
+"size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, "
+"sans-serif;\">Coopérativement,</p>\n"
 "\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p>\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p>\n"
 "\n"
 "<div>\n"
 "  <div>L'équipe Commown<br></div>\n"
 "</div>\n"
-""
 
 #. module: commown
 #: model:mail.template,body_html:commown.sms_template_issue_reminder
-msgid "\n"
-"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.</p>\n"
-""
-msgstr "\n"
-"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.</p><p>L'équipe Commown</p>\n"
-""
+msgid ""
+"\n"
+"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés "
+"sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la "
+"clore.</p>\n"
+msgstr ""
+"\n"
+"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés "
+"sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la "
+"clore.</p><p>L'équipe Commown</p>\n"
 
 #. module: commown
 #: model:mail.template,body_html:commown.sms_template_lead_doc_reminder
-msgid "\n"
-"Rappel finalisation de votre commande : Pensez à mettre vos documents en ligne svp !\n"
-""
-msgstr "Rappel finalisation de votre commande : Pensez à mettre vos documents en ligne svp !\n"
+msgid ""
+"\n"
+"Rappel finalisation de votre commande : Pensez à mettre vos documents en "
+"ligne svp !\n"
+msgstr ""
+"Rappel finalisation de votre commande : Pensez à mettre vos documents en "
+"ligne svp !\n"
 "--\n"
 "L'équipe Commown - contact@commown.coop"
 
@@ -166,8 +228,12 @@ msgstr "<b>Article indisponible pour le moment</b>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
-msgid "<em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société par Actions Simplifiée</em>"
-msgstr "<em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société par Actions Simplifiée</em>"
+msgid ""
+"<em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une "
+"Société Anonyme</em>"
+msgstr ""
+"<em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une "
+"Société Anonyme</em>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -176,18 +242,27 @@ msgstr "<em>SIREN 828 811 489</em>"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
-msgid "<font style=\"font-size: 14px;\">Le processus vous demandera de vous connecter à votre espace Commown avec les   </font>"
-msgstr "<font style=\"font-size: 14px;\">Le processus vous demandera de vous connecter à votre espace Commown avec les   </font>"
+msgid ""
+"<font style=\"font-size: 14px;\">Le processus vous demandera de vous "
+"connecter à votre espace Commown avec les   </font>"
+msgstr ""
+"<font style=\"font-size: 14px;\">Le processus vous demandera de vous "
+"connecter à votre espace Commown avec les   </font>"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
-msgid "<font style=\"font-size: 14px;\">              identifiants choisis lors de votre commande.</font>"
-msgstr "<font style=\"font-size: 14px;\">              identifiants choisis lors de votre commande.</font>"
+msgid ""
+"<font style=\"font-size: 14px;\">              identifiants choisis lors de "
+"votre commande.</font>"
+msgstr ""
+"<font style=\"font-size: 14px;\">              identifiants choisis lors de "
+"votre commande.</font>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
 msgid "<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">ID card</span>"
-msgstr "<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Carte d'identité</span>"
+msgstr ""
+"<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Carte d'identité</span>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
@@ -197,8 +272,12 @@ msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
 #. module: commown
 #: code:addons/commown/models/sale_order.py:28
 #, python-format
-msgid "<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
-msgstr "<p><b>N° de commande :</b> {sale_name}</p><p><b>Date de la commande :</b> {date.day}-{date.month}-{date.year}</p><p><b>Article :</b> {product_name}</p>"
+msgid ""
+"<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date."
+"month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
+msgstr ""
+"<p><b>N° de commande :</b> {sale_name}</p><p><b>Date de la commande :</b> "
+"{date.day}-{date.month}-{date.year}</p><p><b>Article :</b> {product_name}</p>"
 
 #. module: commown
 #: model:ir.model,name:commown.model_coupon_campaign
@@ -236,19 +315,19 @@ msgid "Accueil"
 msgstr "Accueil"
 
 #. module: commown
-#: model:project.task.type,name:commown.investment_followup_start_stage
-msgid "Acompte 10% Reçu"
-msgstr "Acompte 10% Reçu Web"
-
-#. module: commown
 #: model:ir.model,name:commown.model_payment_token_uniquify_obsolescence_action
 msgid "Action to be taken when a payment token becomes obsolete"
-msgstr ""
+msgstr "Action à exécuter quand un mandat de paiement devient obsolète"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment
 msgid "Adresse de livraison"
 msgstr "Adresse de livraison"
+
+#. module: commown
+#: model:project.task.type,name:commown.investment_followup_start_stage
+msgid "Advance payment 10% Web receipt"
+msgstr "Acompte 10% Reçu Web"
 
 #. module: commown
 #: model:product.public.category,name:commown.categ_de
@@ -261,9 +340,19 @@ msgid "Analytic tags"
 msgstr "Étiquettes analytiques"
 
 #. module: commown
+#: model:ir.model,name:commown.model_ir_attachment
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+#. module: commown
 #: model:ir.model,name:commown.model_account_bank_statement
 msgid "Bank Statement"
 msgstr "Relevé bancaire"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Base de connaissance Commown"
+msgstr "Base de connaissance Commown"
 
 #. module: commown
 #: model:project.task.type,legend_blocked:commown.investment_followup_start_stage
@@ -287,8 +376,12 @@ msgstr "Commown : Votre demande d'assistance se languit de vous !"
 
 #. module: commown
 #: model:mail.template,report_name:commown.email_send_invoice_from_contract
-msgid "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
-msgstr "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
+msgid ""
+"Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == "
+"'draft' and 'draft' or ''}"
+msgstr ""
+"Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == "
+"'draft' and 'draft' or ''}"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.address
@@ -381,25 +474,36 @@ msgid "Display Name"
 msgstr "Nom affiché"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Documentation - Tutoriels"
+msgstr "Documentation - Tutoriels"
+
+#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
 #: model_terms:ir.ui.view,arch_db:commown.view_partner_form
 msgid "Documents"
 msgstr "Documents"
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.sale_order_portal_content
-msgid "Documents sent by email"
-msgstr "Documents envoyés par courrier électronique"
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
-msgid "En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance des"
-msgstr "En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance des"
+msgid ""
+"En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance "
+"des"
+msgstr ""
+"En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance "
+"des"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
-msgid "En cliquant sur \"Valider et payer\", je reconnais avoir pris connaissance des"
-msgstr ""
+msgid ""
+"En cliquant sur \"Valider et payer\", je reconnais avoir pris connaissance "
+"des"
+msgstr "En cliquant sur \"Valider et payer\", je reconnais avoir pris connaissance des"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Entraide - Communauté"
+msgstr "Entraide - Communauté"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -434,6 +538,11 @@ msgid "First name"
 msgstr "Prénom"
 
 #. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Forum Commown"
+msgstr "Forum Commown"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_account_move_line__full_reconcile_id
 msgid "Full Reconcile"
 msgstr "Lettrage complet"
@@ -442,6 +551,11 @@ msgstr "Lettrage complet"
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__income_exchange_account_id
 msgid "Gain Exchange Rate Account"
 msgstr "Compte de gain de change"
+
+#. module: commown
+#: model:ir.model,name:commown.model_ir_http
+msgid "HTTP Routing"
+msgstr "Routage HTTP"
 
 #. module: commown
 #: selection:project.task,priority:0
@@ -475,7 +589,7 @@ msgstr "En cours"
 #: code:addons/commown/controllers/payment_slimpay.py:58
 #, python-format
 msgid "Incoherent transaction/token partners"
-msgstr ""
+msgstr "Partenaires de transaction/ transaction incohérents"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_task__internal_followup
@@ -490,6 +604,12 @@ msgid "Invoice"
 msgstr "Facture"
 
 #. module: commown
+#: model:ir.model.fields,field_description:commown.field_product_product__is_user_lang_fr
+#: model:ir.model.fields,field_description:commown.field_product_template__is_user_lang_fr
+msgid "Is User Lang Fr"
+msgstr "Langue utilisateur est Français ?"
+
+#. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__journal_id
 msgid "Journal"
 msgstr "Journal"
@@ -500,17 +620,14 @@ msgid "Journal Item"
 msgstr "Écriture comptable"
 
 #. module: commown
-#: model:project.task.type,description:commown.investment_followup_start_stage
-msgid "La carte se crée ici lorsqu'un investisseur fait une commande en ligne de 10%.\n"
-"Dès qu'il a mis en ligne sa pièce d'identité on passe la carte dans la colonne suivante pour demander le solde (mail auto)."
-msgstr "La carte se crée ici lorsqu'un investisseur fait une commande en ligne de 10%.\n"
-"Dès qu'il a mis en ligne sa pièce d'identité on passe la carte dans la colonne suivante pour demander le solde (mail auto)."
-
-#. module: commown
 #: model:ir.model.fields,help:commown.field_contract_contract__transaction_label
 #: model:ir.model.fields,help:commown.field_contract_template__transaction_label
-msgid "Label to be used for the bank payment. Possible markers: #START#, #END#, #INV# (invoice number)"
-msgstr "Libellé du paiement bancaire. Marqueurs utilisables : #START#, #END#, #INV# (numéro de facture)"
+msgid ""
+"Label to be used for the bank payment. Possible markers: #START#, #END#, "
+"#INV# (invoice number)"
+msgstr ""
+"Libellé du paiement bancaire. Marqueurs utilisables : #START#, #END#, #INV# "
+"(numéro de facture)"
 
 #. module: commown
 #: model:ir.model,name:commown.model_res_lang
@@ -541,9 +658,11 @@ msgstr "Nom"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.short_cart_summary
-msgid "Le règlement se fait par prélèvement bancaire. Pour finaliser\n"
+msgid ""
+"Le règlement se fait par prélèvement bancaire. Pour finaliser\n"
 "        la demande, vous aurez donc besoin de l'IBAN de votre compte."
-msgstr "Le règlement se fait par prélèvement bancaire. Pour finaliser\n"
+msgstr ""
+"Le règlement se fait par prélèvement bancaire. Pour finaliser\n"
 "        la demande, vous aurez donc besoin de l'IBAN de votre compte."
 
 #. module: commown
@@ -615,7 +734,9 @@ msgstr "Message à la ligne de commande de vente"
 #. module: commown
 #: model:ir.model,name:commown.model_utm_commown_utils_mixin
 msgid "Mixin for utm classes, to easily merge/ safely remove them"
-msgstr "Mixin pour les classes utm, pour les fusionner et les effacer en toute sécurité"
+msgstr ""
+"Mixin pour les classes utm, pour les fusionner et les effacer en toute "
+"sécurité"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
@@ -663,6 +784,16 @@ msgid "Nous suivre"
 msgstr "Nous suivre"
 
 #. module: commown
+#: model:crm.stage,name:commown.parcel_preparation_stage
+msgid "Package preparation"
+msgstr "Préparation colis"
+
+#. module: commown
+#: model:account.payment.term,name:commown.investment_payment_term
+msgid "Paiement immédiat 10% prélèvement auto + Solde virement"
+msgstr "Paiement immédiat 10% prélèvement auto + Solde virement"
+
+#. module: commown
 #: model:ir.model,name:commown.model_account_partial_reconcile
 msgid "Partial Reconcile"
 msgstr "Lettrage partiel"
@@ -691,12 +822,25 @@ msgstr "Merci de saisir un n° de TVA valide"
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
 msgid "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
-msgstr "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
+msgstr ""
+"Pour aller au bout du processus, munissez vous des éléments ci-dessous."
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid ""
+"Pour contacter l'équipe parcourez la section \"Auto-dépannage\" à gauche."
+msgstr "Pour contacter l'équipe parcourez la section \"Auto-dépannage\" à gauche."
 
 #. module: commown
 #: model:product.template,description_sale:commown.sepa_mandate
-msgid "Pour créer le mandat SEPA et le valider, ce processus vous guide dans la signature du mandat en ligne et un premier paiement de test d'une valeur de 1 centime."
-msgstr "Pour créer un mandat SEPA et le valider, ce processus vous guide dans la signature du mandat en ligne et un premier paiement de test d'une valeur de 1 centime."
+msgid ""
+"Pour créer le mandat SEPA et le valider, ce processus vous guide dans la "
+"signature du mandat en ligne et un premier paiement de test d'une valeur de "
+"1 centime."
+msgstr ""
+"Pour créer un mandat SEPA et le valider, ce processus vous guide dans la "
+"signature du mandat en ligne et un premier paiement de test d'une valeur de "
+"1 centime."
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_task__priority
@@ -721,11 +865,6 @@ msgid "Proof of address"
 msgstr "Justificatif de domicile"
 
 #. module: commown
-#: model:crm.stage,name:commown.parcel_preparation_stage
-msgid "Préparation colis"
-msgstr "Préparation colis"
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
 msgid "Qui sommes-nous ?"
 msgstr "Qui sommes-nous ?"
@@ -738,17 +877,28 @@ msgstr "Prêt pour l'étape suivante"
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Reattribute contracts"
-msgstr ""
+msgstr "Réattribution des contacts"
 
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Reattribute draft contract invoices"
-msgstr ""
+msgstr "Réattribution des factures de contrats en brouillon"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid ""
+"Rejoignez la communauté pour résoudre vos problèmes, échanger des astuces..."
+msgstr "Rejoignez la communauté pour résoudre vos problèmes, échanger des astuces..."
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_mass_reconcile_simple_partner_commown__partner_ids
 msgid "Restrict on partners"
 msgstr "Filtrer sur des partenaires"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Retrouvez nos tutoriels et toute la documentation de Commown..."
+msgstr "Retrouvez nos tutoriels et toute la documentation de Commown..."
 
 #. module: commown
 #: model:ir.model,name:commown.model_sale_order
@@ -758,7 +908,8 @@ msgstr "Commande"
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.optional_product_items
 msgid "See details in a new window <i class=\"fa fa-external-link\"/>"
-msgstr "Voir les détails dans une nouvelle fenêtre <i class=\"fa fa-external-link\"/>"
+msgstr ""
+"Voir les détails dans une nouvelle fenêtre <i class=\"fa fa-external-link\"/>"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
@@ -768,7 +919,7 @@ msgstr "Voir les détails du produit"
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Set partner invoice merge preferences"
-msgstr ""
+msgstr "Paramétrage des préférences de fusion de factures du partenaire"
 
 #. module: commown
 #: model:ir.model.fields,field_description:commown.field_project_project__show_internal_followup
@@ -778,8 +929,12 @@ msgstr "Afficher le suivi interne"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
-msgid "Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans votre espace Commown, ce sera l'occasion."
-msgstr "Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans votre espace Commown, ce sera l'occasion."
+msgid ""
+"Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans "
+"votre espace Commown, ce sera l'occasion."
+msgstr ""
+"Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans "
+"votre espace Commown, ce sera l'occasion."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
@@ -813,28 +968,61 @@ msgid "Technical name"
 msgstr "Nom technique"
 
 #. module: commown
+#: model:project.task.type,description:commown.investment_followup_start_stage
+msgid ""
+"The card is created here when an investor places an online order for 10%.\n"
+"As soon as we have checked if the amount of the investment is really the one "
+"displayed (!! with the trap of the quantities, we have to go to the Purchase "
+"Order as long as Florent has not added the field \"total of the order line\" "
+"in the card), we pass the card in the following column (ID dunning and 90% "
+"balance request (auto mail)."
+msgstr ""
+"La carte se crée ici lorsqu'un investisseur fait une commande en ligne de 10%.\n"
+"Dès qu'on a vérifié si le montant de l'investissement est bien celui affiché (!! au piège des quantités, il faut aller dans le Bon de Commande tant que Florent n'aura pas rajouté le champ \"total de la ligne de commande\" dans la carte), on passe la carte dans la colonne suivante (relance ID et demande de solde 90% (mail auto)."
+
+#. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner__company_record
 #: model:ir.model.fields,help:commown.field_res_users__company_record
-msgid "This field holds a file to store a company record. Images are resized to 1240x1754 and, all files are limited to 5Mo."
-msgstr "Ce champ contient un fichier de stockage du K-bis ou similaire. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+msgid ""
+"This field holds a file to store a company record. Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage du K-bis ou similaire. Les images "
+"seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont "
+"limités à 5Mo."
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner__proof_of_address
 #: model:ir.model.fields,help:commown.field_res_users__proof_of_address
-msgid "This field holds a file to store a proof of address. Images are resized to 1240x1754 and, all files are limited to 5Mo."
-msgstr "Ce champ contient un fichier de stockage du justificatif de domicile. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+msgid ""
+"This field holds a file to store a proof of address. Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage du justificatif de domicile. Les "
+"images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés "
+"sont limités à 5Mo."
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner__id_card2
 #: model:ir.model.fields,help:commown.field_res_users__id_card2
-msgid "This field holds a file to store the ID card (2). Images are resized to 1240x1754 and, all files are limited to 5Mo."
-msgstr "Ce champ contient un fichier de stockage complémentaire pour la carte d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+msgid ""
+"This field holds a file to store the ID card (2). Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage complémentaire pour la carte "
+"d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les "
+"fichiers stockés sont limités à 5Mo."
 
 #. module: commown
 #: model:ir.model.fields,help:commown.field_res_partner__id_card1
 #: model:ir.model.fields,help:commown.field_res_users__id_card1
-msgid "This field holds a file to store the ID card. Images are resized to 1240x1754 and, all files are limited to 5Mo."
-msgstr "Ce champ contient un fichier de stockage pour la carte d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont limités à 5Mo."
+msgid ""
+"This field holds a file to store the ID card. Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage pour la carte d'identité. Les "
+"images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés "
+"sont limités à 5Mo."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_invoices
@@ -878,9 +1066,12 @@ msgstr "TVA"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
-msgid "Valider et payer\n"
-"              <span class=\"fa fa-long-arrow-right\"/>"
+msgid ""
+"Valider et payer \n"
+"            <span class=\"fa fa-long-arrow-right\"/>"
 msgstr ""
+"Valider et payer \n"
+"            <span class=\"fa fa-long-arrow-right\"/>"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
@@ -894,9 +1085,11 @@ msgstr "Vous devrez entrer l'IBAN de votre compte pour créer le mandat."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
-msgid "Vous serez redirigé·e vers un formulaire de signature de mandat\n"
+msgid ""
+"Vous serez redirigé·e vers un formulaire de signature de mandat\n"
 "        SEPA (Slimpay), sauf si vous êtes déjà client."
-msgstr "Vous serez redirigé·e vers un formulaire de signature de mandat\n"
+msgstr ""
+"Vous serez redirigé·e vers un formulaire de signature de mandat\n"
 "        SEPA (Slimpay), sauf si vous êtes déjà client."
 
 #. module: commown
@@ -948,7 +1141,8 @@ msgstr "[commown] Le délai après le rappel de l'incident a expiré"
 #: model:base.automation,name:commown.manual_issue_waiting_for_too_long
 #: model:base.automation,name:commown.sending_pieces_issue_waiting_for_too_long
 #: model:ir.actions.server,name:commown.action_move_issue_to_stop_waiting_stage
-msgid "[commown] Delay waiting for the customer to return the hardware back expired"
+msgid ""
+"[commown] Delay waiting for the customer to return the hardware back expired"
 msgstr "[commown] Le délai d'attente du retour du matériel a expiré"
 
 #. module: commown
@@ -995,7 +1189,8 @@ msgstr "[commown] Envoyer un SMS de rappel"
 #. module: commown
 #: model:ir.actions.server,name:commown.action_send_issue_reminder_email
 msgid "[commown] Send a reminder email concerning an issue"
-msgstr "[commown] Envoyer un courriel de rappel concernant une demande d'assistance"
+msgstr ""
+"[commown] Envoyer un courriel de rappel concernant une demande d'assistance"
 
 #. module: commown
 #: model:ir.actions.server,name:commown.manual_issue_waiting_for_too_long_ir_actions_server
@@ -1009,11 +1204,13 @@ msgstr "[commown] Le temps d'attente d'une réponse du client a expiré"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
 msgid "conditions de services et informations légales"
 msgstr "conditions de services et informations légales"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
 msgid "et je les accepte."
 msgstr "et je les accepte."
 
@@ -1024,13 +1221,21 @@ msgstr "kg"
 
 #. module: commown
 #: model:mail.template,subject:commown.sms_template_lead_doc_reminder
-msgid "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
-msgstr "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
+msgid ""
+"mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
+"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
+msgstr ""
+"mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
+"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
 
 #. module: commown
 #: model:mail.template,subject:commown.sms_template_issue_reminder
-msgid "mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
-msgstr "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
+msgid ""
+"mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id."
+"mobile or object.partner_id.phone).split()).replace('+', '')}"
+msgstr ""
+"mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
+"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
 
 #. module: commown
 #: model:ir.model,name:commown.model_mass_reconcile_simple_partner_commown
@@ -1041,4 +1246,3 @@ msgstr "mass.reconcile.simple.partner_commown"
 #: model:ir.model,name:commown.model_account_mass_reconcile_method
 msgid "reconcile method for account_mass_reconcile"
 msgstr "Méthode de lettrage"
-
