@@ -23,6 +23,16 @@ _PROPERTY_ACCOUNT_DATA = {
     },
 }
 
+_PAYMENT_PREF_FIELDS = {
+    "invoice_merge_next_date",
+    "invoice_merge_recurring_rule_type",
+    "invoice_merge_recurring_interval",
+}
+
+_PAYMENT_FIELDS = _PAYMENT_PREF_FIELDS | {"payment_token_id"}
+
+_SYNC_CTX = "partner_payment_fields_sync"
+
 
 class FileTooBig(Exception):
     def __init__(self, field, msg):
@@ -167,10 +177,25 @@ class CommownPartner(models.Model):
         self._apply_bin_field_size_policy(vals)
         result = super(CommownPartner, self).create(vals)
 
+        if result.type == "invoice" and result.parent_id:
+            result.parent_id._copy_payment_fields_to_invoice_children()
+
         if result.supplier:
             result._create_payable_account()
 
         return result
+
+    def _copy_payment_fields_to_invoice_children(self):
+        self.ensure_one()
+
+        if self._context.get(_SYNC_CTX, False):
+            return
+
+        _msg = "Syncing payment fields from partner %s (id %d) to its child %s (id %d)"
+        _self = self.with_context(**{_SYNC_CTX: True})
+        for p_inv in _self.child_ids.filtered(lambda p: p.type == "invoice"):
+            _logger.debug(_msg, self.name, self.id, p_inv.name, p_inv.id)
+            p_inv.update({f: self[f] for f in _PAYMENT_FIELDS})
 
     @api.multi
     def write(self, vals):
@@ -180,6 +205,20 @@ class CommownPartner(models.Model):
             old_recv_acc = self.property_account_receivable_id
 
         result = super(CommownPartner, self).write(vals)
+
+        if _PAYMENT_FIELDS.intersection(vals):
+            # Sync payment fields to invoice childs:
+            self._copy_payment_fields_to_invoice_children()
+
+            # If not updating because of above sync, update parent payment fields:
+            if self.type == "invoice" and not self._context.get(_SYNC_CTX, False):
+                debug_msg = (
+                    "Syncing payment fields from partner %s (id %d) to"
+                    " its parent %s (id %d)"
+                )
+                p_parent = self.parent_id
+                _logger.debug(debug_msg, self.name, self.id, p_parent.name, p_parent.id)
+                p_parent.update({f: self[f] for f in _PAYMENT_FIELDS})
 
         if "supplier" in vals and vals["supplier"]:
             self._create_payable_account()
@@ -221,10 +260,4 @@ class CommownPartner(models.Model):
     def reset_payment_token(self):
         "Force the reset on payment preferences on payment token reset"
         super().reset_payment_token()
-        self.update(
-            {
-                "invoice_merge_recurring_rule_type": False,
-                "invoice_merge_recurring_interval": False,
-                "invoice_merge_next_date": False,
-            }
-        )
+        self.update({f: False for f in _PAYMENT_PREF_FIELDS})
