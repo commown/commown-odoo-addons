@@ -6,7 +6,7 @@
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="binding_model_id" ref="stock.model_stock_picking"/>
-    <field name="code">record.action_set_date_done_to_scheduled()</field>
+    <field name="code">records.action_set_date_done_to_scheduled()</field>
   </record>
 
 </odoo>
