@@ -19,6 +19,7 @@
                 <field name="penalty_exemption"/>
                 <field name="stage_id"/>
                 <field name="create_date"/>
+                <button name="get_formview_action" string="Ouvrir" type="object" class="btn-secondary"/>
               </tree>
             </field>
           </group>
