@@ -52,6 +52,7 @@
               <field name="invoice_unpaid_count"/>
               <field name="invoice_next_payment_date"/>
               <field name="create_date" invisible="1"/>
+              <button name="get_formview_action" string="Ouvrir" type="object" class="btn-secondary"/>
             </tree>
           </field>
       </xpath>
