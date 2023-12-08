@@ -5,11 +5,13 @@
     <record model="ir.ui.view" id="view_partner_form">
         <field name="name">res.partner.form</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="inherit_id" ref="contract_payment_auto.view_partner_form"/>
         <field name="arch" type="xml">
+
           <xpath expr="//notebook/page[1]" position="attributes">
             <attribute name="autofocus"></attribute>
           </xpath>
+
           <xpath expr="//notebook/page[1]" position="before">
             <page name="partner_documents" string="Documents" autofocus="autofocus"
                   attrs="{'invisible': [('is_company', '=', True)]}">
@@ -23,7 +25,39 @@
               </group>
             </page>
           </xpath>
+
+          <field name="payment_token_id" position="before">
+            <p colspan="2" attrs="{'invisible': [('type', '!=', 'invoice')]}">
+              Le mandat de paiement est paramétrable sur le partenaire parent et
+              synchronisé automatiquement ici.
+            </p>
+          </field>
+
+          <field name="payment_token_id" position="attributes">
+            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+          </field>
+
+          <field name="invoice_merge_next_date" position="before">
+            <p colspan="2" attrs="{'invisible': [('type', '!=', 'invoice')]}">
+              Les préférences de paiement sont paramétrables sur le partenaire parent et
+              synchronisées automatiquement ici.
+            </p>
+          </field>
+
+          <field name="invoice_merge_next_date" position="attributes">
+            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+          </field>
+
+          <field name="invoice_merge_recurring_rule_type" position="attributes">
+            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+          </field>
+
+          <field name="invoice_merge_recurring_interval" position="attributes">
+            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+          </field>
+
         </field>
+
     </record>
   </data>
 
