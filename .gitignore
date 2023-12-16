@@ -2,3 +2,4 @@ modules_*.po
 */tests/.env
 */tests/odoo.conf
 __pycache__/
+modules_*.po
