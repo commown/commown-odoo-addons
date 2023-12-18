@@ -61,6 +61,20 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
     def check_payment_prefs(self, partner, expected_prefs):
         self.assertEqual({f: partner[f] for f in expected_prefs}, expected_prefs)
 
+    def test_copy_invoice_partner(self):
+        old_inv_partner = self.company_s1_w1.copy(
+            {"type": "invoice", "parent_id": self.company_s1_w1.id}
+        )
+
+        new_token = self._trigger_obsolescence("copy_invoice_partner")
+
+        new_inv_partner = new_token.partner_id.mapped("child_ids")
+        self.assertEqual(new_inv_partner.type, "invoice")
+        self.assertEqual(new_inv_partner.payment_token_id, new_token)
+
+        self.assertFalse(old_inv_partner.active)
+        self.assertTrue(new_inv_partner.active)
+
     def test_reset_payment_token(self):
         "Check that obsolete token deactivation also resets partner payment prefs"
 
@@ -84,29 +98,45 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         )
 
     def test_action_reattribute_contracts(self):
-        # Configure acquirer with contract reattribution and trigger obsolescence:
-        new_token = self._trigger_obsolescence("reattribute_contracts")
+        # Configure acquirer with invoice partner copy and contract reattribution
+        # then trigger obsolescence:
+        self.company_s1_w1.copy({"type": "invoice", "parent_id": self.company_s1_w1.id})
+        new_token = self._trigger_obsolescence(
+            "copy_invoice_partner",
+            "reattribute_contracts",
+        )
 
         # Check the results: the new partner has replaced the old ones as
         # contract partners; the (optional) contracts token has been removed
         # so that the new token is always used for contract automatic payment:
+        p_inv = new_token.partner_id.child_ids
+        self.assertEqual(p_inv.type, "invoice")
+        self.assertEqual(p_inv.payment_token_id, new_token)
         self.assertEqual(self.contract1.partner_id, new_token.partner_id)
-        self.assertEqual(self.contract1.invoice_partner_id, new_token.partner_id)
+        self.assertEqual(self.contract1.invoice_partner_id, p_inv)
         self.assertFalse(self.contract1.payment_token_id)
 
         self.assertEqual(self.contract2.partner_id, new_token.partner_id)
-        self.assertEqual(self.contract2.invoice_partner_id, new_token.partner_id)
+        self.assertEqual(self.contract2.invoice_partner_id, p_inv)
         self.assertFalse(self.contract2.payment_token_id)
 
     def test_action_reattribute_draft_contract_invoices(self):
         # Generate draft invoices (contract isauto_pay is False)
         inv = self.contract1._recurring_create_invoice()
 
-        # Configure acquirer with draft invoices reattribution and trigger obsolescence:
-        new_token = self._trigger_obsolescence("reattribute_draft_contract_invoices")
+        # Configure acquirer with invoice partner copy and draft invoices reattribution
+        # then trigger obsolescence:
+        self.company_s1_w1.copy({"type": "invoice", "parent_id": self.company_s1_w1.id})
+        new_token = self._trigger_obsolescence(
+            "copy_invoice_partner",
+            "reattribute_draft_contract_invoices",
+        )
 
         # Check the results: invoices must have been reattributed to the new partner:
-        self.assertEqual(inv.partner_id, new_token.partner_id)
+        p_inv = new_token.partner_id.child_ids
+        self.assertEqual(p_inv.type, "invoice")
+        self.assertEqual(p_inv.payment_token_id, new_token)
+        self.assertEqual(inv.partner_id, p_inv)
 
     def test_action_set_partner_invoice_merge_prefs_1(self):
         self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-19"))
