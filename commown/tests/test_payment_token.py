@@ -25,7 +25,7 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         self.contract1 = self.new_contract(self.company_s1_w1)
         self.company_s1_w1.payment_token_id = token1.id
 
-        token2 = self.new_payment_token(self.company_s1_w2)
+        token2 = self.new_payment_token(self.company_s1_w2, set_as_partner_token=False)
         self.contract2 = self.new_contract(self.company_s1_w2)
         self.contract2.payment_token_id = token2.id
 
@@ -57,26 +57,6 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
                 ],
             }
         )
-
-    def _trigger_obsolescence(self, *action_refs, **new_partner_kwargs):
-        """Trigger the tested code: a partner of the company creates a new token
-
-        A payment acquirer is used that is first configured to trigger
-        the token obsolescence actions passed as xml refs (without their
-        common prefix).
-        """
-        acquirer = self.env.ref("payment.payment_acquirer_transfer")
-        for action_ref in action_refs:
-            if "." not in action_ref:
-                action_ref = "commown.obsolescence_action_" + action_ref
-            acquirer.obsolescence_action_ids |= self.env.ref(action_ref)
-
-        company_s1_w3 = self.new_worker(self.company_s1, **new_partner_kwargs)
-        cm = self._check_obsolete_token_action_job()
-        with cm:
-            new_token = self.new_payment_token(company_s1_w3, acquirer)
-            cm.gen.send(new_token)
-        return new_token
 
     def check_payment_prefs(self, partner, expected_prefs):
         self.assertEqual({f: partner[f] for f in expected_prefs}, expected_prefs)
