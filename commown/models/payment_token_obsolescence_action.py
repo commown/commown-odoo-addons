@@ -8,6 +8,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
 
     technical_name = fields.Selection(
         selection_add=[
+            ("copy_invoice_partner", "Copy invoice partner"),
             ("reattribute_contracts", "Reattribute contracts"),
             (
                 "reattribute_draft_contract_invoices",
@@ -19,6 +20,17 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
             ),
         ],
     )
+
+    @api.model
+    def _run_action_copy_invoice_partner(self, obsolete_tokens, new_token):
+        """Copy the first invoice partner of the partners of the obsolete tokens.
+        The new invoice partner is added as a child of the new token partner.
+        """
+        children = obsolete_tokens.mapped("partner_id.child_ids")
+        for p_inv in children.filtered(lambda p: p.type == "invoice"):
+            p_inv.copy({"parent_id": new_token.partner_id.id})
+            p_inv.active = False
+            break
 
     @api.model
     def _run_action_reattribute_contracts(self, obsolete_tokens, new_token):
@@ -42,7 +54,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         contracts.update(
             {
                 "partner_id": partner.id,
-                "invoice_partner_id": partner.id,
+                "invoice_partner_id": partner.address_get(["invoice"])["invoice"],
                 "payment_token_id": False,
             }
         )
@@ -55,6 +67,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         to the partner of the new token.
         """
 
+        p_inv_id = new_token.partner_id.address_get(["invoice"])["invoice"]
         self.env["account.invoice"].search(
             [
                 ("type", "=", "out_invoice"),
@@ -62,7 +75,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
                 ("partner_id.payment_token_id", "in", obsolete_tokens.ids),
                 ("invoice_line_ids.contract_line_id", "!=", False),
             ]
-        ).update({"partner_id": new_token.partner_id.id})
+        ).update({"partner_id": p_inv_id})
 
     @api.model
     def _run_action_set_partner_invoice_merge_prefs(self, obsolete_tokens, new_token):
