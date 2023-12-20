@@ -4,8 +4,14 @@ from .common import RentedQuantityTC
 
 
 class ResPartnerTC(RentedQuantityTC):
+    "Test this module's partner methods"
+
     def test_rented_quantity(self):
-        rented_quantity = self.so.partner_id.rented_quantity
+        "Rented quantity must account for contracts of the upper level company"
+        same_company_partner = self.so.partner_id.copy({"name": "Darmanin Autrou"})
+        same_company_partner.action_create_intermediate_company()
+        rented_quantity = same_company_partner.rented_quantity
+
         self.assertEqual(rented_quantity(product_template=self.fp_premium), 1)
         self.assertEqual(rented_quantity(product_template=self.fp2), 1)
         self.assertEqual(rented_quantity(product_category=self.cat_fp), 2)
