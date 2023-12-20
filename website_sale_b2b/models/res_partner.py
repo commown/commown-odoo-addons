@@ -1,7 +1,8 @@
 import logging
 from collections import defaultdict
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__file__)
 
@@ -19,6 +20,25 @@ class ResPartner(models.Model):
     website_id = fields.Many2one(
         help="Website the user can log in. An empty value means all websites."
     )
+
+    @api.multi
+    def action_create_intermediate_company(self):
+        "Create an intermediate company for selected records (useful for french CAEs)"
+
+        erroneous = self.filtered(lambda c: c.is_company or not c.parent_id.is_company)
+        if erroneous:
+            msg = _("Partners not suitable for intermediate company creation:\n- %s")
+            raise UserError(
+                msg % "\n- ".join(f"{c.name} (id {c.id})" for c in erroneous)
+            )
+
+        for record in self:
+            name = _("%(name)s (indep. - %(company_name)s)") % {
+                "name": record.name,
+                "company_name": record.parent_id.name,
+            }
+            new_company = record.copy({"is_company": True, "name": name})
+            record.parent_id = new_company.id
 
     @api.multi
     def rented_quantity(self, product_template=None, product_category=None):
