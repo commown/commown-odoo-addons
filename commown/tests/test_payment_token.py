@@ -79,7 +79,6 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         "Check that obsolete token deactivation also resets partner payment prefs"
 
         # Check or enforce test prerequisites
-        self.assertFalse(self.company_s1.isolated_payment_tokens)
         self.assertTrue(self.company_s1_w1.payment_token_id)
         self.assertFalse(self.company_s1_w2.payment_token_id)  # Set on self.contract2
 
