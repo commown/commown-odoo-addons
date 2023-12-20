@@ -61,16 +61,16 @@ class ResPartner(models.Model):
 
         today = fields.Date.today()
 
+        holding = self.commercial_partner_id
+        while holding.parent_id:
+            holding = holding.parent_id.commercial_partner_id
+
         clines = self.env["contract.line"].search(
             [
                 "|",
                 ("date_end", "=", False),
                 ("date_end", ">", today),
-                (
-                    "contract_id.partner_id.commercial_partner_id",
-                    "=",
-                    self.commercial_partner_id.id,
-                ),
+                ("contract_id.partner_id", "child_of", holding.id),
             ]
         )
 
