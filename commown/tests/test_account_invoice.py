@@ -26,6 +26,28 @@ class AccountInvoiceTC(AutoPayInvoiceTC):
         with patch.object(PaymentTransaction, "s2s_do_transaction", fake_do_tx_ok):
             self._multiple_invoice_merge_test([inv_1, inv_2])
 
+    def test_merge_auto_pay_sends_email(self):
+        p_inv = self.partner_1.copy({"type": "invoice", "parent_id": self.partner_1.id})
+        inv_1 = self.create_invoice(
+            p_inv, "2019-05-09", payment_mode_id=self.payment_mode.id
+        )
+        inv_2 = self.create_invoice(
+            p_inv, "2019-05-10", payment_mode_id=self.payment_mode.id
+        )
+
+        with patch.object(PaymentTransaction, "s2s_do_transaction", fake_do_tx_ok):
+            new_inv = self._multiple_invoice_merge_test([inv_1, inv_2])
+
+        mail = self.env["mail.mail"].search(
+            [
+                ("model", "=", new_inv._name),
+                ("res_id", "=", new_inv.id),
+                ("attachment_ids.res_name", "=", new_inv.display_name),
+                ("attachment_ids.mimetype", "=", "application/pdf"),
+            ]
+        )
+        self.assertTrue(mail)
+
     def test_multiply_investments(self):
         account = self.env.ref("l10n_fr.1_pcg_2751")
         equity = self.env["product.product"].create(
