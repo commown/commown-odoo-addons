@@ -18,7 +18,9 @@
         </xpath>
 
         <xpath expr="//field[@name='description_sale']" position="before">
-          <field name="description_sale_is_template"/>
+          <group name="description_sale_is_template">
+            <field name="description_sale_is_template"/>
+          </group>
         </xpath>
 
       </field>
