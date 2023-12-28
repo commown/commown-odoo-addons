@@ -1,0 +1,14 @@
+<odoo>
+
+  <data>
+
+    <record id="mail_alias" model="mail.alias">
+      <field name="alias_name">slimpay-bot</field>
+      <field name="alias_model_id" ref="model_slimpay_statements_autoimport_statement_import"/>
+      <field name="alias_defaults" eval="{}"/>
+      <field name="alias_contact">everyone</field>
+    </record>
+
+  </data>
+
+</odoo>

@@ -1,0 +1,14 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="slimpay_supplier_account" model="account.account">
+      <field name="name">Slimpay</field>
+      <field name="code">401-F-slimpay</field>
+      <field name="user_type_id" ref="account.data_account_type_payable"/>
+      <field name="reconcile">True</field>
+    </record>
+
+  </data>
+
+</odoo>

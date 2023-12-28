@@ -1,0 +1,19 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="slimpay_journal" model="account.journal">
+      <field name="name">Slimpay bank</field>
+      <field name="code">BQSLM</field>
+      <field name="type">bank</field>
+      <field name="used_for_import">True</field>
+      <field name="import_type">slimpay</field>
+      <field name="create_counterpart">True</field>
+      <field name="commission_account_id" ref="slimpay_supplier_account"/>
+      <field name="receivable_account_id" ref="l10n_fr.1_pcg_5113"/>
+      <field name="partner_id" ref="slimpay_partner"/>
+    </record>
+
+  </data>
+
+</odoo>
