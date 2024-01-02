@@ -1,0 +1,15 @@
+<odoo>
+
+  <record id="reporting" model="ir.cron">
+    <field name="name">Slimpay automatic imports: ask for a reporting</field>
+    <field name="active" eval="True" />
+    <field name="user_id" ref="base.user_root" />
+    <field name="interval_number">1</field>
+    <field name="interval_type">days</field>
+    <field name="numbercall">-1</field>
+    <field name="doall" eval="False" />
+    <field name="model_id" ref="model_slimpay_statements_autoimport_statement_import" />
+    <field name="code">model._cron_reporting()</field>
+  </record>
+
+</odoo>
