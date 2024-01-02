@@ -36,6 +36,8 @@ def _int_or_none(value):
 
 
 class SlimpayParser(FileParser):
+    balance_field = "Nouveau solde"
+
     def __init__(self, journal, ftype="csv", **kwargs):
         self.env = journal.env
         super(SlimpayParser, self).__init__(
@@ -66,7 +68,11 @@ class SlimpayParser(FileParser):
         initial_len = len(self.result_row_list)
         for num, row in enumerate(reversed(self.result_row_list)):
             if not row["CodeOP"]:
+                if row["Nomdebiteur"] == self.balance_field:
+                    self.move_date = _convert_date(row["Datevaleur"])
                 del self.result_row_list[initial_len - num - 1]
+        if self.move_date is None:
+            raise ValueError(_("Couldn't find end balance line in imported statement!"))
         return super()._post(*args, **kwargs)
 
     def _get_partner_id(self, line):
