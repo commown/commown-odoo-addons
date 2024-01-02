@@ -20,6 +20,8 @@ class SlimpayStatementImport(models.Model):
     imported_statement = fields.Many2one("account.move")
 
     def _import_statement(self, fname, fbinary):
+        "Import a Slimpay statement, update the importer, apply some data corrections"
+
         journal = self.env.ref("slimpay_statements_autoimport.slimpay_journal")
         importer = self.env["credit.statement.import"].create(
             {
@@ -32,8 +34,17 @@ class SlimpayStatementImport(models.Model):
             }
         )
         action = importer.import_statement()
+
         self.imported_statement = action.get("res_id", False)
         self.name = self.imported_statement.ref
+
+        # Set date to date_maturity for all imported move lines. Note that date is a
+        # related field to the move's date with store=True, hence the SQL usage:
+        self.env.cr.execute(
+            "UPDATE account_move_line SET date=date_maturity WHERE move_id=%s",
+            (self.imported_statement.id,),
+        )
+        self.imported_statement.env.cache.invalidate()
 
     def fetch_and_import_statement(self):
         "Find the download link in the email, fetch the csv file and import it"

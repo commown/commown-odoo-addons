@@ -1,4 +1,5 @@
 import os.path as osp
+from datetime import date
 
 import requests_mock
 
@@ -71,3 +72,8 @@ class SlimpayStatementImportTC(SavepointCase):
 
         self.assertTrue(si.imported_statement)
         self.assertEqual(si.name, "my_report")
+
+        # Check the data corrections performed at the end of the import
+        move = si.imported_statement
+        self.assertTrue(all(aml.date == aml.date_maturity for aml in move.line_ids))
+        self.assertEqual(move.date, date(2023, 11, 3))
