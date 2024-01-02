@@ -1,10 +1,12 @@
 from base64 import b64encode
+from datetime import date, timedelta
 from urllib.parse import urlparse
 
 import lxml
 import requests
 
 from odoo import _, api, fields, models
+from odoo.tools.config import config
 
 _LINK_TEXT = "télécharge"
 
@@ -18,6 +20,104 @@ class SlimpayStatementImport(models.Model):
     name = fields.Char("Email subject")
     mail_html = fields.Html("Email content", sanitize_attributes=False)
     imported_statement = fields.Many2one("account.move")
+
+    def _get_token(self, api_url, login, password):
+        auth = b64encode(b"dashboard:")
+        resp = requests.post(
+            "%s/oauth/token" % api_url,
+            headers={"Authorization": "Basic %s" % auth.decode("utf-8")},
+            data={
+                "grant_type": "password",
+                "username": login,
+                "password": password,
+                "scope": (
+                    "https://apis.slimpay.net/auth/login"
+                    "+https://apis.slimpay.net/auth/report"
+                ),
+            },
+        )
+        resp.raise_for_status()
+        return resp.json()["access_token"]
+
+    def _get_int_param(self, name, default):
+        pname = "slimpay_statements_autoimport." + name
+        return int(self.env["ir.config_parameter"].get_param(pname, default))
+
+    def _compute_reporting_dates(self, start_date):
+        """Return suitable reporting start and end date as strings.
+
+        Given import state date parameter is usually None (exceptions: first import and
+        unittests), in which case the day after last slimpay move is taken, if any (or
+        an error is raised).
+
+        If no suitable dates are found because of following contraints, `None, None` is
+        returned. Constraints are:
+
+        - system parameter `import_only_older_days` and `import_duration_days` must be
+          set and positive and strictly positive integers respectively
+
+        - the imported data must be old (and thus reliable) enough; this is true if
+          the import start date + import_duration_days
+
+        """
+        older_days = self._get_int_param("import_only_older_days", 0)
+        duration_days = self._get_int_param("import_duration_days", 0)
+        if older_days < 0 or duration_days <= 0:
+            return None, None
+
+        if start_date is None:
+            journal = self.env.ref("slimpay_statements_autoimport.slimpay_journal")
+            last_import = self.env["account.move"].search(
+                [("journal_id", "=", journal.id)],
+                order="date desc",
+                limit=1,
+            )
+
+            if not last_import:
+                raise_msg = _("Cannot determine a suitable slimpay import start date.")
+                raise ValueError(raise_msg)
+
+            start_date = last_import.date + timedelta(days=1)
+
+        end_date = start_date + timedelta(duration_days)
+        max_end_date = date.today() - timedelta(older_days)
+
+        if end_date > max_end_date:
+            return None, None
+
+        return fields.Date.to_string(start_date), fields.Date.to_string(end_date)
+
+    def _cron_reporting(self, start_date=None):
+        "Cron that performs a reporting demand using web scraping"
+
+        # Don't do anything if not configured or last import too recent
+        conf = config.misc.get("slimpay_statements_autoimport")
+        if conf is None:
+            return
+
+        start_date, end_date = self._compute_reporting_dates(start_date)
+        if start_date is None:
+            return
+
+        slm = self.env.ref("account_payment_slimpay.payment_acquirer_slimpay")
+        token = self._get_token(slm.slimpay_api_url, conf["login"], conf["password"])
+
+        resp = requests.post(
+            conf["reports_url"],
+            headers={
+                "Accept": "application/json",
+                "Authorization": "Bearer %s" % token,
+                "Content-Type": "application/json",
+            },
+            json={
+                "creditorReference": slm.slimpay_creditor,
+                "startDate": start_date,
+                "endDate": end_date,
+                "type": "full",
+                "locale": "fr",  # Important for csv column parsing!
+            },
+        )
+        resp.raise_for_status()
 
     def _import_statement(self, fname, fbinary):
         "Import a Slimpay statement, update the importer, apply some data corrections"
