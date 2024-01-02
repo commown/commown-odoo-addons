@@ -2,6 +2,13 @@
 
   <data noupdate="1">
 
+    <record id="slimpay_bank_account" model="account.account">
+      <field name="name">Slimpay</field>
+      <field name="code">51200600</field>
+      <field name="user_type_id" ref="account.data_account_type_liquidity"/>
+      <field name="reconcile">False</field>
+    </record>
+
     <record id="slimpay_supplier_account" model="account.account">
       <field name="name">Slimpay</field>
       <field name="code">401-F-slimpay</field>
