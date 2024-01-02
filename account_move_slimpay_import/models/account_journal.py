@@ -8,7 +8,7 @@ from datetime import datetime
 
 from six import text_type
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 from odoo.addons.account_move_base_import.parser.file_parser import (
     FileParser,
@@ -22,11 +22,6 @@ class AccountJournal(models.Model):
     _inherit = "account.journal"
 
     import_type = fields.Selection(selection_add=[("slimpay", "Slimpay")])
-
-    @api.model
-    def run_import_slimpay_deposit(self):
-        for journal in self.search([("import_type", "=", "slimpay")]):
-            journal.multi_move_import(None, None)
 
 
 def _convert_date(value):
