@@ -1,0 +1,22 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="mass_reconcile" model="account.mass.reconcile">
+      <field name="name">Lettrage Slimpay</field>
+      <field name="account" ref="l10n_fr.1_pcg_5113" />
+    </record>
+
+    <record id="reconcile_method_simple_partner_custom"
+            model="account.mass.reconcile.method">
+      <field name="name">mass.reconcile.simple.partner_commown</field>
+      <field name="sequence" eval="1" />
+      <field name="writeoff" eval="0.0" />
+      <field name="date_base_on">newest</field>
+      <field name="journal_id" ref="slimpay_statements_autoimport.slimpay_journal" />
+      <field name="task_id" ref="mass_reconcile" />
+    </record>
+
+  </data>
+
+</odoo>
