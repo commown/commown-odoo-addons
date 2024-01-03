@@ -7,6 +7,7 @@
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [
+        "commown_contractual_issue",
         "base_automation",
         "sale",
         "website",
