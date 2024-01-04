@@ -28,6 +28,7 @@
         "project_rating_nps",
         "sale_product_email",
         "custom_report",
+        "slimpay_statements_autoimport",
         "website_sale_affiliate_portal",
         "website_sale_affiliate_product_restriction",
         "website_sale_b2b",
@@ -57,6 +58,7 @@
     },
     "data": [
         "data/account_payment_term.xml",
+        "data/account_mass_reconcile.xml",
         "data/mail_templates.xml",
         "data/obsolescence_action.xml",
         "data/product.xml",

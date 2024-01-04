@@ -8,7 +8,7 @@ from datetime import datetime
 
 from six import text_type
 
-from odoo import api, fields, models
+from odoo import _, fields, models
 
 from odoo.addons.account_move_base_import.parser.file_parser import (
     FileParser,
@@ -23,10 +23,32 @@ class AccountJournal(models.Model):
 
     import_type = fields.Selection(selection_add=[("slimpay", "Slimpay")])
 
-    @api.model
-    def run_import_slimpay_deposit(self):
-        for journal in self.search([("import_type", "=", "slimpay")]):
-            journal.multi_move_import(None, None)
+    def _move_import(self, parser, file_stream, result_row_list=None, ftype="csv"):
+        "Check bank account balance after the import"
+        move = super()._move_import(parser, file_stream, result_row_list, ftype=ftype)
+
+        account = self.env.ref("slimpay_statements_autoimport.slimpay_bank_account")
+        data = self.env["account.move.line"].read_group(
+            [("account_id", "=", account.id)],
+            ["balance:sum"],
+            [],
+            lazy=False,
+        )
+
+        cur = move.currency_id
+        if cur.compare_amounts(parser.expected_balance, data[0]["balance"]) != 0:
+            raise ValueError(
+                _(
+                    "Account balance do not match at end of import between"
+                    " Odoo (%s) and Slimpay statement (%s)."
+                )
+                % (
+                    cur.round(parser.expected_balance),
+                    cur.round(data[0]["balance"]),
+                )
+            )
+
+        return move
 
 
 def _convert_date(value):
@@ -41,8 +63,11 @@ def _int_or_none(value):
 
 
 class SlimpayParser(FileParser):
+    balance_field = "Nouveau solde"
+
     def __init__(self, journal, ftype="csv", **kwargs):
         self.env = journal.env
+        self.expected_balance = None
         super(SlimpayParser, self).__init__(
             journal, ftype=ftype, extra_fields=self.conversion_dict, **kwargs
         )
@@ -71,7 +96,12 @@ class SlimpayParser(FileParser):
         initial_len = len(self.result_row_list)
         for num, row in enumerate(reversed(self.result_row_list)):
             if not row["CodeOP"]:
+                if row["Nomdebiteur"] == self.balance_field:
+                    self.move_date = _convert_date(row["Datevaleur"])
+                    self.expected_balance = float_or_zero(row["Debitvaleur"])
                 del self.result_row_list[initial_len - num - 1]
+        if self.move_date is None:
+            raise ValueError(_("Couldn't find end balance line in imported statement!"))
         return super()._post(*args, **kwargs)
 
     def _get_partner_id(self, line):

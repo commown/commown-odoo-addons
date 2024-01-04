@@ -1,0 +1,13 @@
+<odoo>
+
+    <record id="import_only_older_days" model="ir.config_parameter">
+      <field name="key">slimpay_statements_autoimport.import_only_older_days</field>
+      <field name="value">8</field>
+    </record>
+
+    <record id="import_duration_days" model="ir.config_parameter">
+      <field name="key">slimpay_statements_autoimport.import_duration_days</field>
+      <field name="value">7</field>
+    </record>
+
+</odoo>

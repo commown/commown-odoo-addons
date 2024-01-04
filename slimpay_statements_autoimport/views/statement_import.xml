@@ -1,0 +1,51 @@
+<odoo>
+
+  <record id="statement_import_view_tree" model="ir.ui.view">
+    <field name="name">slimpay.statement.import.tree</field>
+    <field name="model">slimpay_statements_autoimport.statement_import</field>
+    <field name="arch" type="xml">
+      <tree string="Slimpay automatic imports">
+        <field name="name"/>
+        <field name="create_date"/>
+        <field name="imported_statement"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="statement_import_view_form" model="ir.ui.view">
+    <field name="name">slimpay.statement.import.form</field>
+    <field name="model">slimpay_statements_autoimport.statement_import</field>
+    <field name="arch" type="xml">
+      <form string="Slimpay automatic import">
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button type="object" name="button_open_job" icon="fa-list-alt" string="Import job"/>
+          </div>
+          <group name="main">
+            <field name="mail_html"/>
+            <field name="imported_statement"/>
+          </group>
+        </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="message_ids" widget="mail_thread"/>
+        </div>
+      </form>
+    </field>
+  </record>
+
+  <record id="statement_import_action" model="ir.actions.act_window">
+    <field name="name">Slimpay automatic imports</field>
+    <field name="res_model">slimpay_statements_autoimport.statement_import</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="statement_import_view_tree"/>
+  </record>
+
+  <menuitem id="statement_import_menu"
+            action="statement_import_action"
+            parent="account.menu_finance_entries"
+            groups="account.group_account_user"
+            sequence="5"
+            />
+
+</odoo>

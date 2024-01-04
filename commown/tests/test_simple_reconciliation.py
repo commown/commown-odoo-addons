@@ -1,3 +1,5 @@
+from datetime import date
+
 from mock import patch
 
 from odoo.tests.common import TransactionCase, at_install, post_install
@@ -12,28 +14,28 @@ class SimpleReconciliationTC(TransactionCase):
             {
                 "id": 1,
                 "partner_id": 7,
-                "date_maturity": "2018-01-01",
+                "date_maturity": date(2018, 1, 1),
                 "credit": 2,
                 "debit": 0,
             },
             {
                 "id": 2,
                 "partner_id": 7,
-                "date_maturity": "2018-01-10",
+                "date_maturity": date(2018, 1, 10),
                 "credit": 2,
                 "debit": 0,
             },
             {
                 "id": 3,
                 "partner_id": 7,
-                "date_maturity": "2018-01-11",
+                "date_maturity": date(2018, 1, 11),
                 "credit": 0,
                 "debit": 2,
             },
             {
                 "id": 4,
                 "partner_id": 7,
-                "date_maturity": "2018-01-21",
+                "date_maturity": date(2018, 1, 21),
                 "credit": 0,
                 "debit": 2,
             },
