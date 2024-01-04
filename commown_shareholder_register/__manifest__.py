@@ -7,7 +7,7 @@
     "name": "Commown Shareholder Register",
     "summary": "Extract data from odoo to create shareholder register",
     "category": "accounting",
-    "version": "12.0.1.0.3",
+    "version": "12.0.1.0.4",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
