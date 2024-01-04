@@ -28,6 +28,7 @@
         "project_rating_nps",
         "sale_product_email",
         "custom_report",
+        "slimpay_statements_autoimport",
         "website_sale_affiliate_portal",
         "website_sale_affiliate_product_restriction",
         "website_sale_b2b",
