@@ -31,6 +31,12 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         selection_add=[("commitment_end_date", "Commitment end date")]
     )
 
+    def is_valid(self, contract_line, date):
+        if self.coupon_campaign_id.date_end and self.coupon_campaign_id.date_end < date:
+            return False
+        else:
+            return super().is_valid(contract_line, date)
+
     def _compute_condition_no_issue_to_date(self, line, date):
         return not [
             t
