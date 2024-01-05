@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
@@ -102,11 +102,25 @@ class DiscountLineTC(TestContractBase):
 
 
 class CouponConditionTC(ContractSaleWithCouponTC):
-    def test(self):
+    "Test coupon and campaign validity apply before applying a discount"
+
+    def test_discount_line_validity(self):
         create_invoice = self.contract.recurring_create_invoice
 
         # Default tax is 15%
         self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 30.0)
+
+    def test_campaign_validity(self):
+        create_invoice = self.contract.recurring_create_invoice
+
+        self.coupon.campaign_id.date_end = (
+            self.contract.recurring_next_date + timedelta(days=50)
+        )
+
+        # Default tax is 15%
         self.assertEqual(create_invoice().amount_untaxed, 6.0)
         self.assertEqual(create_invoice().amount_untaxed, 6.0)
         self.assertEqual(create_invoice().amount_untaxed, 30.0)
