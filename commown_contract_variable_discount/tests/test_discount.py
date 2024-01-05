@@ -22,14 +22,11 @@ class DiscountLineTC(TestContractBase):
         )
 
         # Add a non-contractual issue (to check it does not raise a bug)
-        self.contract.issue_ids |= self.env["project.task"].create(
-            {
-                "name": "task0",
-            }
-        )
+        create_task = self.env["project.task"].create
+        self.contract.issue_ids |= create_task({"name": "task0"})
 
         # Test without penalty
-        self.contract.issue_ids |= self.env["project.task"].create(
+        self.contract.issue_ids |= create_task(
             {
                 "name": "task1",
                 "penalty_exemption": True,
@@ -42,7 +39,7 @@ class DiscountLineTC(TestContractBase):
         self.assertEqual(inv1.mapped("invoice_line_ids.discount"), [5.0])
 
         # Add a penalty
-        self.contract.issue_ids |= self.env["project.task"].create(
+        self.contract.issue_ids |= create_task(
             {
                 "name": "task2",
                 "penalty_exemption": False,
