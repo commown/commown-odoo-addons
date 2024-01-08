@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
@@ -22,14 +22,11 @@ class DiscountLineTC(TestContractBase):
         )
 
         # Add a non-contractual issue (to check it does not raise a bug)
-        self.contract.issue_ids |= self.env["project.task"].create(
-            {
-                "name": "task0",
-            }
-        )
+        create_task = self.env["project.task"].create
+        self.contract.issue_ids |= create_task({"name": "task0"})
 
         # Test without penalty
-        self.contract.issue_ids |= self.env["project.task"].create(
+        self.contract.issue_ids |= create_task(
             {
                 "name": "task1",
                 "penalty_exemption": True,
@@ -42,7 +39,7 @@ class DiscountLineTC(TestContractBase):
         self.assertEqual(inv1.mapped("invoice_line_ids.discount"), [5.0])
 
         # Add a penalty
-        self.contract.issue_ids |= self.env["project.task"].create(
+        self.contract.issue_ids |= create_task(
             {
                 "name": "task2",
                 "penalty_exemption": False,
@@ -102,11 +99,25 @@ class DiscountLineTC(TestContractBase):
 
 
 class CouponConditionTC(ContractSaleWithCouponTC):
-    def test(self):
+    "Test coupon and campaign validity apply before applying a discount"
+
+    def test_discount_line_validity(self):
         create_invoice = self.contract.recurring_create_invoice
 
         # Default tax is 15%
         self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 6.0)
+        self.assertEqual(create_invoice().amount_untaxed, 30.0)
+
+    def test_campaign_validity(self):
+        create_invoice = self.contract.recurring_create_invoice
+
+        self.coupon.campaign_id.date_end = (
+            self.contract.recurring_next_date + timedelta(days=50)
+        )
+
+        # Default tax is 15%
         self.assertEqual(create_invoice().amount_untaxed, 6.0)
         self.assertEqual(create_invoice().amount_untaxed, 6.0)
         self.assertEqual(create_invoice().amount_untaxed, 30.0)
