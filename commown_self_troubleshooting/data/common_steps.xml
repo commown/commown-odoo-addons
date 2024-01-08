@@ -116,7 +116,7 @@
 
     <template id="step-ship-module">
       <t t-set="partner" t-value="env.user.partner_id" />
-      <t t-set="delivery" t-value="partner.colissimo_delivery_data()" />
+      <t t-set="delivery" t-value="partner.colissimo_delivery_data(raise_on_error=False)" />
       <t t-set="_countries" t-value="env['res.country'].search([('code', 'in', ('FR', 'BE', delivery['countryCode']))])" />
       <t t-set="countries" t-value="[(c.code, c.name) for c in _countries]" />
       <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">

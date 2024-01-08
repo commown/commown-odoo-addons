@@ -25,9 +25,9 @@ class ResPartner(models.Model):
     ]
 
     @api.multi
-    def colissimo_delivery_data(self):
+    def colissimo_delivery_data(self, raise_on_error=True):
         self.ensure_one()
-        return delivery_data(self)
+        return delivery_data(self, raise_on_error=raise_on_error)
 
     @classmethod
     def validate_street_lines(cls, data, error, error_message):
