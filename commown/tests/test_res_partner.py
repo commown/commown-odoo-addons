@@ -10,6 +10,8 @@ from odoo.addons.product_rental.tests.common import (
     RentalSaleOrderMixin,
 )
 
+from .common import ContractRelatedPaymentTokenUniquifyTC
+
 
 def _csrf_token(page):
     return page.xpath("string(//input[@name='csrf_token']/@value)")
@@ -199,3 +201,16 @@ class ResPartnerSimpleTC(SavepointCase):
         # Check parent sync on invoice partner update
         p_inv.update(dict(_pay_prefs1, payment_token_id=tok1.id))
         self.assertEqual(expected_prefs1, {f: p_contact[f] for f in expected_prefs1})
+
+
+class ResPartnerInvoiceActionTC(ContractRelatedPaymentTokenUniquifyTC):
+    def test_action(self):
+        "Action must reattribute contracts and draft invoices"
+        partner = self.company_s1_w1
+        inv_partner = partner.copy({"type": "invoice", "parent_id": partner.id})
+        draft_inv = self.contract1._recurring_create_invoice()
+
+        inv_partner.action_set_as_invoice_recipient()
+
+        self.assertEqual(self.contract1.invoice_partner_id, inv_partner)
+        self.assertEqual(draft_inv.partner_id, inv_partner)

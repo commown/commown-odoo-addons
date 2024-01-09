@@ -1,5 +1,6 @@
 import logging
 from base64 import b64decode
+from datetime import date
 
 import magic
 
@@ -261,3 +262,36 @@ class CommownPartner(models.Model):
         "Force the reset on payment preferences on payment token reset"
         super().reset_payment_token()
         self.update({f: False for f in _PAYMENT_PREF_FIELDS})
+
+    @api.multi
+    def action_set_as_invoice_recipient(self):
+        self.ensure_one()
+
+        contracts = self.env["contract.contract"].search(
+            [
+                ("invoice_partner_id", "=", self.parent_id.id),
+                "|",
+                ("date_end", ">=", date.today()),
+                "&",
+                ("date_end", "=", False),
+                ("recurring_next_date", "!=", False),
+            ]
+        )
+        contracts.update({"invoice_partner_id": self.id})
+
+        invoices = self.env["account.invoice"].search(
+            [
+                ("type", "=", "out_invoice"),
+                ("state", "=", "draft"),
+                ("partner_id", "=", self.parent_id.id),
+                ("invoice_line_ids.contract_line_id", "!=", False),
+            ]
+        )
+        invoices.update({"partner_id": self.id})
+
+        msg = _("Modified %d contracts and %d invoices") % (
+            len(contracts),
+            len(invoices),
+        )
+        self.env.user.notify_success(message=msg, title=_("Information"), sticky=True)
+        return True

@@ -56,6 +56,17 @@
             <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
           </field>
 
+          <xpath expr="//field[@name='child_ids']//div[hasclass('oe_kanban_details')]"
+                 position="inside">
+            <button attrs="{'invisible': ['|', ('type', '!=', 'invoice'), ('email', '=', False)]}"
+                    class="btn btn-secondary"
+                    name="action_set_as_invoice_recipient"
+                    type="object">
+              <i title="Send invoices to this contact" class="far fa-envelope"></i>
+              <span class="d-none d-sm-inline">Send invoices to this contact</span>
+            </button>
+          </xpath>
+
         </field>
 
     </record>
