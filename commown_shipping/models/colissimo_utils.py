@@ -22,13 +22,24 @@ class ColissimoError(Exception):
     pass
 
 
-def normalize_phone(phone_number, country_code):
-    "Format phone number for Colissimo"
+def normalize_phone(phone_number, country_code, raise_on_error=True):
+    """Format phone number for Colissimo
+
+    If phone number format is incorrect, raise if raise_on_error is True (default)
+    else return the empty string.
+
+    If the phone number is falsy, return the empty string.
+    """
     if phone_number:
-        tel = phonenumbers.parse(phone_number, country_code)
-        return phonenumbers.format_number(
-            tel, phonenumbers.PhoneNumberFormat.NATIONAL
-        ).replace(" ", "")
+        try:
+            tel = phonenumbers.parse(phone_number, country_code)
+        except phonenumbers.NumberParseException:
+            if raise_on_error:
+                raise
+        else:
+            return phonenumbers.format_number(
+                tel, phonenumbers.PhoneNumberFormat.NATIONAL
+            ).replace(" ", "")
     return ""
 
 
@@ -38,27 +49,33 @@ def delivery_data(partner, raise_on_error=True):
     - that mobile phone numbers may be found in partner.phone instead
       of partner.mobile: put value into mobile if pertinent
     - the address lines must not be too long (35 characters was the limit on
-      coliship): in such a case, raise ValueError unless raise_on_error is False
+      coliship): in such a case, raise ValueError
     - at least one phone number is required to ease delivery
     - an email is required to get a delivery notification
 
+    If raise_on_error is False, never raise and replace invalid phone numbers
+    by the empty string in the result.
     """
 
-    mobile, fixed = partner.mobile, partner.phone
+    country = partner.country_id.code or "FR"
+
+    mobile = normalize_phone(partner.mobile, country, raise_on_error)
+    fixed = normalize_phone(partner.phone, country, raise_on_error)
+
     if not mobile and fixed:
-        fixed_obj = phonenumbers.parse(fixed, partner.country_id.code)
+        fixed_obj = phonenumbers.parse(partner.phone, partner.country_id.code)
         if phonenumbers.number_type(fixed_obj) == MOBILE_TYPE:
-            mobile, fixed = fixed, None
+            mobile, fixed = fixed, ""
 
     partner_data = {
         "lastName": partner.lastname or "",
         "firstName": partner.firstname or "",
         "line2": partner.street,
-        "countryCode": partner.country_id.code or "FR",
+        "countryCode": country,
         "city": partner.city,
         "zipCode": partner.zip,
-        "phoneNumber": normalize_phone(fixed, partner.country_id.code) or "",
-        "mobileNumber": normalize_phone(mobile, partner.country_id.code) or "",
+        "phoneNumber": fixed,
+        "mobileNumber": mobile,
         "email": partner.email or "",
     }
 
