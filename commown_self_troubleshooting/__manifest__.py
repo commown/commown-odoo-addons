@@ -35,6 +35,7 @@
         "data/FP3/display/issue_template.xml",
         "data/FP3/screen/form.xml",
         "data/FP4/screen/form.xml",
+        "data/FP5/screen/form.xml",
         "data/GS/form_day.xml",
         "data/GS/issue_template.xml",
         "data/Shiftphone/screen/form.xml",
