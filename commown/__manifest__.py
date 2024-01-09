@@ -49,6 +49,7 @@
         "portal",
         "sale_management",
         "web_m2x_options",
+        "web_notify",
         "website_sale_cart_selectable",
         "website_sale_require_login",
     ],
