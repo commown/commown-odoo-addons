@@ -32,13 +32,13 @@ def normalize_phone(phone_number, country_code):
     return ""
 
 
-def delivery_data(partner):
+def delivery_data(partner, raise_on_error=True):
     """Return delivery data for given partner, taking into account:
 
     - that mobile phone numbers may be found in partner.phone instead
       of partner.mobile: put value into mobile if pertinent
     - the address lines must not be too long (35 characters was the limit on
-      coliship): in such a case, raise ValueError
+      coliship): in such a case, raise ValueError unless raise_on_error is False
     - at least one phone number is required to ease delivery
     - an email is required to get a delivery notification
 
@@ -69,12 +69,14 @@ def delivery_data(partner):
     if partner.parent_id and partner.parent_id.is_company:
         partner_data["companyName"] = partner.parent_id.name
 
-    if not (partner_data["phoneNumber"] or partner_data["mobileNumber"]):
+    if raise_on_error and not (
+        partner_data["phoneNumber"] or partner_data["mobileNumber"]
+    ):
         raise ColissimoError(
             _("A phone number is required to generate a Colissimo label!")
         )
 
-    if not partner_data["email"]:
+    if raise_on_error and not partner_data["email"]:
         raise ColissimoError(_("An email is required to generate a Colissimo label!"))
 
     return partner_data
