@@ -100,7 +100,6 @@ class RentalFeesDefinition(models.Model):
         comodel_name="rental_fees.definition_line",
         string="Fees definition lines",
         inverse_name="fees_definition_id",
-        cascade="delete",
         copy=False,
     )
 
@@ -230,6 +229,7 @@ class RentalFeesDefinitionLine(models.Model):
         "rental_fees.definition",
         string="Fees definition",
         required=True,
+        ondelete="cascade",
     )
 
     sequence = fields.Integer(
