@@ -258,6 +258,33 @@ class CommownPartner(models.Model):
             res["email"] = res["login"] = partner.email or ""
         return res
 
+    def get_obsolete_tokens(self, newer_token):
+        """Override default behaviour to remove contract-specific secondary tokens
+
+        These token are set directly on a contract and not the main one of their
+        partner. They are generally used in a familly to use 2 different bank accounts
+        for 2 different devices, and are thus still useful and excluded from obsoletes.
+
+        """
+        tokens = super().get_obsolete_tokens(newer_token)
+
+        secondary_tokens = tokens.filtered(lambda t: t != t.partner_id.payment_token_id)
+
+        contracts = self.env["contract.contract"].search(
+            [
+                ("payment_token_id", "in", secondary_tokens.ids),
+                "|",
+                ("date_end", ">=", date.today()),
+                "&",
+                ("date_end", "=", False),
+                ("recurring_next_date", "!=", False),
+            ]
+        )
+
+        still_useful_tokens = contracts.mapped("payment_token_id")
+
+        return tokens - still_useful_tokens
+
     def reset_payment_token(self):
         "Force the reset on payment preferences on payment token reset"
         super().reset_payment_token()

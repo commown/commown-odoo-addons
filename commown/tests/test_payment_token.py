@@ -69,9 +69,11 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         self.assertEqual(self.contract1.invoice_partner_id, p_inv)
         self.assertFalse(self.contract1.payment_token_id)
 
-        self.assertEqual(self.contract2.partner_id, new_token.partner_id)
-        self.assertEqual(self.contract2.invoice_partner_id, p_inv)
-        self.assertFalse(self.contract2.payment_token_id)
+        # Nothing changed on contract2 as its token has NOT become obsolete
+        # (because it is a secondary and contract-specific one)
+        self.assertEqual(self.contract2.partner_id, self.company_s1_w2)
+        self.assertEqual(self.contract2.invoice_partner_id, self.company_s1_w2)
+        self.assertTrue(self.contract2.payment_token_id)
 
     def test_action_reattribute_draft_contract_invoices(self):
         # Generate draft invoices (contract isauto_pay is False)
@@ -92,6 +94,10 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         self.assertEqual(inv.partner_id, p_inv)
 
     def test_action_set_partner_invoice_merge_prefs_1(self):
+        # set s1_w2 token to the one of contract2 so that it can become obsolete
+        # (that way it is no more a secondary token)
+        self.company_s1_w2.payment_token_id = self.contract2.payment_token_id
+
         self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-19"))
         self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-28"))
 

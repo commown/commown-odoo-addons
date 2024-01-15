@@ -55,8 +55,10 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
             {
                 "partner_id": partner.id,
                 "invoice_partner_id": partner.address_get(["invoice"])["invoice"],
-                "payment_token_id": False,
             }
+        )
+        contracts.filtered(lambda c: c.payment_token_id in obsolete_tokens).update(
+            {"payment_token_id": False}
         )
 
     @api.model
