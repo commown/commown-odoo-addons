@@ -3,6 +3,7 @@ from . import test_contract
 from . import test_controllers
 from . import test_crm_lead
 from . import test_customer_portal
+from . import test_customer_team_manager_employee
 from . import test_ir_http
 from . import test_payment
 from . import test_payment_token
