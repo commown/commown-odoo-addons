@@ -75,6 +75,7 @@
         "views/actions_utm.xml",
         "views/address_template.xml",
         "views/auth_signup.xml",
+        "views/assets_backend.xml",
         "views/contract_contract.xml",
         "views/contract_template.xml",
         "views/crm_lead.xml",
@@ -94,6 +95,7 @@
     ],
     "qweb": [
         "static/src/xml/account_reconciliation.xml",
+        "static/src/xml/menu.xml",
     ],
     "installable": True,
     "application": True,
