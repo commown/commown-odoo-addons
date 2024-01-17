@@ -1,3 +1,4 @@
+import json
 from urllib.parse import parse_qs, urlparse
 
 from werkzeug.test import Client
@@ -6,6 +7,8 @@ from werkzeug.wrappers import BaseResponse
 from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase
 from odoo.tools import mute_logger
+
+from .common import PortalMixin
 
 
 class IrHttpTC(HttpCase):
@@ -40,3 +43,28 @@ class IrHttpTC(HttpCase):
         response = test_client.get(pt1.website_url, follow_redirects=False)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.headers["Location"].endswith(pt2.website_url))
+
+
+class SessionInfoTC(PortalMixin, HttpCase):
+    "Test dedicated to ir_http session_info method override"
+
+    def get_session_info(self):
+        response = self.portal_client().get(
+            "/web/session/get_session_info",
+            content_type="application/json",
+            data="{}",
+            headers={"Accept": "application/json"},
+        )
+        return json.loads(response.data)["result"]
+
+    def test_session_info_no_in_group_user(self):
+        self.assertIs(self.get_session_info().get("is_in_group_user"), False)
+
+    def test_session_info_in_group_user(self):
+        with self.registry.cursor() as test_cursor:
+            env = self.env(test_cursor)
+            user = env["res.partner"].browse(self.partner.id).user_ids[0]
+            env.ref("base.group_portal").users -= user
+            env.ref("base.group_user").users |= user
+
+        self.assertIs(self.get_session_info().get("is_in_group_user"), True)
