@@ -72,6 +72,21 @@
 
     </record>
 
+    <record id="action_res_partner_reattribute_commercial_contracts" model="ir.actions.server">
+      <field name="name">[commown] Set partner as its company's contract partner</field>
+      <field name="model_id" ref="base.model_res_partner"/>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="binding_model_id" ref="base.model_res_partner"/>
+      <field name="code"><![CDATA[
+if not record.payment_token_id:
+    raise Warning("Partner has no token!")
+
+record.payment_token_id.acquirer_id.run_obsolete_token_actions(record.payment_token_id)
+]]>
+      </field>
+    </record>
+
   </data>
 
 </odoo>
