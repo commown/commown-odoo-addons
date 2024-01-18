@@ -1,0 +1,14 @@
+<odoo>
+
+  <record id="action_wizard_link_po_to_invoices" model="ir.actions.act_window">
+    <field name="name">[commown] Link PO lines to invoices lines</field>
+    <field name="res_model">po.invoice.link.wizard</field>
+    <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_po_id': active_id}</field>
+    <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+  </record>
+
+</odoo>

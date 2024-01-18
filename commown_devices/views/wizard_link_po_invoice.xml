@@ -1,0 +1,31 @@
+<odoo>
+
+  <record id="wizard_po_invoice_link_form" model="ir.ui.view">
+    <field name="name">[commown] Po invoice link wizard form view</field>
+    <field name="model">po.invoice.link.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Descripe Po invoice Link">
+        <sheet>
+          <group>
+            <field name="po_id" invisible="1"/>
+            <field name="invoice_id"/>
+            <field name="link_line_ids">
+              <tree editable="bottom">
+                <field name="wizard_id" invisible="1"/>
+                <field name="po_line_id"/>
+                <field name="invoice_line_id_domain" invisible="1"/>
+                <field name="invoice_line_id" domain="invoice_line_id_domain"/>
+              </tree>
+            </field>
+          </group>
+        </sheet>
+        <footer>
+          <button name="action_assign_invoice" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>
