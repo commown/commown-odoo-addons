@@ -2,74 +2,76 @@
 <odoo>
 
   <data>
+
     <record model="ir.ui.view" id="view_partner_form">
-        <field name="name">res.partner.form</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="contract_payment_auto.view_partner_form"/>
-        <field name="arch" type="xml">
+      <field name="name">res.partner.form</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="contract_payment_auto.view_partner_form"/>
+      <field name="arch" type="xml">
 
-          <xpath expr="//notebook/page[1]" position="attributes">
-            <attribute name="autofocus"></attribute>
-          </xpath>
+        <xpath expr="//notebook/page[1]" position="attributes">
+          <attribute name="autofocus"></attribute>
+        </xpath>
 
-          <xpath expr="//notebook/page[1]" position="before">
-            <page name="partner_documents" string="Documents" autofocus="autofocus"
-                  attrs="{'invisible': [('is_company', '=', True)]}">
-              <group name="id_card1" >
-                <field name="id_card1" widget="binary" class="oe_inline"/>
-                <field name="id_card2" widget="binary" class="oe_inline"/>
-              </group>
-              <group name="proof_of_address">
-                <field name="proof_of_address" widget="binary" class="oe_inline"/>
-                <field name="company_record" widget="binary" class="oe_inline"/>
-              </group>
-            </page>
-          </xpath>
+        <xpath expr="//notebook/page[1]" position="before">
+          <page name="partner_documents" string="Documents" autofocus="autofocus"
+                attrs="{'invisible': [('is_company', '=', True)]}">
+            <group name="id_card1" >
+              <field name="id_card1" widget="binary" class="oe_inline"/>
+              <field name="id_card2" widget="binary" class="oe_inline"/>
+            </group>
+            <group name="proof_of_address">
+              <field name="proof_of_address" widget="binary" class="oe_inline"/>
+              <field name="company_record" widget="binary" class="oe_inline"/>
+            </group>
+          </page>
+        </xpath>
 
-          <field name="payment_token_id" position="before">
-            <p colspan="2" attrs="{'invisible': [('type', '!=', 'invoice')]}">
-              Le mandat de paiement est paramétrable sur le partenaire parent et
-              synchronisé automatiquement ici.
-            </p>
-          </field>
-
-          <field name="payment_token_id" position="attributes">
-            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
-          </field>
-
-          <field name="invoice_merge_next_date" position="before">
-            <p colspan="2" attrs="{'invisible': [('type', '!=', 'invoice')]}">
-              Les préférences de paiement sont paramétrables sur le partenaire parent et
-              synchronisées automatiquement ici.
-            </p>
-          </field>
-
-          <field name="invoice_merge_next_date" position="attributes">
-            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
-          </field>
-
-          <field name="invoice_merge_recurring_rule_type" position="attributes">
-            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
-          </field>
-
-          <field name="invoice_merge_recurring_interval" position="attributes">
-            <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
-          </field>
-
-          <xpath expr="//field[@name='child_ids']//div[hasclass('oe_kanban_details')]"
-                 position="inside">
-            <button attrs="{'invisible': ['|', ('type', '!=', 'invoice'), ('email', '=', False)]}"
-                    class="btn btn-secondary"
-                    name="action_set_as_invoice_recipient"
-                    type="object">
-              <i title="Send invoices to this contact" class="far fa-envelope"></i>
-              <span class="d-none d-sm-inline">Send invoices to this contact</span>
-            </button>
-          </xpath>
-
+        <field name="payment_token_id" position="before">
+          <p colspan="2" attrs="{'invisible': [('type', '!=', 'invoice')]}">
+            Le mandat de paiement est paramétrable sur le partenaire parent et
+            synchronisé automatiquement ici.
+          </p>
         </field>
 
+        <field name="payment_token_id" position="attributes">
+          <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+        </field>
+
+        <field name="invoice_merge_next_date" position="before">
+          <p colspan="2" attrs="{'invisible': [('type', '!=', 'invoice')]}">
+            Les préférences de paiement sont paramétrables sur le partenaire parent et
+            synchronisées automatiquement ici.
+          </p>
+        </field>
+
+        <field name="invoice_merge_next_date" position="attributes">
+          <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+        </field>
+
+        <field name="invoice_merge_recurring_rule_type" position="attributes">
+          <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+        </field>
+
+        <field name="invoice_merge_recurring_interval" position="attributes">
+          <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
+        </field>
+
+        <xpath expr="//field[@name='child_ids']//div[hasclass('oe_kanban_details')]"
+               position="inside">
+          <button attrs="{'invisible': ['|', ('type', '!=', 'invoice'), ('email', '=', False)]}"
+                  class="btn btn-secondary"
+                  name="action_set_as_invoice_recipient"
+                  type="object">
+            <i title="Send invoices to this contact" class="far fa-envelope"></i>
+            <span class="d-none d-sm-inline">Send invoices to this contact</span>
+          </button>
+        </xpath>
+
+      </field>
+
     </record>
+
   </data>
 
 </odoo>
