@@ -10,7 +10,6 @@ class EmployeeTC(CustomerTeamAbstractTC):
         "Employee display name should be a concatenation of first and last names"
 
         empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
-
         self.assertEqual(empl.display_name, "J C")
 
     def test_create_automatic_company(self):
@@ -25,11 +24,6 @@ class EmployeeTC(CustomerTeamAbstractTC):
 
     def test_create_with_partner(self):
         "Creation by an internal user should set partner email"
-
-        # Set user as active
-        self.user.sudo(self.user.id)._update_last_login()
-        self.user._compute_state()
-        self.assertEqual(self.user.state, "active")
 
         # Create an employee using the admin user
         partner = self.user.partner_id
@@ -73,37 +67,34 @@ class EmployeeTC(CustomerTeamAbstractTC):
     def test_grant_and_revoke_portal_access(self):
         "Customer can grant and revoke portal access"
 
-        # Create employee and check status is Not granted
         empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
-        empl_sudo = empl.sudo()  # compute_sudo is True for portal_status
+        self.assertEqual(empl.portal_status, "not_granted")
 
-        empl_sudo._compute_portal_status()
-        self.assertEqual(empl_sudo.portal_status, "not_granted")
-
-        # Grant employee and check status is Never connected
         empl.action_grant_portal_access()
-        empl_sudo._compute_portal_status()
-        self.assertEqual(empl_sudo.portal_status, "never_connected")
+        self.assertEqual(empl.portal_status, "never_connected")
 
-        # Simulate employee login and check status is Already connected
-        user = empl_sudo.partner.user_ids[0]
-        user.sudo(user.id)._update_last_login()
-        user._compute_state()
+        empl.action_revoke_portal_access()
+        self.assertEqual(empl.portal_status, "not_granted")
 
-        empl_sudo._compute_portal_status()
-        self.assertEqual(empl_sudo.portal_status, "already_connected")
+        empl.action_grant_portal_access()
+        self.assertEqual(empl.portal_status, "never_connected")
 
-        # Revoke portal access and check status is Not granted
-        empl.active = False  # should call action_revoke_portal_access
-        empl_sudo._compute_portal_status()
-        self.assertEqual(empl_sudo.portal_status, "not_granted")
+        self.simulate_user_login(empl.sudo().partner.user_ids)
+        self.assertEqual(empl.portal_status, "already_connected")
 
-    def test_ui_customer_default_company(self):
-        "Creating an employee from a customer should set its company"
+        empl.action_revoke_portal_access()
+        self.assertEqual(empl.portal_status, "not_granted")
+
+    def test_ui_customer_default_company_and_role(self):
+        "Creating an employee from a customer should set its company and employee role"
 
         attrs = dict(firstname="F", lastname="L", email="a@b.c")
         empl = self.create_by_form("employee", **attrs)
+
         self.assertEqual(empl.sudo().company, self.company)
+
+        user_role = self.env.ref("customer_team_manager.customer_role_user")
+        self.assertEqual(empl.roles, user_role)
 
     def test_ui_internal_user_onchange_company(self):
         """Creating an employee with an internal user should work
@@ -138,3 +129,29 @@ class EmployeeTC(CustomerTeamAbstractTC):
         self.assertTrue(self.has_attachment(empl))
         empl.unlink()
         self.assertFalse(self.has_attachment(empl))
+
+    def test_write_with_role_error(self):
+        user_role = self.env.ref("customer_team_manager.customer_role_user")
+        empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
+
+        with self.assertRaises(ValidationError) as err:
+            self.admin.write({"roles": [(6, 0, user_role.ids)]})
+        self.assertEqual(err.exception.name, "At least one administrator is mandatory")
+
+    def test_create_and_write_with_role_ok(self):
+        admin = self.create_admin(firstname="J", lastname="C", email="jc@test.coop")
+        admin.action_grant_portal_access()
+
+        self.assertIsAdmin(admin)
+
+        empl = self.create_employee(firstname="V", lastname="C", email="vc@test.coop")
+        empl.action_grant_portal_access()
+        self.assertIsUser(empl)
+
+        admin_role = self.env.ref("customer_team_manager.customer_role_admin")
+        empl.write({"roles": [(6, 0, admin_role.ids)]})
+        self.assertIsAdmin(empl)
+
+        user_role = self.env.ref("customer_team_manager.customer_role_user")
+        admin.write({"roles": [(6, 0, user_role.ids)]})
+        self.assertIsUser(admin)

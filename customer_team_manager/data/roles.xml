@@ -1,0 +1,12 @@
+<odoo>
+
+  <record id="customer_role_admin" model="customer_team_manager.employee.role">
+    <field name="name">Administrator</field>
+    <field name="groups" eval="[(6, 0, [ref('group_customer_admin')])]" />
+  </record>
+
+  <record id="customer_role_user" model="customer_team_manager.employee.role">
+    <field name="name">Employee</field>
+  </record>
+
+</odoo>
