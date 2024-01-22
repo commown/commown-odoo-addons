@@ -61,12 +61,35 @@ class Employee(models.Model):
         "resized as a 128x128px image, with aspect ratio preserved.",
     )
 
+    roles = fields.Many2many(
+        "customer_team_manager.employee.role",
+        relation="customer_team_manager_employee_role_rel",
+        string="Role(s)",
+        default=lambda self: self._compute_default_roles(),
+        required=True,
+    )
+
     def _compute_default_image(self):
         img_path = get_module_resource("base", "static/img", "avatar.png")
         with open(img_path, "rb") as f:
             image = f.read()
         image = tools.image_colorize(image)
         return base64.b64encode(image)
+
+    def _compute_default_roles(self):
+        return self.env.ref("customer_team_manager.customer_role_user").ids
+
+    @api.constrains("roles")
+    def _check_roles(self):
+        "Check there is always at least one admin in the company"
+        admin_role = self.env.ref("customer_team_manager.customer_role_admin")
+        for company in self.sudo().mapped("company"):
+            if not self.sudo().search(
+                [("company", "=", company.id), ("roles", "=", admin_role.id)]
+            ):
+                raise models.ValidationError(
+                    _("At least one administrator is mandatory")
+                )
 
     def _compute_portal_status(self):
         for _rec in self:
@@ -137,6 +160,7 @@ class Employee(models.Model):
         self.ensure_one()
         wizard = self.prepare_portal_wizard(in_portal)
         wizard.action_apply()
+        self._reset_roles()
 
     @api.multi
     def action_grant_portal_access(self):
@@ -145,6 +169,19 @@ class Employee(models.Model):
     @api.multi
     def action_revoke_portal_access(self):
         self.set_portal_access(False)
+
+    def _reset_roles(self):
+        "Remove and set the res.users.role for the employee according to its roles"
+        self.ensure_one()
+
+        employee_role_model = self.env["customer_team_manager.employee.role"]
+        all_role_groups = employee_role_model.sudo().search([]).mapped("groups")
+
+        users = self.sudo().partner.user_ids
+        if users:
+            user = users[0]
+            user.groups_id -= all_role_groups
+            user.groups_id |= self.roles.mapped("groups")
 
     @api.model
     @api.returns("self", lambda value: value.id)
@@ -181,6 +218,8 @@ class Employee(models.Model):
                 )
             )
 
+        result._reset_roles()
+
         return result
 
     @api.multi
@@ -204,6 +243,9 @@ class Employee(models.Model):
         if not self.active:
             self.action_revoke_portal_access()
 
+        if "roles" in vals:
+            self._reset_roles()
+
         return result
 
     @api.multi
@@ -218,3 +260,19 @@ class Employee(models.Model):
         """
         self.update({"image_medium": False})
         return super().unlink()
+
+
+class CustomerEmployeeRole(models.Model):
+    "Represents the relationship between a customer role and res.users.role"
+
+    _name = "customer_team_manager.employee.role"
+    _description = "Role of the employee of a customer has in its organization"
+    _sql_constraints = [
+        ("name_uniq", "unique (name)", "Employee role already exists!"),
+    ]
+
+    name = fields.Char(required=True)
+    groups = fields.Many2many(
+        "res.groups",
+        string="Corresponding groups",
+    )
