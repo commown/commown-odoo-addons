@@ -60,6 +60,7 @@
         <field name="email"/>
         <field name="phone"/>
         <field name="team"/>
+        <field name="roles" widget="many2many_tags"/>
         <field name="partner"/>
         <field name="company"/>
         <field name="portal_status"/>
@@ -128,13 +129,10 @@
               <field name="display_name" class="oe_inline"/>
             </h1>
           </div>
-          <group name="admin" groups="customer_team_manager.group_manager">
-            <group>
-              <field name="company"/>
-            </group>
-            <group>
-              <field name="partner"/>
-            </group>
+          <group name="admin">
+            <field name="company" groups="customer_team_manager.group_manager"/>
+            <field name="partner" groups="customer_team_manager.group_manager"/>
+            <field name="roles" widget="many2many_tags"/>
           </group>
           <group>
             <group name="main">

@@ -21,6 +21,7 @@
         "security/groups.xml",
         "security/ir.model.access.csv",
         "security/rules.xml",
+        "data/roles.xml",
         "views/customer_team_manager.xml",
     ],
     "installable": True,
