@@ -16,6 +16,8 @@
         # OCA modules
         "partner_firstname",
         "web_notify",
+        # Commown modules
+        "server_actions_auth",
     ],
     "data": [
         "security/groups.xml",
