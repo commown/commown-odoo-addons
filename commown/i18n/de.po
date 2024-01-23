@@ -408,7 +408,7 @@ msgstr "Indem ich auf \"Akzeptieren und bezahlen\" klicke, bestätige ich, dass 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
 msgid "En cliquant sur \"Valider et payer\", je reconnais avoir pris connaissance des"
-msgstr "Durch Klicken auf "Bestätigen und bezahlen" bestätige ich, dass ich die Allgemeinen Geschäftsbedingungen"
+msgstr "Durch Klicken auf \"Bestätigen und bezahlen\" bestätige ich, dass ich die Allgemeinen Geschäftsbedingungen"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
