@@ -98,6 +98,10 @@ class TestPageSmartphone(TestPageTC):
             "commown_self_troubleshooting_smartphone_need_display_with_protection"
         )
 
+    def test_need_new_fairphone(self):
+        self.contract_name = "FP5/B2C"
+        self._run_tour("commown_self_troubleshooting_need_new_fairphone")
+
 
 class TestPageContractManagement(TestPageTC):
     contract_name = "NO/MATTER"
