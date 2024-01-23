@@ -1,0 +1,16 @@
+<odoo>
+
+  <record model="ir.ui.view" id="view_server_action_form">
+    <field name="name">Server Action (in module server_actions_auth)</field>
+    <field name="model">ir.actions.server</field>
+    <field name="inherit_id" ref="base.view_server_action_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//notebook" position="inside">
+        <page string="Security">
+          <field name="groups_id"/>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
