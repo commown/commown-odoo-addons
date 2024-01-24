@@ -32,6 +32,11 @@
       <field name="sequence">70</field>
     </record>
 
+    <record id="fp5-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Fairphone 5</field>
+      <field name="sequence">80</field>
+    </record>
+
     <record id="serenity-ts-cat" model="commown_self_troubleshooting.category">
       <field name="name">Option Sérénité</field>
       <field name="sequence">800</field>
@@ -116,6 +121,13 @@
       <field name="website_page_id" eval="ref('gs-day-page')" />
       <field name="requires_contract" eval="True"/>
       <field name="contract_domain">[("contract_template_id.name", "like", "GS/%")]</field>
+    </record>
+
+    <record id="fp5-screen-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('fp5-ts-cat')"/>
+      <field name="website_page_id" eval="ref('fp5-screen-page')" />
+      <field name="requires_contract" eval="True"/>
+      <field name="contract_domain">[("contract_template_id.name", "like", "FP5/%")]</field>
     </record>
 
     <record id="contract-termination-ts-item" model="commown_self_troubleshooting.item">
