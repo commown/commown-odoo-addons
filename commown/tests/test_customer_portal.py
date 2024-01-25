@@ -201,7 +201,7 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
 
         doc = self.get_page(test_client, "/my/task/%d" % task.id)
         self.assertEqual(
-            doc.xpath("//*[text()='Assigned to']/.." "//span[@itemprop]/@itemprop"),
+            doc.xpath("//*[text()='Assigned to']/..//span[@itemprop]/@itemprop"),
             ["name"],
         )
 
