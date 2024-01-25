@@ -12,6 +12,7 @@
     "license": "AGPL-3",
     "depends": [
         # native modules
+        "account",
         "portal",
         # OCA modules
         "partner_firstname",

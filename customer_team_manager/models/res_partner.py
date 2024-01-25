@@ -45,3 +45,7 @@ class ResPartner(models.Model):
                 }
             )
             self.env["customer_team_manager.employee"].create(attrs)
+
+    def get_employees(self):
+        employee_model = self.env["customer_team_manager.employee"]
+        return employee_model.search([("partner", "in", self.ids)])
