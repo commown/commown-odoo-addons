@@ -5,6 +5,11 @@
     <field name="groups" eval="[(6, 0, [ref('group_customer_admin')])]" />
   </record>
 
+  <record id="customer_role_accounting" model="customer_team_manager.employee.role">
+    <field name="name">Accountant</field>
+    <field name="groups" eval="[(6, 0, [ref('group_customer_accounting')])]" />
+  </record>
+
   <record id="customer_role_user" model="customer_team_manager.employee.role">
     <field name="name">Employee</field>
   </record>
