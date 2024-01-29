@@ -56,8 +56,35 @@ class TeamAndEmployeeIrRulesTC(CustomerTeamAbstractTC):
         self.assertEqual(e_model.sudo(admin_user2.id).search([]), admin_empl2 | empl2)
 
 
-class PortalInvoiceIrRulesTC(SavepointCase):
+class PortalIrRulesTC(SavepointCase):
+    "Base test class for portal user access-rules-related tests"
+
+    model = None  # to be overriden
+
+    def seen(self, user):
+        return self.env[self.model].sudo(user).search([])
+
+    def _give_portal_access(self, partner):
+        model = self.env["portal.wizard"].with_context(active_ids=[partner.id])
+        portal_wizard = model.sudo().create({})
+        portal_wizard.user_ids.update({"in_portal": True})
+        portal_wizard.action_apply()
+        self.assertTrue(partner.user_ids)
+        return partner.user_ids[0]
+
+    def follow_instance(self, partner, instance):
+        self.env["mail.followers"].create(
+            {
+                "res_id": instance.id,
+                "res_model": instance._name,
+                "partner_id": partner.id,
+            }
+        )
+
+
+class PortalInvoiceIrRulesTC(PortalIrRulesTC):
     "Test class for portal user invoice-related access rules"
+    model = "account.invoice"
 
     def setUp(self):
         super().setUp()
@@ -72,39 +99,55 @@ class PortalInvoiceIrRulesTC(SavepointCase):
         self.assertNotIn(partner1, self.inv.message_partner_ids)
         self.assertNotIn(partner2, self.inv.message_partner_ids)
 
-    def _give_portal_access(self, partner):
-        model = self.env["portal.wizard"].with_context(active_ids=[partner.id])
-        portal_wizard = model.sudo().create({})
-        portal_wizard.user_ids.update({"in_portal": True})
-        portal_wizard.action_apply()
-        self.assertTrue(partner.user_ids)
-        return partner.user_ids[0]
-
-    def seen_invoices(self, user):
-        return self.env["account.invoice"].sudo(user).search([])
-
-    def follow_invoice(self, partner):
-        self.env["mail.followers"].create(
-            {
-                "res_id": self.inv.id,
-                "res_model": self.inv._name,
-                "partner_id": partner.id,
-            }
-        )
-
     def test_directly_followed_invoice(self):
         "Portal users who follow an invoice directly must have read access to it"
-        self.assertNotIn(self.inv, self.seen_invoices(self.user1))
+        self.assertNotIn(self.inv, self.seen(self.user1))
 
-        self.follow_invoice(self.user1.partner_id)
-        self.assertIn(self.inv, self.seen_invoices(self.user1))
+        self.follow_instance(self.user1.partner_id, self.inv)
+        self.assertIn(self.inv, self.seen(self.user1))
 
     def test_in_accounting_group(self):
-        self.assertNotIn(self.inv, self.seen_invoices(self.user1))
-        self.assertNotIn(self.inv, self.seen_invoices(self.user2))
+        self.assertNotIn(self.inv, self.seen(self.user1))
+        self.assertNotIn(self.inv, self.seen(self.user2))
 
         accounting_grp = self.env.ref("customer_team_manager.group_customer_accounting")
         accounting_grp.users |= self.user2
 
-        self.assertNotIn(self.inv, self.seen_invoices(self.user1))
-        self.assertIn(self.inv, self.seen_invoices(self.user2))
+        self.assertNotIn(self.inv, self.seen(self.user1))
+        self.assertIn(self.inv, self.seen(self.user2))
+
+
+class PortalSaleOrderIrRulesTC(PortalIrRulesTC):
+    "Test class for portal user sale_order-related access rules"
+    model = "sale.order"
+
+    def setUp(self):
+        super().setUp()
+        self.so = self.env.ref("sale.portal_sale_order_1")
+
+        partner1 = self.so.partner_id
+        partner1.parent_id = self.env.ref("base.res_partner_1")
+        self.user1 = self._give_portal_access(partner1)
+
+        partner2 = partner1.copy()
+        self.user2 = self._give_portal_access(partner2)
+
+        self.assertNotIn(partner1, self.so.message_partner_ids)
+        self.assertNotIn(partner2, self.so.message_partner_ids)
+
+    def test_directly_followed_sale_order(self):
+        "Portal users who follow an sale_order directly must have read access to it"
+        self.assertNotIn(self.so, self.seen(self.user1))
+
+        self.follow_instance(self.user1.partner_id, self.so)
+        self.assertIn(self.so, self.seen(self.user1))
+
+    def test_in_purchase_group(self):
+        self.assertNotIn(self.so, self.seen(self.user1))
+        self.assertNotIn(self.so, self.seen(self.user2))
+
+        purchase_grp = self.env.ref("customer_team_manager.group_customer_purchase")
+        purchase_grp.users |= self.user2
+
+        self.assertNotIn(self.so, self.seen(self.user1))
+        self.assertIn(self.so, self.seen(self.user2))
