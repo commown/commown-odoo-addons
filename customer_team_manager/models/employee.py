@@ -1,4 +1,7 @@
-from odoo import _, api, fields, models
+import base64
+
+from odoo import _, api, fields, models, tools
+from odoo.modules import get_module_resource
 
 
 class Employee(models.Model):
@@ -49,6 +52,21 @@ class Employee(models.Model):
         compute="_compute_portal_status",
         store=False,
     )
+
+    image_medium = fields.Binary(
+        "Medium-sized image",
+        attachment=True,
+        default=lambda self: self._compute_default_image(),
+        help="Medium-sized image of this employee. It is automatically "
+        "resized as a 128x128px image, with aspect ratio preserved.",
+    )
+
+    def _compute_default_image(self):
+        img_path = get_module_resource("base", "static/img", "avatar.png")
+        with open(img_path, "rb") as f:
+            image = f.read()
+        image = tools.image_colorize(image)
+        return base64.b64encode(image)
 
     def _compute_portal_status(self):
         for _rec in self:
@@ -138,6 +156,10 @@ class Employee(models.Model):
             # Email is readonly in the UI when partner has an active user, so set now:
             vals["email"] = partner.email
 
+        if not vals.get("image_medium"):
+            vals["image_medium"] = self._compute_default_image()
+        vals["image_medium"] = tools.image_resize_image_medium(vals["image_medium"])
+
         result = super().create(vals)
         partner = result.sudo().partner
 
@@ -169,9 +191,25 @@ class Employee(models.Model):
                 _("Employee is now active: its email cannot be modified anymore!")
             )
 
+        if "image_medium" in vals:
+            vals["image_medium"] = tools.image_resize_image_medium(vals["image_medium"])
+
         result = super().write(vals)
 
         if not self.active:
             self.action_revoke_portal_access()
 
         return result
+
+    @api.multi
+    def unlink(self):
+        """Remove attachment before unlinking to avoid an Odoo v12 bug...
+
+        ... namely the attachment is removed after the employee which
+        then requires to be in group_user which is not the case for
+        customers.
+
+        see unlink in odoo/models.py (line 3211)
+        """
+        self.update({"image_medium": False})
+        return super().unlink()
