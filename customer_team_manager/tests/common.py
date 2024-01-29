@@ -16,20 +16,15 @@ class CustomerTeamAbstractTC(SavepointCase):
         partner = self.user.partner_id
         partner.update({"parent_id": self.company.id, "firstname": "F"})
 
-        self.env.ref("customer_team_manager.group_customer").users |= self.user
-        self.env.ref("customer_team_manager.group_manager").users |= self.env.user
+        self.env.ref("sales_team.group_sale_manager").users |= self.env.user
 
-        admin_role = self.env.ref("customer_team_manager.customer_role_admin")
-        self.admin = self.env["customer_team_manager.employee"].create(
-            {
-                "firstname": partner.firstname,
-                "lastname": partner.lastname,
-                "email": partner.email,
-                "phone": partner.phone,
-                "roles": [(6, 0, admin_role.ids)],
-                "partner": partner.id,
-                "company": partner.commercial_partner_id.id,
-            }
+        partner.action_create_employee(admin=True)
+        self.assertTrue(
+            self.user.has_group("customer_team_manager.group_customer_admin")
+        )
+
+        self.admin = self.env["customer_team_manager.employee"].search(
+            [("partner", "=", partner.id)]
         )
 
     def create_employee(self, sudo=True, sudo_as=None, **kwargs):
