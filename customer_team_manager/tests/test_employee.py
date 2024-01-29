@@ -118,3 +118,23 @@ class EmployeeTC(CustomerTeamAbstractTC):
         )
         empl = self.create_by_form("employee", sudo=False, **attrs)
         self.assertEqual(empl.sudo().company, self.company)
+
+    def has_attachment(self, entity):
+        self.env.cr.execute(
+            "SELECT id FROM ir_attachment WHERE res_model=%s AND res_id=%s",
+            [entity._name, entity.id],
+        )
+        return bool(self.env.cr.fetchall())
+
+    def test_write_and_unlink_with_image(self):
+        empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
+        old_image = empl.image_medium
+
+        self.assertTrue(self.has_attachment(empl))
+        empl.image_medium = False
+        self.assertFalse(self.has_attachment(empl))
+
+        empl.image_medium = old_image
+        self.assertTrue(self.has_attachment(empl))
+        empl.unlink()
+        self.assertFalse(self.has_attachment(empl))
