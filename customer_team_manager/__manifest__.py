@@ -14,6 +14,7 @@
         # native modules
         "account",
         "portal",
+        "sale",
         # OCA modules
         "partner_firstname",
         "web_notify",
