@@ -274,3 +274,56 @@ class Contract(models.Model):
             }
         else:
             return False
+
+    def get_main_rental_line(self, _raise=True):
+        """Return the main rental line of current contract.
+
+        This line is:
+        1. related to a sold product having a property_contract_template_id
+        2. related to a contract template line that is marked with ##PRODUCT##
+
+        Raise if we could not find one (and only one).
+        """
+        cline_to_property_ct = (
+            "sale_order_line_id.product_id.product_tmpl_id"
+            ".property_contract_template_id"
+        )
+
+        clines = self.env["contract.line"].search(
+            [
+                ("contract_id", "=", self.id),
+                (cline_to_property_ct, "!=", False),
+                ("contract_template_line_id.name", "like", CONTRACT_PROD_MARKER),
+            ]
+        )
+
+        if _raise and len(clines) != 1:
+            raise ValidationError(
+                _("Contract %s (id %d) has %d main rental service lines.")
+                % (self.name, self.id, len(clines))
+            )
+
+        return clines
+
+    def get_main_rental_service(self, _raise=True):
+        """Return the main rental service of current contract.
+
+        See documentation of `get_main_rental_line` for more details.
+        Raise if we could not find one (and only one).
+        """
+
+        self.ensure_one()
+        clines = self.get_main_rental_line(_raise=_raise)
+        services = clines.mapped("sale_order_line_id.product_id.product_tmpl_id")
+        if (
+            _raise
+            and services.property_contract_template_id != self.contract_template_id
+        ):
+            msg = _(
+                "Contract %s (id %d) has a main rental service"
+                " with an incoherent contract model %s"
+            )
+            raise ValidationError(
+                msg % (self.name, self.id, services.property_contract_template_id.name)
+            )
+        return services
