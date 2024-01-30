@@ -27,6 +27,23 @@ def _rental_products(contract_descr):
     }
 
 
+class ContractLine(models.Model):
+    _inherit = "contract.line"
+
+    contract_template_line_id = fields.Many2one(
+        string="Contract template line",
+        help="Contract template line which generated current contract line",
+        comodel_name="contract.template.line",
+        domain=lambda self: self._domain_contract_template_line_id(),
+    )
+
+    def _domain_contract_template_line_id(self):
+        contract = self.contract_id
+        if not contract and "contract_id" in self.env.context:
+            contract = contract.browse(self.env.context["contract_id"])
+        return [("contract_id", "=", contract.contract_template_id.id)]
+
+
 class Contract(models.Model):
     _inherit = "contract.contract"
 
@@ -67,6 +84,19 @@ class Contract(models.Model):
     date_start = fields.Date(inverse="_inverse_date_start")
 
     recurring_next_date = fields.Date(inverse="_inverse_recurring_next_date")
+
+    @api.multi
+    def _convert_contract_lines(self, contract):
+        """On each contract line, add the relation to the contract template
+        line which generated it.
+        """
+
+        new_lines = super(Contract, self)._convert_contract_lines(contract)
+        for contract_line, contract_template_line in zip(
+            new_lines, contract.contract_line_ids
+        ):
+            contract_line.contract_template_line_id = contract_template_line
+        return new_lines
 
     def _inverse_date_start(self):
         "Allow the direct modification of the start date"
