@@ -340,17 +340,13 @@ class RentalFeesDefinitionLine(models.Model):
         using the merged invoice line analytic account, that must match the period's
         contract lines one.
         """
-        _pt = self.fees_definition_id.product_template_id
-        _path_to_storable = (
-            "contract_line_id.sale_order_line_id"
-            ".product_id.product_tmpl_id.storable_product_id"
-        )
+
+        cline = period["contract"].get_main_rental_line()
         paid_invoice_lines = self.env["account.invoice.line"].search(
             [
-                ("contract_line_id.contract_id", "=", period["contract"].id),
+                ("contract_line_id", "=", cline.id),
                 ("date_invoice", ">=", period["from_date"]),
                 ("date_invoice", "<", period["to_date"]),
-                (_path_to_storable, "=", _pt.id),
                 ("state", "=", "paid"),
             ]
         )
