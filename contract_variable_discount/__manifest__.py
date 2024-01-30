@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [
-        "contract",
+        "product_rental",  # for contract.line's contract_template_line_id field
         "web_domain_field",
     ],
     "data": [
