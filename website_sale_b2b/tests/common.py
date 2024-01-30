@@ -5,7 +5,7 @@ class RentedQuantityTC(RentalSaleOrderTC):
     def setUp(self):
         super(RentedQuantityTC, self).setUp()
 
-        self.so = self.create_sale_order()
+        self.so = self.create_sale_order(self.env.ref("base.res_partner_address_1"))
 
         self.fp_premium = self._product_by_name("Fairphone Premium")
         self.fp2 = self._product_by_name("FP2")

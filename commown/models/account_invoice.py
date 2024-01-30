@@ -1,4 +1,4 @@
-from odoo import api, models
+from odoo import _, api, models
 
 
 class AccountInvoice(models.Model):
@@ -59,3 +59,23 @@ class AccountInvoice(models.Model):
 
             invoice.action_invoice_open()
             self.env.cache.invalidate()
+
+    def _invoice_merge_auto_pay_invoice_job(self):
+        result = super()._invoice_merge_auto_pay_invoice_job()
+        if (
+            self.state == "paid"
+            and self.sent is False
+            and self.partner_id.type == "invoice"
+            and self.partner_id.email
+        ):
+            mail_template = self.env.ref(
+                "account.email_template_edi_invoice",
+                raise_if_not_found=False,
+            )
+            if mail_template:
+                mail_template.send_mail(self.id)
+            self.with_context(mail_post_autofollow=True)
+            self.sent = True
+            self.message_post(body=_("Invoice sent"))
+
+        return result

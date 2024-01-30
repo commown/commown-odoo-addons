@@ -1,6 +1,14 @@
 <odoo>
 
   <record
+      id="obsolescence_action_copy_invoice_partner"
+      model="payment_token_uniquify.obsolescence_action">
+    <field name="name">Copy original invoice partner if any</field>
+    <field name="technical_name">copy_invoice_partner</field>
+    <field name="sequence">5</field>
+  </record>
+
+  <record
       id="obsolescence_action_reattribute_contracts"
       model="payment_token_uniquify.obsolescence_action">
     <field name="name">Reattribute contracts</field>
