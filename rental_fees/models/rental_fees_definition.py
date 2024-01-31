@@ -1,3 +1,5 @@
+import json
+
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
@@ -81,6 +83,13 @@ class RentalFeesDefinition(models.Model):
             " will be paid for a device that would not have been rented for"
             " this number of consecutive months."
         ),
+    )
+
+    excluded_devices = fields.One2many(
+        comodel_name="rental_fees.excluded_device",
+        string="Explicitely excluded devices (with compensation)",
+        inverse_name="fees_definition_id",
+        copy=False,
     )
 
     invoice_line_ids = fields.One2many(
@@ -341,7 +350,23 @@ class RentalFeesDefinitionLine(models.Model):
         contract lines one.
         """
 
-        cline = period["contract"].get_main_rental_line()
+        try:
+            cline = period["contract"].get_main_rental_line()
+        except ValidationError as err:
+            msg = _(
+                "\n%(err)s\n"
+                "Previous error occurred while computing the invoiced amounts of this"
+                " period in fees definition %(def_name)r (id %(def_id)d):\n- %(period)s"
+            )
+            raise RuntimeError(
+                msg
+                % {
+                    "err": err.name,
+                    "def_name": self.fees_definition_id.name,
+                    "def_id": self.fees_definition_id.id,
+                    "period": "\n- ".join("%s: %s" % (k, v) for k, v in period.items()),
+                }
+            )
         paid_invoice_lines = self.env["account.invoice.line"].search(
             [
                 ("contract_line_id", "=", cline.id),
@@ -383,3 +408,35 @@ class RentalFeesDefinitionLine(models.Model):
                 ),
                 "currency": self.env.user.company_id.currency_id.symbol,
             }
+
+
+class RentalFeesExcludedDevice(models.Model):
+    _name = "rental_fees.excluded_device"
+    _description = "Represents a device excluded from the fees and the reason for it"
+
+    fees_definition_id = fields.Many2one(
+        "rental_fees.definition",
+        string="Rental fees definition",
+        required=True,
+    )
+
+    device = fields.Many2one(
+        "stock.production.lot",
+        string="Device",
+        help="The device to be excluded",
+        required=True,
+    )
+
+    device_domain = fields.Char(
+        default=lambda self: self._default_device_domain(),
+        readonly=True,
+        store=False,
+    )
+
+    reason = fields.Char()
+
+    def _default_device_domain(self):
+        key = "default_fees_definition_id"
+        if key in self.env.context:
+            _def = self.env["rental_fees.definition"].browse(self.env.context[key])
+            return json.dumps([("id", "in", [d.id for d in _def.devices_delivery()])])
