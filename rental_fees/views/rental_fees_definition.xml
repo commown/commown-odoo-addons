@@ -64,6 +64,13 @@
           <group name="penalties">
             <field name="penalty_period_duration"/>
             <field name="no_rental_duration"/>
+            <field name="excluded_devices" context="{'default_fees_definition_id': id}">
+              <tree editable="bottom">
+                <field name="device_domain" invisible="1"/>
+                <field name="device" domain="device_domain"/>
+                <field name="reason"/>
+              </tree>
+            </field>
           </group>
           <group name="orders">
             <field name="order_ids" widget="many2many" domain="[('partner_id', '=', partner_id)]" />

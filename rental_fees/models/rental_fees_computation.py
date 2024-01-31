@@ -725,10 +725,13 @@ class RentalFeesComputationDetail(models.Model):
             ("fees", "Rental Fees"),
             ("no_rental_compensation", "No rental compensation"),
             ("lost_device_compensation", "Lost device compensation"),
+            ("excluded_device_compensation", "Excluded device compensation"),
         ],
         string="Fees type",
         required=True,
     )
+
+    compensation_reason = fields.Char()
 
     lot_id = fields.Many2one(
         "stock.production.lot",
