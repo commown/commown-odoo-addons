@@ -676,6 +676,7 @@ class RentalFeesComputation(models.Model):
 
             device_fees = 0.0
             for period in periods:
+                period["device"] = device.name  # helps debugging
                 monthly_fees = period["fees_def_line"].compute_monthly_fees(period)
                 period["monthly_fees"] = monthly_fees
                 period["fees"] = sum(amount for _ds, _de, amount in monthly_fees)
