@@ -1,0 +1,11 @@
+<odoo>
+  <data noupdate="1">
+    <record id="scrapped_tag" model="res.partner.category">
+      <field name="name">Web Scrapping</field>
+    </record>
+
+    <record id="to_check_tag" model="res.partner.category">
+      <field name="name">A vérifier</field>
+    </record>
+  </data>
+</odoo>

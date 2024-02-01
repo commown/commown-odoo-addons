@@ -66,6 +66,7 @@
         "data/product_public_category.xml",
         "data/project_project.xml",
         "data/payment_button.xml",
+        "data/res_partner_category.xml",
         "security/ir.model.access.csv",
         "views/account_invoice.xml",
         "views/account_move.xml",
