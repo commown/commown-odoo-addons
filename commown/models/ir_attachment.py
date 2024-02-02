@@ -35,6 +35,11 @@ class IrAttachment(models.Model):
                         interpreter.process_page(page)
 
                     buf = content.getvalue()
+
+                    # Commown fix to avoid crash in postgress index_content column
+                    # update for docs badly converted by pdfminer:
+                    buf = buf.replace("\0", " ")
+
             except Exception:
                 pass
         return buf
