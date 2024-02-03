@@ -122,7 +122,11 @@ class RentalFeesComputation(models.Model):
         return self.details("fees")
 
     def compensation_details(self):
-        return self.details("no_rental_compensation", "lost_device_compensation")
+        field = self.env["rental_fees.computation.detail"].fields_get()["fees_type"]
+        compensation_fees_types = [
+            _type[0] for _type in field["selection"] if "compensation" in _type[0]
+        ]
+        return self.details(*compensation_fees_types)
 
     def per_device_revenues(self):
         fees_data = {
