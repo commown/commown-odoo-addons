@@ -578,7 +578,14 @@ class RentalFeesComputation(models.Model):
             record.with_delay()._run()
 
     def _add_compensation(
-        self, fees_def, compensation_type, device, delivery_date, device_fees, to_date
+        self,
+        fees_def,
+        compensation_type,
+        device,
+        delivery_date,
+        device_fees=0.0,
+        to_date=None,
+        reason=None,
     ):
         prices = fees_def.prices(device)
 
@@ -587,6 +594,8 @@ class RentalFeesComputation(models.Model):
             prices["standard"] - prices["purchase"],
         )
 
+        to_date = delivery_date if to_date is None else (to_date - _one_day)
+
         self.env["rental_fees.computation.detail"].sudo().create(
             {
                 "fees_computation_id": self.id,
@@ -594,8 +603,9 @@ class RentalFeesComputation(models.Model):
                 "fees_type": compensation_type,
                 "lot_id": device.id,
                 "from_date": delivery_date,
-                "to_date": to_date - _one_day,  # dates included in the DB
+                "to_date": to_date,
                 "fees_definition_id": fees_def.id,
+                "compensation_reason": reason,
             }
         )
 
@@ -662,9 +672,20 @@ class RentalFeesComputation(models.Model):
     def _run_for_fees_def(self, fees_def):
 
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
+        excluded_devices = {ed.device: ed.reason for ed in fees_def.excluded_devices}
 
         for device, delivery_data in fees_def.devices_delivery().items():
             delivery_date = delivery_data["date"]
+
+            if device in excluded_devices:
+                self._add_compensation(
+                    fees_def,
+                    "excluded_device_compensation",
+                    device,
+                    delivery_date,
+                    reason=excluded_devices[device],
+                )
+                continue
 
             periods = self.rental_periods(device)
             no_rental_limit, periods = self.scan_no_rental(
