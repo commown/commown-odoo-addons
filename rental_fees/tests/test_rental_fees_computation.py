@@ -500,6 +500,52 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertFalse(comp.details("lost_device_compensation").mapped("fees"))
         self.assertFalse(comp.rental_details().mapped("fees"))
 
+    def test_compute_excluded_device(self):
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        device = contract.quant_ids.ensure_one().lot_id
+        while contract.recurring_next_date <= date(2021, 3, 1):
+            contract._recurring_create_invoice()
+
+        reason = "Used by an internal employee"
+        self.env["rental_fees.excluded_device"].create(
+            {
+                "fees_definition_id": self.fees_def.id,
+                "device": device.id,
+                "reason": reason,
+            }
+        )
+
+        comp = self.compute("2022-03-01")
+        self.assertEqual(
+            comp.details("excluded_device_compensation").mapped("fees"),
+            [300.0],
+        )
+
+    def test_compute_monthly_fees_error_main_rental_line(self):
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        rental_service = contract.get_main_rental_service()
+
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.create_invoices_until(contract, "2021-05-01")
+
+        # Check the computation is OK when no error is raised
+        comp = self.compute("2021-05-01")
+        self.assertTrue(comp.fees > 0)
+
+        # Do the same computation but with an error in get_main_rental_service:
+        rental_service.property_contract_template_id = False
+        with self.assertRaises(RuntimeError) as err:
+            self.compute("2021-05-01")
+
+        # Check the generated error contains useful information
+        exc = str(err.exception)
+        self.assertIn("device: N/S 1", exc)
+        self.assertIn(contract.name, exc)
+        self.assertIn(self.fees_def.name, exc)
+
     def test_fees_def_split_dates(self):
         self.assertEqual(
             {
