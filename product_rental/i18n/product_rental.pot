@@ -1,16 +1,15 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* product_rental
+#	* product_rental
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-04 06:32+0000\n"
-"PO-Revision-Date: 2024-02-04 08:00+0100\n"
-"Last-Translator: <florent@commown.coop>\n"
-"Language-Team: Commown\n"
-"Language: French\n"
+"PO-Revision-Date: 2024-02-04 06:32+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -19,302 +18,290 @@ msgstr ""
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.rental_sale_order_portal_content
 msgid "<span>(deposit)</span>"
-msgstr "<span>(dépôt de garantie)</span>"
+msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.product_price
 msgid "<span>Commitment duration: </span>"
-msgstr "<span>Durée d'engagement : </span>"
+msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.cart_line_product_link
 #: model_terms:ir.ui.view,arch_db:product_rental.optional_product_items
 #: model_terms:ir.ui.view,arch_db:product_rental.product_configurator_configure_optional_products
 msgid "<strong> - Deposit</strong>"
-msgstr "<strong> - Dépôt de garantie</strong>"
+msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_template_form_view
-msgid ""
-"<strong>##ACCESSORY##</strong> (in the description): mark the rental "
-"accessories template line; substituted by the actual accessory name"
+msgid "<strong>##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name"
 msgstr ""
-"<strong>##ACCESSORY##</strong> (dans la description) : marque la ligne "
-"modèle pour les accessoires ; le marqueur sera remplacé par le nom de chacun "
-"des accessoires"
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_template_form_view
-msgid ""
-"<strong>##PRODUCT##</strong> (in the description): mark the rental product "
-"template line; substituted by the actual product name"
+msgid "<strong>##PRODUCT##</strong> (in the description): mark the rental product template line; substituted by the actual product name"
 msgstr ""
-"<strong>##PRODUCT##</strong> (dans la description) : marque la ligne du "
-"produit de location principal ; le marqueur sera remplacé par le nom du "
-"produit vendu"
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "<strong>Commitment end date</strong>"
-msgstr "<strong>Fin de la période d'engagement</strong>"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_contract_contract__commitment_period_number
 #: model:ir.model.fields,help:product_rental.field_contract_template__commitment_period_number
 msgid "Commitment duration in number of periods"
-msgstr "Durée d'engagement (nombre de périodes)"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_contract__commitment_end_date
 msgid "Commitment end date"
-msgstr "Fin de la période d'engagement"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_contract__commitment_period_number
 #: model:ir.model.fields,field_description:product_rental.field_contract_template__commitment_period_number
 msgid "Commitment period number"
-msgstr "Durée d'engagement (nombre de périodes)"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_contract__commitment_period_type
 #: model:ir.model.fields,field_description:product_rental.field_contract_template__commitment_period_type
 msgid "Commitment period type"
-msgstr "Durée d'engagement (type de périodes)"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_contract_contract
 msgid "Contract"
-msgstr "Contrat"
+msgstr ""
 
 #. module: product_rental
 #: code:addons/product_rental/models/contract.py:302
 #, python-format
 msgid "Contract %s (id %d) has %d main rental service lines."
-msgstr "Le contract %s (id %d) a %d lignes de produit de location principal."
+msgstr ""
 
 #. module: product_rental
 #: code:addons/product_rental/models/contract.py:322
 #, python-format
-msgid ""
-"Contract %s (id %d) has a main rental service with an incoherent contract "
-"model %s"
-msgstr "Le contract %s (id %d) a un service de location principal incohérent avec le modèle de contrat %s"
+msgid "Contract %s (id %d) has a main rental service with an incoherent contract model %s"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_contract_line
 msgid "Contract Line"
-msgstr "Ligne du contrat"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_contract_template
 msgid "Contract Template"
-msgstr "Modèle de contrat"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_line__contract_template_line_id
 msgid "Contract template line"
-msgstr "Ligne du modèle de contrat"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_contract_line__contract_template_line_id
 msgid "Contract template line which generated current contract line"
-msgstr "Ligne du modèle de contrat qui a permis de générer cette ligne"
+msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.view_order_form
 msgid "Contracts"
-msgstr "Contrats"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_contract__contractual_documents
 #: model:ir.model.fields,field_description:product_rental.field_contract_template__contractual_documents
 msgid "Contractual documents"
-msgstr "Documents contractuels (CGS/CP)"
+msgstr ""
 
 #. module: product_rental
 #: code:addons/product_rental/models/contract.py:268
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_contract_form_view
 #, python-format
 msgid "Cost/Revenue"
-msgstr "Coûts / Revenus"
+msgstr ""
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Daily"
-msgstr "par jour"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_contract__date_start
 msgid "Date Start"
-msgstr "Date de début"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_contract__recurring_next_date
 msgid "Date of Next Invoice"
-msgstr "Date de la prochaine facture"
+msgstr ""
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Day(s)"
-msgstr "Jour(s)"
+msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.cart_summary
 msgid "Deposit"
-msgstr "Dépôt de garantie"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_product_template_attribute_value__rental_price_extra
 msgid "Extra price of the product rent for current variant"
-msgstr "Montant de loyer suppplémentaire pour cette variante"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_template_attribute_value__rental_price_extra
 msgid "Extra rental price"
-msgstr "Montant de loyer suppplémentaire"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,help:product_rental.field_product_product__rental_frequency
 #: model:ir.model.fields,help:product_rental.field_product_template__rental_frequency
 msgid "Frequency of the rental price payment"
-msgstr "Fréquence de paiement de la location"
+msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.product_price
 msgid "Initial deposit:"
-msgstr "Dépôt de garantie à régler à la commande :"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__is_deposit
 #: model:ir.model.fields,field_description:product_rental.field_product_template__is_deposit
 msgid "Is initial payment a deposit"
-msgstr "Paiement initial = dépôt de garantie ?"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__is_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_template__is_rental
 msgid "Is rental product"
-msgstr "Location"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_template_attribute_value__is_rental
 msgid "Is used by a rental product"
-msgstr "Est utilisé par un produit de location"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_mail_message
 msgid "Message"
-msgstr "Message"
+msgstr ""
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Month(s)"
-msgstr "Mois"
+msgstr ""
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Month(s) last day"
-msgstr "Dernier jour du mois"
+msgstr ""
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Monthly"
-msgstr "par mois"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_contract_template__payment_mode_id
 msgid "Payment Mode"
-msgstr "Mode de paiement"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_payment_transaction
 msgid "Payment Transaction"
-msgstr "Transaction"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_product_template_attribute_value
 msgid "Product Attribute Value"
-msgstr "Valeur d'attribut"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_product_template
 msgid "Product Template"
-msgstr "Modèle d'article"
+msgstr ""
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Quarter(s)"
-msgstr "Trimestre(s)"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__rental_frequency
 #: model:ir.model.fields,field_description:product_rental.field_product_template__rental_frequency
 msgid "Rental payment frequency"
-msgstr "Fréquence de paiement"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__rental_price
 #: model:ir.model.fields,field_description:product_rental.field_product_template__rental_price
 msgid "Rental price"
-msgstr "Tarif de la location"
+msgstr ""
 
 #. module: product_rental
 #: model:project.project,label_tasks:product_rental.contract_termination_project
 msgid "Résiliation"
-msgstr "Résiliation"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order
 msgid "Sale Order"
-msgstr "Commande"
+msgstr ""
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Ligne de bons de commande"
+msgstr ""
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Semester(s)"
-msgstr "Semestre(s)"
+msgstr ""
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Week(s)"
-msgstr "Semaine(s)"
+msgstr ""
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Weekly"
-msgstr "par semaine"
+msgstr ""
 
 #. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "Year(s)"
-msgstr "Année(s)"
+msgstr ""
 
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Yearly"
-msgstr "par an"
+msgstr ""
 
 #. module: product_rental
 #: model:base.automation,name:product_rental.payment_transaction_done
 #: model:ir.actions.server,name:product_rental.action_contract_auto_account_payment
 msgid "[commown] Contract-related payment transaction done"
 msgstr ""
-"[commown] Paiement automatique des transactions induites par un contrat"
+
