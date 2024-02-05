@@ -44,13 +44,6 @@ class ContractTemplateLine(models.Model):
 class ContractLine(models.Model):
     _inherit = "contract.line"
 
-    contract_template_line_id = fields.Many2one(
-        string="Contract template line",
-        help="Contract template line which discount lines apply here",
-        comodel_name="contract.template.line",
-        domain=lambda self: self._domain_contract_template_line_id(),
-    )
-
     inherited_discount_line_ids = fields.One2many(
         string="Inherited discount lines",
         help="Discount lines from the related contract model",
@@ -69,12 +62,6 @@ class ContractLine(models.Model):
     variable_discount = fields.Boolean(
         "Variable discount?", store=False, compute="_compute_variable_discount"
     )
-
-    def _domain_contract_template_line_id(self):
-        contract = self.contract_id
-        if not contract and "contract_id" in self.env.context:
-            contract = contract.browse(self.env.context["contract_id"])
-        return [("contract_id", "=", contract.contract_template_id.id)]
 
     @api.model
     def _prepare_invoice_line(self, invoice_id=False, invoice_values=False):
@@ -150,23 +137,3 @@ class ContractLine(models.Model):
 
         for line in c_lines:
             yield line
-
-
-class Contract(models.Model):
-    _inherit = "contract.contract"
-    discount_date_units = {"days", "weeks", "months", "years"}
-
-    @api.multi
-    def _convert_contract_lines(self, contract):
-        """On each contract line, add the relation to the contract template
-        line which generated it.
-
-        This makes it easy to find the application contract template
-        discount lines.
-        """
-        new_lines = super(Contract, self)._convert_contract_lines(contract)
-        for contract_line, contract_template_line in zip(
-            new_lines, contract.contract_line_ids
-        ):
-            contract_line.contract_template_line_id = contract_template_line
-        return new_lines

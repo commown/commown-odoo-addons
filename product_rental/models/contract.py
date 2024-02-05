@@ -27,6 +27,23 @@ def _rental_products(contract_descr):
     }
 
 
+class ContractLine(models.Model):
+    _inherit = "contract.line"
+
+    contract_template_line_id = fields.Many2one(
+        string="Contract template line",
+        help="Contract template line which generated current contract line",
+        comodel_name="contract.template.line",
+        domain=lambda self: self._domain_contract_template_line_id(),
+    )
+
+    def _domain_contract_template_line_id(self):
+        contract = self.contract_id
+        if not contract and "contract_id" in self.env.context:
+            contract = contract.browse(self.env.context["contract_id"])
+        return [("contract_id", "=", contract.contract_template_id.id)]
+
+
 class Contract(models.Model):
     _inherit = "contract.contract"
 
@@ -67,6 +84,19 @@ class Contract(models.Model):
     date_start = fields.Date(inverse="_inverse_date_start")
 
     recurring_next_date = fields.Date(inverse="_inverse_recurring_next_date")
+
+    @api.multi
+    def _convert_contract_lines(self, contract):
+        """On each contract line, add the relation to the contract template
+        line which generated it.
+        """
+
+        new_lines = super(Contract, self)._convert_contract_lines(contract)
+        for contract_line, contract_template_line in zip(
+            new_lines, contract.contract_line_ids
+        ):
+            contract_line.contract_template_line_id = contract_template_line
+        return new_lines
 
     def _inverse_date_start(self):
         "Allow the direct modification of the start date"
@@ -244,3 +274,56 @@ class Contract(models.Model):
             }
         else:
             return False
+
+    def get_main_rental_line(self, _raise=True):
+        """Return the main rental line of current contract.
+
+        This line is:
+        1. related to a sold product having a property_contract_template_id
+        2. related to a contract template line that is marked with ##PRODUCT##
+
+        Raise if we could not find one (and only one).
+        """
+        cline_to_property_ct = (
+            "sale_order_line_id.product_id.product_tmpl_id"
+            ".property_contract_template_id"
+        )
+
+        clines = self.env["contract.line"].search(
+            [
+                ("contract_id", "=", self.id),
+                (cline_to_property_ct, "!=", False),
+                ("contract_template_line_id.name", "like", CONTRACT_PROD_MARKER),
+            ]
+        )
+
+        if _raise and len(clines) != 1:
+            raise ValidationError(
+                _("Contract %s (id %d) has %d main rental service lines.")
+                % (self.name, self.id, len(clines))
+            )
+
+        return clines
+
+    def get_main_rental_service(self, _raise=True):
+        """Return the main rental service of current contract.
+
+        See documentation of `get_main_rental_line` for more details.
+        Raise if we could not find one (and only one).
+        """
+
+        self.ensure_one()
+        clines = self.get_main_rental_line(_raise=_raise)
+        services = clines.mapped("sale_order_line_id.product_id.product_tmpl_id")
+        if (
+            _raise
+            and services.property_contract_template_id != self.contract_template_id
+        ):
+            msg = _(
+                "Contract %s (id %d) has a main rental service"
+                " with an incoherent contract model %s"
+            )
+            raise ValidationError(
+                msg % (self.name, self.id, services.property_contract_template_id.name)
+            )
+        return services

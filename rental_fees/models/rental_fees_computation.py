@@ -122,7 +122,11 @@ class RentalFeesComputation(models.Model):
         return self.details("fees")
 
     def compensation_details(self):
-        return self.details("no_rental_compensation", "lost_device_compensation")
+        field = self.env["rental_fees.computation.detail"].fields_get()["fees_type"]
+        compensation_fees_types = [
+            _type[0] for _type in field["selection"] if "compensation" in _type[0]
+        ]
+        return self.details(*compensation_fees_types)
 
     def per_device_revenues(self):
         fees_data = {
@@ -578,7 +582,14 @@ class RentalFeesComputation(models.Model):
             record.with_delay()._run()
 
     def _add_compensation(
-        self, fees_def, compensation_type, device, delivery_date, device_fees, to_date
+        self,
+        fees_def,
+        compensation_type,
+        device,
+        delivery_date,
+        device_fees=0.0,
+        to_date=None,
+        reason=None,
     ):
         prices = fees_def.prices(device)
 
@@ -587,6 +598,8 @@ class RentalFeesComputation(models.Model):
             prices["standard"] - prices["purchase"],
         )
 
+        to_date = delivery_date if to_date is None else (to_date - _one_day)
+
         self.env["rental_fees.computation.detail"].sudo().create(
             {
                 "fees_computation_id": self.id,
@@ -594,8 +607,9 @@ class RentalFeesComputation(models.Model):
                 "fees_type": compensation_type,
                 "lot_id": device.id,
                 "from_date": delivery_date,
-                "to_date": to_date - _one_day,  # dates included in the DB
+                "to_date": to_date,
                 "fees_definition_id": fees_def.id,
+                "compensation_reason": reason,
             }
         )
 
@@ -662,9 +676,20 @@ class RentalFeesComputation(models.Model):
     def _run_for_fees_def(self, fees_def):
 
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
+        excluded_devices = {ed.device: ed.reason for ed in fees_def.excluded_devices}
 
         for device, delivery_data in fees_def.devices_delivery().items():
             delivery_date = delivery_data["date"]
+
+            if device in excluded_devices:
+                self._add_compensation(
+                    fees_def,
+                    "excluded_device_compensation",
+                    device,
+                    delivery_date,
+                    reason=excluded_devices[device],
+                )
+                continue
 
             periods = self.rental_periods(device)
             no_rental_limit, periods = self.scan_no_rental(
@@ -676,6 +701,7 @@ class RentalFeesComputation(models.Model):
 
             device_fees = 0.0
             for period in periods:
+                period["device"] = device.name  # helps debugging
                 monthly_fees = period["fees_def_line"].compute_monthly_fees(period)
                 period["monthly_fees"] = monthly_fees
                 period["fees"] = sum(amount for _ds, _de, amount in monthly_fees)
@@ -724,10 +750,13 @@ class RentalFeesComputationDetail(models.Model):
             ("fees", "Rental Fees"),
             ("no_rental_compensation", "No rental compensation"),
             ("lost_device_compensation", "Lost device compensation"),
+            ("excluded_device_compensation", "Excluded device compensation"),
         ],
         string="Fees type",
         required=True,
     )
+
+    compensation_reason = fields.Char()
 
     lot_id = fields.Many2one(
         "stock.production.lot",
