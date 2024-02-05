@@ -103,6 +103,12 @@ class RentalFeesDefinition(models.Model):
     order_ids = fields.Many2many(
         comodel_name="purchase.order",
         string="Purchase orders",
+        domain=(
+            "["
+            " ('partner_id', '=', partner_id),"
+            " ('order_line.product_id.product_tmpl_id', '=', product_template_id)"
+            "]"
+        ),
     )
 
     line_ids = fields.One2many(
