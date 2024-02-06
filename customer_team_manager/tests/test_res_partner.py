@@ -1,3 +1,5 @@
+import json
+
 from odoo.exceptions import UserError
 
 from .common import CustomerTeamAbstractTC
@@ -51,7 +53,56 @@ class ResPartnerTC(CustomerTeamAbstractTC):
         expected_msg = "Partner 'F L' (id %d) has no user yet"
         self.assertEqual(err.exception.name, expected_msg % partner.id)
 
-    def test_action_create_employee_std_ok(self):
+    def info_notifs(self, user=None):
+        user = user or self.env.user
+        return self.env["bus.bus"].search(
+            [("channel", "=", json.dumps(user.notify_info_channel_name))]
+        )
+
+    def test_action_create_employees_ok(self):
+        "Create employees action must accomadate already existing and give feedback"
+
+        # Create an pre-existing admin employee and a partner to become employee:
+        admin = self.create_admin(firstname="J", lastname="C", email="jc@test.coop")
+        admin.action_grant_portal_access()
         partner = self.create_partner()
-        partner.action_create_employee()
+        prev_notifs = self.info_notifs()
+
+        # Select both and call the action
+        (admin.sudo().partner | partner).action_create_employee()
+
         self.assertEqual(len(partner.get_employees()), 1)
+        self.assertEqual(len(admin.sudo().partner.get_employees()), 1)
+
+        new_notifs = self.info_notifs() - prev_notifs
+        self.assertEqual(
+            [json.loads(n.message)["message"] for n in new_notifs],
+            [
+                "<b>Created 1 employees:</b><br>"
+                "- F L (Employee)<br>"
+                "<br>"
+                "<b>Already existing employee(s):</b><br>"
+                "- J C (Administrator)"
+            ],
+        )
+
+    def test_action_create_employees_nothing_done(self):
+        "Create employees action must notify when nothing was done"
+
+        admin = self.create_admin(firstname="J", lastname="C", email="jc@test.coop")
+        admin.action_grant_portal_access()
+        prev_notifs = self.info_notifs()
+
+        # Select both and call the action
+        admin.sudo().partner.action_create_employee()
+
+        new_notifs = self.info_notifs() - prev_notifs
+        self.assertEqual(
+            [json.loads(n.message)["message"] for n in new_notifs],
+            [
+                "<b>No employee created!</b><br>"
+                "<br>"
+                "<b>Already existing employee(s):</b><br>"
+                "- J C (Administrator)"
+            ],
+        )
