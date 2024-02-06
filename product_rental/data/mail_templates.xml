@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="email_loss_declaration" model="mail.template">
+      <field name="name">[commown] AR déclaration Perte</field>
+      <field name="email_from">contact@commown.coop</field>
+      <field name="reply_to">contact@commown.coop</field>
+      <field name="subject">${object.company_id.name} - Votre déclaration de perte</field>
+      <field name="model_id" ref="project.model_project_task"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="lang">${object.partner_id.lang}</field>
+      <field name="body_html"><![CDATA[
+<p>Bonjour ${object.partner_id.firstname},</p>
+<br/>
+<p>Nous vous contactons suite à votre demande d'assistance concernant la perte de l'appareil.
+  Nous sommes vraiment désolés de ce qui vous arrive, tant pour votre usage que pour l'impact financier
+  induit pour la coopérative (et pour vous-même si cet incident ne rentre pas dans des garanties auxquelles vous avez souscrit) :-(
+</p>
+
+<br><br>
+<p>Mais rassurez-vous nous allons tout mettre en œuvre pour vous accompagner dans les démarches et ainsi pouvoir vous renvoyer
+  un autre appareil au plus vite ! :-)</p>
+<br><br>
+
+<p>Voici la marche à suivre pas-à-pas pour la partie administrative :
+<br><br>
+  - La 1ère étape - et uniquement dans le cas des Smartphones - c'est faire une déclaration de perte à votre opérateur pour
+  que l'utilisation de l'appareil soit bloquée, pour cela vous aurez besoin de l'identifiant “IMEI” du téléphone
+  (que vous avez en théorie pu récupérer lors de l'ouverture de la demande d'assistance; si ce n'est pas le cas revenez vers
+  nous pour que nous puissions vous aider à le trouver).
+  <br><br>
+  Il faut également demander à votre opérateur téléphonique de mettre en opposition la carte SIM (ou les 2 cartes SIM
+  si vous utilisiez les 2 emplacements).
+  <br><br>
+  - L'étape suivante c'est de contacter votre assurance et déclarer le sinistre (en fonction des contrats, la perte d'appareils
+  électroniques peut être couverte par votre assurance multirisques habitation/professionnelle, par l’assurance de vos moyens de paiement
+  - CB haut de gamme, ou via une assurance spécifique “appareils nomades”).
+  <br>
+  Concernant les démarches auprès de vos assurances, dans le cadre de la location, l'appareil est un "bien confié" selon la terminologie
+  propre à ce domaine (puisqu'il appartient à la Coopérative mais que vous en avez la garde juridique et la responsabilité).
+  <br><br>
+</p>
+
+<p>
+  En parallèle, le cas où la perte ne serait pas pris en charge par le contrat, nous vous transmettrons une facture avec le montant
+  qui vous sera prélevé, et nous vous présenterons 2 options différentes de règlement possible.
+  A l'inverse, le cas où la perte est prise en charge par le contrat, nous vous demanderons de nous fournir 2 documents additionnels
+  afin que nous puissions prendre en compte votre demande. Le cas échéant, nous vous transmettrons les informations par mail.
+  <br><br>
+  Suite à cela, nous vous ferons parvenir un appareil de remplacement. Pour ce faire, nous vous remercions d'avance de bien vouloir nous
+  confirmer l'adresse de livraison souhaitée (et de nous dire à quel moment vous souhaitez recevoir l'appareil).
+  <br><br>
+  Si la perte concerne également des accessoires associés au contrat de location, merci de le préciser (pour que nous puissions aussi inclure ces équipements dans le processus de remplacement).
+</p>
+<br><br>
+
+<p>
+  Dans l'attente de votre retour,
+  <br>
+  Coopérativement,
+</p>
+<br><br>
+
+<p>L'équipe Commown</p>
+]]></field>
+    </record>
+
+    <record id="email_theft_declaration" model="mail.template">
+      <field name="name">[commown] AR déclaration Vol</field>
+      <field name="email_from">contact@commown.coop</field>
+      <field name="reply_to">contact@commown.coop</field>
+      <field name="subject">${object.company_id.name} - Votre déclaration de vol</field>
+      <field name="model_id" ref="project.model_project_task"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="lang">${object.partner_id.lang}</field>
+      <field name="body_html"><![CDATA[
+<p>Bonjour ${object.partner_id.firstname},</p>
+<br/>
+<p>
+  Nous vous contactons suite à votre demande d'assistance concernant
+  le vol de l'appareil. Nous sommes vraiment désolés de ce qui vous arrive,
+  tant pour votre usage que pour l'impact financier induit pour la
+  coopérative (et pour vous-même si cet incident ne rentre pas dans
+  des garanties auxquelles vous avez souscrit) :-(
+</p>
+
+<br><br>
+<p>Voici la marche à suivre pas-à-pas pour la partie administrative
+  (pour chaque démarches il faudra nous transmettre par retour de mail
+  les copies des récépissés; sans ces documents nous ne pourrons pas prendre
+  en compte votre demande, et celle-ci ne pourra pas non plus être reconnue
+  par les assurances) :</p>
+<br><br>
+
+  - La 1ère étape c’est de faire une déclaration de vol à la Police si vous ne
+  l'avez pas déjà initiée, et leur transmettre l'identifiant de l'appareil
+  associé au contrat (que vous avez en théorie pu récupérer lors de l'ouverture
+  de la demande d'assistance; si ce n'est pas le cas revenez vers nous pour que
+  nous puissions vous aider à le trouver).
+  <br>
+  Si le vol concerne également des accessoires associés au contrat de location,
+  merci de le préciser dans le PV de plainte (pour que la Police en tienne
+  compte et pour que nous puissions aussi inclure ces équipements dans le
+  processus de remplacement).
+  <br>
+  NB : une pré-plainte en ligne n'est pas suffisante, il faut finaliser
+  la démarche auprès des autorités pour qu'elle soit valide.
+  <br><br>
+    En parallèle - et uniquement dans le cas des Smartphones - , il faut
+    contacter votre opérateur téléphonique afin de mettre en opposition
+    la carte SIM (ou les 2 cartes SIM si vous utilisiez les 2 emplacements),
+    et de nous transmettre l'accusé réception de cette demande.
+  <br><br>
+    L'étape suivante c'est de contacter votre assurance et déclarer le sinistre
+    (le vol d'appareils électroniques est en général couvert par votre assurance
+    multirisques habitation/professionnelle, par votre contrat d'assurance auto si
+    le vol a été commis dans votre véhicule, mais peut aussi l'être par l'assurance
+    de vos moyens de paiement - exple : vol de sac à main - ou de votre carte de crédit
+    (CB haut de gamme), ou via une assurance spécifique “appareils nomades”).
+    <br>
+    Concernant les démarches auprès de vos assurances, dans le cadre de la location,
+    l'appareil est un "bien confié" selon la terminologie propre à ce domaine (puisqu'il appartient
+    à la Coopérative mais que vous en avez la garde juridique et la responsabilité).
+    <br><br>
+    Enfin, à réception des éléments listés en début de ce mail (et règlement de l'indemnisation prévue au contrat
+    le cas échéant), nous vous ferons parvenir un appareil de remplacement, pour ce faire nous vous remercions
+    d'avance de bien vouloir nous confirmer l'adresse de livraison souhaitée (et de nous dire à quel moment vous
+    souhaitez recevoir l'appareil).
+    <br><br>
+    Le cas où le vol ne serait pas pris en charge par le contrat, nous vous transmettrons une facture avec le montant qui vous sera prélevé.
+  </p>
+<br><br>
+
+<p>
+  Dans l'attente de votre retour,
+  <br>
+  Coopérativement,
+</p>
+<br><br>
+
+<p>L'équipe Commown</p>
+]]></field>
+    </record>
+
+  </data>
+
+</odoo>

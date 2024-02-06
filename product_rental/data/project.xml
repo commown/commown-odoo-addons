@@ -12,10 +12,14 @@
 
     <record id="stage_declared_theft" model="project.task.type">
       <field name="name">Declared Theft</field>
+      <field name="project_ids" eval="[(4, ref('contract_theft_and_loss_project'))]"/>
+      <field name="mail_template_id" ref="email_theft_declaration"/>
     </record>
 
     <record id="stage_declared_loss" model="project.task.type">
       <field name="name">Declared Loss</field>
+      <field name="project_ids" eval="[(4, ref('contract_theft_and_loss_project'))]"/>
+      <field name="mail_template_id" ref="email_loss_declaration"/>
     </record>
 
   </data>
