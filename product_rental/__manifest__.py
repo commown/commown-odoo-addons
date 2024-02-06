@@ -19,6 +19,7 @@
     ],
     "external_dependencies": {},
     "data": [
+        "data/mail_templates.xml",
         "data/project.xml",
         "views/contract.xml",
         "views/portal_contract.xml",
