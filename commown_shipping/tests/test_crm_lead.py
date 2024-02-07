@@ -92,24 +92,20 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         self.lead.partner_id.country_id = self._country("FR")
         data = shipping_data(**base_kwargs)
         self.assertEqual(data["letter"]["service"]["productCode"], "DOS")
-        self.assertNotIn("returnTypeChoice", data["letter"]["service"])
 
         # French return label
         data = shipping_data(is_return=True, **base_kwargs)
         self.assertEqual(data["letter"]["service"]["productCode"], "CORE")
-        self.assertNotIn("returnTypeChoice", data["letter"]["service"])
 
         # International label
         self.lead.partner_id.country_id = self._country("BE")
         data = shipping_data(**base_kwargs)
         self.assertEqual(data["letter"]["service"]["productCode"], "COLI")
-        self.assertEqual(data["letter"]["service"]["returnTypeChoice"], 3)
 
         # International Return label
         self.lead.partner_id.country_id = self._country("BE")
         data = shipping_data(is_return=True, **base_kwargs)
         self.assertEqual(data["letter"]["service"]["productCode"], "CORI")
-        self.assertNotIn("returnTypeChoice", data["letter"]["service"])
 
     def print_label(self, leads, parcel_type, use_full_page_per_label=False):
         return self._print_label(

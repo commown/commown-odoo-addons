@@ -156,9 +156,6 @@ def shipping_data(
         "commercialName": commercial_name,
     }
 
-    if product_code == "COLI":
-        service["returnTypeChoice"] = 3  # cf. doc p. 31 - no return if undelivered
-
     parcel = {"weight": weight, "insuranceValue": int(insurance_value * 100)}
 
     return {
