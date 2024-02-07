@@ -92,6 +92,7 @@ class ContractTemplatePlannedMailGenerator(models.Model):
              WHERE C.date_start + PMG.send_date_offset_days <= CURRENT_DATE
                AND CURRENT_DATE - PMG.max_delay_days < C.date_start + PMG.send_date_offset_days
                AND C.date_end IS NULL
+               AND C.dont_send_planned_mails IS NOT TRUE
                AND NOT EXISTS(SELECT 1
                                 FROM contract_emails_planned_mail_sent PMS
                                WHERE PMS.contract_id=C.id
@@ -148,6 +149,15 @@ class Contract(models.Model):
     _inherit = "contract.contract"
 
     NO_SYNC = ContractAbstractContract.NO_SYNC + ["planned_mail_gen_ids"]
+
+    dont_send_planned_mails = fields.Boolean(
+        string="Dont send planned mails",
+        help=(
+            "If true, the planned emails set on the contract model will not be sent"
+            " for current contract."
+        ),
+        default=False,
+    )
 
 
 class ContractSentPlannedEmail(models.Model):
