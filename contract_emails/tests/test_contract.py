@@ -57,46 +57,48 @@ class ContractTemplateMailGenerator(TestContractBase):
         g3 = self.create_gen(25, text="Mail after 25 days", max_delay_days=10)
 
         today = date.today()
+        t_30 = today - timedelta(days=30)
+
         c1 = self.create_contract(today)
         c2 = self.create_contract(today - timedelta(days=7))
-        c3 = self.create_contract(today - timedelta(days=30))
-        c4 = self.create_contract(today - timedelta(days=30), date_end=today)
+        c3 = self.create_contract(t_30)
+        c4 = self.create_contract(t_30, date_end=today)
+        c5 = self.create_contract(t_30, dont_send_planned_mails=True)
 
         # Check channel is not already listening to contract
-        self.assertFalse(c1.message_follower_ids.mapped("channel_id"))
-        self.assertFalse(c2.message_follower_ids.mapped("channel_id"))
-        self.assertFalse(c3.message_follower_ids.mapped("channel_id"))
-        self.assertFalse(c4.message_follower_ids.mapped("channel_id"))
+        for c in c1 | c2 | c3 | c4 | c5:
+            self.assertFalse(c.message_follower_ids.mapped("channel_id"))
 
         pmt_model.cron_send_planned_mails()
 
         # Mails send from contracts in emission order
-        c1_mails = c1.message_ids.filtered(is_mail).sorted("id")
-        c2_mails = c2.message_ids.filtered(is_mail).sorted("id")
-        c3_mails = c3.message_ids.filtered(is_mail).sorted("id")
-        c4_mails = c4.message_ids.filtered(is_mail).sorted("id")
+        mails = {
+            c: c.message_ids.filtered(is_mail).sorted("id")
+            for c in (c1 | c2 | c3 | c4 | c5)
+        }
 
-        self.assertEqual(c1_mails.mapped("body"), ["<p>Mail at contract start</p>"])
+        self.assertEqual(mails[c1].mapped("body"), ["<p>Mail at contract start</p>"])
         self.assertEqual(
-            c2_mails.mapped("body"),
+            mails[c2].mapped("body"),
             ["<p>Mail at contract start</p>", "<p>Mail after 6 days</p>"],
         )
         self.assertEqual(
-            c3_mails.mapped("body"), ["<p>Mail after 25 days</p>"]
+            mails[c3].mapped("body"), ["<p>Mail after 25 days</p>"]
         )  # Other mails are too old
-        self.assertFalse(c4_mails)
+        self.assertFalse(mails[c4])
+        self.assertFalse(mails[c5])
 
         # Channel must follow the contracts from which an email was sent
-        self.assertEqual(c1.message_follower_ids.mapped("channel_id"), channel)
-        self.assertEqual(c2.message_follower_ids.mapped("channel_id"), channel)
-        self.assertEqual(c3.message_follower_ids.mapped("channel_id"), channel)
-        self.assertFalse(c4.message_follower_ids.mapped("channel_id"))
+        for c in c1 | c2 | c3:
+            self.assertEqual(c.message_follower_ids.mapped("channel_id"), channel)
+        for c in c4 | c5:
+            self.assertFalse(c.message_follower_ids.mapped("channel_id"))
 
         # Check messages are not sent again and again
         pmt_model.cron_send_planned_mails()
 
-        self.assertEqual(c1.message_ids.filtered(is_mail), c1_mails)
-        self.assertEqual(c2.message_ids.filtered(is_mail), c2_mails)
-        self.assertEqual(c3.message_ids.filtered(is_mail), c3_mails)
+        for c in c1 | c2 | c3:
+            self.assertEqual(c.message_ids.filtered(is_mail), mails[c])
 
-        self.assertFalse(c4.message_follower_ids.mapped("channel_id"))
+        for c in c4 | c5:
+            self.assertFalse(c.message_follower_ids.mapped("channel_id"))

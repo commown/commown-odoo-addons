@@ -31,7 +31,7 @@
   </record>
 
   <record id="contract_template_form_view" model="ir.ui.view">
-    <field name="name">contract.template for view (in contract_emails)</field>
+    <field name="name">contract.template form view (in contract_emails)</field>
     <field name="model">contract.template</field>
     <field name="inherit_id" ref="contract.contract_template_form_view"/>
     <field name="arch" type="xml">
@@ -42,6 +42,19 @@
                  context="{'default_contract_id': id}"/>
         </group>
       </xpath>
+
+    </field>
+  </record>
+
+  <record id="contract_contract_customer_form_view" model="ir.ui.view">
+    <field name="name">contract.contract form view (in contract_emails)</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+    <field name="arch" type="xml">
+
+      <field name="contract_template_id" position="after">
+        <field name="dont_send_planned_mails" />
+      </field>
 
     </field>
   </record>
