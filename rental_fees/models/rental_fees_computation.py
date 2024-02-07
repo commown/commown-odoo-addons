@@ -707,16 +707,7 @@ class RentalFeesComputation(models.Model):
                 period["fees"] = sum(amount for _ds, _de, amount in monthly_fees)
                 device_fees += period["fees"]
 
-            if no_rental_limit:
-                self._add_compensation(
-                    fees_def,
-                    "no_rental_compensation",
-                    device,
-                    delivery_date,
-                    device_fees,
-                    no_rental_limit,
-                )
-            elif device in scrapped_devices:
+            if device in scrapped_devices:
                 self._add_compensation(
                     fees_def,
                     "lost_device_compensation",
@@ -724,6 +715,15 @@ class RentalFeesComputation(models.Model):
                     delivery_date,
                     device_fees,
                     scrapped_devices[device]["date"],
+                )
+            elif no_rental_limit:
+                self._add_compensation(
+                    fees_def,
+                    "no_rental_compensation",
+                    device,
+                    delivery_date,
+                    device_fees,
+                    no_rental_limit,
                 )
             else:
                 self._add_fees_periods(device, periods)

@@ -482,7 +482,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertFalse(comp.rental_details().mapped("fees"))
 
     def test_compute_no_rental_compensation_non_zero_2(self):
-        "No rental conditions fulfilled: compensation occurs then no other compensation"
+        "No rental then lost lead to exactly one compensation"
 
         contract = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract, "2021-02-01")
@@ -496,8 +496,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.scrap_device(device, date(2021, 12, 1))  # after no rental limit!
 
         comp = self.compute("2022-04-01")
-        self.assertEqual(comp.details("no_rental_compensation").mapped("fees"), [300.0])
-        self.assertFalse(comp.details("lost_device_compensation").mapped("fees"))
+        self.assertEqual(comp.compensation_details().mapped("fees"), [300.0])
         self.assertFalse(comp.rental_details().mapped("fees"))
 
     def test_compute_excluded_device(self):
