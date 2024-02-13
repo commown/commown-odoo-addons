@@ -294,6 +294,27 @@ class RentalFeesComputationTC(RentalFeesTC):
         product_col = [c for c in s_dev.column[3] if c != "" and type(c) == str]
         self.assertEquals(product_col, ["Product"] + 3 * ["Fairphone 3"])
 
+    def test_send_report_for_invoicing(self):
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.create_invoices_until(contract, "2021-03-01")
+
+        comp = self.compute("2022-03-01")
+        comp.action_send_report_for_invoicing()
+
+        self.assertEqual(comp.mapped("invoice_ids.state"), ["draft"])
+        inv = comp.invoice_ids
+        self.assertEqual(
+            inv.message_ids[0].subject,
+            "[YourCompany] Fees to be invoices as of 03/01/2022",
+        )
+        atts = inv.message_ids[0].attachment_ids
+        self.assertEqual(
+            atts.mapped("mimetype"),
+            ["application/vnd.oasis.opendocument.spreadsheet"],
+        )
+
     def test_merged_invoices(self):
         contract1 = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract1, date="2021-02-15")

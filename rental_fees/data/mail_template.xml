@@ -1,0 +1,37 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="send_report_mail_template" model="mail.template">
+      <field name="name">[commown] Send fees report through the invoice</field>
+      <field name="subject">[${object.company_id.name}] Fees to be invoices as of ${format_date(object.fees_computation_id.until_date)}</field>
+      <field name="partner_to">${object.partner_id.id}</field>
+      <field name="model_id" ref="account.model_account_invoice"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="lang">${object.partner_id.lang}</field>
+      <field name="body_html"><![CDATA[
+<p>Hello dear ${object.partner_id.name} team,</p>
+
+<br/>
+
+<p>Please find attached the fees report dated
+${format_date(object.fees_computation_id.until_date)}<p>
+
+<p>Please return the corresponding invoice amouting to
+${format_amount(object.amount_total, object.currency_id)} by simply attaching it in
+reply to this email without changing its subject.</p>
+
+<br><br>
+
+<p>Cooperatively,</p>
+<p>--</p>
+<div>
+  <div>The Commown team.<br></div>
+</div>
+]]></field>
+
+    </record>
+
+  </data>
+
+</odoo>
