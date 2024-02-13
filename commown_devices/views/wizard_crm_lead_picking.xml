@@ -28,7 +28,7 @@
     <field name="name">[commown] Crm lead picking creation form view</field>
     <field name="model">crm.lead.picking.wizard</field>
     <field name="inherit_id" ref="commown_devices.wizard_crm_lead_picking_form" />
-    <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]"/>
+    <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_user')])]"/>
     <field name="arch" type="xml">
       <xpath expr="//field[@name='all_products']" position="attributes">
         <attribute name="readonly">False</attribute>
