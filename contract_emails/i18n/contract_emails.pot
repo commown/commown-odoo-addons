@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-10 06:49+0000\n"
-"PO-Revision-Date: 2024-02-10 06:49+0000\n"
+"POT-Creation-Date: 2024-02-13 08:10+0000\n"
+"PO-Revision-Date: 2024-02-13 08:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -65,6 +65,11 @@ msgid "Display Name"
 msgstr ""
 
 #. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_contract__dont_send_planned_mails
+msgid "Dont send planned mails"
+msgstr ""
+
+#. module: contract_emails
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator__mail_template_id
 msgid "Email to send"
 msgstr ""
@@ -73,6 +78,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator__id
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_sent__id
 msgid "ID"
+msgstr ""
+
+#. module: contract_emails
+#: model:ir.model.fields,help:contract_emails.field_contract_contract__dont_send_planned_mails
+msgid "If true, the planned emails set on the contract model will not be sent for current contract."
 msgstr ""
 
 #. module: contract_emails
