@@ -125,6 +125,7 @@
           <button string="Run computation" states="draft" name="action_run" type="object"/>
           <button string="Reset to draft" states="done" name="action_reset" type="object"/>
           <button string="Generate invoice" states="done" name="action_invoice" type="object"/>
+          <button string="Send report for invoicing" states="done" name="action_send_report_for_invoicing" type="object"/>
           <field name="state" widget="statusbar" readonly="1"/>
         </header>
         <sheet>
