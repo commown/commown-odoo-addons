@@ -73,7 +73,7 @@
             </field>
           </group>
           <group name="orders">
-            <field name="order_ids" widget="many2many" />
+            <field name="order_ids" widget="many2many" domain="[('partner_id', '=', partner_id), ('order_line.product_id.product_tmpl_id', '=', product_template_id)]"/>
           </group>
           <group name="lines">
             <field name="line_ids">
