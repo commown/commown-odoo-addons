@@ -1,0 +1,192 @@
+<odoo>
+
+  <record id="view_team_tree" model="ir.ui.view">
+    <field name="name">customer_team_manager.team.tree</field>
+    <field name="model">customer_team_manager.team</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="full_name"/>
+        <field name="company"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_employee_kanban" model="ir.ui.view">
+    <field name="name">customer_team_manager.employee.kanban</field>
+    <field name="model">customer_team_manager.employee</field>
+    <field name="arch" type="xml">
+      <kanban class="o_res_partner_kanban">
+        <field name="id"/>
+        <field name="display_name"/>
+        <field name="email"/>
+        <field name="phone"/>
+        <field name="team"/>
+        <field name="image_medium"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+              <t t-if="record.image_medium.raw_value">
+                <div
+                    class="o_kanban_image_fill_left d-none d-md-block"
+                    t-attf-style="background-image:url('#{kanban_image('customer_team_manager.employee', 'image_medium', record.id.raw_value)}')">
+                </div>
+              </t>
+              <t t-else="">
+                <img class="o_kanban_image" alt="Avatar" t-att-src='_s + "/base/static/img/avatar.png"'/>
+              </t>
+              <div class="oe_kanban_details">
+                <strong class="o_kanban_record_title oe_partner_heading">
+                  <field name="display_name"/>
+                </strong>
+                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
+                <ul>
+                  <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                </ul>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <record id="view_employee_tree" model="ir.ui.view">
+    <field name="name">customer_team_manager.employee.tree</field>
+    <field name="model">customer_team_manager.employee</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="firstname"/>
+        <field name="lastname"/>
+        <field name="email"/>
+        <field name="phone"/>
+        <field name="team"/>
+        <field name="roles" widget="many2many_tags"/>
+        <field name="partner"/>
+        <field name="company"/>
+        <field name="portal_status"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_team_form" model="ir.ui.view">
+    <field name="name">customer_team_manager.team.form</field>
+    <field name="model">customer_team_manager.team</field>
+    <field name="arch" type="xml">
+      <form string="Teams">
+        <sheet>
+          <div class="oe_title">
+            <h1>
+              <field name="display_name" class="oe_inline"/>
+            </h1>
+          </div>
+          <group name="admin" groups="customer_team_manager.group_manager">
+            <field name="company"/>
+          </group>
+          <group name="main">
+            <field name="name"/>
+            <field name="parent_team"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_employee_form" model="ir.ui.view">
+    <field name="name">customer_team_manager.employee.form</field>
+    <field name="model">customer_team_manager.employee</field>
+    <field name="arch" type="xml">
+      <form string="Employees">
+        <header>
+          <button
+              string="Grant portal access"
+              class="oe_highlight"
+              name="action_grant_portal_access"
+              type="object"
+              attrs="{'invisible': ['|', ('portal_status', '!=', 'not_granted'), ('active', '=', False)]}"
+              />
+          <button
+              string="Revoke portal access"
+              name="action_revoke_portal_access"
+              type="object"
+              attrs="{'invisible': ['|', ('portal_status', '=', 'not_granted'), ('active', '=', False)]}"
+              />
+          <field name="portal_status" widget="statusbar"/>
+        </header>
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button class="oe_stat_button" type="object" name="toggle_active" icon="fa-archive">
+              <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+            </button>
+          </div>
+          <field
+              name="image_medium"
+              widget='image'
+              class="oe_avatar"
+              options='{"preview_image": "image_medium"}'
+              />
+          <div class="oe_title">
+            <h1>
+              <field name="display_name" class="oe_inline"/>
+            </h1>
+          </div>
+          <group name="admin">
+            <field name="company" groups="customer_team_manager.group_manager"/>
+            <field name="partner" groups="customer_team_manager.group_manager"/>
+            <field name="roles" widget="many2many_tags"/>
+          </group>
+          <group>
+            <group name="main">
+              <field name="firstname"/>
+              <field name="lastname"/>
+            </group>
+            <group name="contact">
+              <field
+                  name="email"
+                  attrs="{'readonly': [('portal_status', '!=', 'not_granted')]}"
+                  help="Cannot be modified when employee was granted portal access"
+                  />
+              <field name="phone"/>
+            </group>
+            <group name="team">
+              <field name="team"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_teams" model="ir.actions.act_window">
+    <field name="name">Teams</field>
+    <field name="res_model">customer_team_manager.team</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{}</field>
+    <field name="view_id" ref="view_team_tree"/>
+  </record>
+
+  <record id="action_employees" model="ir.actions.act_window">
+    <field name="name">Employees</field>
+    <field name="res_model">customer_team_manager.employee</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="context">{}</field>
+    <field name="view_id" ref="view_employee_kanban"/>
+  </record>
+
+  <menuitem id="menu_customer_team_manager_root"
+            name="Team manager"
+            web_icon="customer_team_manager,static/description/icon.png"
+            groups="group_customer_admin,group_manager"/>
+
+  <menuitem id="menu_team"
+            action="action_teams"
+            sequence="20"
+            parent="menu_customer_team_manager_root"/>
+
+  <menuitem id="menu_employees"
+            action="action_employees"
+            sequence="10"
+            parent="menu_customer_team_manager_root"/>
+
+</odoo>
