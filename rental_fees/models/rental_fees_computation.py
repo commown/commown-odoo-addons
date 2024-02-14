@@ -558,6 +558,34 @@ class RentalFeesComputation(models.Model):
         self.invoice_ids._onchange_invoice_line_ids()
 
     @api.multi
+    def action_send_report_for_invoicing(self):
+        "Get or generate supplier invoice and report, send then it through the invoice"
+
+        report_action = self.env.ref(
+            "rental_fees.action_py3o_spreadsheet_fees_rental_computation"
+        )
+
+        def _draft_invoices():
+            return self.invoice_ids.filtered(lambda invoice: invoice.state == "draft")
+
+        def _create_invoice():
+            self.action_invoice()
+            return _draft_invoices()
+
+        def _create_report():
+            report_action.render(self.ids)
+            return report_action.retrieve_attachment(self)
+
+        # Get or create invoice and report
+        inv = _draft_invoices() or _create_invoice()
+        report = report_action.retrieve_attachment(self) or _create_report()
+
+        # Send report from invoice
+        mail = self.env.ref("rental_fees.send_report_mail_template")
+        _inv = inv.with_context(default_attachment_ids=[(4, report.id)])
+        _inv.message_post_with_template(mail.id)
+
+    @api.multi
     def action_reset(self):
         "Reset a done computation into a draft and remove its details"
         self.ensure_one()

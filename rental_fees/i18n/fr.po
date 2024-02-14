@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-04 07:39+0000\n"
-"PO-Revision-Date: 2024-02-04 08:31+0100\n"
+"POT-Creation-Date: 2024-02-14 07:32+0000\n"
+"PO-Revision-Date: 2024-02-14 08:47+0100\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -32,6 +32,50 @@ msgstr ""
 "période suivante de la définition de commissions %(def_name)r (id "
 "%(def_id)d) :\n"
 "- %(period)s"
+
+#. module: rental_fees
+#: model:mail.template,body_html:rental_fees.send_report_mail_template
+msgid ""
+"\n"
+"<p>Hello dear ${object.partner_id.name} team,</p>\n"
+"\n"
+"<br/>\n"
+"\n"
+"<p>Please find attached the fees report dated\n"
+"${format_date(object.fees_computation_id.until_date)}<p>\n"
+"\n"
+"<p>Please return the corresponding invoice amouting to\n"
+"${format_amount(object.amount_total, object.currency_id)} by simply "
+"attaching it in\n"
+"reply to this email without changing its subject.</p>\n"
+"\n"
+"<br><br>\n"
+"\n"
+"<p>Cooperatively,</p>\n"
+"<p>--</p>\n"
+"<div>\n"
+"  <div>The Commown team.<br></div>\n"
+"</div>\n"
+msgstr ""
+"\n"
+"<p>Bonjour l'équipe ${object.partner_id.name},</p>\n"
+"\n"
+"<br/>\n"
+"\n"
+"<p>Veuillez trouver ci-joint le rapport des commissions sur les loyers en date du\n"
+"${format_date(object.fees_computation_id.until_date)}.<p>\n"
+"\n"
+"<p>Merci de nous renvoyer la facture correspondante d'un montant de\n"
+"${format_amount(object.amount_total, object.currency_id)} en la joignant simplement en\n"
+"réponse à ce courriel sans en changer le sujet.</p>\n"
+"\n"
+"<br><br>\n"
+"\n"
+"<p>Coopérativement,</p>\n"
+"<p>--</p>\n"
+"<div>\n"
+"  <div>L'équipe Commown.<br></div>\n"
+"</div>\n"
 
 #. module: rental_fees
 #: code:addons/rental_fees/models/rental_fees_definition.py:403
@@ -96,7 +140,7 @@ msgid "B2C"
 msgstr "B2C"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:567
+#: code:addons/rental_fees/models/rental_fees_computation.py:595
 #, python-format
 msgid "Cannot reset fees computation if not in the 'done' state"
 msgstr ""
@@ -104,7 +148,7 @@ msgstr ""
 "l'état 'fait'"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:571
+#: code:addons/rental_fees/models/rental_fees_computation.py:599
 #, python-format
 msgid "Cannot reset fees computation with a non-canceled invoice"
 msgstr ""
@@ -387,11 +431,6 @@ msgstr "Abonnés (Canaux)"
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_partner_ids
 msgid "Followers (Partners)"
 msgstr "Abonnés (Partenaires)"
-
-#. module: rental_fees
-#: model:ir.model.fields,help:rental_fees.field_rental_fees_definition__excluded_devices
-msgid "Following devices "
-msgstr ""
 
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_search
@@ -789,6 +828,11 @@ msgid "Running"
 msgstr "En cours"
 
 #. module: rental_fees
+#: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
+msgid "Send report for invoicing"
+msgstr "Envoyer le rapport pour facturation"
+
+#. module: rental_fees
 #: code:addons/rental_fees/models/rental_fees_definition.py:128
 #, python-format
 msgid ""
@@ -924,6 +968,17 @@ msgid "Years"
 msgstr "Années"
 
 #. module: rental_fees
+#: model:mail.template,subject:rental_fees.send_report_mail_template
+msgid ""
+"[${object.company_id.name}] Fees to be invoices as of ${object.until_date}"
+msgstr "[${object.company_id.name}] Facturation des commissions sur les loyers au ${object.until_date}"
+
+#. module: rental_fees
 #: model:ir.actions.report,name:rental_fees.action_py3o_spreadsheet_fees_rental_computation
 msgid "[commown] Export to spreadsheet"
 msgstr "[commown] Exporter au format ODS (feuille de calcul Libreoffice)"
+
+#. module: rental_fees
+#: model:mail.template,name:rental_fees.send_report_mail_template
+msgid "[commown] Send fees report through the invoice"
+msgstr "[commown] Envoyer le rapport des commissions sur les loyers via une facture fournisseur"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-04 07:40+0000\n"
-"PO-Revision-Date: 2024-02-04 07:40+0000\n"
+"POT-Creation-Date: 2024-02-14 07:32+0000\n"
+"PO-Revision-Date: 2024-02-14 07:32+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,6 +22,30 @@ msgid "\n"
 "%(err)s\n"
 "Previous error occurred while computing the invoiced amounts of this period in fees definition %(def_name)r (id %(def_id)d):\n"
 "- %(period)s"
+msgstr ""
+
+#. module: rental_fees
+#: model:mail.template,body_html:rental_fees.send_report_mail_template
+msgid "\n"
+"<p>Hello dear ${object.partner_id.name} team,</p>\n"
+"\n"
+"<br/>\n"
+"\n"
+"<p>Please find attached the fees report dated\n"
+"${format_date(object.fees_computation_id.until_date)}<p>\n"
+"\n"
+"<p>Please return the corresponding invoice amouting to\n"
+"${format_amount(object.amount_total, object.currency_id)} by simply attaching it in\n"
+"reply to this email without changing its subject.</p>\n"
+"\n"
+"<br><br>\n"
+"\n"
+"<p>Cooperatively,</p>\n"
+"<p>--</p>\n"
+"<div>\n"
+"  <div>The Commown team.<br></div>\n"
+"</div>\n"
+""
 msgstr ""
 
 #. module: rental_fees
@@ -79,13 +103,13 @@ msgid "B2C"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:567
+#: code:addons/rental_fees/models/rental_fees_computation.py:595
 #, python-format
 msgid "Cannot reset fees computation if not in the 'done' state"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:571
+#: code:addons/rental_fees/models/rental_fees_computation.py:599
 #, python-format
 msgid "Cannot reset fees computation with a non-canceled invoice"
 msgstr ""
@@ -345,11 +369,6 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
-
-#. module: rental_fees
-#: model:ir.model.fields,help:rental_fees.field_rental_fees_definition__excluded_devices
-msgid "Following devices "
 msgstr ""
 
 #. module: rental_fees
@@ -723,6 +742,11 @@ msgid "Running"
 msgstr ""
 
 #. module: rental_fees
+#: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
+msgid "Send report for invoicing"
+msgstr ""
+
+#. module: rental_fees
 #: code:addons/rental_fees/models/rental_fees_definition.py:128
 #, python-format
 msgid "Some non-draft computations use this fees definition. Please remove or set them draft to modify the definition."
@@ -843,7 +867,17 @@ msgid "Years"
 msgstr ""
 
 #. module: rental_fees
+#: model:mail.template,subject:rental_fees.send_report_mail_template
+msgid "[${object.company_id.name}] Fees to be invoices as of ${object.until_date}"
+msgstr ""
+
+#. module: rental_fees
 #: model:ir.actions.report,name:rental_fees.action_py3o_spreadsheet_fees_rental_computation
 msgid "[commown] Export to spreadsheet"
+msgstr ""
+
+#. module: rental_fees
+#: model:mail.template,name:rental_fees.send_report_mail_template
+msgid "[commown] Send fees report through the invoice"
 msgstr ""
 

@@ -20,6 +20,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "data/mail_template.xml",
         "views/rental_fees_computation.xml",
         "views/rental_fees_definition.xml",
         "views/rental_fees_report.xml",
