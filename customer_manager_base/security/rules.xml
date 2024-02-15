@@ -1,0 +1,161 @@
+<odoo noupdate="1">
+
+  <!-- Project tasks for it support customers -->
+
+  <record model="ir.rule" id="project_task_rule_customer_it_support">
+    <field name="name">Portal: see company project tasks if IT support customer</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="domain_force">[('partner_id', 'child_of', user.commercial_partner_id.id)]</field>
+    <field name="groups" eval="[(6, 0, [ref('group_customer_it_support')])]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="1"/>
+  </record>
+
+  <!-- Invoices for accountant customers -->
+
+  <record model="ir.rule" id="account_invoice_rule_customer_accounting">
+    <field name="name">Portal: see company invoices if accounting customer</field>
+    <field name="model_id" ref="account.model_account_invoice"/>
+    <field name="domain_force">[('partner_id', 'child_of', user.commercial_partner_id.id), ('type', 'in', ['out_invoice', 'out_refund']), ('state', 'not in', ['draft', 'cancel'])]</field>
+    <field name="groups" eval="[(6, 0, [ref('group_customer_accounting')])]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="1"/>
+  </record>
+
+  <record model="ir.rule" id="account_invoice_line_rule_customer_accounting">
+    <field name="name">Portal: see company invoice lines if accounting customer</field>
+    <field name="model_id" ref="account.model_account_invoice_line"/>
+    <field name="domain_force">[('partner_id', 'child_of', user.commercial_partner_id.id), ('invoice_id.type', 'in', ['out_invoice', 'out_refund']), ('invoice_id.state', 'not in', ['draft', 'cancel'])]</field>
+    <field name="groups" eval="[(6, 0, [ref('group_customer_accounting')])]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="1"/>
+  </record>
+
+  <!-- Sale orders for purchaser customers -->
+
+  <record model="ir.rule" id="sale_order_rule_customer_purchaser">
+    <field name="name">Portal: see company sale orders if purchaser customer</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="domain_force">[('partner_id', 'child_of', user.commercial_partner_id.id)]
+    </field>
+    <field name="groups" eval="[(6, 0, [ref('group_customer_purchase')])]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="0"/>
+    <field name="perm_unlink" eval="1"/>
+  </record>
+
+  <record model="ir.rule" id="sale_order_line_rule_customer_purchaser">
+    <field name="name">Portal: see company sale order lines if purchaser customer</field>
+    <field name="model_id" ref="sale.model_sale_order_line"/>
+    <field name="domain_force">[('order_id.partner_id', 'child_of', user.commercial_partner_id.id)]</field>
+    <field name="groups" eval="[(6, 0, [ref('group_customer_purchase')])]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="1"/>
+  </record>
+
+  <!-- Existing rules overrides: restrict existing ir_rules with groups -->
+
+  <!-- * Temporarily set rules' noupdate to False -->
+
+  <function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+      <value eval="[('module', '=', 'account'), ('name', 'in', ('account_invoice_rule_portal', 'account_invoice_line_rule_portal'))] "/>
+    </function>
+    <value eval="{'noupdate': False}"/>
+  </function>
+
+  <function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+      <value eval="[('module', '=', 'sale'), ('name', 'in', ('sale_order_rule_portal', 'sale_order_line_rule_portal'))] "/>
+    </function>
+    <value eval="{'noupdate': False}"/>
+  </function>
+
+  <function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+      <value eval="[('module', '=', 'project'), ('name', '=', 'project_task_rule_portal')] "/>
+    </function>
+    <value eval="{'noupdate': False}"/>
+  </function>
+
+  <!-- * project tasks on portal -->
+
+  <record model="ir.rule" id="project.project_task_rule_portal">
+    <field name="name">Portal: see direcly followed tasks (from customer_manager_base)</field>
+    <field name="model_id" ref="project.model_project_task"/>
+    <field name="domain_force"><![CDATA[
+      [
+        '|',
+        '&',
+        ('project_id.privacy_visibility', '=', 'portal'),
+        ('project_id.message_partner_ids', 'child_of', user.partner_id.id),
+        '&',
+        ('project_id.privacy_visibility', '=', 'portal'),
+        ('message_partner_ids', 'child_of', user.partner_id.id),
+      ]
+    ]]></field>
+  </record>
+
+  <!-- * invoices on portal -->
+
+  <record model="ir.rule" id="account.account_invoice_rule_portal">
+    <field name="name">Portal: see own invoices (from customer_manager_base)</field>
+    <field name="model_id" ref="account.model_account_invoice"/>
+    <field name="domain_force">[('partner_id', 'child_of', user.partner_id.id), ('type', 'in', ['out_invoice', 'out_refund']), ('state', 'not in', ['draft', 'cancel'])]</field>
+  </record>
+
+  <record model="ir.rule" id="account.account_invoice_line_rule_portal">
+    <field name="name">Portal: see own invoice lines (from customer_manager_base)</field>
+    <field name="model_id" ref="account.model_account_invoice_line"/>
+    <field name="domain_force">[('invoice_id.partner_id', 'child_of', user.partner_id.id), ('invoice_id.type', 'in', ['out_invoice', 'out_refund']), ('invoice_id.state', 'not in', ['draft', 'cancel'])]</field>
+  </record>
+
+  <!-- * sale orders on portal -->
+
+  <record model="ir.rule" id="sale.sale_order_rule_portal">
+    <field name="name">Portal: see direcly followed sale orders (from customer_manager_base)</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="domain_force">[('message_partner_ids', 'child_of', user.partner_id.id)]</field>
+  </record>
+
+  <record model="ir.rule" id="sale.sale_order_line_rule_portal">
+    <field name="name">Portal: see direcly followed sale order lines (from customer_manager_base)</field>
+    <field name="model_id" ref="sale.model_sale_order_line"/>
+    <field name="domain_force">[('order_id.message_partner_ids', 'child_of', user.partner_id.id)]</field>
+  </record>
+
+  <!-- * Restore rules' noupdate to True -->
+
+  <function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+      <value eval="[('module', '=', 'account'), ('name', 'in', ('account_invoice_rule_portal', 'account_invoice_line_rule_portal'))] "/>
+    </function>
+    <value eval="{'noupdate': True}"/>
+  </function>
+
+  <function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+      <value eval="[('module', '=', 'sale'), ('name', 'in', ('sale_order_rule_portal', 'sale_order_line_rule_portal'))] "/>
+    </function>
+    <value eval="{'noupdate': True}"/>
+  </function>
+
+  <function name="write" model="ir.model.data">
+    <function name="search" model="ir.model.data">
+      <value eval="[('module', '=', 'project'), ('name', '=', 'project_task_rule_portal')] "/>
+    </function>
+    <value eval="{'noupdate': True}"/>
+  </function>
+
+  <!-- End of existing rules overrides -->
+
+</odoo>
