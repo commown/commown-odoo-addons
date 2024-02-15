@@ -1,0 +1,27 @@
+<odoo>
+
+  <record id="group_customer_accounting" model="res.groups">
+    <field name="name">Customer: Accounting</field>
+    <field name="category_id" ref="base.module_category_manager_customer"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+  </record>
+
+  <record id="group_customer_purchase" model="res.groups">
+    <field name="name">Customer: Purchase</field>
+    <field name="category_id" ref="base.module_category_manager_customer"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+  </record>
+
+  <record id="group_customer_it_support" model="res.groups">
+    <field name="name">Customer: IT Support</field>
+    <field name="category_id" ref="base.module_category_manager_customer"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+  </record>
+
+  <record id="group_customer_contract_manager" model="res.groups">
+    <field name="name">Customer: Contract manager</field>
+    <field name="category_id" ref="base.module_category_manager_customer"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+  </record>
+
+</odoo>

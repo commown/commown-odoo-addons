@@ -13,7 +13,12 @@
     "depends": [
         "account",
         "portal",
+        "project",
         "sale",
+    ],
+    "data": [
+        "security/groups.xml",
+        "security/rules.xml",
     ],
     "installable": True,
 }
