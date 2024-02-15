@@ -87,3 +87,8 @@ class ResPartnerWithContractStockTC(DeviceAsAServiceTC):
             [("lot_id", "=", lot2.id), ("quantity", ">", 0)],
         )
         self.assertEqual(quant2.location_id, loc_init)
+
+        # Check that lots are still associated with the rigth contract
+        self.assertEqual(contract.lot_ids, lot1)
+        self.assertEqual(contract2.lot_ids, lot2)
+        self.assertEqual(quant2.location_id, loc_init)
