@@ -239,12 +239,13 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         lot = possibilities["lot_ids"][0]
         wizard.lot_ids = lot
 
-        picking = wizard.create_picking()
+        move_lines = wizard.create_picking()
 
         # Check the result
+        picking = move_lines.mapped("picking_id")
         loc_new = self.env.ref("commown_devices.stock_location_available_for_rent")
 
-        self.assertIn(picking.id, lead.contract_id.picking_ids.ids)
+        self.assertEqual(move_lines.ids, lead.contract_id.move_line_ids.ids)
         self.assertEqual(picking.state, "assigned")
         self.assertEqual(picking.move_type, "direct")
         self.assertEqual(picking.location_id, loc_new)

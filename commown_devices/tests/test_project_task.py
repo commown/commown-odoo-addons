@@ -417,7 +417,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
                 "product_tmpl_id": lot_to_send.product_id.product_tmpl_id.id,
             }
         )
-        picking = wizard.create_picking()
+        picking = wizard.create_picking().mapped("picking_id")
 
         self.assertEqual(picking.scheduled_date, date)
         self.assertEqual(picking.date_done, date)
@@ -507,7 +507,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             "project.task.notracking.outward.picking.wizard"
         ].create({"task_id": self.task.id, "date": date, "variant_id": pt_variant.id})
 
-        picking = wizard_outward.create_picking()
+        picking = wizard_outward.create_picking().mapped("picking_id")
         do_new_transfer(picking, date)
 
         client_location = get_present_location(pt_variant)
@@ -517,7 +517,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             "project.task.notracking.inward.picking.wizard"
         ].create({"task_id": self.task.id, "date": date, "variant_id": pt_variant.id})
 
-        picking = wizard_inward.create_picking()
+        picking = wizard_inward.create_picking().mapped("picking_id")
         do_new_transfer(picking, date)
 
         final_location = get_present_location(pt_variant)

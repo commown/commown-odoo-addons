@@ -3,6 +3,8 @@ import json
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, Warning
 
+from .common import _assigned
+
 CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.diagnostic_stage",
     "commown_devices.resiliated_stage",
@@ -78,9 +80,9 @@ class ProjectTask(models.Model):
 
         for contract in contracts:
             lots |= contract.quant_ids.mapped("lot_id")
-            lots |= contract.picking_ids.filtered(
-                lambda c: c.state == "assigned"
-            ).mapped("move_line_ids.lot_id")
+            lots |= contract.move_line_ids.filtered(
+                lambda ml: _assigned(ml.picking_id)
+            ).mapped("lot_id")
 
         return lots
 
@@ -199,7 +201,7 @@ class ProjectTask(models.Model):
                     and picking.state == "assigned"
                     and "/" + str(stock_location.id) + "/"
                     in picking.location_id.parent_path
-                    for picking in task.contract_id.picking_ids
+                    for picking in task.contract_id.move_line_ids.mapped("picking_id")
                 ]
             )
         )
