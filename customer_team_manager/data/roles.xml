@@ -4,14 +4,14 @@
     <field name="name">Administrator</field>
     <field
         name="groups"
-        eval="[(6, 0, [ref('group_customer_admin'), ref('group_customer_purchase')])]" />
+        eval="[(6, 0, [ref('group_customer_admin'), ref('customer_manager_base.group_customer_purchase')])]" />
   </record>
 
   <record id="customer_role_accounting" model="customer_team_manager.employee.role">
     <field name="name">Accountant</field>
     <field
         name="groups"
-        eval="[(6, 0, [ref('group_customer_accounting'), ref('group_customer_purchase')])]" />
+        eval="[(6, 0, [ref('customer_manager_base.group_customer_accounting'), ref('customer_manager_base.group_customer_purchase')])]" />
   </record>
 
   <record id="customer_role_user" model="customer_team_manager.employee.role">
