@@ -32,6 +32,19 @@ class Contract(models.Model):
         index=True,
     )
 
+    move_line_ids = fields.One2many(
+        "stock.move.line",
+        string="Move Lines",
+        compute="_compute_move_line_ids",
+        store=False,
+    )
+
+    move_ids = fields.One2many(
+        "stock.move",
+        "contract_id",
+        string="Stock Move",
+    )
+
     @api.depends("picking_ids.state")
     def _compute_quant_ids(self):
         for record in self:
@@ -42,6 +55,10 @@ class Contract(models.Model):
                 "move_line_ids.lot_id.quant_ids"
             ).filtered(lambda q: q.quantity > 0 and q.location_id == loc)
             record.quant_nb = len(record.quant_ids)
+
+    def _compute_move_line_ids(self):
+        for rec in self:
+            rec.move_line_ids = rec.move_ids.mapped("move_line_ids")
 
     @api.multi
     def send_devices(
