@@ -149,17 +149,16 @@ class RentalFeesComputation(models.Model):
 
         for device in sorted(purchase_data, key=lambda d: d.product_id):
             fees_def, ol = purchase_data[device]
-            price_ratio = fees_def.agreed_to_std_price_ratio
-            purchase_price = ol.price_unit
+            prices = fees_def.prices(device)
 
             fees = fees_data.get(device.id, 0.0)
             result[device] = {
                 "purchase": ol.order_id,
                 "purchase_line": ol,
-                "purchase_price": purchase_price,
-                "without_agreement": purchase_price / price_ratio,
+                "purchase_price": prices["purchase"],
+                "without_agreement": prices["standard"],
                 "fees": fees,
-                "total": purchase_price + fees,
+                "total": prices["purchase"] + fees,
             }
         return result
 
