@@ -482,6 +482,16 @@ class RentalFeesComputation(models.Model):
         return result
 
     @api.multi
+    def action_compare_computations(self):
+        return {
+            "name": _("Fees computation details"),
+            "domain": [("fees_computation_id", "in", self.ids)],
+            "type": "ir.actions.act_window",
+            "view_mode": "tree,graph,pivot,form",
+            "res_model": "rental_fees.computation.detail",
+        }
+
+    @api.multi
     def button_open_details(self):
         self.ensure_one()
         return {

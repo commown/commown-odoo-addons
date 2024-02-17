@@ -244,6 +244,11 @@ class RentalFeesComputationTC(RentalFeesTC):
             err.exception.name,
         )
 
+        # Check computation comparison action does not crash
+        compare_action = (c1 | c2).action_compare_computations()
+        self.assertEqual(compare_action["type"], "ir.actions.act_window")
+        self.assertEqual(compare_action["res_model"], "rental_fees.computation.detail")
+
         # Generate an ods report
         ref = self.env.ref
         action = ref("rental_fees.action_py3o_spreadsheet_fees_rental_computation")
