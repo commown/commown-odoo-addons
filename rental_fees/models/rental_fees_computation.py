@@ -563,8 +563,8 @@ class RentalFeesComputation(models.Model):
             else:
                 inv.invoice_line_ids[0].copy(inv_line_data)
 
+        inv._onchange_invoice_line_ids()
         self.invoice_ids |= inv
-        self.invoice_ids._onchange_invoice_line_ids()
 
     @api.multi
     def action_send_report_for_invoicing(self):
