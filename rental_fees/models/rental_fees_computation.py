@@ -532,16 +532,21 @@ class RentalFeesComputation(models.Model):
         inv, inv_line_name = None, None
         until_date = format_date(self.env, self.until_date)
 
-        for fees_def, amounts in self.amounts_summary()["by_fees_def"].items():
+        amounts_by_def = self.amounts_summary()["by_fees_def"]
+        invoice_model = next(iter(amounts_by_def)).model_invoice_id
+        if not invoice_model:
+            raise UserError(_("Please set the invoice model on all fees definitions."))
+
+        for fees_def, amounts in amounts_by_def.items():
 
             if self._has_later_invoiced_computation():
                 raise UserError(
                     _("There is a later invoice for the same fees definition")
                 )
 
-            if not fees_def.model_invoice_id:
+            if fees_def.model_invoice_id != invoice_model:
                 raise UserError(
-                    _("Please set the invoice model on the fees definition."),
+                    _("Please use the same invoice model on all fees definition."),
                 )
 
             inv_line_name = fees_def.model_invoice_id.invoice_line_ids[0].name
