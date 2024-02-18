@@ -240,7 +240,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             with self.assertRaises(UserError) as err:
                 c5 = self.compute("2021-05-30", invoice=True)
         self.assertEqual(
-            "Please set the invoice model on the fees definition.",
+            "Please set the invoice model on all fees definitions.",
             err.exception.name,
         )
 
@@ -671,4 +671,30 @@ class RentalFeesComputationTC(RentalFeesTC):
             self.compute("2100-01-01").split_periods_wrt_fees_def(
                 self.fees_def, periods
             ),
+        )
+
+    def test_action_invoice_error(self):
+        "All computation fees defs must have the same invoice model to be invoiceable"
+        p2 = self.storable_product.copy()
+        inv_model = self.fees_def.model_invoice_id.copy()
+        fees_def2 = self.fees_def.copy(
+            {
+                "name": "def2",
+                "product_template_id": p2.id,
+                "model_invoice_id": inv_model.id,
+            }
+        )
+
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.create_invoices_until(contract, "2021-03-01")
+
+        comp = self.compute("2022-03-01", fees_def=self.fees_def | fees_def2)
+
+        with self.assertRaises(UserError) as err:
+            comp.action_invoice()
+        self.assertEqual(
+            err.exception.name,
+            "Please use the same invoice model on all fees definition.",
         )
