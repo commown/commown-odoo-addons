@@ -342,6 +342,19 @@ class RentalFeesComputationTC(RentalFeesTC):
         c3 = self.compute(computation_date)
         self.assertEqual(c3.fees, 7.5)
 
+    def test_action_invoice_two_fees_def(self):
+        p2 = self.storable_product.copy()
+        fees_def2 = self.fees_def.copy({"name": "def2", "product_template_id": p2.id})
+
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.create_invoices_until(contract, "2021-03-01")
+
+        fees_def = self.fees_def | fees_def2
+        comp = self.compute("2022-03-01", fees_def=fees_def, invoice=True)
+        self.assertEqual(len(comp.mapped("invoice_ids.invoice_line_ids")), 2)
+
     def test_compute_with_forecast(self):
         company = self.env.user.partner_id.company_id
         company.update(
