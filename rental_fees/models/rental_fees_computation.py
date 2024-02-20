@@ -108,12 +108,12 @@ class RentalFeesComputation(models.Model):
     def _compute_run_datetime_and_has_forecast(self):
         now = fields.Datetime.now()
         for record in self:
-            if self.state == "running":
-                self.run_datetime = now
-                self.has_forecast = self.until_date > self.run_datetime.date()
+            if record.state == "running":
+                record.run_datetime = now
+                record.has_forecast = record.until_date > record.run_datetime.date()
             else:
-                self.run_datetime = False
-                self.has_forecast = self.until_date > now.date()
+                record.run_datetime = False
+                record.has_forecast = record.until_date > now.date()
 
     def details(self, *fees_types):
         return self.detail_ids.filtered(lambda d: d.fees_type in fees_types)
