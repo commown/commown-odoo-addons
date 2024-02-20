@@ -128,14 +128,12 @@
         </h2>
         <p t-if="header" t-raw="header"></p>
         <p>
-          Nous allons vous envoyer
-          <t t-esc="new_module" />
-        . Veuillez vérifier attentivement
-        les informations d'expédition ci-dessous, et les
-        modifier en cas de besoin. Notez que le paquet sera
-        déposé directement dans votre boite aux lettres :
-        votre présence n'est pas requise lors du passage du
-        facteur (sauf pour les cas d'une livraison PC).
+          Afin d'anticiper un envoi de module ou d'appareil, veuillez vérifier attentivement
+          les informations d'expédition ci-dessous, et les
+          modifier en cas de besoin. Notez que le paquet sera
+          déposé directement dans votre boite aux lettres :
+          votre présence n'est pas requise lors du passage du
+          facteur (sauf s'il s'agit d'un ordinateur complet).
         </p>
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
