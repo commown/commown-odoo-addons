@@ -100,13 +100,18 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
         run: "text Inférieure à 80%",
       },
       {
-        content: "Check step 2 nav link is disabled",
-        trigger: "#smartwizard a.nav-link:eq(2).disabled",
+        content: "Check step 2 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(2):not(.disabled)",
         run: function() {},
       },
       {
-        content: "Check step 3 nav link is not disabled",
-        trigger: "#smartwizard a.nav-link:eq(3):not(.disabled)",
+        content: "Check step 3 nav link is disabled",
+        trigger: "#smartwizard a.nav-link:eq(3).disabled",
+        run: function() {},
+      },
+      {
+        content: "Check step 4 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(4):not(.disabled)",
         run: function() {},
       },
       commonSteps.gotoNextStep,
@@ -141,10 +146,17 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
         run: function() {},
       },
       {
-        content: "Check step 3 nav link is disabled",
-        trigger: "#smartwizard a.nav-link:eq(3).disabled",
+        content: "Check step 3 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(3):not(.disabled)",
         run: function() {},
       },
+      {
+        content: "Check step 4 nav link is disabled",
+        trigger: "#smartwizard a.nav-link:eq(4).disabled",
+        run: function() {},
+      },
+      commonSteps.gotoNextStep,
+      commonSteps.checkInputNamesMatchesUser,
       commonSteps.gotoNextStep,
       ...commonSteps.funcAddMoreInfo("text FB drains the battery!"),
       ...commonSteps.funcCreateAndCheckTicket(

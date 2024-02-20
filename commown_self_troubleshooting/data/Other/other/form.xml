@@ -32,6 +32,12 @@
                 <ul class="nav">
                   <li class="nav-item">
                     <a class="nav-link" href="#step-0">
+                      Adresse de livraison
+                      <br />
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-1">
                       Votre demande
                       <br />
                     </a>
@@ -39,7 +45,12 @@
                 </ul>
 
                 <div class="tab-content">
-                  <div id="step-0" class="tab-pane" role="tabpanel" aria-labelledby="step-0">
+
+                  <t t-call="commown_self_troubleshooting.step-ship-module">
+                    <t t-set="step">0</t>
+                  </t>
+
+                  <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
                     <h2>
                       <i class="fas fa-hands-helping" />
                       Contacter un humain
@@ -51,11 +62,11 @@
 
                     <t t-call="commown_self_troubleshooting.commown-signature" />
 
-                    <div id="form-step-0" role="form" data-toggle="validator">
+                    <div id="form-step-1" role="form" data-toggle="validator">
 
                       <div class="form-group">
-                        <label for="more_info_step_0">En quoi pouvons-nous vous aider ?</label>
-                        <textarea class="form-control" rows="3" required="required" id="more_info_step_0" name="more_info" />
+                        <label for="more_info_step_1">En quoi pouvons-nous vous aider ?</label>
+                        <textarea class="form-control" rows="3" required="required" id="more_info_step_1" name="more_info" />
                       </div>
 
                       <div class="form-group">

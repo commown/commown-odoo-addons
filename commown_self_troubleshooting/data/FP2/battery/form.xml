@@ -17,9 +17,8 @@
                   const wizard = setUpWizard($('#smartwizard'));
 
                   $('#accu_battery').change(function () {
-                       wizard.toggleStep(2, this.value==='sup');
-                       wizard.toggleStep(3, this.value==='inf');
-                       wizard.toggleStep(4, this.value==='inf');
+                    wizard.toggleStep(3, this.value==='sup');
+                    wizard.toggleStep(4, this.value==='inf');
                   });
 
               });
@@ -56,8 +55,8 @@
                   <ul class="nav">
                     <li class="nav-item"><a class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
                     <li class="nav-item"><a class="nav-link" href="#step-1">Étape 1<br/><small>AccuBattery</small></a></li>
-                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Problème logiciel</small></a></li>
-                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Problème logiciel</small></a></li>
                     <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
                     <li class="nav-item"><a class="nav-link" href="#step-5">Étape 5<br/><small>Contacter un humain</small></a></li>
                   </ul>
@@ -95,7 +94,11 @@
 
                     </div>
 
-                    <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">2</t>
+                    </t>
+
+                    <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                       <h2><i class="fas fa-bug"/> Problème logiciel</h2>
                       <p>Dans ce cas, nous vous invitons à démarrer votre FP2 en mode "sans échec" afin de
                       voir si le problème est dû à une application instable. </p>
@@ -118,7 +121,7 @@
                         envoyées, un membre de l'équipe support de Commown va alors prendre contact avec vous.
                       </p>
 
-                      <div id="form-step-2" role="form" data-toggle="validator">
+                      <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utile :</label>
                           <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info"/>
@@ -130,10 +133,6 @@
                         </div>
                       </div>
                     </div>
-
-                    <t t-call="commown_self_troubleshooting.step-ship-module">
-                      <t t-set="step">3</t>
-                    </t>
 
                     <t t-call="commown_self_troubleshooting.step-confirm-change">
                       <t t-set="step">4</t>

@@ -220,6 +220,29 @@
       </div>
     </template>
 
+    <template id="display-shipping-information">
+      <p>
+        L'adresse d'expédition est la suivante :<br/>
+        <ul>
+          <li t-if="name.strip()" t-esc="name.strip()"/>
+          <li t-if="street.strip()" t-esc="street.strip()"/>
+          <li t-if="street2.strip()" t-esc="street2.strip()"/>
+          <li t-if="zipcode.strip()" t-esc="zipcode.strip()"/>
+          <li t-if="city.strip()" t-esc="city.strip()"/>
+          <li t-if="country.strip()" t-esc="country.strip()"/>
+        </ul>
+        Informations supplémentaires utiles à la livraison :<br/>
+        <ul>
+          <li>
+            Numéro de téléphone : <t t-if="phone.strip()" t-esc="phone.strip()"/>
+          </li>
+          <li>
+            Adresse de courriel : <t t-if="email.strip()" t-esc="email.strip()"/>
+          </li>
+        </ul>
+      </p>
+    </template>
+
     <template id="step-self-solved">
       <div t-attf-id="step-{{ step }}" class="tab-pane" role="tabpanel" t-attf-aria-labelledby="step-{{ step }}">
         <h2>
