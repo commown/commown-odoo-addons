@@ -6,11 +6,17 @@
     <field name="name">rental.fees.computation.tree</field>
     <field name="model">rental_fees.computation</field>
     <field name="arch" type="xml">
-      <tree string="Rental fees computations">
-        <field name="fees_definition_ids" widget="many2many_tags"/>
-        <field name="partner_id" invisible="True"/>
-        <field name="fees" string="Fees until date"/>
+      <tree
+          string="Rental fees computations"
+          decoration-muted="has_forecast"
+          decoration-it="state != 'done'"
+          >
+        <field name="has_forecast" invisible="True"/>
+        <field name="partner_id"/>
         <field name="until_date" string="Date"/>
+        <field name="fees" string="Fees until date"/>
+        <field name="fees_definition_ids" widget="many2many_tags" options="{'open': true}"/>
+        <field name="invoice_ids" widget="many2many_tags" options="{'open': true}"/>
         <field name="state"/>
       </tree>
     </field>

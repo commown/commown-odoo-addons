@@ -37,6 +37,7 @@ class RentalFeesComputation(models.Model):
     _name = "rental_fees.computation"
     _description = "Computation of rental fees"
     _inherit = ["mail.thread"]
+    _order = "partner_id,until_date desc"
 
     partner_id = fields.Many2one("res.partner", domain=[("is_company", "=", True)])
 
