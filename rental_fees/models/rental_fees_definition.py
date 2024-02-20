@@ -42,7 +42,12 @@ class RentalFeesDefinition(models.Model):
             " The optional marker ##DATE## in an invoice line description will"
             " be replaced by the fees computation date."
         ),
-        domain='[("partner_id", "=", partner_id), ("type", "=", "in_invoice")]',
+        domain=(
+            "["
+            ' ("partner_id.commercial_partner_id", "=", partner_id),'
+            ' ("type", "=", "in_invoice"),'
+            "]"
+        ),
     )
 
     product_template_id = fields.Many2one(

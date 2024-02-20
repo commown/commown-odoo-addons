@@ -37,6 +37,7 @@ class RentalFeesComputation(models.Model):
     _name = "rental_fees.computation"
     _description = "Computation of rental fees"
     _inherit = ["mail.thread"]
+    _order = "partner_id,until_date desc"
 
     partner_id = fields.Many2one("res.partner", domain=[("is_company", "=", True)])
 
@@ -108,12 +109,12 @@ class RentalFeesComputation(models.Model):
     def _compute_run_datetime_and_has_forecast(self):
         now = fields.Datetime.now()
         for record in self:
-            if self.state == "running":
-                self.run_datetime = now
-                self.has_forecast = self.until_date > self.run_datetime.date()
+            if record.state == "running":
+                record.run_datetime = now
+                record.has_forecast = record.until_date > record.run_datetime.date()
             else:
-                self.run_datetime = False
-                self.has_forecast = self.until_date > now.date()
+                record.run_datetime = False
+                record.has_forecast = record.until_date > now.date()
 
     def details(self, *fees_types):
         return self.detail_ids.filtered(lambda d: d.fees_type in fees_types)
@@ -482,6 +483,16 @@ class RentalFeesComputation(models.Model):
         return result
 
     @api.multi
+    def action_compare_computations(self):
+        return {
+            "name": _("Fees computation details"),
+            "domain": [("fees_computation_id", "in", self.ids)],
+            "type": "ir.actions.act_window",
+            "view_mode": "tree,graph,pivot,form",
+            "res_model": "rental_fees.computation.detail",
+        }
+
+    @api.multi
     def button_open_details(self):
         self.ensure_one()
         return {
@@ -522,16 +533,21 @@ class RentalFeesComputation(models.Model):
         inv, inv_line_name = None, None
         until_date = format_date(self.env, self.until_date)
 
-        for fees_def, amounts in self.amounts_summary()["by_fees_def"].items():
+        amounts_by_def = self.amounts_summary()["by_fees_def"]
+        invoice_model = next(iter(amounts_by_def)).model_invoice_id
+        if not invoice_model:
+            raise UserError(_("Please set the invoice model on all fees definitions."))
+
+        for fees_def, amounts in amounts_by_def.items():
 
             if self._has_later_invoiced_computation():
                 raise UserError(
                     _("There is a later invoice for the same fees definition")
                 )
 
-            if not fees_def.model_invoice_id:
+            if fees_def.model_invoice_id != invoice_model:
                 raise UserError(
-                    _("Please set the invoice model on the fees definition."),
+                    _("Please use the same invoice model on all fees definition."),
                 )
 
             inv_line_name = fees_def.model_invoice_id.invoice_line_ids[0].name
@@ -553,8 +569,8 @@ class RentalFeesComputation(models.Model):
             else:
                 inv.invoice_line_ids[0].copy(inv_line_data)
 
+        inv._onchange_invoice_line_ids()
         self.invoice_ids |= inv
-        self.invoice_ids._onchange_invoice_line_ids()
 
     @api.multi
     def action_send_report_for_invoicing(self):
