@@ -11,7 +11,7 @@
         <field name="partner_id"/>
         <field name="product_template_id"/>
         <field name="agreed_to_std_price_ratio" widget="percentage"/>
-        <field name="order_ids" widget="many2many_tags"/>
+        <field name="order_ids" widget="many2many_tags" options="{'open': true}"/>
       </tree>
     </field>
   </record>
