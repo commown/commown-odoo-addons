@@ -18,16 +18,15 @@
                 $('input[type="radio"][name="mute_solved"]').change(function () {
                   const isNo = this.value!=='yes';
                   wizard.toggleStep(2, isNo);
-                  wizard.toggleStep(3, isNo);
                   wizard.toggleStep(4, isNo);
+                  wizard.toggleStep(3, isNo);
                   wizard.toggleStep(5, isNo);
                   wizard.toggleStep(6, !isNo);
                 });
 
                 $('input[type="radio"][name="is_micro_test_ok"]').change(function () {
                   const isNo = this.value!=='yes';
-                  wizard.toggleStep(3, !isNo);
-                  wizard.toggleStep(4, isNo);
+                  wizard.toggleStep(4, !isNo);
                   wizard.toggleStep(5, isNo);
                 });
 
@@ -65,8 +64,8 @@
                     <li class="nav-item"><a class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
                     <li class="nav-item"><a class="nav-link" href="#step-1">Étape 1<br/><small>Mode micro coupé</small></a></li>
                     <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Test de maintenance</small></a></li>
-                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Test autre SIM</small></a></li>
-                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-4">Étape 4<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-4">Étape 4<br/><small>Test autre SIM</small></a></li>
                     <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-5">Étape 5<br/><small>Confirmation</small></a></li>
                     <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-6">Étape 6<br/><small>Problème résolu</small></a></li>
                     <li class="nav-item"><a class="nav-link" href="#step-7">Étape 7<br/><small>Contacter un humain</small></a></li>
@@ -122,7 +121,11 @@
                       </div>
                     </div>
 
-                    <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">3</t>
+                    </t>
+
+                    <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
                       <h2><i class="fas fa-sim-card"/> Test d'une autre carte SIM</h2>
                       <p> Si le test de maintenance montre que le micro principal est
                       fonctionnel mais que l'interlocuteur ne vous entend toujours pas,
@@ -139,10 +142,10 @@
                       d'appuyer sur le bouton "Envoyer les informations" ci-dessous.
                       </p>
 
-                      <div id="form-step-3" role="form" data-toggle="validator">
+                      <div id="form-step-4" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utiles :</label>
-                          <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info"/>
+                          <textarea class="form-control" rows="3" id="more_info_step_4" name="more_info"/>
                         </div>
 
                         <div class="form-group">
@@ -151,10 +154,6 @@
                         </div>
                       </div>
                     </div>
-
-                    <t t-call="commown_self_troubleshooting.step-ship-module">
-                      <t t-set="step">4</t>
-                    </t>
 
                     <t t-call="commown_self_troubleshooting.step-confirm-module-change">
                       <t t-set="step">5</t>

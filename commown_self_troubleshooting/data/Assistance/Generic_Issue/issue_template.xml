@@ -10,40 +10,24 @@
         <t t-if="generic_issue_type=='course'">
             <p>Je souhaite effectuer mon heure de formation Linux.</p>
         </t>
-        <t t-if="action=='ship'">
-          <t t-if="generic_issue_type=='upgrade'">
+        <t t-if="action=='ship' or action=='confirm-bug' or action=='confirm-linux'">
+          <t t-if="generic_issue_type=='bug'">
             <p>
-              Je souhaite un matériel supplémentaire
+              Je rencontre un incident / bug
             </p>
           </t>
-          <t t-else="">
-            <p>
-              Je rencontre une casse avec mon appareil
-            </p>
-          </t>
-          <p>
-            L'adresse d'expédition est la suivante : <br/>
-            <ul>
-              <li t-if="name.strip()" t-esc="name.strip()"/>
-              <li t-if="street.strip()" t-esc="street.strip()"/>
-              <li t-if="street2.strip()" t-esc="street2.strip()"/>
-              <li t-if="zipcode.strip()" t-esc="zipcode.strip()"/>
-              <li t-if="city.strip()" t-esc="city.strip()"/>
-              <li t-if="country.strip()" t-esc="country.strip()"/>
-            </ul>
-
-            Informations supplémentaires utiles à la livraison :<br/>
-            <ul>
-              <li>
-                Numéro de téléphone : <t t-if="phone.strip()" t-esc="phone.strip()"/>
-              </li>
-              <li>
-                Adresse de courriel : <t t-if="email.strip()" t-esc="email.strip()"/>
-              </li>
-            </ul>
-          </p>
+            <t t-if="generic_issue_type=='upgrade'">
+              <p>
+                Je souhaite un matériel supplémentaire
+              </p>
+            </t>
+            <t t-elif="generic_issue_type=='broken'">
+              <p>
+                Je rencontre une casse avec mon appareil
+              </p>
+            </t>
+          <t t-call="commown_self_troubleshooting.display-shipping-information" />
         </t>
-
         <t t-call="commown_self_troubleshooting.more_customer_info" />
 
       </t>

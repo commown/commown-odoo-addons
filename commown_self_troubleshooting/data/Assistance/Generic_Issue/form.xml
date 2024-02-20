@@ -26,11 +26,15 @@
               $('select[name=device_contract]').change(contractChanged);
 
               $('#generic_issue_type').change(function () {
-                wizard.toggleStep(2, this.value==='bug');
-                wizard.toggleStep(3, this.value==='broken');
-                wizard.toggleStep(4, this.value==='course');
-                wizard.toggleStep(5, this.value==='upgrade');
-                wizard.toggleStep(6, (this.value == 'broken' || this.value == 'upgrade'));
+                wizard.toggleStep(2, (this.value == 'bug'
+                || this.value == 'course'));
+                wizard.toggleStep(3, this.value==='bug');
+                wizard.toggleStep(4, this.value==='broken');
+                wizard.toggleStep(5, this.value==='course');
+                wizard.toggleStep(6, this.value==='upgrade');
+                wizard.toggleStep(7, (this.value == 'broken'
+                || this.value == 'course'
+                || this.value == 'upgrade'));
               });
 
             });
@@ -70,29 +74,35 @@
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-2">Étape 2
                       <br/>
-                      <small>Incident, assistance</small>
+                      <small>Expédition</small>
                     </a>
                   </li>
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-3">Étape 3
                       <br/>
-                      <small>Casse</small>
+                      <small>Incident, assistance</small>
                     </a>
                   </li>
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-4">Étape 4
                       <br/>
-                      <small>Formation</small>
+                      <small>Casse</small>
                     </a>
                   </li>
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-5">Étape 5
                       <br/>
-                      <small>Demande de matériel</small>
+                      <small>Formation</small>
                     </a>
                   </li>
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-6">Étape 6
+                      <br/>
+                      <small>Demande de matériel</small>
+                    </a>
+                  </li>
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-7">Étape 7
                       <br/>
                       <small>Confirmation</small>
                     </a>
@@ -144,6 +154,12 @@
                   </div>
 
                   <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">2</t>
+                    </t>
+                  </div>
+
+                  <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
                     <p>Afin de traiter au mieux votre demande, nous vous invitons à adopter le formalisme
                       ci-dessous qui permet d'obtenir une aide optimale. Il consiste à répondre aux 4 questions
                       suivantes pour bien nous faire comprendre le problème que vous rencontrez :
@@ -187,21 +203,21 @@
                       </strong>
                     </p>
 
-                    <div id="form-step-2" role="form" data-toggle="validator">
+                    <div id="form-step-3" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label for="more_info_step_2">Saisissez les informations ici :</label>
-                        <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" required="required" />
+                        <label for="more_info_step_3">Saisissez les informations ici :</label>
+                        <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info" required="required" />
                       </div>
 
                       <div class="form-group">
                         <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_received" />
-                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                        <button type="submit" class="btn btn-primary" name="action" value="confirm-bug">Envoyer la demande</button>
                       </div>
                     </div>
 
                   </div>
 
-                  <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                  <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
                     <p class="alert alert-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
                       La prise en charge d'une casse est différente selon les contrats souscrits chez Commown.
                       Nous vous invitons à lire scrupuleusement le paragraphe dédié à la casse dans vos
@@ -213,11 +229,11 @@
                       dans l'attente d'un nouvel appareil.
                     </p>
                     <t t-call="commown_self_troubleshooting.step-ship-module">
-                      <t t-set="step">3</t>
+                      <t t-set="step">4</t>
                     </t>
                   </div>
 
-                  <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                  <div id="step-5" class="tab-pane" role="tabpanel" aria-labelledby="step-5">
                     <img src="/commown_self_troubleshooting/static/images/logo_linux.png"
                          alt="Logo Linux" />
                     <h2>
@@ -241,22 +257,22 @@
                       le travail en amont et fluidifier nos échanges lors de la formation.
                     </p>
 
-                    <div id="form-step-4" role="form" data-toggle="validator">
+                    <div id="form-step-5" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <label for="more_info_step_4">Inscrivez vos disponibilités et les sujets à aborder :</label>
-                        <textarea class="form-control" required="required" rows="3" id="more_info_step_4" name="more_info" />
+                        <label for="more_info_step_5">Inscrivez vos disponibilités et les sujets à aborder :</label>
+                        <textarea class="form-control" required="required" rows="3" id="more_info_step_5" name="more_info" />
                       </div>
 
                       <div class="form-group">
                         <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_received" />
-                        <button type="submit" class="btn btn-primary" name="action">Envoyer ma demande</button>
+                        <button type="submit" class="btn btn-primary" name="action" value="confirm-linux">Envoyer ma demande</button>
                       </div>
                     </div>
 
                   </div>
 
                   <t t-call="commown_self_troubleshooting.step-ship-module">
-                    <t t-set="step">5</t>
+                    <t t-set="step">6</t>
                     <t t-set="header">
                       <p class="alert alert-danger" style="padding: 1em; margin: 1em 0" id="water_damage">
                         Ce formulaire permet à l'équipe de Commown de s'assurer que votre adresse d'expédition est la bonne.
@@ -272,9 +288,9 @@
                     </t>
                   </t>
 
-                  <div id="step-6" class="tab-pane" role="tabpanel" aria-labelledby="step-6">
+                  <div id="step-7" class="tab-pane" role="tabpanel" aria-labelledby="step-7">
                     <t t-call="commown_self_troubleshooting.step-confirm-change">
-                      <t t-set="step">6</t>
+                      <t t-set="step">7</t>
                     </t>
                   </div>
 
