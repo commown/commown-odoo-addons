@@ -178,7 +178,6 @@
 
                     <t t-call="commown_self_troubleshooting.step-ship-module">
                       <t t-set="step">5</t>
-                      <t t-set="new_module">l'élément nécessaire</t>
                     </t>
 
                     <t t-call="commown_self_troubleshooting.step-confirm-change">

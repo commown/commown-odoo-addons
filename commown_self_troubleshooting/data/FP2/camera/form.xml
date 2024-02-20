@@ -125,7 +125,6 @@
 
                     <t t-call="commown_self_troubleshooting.step-ship-module">
                       <t t-set="step">3</t>
-                      <t t-set="new_module">une nouvelle caméra</t>
                     </t>
 
                     <t t-call="commown_self_troubleshooting.step-confirm-module-change">

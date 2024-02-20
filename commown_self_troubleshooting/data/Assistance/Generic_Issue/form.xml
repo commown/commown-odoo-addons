@@ -214,7 +214,6 @@
                     </p>
                     <t t-call="commown_self_troubleshooting.step-ship-module">
                       <t t-set="step">3</t>
-                      <t t-set="new_module">un nouvel appareil ou module</t>
                     </t>
                   </div>
 
@@ -271,7 +270,6 @@
                         NB : nous ne garantissons pas que le matériel supplémentaire demandé soit en stock.
                       </p>
                     </t>
-                    <t t-set="new_module">une nouvelle pièce</t>
                   </t>
 
                   <div id="step-6" class="tab-pane" role="tabpanel" aria-labelledby="step-6">
