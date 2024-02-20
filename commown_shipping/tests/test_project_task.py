@@ -28,7 +28,13 @@ class ProjectTaskTC(BaseShippingTC):
         for num in range(5):
             tasks += orig_task.copy({"name": "[SO%05d] Test lead" % num})
 
+        # Simulate two impressions in a row:
+        all_labels_initial = self.print_label(tasks, self.parcel_type)
         all_labels = self.print_label(tasks, self.parcel_type)
+
+        # Second impression must create new labels and delete the previous:
+        self.assertTrue(all_labels_initial.ids != all_labels.ids)
+        self.assertFalse(all_labels_initial.exists())
 
         self.assertEqual(all_labels.name, self.parcel_type.name + ".pdf")
         self.assertEqual(pdf_page_num(all_labels), 2)

@@ -221,7 +221,7 @@ class CommownShippingMixin(models.AbstractModel):
             }
             domain = [(k, "=", v) for k, v in list(attrs.items())]
             for att in self.env["ir.attachment"].search(domain):
-                att.unlink()
+                att.sudo().unlink()  # user may not have project write perm
             attrs.update(
                 {
                     "mimetype": "application/pdf",
@@ -231,7 +231,9 @@ class CommownShippingMixin(models.AbstractModel):
                     "type": "binary",
                 }
             )
-            return self.env["ir.attachment"].create(attrs)
+
+            # User may not have project write perm
+            return self.env["ir.attachment"].sudo().create(attrs)
 
         finally:
             for p in (fpath, result_path):
