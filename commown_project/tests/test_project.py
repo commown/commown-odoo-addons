@@ -81,6 +81,9 @@ class ProjectOwnUserPermissionTC(ProjectPermissionTC):
         # Update config mostly OK
         project.name = "project new name"
 
+        # can_write compute field is OK:
+        self.assertTrue(project.can_write)
+
         # Add follower OK and gives read access
         self.add_follower(project, self.user2.partner_id)
         self.assertTrue(self.is_follower(self.user2, project))
@@ -114,6 +117,7 @@ class ProjectOtherUsersPermissions(ProjectPermissionTC):
 
         self.assertFalse(self.is_follower(self.user2, self.project1))
         self.assertNotIn(self.project1, self.seen_projects(self.user2))
+        self.assertFalse(self.entity_as(self.project1, self.user2).can_write)
 
         self.project1.sudo().privacy_visibility = "portal"
         self.assertIn(self.project1, self.seen_projects(self.user2))
@@ -136,6 +140,9 @@ class ProjectOtherUsersPermissions(ProjectPermissionTC):
         self.add_follower(self.project1, self.user2.partner_id)
         self.assertIn(self.project1, self.seen_projects(self.user2))
         p1_as_user2 = self.entity_as(self.project1, self.user2)
+
+        # Check can_write compute field is True:
+        self.assertTrue(p1_as_user2.can_write)
 
         # Check user2 can modify project's name:
         p1_as_user2.name = "user2 given name"
