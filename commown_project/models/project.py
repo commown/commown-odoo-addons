@@ -10,10 +10,20 @@ class Project(models.Model):
         store=False,
     )
 
+    is_manager = fields.Boolean(
+        compute="_compute_is_manager",
+        store=False,
+    )
+
     def _compute_can_write(self):
         can_write_record_ids = self._filter_access_rules("write").ids
         for record in self:
             record.can_write = record.id in can_write_record_ids
+
+    def _compute_is_manager(self):
+        self.update(
+            {"is_manager": self.env.user.has_group("project.group_project_manager")}
+        )
 
     @api.model
     @api.returns("self", lambda value: value.id)
