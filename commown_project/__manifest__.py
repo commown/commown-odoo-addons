@@ -19,5 +19,6 @@
     "data": [
         "security/ir.model.access.csv",
         "security/rules.xml",
+        "views/project.xml",
     ],
 }
