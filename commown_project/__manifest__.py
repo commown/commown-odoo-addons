@@ -13,4 +13,11 @@
     "development_status": "Alpha",
     "maintainers": ["fcayre"],
     "installable": True,
+    "depends": [
+        "project",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "security/rules.xml",
+    ],
 }
