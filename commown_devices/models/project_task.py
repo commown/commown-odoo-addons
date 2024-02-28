@@ -1,3 +1,5 @@
+import json
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, Warning
 
@@ -25,13 +27,25 @@ class ProjectTask(models.Model):
     storable_product_id = fields.Many2one(
         string="Article",
         comodel_name="product.product",
-        domain=lambda self: self._compute_storable_product_domain(),
+    )
+
+    storable_product_id_domain = fields.Char(
+        compute=lambda self: self._compute_storable_product_domain(),
+        readonly=True,
+        store=False,
+        default="[]",
     )
 
     lot_id = fields.Many2one(
         string="Device",
         comodel_name="stock.production.lot",
-        domain=lambda self: self._compute_lot_domain(),
+    )
+
+    lot_id_domain = fields.Char(
+        compute=lambda self: self._compute_lot_domain(),
+        readonly=True,
+        store=False,
+        default="[]",
     )
 
     device_tracking = fields.Boolean(
@@ -43,7 +57,7 @@ class ProjectTask(models.Model):
         if self.require_contract:
             products = self._may_be_related_lots().mapped("product_id")
             domain = [("id", "in", products.ids)]
-        return domain
+        self.storable_product_id_domain = json.dumps(domain)
 
     def _may_be_related_lots(self):
         """Return lots that lay be related to current task:
@@ -101,10 +115,10 @@ class ProjectTask(models.Model):
             quants = self.env["stock.quant"].search(qdom)
             domain.append(("id", "in", quants.mapped("lot_id").ids))
 
-        return domain
+        self.lot_id_domain = json.dumps(domain)
 
-    def _reset_field_target(self, field_name, domain):
-        """Set value of `field_name` according to its `domain` and actual value
+    def _reset_field_target(self, field_name):
+        """Set `field_name` according to its domain companion field and actual value
 
         Perform a search of the possible values from `domain` and:
         - if there is a single possible value, use it to set the field
@@ -112,6 +126,7 @@ class ProjectTask(models.Model):
         - otherwise do nothing (and let the actual value)
         """
 
+        domain = json.loads(getattr(self, field_name + "_domain"))
         model = self.env[self._fields[field_name].comodel_name]
         possible_values = model.search(domain)
         if len(possible_values) == 1:
@@ -129,18 +144,11 @@ class ProjectTask(models.Model):
 
     @api.onchange("contract_id", "storable_product_id")
     def onchange_contract_or_product(self):
-        lot_domain = self._compute_lot_domain()
-        product_domain = self._compute_storable_product_domain()
+        self._compute_lot_domain()
+        self._compute_storable_product_domain()
 
-        self._reset_field_target("lot_id", lot_domain)
-        self._reset_field_target("storable_product_id", product_domain)
-
-        return {
-            "domain": {
-                "lot_id": lot_domain,
-                "storable_product_id": product_domain,
-            }
-        }
+        self._reset_field_target("lot_id")
+        self._reset_field_target("storable_product_id")
 
     @api.onchange("lot_id")
     def onchange_lot_id(self):
