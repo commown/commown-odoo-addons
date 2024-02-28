@@ -1,0 +1,46 @@
+<odoo>
+
+  <record model="ir.ui.view" id="view_project_kanban">
+    <field name="name">project.project.kanban</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.view_project_kanban"/>
+    <field name="arch" type="xml">
+
+      <!-- Activate Project Edition button depending on the permission to write -->
+      <xpath expr="//kanban/field[@name='name']" position="before">
+        <field name="can_write" invisible="1"/>
+      </xpath>
+      <xpath expr="//a[hasclass('o_kanban_manage_toggle_button')]" position="attributes">
+        <attribute name="groups" />
+        <attribute name="t-if">record.can_write.raw_value</attribute>
+      </xpath>
+      <xpath expr="//div[hasclass('o_kanban_card_manage_pane')]" position="attributes">
+        <attribute name="groups" />
+        <attribute name="t-if">record.can_write.raw_value</attribute>
+        <attribute name="t-att-data-can-write">record.can_write.raw_value</attribute>
+      </xpath>
+      <!-- End -->
+
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="edit_project">
+    <field name="name">project.project.form</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.edit_project"/>
+    <field name="arch" type="xml">
+
+      <field name="user_id" position="before">
+        <field name="is_manager" invisible="1"/>
+      </field>
+      <xpath expr="//field[@name='user_id']" position="attributes">
+        <attribute name="attrs">{'readonly': [('is_manager', '=', False)]}</attribute>
+      </xpath>
+      <xpath expr="//field[@name='privacy_visibility']" position="attributes">
+        <attribute name="attrs">{'readonly': [('is_manager', '=', False)]}</attribute>
+      </xpath>
+
+    </field>
+  </record>
+
+</odoo>
