@@ -1,3 +1,5 @@
+import json
+
 import dateutil.parser
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
@@ -167,7 +169,12 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         )
 
     def prepare_ui(
-        self, created_model_name, related_entity, relation_field, user_choices=None
+        self,
+        created_model_name,
+        related_entity,
+        relation_field,
+        user_choices=None,
+        fdomains=None,
     ):
         created_model = self.env[created_model_name].with_context(
             {
@@ -213,4 +220,11 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             if domain is None:
                 continue
             possible_values[name] = self.env[field["relation"]].search(domain)
+
+        # Apply domain fields:
+        for domain_field_name in fdomains or ():
+            domain = json.loads(values[domain_field_name])
+            name = domain_field_name[: -len("_domain")]
+            possible_values[name] = self.env[fields[name]["relation"]].search(domain)
+
         return values, possible_values
