@@ -96,13 +96,8 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             contract.send_devices(lot, {}, do_transfer=do_transfer)
 
     def get_form(self, **user_choices):
-        fdomains = ("storable_product_id_domain", "lot_id_domain")
         return self.prepare_ui(
-            "project.task",
-            self.project,
-            "project_id",
-            user_choices,
-            fdomains,
+            "project.task", self.project, "project_id", user_choices=user_choices
         )
 
     def test_ui_help_desk(self):
