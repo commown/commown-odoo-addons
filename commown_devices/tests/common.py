@@ -1,4 +1,9 @@
+import json
+
 import dateutil.parser
+from lxml import etree
+
+from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
@@ -213,4 +218,14 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             if domain is None:
                 continue
             possible_values[name] = self.env[field["relation"]].search(domain)
+
+        # Apply view domains:
+        tree = etree.fromstring(created_model.fields_view_get()["arch"])
+        for view_field in tree.xpath("//field[@domain]"):
+            name = view_field.get("name")
+            domain = safe_eval(view_field.get("domain"), values)
+            if isinstance(domain, str):  # the domain was a field itself
+                domain = json.loads(domain)
+            possible_values[name] = self.env[fields[name]["relation"]].search(domain)
+
         return values, possible_values
