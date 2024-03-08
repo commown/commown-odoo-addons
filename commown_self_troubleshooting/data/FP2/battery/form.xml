@@ -47,6 +47,7 @@
                     id="myForm" role="form">
 
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="project_ref" value="commown_self_troubleshooting.support_project" />
                 <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title"/>
                 <input type="hidden" name="tags" id="tags" t-att-value="tag_names"/>
                 <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template"/>
@@ -124,7 +125,7 @@
                         </div>
 
                         <div class="form-group">
-                          <input type="hidden" name="stage_ref" value="stage_long_term_followup"/>
+                          <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_long_term_followup"/>
                           <button type="submit" class="btn btn-primary" name="action" value="pb_logiciel">Envoyer les informations</button>
                         </div>
                       </div>

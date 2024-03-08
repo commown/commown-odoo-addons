@@ -27,6 +27,7 @@
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
 
               <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="project_ref" value="commown_self_troubleshooting.support_project" />
               <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
               <input type="hidden" name="tags" id="tags" t-att-value="tag_names" />
               <input type="hidden" name="priority" id="priority" value="2" />
@@ -88,7 +89,7 @@
                       </div>
 
                       <div class="form-group">
-                        <input type="hidden" name="stage_ref" value="stage_callback" />
+                        <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_callback" />
                         <button type="submit" class="btn btn-primary" name="action">Être appelé</button>
                       </div>
                     </div>

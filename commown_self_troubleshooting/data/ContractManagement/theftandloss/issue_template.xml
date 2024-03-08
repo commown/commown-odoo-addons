@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="issue-description-theft-and-loss" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-theft-and-loss</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-theft-and-loss</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-theft-and-loss">
+
+        <p>
+          <t t-if="theft_loss=='theft'">Mon appareil a été volé</t>
+          <t t-elif="theft_loss=='loss'">J'ai perdu mon appareil</t>
+        </p>
+
+        <p t-if="more_info">Informations complémentaires :</p>
+        <pre t-if="more_info"><t t-esc="more_info" /></pre>
+
+      </t>
+
+    </field>
+  </record>
+
+</odoo>

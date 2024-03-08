@@ -59,6 +59,8 @@
                     t-att-data-commitment-end-date="c_descr['commitment_end_date']"
                     t-att-data-in-commitment="c_descr['in_commitment'] and 'true' or 'false'"
                     t-att-data-order-id="c_descr['order_id']"
+                    t-att-data-product="c_descr.get('product')"
+                    t-att-data-serial="c_descr.get('serial')"
                 ><t t-esc="c.name + c_descr['descr']"/>
                 </option>
               </t>
@@ -245,7 +247,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_ref" value="stage_solved" />
+            <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_solved" />
             <button type="submit" class="btn btn-primary" name="action" value="inform">Envoyer les informations</button>
           </div>
 
@@ -286,7 +288,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_ref" value="stage_received" />
+            <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_received" />
             <button type="submit" class="btn btn-primary" name="action" value="contact">Envoyer les informations</button>
           </div>
 
@@ -324,7 +326,7 @@
           </div>
 
           <div class="form-group">
-            <input type="hidden" name="stage_ref" value="stage_received" />
+            <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_received" />
             <input type="hidden" name="priority" id="priority" value="1" />
             <button type="submit" class="btn btn-primary" name="action" value="ship">Confirmer ma demande</button>
           </div>
