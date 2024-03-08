@@ -7,10 +7,13 @@
     <field name="key">commown_self_troubleshooting.issue-description-fp2-battery</field>
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-fp2-batterie">
-          <t t-if="action=='ship'">
-            <p>
-              Après avoir effectué un auto-dépannage, il ressort que la batterie de mon FP2 doit être changée.
-            </p><br/>
+          <p t-if="action=='pb_logiciel'">
+          Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
+          </p>
+          <p t-if="action=='ship'">
+            Après avoir effectué un auto-dépannage, il ressort que la batterie de mon FP2 doit être changée.
+          </p><br/>
+          <t t-if="action=='ship' or action=='pb_logiciel'">
             <p>
               L'adresse d'expédition est la suivante : <br/>
 
@@ -30,10 +33,6 @@
               </ul>
             </p>
           </t>
-
-          <p t-elif="action=='pb_logiciel'">
-          Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
-          </p>
 
           <t t-call="commown_self_troubleshooting.more_customer_info" />
 
