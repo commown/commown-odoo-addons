@@ -578,3 +578,36 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.task_test_checks.stage_id = self.picking_sent_stage
         self.assertTrue(self.task_test_checks.stage_id == self.picking_sent_stage)
+
+    def test_action_scrap(self):
+        lot = self.c1.lot_ids[0]
+        self.task.update(
+            {
+                "contract_id": self.c1.id,
+                "lot_id": lot.id,
+            }
+        )
+
+        # Check Pre-requisite
+        initial_contract_lots = self.task.contract_id.lot_ids
+        self.assertEqual(
+            set(initial_contract_lots.mapped("name")),
+            {"cc1", "fp1"},
+        )
+
+        scrap_ctx = self.task.action_scrap_device()["context"]
+        puom = (
+            self.env["product.product"].browse(scrap_ctx["default_product_id"]).uom_id
+        )
+        scrap = (
+            self.env["stock.scrap"]
+            .with_context(scrap_ctx)
+            .create({"product_uom_id": puom.id})
+        )
+        scrap.action_validate()
+
+        # Check results
+        self.assertEqual(
+            initial_contract_lots - lot,
+            self.task.contract_id.lot_ids,
+        )
