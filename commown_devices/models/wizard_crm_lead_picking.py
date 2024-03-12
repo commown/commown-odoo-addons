@@ -13,6 +13,17 @@ class CrmLeadPickingWizard(models.TransientModel):
         required=True,
     )
 
+    update_picking = fields.Boolean(
+        "Use existing picking",
+        help="Send from an existing picking instead of creating a new one",
+        default=False,
+    )
+
+    picking_to_update = fields.Many2one(
+        "stock.picking",
+        string="Existing picking to update",
+    )
+
     date = fields.Datetime(
         string="Date",
         help="Defaults to now - To be set only to force a date",
@@ -41,6 +52,32 @@ class CrmLeadPickingWizard(models.TransientModel):
         "Products will be sent from",
         default=lambda self: self._compute_products_locations(),
     )
+
+    @api.onchange("picking_to_update")
+    def update_date(self):
+        self.date = self.picking_to_update.date
+
+    @api.onchange("lead_id")
+    def _compute_picking_domain(self):
+        if self.lead_id:
+            contract_dest = (
+                self.lead_id.contract_id.partner_id.get_or_create_customer_location()
+            )
+            linked_so = self.lead_id.contract_id.mapped(
+                "contract_line_ids.sale_order_line_id.order_id"
+            )
+            path_picking_to_so = (
+                "move_lines.contract_id.contract_line_ids.sale_order_line_id.order_id"
+            )
+            return {
+                "domain": {
+                    "picking_to_update": [
+                        ("state", "not in", ["done", "cancel"]),
+                        ("location_dest_id", "=", contract_dest.id),
+                        (path_picking_to_so, "=", linked_so.id),
+                    ]
+                }
+            }
 
     @api.multi
     @api.onchange("all_products", "lot_ids")
@@ -119,4 +156,5 @@ class CrmLeadPickingWizard(models.TransientModel):
             products,
             send_nonserial_products_from=self._compute_send_from(),
             date=self.date,
+            reuse_picking=self.picking_to_update or None,
         )

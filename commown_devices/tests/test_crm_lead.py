@@ -25,10 +25,10 @@ class CrmLeadTC(DeviceAsAServiceTC):
                 lead.stage_id = stage.id
             self.assertEqual("Lead has no assigned picking.", err.exception.name)
 
-        picking = lead.contract_id.send_devices([lot], {})
-        self.assertEqual(picking.mapped("move_lines.product_qty"), [1.0])
-        self.assertEqual(picking.state, "assigned")
+        move_lines = lead.contract_id.send_devices([lot], {})
+        self.assertEqual(move_lines.mapped("product_qty"), [1.0])
+        self.assertEqual(move_lines.mapped("picking_id.state"), ["assigned"])
 
         # Set delivery date to trigger the actions and check picking is now done
         lead.delivery_date = fields.Date.today()
-        self.assertEqual(picking.state, "done")
+        self.assertEqual(move_lines.mapped("picking_id.state"), ["done"])

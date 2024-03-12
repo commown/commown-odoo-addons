@@ -37,7 +37,7 @@ class Contract(models.Model):
             result["start_date"],
         )
 
-        devices = self.quant_ids.mapped("lot_id")
+        devices = self.lot_ids
         if devices:
             result["descr"] = (
                 self.displayable_key_value(

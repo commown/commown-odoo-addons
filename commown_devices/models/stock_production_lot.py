@@ -1,8 +1,10 @@
-from odoo import _, models
+from odoo import _, fields, models
 
 
 class StockProductionLot(models.Model):
     _inherit = "stock.production.lot"
+
+    contract_id = fields.Many2one("contract.contract", string="Contract")
 
     def name_get(self):
         result = []

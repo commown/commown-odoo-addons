@@ -8,7 +8,9 @@
         <sheet>
           <group>
             <field name="lead_id" invisible="1"/>
-            <field name="date"/>
+            <field name="update_picking"/>
+            <field name="date" attrs="{'readonly': [('update_picking', '=', True)]}"/>
+            <field name="picking_to_update" attrs="{'required': [('update_picking', '=', True)], 'readonly': [('update_picking', '=', False)]}"/>
             <field name="all_products" widget="many2many_tags" options="{'no_create_edit': True, 'open': true}" readonly="1" context="{'default_public': True}"/>
             <field name="lot_ids" widget="many2many_tags"/>
             <field name="prioritize_repackaged"/>
