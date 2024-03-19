@@ -9,7 +9,7 @@
       <t t-name="self-troubleshoot-issue-description-fp2-micro">
         <t t-if="action=='ship'">
         <p>
-          Après avoir effectué un auto-dépannage, il ressort que le module micro de mon FP2 doit être changé.
+          Il ressort que le module micro de mon FP2 doit être changé.
         </p><br/>
         <p>
           L'adresse d'expédition est la suivante :<br/>

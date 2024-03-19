@@ -10,7 +10,7 @@
         <t t-set="old_or_new" t-value="camera_model == u'new' and u'nouveau' or u'ancien'" />
           <t t-if="action=='ship'">
             <p>
-              Après avoir effectué un auto-dépannage, il ressort que la
+              Il ressort que la
               caméra (<t t-esc="old_or_new"/> modèle) de mon FP2 doit être
               changée.
             </p><br/>
