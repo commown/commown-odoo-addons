@@ -39,9 +39,6 @@
               <h1>Auto-dépannage : Smartphone</h1>
               <h2>Mon écran (ou sa protection) est fissuré </h2>
             </div>
-            <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
-              Contacter un humain
-            </button>
           </div>
 
           <form action="/self-troubleshoot/" method="post" accept-charset="utf-8"
@@ -176,11 +173,6 @@
 
                 <t t-call="commown_self_troubleshooting.step-confirm-change">
                   <t t-set="step">6</t>
-                </t>
-
-                <t t-call="commown_self_troubleshooting.step-contact-human">
-                  <t t-set="step">7</t>
-                  <t t-set="contracts" t-value="contracts"/>
                 </t>
 
               </div>

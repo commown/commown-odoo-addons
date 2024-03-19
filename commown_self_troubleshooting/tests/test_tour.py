@@ -83,9 +83,6 @@ class TestPageFP2(TestPageTC):
     def test_fp2_battery_sup_80(self):
         self._run_tour("commown_self_troubleshooting_tour_fp2_battery_sup_80")
 
-    def test_fp2_battery_contact_human(self):
-        self._run_tour("commown_self_troubleshooting_tour_fp2_battery_contact_human")
-
 
 class TestPageSmartphone(TestPageTC):
     contract_name = "FP3/B2C"
