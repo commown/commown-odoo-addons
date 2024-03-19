@@ -10,14 +10,14 @@
         <p>Bonjour,</p>
         <t t-if="action=='ship'">
           <t t-if="replace_screen=='no'">
-            <p>après avoir effectué un auto-dépannage, il ressort qu'une vitre de protection doit m'être envoyée.</p>
+            <p>Il ressort qu'une vitre de protection doit m'être envoyée.</p>
           </t>
           <t t-else="">
             <t t-if="type_contrat=='me'">
-              <p>après avoir effectué un auto-dépannage, il ressort qu'un écran muni d'une protection doit m'être envoyé.</p>
+              <p>Il ressort qu'un écran muni d'une protection doit m'être envoyé.</p>
             </t>
             <t t-else="">
-              <p>après avoir effectué un auto-dépannage, il ressort qu'un nouvel appareil doit m'être envoyé.</p>
+              <p>Il ressort qu'un nouvel appareil doit m'être envoyé.</p>
             </t>
           </t>
           <t t-call="commown_self_troubleshooting.display-shipping-information" />

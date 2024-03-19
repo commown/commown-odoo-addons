@@ -332,7 +332,7 @@
           Une demande d'assistance va être créée automatiquement lorsque vous aurez soumis ce formulaire.
           Vous pourrez y accéder à tout moment depuis
           <a href=" /my/tasks" target="_blank">votre espace personnel <i class="fas fa-external-link-alt"></i></a>, via la section
-          <i>Mes demandes d'assistance</i> pour en suivre l'avancement et en consulter l'historique.
+          <i>Mes interactions avec Commown</i> pour en suivre l'avancement et en consulter l'historique.
         </p>
 
         <t t-call="commown_self_troubleshooting.commown-signature" />

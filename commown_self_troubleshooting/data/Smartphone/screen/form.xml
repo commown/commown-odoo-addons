@@ -7,7 +7,7 @@
 
     <t t-name="website.self-troubleshoot-smartphone-screen">
       <t t-call="portal.portal_layout">
-        <t t-set="title">Commown - Auto-dépannage - Smartphone : Mon écran (ou sa protection) est fissuré</t>
+        <t t-set="title">Commown - Besoin d'assistance - Smartphone : Mon écran (ou sa protection) est fissuré</t>
 
         <script type="text/javascript">
           $(document).ready(function() {
@@ -36,7 +36,7 @@
         <div class="bg-white border m-0 p-3 rounded">
           <div class="d-flex flex-row" style="justify-content: space-between;">
             <div class="d-flex flex-column">
-              <h1>Auto-dépannage : Smartphone</h1>
+              <h1>Besoin d'assistance : Smartphone</h1>
               <h2>Mon écran (ou sa protection) est fissuré </h2>
             </div>
             <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">

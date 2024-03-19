@@ -9,7 +9,7 @@
 
       <t t-name="website.self-troubleshoot-serenity">
         <t t-call="portal.portal_layout">
-          <t t-set="title">Commown - Auto-dépannage - Option Sérénité</t>
+          <t t-set="title">Commown - Besoin d'assistance - Option Sérénité</t>
 
           <script type="text/javascript">
             $(document).ready(function() {setUpWizard($('#smartwizard'))});
@@ -21,7 +21,7 @@
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">
-            <h1>Auto-dépannage : Option Sérénité - Être appelé</h1>
+            <h1>Besoin d'assistance : Option Sérénité - Être appelé</h1>
             <h2>Je rencontre un incident qui nécessite qu'on m'appelle</h2>
 
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
