@@ -8,7 +8,7 @@
       <field name="arch" type="xml">
         <t t-name="website.self-troubleshoot-gs-day">
           <t t-call="portal.portal_layout">
-            <t t-set="title">Commown - Auto-dépannage - Casque DAY : Problème de son </t>
+            <t t-set="title">Commown - Besoin d'assistance - Casque DAY : Problème de son </t>
             <t t-set="head">
               <script type="text/javascript">
                 $(document).ready(function() {
@@ -54,7 +54,7 @@
             <div class="bg-white border m-0 p-3 rounded">
               <div class="d-flex flex-row" style="justify-content: space-between;">
                 <div class="d-flex flex-column">
-                  <h1>Auto-dépannage : Casque DAY</h1>
+                  <h1>Besoin d'assistance : Casque DAY</h1>
                   <h2>J'ai un problème de son</h2>
                 </div>
                 <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
