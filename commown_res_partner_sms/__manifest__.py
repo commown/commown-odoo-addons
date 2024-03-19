@@ -10,7 +10,9 @@
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [],
-    "data": [],
+    "data": [
+        "data/mail_template.xml",
+    ],
     "demo": [],
     "installable": True,
 }
