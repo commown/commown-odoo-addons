@@ -52,7 +52,7 @@
       </div>
       <div class="mt-4" t-if="st_data">
         <hr class="mt-1 mb-0"/>
-        <p>Pour contacter l'équipe parcourez la section "Auto-dépannage" à gauche.</p>
+        <p>Pour contacter l'équipe parcourez la section "Vos besoins d'assistance".</p>
       </div>
     </xpath>
 
