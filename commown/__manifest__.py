@@ -71,7 +71,6 @@
         "views/account_invoice.xml",
         "views/account_move.xml",
         "views/actions_account_invoice.xml",
-        "views/actions_crm_lead.xml",
         "views/actions_utm.xml",
         "views/address_template.xml",
         "views/auth_signup.xml",

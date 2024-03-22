@@ -10,12 +10,14 @@
     "license": "AGPL-3",
     "website": "https://commown.coop",
     "depends": [
+        "crm",
         "project",
         # OCA modules
         "html_text",
     ],
     "data": [
         "data/mail_template.xml",
+        "data/actions_crm_lead.xml",
     ],
     "demo": [],
     "installable": True,
