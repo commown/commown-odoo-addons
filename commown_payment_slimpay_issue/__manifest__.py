@@ -11,12 +11,14 @@
         "contract",
         "payment_slimpay_issue",
         "queue_job",
+        # OCA modules
+        "html_text",
+        "sms_ovh_http",
     ],
     "external_dependencies": {},
     "data": [
         "data/action.xml",
         "data/mail_template.xml",
-        "data/project.xml",
     ],
     "qweb": [],
     "installable": True,
