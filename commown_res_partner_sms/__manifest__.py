@@ -9,7 +9,11 @@
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
-    "depends": [],
+    "depends": [
+        "project",
+        # OCA modules
+        "html_text",
+    ],
     "data": [
         "data/mail_template.xml",
     ],
