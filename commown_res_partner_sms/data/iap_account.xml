@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="sms_ovh" model="iap.account">
+      <field name="name">Sms OVH</field>
+      <field name="service_name">sms</field>
+      <field name="provider">sms_ovh_http</field>
+    </record>
+
+  </data>
+</odoo>
