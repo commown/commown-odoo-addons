@@ -298,7 +298,7 @@ class CommownPartner(models.Model):
 
         contracts = self.env["contract.contract"].search(
             [
-                ("invoice_partner_id", "=", self.parent_id.id),
+                ("partner_id", "=", self.parent_id.id),
                 "|",
                 ("date_end", ">=", date.today()),
                 "&",
