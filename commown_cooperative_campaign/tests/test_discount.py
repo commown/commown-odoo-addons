@@ -208,7 +208,9 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
         def do_test(env):
             before1 = partial(ts_before, days=1)
-            self.invoice(before1, mock_optin=False, check_mock_calls=False, env=env)
+            return self.invoice(
+                before1, mock_optin=False, check_mock_calls=False, env=env
+            )
 
         # Check test prequisite without modifying the DB, to revert the side effect of
         # this check (which otherwise would create an invoice and prevent a new optin
@@ -220,4 +222,10 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
         # Same call with same DB state but with the bypass_coop_campaigns context
         # variable should not raise (important-events is mocked here!):
-        do_test(self.env(context=dict(self.env.context, bypass_coop_campaigns=True)))
+        bypass = dict.fromkeys(
+            self.contract.contract_line_ids._applicable_discount_lines(),
+            True,
+        )
+        env = self.env(context=dict(self.env.context, bypass_coop_campaigns=bypass))
+        invoice = do_test(env)
+        self.assertIn("Test coupon discount", invoice.invoice_line_ids.name)
