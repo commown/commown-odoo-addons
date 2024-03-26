@@ -99,6 +99,8 @@ class CommownPartner(models.Model):
 
     country_id = fields.Many2one(default=_default_country)
 
+    parent_payment_token_id = fields.Many2one(related="parent_id.payment_token_id")
+
     def _apply_bin_field_size_policy(self, vals):
         """Apply the binary field limit policy: resize images, raise if the
         final value is still too big.
@@ -296,7 +298,7 @@ class CommownPartner(models.Model):
 
         contracts = self.env["contract.contract"].search(
             [
-                ("invoice_partner_id", "=", self.parent_id.id),
+                ("partner_id", "=", self.parent_id.id),
                 "|",
                 ("date_end", ">=", date.today()),
                 "&",

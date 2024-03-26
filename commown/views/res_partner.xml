@@ -57,9 +57,13 @@
           <attribute name="attrs">{'readonly': [('type', '=', 'invoice')]}</attribute>
         </field>
 
+        <xpath expr="//field[@name='child_ids']//field[@name='name']" position="before">
+          <field name="parent_payment_token_id" invisible="1"/>
+        </xpath>
+
         <xpath expr="//field[@name='child_ids']//div[hasclass('oe_kanban_details')]"
                position="inside">
-          <button attrs="{'invisible': ['|', ('type', '!=', 'invoice'), ('email', '=', False)]}"
+          <button attrs="{'invisible': ['|', '|', ('type', '!=', 'invoice'), ('email', '=', False), ('parent_payment_token_id', '=', False)]}"
                   class="btn btn-secondary"
                   name="action_set_as_invoice_recipient"
                   type="object">
