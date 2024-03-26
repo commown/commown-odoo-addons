@@ -92,8 +92,9 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     @api.multi
     def compute(self, contract_line, date):
-        """Optin if valid and not simulating before computing the actual value
+        """Optin before computing the actual value...
 
+        ... if current discount line is valid and not being bypassed.
         This is because we optin at first contract invoice generation,
         i.e. when the customer receives its device. The sale could
         indeed be canceled before this date.
@@ -101,9 +102,10 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
         # Use no_check_coop_ws context to disable optin check in the
         # `is_valid` method here as the aim is... to optin!
-        if not self._context.get("bypass_coop_campaigns") and self.with_context(
-            no_check_coop_ws=True
-        ).is_valid(contract_line, date):
+        bypassed = self in self._context.get("bypass_coop_campaigns", {})
+        if not bypassed and self.with_context(no_check_coop_ws=True).is_valid(
+            contract_line, date
+        ):
             campaign = self.coupon_campaign_id
 
             if campaign.is_coop_campaign:
@@ -163,9 +165,13 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             and self.coupon_campaign_id.is_coop_campaign
         ):
 
-            # Do not call the cooperative WS if we are simulating
-            # future invoices...
-            if not self._context.get("bypass_coop_campaigns"):
+            # bypass_coop_campaigns is a mecanism to force a result
+            # for a cooperative campaign discount to avoid the http call
+            # This is useful for forecasts and the like.
+            if self in self._context.get("bypass_coop_campaigns", {}):
+                # /!\ The bypass value may be True or False
+                return self._context["bypass_coop_campaigns"][self]
+            else:
                 contract = contract_line.contract_id
                 partner = contract.partner_id
                 campaign = self.coupon_campaign_id
