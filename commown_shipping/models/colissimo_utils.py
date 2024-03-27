@@ -9,6 +9,8 @@ from requests_toolbelt.multipart import decoder
 
 from odoo import _
 
+from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
+
 _logger = logging.getLogger(__name__)
 
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
@@ -20,27 +22,6 @@ MAX_ADDRESS_SIZE_COLISSIMO = 35
 
 class ColissimoError(Exception):
     pass
-
-
-def normalize_phone(phone_number, country_code, raise_on_error=True):
-    """Format phone number for Colissimo
-
-    If phone number format is incorrect, raise if raise_on_error is True (default)
-    else return the empty string.
-
-    If the phone number is falsy, return the empty string.
-    """
-    if phone_number:
-        try:
-            tel = phonenumbers.parse(phone_number, country_code)
-        except phonenumbers.NumberParseException:
-            if raise_on_error:
-                raise
-        else:
-            return phonenumbers.format_number(
-                tel, phonenumbers.PhoneNumberFormat.NATIONAL
-            ).replace(" ", "")
-    return ""
 
 
 def delivery_data(partner, raise_on_error=True):
