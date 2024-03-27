@@ -16,7 +16,12 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
     def test_invoices(self):
         before7 = partial(ts_before, days=7)
         before1 = partial(ts_before, days=1)
-        self.assertEqual(self.invoice(before1, mock_optin=True).amount_untaxed, 6.0)
+        inv1 = self.invoice(before1, mock_optin=True)
+        self.assertEqual(
+            self.contract.contract_line_ids.last_invoice_discount_state(),
+            {inv1.invoice_line_ids.applied_discount_template_line_ids: True},
+        )
+        self.assertEqual(inv1.amount_untaxed, 6.0)
         self.assertEqual(self.invoice(before1, ts_after).amount_untaxed, 6.0)
         self.assertEqual(self.invoice(before7, before1).amount_untaxed, 30.0)
         self.assertEqual(self.invoice(ts_after).amount_untaxed, 30.0)
