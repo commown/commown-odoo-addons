@@ -1,21 +1,23 @@
 # Copyright 2023 Commown SCIC
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0)
 
-from odoo.addons.contract.tests.test_contract import TestContractBase
+from odoo.addons.commown_cooperative_campaign.tests.common import CooperativeCampaignTC
 from odoo.addons.queue_job.tests.common import trap_jobs
 
 from .common import fake_today
 
 
-class ContractLineComputeForecastTC(TestContractBase):
-    def cdiscount(self, c_line=None, **kwargs):
-        kwargs.setdefault("contract_line_id", (c_line or self.acct_line).id)
+class ContractLineComputeForecastTC(CooperativeCampaignTC):
+    def cdiscount(self, **kwargs):
         return self.env["contract.discount.line"].create(kwargs)
 
     def test_forecast_with_discount(self):
         "Check that forecast take discounts into account"
 
-        self.acct_line.specific_discount_line_ids = self.cdiscount(
+        cline = self.contract.contract_line_ids[0]
+
+        cline.specific_discount_line_ids = self.cdiscount(
+            contract_line_id=cline.id,
             name="1 year loyalty",
             amount_type="percent",
             amount_value=10.0,
@@ -27,6 +29,7 @@ class ContractLineComputeForecastTC(TestContractBase):
             end_value=2,
             end_unit="years",
         ) | self.cdiscount(
+            contract_line_id=cline.id,
             name="2 year loyalty",
             amount_type="percent",
             amount_value=20.0,
@@ -36,14 +39,6 @@ class ContractLineComputeForecastTC(TestContractBase):
             end_type="absolute",
             end_value=False,  # no end
         )
-
-        # Do not choose plain today to make test deterministic:
-        # - always have a last month with no fees
-        # - avoid end of month invoice date shifts
-        date = fake_today()
-
-        clines = self.contract.contract_line_ids
-        clines.write({"recurring_next_date": date})
 
         self.contract.partner_id.company_id.update(
             {
@@ -55,15 +50,39 @@ class ContractLineComputeForecastTC(TestContractBase):
 
         self.assertFalse(self.contract.mapped("contract_line_ids.forecast_period_ids"))
 
+        # Do not choose plain today to make test deterministic:
+        # - always have a last month with no fees
+        # - avoid end of month invoice date shifts
         with trap_jobs() as trap:
-            self.contract.date_start = date
+            self.contract.date_start = fake_today()
 
+        clines = self.contract.contract_line_ids
+        trap.assert_jobs_count(1, only=clines._generate_forecast_periods)
+        trap.perform_enqueued_jobs()
+
+        # At this point, the cooperative campaign has not been proved applicable
+        # so should not be visible
+        self.assertEqual(
+            clines.mapped("forecast_period_ids").mapped("discount"),
+            [0.0] * 12 + [10.0] * 12 + [20.0] * 12,
+        )
+
+        # Now let's simulate a coop campaign applicability on first invoice gen:
+        coop_camp_discount = cline.contract_template_line_id.discount_line_ids[0]
+        bypass = {coop_camp_discount: True}
+        contract = self.contract.with_context(bypass_coop_campaigns=bypass)
+        with trap_jobs() as trap:
+            invoice = contract.recurring_create_invoice()
+        self.assertIn("Test coupon discount", invoice.invoice_line_ids[0].name)
+
+        # Forecast recomputation of contract lines were triggered, which should now
+        # have the cooperative campaign discount applied:
         trap.assert_jobs_count(1, only=clines._generate_forecast_periods)
         trap.perform_enqueued_jobs()
 
         self.assertEqual(
             clines.mapped("forecast_period_ids").mapped("discount"),
-            [0.0] * 12 + [10.0] * 12 + [20.0] * 12,
+            [80.0] * 2 + [0.0] * 9 + [10.0] * 12 + [20.0] * 12,
         )
 
     def test_cron(self):
@@ -83,7 +102,6 @@ class ContractLineComputeForecastTC(TestContractBase):
 
         date = fake_today()
         with trap_jobs() as trap:
-            clines.write({"recurring_next_date": date})
             self.contract.date_start = date
 
         trap.assert_jobs_count(len(clines))
