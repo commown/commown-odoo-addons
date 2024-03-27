@@ -54,10 +54,10 @@ class ContractLine(models.Model):
         ).compute_discount(period_date_start)
 
         values["discount"] = discount_values["total"]
-        if discount_values["descriptions"]:
+        if discount_values["discounts"]:
             values["name"] += "\n" + (
                 _("Applied discounts:\n- %s")
-                % "\n- ".join(discount_values["descriptions"])
+                % "\n- ".join(d.name for d in discount_values["discounts"])
             )
 
         return values
