@@ -9,7 +9,9 @@
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
-    "depends": [],
+    "depends": [
+        "sms_ovh_http",
+    ],
     "data": [
         "data/iap_account.xml",
     ],
