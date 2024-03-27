@@ -8,6 +8,7 @@
     "website": "https://commown.coop",
     "depends": [
         "commown_contractual_issue",
+        "commown_res_partner_sms",
         "base_automation",
         "sale",
         "website",
