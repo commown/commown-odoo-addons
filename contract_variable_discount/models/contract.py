@@ -79,6 +79,15 @@ class ContractLine(models.Model):
                 _("Applied discounts:\n- %s") % "\n- ".join(d.name for d in discounts)
             )
 
+            relnames = {
+                "contract.template.discount.line": "applied_discount_template_line_ids",
+                "contract.discount.line": "applied_discount_line_ids",
+            }
+            for discount in discounts:
+                relname = relnames[discount._name]
+                vals.setdefault(relname, [(6, 0, [])])
+                vals[relname][0][2].append(discount.id)
+
         return vals
 
     @api.depends(
