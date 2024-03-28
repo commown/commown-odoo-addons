@@ -15,3 +15,10 @@ class AccountInvoiceLine(models.Model):
         string="Applied contract discounts",
         readonly=True,
     )
+
+    def applied_discounts(self):
+        self.ensure_one()
+        for discount in self.applied_discount_template_line_ids:
+            yield discount
+        for discount in self.applied_discount_line_ids:
+            yield discount

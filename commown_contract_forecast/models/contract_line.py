@@ -77,3 +77,23 @@ class ContractLine(models.Model):
                     contract_line.with_delay(
                         identity_key=identity_exact
                     )._generate_forecast_periods()
+
+    def regenerate_forecast_if_conditional_discounts_changed(self):
+        """Regenerate forecasts if some discounts changed between last 2 invoices
+
+        This is needed for conditional discounts (e.g. TeleCommown or no_issue_to_date)
+        which are by nature unpredictable: in this case, the last value of its
+        applicability/ inapplicability is reused as a forecast (the best possible).
+        """
+
+        self.ensure_one()
+
+        inv_lines = self._last_invoices_self_generated_line(limit=2)
+        if len(inv_lines) != 2:
+            return
+
+        invl1, invl2 = inv_lines
+        discounts1 = {d for d in invl1.applied_discounts() if d.condition}
+        discounts2 = {d for d in invl2.applied_discounts() if d.condition}
+        if discounts1 != discounts2:
+            self._generate_forecast_periods()
