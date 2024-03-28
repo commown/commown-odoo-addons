@@ -73,11 +73,20 @@ class ContractLine(models.Model):
         result = self.compute_discount(invoice_values["date_invoice"])
 
         vals["discount"] = result["total"]
-        descriptions = result["descriptions"]
-        if descriptions:
+        discounts = result["discounts"]
+        if discounts:
             vals["name"] += "\n" + (
-                _("Applied discounts:\n- %s") % "\n- ".join(descriptions)
+                _("Applied discounts:\n- %s") % "\n- ".join(d.name for d in discounts)
             )
+
+            relnames = {
+                "contract.template.discount.line": "applied_discount_template_line_ids",
+                "contract.discount.line": "applied_discount_line_ids",
+            }
+            for discount in discounts:
+                relname = relnames[discount._name]
+                vals.setdefault(relname, [(6, 0, [])])
+                vals[relname][0][2].append(discount.id)
 
         return vals
 
@@ -96,8 +105,8 @@ class ContractLine(models.Model):
         """Compute the discount of current contract line for given invoice date
 
         Returns a dict like:
+        - discounts: a list of the discount lines that have been applied
         - total: the total computed amount
-        - descriptions: a list of strings describing the discounts
 
         A contract line specific discount line may replace a discount
         of its related contract template line using the
@@ -108,19 +117,15 @@ class ContractLine(models.Model):
         contract line discount.
         """
 
-        total_discount = 0.0
-        customer_descriptions = []
+        result = {"total": 0.0, "discounts": []}
 
         for discount_line in self._applicable_discount_lines():
             value = discount_line.compute(self, date_invoice)
             if value is not None and value > 0.0:
-                total_discount += value
-                customer_descriptions.append(discount_line.name)
+                result["total"] += value
+                result["discounts"].append(discount_line)
 
-        return {
-            "total": total_discount,
-            "descriptions": customer_descriptions,
-        }
+        return result
 
     def _applicable_discount_lines(self):
         """Yields applicable discount lines, either contract.discount.line or
