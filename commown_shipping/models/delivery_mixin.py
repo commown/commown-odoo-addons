@@ -50,6 +50,17 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     _delivery_tracking_parent_rel = None
     _delivery_tracking_stage_parent_rel = None
 
+    @api.onchange("expedition_ref")
+    def _normalize_expedition_ref(self):
+        if self.env.context.get("in_onchange_expedition_ref"):
+            return
+        self = self.with_context(in_onchange_expedition_ref=True)
+        self.expedition_ref = self.expedition_ref.strip()
+        if not any(
+            [marker in self.expedition_ref for marker in ["http://", "https://"]]
+        ):
+            self.expedition_ref = self.expedition_ref.replace(" ", "")
+
     @api.model
     def _delivery_tracking_stage_type(self):
         return self.env[self._name].fields_get("stage_id")["stage_id"]["relation"]
