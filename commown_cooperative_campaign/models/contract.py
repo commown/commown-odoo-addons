@@ -110,6 +110,6 @@ class ContractLine(models.Model):
 
         last_inv_line = self._last_invoice_self_generated_line()
         return {
-            discount: last_inv_line and discount.name in last_inv_line.name
+            discount: last_inv_line and last_inv_line.is_discount_applied(discount)
             for discount in self._applicable_discount_lines()
         }
