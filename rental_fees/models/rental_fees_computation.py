@@ -1,3 +1,4 @@
+import logging
 from functools import partial
 
 from dateutil.relativedelta import relativedelta
@@ -9,6 +10,7 @@ from odoo.tools import format_date
 from odoo.addons.queue_job.job import job
 
 _one_day = relativedelta(days=1)
+_logger = logging.getLogger(__file__)
 
 
 def _move_contract(move_line):
@@ -724,13 +726,20 @@ class RentalFeesComputation(models.Model):
         excluded_devices = {ed.device: ed.reason for ed in fees_def.excluded_devices}
 
         for device, delivery_data in fees_def.devices_delivery().items():
-            self._run_for_device(
-                fees_def,
-                device,
-                delivery_data,
-                scrapped_devices,
-                excluded_devices,
-            )
+            try:
+                self._run_for_device(
+                    fees_def,
+                    device,
+                    delivery_data,
+                    scrapped_devices,
+                    excluded_devices,
+                )
+            except:
+                _logger.error(
+                    "An error occurred while computing fees for device %s",
+                    device.name,
+                )
+                raise
 
     def _run_for_device(
         self,
