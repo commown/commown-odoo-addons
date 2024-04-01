@@ -724,54 +724,70 @@ class RentalFeesComputation(models.Model):
         excluded_devices = {ed.device: ed.reason for ed in fees_def.excluded_devices}
 
         for device, delivery_data in fees_def.devices_delivery().items():
-            delivery_date = delivery_data["date"]
-
-            if device in excluded_devices:
-                self._add_compensation(
-                    fees_def,
-                    "excluded_device_compensation",
-                    device,
-                    delivery_date,
-                    reason=excluded_devices[device],
-                )
-                continue
-
-            periods = self.rental_periods(device)
-            no_rental_limit, periods = self.scan_no_rental(
-                fees_def, device, delivery_date, periods
+            self._run_for_device(
+                fees_def,
+                device,
+                delivery_data,
+                scrapped_devices,
+                excluded_devices,
             )
 
-            if periods:
-                periods = self.split_periods_wrt_fees_def(fees_def, periods)
+    def _run_for_device(
+        self,
+        fees_def,
+        device,
+        delivery_data,
+        scrapped_devices,
+        excluded_devices,
+    ):
+        delivery_date = delivery_data["date"]
 
-            device_fees = 0.0
-            for period in periods:
-                period["device"] = device.name  # helps debugging
-                monthly_fees = period["fees_def_line"].compute_monthly_fees(period)
-                period["monthly_fees"] = monthly_fees
-                period["fees"] = sum(amount for _ds, _de, amount in monthly_fees)
-                device_fees += period["fees"]
+        if device in excluded_devices:
+            self._add_compensation(
+                fees_def,
+                "excluded_device_compensation",
+                device,
+                delivery_date,
+                reason=excluded_devices[device],
+            )
+            return
 
-            if device in scrapped_devices:
-                self._add_compensation(
-                    fees_def,
-                    "lost_device_compensation",
-                    device,
-                    delivery_date,
-                    device_fees,
-                    scrapped_devices[device]["date"],
-                )
-            elif no_rental_limit:
-                self._add_compensation(
-                    fees_def,
-                    "no_rental_compensation",
-                    device,
-                    delivery_date,
-                    device_fees,
-                    no_rental_limit,
-                )
-            else:
-                self._add_fees_periods(device, periods)
+        periods = self.rental_periods(device)
+        no_rental_limit, periods = self.scan_no_rental(
+            fees_def, device, delivery_date, periods
+        )
+
+        if periods:
+            periods = self.split_periods_wrt_fees_def(fees_def, periods)
+
+        device_fees = 0.0
+        for period in periods:
+            period["device"] = device.name  # helps debugging
+            monthly_fees = period["fees_def_line"].compute_monthly_fees(period)
+            period["monthly_fees"] = monthly_fees
+            period["fees"] = sum(amount for _ds, _de, amount in monthly_fees)
+            device_fees += period["fees"]
+
+        if device in scrapped_devices:
+            self._add_compensation(
+                fees_def,
+                "lost_device_compensation",
+                device,
+                delivery_date,
+                device_fees,
+                scrapped_devices[device]["date"],
+            )
+        elif no_rental_limit:
+            self._add_compensation(
+                fees_def,
+                "no_rental_compensation",
+                device,
+                delivery_date,
+                device_fees,
+                no_rental_limit,
+            )
+        else:
+            self._add_fees_periods(device, periods)
 
 
 class RentalFeesComputationDetail(models.Model):
