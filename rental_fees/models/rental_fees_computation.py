@@ -239,7 +239,9 @@ class RentalFeesComputation(models.Model):
                     current_period["from_date"] = move_date
                     current_period["contract"] = move.picking_id.contract_id
                 else:
-                    raise ValueError("Device was already at customer location")
+                    raise ValueError(
+                        "Device %s was already at customer location" % device.name
+                    )
 
             elif current_period:
                 assert (
