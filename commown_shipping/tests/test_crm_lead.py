@@ -3,7 +3,7 @@ from datetime import date, timedelta
 import requests_mock
 from mock import patch
 
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
@@ -198,6 +198,23 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
             in_onchange_expedition_ref=True
         )._normalize_expedition_ref()
         self.assertEqual(self.lead.expedition_ref, ref)
+
+    def test_check_expedition_ref(self):
+        stage = self.env["crm.stage"].create({"name": "TEST [log: check exp-ref]"})
+        # Check Pre-requisite
+        self.assertFalse(self.lead.expedition_ref)
+
+        expected_msg = "Lead has no expedition ref. Please fill it in."
+
+        with self.assertRaises(ValidationError) as err:
+            self.lead.stage_id = stage
+        self.assertEqual(err.exception.args, (expected_msg, None))
+
+        self.lead.expedition_ref = "TESTREFFF"
+        self.lead.stage_id = stage
+
+        # Check results
+        self.assertEqual(self.lead.stage_id, stage)
 
 
 class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
