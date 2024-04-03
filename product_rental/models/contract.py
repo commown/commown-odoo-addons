@@ -30,18 +30,17 @@ def _rental_products(contract_descr):
 class ContractLine(models.Model):
     _inherit = "contract.line"
 
+    contract_template_id = fields.Many2one(
+        string="Contract template",
+        related="contract_id.contract_template_id",
+    )
+
     contract_template_line_id = fields.Many2one(
         string="Contract template line",
         help="Contract template line which generated current contract line",
         comodel_name="contract.template.line",
-        domain=lambda self: self._domain_contract_template_line_id(),
+        domain='[("contract_id", "=", contract_template_id)]',
     )
-
-    def _domain_contract_template_line_id(self):
-        contract = self.contract_id
-        if not contract and "contract_id" in self.env.context:
-            contract = contract.browse(self.env.context["contract_id"])
-        return [("contract_id", "=", contract.contract_template_id.id)]
 
 
 class Contract(models.Model):
