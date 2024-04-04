@@ -11,8 +11,11 @@ class RentalProductTemplate(models.Model):
     _inherit = "product.template"
 
     is_rental = fields.Boolean("Is rental product")
+
     is_deposit = fields.Boolean("Is initial payment a deposit", default=True)
+
     rental_price = fields.Float("Rental price", dp.get_precision("Product Price"))
+
     rental_frequency = fields.Selection(
         [
             ("daily", "Daily"),
@@ -24,6 +27,12 @@ class RentalProductTemplate(models.Model):
         default="monthly",
         help="Frequency of the rental price payment",
         required=True,
+    )
+
+    rental_tax_ids = fields.Many2many(
+        comodel_name="account.tax",
+        string="Rental taxes",
+        domain=[("type_tax_use", "=", "sale")],
     )
 
     @api.multi
