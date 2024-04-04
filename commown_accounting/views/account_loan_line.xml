@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+  <record id="account_loan_line_view_tree" model="ir.ui.view">
+    <field name="name">account.loan.line.tree</field>
+    <field name="model">account.loan.line</field>
+    <field name="arch" type="xml">
+      <tree string="Account Loan Lines">
+        <field name="loan_id"/>
+        <field name="loan_state"/>
+        <field name="loan_start_date"/>
+        <field name="date"/>
+        <field name="pending_principal_amount"/>
+        <field name="payment_amount"/>
+        <field name="principal_amount"/>
+        <field name="interests_amount"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="account_loan_line_view_search" model="ir.ui.view">
+    <field name="name">account.loan.line.search</field>
+    <field name="model">account.loan.line</field>
+    <field name="arch" type="xml">
+      <search string="Account Loan Lines">
+        <field name="loan_id" string="Loan"/>
+        <field name="loan_state" string="State"/>
+        <field
+          name="loan_id"
+          string="Lender"
+          filter_domain="[('loan_id.partner_id', 'ilike', self)]"/>
+        <group expand="0" string="Group By">
+          <filter string="Date" name="date"
+                  context="{'group_by': 'date'}"/>
+          <filter string="Loan start date" name="loan_start_date"
+                  context="{'group_by': 'loan_start_date'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="account_loan_lines_view_action" model="ir.actions.act_window">
+    <field name="name">Account Loan Lines</field>
+    <field name="res_model">account.loan.line</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">graph,pivot,tree,form</field>
+    <field name="domain">[("loan_state", "!=", "cancelled")]</field>
+    <field name="view_id" ref="account_loan_line_view_tree"/>
+    <field name="search_view_id" ref="account_loan_line_view_search"/>
+  </record>
+
+  <menuitem id="menu_loan_category"
+            name="Loans"
+            parent="account.menu_finance_entries"
+            sequence="60"
+            />
+
+  <menuitem id="account_loan.account_loan_menu"
+            parent="menu_loan_category"
+            sequence="20"
+            />
+
+  <menuitem id="menu_account_loan_lines_view"
+            action="account_loan_lines_view_action"
+            parent="menu_loan_category"
+            sequence="30"
+            />
+</odoo>
