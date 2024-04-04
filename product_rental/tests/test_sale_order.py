@@ -298,6 +298,47 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             [("1 year of GS Headset", 1.0), ("1 month of micro", 12.0)],
         )
 
+    def test_rental_taxes(self):
+        """Check rental and price taxes roles
+
+        - rental product rental price tax is used to compute contract line price which
+          must be interpreted without tax.
+
+        - contract product normal price tax is used to compute invoice price which must
+          be interpreted like the price tax (according to its price_include field value.
+        """
+
+        partner = self.env.ref("base.res_partner_3")
+        rental_tax = self.get_default_tax()
+        assert (rental_tax.amount, rental_tax.price_include) == (20.0, True)
+        tax = rental_tax.copy({"price_include": False})
+
+        ct = self._create_rental_contract_tmpl(
+            1,
+            contract_line_ids=[self._contract_line(1, "1 month ##PRODUCT##", tax)],
+        )
+
+        product = self._create_rental_product(
+            name="Fairphone",
+            list_price=60.0,
+            rental_price=30.0,
+            rental_tax_ids=[(6, 0, rental_tax.ids)],
+            property_contract_template_id=ct.id,
+        )
+
+        so = self.env["sale.order"].create(
+            {"partner_id": partner.id, "order_line": [self._oline(product)]}
+        )
+        so.action_confirm()
+
+        contract = self.env["contract.contract"].of_sale(so)[0]
+        cline = contract.contract_line_ids
+        self.assertEqual(cline.specific_price, 25.0)
+
+        inv = contract.recurring_create_invoice()
+        self.assertEqual(inv.amount_total, 30.0)
+        self.assertEqual(inv.amount_tax, 5.0)
+
     def test_automatic_payment(self):
         so = self.create_sale_order()
         so.action_confirm()

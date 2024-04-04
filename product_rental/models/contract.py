@@ -232,7 +232,7 @@ class Contract(models.Model):
                                 "name": line.name.replace(marker, product.name),
                                 "sequence": sequence,
                                 "specific_price": so_line.compute_rental_price(
-                                    line.product_id.taxes_id
+                                    without_tax=True,
                                 ),
                                 "quantity": quantity * line.quantity,
                                 "sale_order_line_id": so_line.id,
