@@ -59,7 +59,7 @@ class SaleOrderLine(models.Model):
         """
 
         if amount is None:
-            amount = self.compute_rental_price(None)
+            amount = self.compute_rental_price()
         str_amount = format_amount(self.env, amount, self.product_id.currency_id)
 
         if self.product_id.product_tmpl_id.is_b2b():
