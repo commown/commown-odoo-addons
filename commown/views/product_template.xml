@@ -9,7 +9,7 @@
       <field name="inherit_id" ref="website_sale_b2b.product_template_form_view"/>
       <field name="arch" type="xml">
 
-        <xpath expr="//group[@name='group_standard_price']" position="after">
+        <xpath expr="//group[@name='group_standard_price']" position="before">
           <group name="support">
             <field name="support_group_ids"/>
           </group>

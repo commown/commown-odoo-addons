@@ -7,19 +7,38 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="website_sale.product_template_form_view"/>
         <field name="arch" type="xml">
+
           <xpath expr="//field[@name='sale_ok']/ancestor::div[1]" position="before">
             <div>
               <field name="is_rental"/>
               <label for="is_rental"/>
             </div>
           </xpath>
+
+          <!-- Improve labels for rental products -->
+          <xpath expr="//group[@name='group_standard_price']" position="attributes">
+            <attribute name="string">Price</attribute>
+          </xpath>
+          <xpath expr="//group[@name='group_standard_price']//field[@name='list_price']"
+                 position="attributes">
+            <attribute name="attrs">{"invisible": [("is_rental", "=", True)]}</attribute>
+          </xpath>
+          <xpath expr="//group[@name='group_standard_price']//field[@name='list_price']"
+                 position="after">
+            <field name="list_price" t-if="is_rental" string="Deposit"/>
+          </xpath>
+          <!-- END - Improve labels for rental products -->
+
           <xpath expr="//group[@name='group_standard_price']" position="after">
-            <group name="rental" attrs="{'invisible':[('is_rental','=',False)]}" >
+            <group name="rental" string="Rental price"
+                   attrs="{'invisible':[('is_rental','=',False)]}" >
               <field name="is_deposit"/>
               <field name="rental_price" widget="monetary" attrs="{'required': [('is_rental', '=', True)]}"/>
               <field name="rental_frequency"/>
+              <field name="rental_tax_ids" widget="many2many_tags"/>
             </group>
           </xpath>
+
         </field>
     </record>
   </data>
