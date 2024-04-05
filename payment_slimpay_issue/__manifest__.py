@@ -13,7 +13,9 @@
         "account_payment_partner",
         "account_payment_slimpay",
         "base_automation",
+        "commown_res_partner_sms",
         "project",
+        "queue_job",
     ],
     "data": [
         "data/mail_template.xml",
