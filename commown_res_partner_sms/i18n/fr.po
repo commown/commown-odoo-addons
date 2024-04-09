@@ -1,0 +1,72 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_res_partner_sms
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-09 09:55+0000\n"
+"PO-Revision-Date: 2024-04-09 09:55+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_res_partner_sms
+#: model:mail.template,body_html:commown_res_partner_sms.sms_template_issue_reminder
+msgid "\n"
+"Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.\n"
+""
+msgstr "\n"
+"Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.\n"
+""
+
+
+#. module: commown_res_partner_sms
+#: model:mail.template,body_html:commown_res_partner_sms.sms_template_lead_doc_reminder
+msgid "\n"
+"Rappel finalisation de votre commande : Pensez à mettre vos documents en ligne svp !\n"
+""
+msgstr "Rappel finalisation de votre commande : Pensez à mettre vos documents en ligne svp !\n"
+"\n"
+"L'équipe Commown - contact@commown.coop</p>"
+
+#. module: commown_res_partner_sms
+#: model:ir.model,name:commown_res_partner_sms.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: commown_res_partner_sms
+#: model:ir.model,name:commown_res_partner_sms.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Piste/opportunité"
+
+#. module: commown_res_partner_sms
+#: model:ir.model,name:commown_res_partner_sms.model_project_task
+msgid "Task"
+msgstr "Tâche"
+
+#. module: commown_res_partner_sms
+#: code:addons/commown_res_partner_sms/models/res_partner.py:20
+#, python-format
+msgid "The partner %s does not have a set country or the country has no associated country code. Impossible to parse his phone number"
+msgstr "Le contact %s n'a pas de pays défini ou le pays n'a pas de code associé. Impossible d'analyser son numéro de téléphone"
+
+#. module: commown_res_partner_sms
+#: model:ir.actions.server,name:commown_res_partner_sms.action_crm_lead_send_sms_doc_reminder
+msgid "[commown] Envoyer le SMS de relance doc"
+msgstr "[commown] Envoyer le SMS de relance doc"
+
+#. module: commown_res_partner_sms
+#: model:mail.template,name:commown_res_partner_sms.sms_template_issue_reminder
+msgid "[commown] SAV : relance SMS"
+msgstr "[commown] SAV : relance SMS"
+
+#. module: commown_res_partner_sms
+#: model:mail.template,name:commown_res_partner_sms.sms_template_lead_doc_reminder
+msgid "[commown] SMS relance doc"
+msgstr "[commown] SMS relance doc"
+
