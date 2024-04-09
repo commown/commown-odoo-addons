@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-17 11:09+0000\n"
-"PO-Revision-Date: 2023-01-17 11:09+0000\n"
+"POT-Creation-Date: 2024-04-09 09:57+0000\n"
+"PO-Revision-Date: 2024-04-09 09:57+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -123,6 +123,23 @@ msgid "${object.user_id.company_id.name}: max payment trials reached"
 msgstr "${object.user_id.company_id.name}: nombre maximum de rejets de prélèvement atteint"
 
 #. module: payment_slimpay_issue
+#: model:mail.template,body_html:payment_slimpay_issue.smspro_payment_issue
+msgid "<div>\n"
+"%if object.invoice_unpaid_count in (0, 1):\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le prélèvement de votre dernière mensualité a été rejeté =&gt; Infos par mail (pensez à consulter vos spams).</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown - contact@commown.coop----- n'apparaîtra pas&nbsp;!</p>\n"
+"%else:\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">RAPPEL : Rejet de prélèvement de mensualité =&gt; Contactez-nous d'urgence svp.</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown - contact@commown.coop----- n'apparaîtra pas&nbsp;! </p>\n"
+"%endif\n"
+"</div>"
+msgstr "<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"%if object.invoice_unpaid_count in (0, 1):\n"
+"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Le prélèvement de votre dernière mensualité a été rejeté =&gt; Infos par mail (pensez à consulter vos spams).</p><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">--</p><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">L'équipe Commown - contact@commown.coop----- n'apparaîtra pas&nbsp;!</p>\n"
+"%else:\n"
+"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">RAPPEL : Rejet de prélèvement de mensualité =&gt; Contactez-nous d'urgence svp.</p><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">--</p><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">L'équipe Commown - contact@commown.coop----- n'apparaîtra pas&nbsp;! </p>\n"
+"%endif\n"
+"</div>"
+
+#. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_retry_payment_and_wait
 msgid "A payment is immediately retried when the issue is move here. The issue then stays here for a given number of days (see dedicated time-based automated action) during which the payment may be rejected again. After this period, the payment is considered OK and the issue fixed: in this case the issue will be moved to the corresponding column."
 msgstr "Une tentative de prélèvement est immédiatement effectuée lorsqu'un incident de paiement arrive dans cette colonne. Il y reste alors un nombre de jours donné (paramétrable dans l'action automatisée dédiée, actuellement 8, cf. https://shop.commown.coop/web?debug#id=21&view_type=form&model=base.action.rule&menu_id=232&action=309) pendant lesquels le prélèvement peut être rejeté de nouveau. À l'issue de cette période, le prélèvement est considéré comme validé et l'incident est automatiquement bougé dans la colonne correspondante."
@@ -208,6 +225,16 @@ msgid "Label the customer will see on his bank statement. When left empty, the O
 msgstr "Libellé que le client verra sur son relevé bancaire. Lorsque laissé vide, c'est le nom de la transaction Odoo qui y figure."
 
 #. module: payment_slimpay_issue
+#: model:project.task.type,name:payment_slimpay_issue.stage_orphan
+msgid "Linked invoice not determined or not linked to a contract"
+msgstr "Facture liée non déterminée ou non liée à un contrat"
+
+#. module: payment_slimpay_issue
+#: model:mail.template,name:payment_slimpay_issue.mail_max_trial
+msgid "Max Slimpay payment trials reached"
+msgstr "Nb max d'impayés Slimpay atteint"
+
+#. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_max_trials_reached
 msgid "Max payment trials reached"
 msgstr "Nb max d'impayés atteint"
@@ -234,8 +261,7 @@ msgstr "Nouveau"
 msgid "No corresponding invoice found"
 msgstr "Facture liée non déterminée"
 
-#. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_task.py:198
+#: code:addons/payment_slimpay_issue/models/project_task.py:189
 #, python-format
 msgid "No payment ref"
 msgstr "No payment ref"
@@ -253,7 +279,18 @@ msgstr "Paiement"
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_orphan
 msgid "Payment issues end-up here when no corresponding odoo invoice could be identified. They must then be handled manually."
-msgstr "Les incidents de paiement atterrissent ici lorsque le lien avec une facture n'a pas pu être trouvé. Ils doivent alors être traités manuellement."
+msgstr "Les incidents de paiement atterrissent ici lorsque le lien avec une facture n'a pas pu être trouvé ou n'est pas liée à un contrat. Ils doivent alors être traités manuellement.\n"
+"\n"
+"1/ POUR LES FACTURES ISSUES D'UN MERGE (qui vont apparaître ici car Slimpay et Odoo n'arrivent pas se coordonner pour retrouver la facture liée), il faut :\n"
+"- Associer la facture dans la carte\n"
+"- Mettre le nbre de tentative à 1\n"
+"- Passer la carte dans la colonne suivante (pour que le mail et le sms partent) - la date du prochain prlvmt se paramètre automatiquement !\n"
+"- Délettrer la facture et annuler son paiement\n"
+"\n"
+"2/ POUR LES FACTURES ISSUES D'UN DÉPÔT DE GARANTIE :\n"
+"Idem, MAIS IL FAUT EN PLUS PARAMÉTRER LE \"MODE DE PAIEMENT\" DE LA FACTURE CONCERNEE -> \"Paiement auto des contrats\"\n"
+"(sinon ça plante tout !!!) \n"
+"Alternative : gérer la relance du paiement en manuel (sans bouger la carte de colonne), mais c'est dommage ^^"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,legend_done:payment_slimpay_issue.stage_issue_fixed
@@ -293,6 +330,11 @@ msgid "Slimpay payment label"
 msgstr "Libellé bancaire"
 
 #. module: payment_slimpay_issue
+#: model:product.template,name:payment_slimpay_issue.bank_supplier_fees_product
+msgid "Slimpay supplier fees"
+msgstr "Frais bancaires sans taxes (pour impayés)"
+
+#. module: payment_slimpay_issue
 #: model:ir.model,name:payment_slimpay_issue.model_project_task
 msgid "Task"
 msgstr "Tâche"
@@ -305,19 +347,29 @@ msgid "Unit(s)"
 msgstr "Unité(s)"
 
 #. module: payment_slimpay_issue
+#: model:mail.template,name:payment_slimpay_issue.mail_warn_user
+msgid "Warn partner of a payment issue"
+msgstr ""
+
+#. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid "Warn partner then wait"
 msgstr "Avertir le partenaire et attendre"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_warn_partner_and_wait
-msgid "When the issue is moved to this stage, the partner is immediately warned by email that the payment was rejected. The issue then stays here for a given number of days (see dedicated time-based automated action), then moves to the next stage."
+msgid "When a payment incident arrives in this column, the partner is immediately notified by e-mail that the debit has been rejected. The incident then remains in this column for a certain number of days (configurable in the dedicated automated action), then is automatically moved to the next column."
 msgstr "Lorsqu'un incident de paiement arrive dans cette colonne,  le partenaire est immédiatement averti par courriel que le prélèvement a été rejeté. L'incident reste alors dans cette colonne un certain nombre de jours (paramétrable dans l'action automatisée dédiée), puis est automatiquement bougée dans la colonne suivante."
+
+#. module: payment_slimpay_issue
+#: model:mail.template,name:payment_slimpay_issue.smspro_payment_issue
+msgid "[Commown] SMS impayé"
+msgstr "[Commown] SMS impayé"
 
 #. module: payment_slimpay_issue
 #: model:product.template,weight_uom_name:payment_slimpay_issue.bank_fees_product
 #: model:product.template,weight_uom_name:payment_slimpay_issue.bank_supplier_fees_product
 #: model:product.template,weight_uom_name:payment_slimpay_issue.management_fees_product
 msgid "kg"
-msgstr ""
+msgstr "kg"
 
