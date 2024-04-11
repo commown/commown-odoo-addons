@@ -1,0 +1,71 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_accounting
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-04 13:30+0000\n"
+"PO-Revision-Date: 2024-04-04 13:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_accounting
+#: model:ir.actions.act_window,name:commown_accounting.account_loan_lines_view_action
+#: model:ir.ui.menu,name:commown_accounting.menu_account_loan_lines_view
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_search
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_tree
+msgid "Account Loan Lines"
+msgstr "Échéances"
+
+#. module: commown_accounting
+#: model:ir.model,name:commown_accounting.model_account_loan_line
+msgid "Annuity"
+msgstr "Annuité"
+
+#. module: commown_accounting
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_search
+msgid "Date"
+msgstr "Date "
+
+#. module: commown_accounting
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_search
+msgid "Group By"
+msgstr "Grouper par"
+
+#. module: commown_accounting
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_search
+msgid "Lender"
+msgstr "Prêteur"
+
+#. module: commown_accounting
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_search
+msgid "Loan"
+msgstr "Prêt"
+
+#. module: commown_accounting
+#: model:ir.model.fields,field_description:commown_accounting.field_account_loan_line__loan_start_date
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_search
+msgid "Loan start date"
+msgstr "Date de début du prêt"
+
+#. module: commown_accounting
+#: model:ir.ui.menu,name:commown_accounting.menu_loan_category
+msgid "Loans"
+msgstr "Prêts"
+
+#. module: commown_accounting
+#: model:ir.model.fields,help:commown_accounting.field_account_loan_line__loan_start_date
+msgid "Start of the moves"
+msgstr "Début des écritures"
+
+#. module: commown_accounting
+#: model_terms:ir.ui.view,arch_db:commown_accounting.account_loan_line_view_search
+msgid "State"
+msgstr "État"
+
