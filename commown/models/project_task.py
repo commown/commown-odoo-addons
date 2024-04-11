@@ -2,6 +2,8 @@ import logging
 
 from odoo import fields, models
 
+from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
+
 _logger = logging.getLogger(__file__)
 
 
@@ -32,32 +34,16 @@ class ProjectTask(models.Model):
     def send_sms_reminder(self):
         self.ensure_one()
 
-        # Make sure the message is sent by the assigned user
-        if self.user_id:
-            self = self.sudo(self.user_id)
-
-        phone = self.partner_id.mobile or self.partner_id.phone
+        country_code = self.partner_id.country_id.code
+        phone = normalize_phone(self.partner_id.get_mobile_phone(), country_code)
 
         if phone and self.has_no_partner_message():
-            # Temporarily remove followers
-            _data = [f.copy_data()[0] for f in self.message_follower_ids]
-            self.sudo().message_follower_ids.unlink()
-
             # Send the SMS
             template = self.env.ref("commown.sms_template_issue_reminder")
-            layout = "commown_payment_slimpay_issue.message_nowrap_template"
-            self.with_context(
-                custom_layout=layout, lang=self.partner_id.lang
-            ).message_post_with_template(
-                template.id,
-                message_type="comment",
+            self.with_delay().message_post_send_sms_html(
+                template.body_html, numbers=[phone], log_error=True
             )
 
-            # Put followers back
-            current_followers = self.mapped("message_follower_ids.partner_id")
-            for data in _data:
-                if data["partner_id"] not in current_followers.ids:
-                    self.env["mail.followers"].create(data)
         else:
             _logger.warning(
                 "No SMS reminder sent to %s for task %s (id %d)",

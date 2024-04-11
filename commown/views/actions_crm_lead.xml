@@ -6,27 +6,7 @@
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="binding_model_id" ref="crm.model_crm_lead"/>
-    <field name="code"><![CDATA[
-template = env.ref('commown.sms_template_lead_doc_reminder')
-record = record.with_context({
-    "custom_layout": "commown_payment_slimpay_issue.message_nowrap_template",
-    "lang": record.partner_id.lang,
-})
-# Temporarily remove followers
-_data = [f.copy_data()[0] for f in record.message_follower_ids]
-record.sudo().message_follower_ids.unlink()
-
-# Send the SMS
-record.message_post_with_template(template.id, message_type='comment')
-
-# Put followers back
-current_followers = record.mapped('message_follower_ids.partner_id')
-for data in _data:
-    if data['partner_id'] not in current_followers.ids:
-        env['mail.followers'].create(data)
-
-]]>
-    </field>
+    <field name="code">record._action_send_sms_doc_reminder()</field>
   </record>
 
 </odoo>

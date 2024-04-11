@@ -23,6 +23,7 @@
         "commown_contract_variable_discount",
         "commown_self_troubleshooting",
         "commown_payment_slimpay_issue",
+        "commown_res_partner_sms",
         "payment_token_uniquify",
         "product_rental",
         "project_rating_nps",
