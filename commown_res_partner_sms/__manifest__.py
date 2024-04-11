@@ -11,6 +11,7 @@
     "website": "https://commown.coop",
     "depends": [
         "sms_ovh_http",
+        "html_text",
     ],
     "data": [
         "data/iap_account.xml",
