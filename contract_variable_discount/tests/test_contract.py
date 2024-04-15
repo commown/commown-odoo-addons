@@ -254,11 +254,13 @@ class ContractTC(TestContractBase):
             mock.return_value = False
             inv3 = self.contract.recurring_create_invoice()
 
-        self.assertEqual(mock.call_count, 3)
+        self.assertEqual(mock.call_count, 2)
         self.assertEqual(
             [tuple(c) for c in mock.call_args_list],
             [
-                ((self.acct_line, fields.Date.from_string(inv1.date_invoice)), {}),
+                # inv1 is before discount validity date, so _compute_condition_test
+                # is NOT called at all (which is what we want as this call may be
+                # costly in terms of performance)
                 ((self.acct_line, fields.Date.from_string(inv2.date_invoice)), {}),
                 ((self.acct_line, fields.Date.from_string(inv3.date_invoice)), {}),
             ],

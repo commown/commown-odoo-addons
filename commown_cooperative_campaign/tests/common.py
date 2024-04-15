@@ -47,7 +47,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
         env=None,
     ):
         """Create an invoice from contract mocking the cooperative web service
-        with give optin and optout dates generators.
+        with given optin and optout date generators.
         """
         if env is None:
             contract = self.contract

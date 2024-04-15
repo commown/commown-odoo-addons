@@ -24,7 +24,10 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
         self.assertEqual(inv1.amount_untaxed, 6.0)
         self.assertEqual(self.invoice(before1, ts_after).amount_untaxed, 6.0)
         self.assertEqual(self.invoice(before7, before1).amount_untaxed, 30.0)
-        self.assertEqual(self.invoice(ts_after).amount_untaxed, 30.0)
+        # opt-in mock is not called below as the end date of the discount is reached
+        self.assertEqual(
+            self.invoice(ts_after, check_mock_calls=False).amount_untaxed, 30.0
+        )
 
     def test_invoice_no_identifier(self):
         "Partners having no phone or country do not benefit from the discount"
