@@ -106,9 +106,9 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     def is_valid(self, contract_line, date):
         return (
-            self._condition_ok(contract_line, date)
-            and self._start_date_ok(contract_line, date)
+            self._start_date_ok(contract_line, date)
             and self._end_date_ok(contract_line, date)
+            and self._condition_ok(contract_line, date)  # execute last, may be slow
         )
 
     @api.multi
