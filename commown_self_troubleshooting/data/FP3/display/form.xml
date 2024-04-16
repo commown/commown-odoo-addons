@@ -8,7 +8,7 @@
     <field name="arch" type="xml">
       <t t-name="website.self-troubleshoot-fp3-display">
         <t t-call="portal.portal_layout">
-          <t t-set="title">Commown - Auto-dépannage - Fairphone 3 : Écran</t>
+          <t t-set="title">Commown - Auto-dépannage - Fairphone 3 : Écran</t>
 
           <script type="text/javascript">
             $(document).ready(function() {
@@ -37,7 +37,7 @@
           <div class="bg-white border m-0 p-3 rounded">
             <div class="d-flex flex-row" style="justify-content: space-between;">
               <div class="d-flex flex-column">
-                <h1>Auto-dépannage : Fairphone 3</h1>
+                <h1>Auto-dépannage : Fairphone 3</h1>
                 <h2>Mon écran ne fonctionne plus</h2>
               </div>
               <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
@@ -82,7 +82,7 @@
                       <p> La cause la plus fréquente des problèmes d'écran est l'état des contacts entre le corps de l'appareil et l'écran.
                           Il faut donc démonter l'écran et nettoyer les contacts.
                       <br />
-                      <p>Pour démonter et remonter l’écran, nous vous invitons à visualiser la vidéo ci-dessous :</p>
+                      <p>Pour démonter et remonter l’écran, nous vous invitons à visualiser la vidéo ci-dessous :</p>
                       <br />
                       <iframe width="460" height="215" src="https://www.youtube.com/embed/hG6OVPTnrK4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
                       <br />
@@ -92,7 +92,7 @@
                       </p>
                       <div id="form-step-2" role="form" data-toggle="validator">
                           <div class="form-group">
-                            <p>Le problème est-il résolu ?</p>
+                            <p>Le problème est-il résolu ?</p>
                             <div class="form-check form-check-inline">
                               <input class="form-check-input" type="radio" name="net_contact" id="net_contact-yes" value="solved" required="required"/>
                               <label class="form-check-label" for="net_contact-yes">Oui</label>

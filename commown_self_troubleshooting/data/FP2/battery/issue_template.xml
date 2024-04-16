@@ -8,7 +8,7 @@
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-fp2-batterie">
           <p t-if="action=='pb_logiciel'">
-          Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
+          Je vous informe que je vais effectuer le test en mode sans échec et vous tiens au courant du résultat !
           </p>
           <p t-if="action=='ship'">
             Après avoir effectué un auto-dépannage, il ressort que la batterie de mon FP2 doit être changée.

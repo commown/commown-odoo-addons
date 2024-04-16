@@ -3,7 +3,7 @@
   <data>
 
     <template id="more_customer_info">
-      <p t-if="more_info">Informations complémentaires :</p>
+      <p t-if="more_info">Informations complémentaires :</p>
       <div t-if="more_info">
         <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
       </div>
@@ -97,8 +97,8 @@
             d'un téléphone à l'autre).
           </p>
           <p>
-          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,
-          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
+          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,
+          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
 </p>
         </div>
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">

@@ -7,7 +7,7 @@
     <field name="key">commown_self_troubleshooting.issue-description-serenity</field>
     <field name="arch" type="xml">
       <t t-name="self-troubleshoot-issue-description-serenity">
-        <p>Numéro de téléphone à appeler : <b t-esc="phone"></b></p>
+        <p>Numéro de téléphone à appeler : <b t-esc="phone"></b></p>
         <t t-call="commown_self_troubleshooting.more_customer_info" />
       </t>
     </field>

@@ -9,7 +9,7 @@
 
         <t t-name="website.self-troubleshoot-fp2-camera">
           <t t-call="portal.portal_layout">
-            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Caméra</t>
+            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Caméra</t>
 
             <script type="text/javascript">
               $(document).ready(function() {
@@ -39,7 +39,7 @@
             <div class="bg-white border m-0 p-3 rounded">
               <div class="d-flex flex-row" style="justify-content: space-between;">
                 <div class="d-flex flex-column">
-                  <h1>Auto-dépannage : Fairphone 2</h1>
+                  <h1>Auto-dépannage : Fairphone 2</h1>
                   <h2>Ma caméra principale fonctionne mal ou plus du tout</h2>
                 </div>
                 <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
@@ -81,11 +81,11 @@
                         <h2>Modèle de la caméra</h2>
                         <p>Allez voir <a target="_blank" href="https://wiki.commown.coop/Reconnaître-la-version-de-votre-caméra">cette
                       page de notre wiki</a> et répondez à la question
-                        ci-dessous :</p>
+                        ci-dessous :</p>
                       </div>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label for="camera_model">Modèle de caméra :</label>
+                          <label for="camera_model">Modèle de caméra :</label>
                           <select class="form-control" required="required"
                                   id="camera_model" name="camera_model"
                                   data-required-error="Veuillez sélectionner un modèle de caméra dans la liste ci-dessus.">
@@ -108,7 +108,7 @@
                       de resserrer les vis de la caméra grace
                       à <a target='_blank'
                       href='https://fr.ifixit.com/Tutoriel/Remplacement+de+la+cam%C3%A9ra+arri%C3%A8re+du+Fairphone+2/54993'>ce
-                      tutoriel en ligne</a>, puis dites-nous si le problème est résolu :</p>
+                      tutoriel en ligne</a>, puis dites-nous si le problème est résolu :</p>
                       <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
                           <select class="form-control" required="required"

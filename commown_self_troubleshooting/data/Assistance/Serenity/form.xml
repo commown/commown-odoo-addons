@@ -21,7 +21,7 @@
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">
-            <h1>Auto-dépannage : Option Sérénité - Être appelé</h1>
+            <h1>Auto-dépannage : Option Sérénité - Être appelé</h1>
             <h2>Je rencontre un incident qui nécessite qu'on m'appelle</h2>
 
             <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
