@@ -208,6 +208,16 @@ def _force_picking_date(picking, date):
                 _set_date(quant, date, "in_date")
 
 
+def _force_scrap_date(scrap, date):
+    loc = scrap.scrap_location_id
+    _set_date(scrap.move_id, date, "date")
+    for move_line in scrap.move_id.move_line_ids:
+        _set_date(move_line, date, "date")
+        for quant in move_line.lot_id.quant_ids:
+            if quant.quantity > 0 and quant.location_id == loc:
+                _set_date(quant, date, "in_date")
+
+
 def _set_date(entity, value, attr_name):
     setattr(entity.sudo(), attr_name, value)
     sql = "UPDATE %s SET %s=%%s WHERE id=%%s" % (
