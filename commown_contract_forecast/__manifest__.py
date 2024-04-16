@@ -17,7 +17,4 @@
         "commown_cooperative_campaign",
         "contract_queue_job",  # Make tests behave as when the commown module is installed
     ],
-    "data": [
-        "data/cron.xml",
-    ],
 }

@@ -7,21 +7,6 @@ class ContractLine(models.Model):
 
     _inherit = "contract.line"
 
-    @api.model
-    def cron_recompute_forecasts(self, batch_size=100):
-        self.env["contract.line.forecast.period"].search([]).unlink()
-        offset = 0
-        while True:
-            contract_lines = self.search(
-                [("is_canceled", "=", False)],
-                limit=batch_size,
-                offset=offset,
-            )
-            contract_lines.generate_forecast_periods()
-            if len(contract_lines) < batch_size:
-                break
-            offset += batch_size
-
     @api.multi
     def _prepare_contract_line_forecast_period(
         self, period_date_start, period_date_end, recurring_next_date
