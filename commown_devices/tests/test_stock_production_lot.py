@@ -24,7 +24,7 @@ class StockProductionLotTC(SavepointCase):
         )
         self.location_internal_available = self.env["stock.location"].create(
             {
-                "name": "Test insernal available location",
+                "name": "Test internal available location",
                 "usage": "internal",
                 "partner_id": 1,
                 "location_id": self.location_available_for_rent.id,
