@@ -1,8 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from functools import partial
 
 import mock
-import pytz
 import requests
 import requests_mock
 from requests_mock.exceptions import NoMockAddress
@@ -10,109 +9,25 @@ from requests_mock.exceptions import NoMockAddress
 from odoo.fields import Date
 from odoo.tools import mute_logger
 
-from odoo.addons.commown_contract_variable_discount.tests.common import (
-    ContractSaleWithCouponTC,
-)
+from .common import CooperativeCampaignTC, ts_after, ts_before
 
 
-def ts_after(date, days=7, hour=9):
-    "Generate a date in iso format from given odoo string date + given days"
-    return (
-        datetime(date.year, date.month, date.day, hour, tzinfo=pytz.utc)
-        + timedelta(days=days)
-    ).isoformat()
-
-
-def ts_before(date, days=7):
-    "Generate a date in iso format from given odoo string date - given days"
-    return ts_after(date, -days)
-
-
-class CooperativeCampaignTC(ContractSaleWithCouponTC):
-    def setUp(self):
-        super(CooperativeCampaignTC, self).setUp()
-
-        # Force querying the cooperative web service:
-        self.campaign.update(
-            {
-                "is_coop_campaign": True,
-                "cooperative_salt": "no matter",
-            }
-        )
-
-        # This is required for partner "anon" identifier generation:
-        self.so.partner_id.phone = "0677889900"
-        self.so.partner_id.country_id = self.env.ref("base.fr").id
-        self.customer_key = self.campaign.coop_partner_identifier(self.so.partner_id)
-
-    def invoice(
-        self,
-        optin,
-        optout=None,
-        mock_optin=False,
-        check_mock_calls=True,
-        env=None,
-    ):
-        """Create an invoice from contract mocking the cooperative web service
-        with give optin and optout dates generators.
-        """
-        if env is None:
-            contract = self.contract
-        else:
-            contract = env["contract.contract"].browse(self.contract.id)
-
-        date = contract.recurring_next_date
-
-        events = [{"type": "optin", "ts": optin(date)}]
-        if optout is not None:
-            events.append({"type": "optout", "ts": optout(date)})
-
-        with requests_mock.Mocker() as rm:
-            rm.get(
-                "/campaigns/test-campaign/subscriptions/important-events",
-                json=[{"events": events}],
-            )
-            if mock_optin:
-                rm.post(
-                    "/campaigns/test-campaign/opt-in",
-                    json={
-                        "id": 1,
-                        "campaign": {},
-                        "member": {},
-                        "optin_ts": ts_after(contract.recurring_next_date, 0),
-                        "optout_ts": None,
-                    },
-                )
-            invoice = contract.recurring_create_invoice()
-
-        if check_mock_calls:
-            reqs = rm.request_history
-
-            if mock_optin:
-                self.assertEqual(reqs[0].path, "/campaigns/test-campaign/opt-in")
-                self.assertEqual(
-                    reqs[0].json(),
-                    {
-                        "customer_key": self.customer_key,
-                        "optin_ts": ts_after(invoice.date_invoice, 0),
-                    },
-                )
-            else:
-                self.assertEqual(len(reqs), 1)
-            self.assertEqual(
-                reqs[-1].path, "/campaigns/test-campaign/subscriptions/important-events"
-            )
-            self.assertEqual(reqs[-1].query, "customer_key=" + self.customer_key)
-
-        return invoice
-
+class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
     def test_invoices(self):
         before7 = partial(ts_before, days=7)
         before1 = partial(ts_before, days=1)
-        self.assertEqual(self.invoice(before1, mock_optin=True).amount_untaxed, 6.0)
+        inv1 = self.invoice(before1, mock_optin=True)
+        self.assertEqual(
+            self.contract.contract_line_ids.last_invoice_discount_state(),
+            {inv1.invoice_line_ids.applied_discount_template_line_ids: True},
+        )
+        self.assertEqual(inv1.amount_untaxed, 6.0)
         self.assertEqual(self.invoice(before1, ts_after).amount_untaxed, 6.0)
         self.assertEqual(self.invoice(before7, before1).amount_untaxed, 30.0)
-        self.assertEqual(self.invoice(ts_after).amount_untaxed, 30.0)
+        # opt-in mock is not called below as the end date of the discount is reached
+        self.assertEqual(
+            self.invoice(ts_after, check_mock_calls=False).amount_untaxed, 30.0
+        )
 
     def test_invoice_no_identifier(self):
         "Partners having no phone or country do not benefit from the discount"
@@ -208,7 +123,9 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
         def do_test(env):
             before1 = partial(ts_before, days=1)
-            self.invoice(before1, mock_optin=False, check_mock_calls=False, env=env)
+            return self.invoice(
+                before1, mock_optin=False, check_mock_calls=False, env=env
+            )
 
         # Check test prequisite without modifying the DB, to revert the side effect of
         # this check (which otherwise would create an invoice and prevent a new optin
@@ -220,4 +137,10 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
 
         # Same call with same DB state but with the bypass_coop_campaigns context
         # variable should not raise (important-events is mocked here!):
-        do_test(self.env(context=dict(self.env.context, bypass_coop_campaigns=True)))
+        bypass = dict.fromkeys(
+            self.contract.contract_line_ids._applicable_discount_lines(),
+            True,
+        )
+        env = self.env(context=dict(self.env.context, bypass_coop_campaigns=bypass))
+        invoice = do_test(env)
+        self.assertIn("Test coupon discount", invoice.invoice_line_ids.name)

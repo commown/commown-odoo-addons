@@ -81,6 +81,23 @@ class ContractTC(TestContractBase):
         discount = self.cdiscount(**kwargs)
         return discount._compute_date(self.acct_line, prefix)
 
+    def _check_applied_discounts(self, invl, prefix, ctd_names=(), cd_names=()):
+        ctd_names, cd_names = list(ctd_names), list(cd_names)
+
+        self.assertEqual(len(invl), 1)
+
+        expected = prefix
+        if ctd_names or cd_names:
+            expected += "\n"
+            expected += "\n- ".join(["Applied discounts:"] + ctd_names + cd_names)
+
+        self.assertEqual(invl.name, expected)
+
+        ctd_rel = "applied_discount_template_line_ids.name"
+        cd_rel = "applied_discount_line_ids.name"
+        self.assertEqual(invl.mapped(ctd_rel), ctd_names)
+        self.assertEqual(invl.mapped(cd_rel), cd_names)
+
     def test_discount_compute_date_ok(self):
         "Start date must be computed correctly"
         self.assertEqual(
@@ -189,14 +206,10 @@ class ContractTC(TestContractBase):
 
         # Check applied discounts
         inv = self.contract.recurring_create_invoice()
-        self.assertEqual(
-            inv.mapped("invoice_line_ids.name"),
-            [
-                "Services from 02/29/2016 to 03/28/2016\n"
-                "Applied discounts:\n"
-                "- Fix discount\n"
-                "- 5% discount"
-            ],
+        self._check_applied_discounts(
+            inv.invoice_line_ids,
+            "Services from 02/29/2016 to 03/28/2016",
+            ["Fix discount", "5% discount"],
         )
 
         # Add an override for the 5% discount
@@ -210,14 +223,11 @@ class ContractTC(TestContractBase):
 
         # Check applied discounts
         inv = self.contract.recurring_create_invoice()
-        self.assertEqual(
-            inv.mapped("invoice_line_ids.name"),
-            [
-                "Services from 03/29/2016 to 04/28/2016\n"
-                "Applied discounts:\n"
-                "- Fix discount\n"
-                "- 10% discount"
-            ],
+        self._check_applied_discounts(
+            inv.invoice_line_ids,
+            "Services from 03/29/2016 to 04/28/2016",
+            ["Fix discount"],
+            ["10% discount"],
         )
 
     def test_condition_and_description(self):
@@ -244,11 +254,13 @@ class ContractTC(TestContractBase):
             mock.return_value = False
             inv3 = self.contract.recurring_create_invoice()
 
-        self.assertEqual(mock.call_count, 3)
+        self.assertEqual(mock.call_count, 2)
         self.assertEqual(
             [tuple(c) for c in mock.call_args_list],
             [
-                ((self.acct_line, fields.Date.from_string(inv1.date_invoice)), {}),
+                # inv1 is before discount validity date, so _compute_condition_test
+                # is NOT called at all (which is what we want as this call may be
+                # costly in terms of performance)
                 ((self.acct_line, fields.Date.from_string(inv2.date_invoice)), {}),
                 ((self.acct_line, fields.Date.from_string(inv3.date_invoice)), {}),
             ],
@@ -258,19 +270,18 @@ class ContractTC(TestContractBase):
         self.assertEqual(inv2.mapped("invoice_line_ids.discount"), [5.0])
         self.assertEqual(inv3.mapped("invoice_line_ids.discount"), [0.0])
 
-        self.assertEqual(
-            inv1.mapped("invoice_line_ids.name"),
-            ["Services from 02/15/2016 to 03/28/2016"],
+        self._check_applied_discounts(
+            inv1.invoice_line_ids,
+            "Services from 02/15/2016 to 03/28/2016",
         )
-        self.assertEqual(
-            inv2.mapped("invoice_line_ids.name"),
-            [
-                "Services from 03/29/2016 to 04/28/2016\n"
-                "Applied discounts:\n"
-                "- Fix discount after 1 month under condition"
-            ],
+
+        self._check_applied_discounts(
+            inv2.invoice_line_ids,
+            "Services from 03/29/2016 to 04/28/2016",
+            [],
+            ["Fix discount after 1 month under condition"],
         )
-        self.assertEqual(
-            inv3.mapped("invoice_line_ids.name"),
-            ["Services from 04/29/2016 to 05/28/2016"],
+
+        self._check_applied_discounts(
+            inv3.invoice_line_ids, "Services from 04/29/2016 to 05/28/2016"
         )
