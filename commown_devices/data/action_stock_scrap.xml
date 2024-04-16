@@ -1,0 +1,12 @@
+<odoo>
+
+  <record id="action_set_scrap_date_done_to_scheduled" model="ir.actions.server">
+    <field name="name">[LOG] Force scrap and move date to scrap scheduled date</field>
+    <field name="model_id" ref="stock.model_stock_scrap"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="binding_model_id" ref="stock.model_stock_scrap"/>
+    <field name="code">records.action_set_date_done_to_expected()</field>
+  </record>
+
+</odoo>
