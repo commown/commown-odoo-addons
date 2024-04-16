@@ -9,7 +9,7 @@
 
         <t t-name="website.self-troubleshoot-fp2-battery">
           <t t-call="portal.portal_layout">
-            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Batterie</t>
+            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Batterie</t>
 
             <script type="text/javascript">
               $(document).ready(function() {
@@ -34,7 +34,7 @@
 
               <div class="d-flex flex-row" style="justify-content: space-between;">
                 <div class="d-flex flex-column">
-                  <h1>Auto-dépannage : Fairphone 2</h1>
+                  <h1>Auto-dépannage : Fairphone 2</h1>
                   <h2>Ma batterie se décharge rapidement</h2>
                 </div>
                 <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
@@ -82,7 +82,7 @@
                       </div>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label for="accu_battery">Quel est l'état de votre batterie ?</label>
+                          <label for="accu_battery">Quel est l'état de votre batterie ?</label>
                           <select class="form-control" required="required" id="accu_battery" name="accu_battery" data-required-error="Veuillez sélectionner l'état de votre batterie.">
                             <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
                             <option value="sup">Supérieure à 80%</option>
@@ -99,10 +99,11 @@
                     </t>
 
                     <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
-                      <h2><i class="fas fa-bug"/> Problème logiciel</h2>
+                      <h2><i class="fas fa-bug"/>Problème logiciel</h2>
                       <p>Dans ce cas, nous vous invitons à démarrer votre FP2 en mode "sans échec" afin de
-                      voir si le problème est dû à une application instable. </p>
-                      <p>Pour passer en mode sans échec :
+                      voir si le problème est dû à une application instable.
+                      </p>
+                      <p>Pour passer en mode sans échec :
                         <ul>
                           <li>Appuyez et maintenez le bouton ON / OFF. Une fenêtre contextuelle s'ouvre
                             avec l'option <i>Éteindre</i>
@@ -123,7 +124,7 @@
 
                       <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utile :</label>
+                          <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utile :</label>
                           <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info"/>
                         </div>
 

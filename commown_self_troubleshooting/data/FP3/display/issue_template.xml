@@ -15,14 +15,14 @@
         </t>
 
         <p t-else="">
-          Mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)
+          Mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)
         </p><br/>
 
         <t t-call="commown_self_troubleshooting.display-shipping-information" />
       </t>
 
       <p t-elif="action=='inform'">
-        Suite à l'auto-dépannage, le nettoyage des contacts a permis de résoudre le problème !
+        Suite à l'auto-dépannage, le nettoyage des contacts a permis de résoudre le problème !
       </p>
 
       <t t-call="commown_self_troubleshooting.more_customer_info" />
