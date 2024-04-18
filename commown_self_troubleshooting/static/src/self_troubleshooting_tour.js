@@ -456,4 +456,25 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
     ]
   );
 
+  tour.register(
+    "commown_self_troubleshooting_tour_theft_and_loss",
+    { url: "/my" },
+    [
+      {
+        content: "Go to Theft and loss page",
+        trigger: 'a[href="/page/self-troubleshoot-theft-and-loss"]',
+      },
+      commonSteps.fillInContract,
+      commonSteps.gotoNextStep,
+      {
+        content: "Select the theft option",
+        trigger: 'select[id=theft_loss]',
+        run: "text Vol",
+      },
+      commonSteps.gotoNextStep,
+      ...commonSteps.funcAddMoreInfo("HELP my phone was theft!"),
+      ...commonSteps.funcCreateAndCheckTicket("Mon appareil a été volé"),
+    ]
+  );
+
 });

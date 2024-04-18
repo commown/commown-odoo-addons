@@ -6,6 +6,8 @@ import websocket
 import odoo.tests
 from odoo.tests.common import ChromeBrowser
 
+from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
+
 
 @contextmanager
 def chrome_suppress_origin():
@@ -24,8 +26,16 @@ def chrome_suppress_origin():
         ChromeBrowser._open_websocket = old_open_websocket
 
 
+class RunTourMixin:
+    def _run_tour(self, name):
+        js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name
+        js_ready = "odoo.__DEBUG__.services['web_tour.tour'].tours.%s.ready" % name
+        with chrome_suppress_origin():
+            self.phantom_js("/my", js, js_ready, login="portal")
+
+
 @odoo.tests.tagged("post_install", "-at_install")
-class TestPageTC(odoo.tests.HttpCase):
+class TestPageTC(RunTourMixin, odoo.tests.HttpCase):
     "Base class to ease tour test writting"
 
     contract_name = None  # Override me!
@@ -66,12 +76,6 @@ class TestPageTC(odoo.tests.HttpCase):
                 product,
                 user_portal,
             )
-
-    def _run_tour(self, name):
-        js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name
-        js_ready = "odoo.__DEBUG__.services['web_tour.tour'].tours.%s.ready" % name
-        with chrome_suppress_origin():
-            self.phantom_js("/my", js, js_ready, login="portal")
 
 
 class TestPageFP2(TestPageTC):
@@ -118,3 +122,12 @@ class TestPageContractManagement(TestPageTC):
     def test_termination_with_commitment_pay(self):
         self.contract.commitment_period_number = 240
         self._run_tour("commown_self_troubleshooting_tour_termination_commitment_pay")
+
+
+class TestPageRealContractTC(RunTourMixin, DeviceAsAServiceTC, odoo.tests.HttpCase):
+    def test_theft_and_loss(self):
+        lot = self.adjust_stock(serial="S/N-001")
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        contract.send_devices(lot, {}, date="2023-09-01", do_transfer=True)
+        contract.date_start = "2023-09-01"
+        self._run_tour("commown_self_troubleshooting_tour_theft_and_loss")

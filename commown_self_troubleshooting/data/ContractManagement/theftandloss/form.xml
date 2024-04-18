@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="theft-and-loss" model="ir.ui.view">
+    <field name="name">Self-troubleshoot Theft and Loss</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-theft-and-loss</field>
+    <field name="arch" type="xml">
+
+      <t t-name="website.self-troubleshoot-theft-and-loss">
+        <t t-call="portal.portal_layout">
+          <t t-set="title">Commown - Vie de mes contrats - Vol ou Perte</t>
+
+          <script type="text/javascript">
+            $(document).ready(function() {
+
+              const wizard = setUpWizard($('#smartwizard'));
+
+              function contractChanged() {
+                let contractData = document.getElementById('device_contract').selectedOptions[0].dataset;
+                let $details = $('.contract_details').show();
+                $details.find('#contract_name').text(contractData.contractName);
+                $details.find('#contract_commitment_end_date').text(contractData.commitmentEndDate);
+                $details.find('.contract_serial').text(contractData.serial ? '(' + contractData.serial + ')' : '');
+
+                const selectedOption = $('select[name=theft_loss]').val();
+                const suffix = (contractData.product || contractData.contractName) + (contractData.serial ? ' : ' + contractData.serial : '');
+                if (selectedOption === 'theft') {
+                  $('#self-troubleshoot-type').val('V - ' + suffix);
+                } else if (selectedOption === 'loss') {
+                  $('#self-troubleshoot-type').val('P - ' + suffix);
+                }
+              }
+
+              $('select[name=device_contract]').change(contractChanged);
+
+              $('select[name=theft_loss]').change(function () {
+                wizard.toggleStep(2, this.value==='theft');
+                wizard.toggleStep(3, this.value==='loss');
+                contractChanged();
+              });
+
+              contractChanged();
+
+            });
+          </script>
+
+          <t t-set="title">Commown - Vie de mes contrats - Vol ou Perte</t>
+          <t t-set="issue_description_template">issue-description-theft-and-loss</t>
+          <!-- Fin des variables à modifier -->
+
+          <div class="bg-white border m-0 p-3 rounded">
+            <h1>Vol ou Perte</h1>
+            <h2>Je me suis fait voler ou j'ai perdu mon appareil</h2>
+
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="project_ref" value="product_rental.contract_theft_and_loss_project" />
+              <input type="hidden" name="contractual_issue_date" id="contractual_issue_date" t-att-value="datetime.datetime.today().strftime('%Y-%m-%d')" />
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+
+              <div id="smartwizard">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-0">
+                      Contexte
+                      <br />
+                      <small>Appareil concerné</small>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-1">
+                      Étape 1
+                      <br />
+                      <small>Vol ou Perte</small>
+                    </a>
+                  </li>
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-2">Étape 2
+                      <br/>
+                      <small>Vol</small>
+                    </a>
+                  </li>
+                  <li class="nav-item" disabled="disabled">
+                    <a class="nav-link" href="#step-3">Étape 3
+                      <br/>
+                      <small>Perte</small>
+                    </a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <t t-call="commown_self_troubleshooting.step-contract-choice">
+                    <t t-set="contracts"
+                       t-value="env.user.partner_id.self_troubleshooting_contracts('theft-and-loss-page')"/>
+                  </t>
+
+                  <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                    <h2>
+                      Est-ce un vol ou une perte ?
+                    </h2>
+
+                    <p>
+                      Retrouvez ci-dessous un menu déroulant qui orientera votre sinistre.
+                    </p>
+
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <select class="form-control" name="theft_loss" id="theft_loss" required="required">
+                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                          <option value="theft">Vol</option>
+                          <option value="loss">Perte</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+
+                    <p class="alert alert-danger contract_details" style="padding: 1em; margin: 1em">
+                      <b>Vigilance :</b> Pensez bien à inscrire le numéro de série / IMEI
+                      <b class="contract_serial"></b> sur une feuille, car vous
+                      devrez l'indiquer à la gendarmerie lors de l'établissement de plainte
+                      pour le vol et/ou à votre opérateur pour le blocage du téléphone.<br />
+                      Si votre numéro de série / IMEI n'est pas inscrit ci-dessus ou que vous ne le connaissez pas,
+                      veuillez nous l'indiquer dans votre message afin que nous puissions le
+                      retrouver.
+                    </p>
+
+                    <p>
+                      Vous vous êtes fait voler votre appareil. Pas de panique, nous allons tout
+                      mettre en œuvre pour vous accompagner dans les démarches et ainsi pouvoir
+                      vous renvoyer un autre appareil au plus vite ! :-)<br /><br />
+                      Dans un premier temps, dans le champ de texte ci-dessous, pourriez-vous me
+                      relater ce qui s'est exactement passé (où-comment-quand) ?
+                    </p>
+
+                    <div id="form-step-2" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_2">
+                          Merci de renseigner toutes les informations possibles :
+                        </label>
+                        <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="contractual_issue_type" id="contractual_issue_type" value="theft" />
+                        <input type="hidden" name="stage_ref" value="product_rental.stage_declared_theft" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                    <h2>
+                      <i class="fas fa-check-double" />
+                      Confirmation de votre demande
+                    </h2>
+
+                    <p class="alert alert-danger contract_details" style="padding: 1em; margin: 1em">
+                      <b>Vigilance :</b> Pensez bien à inscrire le numéro de série / IMEI
+                      <b class="contract_serial"></b> sur une feuille, car il vous sera utile
+                      pour le blocage du téléphone.<br />
+                      Si votre numéro de série / IMEI n'est pas inscrit ci-dessus ou que vous ne le connaissez pas,
+                      veuillez nous l'indiquer dans votre message afin que nous puissions le
+                      retrouver.
+                    </p>
+
+                    <p>
+                      Vous avez perdu votre appareil. N'ayez crainte, nous allons tout mettre en œuvre pour vous accompagner dans les démarches et ainsi pouvoir vous renvoyer un autre appareil au plus vite ! :-)<br /><br />
+                      Veuillez renseigner dans le champ de texte ci-dessous
+                      la date présumée de la perte ainsi que les circonstances
+                      de celle-ci.
+                    </p>
+
+                    <div id="form-step-3" role="form" data-toggle="validator">
+                      <div class="form-group">
+                        <label for="more_info_step_3">
+                          Merci de renseigner toutes les informations possibles :
+                        </label>
+                        <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info" required="required" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="contractual_issue_type" id="contractual_issue_type" value="loss" />
+                        <input type="hidden" name="stage_ref" value="product_rental.stage_declared_loss" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+  <record id="theft-and-loss-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-theft-and-loss</field>
+    <field name="view_id" ref="theft-and-loss" />
+    <field name="website_meta_title">Vol ou Perte</field>
+    <field name="website_meta_description">Je me suis fait voler ou j'ai perdu mon appareil</field>
+  </record>
+
+</odoo>
