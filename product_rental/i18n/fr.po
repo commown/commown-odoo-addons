@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-04 06:32+0000\n"
-"PO-Revision-Date: 2024-02-04 08:00+0100\n"
+"POT-Creation-Date: 2024-04-19 06:47+0000\n"
+"PO-Revision-Date: 2024-04-19 10:34+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -87,18 +87,20 @@ msgid "Contract"
 msgstr "Contrat"
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:302
+#: code:addons/product_rental/models/contract.py:301
 #, python-format
 msgid "Contract %s (id %d) has %d main rental service lines."
 msgstr "Le contract %s (id %d) a %d lignes de produit de location principal."
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:322
+#: code:addons/product_rental/models/contract.py:321
 #, python-format
 msgid ""
 "Contract %s (id %d) has a main rental service with an incoherent contract "
 "model %s"
-msgstr "Le contract %s (id %d) a un service de location principal incohérent avec le modèle de contrat %s"
+msgstr ""
+"Le contract %s (id %d) a un service de location principal incohérent avec le "
+"modèle de contrat %s"
 
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_contract_line
@@ -108,6 +110,11 @@ msgstr "Ligne du contrat"
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_contract_template
 msgid "Contract Template"
+msgstr "Modèle de contrat"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_contract_line__contract_template_id
+msgid "Contract template"
 msgstr "Modèle de contrat"
 
 #. module: product_rental
@@ -132,7 +139,7 @@ msgid "Contractual documents"
 msgstr "Documents contractuels (CGS/CP)"
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:268
+#: code:addons/product_rental/models/contract.py:267
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_contract_form_view
 #, python-format
 msgid "Cost/Revenue"
@@ -162,6 +169,7 @@ msgstr "Jour(s)"
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.cart_summary
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
 msgid "Deposit"
 msgstr "Dépôt de garantie"
 
@@ -185,12 +193,6 @@ msgstr "Fréquence de paiement de la location"
 #: model_terms:ir.ui.view,arch_db:product_rental.product_price
 msgid "Initial deposit:"
 msgstr "Dépôt de garantie à régler à la commande :"
-
-#. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product__is_deposit
-#: model:ir.model.fields,field_description:product_rental.field_product_template__is_deposit
-msgid "Is initial payment a deposit"
-msgstr "Paiement initial = dépôt de garantie ?"
 
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__is_rental
@@ -238,6 +240,11 @@ msgid "Payment Transaction"
 msgstr "Transaction"
 
 #. module: product_rental
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
+msgid "Price"
+msgstr "Prix"
+
+#. module: product_rental
 #: model:ir.model,name:product_rental.model_product_template_attribute_value
 msgid "Product Attribute Value"
 msgstr "Valeur d'attribut"
@@ -263,8 +270,15 @@ msgstr "Fréquence de paiement"
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__rental_price
 #: model:ir.model.fields,field_description:product_rental.field_product_template__rental_price
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
 msgid "Rental price"
 msgstr "Tarif de la location"
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product__rental_tax_ids
+#: model:ir.model.fields,field_description:product_rental.field_product_template__rental_tax_ids
+msgid "Rental taxes"
+msgstr "Taxes applicables au loyer"
 
 #. module: product_rental
 #: model:project.project,label_tasks:product_rental.contract_termination_project
@@ -318,3 +332,6 @@ msgstr "par an"
 msgid "[commown] Contract-related payment transaction done"
 msgstr ""
 "[commown] Paiement automatique des transactions induites par un contrat"
+
+#~ msgid "Is initial payment a deposit"
+#~ msgstr "Paiement initial = dépôt de garantie ?"

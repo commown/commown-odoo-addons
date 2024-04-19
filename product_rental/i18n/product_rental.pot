@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-04 06:32+0000\n"
-"PO-Revision-Date: 2024-02-04 06:32+0000\n"
+"POT-Creation-Date: 2024-04-19 06:47+0000\n"
+"PO-Revision-Date: 2024-04-19 06:47+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -76,13 +76,13 @@ msgid "Contract"
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:302
+#: code:addons/product_rental/models/contract.py:301
 #, python-format
 msgid "Contract %s (id %d) has %d main rental service lines."
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:322
+#: code:addons/product_rental/models/contract.py:321
 #, python-format
 msgid "Contract %s (id %d) has a main rental service with an incoherent contract model %s"
 msgstr ""
@@ -95,6 +95,11 @@ msgstr ""
 #. module: product_rental
 #: model:ir.model,name:product_rental.model_contract_template
 msgid "Contract Template"
+msgstr ""
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_contract_line__contract_template_id
+msgid "Contract template"
 msgstr ""
 
 #. module: product_rental
@@ -119,7 +124,7 @@ msgid "Contractual documents"
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:268
+#: code:addons/product_rental/models/contract.py:267
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_contract_form_view
 #, python-format
 msgid "Cost/Revenue"
@@ -149,6 +154,7 @@ msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.cart_summary
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
 msgid "Deposit"
 msgstr ""
 
@@ -171,12 +177,6 @@ msgstr ""
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.product_price
 msgid "Initial deposit:"
-msgstr ""
-
-#. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product__is_deposit
-#: model:ir.model.fields,field_description:product_rental.field_product_template__is_deposit
-msgid "Is initial payment a deposit"
 msgstr ""
 
 #. module: product_rental
@@ -225,6 +225,11 @@ msgid "Payment Transaction"
 msgstr ""
 
 #. module: product_rental
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
+msgid "Price"
+msgstr ""
+
+#. module: product_rental
 #: model:ir.model,name:product_rental.model_product_template_attribute_value
 msgid "Product Attribute Value"
 msgstr ""
@@ -250,7 +255,14 @@ msgstr ""
 #. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__rental_price
 #: model:ir.model.fields,field_description:product_rental.field_product_template__rental_price
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
 msgid "Rental price"
+msgstr ""
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product__rental_tax_ids
+#: model:ir.model.fields,field_description:product_rental.field_product_template__rental_tax_ids
+msgid "Rental taxes"
 msgstr ""
 
 #. module: product_rental
