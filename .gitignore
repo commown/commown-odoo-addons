@@ -3,3 +3,5 @@ modules_*.po
 */tests/odoo.conf
 __pycache__/
 modules_*.po
+odoo_test.conf
+pytest.ini
