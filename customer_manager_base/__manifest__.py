@@ -19,6 +19,7 @@
     "data": [
         "security/groups.xml",
         "security/rules.xml",
+        "views/customer_group_wizard.xml",
     ],
     "installable": True,
 }
