@@ -1,0 +1,77 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* product_rental
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-23 17:41+0000\n"
+"PO-Revision-Date: 2024-04-23 19:47+0200\n"
+"Last-Translator: <florent@commown.coop>\n"
+"Language-Team: Commown\n"
+"Language: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_contract_forecast
+#: model:ir.model.fields,field_description:commown_contract_forecast.field_contract_line_forecast_period__price_subtotal_taxed
+msgid "Amount taxed"
+msgstr "Betrag ohne MwSt."
+
+#. module: commown_contract_forecast
+#: code:addons/commown_contract_forecast/models/contract_line.py:44
+#, python-format
+msgid ""
+"Applied discounts:\n"
+"- %s"
+msgstr ""
+"Angewandte Rabatte:\n"
+"- %s"
+
+#. module: commown_contract_forecast
+#: selection:contract.line.forecast.period,market:0
+msgid "B2B"
+msgstr "B2B"
+
+#. module: commown_contract_forecast
+#: selection:contract.line.forecast.period,market:0
+msgid "B2C"
+msgstr "B2C"
+
+#. module: commown_contract_forecast
+#: model:ir.model,name:commown_contract_forecast.model_contract_contract
+msgid "Contract"
+msgstr "Vertrag"
+
+#. module: commown_contract_forecast
+#: model:ir.model,name:commown_contract_forecast.model_contract_line
+msgid "Contract Line"
+msgstr "Vertragszeile"
+
+#. module: commown_contract_forecast
+#: model:ir.model,name:commown_contract_forecast.model_contract_line_forecast_period
+msgid "Contract Line Forecast Period"
+msgstr "Prognose für die Vertragszeile"
+
+#. module: commown_contract_forecast
+#: model:ir.model,name:commown_contract_forecast.model_contract_template_line
+msgid "Contract Template Line"
+msgstr "Zeile der Vertragsvorlage"
+
+#. module: commown_contract_forecast
+#: model:ir.model.fields,field_description:commown_contract_forecast.field_contract_line_forecast_period__contract_template_id
+msgid "Contract template"
+msgstr "Vertragsmodell"
+
+#. module: commown_contract_forecast
+#: model:ir.model.fields,field_description:commown_contract_forecast.field_contract_line_forecast_period__market
+msgid "Market"
+msgstr "Markt"
+
+#. module: commown_contract_forecast
+#: model:ir.model.fields,field_description:commown_contract_forecast.field_contract_line_forecast_period__product_range
+msgid "Product range"
+msgstr "Produktreihe"
