@@ -1,0 +1,14 @@
+<odoo>
+
+  <record id="forecast_view_graph" model="ir.ui.view">
+    <field name="name">contract.line.forecast.period.view.graph</field>
+    <field name="model">contract.line.forecast.period</field>
+    <field name="arch" type="xml">
+      <graph type="bar" stacked="True">
+        <field name="date_invoice" interval="month" type="row"/>
+        <field name="price_subtotal_taxed" type="measure"/>
+      </graph>
+    </field>
+  </record>
+
+</odoo>
