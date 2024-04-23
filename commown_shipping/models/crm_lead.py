@@ -1,6 +1,7 @@
 from datetime import date
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class CrmLead(models.Model):
@@ -50,6 +51,14 @@ class CrmLead(models.Model):
             return self._print_parcel_labels(
                 self._default_shipping_parcel_type(), force_single=force_single
             )
+
+    @api.constrains("stage_id")
+    def check_expedition_ref(self):
+        if self.stage_id.name:
+            if "[log: check exp-ref]" in self.stage_id.name and not self.expedition_ref:
+                raise ValidationError(
+                    _("Lead has no expedition ref. Please fill it in.")
+                )
 
     def _recipient_partner(self):
         "Override to use the sale order shipping partner as best non-explicit choice"
