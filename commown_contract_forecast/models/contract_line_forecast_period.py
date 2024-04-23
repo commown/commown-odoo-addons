@@ -1,5 +1,7 @@
 from odoo import api, fields, models
 
+from odoo.addons import decimal_precision as dp
+
 
 class ContractLineForecastPeriod(models.Model):
 
@@ -30,6 +32,21 @@ class ContractLineForecastPeriod(models.Model):
         store=True,
         index=True,
     )
+
+    price_subtotal_taxed = fields.Float(
+        digits=dp.get_precision("Account"),
+        string="Amount taxed",
+        compute="_compute_price_subtotal_taxed",
+        store=True,
+    )
+
+    @api.multi
+    @api.depends("price_subtotal")
+    def _compute_price_subtotal_taxed(self):
+        for line in self:
+            taxes = line.product_id.product_tmpl_id.taxes_id
+            prices = taxes.compute_all(line.price_subtotal)
+            line.price_subtotal_taxed = prices["total_included"]
 
     @api.depends("contract_line_id")
     def _compute_market_and_product_range(self):
