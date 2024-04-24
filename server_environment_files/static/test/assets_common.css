@@ -1,0 +1,13 @@
+.o_main_navbar{
+    background-color: #33cc33 !important;
+    background-image: none !important;
+}
+.o_main_navbar > ul > li > a:hover{
+    background-color: #339933 !important;
+}
+.o_main_navbar > a:hover{
+    background-color: #339933 !important;
+}
+.navbar-light {
+  background-color: #3366cc !important;
+}
