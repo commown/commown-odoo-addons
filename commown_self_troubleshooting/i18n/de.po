@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-16 07:55+0000\n"
-"PO-Revision-Date: 2024-05-16 10:06+0200\n"
+"POT-Creation-Date: 2024-05-16 08:10+0000\n"
+"PO-Revision-Date: 2024-05-16 10:11+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -151,6 +151,23 @@ msgstr ""
 ".\n"
 "                      <br/><br/>\n"
 "                     Bei einem Wasserschaden an Ihrem Fairphone befolgen Sie bitte diese Anweisungen von unserem"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
+msgid ""
+". Veuillez vérifier attentivement\n"
+"        les informations d'expédition ci-dessous, et les\n"
+"        modifier en cas de besoin. Notez que le paquet sera\n"
+"        déposé directement dans votre boite aux lettres :\n"
+"        votre présence n'est pas requise lors du passage du\n"
+"        facteur (sauf pour les cas d'une livraison PC)."
+msgstr ""
+". Bitte achten Sie genau auf\n"
+"        die nachstehenden Versandinformationen und \n"
+"        ändern Sie sie gegebenenfalls. Beachten Sie, dass das Paket\n"
+"        direkt in Ihren Briefkasten eingeworfen wird:\n"
+"        Sie müssen nicht anwesend sein, wenn der Postbote kommt.\n"
+"        (außer bei PC-Lieferung)."
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
@@ -300,7 +317,9 @@ msgid "<i class=\"fas fa-exchange-alt\"/> Sens du câble jack"
 msgstr "<i class=\"fas fa-exchange-alt\"/> Richtung des Klinkenkabels"
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
 msgid ""
 "<i class=\"fas fa-hands-helping\"/>\n"
@@ -489,7 +508,7 @@ msgstr ""
 msgid ""
 "Afin de traiter au mieux votre demande, nous vous invitons à adopter le formalisme\n"
 "                      ci-dessous qui permet d'obtenir une aide optimale. Il consiste à répondre aux 4 questions\n"
-"                      suivantes pour bien nous faire comprendre le problème que vous rencontrez :"
+"                      suivantes pour bien nous faire comprendre le problème que vous rencontrez :"
 msgstr ""
 "Um Ihre Anfrage bestmöglich bearbeiten zu können, halten Sie sich bitte an die unten\n"
 "                      aufgeführten Formalien, die eine optimale Unterstützung ermöglichen. Beantworten Sie bitte die\n"
@@ -782,7 +801,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid ""
-"Commençons par vérifier que la vitre de protection est bien présente sur votre Smartphone :\n"
+"Commençons par vérifier que la vitre de protection est bien présente sur votre Smartphone :\n"
 "                  cela se remarque facilement dans les coins de l'écran grâce à un relief visible\n"
 "                  (cf. photo ci-dessous) et détectable au toucher."
 msgstr ""
@@ -836,6 +855,12 @@ msgstr "Commown - Selbsthilfe - Smartphone: Mein Display (oder dessen Schutz) is
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid "Commown - Demande d'assistance"
 msgstr "Commown - Supportanfrage"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
+msgid "Commown - Demandes Commerciales"
+msgstr "Commown - Kommerzielle Anfragen"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
@@ -1029,6 +1054,12 @@ msgstr ""
 "        Seite."
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
+msgid "Demande commerciale"
+msgstr "Kommerzielle Nachfrage"
+
+#. module: commown_self_troubleshooting
 #: model:commown_self_troubleshooting.category,name:commown_self_troubleshooting.generic-ts-cat
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model:ir.ui.view,website_meta_title:commown_self_troubleshooting.generic-issue
@@ -1048,6 +1079,19 @@ msgstr "Material anfragen"
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
 msgid "Demande spéciale"
 msgstr "Spezielle Anfrage"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
+#: model:ir.ui.view,website_meta_title:commown_self_troubleshooting.commercial
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
+#: model:website.page,website_meta_title:commown_self_troubleshooting.commercial-page
+msgid "Demandes Commerciales"
+msgstr "Kommerzielle Anfragen"
+
+#. module: commown_self_troubleshooting
+#: model:commown_self_troubleshooting.category,name:commown_self_troubleshooting.commercial-ts-cat
+msgid "Demandes commerciales"
+msgstr "Kommerzielle Anfragen"
 
 #. module: commown_self_troubleshooting
 #: model:commown_self_troubleshooting.category,name:commown_self_troubleshooting.other-ts-cat
@@ -1147,8 +1191,10 @@ msgstr ""
 "        Anfrage."
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contact-human
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
 msgid "En quoi pouvons-nous vous aider ?"
 msgstr "Wie können wir Ihnen behilflich sein?"
@@ -1182,10 +1228,12 @@ msgid "Entendez-vous du son dans les deux haut-parleurs ?"
 msgstr "Hören Sie auf beiden Lautsprechern?"
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.theft-and-loss
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.contract-termination-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
@@ -1236,7 +1284,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_long_term_followup
 msgid "Exchanges in progress"
-msgstr "Austausch in Gang"
+msgstr "Austausch in Gang\n"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
@@ -1377,6 +1425,7 @@ msgstr "Zusätzliche Informationen (falls erforderlich) :"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-theft-and-loss
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.more_customer_info
 msgid "Informations complémentaires :"
 msgstr "Zusätzliche Informationen:"
 
@@ -1406,6 +1455,12 @@ msgstr "Tragen Sie Ihre Verfügbarkeit und die zu besprechenden Themen ein:"
 #: model:ir.ui.menu,name:commown_self_troubleshooting.self_troubleshooting_items
 msgid "Items"
 msgstr "Artikel"
+
+#. module: commown_self_troubleshooting
+#: model:ir.ui.view,website_meta_description:commown_self_troubleshooting.commercial
+#: model:website.page,website_meta_description:commown_self_troubleshooting.commercial-page
+msgid "J'ai besoin de conseil/information pour une commande en cours, un appareil ou un service"
+msgstr "Ich brauche Beratung/Information zu einer laufenden Bestellung, einem Gerät oder einer Dienstleistung"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
@@ -1524,7 +1579,25 @@ msgid "Je vous informe que je vais effectuer le test en mode sans échec et vous
 msgstr "Ich teile Ihnen mit, dass ich den Test im abgesicherten Modus durchführen werde und halte Sie über das Ergebnis auf dem Laufenden!"
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.display-shipping-information
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-micro
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-gs
+msgid "L'adresse d'expédition est la suivante :<br/>"
+msgstr "Die Versandadresse lautet wie folgt:<br/>"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "L'adresse d'expédition est la suivante:"
+msgstr "Die Versandadresse lautet wie folgt:"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-battery
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-generic-issue
+msgid "L'adresse d'expédition est la suivante : <br/>"
+msgstr "Die Versandadresse lautet wie folgt:<br>"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp3-display
 msgid "L'adresse d'expédition est la suivante :<br/>"
 msgstr "Die Versandadresse lautet wie folgt:"
 
@@ -1654,7 +1727,7 @@ msgstr "Der Sound hört sich seltsam an"
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid ""
-"Les connecteurs USB-C sont sûrement mal branchés ! Afin de vérifier cela, veuillez débrancher puis\n"
+"Les connecteurs USB-C sont sûrement mal branchés ! Afin de vérifier cela, veuillez débrancher puis\n"
 "                        rebrancher les connecteurs et s'assurer que vous entendez bien un petit \"clic\" lors du branchement.\n"
 "                        Si cela ne résout pas votre problème, nous vous enverrons alors un autre casque."
 msgstr ""
@@ -1809,6 +1882,15 @@ msgstr ""
 "            von einem Telefon zum anderen)."
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-manipulation-option
+msgid ""
+"NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,\n"
+"          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)"
+msgstr ""
+"NB: Wenn man ein wenig vorsichtig ist, besteht keine Gefahr, dass die Teile beschädigt werden,\n"
+"          Das Fairphone ist wirklich dafür konzipiert, das ist die Magie eines modularen Geräts! :-)"
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid ""
@@ -1826,6 +1908,10 @@ msgid ""
 msgstr ""
 "NB: Wenn man ein wenig vorsichtig ist, besteht keine Gefahr, dass die Teile beschädigt werden,\n"
 "          Das Fairphone ist wirklich dafür konzipiert, das ist die Magie eines modularen Geräts! :-)"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
+msgid "NB: pour toute assistance technique ou administrative relative à un appareil déjà en contrat, nous vous invitons à utiliser les autres menus d'assistance dédiés."
+msgstr "Hinweis: Wenn Sie technische oder administrative Unterstützung für ein Gerät benötigen, das bereits unter Vertrag ist, sollten Sie die anderen Support-Menüs verwenden."
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
@@ -2142,6 +2228,12 @@ msgstr ""
 "                      dann müssen Sie die SIM-Karte wechseln."
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
+msgid "Si vous avez des questions sur votre commande non-livrée en cours ou besoin de conseils concernant un appareil ou un service, nous vous invitons à préciser votre demande ci-dessous."
+msgstr "Wenn Sie Fragen zu Ihrer aktuellen, noch nicht gelieferten Bestellung haben oder eine Beratung zu einem Gerät oder einer Dienstleistung benötigen, bitten wir Sie, Ihre Anfrage unten zu präzisieren."
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
 msgid ""
 "Si vous avez un doute, soulevez délicatement la vitre de protection afin de voir\n"
@@ -2185,6 +2277,11 @@ msgid "Target link URL - only required when not a self troubleshooting web page"
 msgstr "Ziellink-URL - nur erforderlich, wenn es sich nicht um eine Webseite zur Fehlerbehebung handelt"
 
 #. module: commown_self_troubleshooting
+#: model:project.project,label_tasks:commown_self_troubleshooting.commercial_project
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#. module: commown_self_troubleshooting
 #: model:project.task.type,description:commown_self_troubleshooting.stage_long_term_followup
 msgid "The cards automatically return to the \" Assigned - in progress \" column (after about 10-11 days)"
 msgstr "Die Karten werden automatisch wieder in die Spalte \"Zugewiesen - in Bearbeitung\" verschoben (nach ca. 10-11 Tagen)."
@@ -2192,7 +2289,7 @@ msgstr "Die Karten werden automatisch wieder in die Spalte \"Zugewiesen - in Bea
 #. module: commown_self_troubleshooting
 #: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_pending
 msgid "The team takes care of it!"
-msgstr "Das Team kümmert sich darum!"
+msgstr "Das Team kümmert sich darum!\n"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
@@ -2295,7 +2392,9 @@ msgstr ""
 "                            <i>Abgesicherter Modus</i> oder <i>Safe Mode</i> in einem Textfeld unten."
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
 msgid ""
 "Votre demande\n"
@@ -2397,7 +2496,7 @@ msgstr "Diese Information finden Sie in Ihrer Bestellung"
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid ""
 "Vous souhaitez bénéficier de votre <strong>heure</strong> de formation Linux régit par votre contrat.<br/><br/>\n"
-"                      Nous avons besoin de deux éléments :"
+"                      Nous avons besoin de deux éléments :"
 msgstr ""
 "Sie möchten Ihre vertragliche geregelte  <strong>einstündige</strong>  Linux-Schulung in Anspruch nehmen.<br/><br/>\n"
 "                      Wir benötigen zwei Dinge:"
@@ -2572,7 +2671,7 @@ msgstr ""
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-camera-page
 msgid ""
 "et répondez à la question\n"
-"                        ci-dessous :"
+"                        ci-dessous :"
 msgstr ""
 "und beantworten Sie die Frage\n"
 "                        unten:"
@@ -2589,6 +2688,12 @@ msgstr "hier <i class=\"fas fa-external-link-alt\"/>"
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
 msgid "ici pour les ordinateurs  <i class=\"fas fa-external-link-alt\"/>"
 msgstr "hier für Computer <i class=\"fas fa-external-link-alt\"/>"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.commercial-page
+msgid "issue-description-commercial"
+msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
@@ -2876,6 +2981,10 @@ msgstr "Schritt 1<br/><small>Art des Problems</small>"
 msgid ""
 "Étape 2\n"
 "                      <br/>\n"
+"                      <small>Incident, assistance</small>"
+msgstr ""
+"Schritt 2\n"
+"                      <br/>\n"
 "                      <small>Expédition</small>"
 msgstr ""
 
@@ -2944,8 +3053,20 @@ msgid ""
 "                      <small>Incident, assistance</small>"
 msgstr ""
 "Schritt 2\n"
+"                      <small>Casse</small>"
+msgstr ""
+"Schritt 3\n"
 "                      <br/>\n"
 "                      <small>Störung, Hilfe</small>"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.theft-and-loss
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.theft-and-loss-page
+msgid ""
+"Étape 3\n"
+"                      <br/>\n"
+"                      <small>Perte</small>"
+msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.theft-and-loss
@@ -3004,6 +3125,9 @@ msgid ""
 "                      <small>Casse</small>"
 msgstr ""
 "Schritt 3\n"
+"                      <small>Formation</small>"
+msgstr ""
+"Schritt 4\n"
 "                      <br/>\n"
 "                      <small>Bruch</small>"
 
@@ -3055,6 +3179,9 @@ msgid ""
 "                      <small>Formation</small>"
 msgstr ""
 "Schritt 4\n"
+"                      <small>Demande de matériel</small>"
+msgstr ""
+"Schritt 5\n"
 "                      <br/>\n"
 "                      <small>Schulung</small>"
 
@@ -3094,6 +3221,9 @@ msgid ""
 "                      <small>Demande de matériel</small>"
 msgstr ""
 "Schritt 5\n"
+"                      <small>Confirmation</small>"
+msgstr ""
+"Schritt 6\n"
 "                      <br/>\n"
 "                      <small>Material anfragen</small>"
 
