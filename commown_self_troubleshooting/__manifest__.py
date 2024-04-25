@@ -23,6 +23,8 @@
         "data/Assistance/Generic_Issue/form.xml",
         "data/Assistance/Generic_Issue/issue_template.xml",
         "data/CC/screen/form.xml",
+        "data/Commercial/form.xml",
+        "data/Commercial/issue_template.xml",
         "data/ContractManagement/termination/form.xml",
         "data/ContractManagement/termination/issue_template.xml",
         "data/ContractManagement/theftandloss/form.xml",

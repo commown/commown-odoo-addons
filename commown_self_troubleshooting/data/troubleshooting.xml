@@ -52,6 +52,11 @@
       <field name="sequence">950</field>
     </record>
 
+    <record id="commercial-ts-cat" model="commown_self_troubleshooting.category">
+      <field name="name">Demandes commerciales</field>
+      <field name="sequence">960</field>
+    </record>
+
     <record id="other-ts-cat" model="commown_self_troubleshooting.category">
       <field name="name">Demandes spéciales</field>
       <field name="sequence">1000</field>
@@ -142,6 +147,12 @@
       <field name="website_page_id" eval="ref('theft-and-loss-page')" />
       <field name="requires_contract" eval="True"/>
       <field name="contract_domain"></field>
+    </record>
+
+    <record id="commercial-ts-item" model="commown_self_troubleshooting.item">
+      <field name="category_id" eval="ref('commercial-ts-cat')"/>
+      <field name="website_page_id" eval="ref('commercial-page')" />
+      <field name="requires_contract" eval="False"/>
     </record>
 
     <record id="other-ts-item" model="commown_self_troubleshooting.item">

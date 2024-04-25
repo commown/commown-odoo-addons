@@ -26,5 +26,9 @@
       <field name="name">Long term followup</field>
     </record>
 
+    <record id="commercial_project" model="project.project">
+      <field name="name">Commercial</field>
+    </record>
+
   </data>
 </odoo>
