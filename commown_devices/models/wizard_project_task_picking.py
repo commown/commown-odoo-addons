@@ -184,7 +184,6 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 
     def _domain_lot_id(self):
         quant_domain = [
-            ("quantity", ">", 0),
             (
                 "location_id",
                 "child_of",
@@ -195,7 +194,11 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
             quant_domain.append(("product_tmpl_id", "=", self.product_tmpl_id.id))
         if self.variant_id:
             quant_domain.append(("product_id", "=", self.variant_id.id))
-        quants = self.env["stock.quant"].search(quant_domain)
+        quants = (
+            self.env["stock.quant"]
+            .search(quant_domain)
+            .filtered(lambda q: q.quantity > q.reserved_quantity)
+        )
         return [("id", "in", quants.mapped("lot_id").ids)]
 
     @api.onchange("product_tmpl_id")
