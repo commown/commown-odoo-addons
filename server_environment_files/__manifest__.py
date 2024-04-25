@@ -5,7 +5,7 @@
 {
     "name": "Server configuration environment files for Commown",
     "category": "Tools",
-    "version": "12.0.1.0.1",
+    "version": "12.0.1.0.2",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
