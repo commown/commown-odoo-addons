@@ -1,11 +1,15 @@
 from datetime import date
 
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class CrmLead(models.Model):
     _name = "crm.lead"
     _inherit = "crm.lead"
+
+    contract_id = fields.Many2one(
+        domain="[('commercial_partner_id', '=', commercial_partner_id)]",
+    )
 
     def _default_perform_actions_on_delivery(self):
         return super(CrmLead, self)._default_perform_actions_on_delivery()
