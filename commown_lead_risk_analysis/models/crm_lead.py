@@ -39,8 +39,9 @@ GLOBAL_FEELING = [
 class CommownCrmLead(models.Model):
     _inherit = "crm.lead"
 
-    so_line_id = fields.Many2one("sale.order.line", _("Sale order line"))
-    contract_id = fields.Many2one("contract.contract", _("Contract"))
+    so_line_id = fields.Many2one("sale.order.line", "Sale order line")
+
+    contract_id = fields.Many2one("contract.contract", "Contract")
 
     email_rating = fields.Selection(
         EMAIL_RATINGS, string="Email Rating", default=EMAIL_RATINGS[0][0]
