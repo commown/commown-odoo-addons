@@ -131,3 +131,10 @@ class TestPageRealContractTC(RunTourMixin, DeviceAsAServiceTC, odoo.tests.HttpCa
         contract.send_devices(lot, {}, date="2023-09-01", do_transfer=True)
         contract.date_start = "2023-09-01"
         self._run_tour("commown_self_troubleshooting_tour_theft_and_loss")
+
+
+class TestPageGSDay(TestPageTC):
+    contract_name = "GS/B2C"
+
+    def test_gs_day_audio(self):
+        self._run_tour("commown_self_troubleshooting_tour_gs_day_audio")

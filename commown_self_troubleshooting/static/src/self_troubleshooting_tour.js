@@ -477,4 +477,39 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
     ]
   );
 
+  tour.register(
+    "commown_self_troubleshooting_tour_gs_day_audio",
+    { url: "/my" },
+    [
+      {
+        content: "Go to Gs DAY I Have a audio problem page",
+        trigger: 'a[href="/page/self-troubleshoot-gs-day"]',
+      },
+      commonSteps.fillInContract,
+      commonSteps.gotoNextStep,
+      {
+        content: "Select i don't hear option",
+        trigger: 'select[id=type_problem]',
+        run: "text Je n'entends rien du tout ou j'entends d'une seule oreille",
+      },
+      commonSteps.gotoNextStep,
+      {
+        content: "Select i don't hear option",
+        trigger: 'input[id=cable_sound-no]',
+        run: "text Non",
+      },
+      commonSteps.gotoNextStep,
+      {
+        content: "Select i don't hear in two speakers option",
+        trigger: 'input[id=connection_solved-no]',
+        run: "text Non",
+      },
+      commonSteps.gotoNextStep,
+      commonSteps.checkInputNamesMatchesUser,
+      commonSteps.gotoNextStep,
+      ...commonSteps.funcAddMoreInfo("I can't hear!"),
+      ...commonSteps.funcCreateAndCheckTicket("le casque doit être changé"),
+    ]
+  );
+
 });
