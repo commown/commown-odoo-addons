@@ -11,7 +11,7 @@
           <p>
             Suite à l'auto-dépannage, il ressort que
             <t t-if="connection_solved=='no'">le casque doit être changé.</t>
-            <t t-if="branchement_solved=='no'"> le casque doit être changé.</t>
+            <t t-if="branchement_solved=='no'">le casque doit être changé.</t>
             <t t-if="cable_sound=='yes'">le câble doit être changé.</t>
 
             L'adresse d'expédition est la suivante :<br/>
