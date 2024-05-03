@@ -239,24 +239,26 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         lot = possibilities["lot_ids"][0]
         wizard.lot_ids = lot
 
-        move_lines = wizard.create_picking()
+        moves = wizard.create_picking()
 
         # Check the result
-        picking = move_lines.mapped("picking_id")
+        picking = moves.mapped("picking_id")
         loc_new = self.env.ref("commown_devices.stock_location_available_for_rent")
 
-        self.assertEqual(move_lines.ids, lead.contract_id.move_line_ids.ids)
+        self.assertEqual(moves, lead.contract_id.move_ids)
         self.assertEqual(picking.state, "assigned")
         self.assertEqual(picking.move_type, "direct")
         self.assertEqual(picking.location_id, loc_new)
 
-        move_lines = picking.move_line_ids
-        self.assertEqual(len(move_lines), 3)
+        moves = picking.move_lines
+        self.assertEqual(len(moves), 3)
         loc_partner = self.so.partner_id.get_or_create_customer_location()
         self.assertEqual(
-            sorted(move_lines.mapped("location_id").ids),
+            sorted(moves.mapped("location_id").ids),
             sorted([self.location_fp3_new.id, self.loc_new_untracked.id]),
         )
-        self.assertEqual(move_lines.mapped("location_dest_id"), loc_partner)
+        self.assertEqual(moves.mapped("location_dest_id"), loc_partner)
 
-        self.assertEqual(move_lines.mapped("lot_id.name"), [lot.name])
+        self.assertEqual(moves.mapped("move_line_ids.lot_id.name"), [lot.name])
+
+        # COMMENT TO DELETE
