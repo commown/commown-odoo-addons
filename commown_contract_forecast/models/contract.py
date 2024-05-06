@@ -13,5 +13,5 @@ class Contract(models.Model):
         result = super().action_show_contract_forecast()
         result["view_mode"] = "graph,pivot,tree"
         graph_view = self.env.ref("commown_contract_forecast.forecast_view_graph")
-        result["views"] = [(graph_view.id, "graph")]
+        result["views"] = [(graph_view.id, "graph"), (None, "pivot"), (None, "tree")]
         return result
