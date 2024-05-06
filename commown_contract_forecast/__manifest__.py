@@ -4,7 +4,7 @@
 {
     "name": "Commown contract forecast integration",
     "summary": "Integrate the contract_forecast module into Commown odoo-based management software",
-    "version": "12.0.1.1.0",
+    "version": "12.0.1.1.1",
     "development_status": "Alpha",
     "category": "Accounting/Accounting",
     "website": "https://commown.coop",
