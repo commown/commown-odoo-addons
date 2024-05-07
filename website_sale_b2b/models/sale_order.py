@@ -10,6 +10,29 @@ _logger = logging.getLogger(__file__)
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    def is_big_b2b(self):
+        """Return True if present order is considered big B2B
+
+        ... in which case we do not accept it right away but require a commercial
+        (human) contact. In such a case, an opportunity is created instead of a
+        validated sale.
+        """
+        b2b_website = self.env.ref("website_sale_b2b.b2b_website")
+        min_qty = float(
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("website_sale_b2b.big_b2b_min_qty")
+        )
+        return (
+            self.partner_id.mapped("user_ids.website_id") == b2b_website
+            and sum(
+                self.order_line.filtered(
+                    "product_id.property_contract_template_id"
+                ).mapped("product_uom_qty")
+            )
+            > min_qty
+        )
+
     def create_b2b_opportunity(self):
         """Called when a big b2b customer submits an order request online
 

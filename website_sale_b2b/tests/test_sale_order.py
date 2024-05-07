@@ -39,3 +39,31 @@ class SaleOrderLineTC(RentalSaleOrderTC):
             action["context"]["default_template_id"],
             self.env.ref("website_sale_b2b.email_template_edi_sale").id,
         )
+
+    def _add_partner_to_b2b_portal(self, partner):
+        b2b_website = self.env.ref("website_sale_b2b.b2b_website")
+        wiz = self.env["portal.wizard"].with_context(active_ids=[partner.id]).create({})
+        wiz.user_ids.update({"in_portal": True, "website_id": b2b_website.id})
+        wiz.action_apply()
+
+    def test_is_big_b2b(self):
+        def set_big_b2b_qty(value):
+            self.env["ir.config_parameter"].set_param(
+                "website_sale_b2b.big_b2b_min_qty",
+                value,
+            )
+
+        self._add_partner_to_b2b_portal(self.so.partner_id)
+        set_big_b2b_qty(0)  # Make sure we are above the threshold
+
+        # Test when all conditions are fulfilled:
+        self.assertTrue(self.so.is_big_b2b())
+
+        # Remove the "big" B2B condition and check the result is False:
+        set_big_b2b_qty(1000)  # Make sure we are below the threshold
+        self.assertFalse(self.so.is_big_b2b())
+
+        # Re-add the "big" B2B condition but remove the B2B website one:
+        set_big_b2b_qty(0)
+        self.so.partner_id.user_ids.update({"website_id": False})
+        self.assertFalse(self.so.is_big_b2b())
