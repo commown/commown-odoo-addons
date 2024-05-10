@@ -1,16 +1,16 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* website_sale_b2b
+# 	* product_rental
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-27 17:23+0000\n"
-"PO-Revision-Date: 2024-05-10 12:09+0200\n"
-"Last-Translator: <>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2024-05-10 12:31+0200\n"
+"Last-Translator: <florent@commown.coop>\n"
+"Language-Team: Commown\n"
+"Language: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -20,7 +20,7 @@ msgstr ""
 #: code:addons/website_sale_b2b/models/sale_order.py:90
 #, python-format
 msgid " excl. taxes"
-msgstr " HT"
+msgstr "ohne MwSt."
 
 #. module: website_sale_b2b
 #: model:mail.template,report_name:website_sale_b2b.email_template_edi_sale
@@ -35,10 +35,10 @@ msgid ""
 "has_investment()) and \"Les prochaines étapes pour finaliser !\" or "
 "\"Récapitulatif de vos opérations\"} | NE PAS REPONDRE"
 msgstr ""
-"${object.company_id.name} - Réf. ${object.name |safe } : ${ (object."
+"${object.company_id.name} - Betreff ${object.name |safe } : ${ (object."
 "filtered(\"order_line.product_id.product_tmpl_id.is_rental\") or object."
-"has_investment()) and \"Les prochaines étapes pour finaliser !\" or "
-"\"Récapitulatif de vos opérations\"} | NE PAS REPONDRE"
+"has_investment()) and \"Die nächsten Schritte zum Abschluss Ihrer Bestellung"
+"\" or \"Zahlungsübersicht\"} | NICHT BEANTWORTEN"
 
 #. module: website_sale_b2b
 #: code:addons/website_sale_b2b/models/res_partner.py:40
@@ -52,19 +52,18 @@ msgid ""
 "(viewed by sales only) -\n"
 "          <span>Variant id: <span id=\"variant_id_placeholder\"/></span>"
 msgstr ""
-"(vu par les vendeurs uniquement) -\n"
-"          <span>ID de la variante : <span id=\"variant_id_placeholder\"/></"
-"span>"
+"(viewed by sales only) -\n"
+"          <span>Variant id: <span id=\"variant_id_placeholder\"/></span>"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
 msgid ") nous a bien été soumise, merci !"
-msgstr ") nous a bien été soumise, merci !"
+msgstr ") hat uns erreicht, vielen Dank!"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.login
 msgid "<br/>Connect to"
-msgstr "<br/>Aller sur"
+msgstr "<br/>verbinden zu"
 
 #. module: website_sale_b2b
 #: model:mail.template,body_html:website_sale_b2b.email_template_edi_sale
@@ -360,296 +359,6 @@ msgid ""
 "18px;\"><br></font></b><br></div>\n"
 "</div>\n"
 msgstr ""
-"<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;\">\n"
-"% set has_rental = not not object.filtered('order_line.product_id."
-"product_tmpl_id.is_rental')\n"
-"% if object.amount_total != 0.01:\n"
-"\n"
-"% if not has_rental:\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Bonjour ${object."
-"partner_id.firstname},</p>\n"
-"<br>\n"
-"% else:\n"
-"\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">${object.partner_id."
-"firstname}, bienvenue parmi les Commowners professionnels ! (ou si vous "
-"l'êtes déjà, merci pour votre fidélité !)<br></p>\n"
-"<br>\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Ce mail explique vos "
-"prochaines actions nécessaires pour valider votre demande.</p>\n"
-"<br>\n"
-"\n"
-"<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;\">\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><b style="
-"\"font-weight:bold;\"><font style=\"font-size: 18px;\">Votre demande de "
-"location et modalités de livraison </font></b></p>\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Merci "
-"d’avoir franchi ce premier pas&nbsp;pour votre demande de location "
-"d'appareils électroniques responsables, encore quelques étapes et votre "
-"souscription sera validée. :-)</p>\n"
-"\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><i>NB : Vous "
-"venez de faire un premier paiement en ligne (cf. récapitulatif détaillé ci-"
-"dessous), la première échéance de location ne sera prélevée qu'à réception "
-"du matériel.</i></p>\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><b style="
-"\"font-weight:bold;\">La souscription de votre location sera définitivement "
-"validée à partir du moment où les étapes suivantes auront été finalisées "
-"(vous pouvez annuler votre commande sans frais dans l'intervalle) :</b></p>\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><b style="
-"\"font-weight:bold;\">1/ Documents en ligne :</b></p>\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Nous vous "
-"demandons de bien vouloir fournir&nbsp;les documents suivants en les "
-"téléchargeant dans votre Espace Personnel, au moyen du bouton ci-"
-"dessous&nbsp;:</p>\n"
-"  <ul style=\"margin:0px 0 9px 0;\">\n"
-"  \t<li><font style=\"font-size: 14px;\">Une copie recto-verso d'une pièce "
-"d'identité d'un représentant légal de votre structure</font></li>\n"
-"  \t<li><font style=\"font-size: 14px;\">Un K-bis (ou équivalent si vous "
-"n'en disposez pas : extrait SIREN, dernier PV d'AG, extrait BCE, etc.) de "
-"votre structure juridique daté de moins de 3 mois<br></font></li><li><font "
-"style=\"font-size: 14px;\"><b style=\"font-weight:bolder;\">Si votre "
-"structure est déjà cliente</b>&nbsp;: mise à jour des documents * (le cas "
-"échéant en cas de déménagement, changement de responsable légal, etc.)<br></"
-"font></li>\n"
-"  </ul>\n"
-"\n"
-"  <br>\n"
-"  <br>\n"
-"  <br>\n"
-"\n"
-"  <center>\n"
-"    <a href=\"https://greener-it-pro.commown.coop/my/account\" style=\"color:"
-"rgb(124, 123, 173);text-decoration-thickness:auto;background-color: #1abc9c; "
-"padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-"
-"size: 16px;\" data-original-title=\"\" title=\"\" aria-describedby="
-"\"tooltip555189\" target=\"_blank\">Déposez vos documents</a>\n"
-"  </center>\n"
-"\n"
-"  <br>\n"
-"  <br>\n"
-"  <br>\n"
-"\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><b style="
-"\"font-weight:bold;\">2/ Analyse des informations, contrôle de l'état des "
-"stocks et délai de livraison :</b></p>\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Une fois les "
-"documents en ligne, les informations transmises feront l'objet d'une "
-"analyse. Notre équipe vérifiera également l'état des stocks, et les éléments "
-"nécessaires seront attribués à votre commande.<br>Pour les commowners "
-"professionnels qui ont déjà souscrit un contrat de location dans le "
-"passé&nbsp;les appareils seront alors expédiés sous 2 à 5 jours ouvrés en "
-"fonction du volume de la commande. Nous faisons le maximum (pour rappel nous "
-"ne sommes pas Amazon ^^), il n'est donc pas nécessaire de nous relancer, "
-"vous serez averti.e par une notification mail de nos partenaires de "
-"livraison (Colissimo, etc.).<br>Dans les autres cas l'expédition se fera "
-"après l'étape 3.<br></p>\n"
-"\n"
-"  <br><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><b style="
-"\"font-weight:bold;\">3/ Échange téléphonique <i>(! Non-applicable pour les "
-"commowners professionnels ayant déjà souscrit des contrats dans le passé, ou "
-"pour ceux qui ont déjà été contactés en amont de la commande !)</i><br></b></"
-"p><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Dès que "
-"l'état des stocks le permettra, un membre de l’équipe prendra contact avec "
-"vous par téléphone. Nous vous détaillerons le protocole de livraison&nbsp;du "
-"matériel électronique, aborderons sa mise en service et verrons ensemble "
-"comment ajuster au mieux notre service pour vous satisfaire. Cela permettra "
-"de valider définitivement avec vous votre souscription et déclenchera "
-"l’expédition du matériel.&nbsp;<br>Si vous souhaitez être livré à des <b "
-"style=\"font-weight:bolder;\">adresses multiples</b> c’est possible sans "
-"surcoût, nous vous invitons donc également à nous le signaler pendant cet "
-"échange. Le cas échéant, et a<span style=\"text-align: inherit;\">fin de "
-"pouvoir fiabiliser les expéditions des appareils, nous vous remercions de "
-"préparer la répartition précise du matériel à expédier en fonction des "
-"adresses de livraison, ainsi que les coordonnées complètes de la personne en "
-"charge de la réception sur chaque lieu (nom, prénom, email, et n° de mobile)."
-"</span></p><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"> </p><p "
-"style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Si votre structure est "
-"parrainée par une autre, c'est aussi l'occasion de le signaler pour que "
-"cette marraine puisse bénéficier d'une remise sur ses mensualités. (cf. <a "
-"href=\"https://wiki.commown.coop/Les-d%C3%A9fis-de-Commown-et-des-"
-"commowners#D_fi_2_:_Boule_de_Neige_\" target=\"_blank\" style=\"background-"
-"color:transparent;color:rgb(124, 123, 173);text-decoration-thickness:auto;\" "
-"data-original-title=\"\" title=\"\" aria-describedby="
-"\"tooltip281312\">Défi#2</a>).<br></p><br></div>\n"
-"\n"
-"% endif\n"
-"\n"
-"% if object.has_crowd_equity():\n"
-"<br>\n"
-"\n"
-"<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;\">\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><b style="
-"\"font-weight:bold;\"><font style=\"font-size: 14px;\">Votre demande de "
-"souscription de part sociale</font></b></p>\n"
-"\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Vous avez "
-"souhaité devenir sociétaire de la SCIC, dans le collège de sociétaires dit "
-"\"Bénéficiaires\", qui utilisent les services de la coopérative. Cela vous "
-"permettra de voter lors des assemblées générales, et d'avoir accès à des "
-"informations détaillées sur la gestion de la coopérative. Ce mail fait "
-"office de justificatif administratif et fiscal, mais un reçu au format PDF "
-"est aussi disponible sur votre Espace Client en ligne. </p>&nbsp;</div>\n"
-"\n"
-"\n"
-"\n"
-"% endif\n"
-"\n"
-"\n"
-"<br>\n"
-"\n"
-"\n"
-"\n"
-"<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;\"><b style=\"font-weight:bold;"
-"\"><font style=\"font-size: 18px;\">Récapitulatif de votre paiement :</"
-"font></b>\n"
-"\n"
-"% if has_rental:\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Vous avez réglé en "
-"ligne <b style=\"font-weight:bold;\">un premier paiement</b>, ce règlement "
-"vaut acceptation sans réserves des Conditions Générales de Services et des "
-"Conditions Particulières liées aux offres souscrites et disponibles en ligne "
-"et jointes à ce courrier électronique (pensez à bien les conserver)."
-"<br><i>NB : Les Conditions Générales de Services et les Conditions "
-"Particulières applicables sont celles de <u>la langue</u> du parcours de "
-"souscription (et non celles du pays où se trouve le siège social de votre "
-"structure).</i> &nbsp; </p>\n"
-"% endif\n"
-"\n"
-"% if object.has_crowd_equity():\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Vous avez également "
-"pris une part sociale à 20 €.</p>\n"
-"\n"
-"% endif\n"
-"\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Vous avez choisi sur "
-"notre site&nbsp;:</p>\n"
-"  <ul style=\"margin:0px 0 9px 0;\">\n"
-"% for line in object.order_line:\n"
-"% set product = line.product_id\n"
-"% set freq = dict(product.fields_get('rental_frequency')['rental_frequency']"
-"['selection'])[product.rental_frequency]\n"
-"    <li><b style=\"font-weight:bold;\">${line.product_id.display_name} :</"
-"b><br>\n"
-"Quantité&nbsp;: ${line.product_uom_qty}<br>\n"
-"%if line.product_id.is_rental and line.product_id.is_deposit:\n"
-"Dépôt de garantie&nbsp;:\n"
-"%else:\n"
-"Paiement en ligne&nbsp;:\n"
-"%endif\n"
-"${line.price_total} ${object.pricelist_id.currency_id.symbol}<br>\n"
-"%if line.product_id.is_rental:\n"
-"Loyer&nbsp;: ${'%.02f' % (line.price_unit * line.product_id.rental_price / "
-"(line.product_id.list_price or 1))}&nbsp;${object.pricelist_id.currency_id."
-"symbol} ${freq}<br>\n"
-"%if line.contract_template_id.min_contract_duration:\n"
-"Durée d'engagement (à partir de la réception de l'appareil)&nbsp;: ${line."
-"contract_template_id.min_contract_duration} ${dict(line.contract_template_id."
-"fields_get()['recurring_rule_type']['selection'])[line.contract_template_id."
-"recurring_rule_type].lower()}\n"
-"%endif\n"
-"%endif\n"
-"</li>\n"
-"% endfor\n"
-"  </ul>\n"
-"\n"
-"% if has_rental:\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Montant "
-"total du paiement réglé en ligne : ${object.amount_total} ${object."
-"pricelist_id.currency_id.symbol}</p>\n"
-"% endif\n"
-"\n"
-"</div>\n"
-"\n"
-"<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;\">\n"
-"\n"
-"\n"
-"<br>\n"
-"\n"
-"\n"
-"  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"></p><p style="
-"\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, "
-"Arial, sans-serif;margin:0px 0px 9px 0px;\">Merci et à bientôt,</p>\n"
-"\n"
-"</div>\n"
-"\n"
-"% else\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">${object.partner_id."
-"firstname},</p>\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Vous venez de signer un "
-"mandat SEPA en faveur de Commown et nous vous en remercions.</p>\n"
-"\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Le système de "
-"prélèvements automatiques mis en place simplifie beaucoup la gestion de "
-"Commown.</p>\n"
-"\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">Merci et à bientôt,</"
-"p>\n"
-"% endif\n"
-"\n"
-"<p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">--</p>\n"
-"\n"
-"    <div class=\"moz-signature\" style=\"font-size:13px;font-family:&quot;"
-"Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"      <div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown</div> \n"
-"<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;\"><br><br><b style=\"font-weight:bold;"
-"\"></b><p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
-"Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\"><b style="
-"\"font-weight:bold;\"><font style=\"color: rgb(255, 156, 0);\">!! "
-"ACTUALITÉ : Commown est heureux de faire partie des LICOORNES, pour "
-"découvrir ce groupement coopératif engagé et émergent n'hésitez pas à "
-"cliquer sur <a href=\"https://www.licoornes.coop/\" target=\"_blank\" style="
-"\"background-color:transparent;color:rgb(124, 123, 173);text-decoration-"
-"thickness:auto;\">ce lien</a> !</font></b></p>\n"
-"      \n"
-"\t<br><i><font style=\"font-size: 14px;\">* Pour mettre à jour un document "
-"sur votre Espace Personnel en ligne, il faut d'abord supprimer l'ancien à "
-"l'aide de l’icône orange, avant de télécharger le nouveau.</font></i><br></"
-"div><br><font style=\"font-size: 18px;\"><br>|-|-| CECI EST UN MAIL "
-"AUTOMATIQUE, MERCI DE NE PAS Y RÉPONDRE, VOTRE DEMANDE NE SERAIT PAS TRAITÉE "
-"|-|-|<br></font><font style=\"font-size: 14px;\">(pour échanger nous vous "
-"invitons à le faire pendant l'appel téléphonique initial, puis ensuite&nbsp;"
-"à toujours privilégier le canal de Support qui sera créé et dédié à votre "
-"structure, accessible depuis votre <a href=\"https://greener-it-pro.commown."
-"coop/my/home\" target=\"_blank\" style=\"text-decoration:none;background-"
-"color:transparent;color:rgb(124, 123, 173);\">Espace Client</a> en "
-"ligne)<br></font><b style=\"font-weight:bolder;\"><font style=\"font-size: "
-"18px;\"><br></font></b><br></div>\n"
-"</div>\n"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
@@ -658,7 +367,7 @@ msgid ""
 "              <span>Back to shopping cart</span>"
 msgstr ""
 "<i class=\"fa fa-chevron-left\"/>\n"
-"              <span>Revenir au panier</span>"
+"              <span>Zurück zum Warenkorb</span>"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
@@ -667,17 +376,18 @@ msgid ""
 "            <span>Back to shopping cart</span>"
 msgstr ""
 "<i class=\"fa fa-chevron-left\"/>\n"
-"            <span>Revenir au panier</span>"
+"            <span>Zurück zum Warenkorb</span>"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
 msgid "<span>Submit my request</span> <i class=\"fa fa-chevron-right\"/>"
-msgstr "<span>Soumettre ma demande</span> <i class=\"fa fa-chevron-right\"/>"
+msgstr ""
+"<span>Meine Anfrage abschicken</span> <i class=\"fa fa-chevron-right\"/>"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_price_b2b
 msgid "<span>excl. taxes</span>"
-msgstr "<span>HT</span>"
+msgstr "<span>ohne MwSt.</span>"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_product_product__website_description_sale
@@ -686,43 +396,42 @@ msgid ""
 "A description of the Product that you want to communicate to your online "
 "customers."
 msgstr ""
-"Une description du produit que vous voulez afficher sur le magasin en ligne."
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist__account_for_rented_quantity
 msgid "Account For Rented Quantity"
-msgstr "Prendre en compte la quantité déjà louée"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist__account_for_rented_quantity_category_ids
 msgid "Account For Rented Quantity Category"
-msgstr "Catégories pour sommer les quantités déjà louées"
+msgstr ""
 
 #. module: website_sale_b2b
 #: selection:product.pricelist,account_for_rented_quantity:0
 msgid "At category level"
-msgstr "Au niveau des catégories d'articles"
+msgstr ""
 
 #. module: website_sale_b2b
 #: selection:product.pricelist,account_for_rented_quantity:0
 msgid "At product level"
-msgstr "Au niveau du modèle d'article"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:crm.team,name:website_sale_b2b.big_b2b_team
 msgid "CRM B2B FR/BE - Suivi COMMERCIAL"
-msgstr "CRM B2B FR/BE - Suivi COMMERCIAL"
+msgstr "CRM B2B FR/BE - Handelsüberwachung"
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_res_partner
 msgid "Contact"
-msgstr "Contact"
+msgstr "Kontakt"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_product__description_sale_is_template
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_template__description_sale_is_template
 msgid "Description for customers is a template"
-msgstr "La description est un template"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
@@ -730,28 +439,29 @@ msgid ""
 "Due to the large number of units required, a member of our sales team will\n"
 "        contact you shortly to finalize your order."
 msgstr ""
-"En raison du nombre important d’appareils souhaités, un membre de l’équipe "
-"commerciale vous recontactera rapidement pour finaliser la commande."
+"Aufgrund der großen Anzahl an gewünschten Geräten wird sich ein Mitglied des "
+"Vertriebsteams umgehend mit Ihnen in Verbindung setzen, um die Bestellung "
+"abzuschließen."
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_portal_wizard_user__website_id
 msgid "Empty means all websites"
-msgstr "La valeur vide signifie tous les sites"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_pricelist_item__percentage_exclude_extra
 msgid "Exclude variant extra prices from reductions?"
-msgstr "Ne pas appliquer sur le supplément de prix des variantes"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_portal_wizard
 msgid "Grant Portal Access"
-msgstr "Gestion de l'accès au portail"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_portal_wizard_user__had_user
 msgid "Had User"
-msgstr "Avait déjà un utilisateur"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_product_product__description_sale_is_template
@@ -761,20 +471,16 @@ msgid ""
 "as mako templates, with 'record' being the order line, and recomputed as "
 "soon as the unit price of the order line changes."
 msgstr ""
-"Lorsque coché, la description sera interprétée comme un template mako "
-"permettant de générer la description des lignes de devis contenant ce "
-"produit. La variable 'record' peut être utilisée dans le template, qui "
-"représente la ligne de devis."
 
 #. module: website_sale_b2b
 #: model:website,login_checkbox_message:website_sale_b2b.b2b_website
 msgid "Je représente une entreprise, association, collectivité..."
-msgstr "Je représente une entreprise, association, collectivité..."
+msgstr "Ich vertrete ein Unternehmen, einen Verein, eine Körperschaft..."
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_website__legal_notice_url
 msgid "Legal notice URL"
-msgstr "URL des mentions légales"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_product_pricelist__account_for_rented_quantity_category_ids
@@ -782,28 +488,26 @@ msgid ""
 "List of the product web categories in which rental products will be counted "
 "for volume discounts."
 msgstr ""
-"Catégories web pour agréger les quantités louées pour les réductions en "
-"volume"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_website__login_checkbox_message
 msgid "Login checkbox message"
-msgstr "Message de la case à cocher sur la page de connexion"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:crm.stage,name:website_sale_b2b.big_b2b_stage_new
 msgid "New quotation submitted"
-msgstr "Nouveau devis soumis"
+msgstr "Neues Angebot eingereicht"
 
 #. module: website_sale_b2b
 #: selection:product.pricelist,account_for_rented_quantity:0
 msgid "No"
-msgstr "Non"
+msgstr "Nein"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.login
 msgid "Or am I at the wrong place?"
-msgstr "Ou je suis au mauvais endroit..."
+msgstr "Oder bin ich auf der falschen Website?"
 
 #. module: website_sale_b2b
 #: code:addons/website_sale_b2b/models/res_partner.py:30
@@ -812,54 +516,52 @@ msgid ""
 "Partners not suitable for intermediate company creation:\n"
 "- %s"
 msgstr ""
-"Partenaires non compatibles avec la création d'une société intermédiaire :\n"
-"- %s"
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_portal_wizard_user
 msgid "Portal User Config"
-msgstr "Paramétrage du portail utilisateur"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_pricelist
 msgid "Pricelist"
-msgstr "Liste de prix"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_pricelist_item
 msgid "Pricelist Item"
-msgstr "Élément de la liste de prix"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_template
 msgid "Product Template"
-msgstr "Modèle d'article"
+msgstr "Produktvorlage"
 
 #. module: website_sale_b2b
 #: model:website,name:website_sale_b2b.b2b_website
 msgid "Products for professionals"
-msgstr "Commown pour les professionnels"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_res_partner__website_id
 msgid "Registration Website"
-msgstr "Site web"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_sale_order
 msgid "Sale Order"
-msgstr "Vente"
+msgstr "Verkauf"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_product__website_description_sale
 #: model:ir.model.fields,field_description:website_sale_b2b.field_product_template__website_description_sale
 msgid "Sale description for the website"
-msgstr "Description pour la vente en ligne"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Ligne de bons de commande"
+msgstr "Auftragsposition"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_product_pricelist__account_for_rented_quantity
@@ -867,55 +569,53 @@ msgid ""
 "Take into account the quantity already rented by customer's company to "
 "compute which price rule to apply."
 msgstr ""
-"Prendre en compte les articles déjà loués par l'entreprise du client pour "
-"déterminer la règle de prix à appliquer"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "This reduced price takes into account the"
-msgstr "Ce tarif est réduit en prenant en compte les"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_res_users
 msgid "Users"
-msgstr "Utilisateurs"
+msgstr "Benutzer"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
 msgid "Votre demande (référencée"
-msgstr "Votre demande (référencée"
+msgstr "Ihre Anfrage (Referenz"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
 msgid "Votre demande a été soumise"
-msgstr "Votre demande a été soumise"
+msgstr "Ihre Anfrage wurde übermittelt"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.order_submitted
 msgid "Vous allez être recontacté.e dans les prochains jours."
-msgstr "Vous allez être recontacté.e dans les prochains jours."
+msgstr "Sie werden in den nächsten Tagen von uns kontaktiert."
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_website
 #: model:ir.model.fields,field_description:website_sale_b2b.field_portal_wizard_user__website_id
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_template_form_view
 msgid "Website"
-msgstr "Site Web"
+msgstr "Website"
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,field_description:website_sale_b2b.field_website__name
 msgid "Website Name"
-msgstr "Nom du site web"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model,name:website_sale_b2b.model_product_public_category
 msgid "Website Product Category"
-msgstr "Catégorie d'articles du site Web"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_res_partner__website_id
 msgid "Website the user can log in. An empty value means all websites."
-msgstr "Site web de connexion. Une valeur vide signifie tous les sites."
+msgstr ""
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
@@ -923,73 +623,52 @@ msgid ""
 "You are not allowed to place an order on this website in the name of your\n"
 "          company. Please contact your administrator."
 msgstr ""
-"Vous n'êtes pas autorisé.e à effectuer une commande sur ce site web au nom "
-"de votre entreprise. Merci de contacter votre administrateur."
+"Sie dürfen auf dieser Website keine Bestellung im Namen Ihres Unternehmens "
+"aufgeben. Bitte kontaktieren Sie Ihren Administrator."
 
 #. module: website_sale_b2b
 #: model:ir.actions.server,name:website_sale_b2b.action_create_intermediate_company
 msgid "[commown] Create intermediate company"
-msgstr "[commown] Créer une société intermédiaire"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model:mail.template,name:website_sale_b2b.email_template_edi_sale
 msgid "[commown] SHOP B2B : AR de Commande - envoyer par mail"
-msgstr "[commown] SHOP B2B : AR de Commande - envoyer par mail"
+msgstr ""
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "category"
-msgstr "catégorie"
+msgstr "Kategorie"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "devices"
-msgstr "appareils"
+msgstr "Geräte"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.cart_line_product_link
 msgid "excl. taxes"
-msgstr "HT"
+msgstr "ohne MwSt."
 
 #. module: website_sale_b2b
 #: model:website,legal_notice_url:website_sale_b2b.b2b_website
 msgid "https://commown.coop/mentions-legales/#12-pour-les-professionnels"
-msgstr "https://commown.coop/mentions-legales/#12-pour-les-professionnels"
+msgstr ""
+"https://commown.coop/de/allgemeine_gesch%c3%a4ftsbedingungen/#1-angebote-f"
+"%C3%BCr-berufst%C3%A4tige"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "of the"
-msgstr "de la catégorie"
+msgstr "der"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "of the same model"
-msgstr "du même modèle"
+msgstr "desselben Modells"
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "you already have."
-msgstr "que vous avez déjà."
-
-#~ msgid ""
-#~ "<i class=\"fa fa-chevron-left\"/>\n"
-#~ "            <span>Revenir au panier</span>"
-#~ msgstr ""
-#~ "<i class=\"fa fa-chevron-left\"/>\n"
-#~ "            <span>Revenir au panier</span>"
-
-#~ msgid "<span>Soumettre ma demande</span> <i class=\"fa fa-chevron-right\"/>"
-#~ msgstr ""
-#~ "<span>Soumettre ma demande</span> <i class=\"fa fa-chevron-right\"/>"
-
-#~ msgid ""
-#~ "En raison du nombre important d’appareils souhaités, un membre de "
-#~ "l’équipe commerciale vous recontactera rapidement pour finaliser la "
-#~ "commande."
-#~ msgstr ""
-#~ "En raison du nombre important d’appareils souhaités, un membre de "
-#~ "l’équipe commerciale vous recontactera rapidement pour finaliser la "
-#~ "commande."
-
-#~ msgid "Sales"
-#~ msgstr "Ventes"
+msgstr ", die Sie bereits besitzen."
