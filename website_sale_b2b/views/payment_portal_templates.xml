@@ -24,18 +24,19 @@
         <div class="float-left mt-2">
           <a role="button" href="/shop/cart" class="btn btn-secondary">
             <i class="fa fa-chevron-left"/>
-            <span>Revenir au panier</span>
+            <span>Back to shopping cart</span>
           </a>
         </div>
         <div class="float-right mt-2">
           <button type="submit" class="btn btn-primary">
-            <span>Soumettre ma demande</span> <i class="fa fa-chevron-right"/>
+            <span>Submit my request</span> <i class="fa fa-chevron-right"/>
           </button>
         </div>
       </form>
 
       <div t-if="is_big_b2b" class="mt-2 alert alert-warning" role="alert">
-        En raison du nombre important d’appareils souhaités, un membre de l’équipe commerciale vous recontactera rapidement pour finaliser la commande.
+        Due to the large number of units required, a member of our sales team will
+        contact you shortly to finalize your order.
       </div>
 
     </xpath>
