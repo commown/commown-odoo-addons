@@ -34,7 +34,7 @@
         </div>
       </form>
 
-      <div t-if="is_big_b2b" class="float-right col-4 pr-0 mt-1 text-right">
+      <div t-if="is_big_b2b" class="mt-2 alert alert-warning" role="alert">
         En raison du nombre important d’appareils souhaités, un membre de l’équipe commerciale vous recontactera rapidement pour finaliser la commande.
       </div>
 
