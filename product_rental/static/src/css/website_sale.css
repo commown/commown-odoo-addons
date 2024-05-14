@@ -2,3 +2,11 @@ div.is_deposit h4.oe_price_h4 {
   /* Deposit price is less important than rental price decrease it */
   font-size: inherit;
 }
+
+td.oe_product.oe_grid form section h6 {
+  min-height: 2em;
+}
+
+td.oe_product.oe_grid form section b {
+  font-weight: normal;
+}
