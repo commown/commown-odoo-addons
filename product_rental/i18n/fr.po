@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-14 17:26+0000\n"
-"PO-Revision-Date: 2024-05-14 19:27+0200\n"
+"PO-Revision-Date: 2024-05-14 22:52+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -358,7 +358,7 @@ msgstr "<span>Durée d'engagement : </span>"
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.products_item
 msgid "<span>From</span>"
-msgstr "<span>À partir de</span>"
+msgstr "<span>Dès</span>"
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.cart_line_product_link
@@ -532,7 +532,7 @@ msgstr "Fréquence de paiement de la location"
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.products_item
 msgid "From"
-msgstr "À partir de"
+msgstr "Dès"
 
 #. module: product_rental
 #: model:project.task.type,legend_normal:product_rental.stage_declared_loss
