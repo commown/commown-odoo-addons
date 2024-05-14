@@ -21,13 +21,20 @@
 
   </template>
 
-  <!-- From website_sale_hide_price: prices on product list is always wrong
-       for rental products, as they correspond to the initial payment which
-       is usually a deposit..
-       So we remove them (not on single product page however ). -->
   <template id="products_item" inherit_id="website_sale.products_item">
-    <xpath expr="//div[@itemprop='offers']" position="replace">
+    <xpath expr="//div[@itemprop='offers']/b" position="replace">
+      <b t-if="product.is_rental">
+        <span>From</span>
+        <span t-esc="product.rental_price"
+              t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+        <span t-field="product.rental_frequency"/>
+      </b>
+      <t t-else="">
+        <span t-if="product.product_variant_count > 1 and combination_info['price']">From</span>
+        <t>$0</t>
+      </t>
     </xpath>
+
   </template>
 
   <template id="product_price" inherit_id="website_sale.product_price">
