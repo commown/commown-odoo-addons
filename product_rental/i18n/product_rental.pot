@@ -6,14 +6,231 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-19 06:47+0000\n"
-"PO-Revision-Date: 2024-04-19 06:47+0000\n"
+"POT-Creation-Date: 2024-05-14 17:26+0000\n"
+"PO-Revision-Date: 2024-05-14 17:26+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: product_rental
+#: model:mail.template,body_html:product_rental.email_theft_declaration
+msgid "\n"
+"<p>Bonjour ${object.partner_id.firstname},</p>\n"
+"<br/>\n"
+"<p>\n"
+"  Nous vous contactons suite à votre demande d'assistance concernant\n"
+"  le vol de l'appareil. Nous sommes vraiment désolés de ce qui vous arrive,\n"
+"  tant pour votre usage que pour l'impact financier induit pour la\n"
+"  coopérative (et pour vous-même si cet incident ne rentre pas dans\n"
+"  des garanties auxquelles vous avez souscrit) :-(\n"
+"</p>\n"
+"\n"
+"<br><br>\n"
+"<p>Voici la marche à suivre pas-à-pas pour la partie administrative\n"
+"  (pour chaque démarches il faudra nous transmettre par retour de mail\n"
+"  les copies des récépissés; sans ces documents nous ne pourrons pas prendre\n"
+"  en compte votre demande, et celle-ci ne pourra pas non plus être reconnue\n"
+"  par les assurances) :</p>\n"
+"<br><br>\n"
+"\n"
+"  - La 1ère étape c’est de faire une déclaration de vol à la Police si vous ne\n"
+"  l'avez pas déjà initiée, et leur transmettre l'identifiant de l'appareil\n"
+"  associé au contrat (que vous avez en théorie pu récupérer lors de l'ouverture\n"
+"  de la demande d'assistance; si ce n'est pas le cas revenez vers nous pour que\n"
+"  nous puissions vous aider à le trouver).\n"
+"  <br>\n"
+"  Si le vol concerne également des accessoires associés au contrat de location,\n"
+"  merci de le préciser dans le PV de plainte (pour que la Police en tienne\n"
+"  compte et pour que nous puissions aussi inclure ces équipements dans le\n"
+"  processus de remplacement).\n"
+"  <br>\n"
+"  NB : une pré-plainte en ligne n'est pas suffisante, il faut finaliser\n"
+"  la démarche auprès des autorités pour qu'elle soit valide.\n"
+"  <br><br>\n"
+"    En parallèle - et uniquement dans le cas des Smartphones - , il faut\n"
+"    contacter votre opérateur téléphonique afin de mettre en opposition\n"
+"    la carte SIM (ou les 2 cartes SIM si vous utilisiez les 2 emplacements),\n"
+"    et de nous transmettre l'accusé réception de cette demande.\n"
+"  <br><br>\n"
+"    L'étape suivante c'est de contacter votre assurance et déclarer le sinistre\n"
+"    (le vol d'appareils électroniques est en général couvert par votre assurance\n"
+"    multirisques habitation/professionnelle, par votre contrat d'assurance auto si\n"
+"    le vol a été commis dans votre véhicule, mais peut aussi l'être par l'assurance\n"
+"    de vos moyens de paiement - exple : vol de sac à main - ou de votre carte de crédit\n"
+"    (CB haut de gamme), ou via une assurance spécifique “appareils nomades”).\n"
+"    <br>\n"
+"    Concernant les démarches auprès de vos assurances, dans le cadre de la location,\n"
+"    l'appareil est un \"bien confié\" selon la terminologie propre à ce domaine (puisqu'il appartient\n"
+"    à la Coopérative mais que vous en avez la garde juridique et la responsabilité).\n"
+"    <br><br>\n"
+"    Enfin, à réception des éléments listés en début de ce mail (et règlement de l'indemnisation prévue au contrat\n"
+"    le cas échéant), nous vous ferons parvenir un appareil de remplacement, pour ce faire nous vous remercions\n"
+"    d'avance de bien vouloir nous confirmer l'adresse de livraison souhaitée (et de nous dire à quel moment vous\n"
+"    souhaitez recevoir l'appareil).\n"
+"    <br><br>\n"
+"    Le cas où le vol ne serait pas pris en charge par le contrat, nous vous transmettrons une facture avec le montant qui vous sera prélevé.\n"
+"  </p>\n"
+"<br><br>\n"
+"\n"
+"<p>\n"
+"  Dans l'attente de votre retour,\n"
+"  <br>\n"
+"  Coopérativement,\n"
+"</p>\n"
+"<br><br>\n"
+"\n"
+"<p>L'équipe Commown</p>\n"
+""
+msgstr ""
+
+#. module: product_rental
+#: model:mail.template,body_html:product_rental.email_loss_declaration
+msgid "\n"
+"<p>Bonjour ${object.partner_id.firstname},</p>\n"
+"<br/>\n"
+"<p>Nous vous contactons suite à votre demande d'assistance concernant la perte de l'appareil.\n"
+"  Nous sommes vraiment désolés de ce qui vous arrive, tant pour votre usage que pour l'impact financier\n"
+"  induit pour la coopérative (et pour vous-même si cet incident ne rentre pas dans des garanties auxquelles vous avez souscrit) :-(\n"
+"</p>\n"
+"\n"
+"<br><br>\n"
+"<p>Mais rassurez-vous nous allons tout mettre en œuvre pour vous accompagner dans les démarches et ainsi pouvoir vous renvoyer\n"
+"  un autre appareil au plus vite ! :-)</p>\n"
+"<br><br>\n"
+"\n"
+"<p>Voici la marche à suivre pas-à-pas pour la partie administrative :\n"
+"<br><br>\n"
+"  - La 1ère étape - et uniquement dans le cas des Smartphones - c'est faire une déclaration de perte à votre opérateur pour\n"
+"  que l'utilisation de l'appareil soit bloquée, pour cela vous aurez besoin de l'identifiant “IMEI” du téléphone\n"
+"  (que vous avez en théorie pu récupérer lors de l'ouverture de la demande d'assistance; si ce n'est pas le cas revenez vers\n"
+"  nous pour que nous puissions vous aider à le trouver).\n"
+"  <br><br>\n"
+"  Il faut également demander à votre opérateur téléphonique de mettre en opposition la carte SIM (ou les 2 cartes SIM\n"
+"  si vous utilisiez les 2 emplacements).\n"
+"  <br><br>\n"
+"  - L'étape suivante c'est de contacter votre assurance et déclarer le sinistre (en fonction des contrats, la perte d'appareils\n"
+"  électroniques peut être couverte par votre assurance multirisques habitation/professionnelle, par l’assurance de vos moyens de paiement\n"
+"  - CB haut de gamme, ou via une assurance spécifique “appareils nomades”).\n"
+"  <br>\n"
+"  Concernant les démarches auprès de vos assurances, dans le cadre de la location, l'appareil est un \"bien confié\" selon la terminologie\n"
+"  propre à ce domaine (puisqu'il appartient à la Coopérative mais que vous en avez la garde juridique et la responsabilité).\n"
+"  <br><br>\n"
+"</p>\n"
+"\n"
+"<p>\n"
+"  En parallèle, le cas où la perte ne serait pas pris en charge par le contrat, nous vous transmettrons une facture avec le montant\n"
+"  qui vous sera prélevé, et nous vous présenterons 2 options différentes de règlement possible.\n"
+"  A l'inverse, le cas où la perte est prise en charge par le contrat, nous vous demanderons de nous fournir 2 documents additionnels\n"
+"  afin que nous puissions prendre en compte votre demande. Le cas échéant, nous vous transmettrons les informations par mail.\n"
+"  <br><br>\n"
+"  Suite à cela, nous vous ferons parvenir un appareil de remplacement. Pour ce faire, nous vous remercions d'avance de bien vouloir nous\n"
+"  confirmer l'adresse de livraison souhaitée (et de nous dire à quel moment vous souhaitez recevoir l'appareil).\n"
+"  <br><br>\n"
+"  Si la perte concerne également des accessoires associés au contrat de location, merci de le préciser (pour que nous puissions aussi inclure ces équipements dans le processus de remplacement).\n"
+"</p>\n"
+"<br><br>\n"
+"\n"
+"<p>\n"
+"  Dans l'attente de votre retour,\n"
+"  <br>\n"
+"  Coopérativement,\n"
+"</p>\n"
+"<br><br>\n"
+"\n"
+"<p>L'équipe Commown</p>\n"
+""
+msgstr ""
+
+#. module: product_rental
+#: model:mail.template,subject:product_rental.email_loss_declaration
+msgid "${object.company_id.name} - Votre déclaration de perte"
+msgstr ""
+
+#. module: product_rental
+#: model:mail.template,subject:product_rental.email_theft_declaration
+msgid "${object.company_id.name} - Votre déclaration de vol"
+msgstr ""
+
+#. module: product_rental
+#: model:project.task.type,description:product_rental.stage_declared_loss
+msgid "- When creating a card in this project, please document it (a link with a short 2 word summary or, if there is no other linked card, a DATE copy of the conversation for example; otherwise the Management team arrives on the card and doesn't know what it's about and is obliged to play Sherlocks Holmes ;p\n"
+"- On the \"tag\" side, in this pipe we only use \"[C/P/V] Water Damage\" or \"[C/P/V] Perte livraison\" (the other tags are for the Support cards); if none of these 2 cases => No tag\n"
+"\n"
+"----------------------------------------------------------------\n"
+"Process Management team :\n"
+"- for Losses, in all cases the customer is charged full price, so there is no impact on his 10% discount - for this, the Management team must remember to tick the little box \"exempt from penalty\" on the PVC card (!!)\n"
+"\n"
+"In the event of a loss, the customer must be invoiced:\n"
+"You have to make an invoice, it's more complex, but the template is quite complete, it's just the invoice that is more tricky (see info below and follow this example: https://shop.commown.coop/web?&debug=#id=22054&view_type=form&model=account.invoice&action=208&active_id=1064\n"
+"\n"
+"- Then, when we have received the compensation payment, we make him validate his address, if he needs accessories (to know if they have been stolen too), and the colour (if necessary for FP2/FP4)\n"
+"- Then we duplicate the corresponding opportunity with the details of the device (and accessories) to be returned in the title of a card that we place in the \"GO\" column of the corresponding sales pipe, and we generate the PDF label for the Logistics team\n"
+"- ATTENTION !!!!!!!!!!!!!!!! when creating this card you MUST not forget to uncheck the box in the \"shipment tracking\" tab\n"
+"\n"
+"+ Check that the correct contract is entered in the \"Contract\" area \n"
+"-----------------------------------\n"
+"Protocol in case of Lost Delivery :\n"
+"!! In all cases you must create a \"loss\" card (with a \"loss of delivery\" tag) to follow this case and store all the useful information for our Management follow-up!\n"
+"\n"
+"A. The package never arrived at the customer's premises and the tracking link is \"blocked\": \n"
+"0/ First reflex: creation of the \"loss\" card \n"
+"1/ Investigate -> go through Coliview + ask the customer for confirmation of non-delivery\n"
+"2/ Reship the material (!! if important value >5 k€ you need the confirmation of the management!!) AND\n"
+"- if B2C: we send a small message via the new logistics/opportunity card (= duplication of the 1st one + generation of a new label in the process) to inform him/her that a new parcel is leaving\n"
+"- if B2B: the sales representative is pinged to inform his client\n"
+"3/ Open a file via the Coliview online interface\n"
+"4/ Once the case has been \"clarified\" (= for example: Colissimo requesting an invoice), we send the most relevant justifications so that the date of purchase is the most recent and the price (especially!) the most representative of our real financial loss. (if you need help or a referee's opinion, please contact Fred)\n"
+"5/ If Colissimo takes us for Americans (= status announced as \"parcel delivered\" and file closed when obviously this is not the case) => We go through our Colissimo sales contact Hugo Bachelier\n"
+"\n"
+"B. The parcel has been delivered but the customer has not received anything: \n"
+"1/ we investigate on our side to find the proof of delivery (available in theory on Coliview)\n"
+"2/ we send it to the customer, insisting that they look a little further than the end of their nose\n"
+"3/ If they fail, we ask for a certificate on honour + that they make a complaint to the Post Office\n"
+"4/ Once these two points have been noted (certificate sent and file opened - which can be seen from Coliview), only then do we reship a new device \n"
+"5/ We also open a claim via Coliview (attaching the certificate and the purchase invoice of the device)\n"
+""
+msgstr ""
+
+#. module: product_rental
+#: model:project.task.type,description:product_rental.stage_declared_theft
+msgid "- When you create a card in this project, please document it (a link with a short summary in 2 words or, if there is no other linked card, a DATED copy of the conversation for example; otherwise the Management team arrives on the card and doesn't know what it's about and is obliged to play sherlocks holmes ;p\n"
+"- On the \"tag\" side, in this pipe we only use \"[C/P/V] Water Damage\" or \"[C/P/V] Perte livraison\" (the other tags are for the Support cards); if none of these 2 cases => No tag\n"
+"- Box \"exempt from penalty\" : \n"
+"1/ either we are in a situation where the customer pays the full amount of the loss (cf. GCS or customer's wish, since in the Support protocol this option is sometimes proposed), in which case it is the same as for Loss, we tick the box and there is no impact on the discount\n"
+"2/ either there is still a damage for Commown (customer pays nothing because incident is covered by the contract; OR he only pays an excess - case of Essential contracts!!), in this case the box is NOT ticked and the customer loses the benefit of his discount\n"
+"------------------------------------------------------------------\n"
+"\n"
+"Management team process:\n"
+"In the event of a theft for a PREMIUM contract:\n"
+"- first we check that it is the 1st incident of this kind (if not, it is not taken into account - in case of doubt, see Fred for adjudication)\n"
+"- then if OK use and customise the \"theft\" template\n"
+"(basically the customer has to send us a number of documents to validate the shipment of a new device, which is at our charge (= 100% parte :( )\n"
+"- Then when we have received everything, we make him validate his address, if he needs accessories (to know if they have been stolen too), and the colour (if necessary for FP2/FP4)\n"
+"- Then we duplicate the corresponding opportunity (with the details of the device (and accessories) to be returned in the title of a card that we place in the \"GO\" column of the corresponding sales pipe\n"
+"- ATTENTION !!!!!!!!!!!!!!!! when creating this card you MUST not forget to uncheck the box in the \"shipment tracking\" tab\n"
+"\n"
+"+ Check that the contract is entered in the \"Contract\" field in the opportunity + Delete the \"Origin and Source\" fields \n"
+"\n"
+"----------------------------------------------------------------\n"
+"Process team Management :\n"
+"In case of theft for an HO contract:\n"
+"You have to make an invoice, it's more complex, but the template is quite complete, it's just the invoice that is more tricky (see info below and follow this example: https://shop.commown.coop/web?&debug=#id=22054&view_type=form&model=account.invoice&action=208&active_id=1064\n"
+"\n"
+"- Then, when we have received the payment of the compensation, we make him validate his address, if he needs accessories (to know if they have been stolen too), and the colour (if necessary for FP2/FP4)\n"
+"- Then we duplicate the corresponding opportunity with the details of the device (and accessories) to be returned in the title of a card that we place in the \"GO\" column of the corresponding sales pipe\n"
+"- ATTENTION !!!!!!!!!!!!!!!! when creating this card you MUST not forget to uncheck the box in the \"shipment tracking\" tab\n"
+"\n"
+"+ Check that the contract is entered in the \"Contract\" field in the opportunity + \"Origin and Source\" fields \n"
+"---------------------------------------------------------------------\n"
+"Internal note from the Management team:\n"
+"FOR FP2 Ordinary Heroes: From Oct18 the purchase price of FPs has changed to about 305€ (from 405), but it's not a good idea to display it on customer invoices, so the strategy is the following (for 2019 customers in particular):\n"
+"- Leave 405\n"
+"- Increase the obsolescence to 50%.  \n"
+"- Send the FP invoice for Oct18 if needed for insurance purposes (the one for order n°8) - only if requested! https://shop.commown.coop/web?&debug=#id=2894&view_type=form&model=account.invoice&menu_id=143&action=211"
+msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.rental_sale_order_portal_content
@@ -23,6 +240,11 @@ msgstr ""
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.product_price
 msgid "<span>Commitment duration: </span>"
+msgstr ""
+
+#. module: product_rental
+#: model_terms:ir.ui.view,arch_db:product_rental.products_item
+msgid "<span>From</span>"
 msgstr ""
 
 #. module: product_rental
@@ -45,6 +267,12 @@ msgstr ""
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
 msgid "<strong>Commitment end date</strong>"
+msgstr ""
+
+#. module: product_rental
+#: model:project.task.type,legend_blocked:product_rental.stage_declared_loss
+#: model:project.task.type,legend_blocked:product_rental.stage_declared_theft
+msgid "Blocked"
 msgstr ""
 
 #. module: product_rental
@@ -76,13 +304,13 @@ msgid "Contract"
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:301
+#: code:addons/product_rental/models/contract.py:316
 #, python-format
 msgid "Contract %s (id %d) has %d main rental service lines."
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:321
+#: code:addons/product_rental/models/contract.py:336
 #, python-format
 msgid "Contract %s (id %d) has a main rental service with an incoherent contract model %s"
 msgstr ""
@@ -124,7 +352,7 @@ msgid "Contractual documents"
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:267
+#: code:addons/product_rental/models/contract.py:282
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_contract_form_view
 #, python-format
 msgid "Cost/Revenue"
@@ -175,8 +403,25 @@ msgid "Frequency of the rental price payment"
 msgstr ""
 
 #. module: product_rental
+#: model_terms:ir.ui.view,arch_db:product_rental.products_item
+msgid "From"
+msgstr ""
+
+#. module: product_rental
+#: model:project.task.type,legend_normal:product_rental.stage_declared_loss
+#: model:project.task.type,legend_normal:product_rental.stage_declared_theft
+msgid "In Progress"
+msgstr ""
+
+#. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.product_price
 msgid "Initial deposit:"
+msgstr ""
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product__is_deposit
+#: model:ir.model.fields,field_description:product_rental.field_product_template__is_deposit
+msgid "Is initial payment a deposit"
 msgstr ""
 
 #. module: product_rental
@@ -225,6 +470,11 @@ msgid "Payment Transaction"
 msgstr ""
 
 #. module: product_rental
+#: model:project.task.type,portal_displayed_name:product_rental.stage_declared_loss
+msgid "Perte déclarée"
+msgstr ""
+
+#. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
 msgid "Price"
 msgstr ""
@@ -247,6 +497,12 @@ msgid "Quarter(s)"
 msgstr ""
 
 #. module: product_rental
+#: model:project.task.type,legend_done:product_rental.stage_declared_loss
+#: model:project.task.type,legend_done:product_rental.stage_declared_theft
+msgid "Ready for Next Stage"
+msgstr ""
+
+#. module: product_rental
 #: model:ir.model.fields,field_description:product_rental.field_product_product__rental_frequency
 #: model:ir.model.fields,field_description:product_rental.field_product_template__rental_frequency
 msgid "Rental payment frequency"
@@ -263,6 +519,16 @@ msgstr ""
 #: model:ir.model.fields,field_description:product_rental.field_product_product__rental_tax_ids
 #: model:ir.model.fields,field_description:product_rental.field_product_template__rental_tax_ids
 msgid "Rental taxes"
+msgstr ""
+
+#. module: product_rental
+#: model:project.task.type,name:product_rental.stage_declared_loss
+msgid "Reported loss"
+msgstr ""
+
+#. module: product_rental
+#: model:project.task.type,name:product_rental.stage_declared_theft
+msgid "Reported theft"
 msgstr ""
 
 #. module: product_rental
@@ -288,6 +554,16 @@ msgid "Semester(s)"
 msgstr ""
 
 #. module: product_rental
+#: model:project.project,label_tasks:product_rental.contract_theft_and_loss_project
+msgid "Tasks"
+msgstr ""
+
+#. module: product_rental
+#: model:project.task.type,portal_displayed_name:product_rental.stage_declared_theft
+msgid "Vol déclaré"
+msgstr ""
+
+#. module: product_rental
 #: selection:contract.contract,commitment_period_type:0
 #: selection:contract.template,commitment_period_type:0
 #: model_terms:ir.ui.view,arch_db:product_rental.portal_contract_page
@@ -309,6 +585,16 @@ msgstr ""
 #. module: product_rental
 #: selection:product.template,rental_frequency:0
 msgid "Yearly"
+msgstr ""
+
+#. module: product_rental
+#: model:mail.template,name:product_rental.email_loss_declaration
+msgid "[commown] AR déclaration Perte"
+msgstr ""
+
+#. module: product_rental
+#: model:mail.template,name:product_rental.email_theft_declaration
+msgid "[commown] AR déclaration Vol"
 msgstr ""
 
 #. module: product_rental
