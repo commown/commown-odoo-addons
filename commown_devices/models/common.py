@@ -34,7 +34,7 @@ def find_products_orig_location(env, products, stocks=None, compute_summary=Fals
     `stocks` parameter is a list of stock.location to look in for `products` ordered by
     preference"""
     if stocks is None:
-        stocks = self.env.ref("commown_devices.stock_location_available_for_rent")
+        stocks = env.ref("commown_devices.stock_location_available_for_rent")
     pts_orig = {}
     enough_to_send = lambda q, to_send: q.quantity - q.reserved_quantity >= to_send
     for product, quantity_to_send in products.items():
