@@ -3,7 +3,7 @@
   <data>
 
     <template id="more_customer_info">
-      <p t-if="more_info">Informations complémentaires :</p>
+      <p t-if="more_info">Informations complémentaires :</p>
       <div t-if="more_info">
         <pre style="white-space: pre-wrap;"><t t-esc="more_info" /></pre>
       </div>
@@ -97,8 +97,8 @@
             d'un téléphone à l'autre).
           </p>
           <p>
-          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,
-          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
+          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,
+          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
 </p>
         </div>
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
@@ -128,14 +128,12 @@
         </h2>
         <p t-if="header" t-raw="header"></p>
         <p>
-          Nous allons vous envoyer
-          <t t-esc="new_module" />
-        . Veuillez vérifier attentivement
-        les informations d'expédition ci-dessous, et les
-        modifier en cas de besoin. Notez que le paquet sera
-        déposé directement dans votre boite aux lettres :
-        votre présence n'est pas requise lors du passage du
-        facteur (sauf pour les cas d'une livraison PC).
+          Afin d'anticiper un envoi de module ou d'appareil, veuillez vérifier attentivement
+          les informations d'expédition ci-dessous, et les
+          modifier en cas de besoin. Notez que le paquet sera
+          déposé directement dans votre boite aux lettres :
+          votre présence n'est pas requise lors du passage du
+          facteur (sauf s'il s'agit d'un ordinateur complet).
         </p>
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
@@ -220,6 +218,29 @@
 
         </div>
       </div>
+    </template>
+
+    <template id="display-shipping-information">
+      <p>
+        L'adresse d'expédition est la suivante :<br/>
+        <ul>
+          <li t-if="name.strip()" t-esc="name.strip()"/>
+          <li t-if="street.strip()" t-esc="street.strip()"/>
+          <li t-if="street2.strip()" t-esc="street2.strip()"/>
+          <li t-if="zipcode.strip()" t-esc="zipcode.strip()"/>
+          <li t-if="city.strip()" t-esc="city.strip()"/>
+          <li t-if="country.strip()" t-esc="country.strip()"/>
+        </ul>
+        Informations supplémentaires utiles à la livraison :<br/>
+        <ul>
+          <li>
+            Numéro de téléphone : <t t-if="phone.strip()" t-esc="phone.strip()"/>
+          </li>
+          <li>
+            Adresse de courriel : <t t-if="email.strip()" t-esc="email.strip()"/>
+          </li>
+        </ul>
+      </p>
     </template>
 
     <template id="step-self-solved">

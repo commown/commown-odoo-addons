@@ -7,7 +7,7 @@
 
     <t t-name="website.self-troubleshoot-smartphone-screen">
       <t t-call="portal.portal_layout">
-        <t t-set="title">Commown - Auto-dépannage - Smartphone : Mon écran (ou sa protection) est fissuré</t>
+        <t t-set="title">Commown - Auto-dépannage - Smartphone : Mon écran (ou sa protection) est fissuré</t>
 
         <script type="text/javascript">
           $(document).ready(function() {
@@ -36,7 +36,7 @@
         <div class="bg-white border m-0 p-3 rounded">
           <div class="d-flex flex-row" style="justify-content: space-between;">
             <div class="d-flex flex-column">
-              <h1>Auto-dépannage : Smartphone</h1>
+              <h1>Auto-dépannage : Smartphone</h1>
               <h2>Mon écran (ou sa protection) est fissuré </h2>
             </div>
             <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
@@ -79,7 +79,7 @@
                   durée de vie de l'appareil.</p>
                   <p>Ainsi, votre Smartphone doit déjà avoir une vitre de protection posée
                   par nos soins avant de vous l'envoyer.</p>
-                  <p>Commençons par vérifier que la vitre de protection est bien présente sur votre Smartphone :
+                  <p>Commençons par vérifier que la vitre de protection est bien présente sur votre Smartphone :
                   cela se remarque facilement dans les coins de l'écran grâce à un relief visible
                   (cf. photo ci-dessous) et détectable au toucher.</p>
                   <img
@@ -172,7 +172,6 @@
 
                 <t t-call="commown_self_troubleshooting.step-ship-module">
                   <t t-set="step">5</t>
-                  <t t-set="new_module">les éléments nécessaires</t>
                 </t>
 
                 <t t-call="commown_self_troubleshooting.step-confirm-change">

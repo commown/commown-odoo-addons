@@ -9,7 +9,7 @@
 
         <t t-name="website.self-troubleshoot-fp2-battery">
           <t t-call="portal.portal_layout">
-            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Batterie</t>
+            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Batterie</t>
 
             <script type="text/javascript">
               $(document).ready(function() {
@@ -17,9 +17,8 @@
                   const wizard = setUpWizard($('#smartwizard'));
 
                   $('#accu_battery').change(function () {
-                       wizard.toggleStep(2, this.value==='sup');
-                       wizard.toggleStep(3, this.value==='inf');
-                       wizard.toggleStep(4, this.value==='inf');
+                    wizard.toggleStep(3, this.value==='sup');
+                    wizard.toggleStep(4, this.value==='inf');
                   });
 
               });
@@ -35,7 +34,7 @@
 
               <div class="d-flex flex-row" style="justify-content: space-between;">
                 <div class="d-flex flex-column">
-                  <h1>Auto-dépannage : Fairphone 2</h1>
+                  <h1>Auto-dépannage : Fairphone 2</h1>
                   <h2>Ma batterie se décharge rapidement</h2>
                 </div>
                 <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
@@ -56,8 +55,8 @@
                   <ul class="nav">
                     <li class="nav-item"><a class="nav-link" href="#step-0">Contexte<br/><small>Appareil concerné</small></a></li>
                     <li class="nav-item"><a class="nav-link" href="#step-1">Étape 1<br/><small>AccuBattery</small></a></li>
-                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Problème logiciel</small></a></li>
-                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-2">Étape 2<br/><small>Expédition</small></a></li>
+                    <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-3">Étape 3<br/><small>Problème logiciel</small></a></li>
                     <li class="nav-item" disabled="disabled"><a class="nav-link" href="#step-4">Étape 4<br/><small>Confirmation</small></a></li>
                     <li class="nav-item"><a class="nav-link" href="#step-5">Étape 5<br/><small>Contacter un humain</small></a></li>
                   </ul>
@@ -83,7 +82,7 @@
                       </div>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label for="accu_battery">Quel est l'état de votre batterie ?</label>
+                          <label for="accu_battery">Quel est l'état de votre batterie ?</label>
                           <select class="form-control" required="required" id="accu_battery" name="accu_battery" data-required-error="Veuillez sélectionner l'état de votre batterie.">
                             <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
                             <option value="sup">Supérieure à 80%</option>
@@ -95,11 +94,16 @@
 
                     </div>
 
-                    <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
-                      <h2><i class="fas fa-bug"/> Problème logiciel</h2>
+                    <t t-call="commown_self_troubleshooting.step-ship-module">
+                      <t t-set="step">2</t>
+                    </t>
+
+                    <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                      <h2><i class="fas fa-bug"/>Problème logiciel</h2>
                       <p>Dans ce cas, nous vous invitons à démarrer votre FP2 en mode "sans échec" afin de
-                      voir si le problème est dû à une application instable. </p>
-                      <p>Pour passer en mode sans échec :
+                      voir si le problème est dû à une application instable.
+                      </p>
+                      <p>Pour passer en mode sans échec :
                         <ul>
                           <li>Appuyez et maintenez le bouton ON / OFF. Une fenêtre contextuelle s'ouvre
                             avec l'option <i>Éteindre</i>
@@ -118,9 +122,9 @@
                         envoyées, un membre de l'équipe support de Commown va alors prendre contact avec vous.
                       </p>
 
-                      <div id="form-step-2" role="form" data-toggle="validator">
+                      <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
-                          <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utile :</label>
+                          <label for="more_info_step_3">Ajoutez ici toutes les informations que vous jugerez utile :</label>
                           <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info"/>
                         </div>
 
@@ -130,11 +134,6 @@
                         </div>
                       </div>
                     </div>
-
-                    <t t-call="commown_self_troubleshooting.step-ship-module">
-                      <t t-set="step">3</t>
-                      <t t-set="new_module">une nouvelle batterie</t>
-                    </t>
 
                     <t t-call="commown_self_troubleshooting.step-confirm-change">
                       <t t-set="step">4</t>
