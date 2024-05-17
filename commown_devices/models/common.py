@@ -4,6 +4,10 @@ from odoo import _, fields
 from odoo.exceptions import UserError
 
 
+def _assigned(picking):
+    return picking.state == "assigned"
+
+
 def first_common_location(locs):
     """From a list of locations return the first common parent location.
     Retun a falsy stock.location if there is no common location.

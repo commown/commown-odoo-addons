@@ -3,11 +3,7 @@ import datetime
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
-from .common import do_new_transfer
-
-
-def _assigned(picking):
-    return picking.state == "assigned"
+from .common import _assigned, do_new_transfer
 
 
 class CrmLead(models.Model):
