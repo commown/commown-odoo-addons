@@ -132,3 +132,46 @@ class ResPartnerLocationTC(HttpCase):
 
         self.assertEqual(lot1.current_location(customer_loc), loc_p1)
         self.assertEqual(lot2.current_location(customer_loc), loc_p1)
+
+    def test_location_individual_becomes_pro(self):
+        partner = self.env.ref("base.partner_demo_portal")
+
+        # Check test prerequisite
+        self.assertFalse(partner.parent_id)
+
+        # Insert test data: a lot in the partner's location
+        loc_init = partner.get_or_create_customer_location()
+        new_dev_loc = self.env["stock.location"].create(
+            {
+                "name": "New devices",
+                "usage": "internal",
+                "partner_id": 1,
+                "location_id": self.env.ref(
+                    "commown_devices.stock_location_new_devices"
+                ).id,
+            }
+        )
+        pt = self.env["product.template"].create(
+            {"name": "My test product", "type": "product", "tracking": "serial"}
+        )
+        lot = self._new_dev("lot", pt.product_variant_id, new_dev_loc)
+        picking = self._send(lot, new_dev_loc, loc_init)
+
+        # Now create a company for the partner and move it there:
+        company = self.env["res.partner"].create({"name": "my c", "is_company": True})
+        partner.parent_id = company.id
+
+        # Check the effects
+        # - initial location has disappeared
+        self.assertFalse(loc_init.exists())
+        # - partner's location is now the company's one
+        new_loc = partner.get_customer_location()
+        self.assertEqual(new_loc.partner_id, company)
+        # - ... and the lot is there
+        q = self.env["stock.quant"].search(
+            [("lot_id", "=", lot.id), ("quantity", ">", 0.0)]
+        )
+        self.assertEqual(len(q), 1)
+        self.assertEqual(q.location_id, new_loc)
+        # - ... and the picking customer location is the new one
+        self.assertEqual(picking.location_dest_id, new_loc)
