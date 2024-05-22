@@ -143,6 +143,25 @@ class ResPartner(models.Model):
             self._update_foreign_keys(src_locations, dst_location)
             src_locations.unlink()
 
+    @api.multi
+    def write(self, vals):
+        "Handle individual > professional status change regarding stock location"
+
+        to_change_customer_loc = (
+            "parent_id" in vals
+            and self.commercial_partner_id == self
+            and self.get_customer_location()
+        )
+
+        result = super().write(vals)
+
+        if to_change_customer_loc and self.commercial_partner_id != self:
+            new_loc = self.get_or_create_customer_location()
+            self._update_foreign_keys(to_change_customer_loc, new_loc)
+            to_change_customer_loc.unlink()
+
+        return result
+
 
 class MergePartnerAutomatic(models.TransientModel):
     _inherit = "base.partner.merge.automatic.wizard"
