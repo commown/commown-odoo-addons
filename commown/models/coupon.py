@@ -2,6 +2,7 @@ import os.path as osp
 import shutil
 import subprocess
 import tempfile
+from base64 import b64encode
 
 from odoo import fields, models
 
@@ -43,7 +44,7 @@ def convert_svg_to_pdf(svg_content, settings):
     try:
         svg_path = osp.join(directory, "file.svg")
         pdf_path = osp.join(directory, "file.pdf")
-        with open(svg_path, "wb") as svg_file:
+        with open(svg_path, "w") as svg_file:
             svg_file.write(svg_content)
         subprocess.check_call(
             [
@@ -58,7 +59,7 @@ def convert_svg_to_pdf(svg_content, settings):
                 svg_path,
             ]
         )
-        with open(pdf_path) as pdf_file:
+        with open(pdf_path, "rb") as pdf_file:
             return pdf_file.read()
     finally:
         shutil.rmtree(directory, ignore_errors=True)
@@ -115,7 +116,7 @@ class Campaign(models.Model):
                 "res_model": "coupon.campaign",
                 "res_id": self.id,
                 "mimetype": mime,
-                "datas": data.encode("base64"),
+                "datas": b64encode(data),
                 "datas_fname": name,
                 "name": name,
                 "public": False,
