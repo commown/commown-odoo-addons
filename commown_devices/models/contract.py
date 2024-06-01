@@ -92,11 +92,13 @@ class Contract(models.Model):
         if origin is None:
             origin = self.name
 
+        location = self.partner_id.get_or_create_customer_location()
+
         return self._create_picking(
             lots,
             products,
-            self.partner_id.get_or_create_customer_location(),
-            self.partner_id.get_or_create_customer_location(),
+            location,
+            location,
             dest_location,
             origin=origin,
             date=date,
