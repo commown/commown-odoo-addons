@@ -171,7 +171,7 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
             att_val_ids=self.color2,
         )
         with self.assertRaises(UserError) as err:
-            false_config = create_config(
+            create_config(
                 self.fp3_service_tmpl,
                 "primary",
                 self.fp3_storable_tmpl,

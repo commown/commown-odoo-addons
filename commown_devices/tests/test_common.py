@@ -9,7 +9,7 @@ def create_stock_location(self, name, parent=None):
             "name": name,
             "usage": "internal",
             "partner_id": 1,
-            "location_id": parent.id if parent != None else False,
+            "location_id": parent.id if parent is not None else False,
         }
     )
 
