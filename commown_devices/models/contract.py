@@ -157,3 +157,35 @@ class Contract(models.Model):
         return self.env["stock.production.lot"].browse(
             [l_id for (l_id, total) in list(lot_ids.items()) if total > 0]
         )
+
+    def _partner_location_changed(self, old_location=None):
+        """Change all present contract stock-related entities customer-side location
+        to the one
+
+        Works by updating the pickings, moves and moves lines source or destination
+        locations when they are equal to or child of given old location (or standard
+        customer location if not passed).
+
+        """
+        self.ensure_one()
+        if old_location is None:
+            old_location = self.env.ref("stock.stock_location_customers")
+        new_loc = self.partner_id.get_or_create_customer_location()
+
+        for picking in self.picking_ids:
+            for attr in ("location_id", "location_dest_id"):
+                loc = getattr(picking, attr)
+
+                if loc == old_location or loc.location_id == old_location:
+                    setattr(picking, attr, new_loc.id)
+
+                    picking.move_lines.update({attr: new_loc.id})
+                    picking.move_line_ids.update({attr: new_loc.id})
+
+                    # Reset picking, moves, move lines and quant dates
+                    if picking.state == "done":
+                        picking.action_set_date_done_to_scheduled()
+
+                    break
+
+        self._compute_quant_ids()
