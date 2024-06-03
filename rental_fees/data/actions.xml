@@ -1,0 +1,11 @@
+<odoo>
+
+  <record id="update_defs_with_new_pos" model="ir.actions.server">
+    <field name="name">[commown] Update fees definitions with the new POs</field>
+    <field name="model_id" ref="rental_fees.model_rental_fees_definition"/>
+    <field name="state">code</field>
+    <field name="code">records.action_update_with_new_pos()</field>
+    <field name="binding_model_id" ref="rental_fees.model_rental_fees_definition" />
+  </record>
+
+</odoo>

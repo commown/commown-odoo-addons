@@ -238,6 +238,72 @@ class RentalFeesDefinition(models.Model):
             "res_model": "stock.production.lot",
         }
 
+    def _active_fees_defs(self):
+        """Return a fees_def: from_date dictionary telling which fees defs are still
+        active and from which date should new POs be associated: for a given (supplier,
+        product) couple, the one with the more recent purchase order.
+
+        """
+        active_fees_def = {}
+
+        for fees_def in self.env["rental_fees.definition"].search([]):
+            key = (fees_def.partner_id, fees_def.product_template_id)
+            from_date = max(
+                fees_def.mapped("order_ids.date_order") or [fees_def.create_date]
+            )
+
+            if key not in active_fees_def or from_date > active_fees_def[key][1]:
+                active_fees_def[key] = (fees_def, from_date)
+
+        return dict(active_fees_def.values())
+
+    def action_update_with_new_pos(self):
+        _active_fees_defs = self._active_fees_defs()
+
+        for fees_def in self:
+
+            if fees_def not in _active_fees_defs:
+                msg = _("Ignoring fees def '%s', superseded by a more recent one.")
+                self.env.user.notify_info(msg % fees_def.name, sticky=True)
+                continue
+
+            _pt = fees_def.product_template_id
+            new_pos = self.env["purchase.order"].search(
+                [
+                    ("partner_id", "=", fees_def.partner_id.id),
+                    ("order_line.product_id.product_tmpl_id", "=", _pt.id),
+                    ("date_order", ">", _active_fees_defs[fees_def]),
+                    ("state", "!=", "cancel"),
+                ],
+                order="id",
+            )
+
+            for new_po in new_pos:
+                if new_po.state not in ("purchase", "done"):
+                    self.env.user.notify_danger(
+                        _("%s is still in an early state.") % new_po.name,
+                        sticky=True,
+                    )
+                else:
+                    order_lines = new_po.order_line.filtered(
+                        lambda ol: ol.product_id.product_tmpl_id == _pt
+                    )
+                    ordered_qty = sum(order_lines.mapped("product_qty"))
+                    received_qty = sum(order_lines.mapped("qty_received"))
+
+                    if ordered_qty > received_qty:
+                        msg = _("%s is not fully delivered.")
+                        self.env.user.notify_danger(msg % new_po.name, sticky=True)
+
+            if new_pos:
+                msg = _("Adding new POs to fees def '%s': %s")
+                self.env.user.notify_success(
+                    msg % (fees_def.name, ", ".join(new_pos.mapped("name"))),
+                    sticky=True,
+                )
+
+                fees_def.order_ids |= new_pos
+
 
 class RentalFeesDefinitionLine(models.Model):
     _name = "rental_fees.definition_line"
