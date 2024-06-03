@@ -23,7 +23,7 @@ def create_config(serv_tmpl, type, stor_tmpl, stor_variant, att_val_ids=None):
 
 
 def add_attributes_to_product(product, attribute, attribute_values):
-    line = product.env["product.template.attribute.line"].create(
+    product.env["product.template.attribute.line"].create(
         {
             "product_tmpl_id": product.id,
             "attribute_id": attribute.id,

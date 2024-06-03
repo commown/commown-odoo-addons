@@ -36,7 +36,10 @@ def find_products_orig_location(env, products, stocks=None, compute_summary=Fals
     if stocks is None:
         stocks = env.ref("commown_devices.stock_location_available_for_rent")
     pts_orig = {}
-    enough_to_send = lambda q, to_send: q.quantity - q.reserved_quantity >= to_send
+
+    def enough_to_send(q, to_send):
+        return q.quantity - q.reserved_quantity >= to_send
+
     for product, quantity_to_send in products.items():
         enough_in_quant = partial(enough_to_send, to_send=quantity_to_send)
         quants = env["stock.quant"]
@@ -109,7 +112,7 @@ def internal_picking(
         for lot in lots
     }
 
-    lots_locations = [located_lots[l]["loc"] for l in located_lots.keys()]
+    lots_locations = [located_lots[lot]["loc"] for lot in located_lots.keys()]
 
     picking_type = env.ref("stock.picking_type_internal")
 
