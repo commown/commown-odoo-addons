@@ -1,4 +1,7 @@
 from odoo.exceptions import UserError
+from odoo.tests.common import tagged
+
+from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
 
 from .common import RentedQuantityTC
 
@@ -32,16 +35,55 @@ class ResPartnerTC(RentedQuantityTC):
             "\n- c1 (id %d)\n- c3 (id %d)" % (c1.id, c3.id),
         )
 
+
+@tagged("post_install", "-at_install")
+class ResPartnerWithContractStockTC(DeviceAsAServiceTC):
     def test_action_create_intermediate_company_ok(self):
+        # Make contract a B2B one
         comp = self.env["res.partner"].create({"name": "Company", "is_company": True})
-        c1 = self.env["res.partner"].create({"name": "c1", "parent_id": comp.id})
-        c2 = self.env["res.partner"].create({"name": "c2", "parent_id": comp.id})
+        p1 = self.env["res.partner"].create({"name": "p1", "parent_id": comp.id})
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        contract.partner_id = p1.id
 
-        (c1 | c2).action_create_intermediate_company()
+        # Send a device in the context of this contract
+        lot1 = self.adjust_stock(serial="my-fp3-1")
+        picking1 = contract.send_devices(lot1, {}, date="2024-01-01", do_transfer=True)
+        loc_init = p1.get_customer_location()
 
-        self.assertEqual(c1.parent_id.parent_id, comp)
-        self.assertEqual(c2.parent_id.parent_id, comp)
-        self.assertTrue(c1.parent_id.is_company)
-        self.assertTrue(c2.parent_id.is_company)
-        self.assertEqual(c1.parent_id.name, "c1 (indep. - Company)")
-        self.assertEqual(c2.parent_id.name, "c2 (indep. - Company)")
+        # Create another partner in the base company
+        p2 = self.env["res.partner"].create({"name": "p2", "parent_id": comp.id})
+        so2 = self.so.copy({"partner_id": p2.id})
+        so2.action_confirm()
+        contract2 = self.env["contract.contract"].of_sale(so2)[0]
+        lot2 = self.adjust_stock(serial="my-fp3-2")
+        picking2 = contract2.send_devices(lot2, {}, date="2023-12-01", do_transfer=True)
+
+        # ... and create an intermediate company for partner 1
+        p1.action_create_intermediate_company()
+
+        # Check that the partner 1 was moved to the new company
+        self.assertEqual(p1.parent_id.parent_id, comp)
+        self.assertTrue(p1.parent_id.is_company)
+        self.assertEqual(p1.parent_id.name, "p1 (indep. - Company)")
+
+        # ... but not partner 2, whose location is still the initial one
+        self.assertEqual(p2.parent_id, comp)
+        self.assertEqual(p2.get_customer_location(), loc_init)
+
+        # ... and check that the contract stock has moved to the new
+        # partner 1's location
+        loc_new = p1.get_customer_location()
+        self.assertTrue(loc_init != loc_new)
+        self.assertEqual(loc_new.partner_id, p1.parent_id)
+        self.assertEqual(picking1.location_dest_id, loc_new)
+        quant1 = self.env["stock.quant"].search(
+            [("lot_id", "=", lot1.id), ("quantity", ">", 0)],
+        )
+        self.assertEqual(quant1.location_id, loc_new)
+
+        # ... but that contract 2 stock is still in the initial location
+        self.assertEqual(picking2.location_dest_id, loc_init)
+        quant2 = self.env["stock.quant"].search(
+            [("lot_id", "=", lot2.id), ("quantity", ">", 0)],
+        )
+        self.assertEqual(quant2.location_id, loc_init)
