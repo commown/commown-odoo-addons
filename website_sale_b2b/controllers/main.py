@@ -24,7 +24,7 @@ class WebsiteSaleB2B(WebsiteSale):
             product = product.with_context(quantity=quantity)
 
             visible_attrs_ids = (
-                product.attribute_line_ids.filtered(lambda l: len(l.value_ids) > 1)
+                product.attribute_line_ids.filtered(lambda al: len(al.value_ids) > 1)
                 .mapped("attribute_id")
                 .ids
             )
