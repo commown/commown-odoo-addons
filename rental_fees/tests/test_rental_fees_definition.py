@@ -1,4 +1,5 @@
-from datetime import date
+import json
+from datetime import date, timedelta
 
 from odoo.exceptions import UserError, ValidationError
 
@@ -118,4 +119,58 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         self.assertDictEqual(
             self.fees_def.scrapped_devices(date(2021, 8, 1)),
             {device: {"date": date(2021, 3, 15)}},
+        )
+
+    def get_notifications(self, msg_level):
+        name = json.dumps(getattr(self.env.user, "notify_%s_channel_name" % msg_level))
+        return self.env["bus.bus"].search([("channel", "=", name)], order="id")
+
+    def assertNewNotifs(self, msg_level, prev_notifs, *messages):
+        new_notifs = self.get_notifications(msg_level) - prev_notifs
+        self.assertEqual(
+            {json.loads(nf.message)["message"] for nf in new_notifs},
+            set(messages),
+        )
+
+    def test_action_update_with_new_pos(self):
+        one_day = timedelta(days=1)
+
+        newer_draft_po = self.po.copy({"date_order": self.po.date_order + one_day})
+
+        newer_partial_po = self.po.copy({"date_order": self.po.date_order + one_day})
+        newer_partial_po.button_confirm()
+        assert len(newer_partial_po.picking_ids.move_line_ids) > 1
+        mol0 = newer_partial_po.picking_ids.move_line_ids[0]
+        mol0.update({"lot_name": "test-serial", "qty_done": 1})
+        newer_partial_po.picking_ids.action_done()
+
+        prev_info = self.get_notifications("info")
+        prev_danger = self.get_notifications("danger")
+        prev_success = self.get_notifications("success")
+
+        older_po = self.po.copy({"date_order": self.po.date_order - one_day})
+        old_fees_def = self.fees_def.copy({"name": "Old def"})
+        old_fees_def.order_ids |= older_po
+
+        (old_fees_def | self.fees_def).action_update_with_new_pos()
+
+        self.assertNewNotifs(
+            "info",
+            prev_info,
+            "Ignoring fees def '%s', superseded by a more recent one."
+            % old_fees_def.name,
+        )
+
+        self.assertNewNotifs(
+            "danger",
+            prev_danger,
+            "%s is still in an early state." % newer_draft_po.name,
+            "%s is not fully delivered." % newer_partial_po.name,
+        )
+
+        self.assertNewNotifs(
+            "success",
+            prev_success,
+            "Adding new POs to fees def 'Test fees_def': %s, %s"
+            % (newer_draft_po.name, newer_partial_po.name),
         )
