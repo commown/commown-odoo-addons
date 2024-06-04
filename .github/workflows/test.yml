@@ -51,3 +51,5 @@ jobs:
       - name: Run tests
         run: oca_run_tests
       - uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
