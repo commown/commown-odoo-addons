@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 07:32+0000\n"
+"POT-Creation-Date: 2024-06-04 09:46+0000\n"
 "PO-Revision-Date: 2024-02-14 08:53+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:356
+#: code:addons/rental_fees/models/rental_fees_definition.py:432
 #, python-format
 msgid ""
 "\n"
@@ -28,7 +28,9 @@ msgid ""
 msgstr ""
 "\n"
 "%(err)s\n"
-"Bei der Berechnung der in Rechnung gestellten Beträge dieses Zeitraums in der Gebührendefinition %(def_name)r (id %(def_id)d) ist ein früherer Fehler aufgetreten:\n"
+"Bei der Berechnung der in Rechnung gestellten Beträge dieses Zeitraums in "
+"der Gebührendefinition %(def_name)r (id %(def_id)d) ist ein früherer Fehler "
+"aufgetreten:\n"
 "- %(period)s"
 
 #. module: rental_fees
@@ -64,7 +66,8 @@ msgstr ""
 "${format_date(object.fees_computation_id.until_date)}<p>\n"
 "\n"
 "<p>Bitte senden Sie uns die entsprechende Rechnung über\n"
-"${format_amount(object.amount_total, object.currency_id)} zurück, indem Sie sie einfach\n"
+"${format_amount(object.amount_total, object.currency_id)} zurück, indem Sie "
+"sie einfach\n"
 "als Antwort auf diese E-Mail anhängen, ohne den Betreff zu ändern.</p>\n"
 "\n"
 "<br><br>\n"
@@ -76,17 +79,31 @@ msgstr ""
 "</div>\n"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:403
+#: code:addons/rental_fees/models/rental_fees_definition.py:479
 #, python-format
 msgid "%(fixed_amount)s %(currency)s (fixed)"
 msgstr "%(fixed_amount)s %(currency)s (fest)"
+
+#. module: rental_fees
+#: code:addons/rental_fees/models/rental_fees_definition.py:295
+#, python-format
+msgid "%s is not fully delivered."
+msgstr ""
+
+#. module: rental_fees
+#: code:addons/rental_fees/models/rental_fees_definition.py:284
+#, python-format
+msgid "%s is still in an early state."
+msgstr ""
 
 #. module: rental_fees
 #: model:ir.model,name:rental_fees.model_rental_fees_definition
 msgid ""
 "A definition of fees to be paid back to the supplier when renting his "
 "hardware"
-msgstr "eine Definition der Gebühren, die dem Anbieter bei der Anmietung seiner Hardware zu erstatten sind"
+msgstr ""
+"eine Definition der Gebühren, die dem Anbieter bei der Anmietung seiner "
+"Hardware zu erstatten sind"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_needaction
@@ -99,6 +116,12 @@ msgid "Actual"
 msgstr "Tatsächlich"
 
 #. module: rental_fees
+#: code:addons/rental_fees/models/rental_fees_definition.py:299
+#, python-format
+msgid "Adding new POs to fees def '%s': %s"
+msgstr ""
+
+#. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__agreed_to_std_price_ratio
 msgid "Agreed / standard price ratio"
 msgstr "Vereinbartes Preis/Standardpreis-Verhältnis"
@@ -109,12 +132,14 @@ msgid "Amount"
 msgstr "Betrag"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:160
+#: code:addons/rental_fees/models/rental_fees_definition.py:167
 #, python-format
 msgid ""
 "At least one other fees def, %s (id %d), has the same partner, product & "
 "order"
-msgstr "Mindestens ein weiterer Gebührendefinition, %s (id %d), hat denselben Partner, dasselbe Produkt und denselben Auftrag"
+msgstr ""
+"Mindestens ein weiterer Gebührendefinition, %s (id %d), hat denselben "
+"Partner, dasselbe Produkt und denselben Auftrag"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_attachment_count
@@ -134,16 +159,20 @@ msgid "B2C"
 msgstr "B2C"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:595
+#: code:addons/rental_fees/models/rental_fees_computation.py:604
 #, python-format
 msgid "Cannot reset fees computation if not in the 'done' state"
-msgstr "Die Gebührenberechnung kann nicht zurückgesetzt werden, wenn sie sich nicht im Zustand \"erledigt\" befindet."
+msgstr ""
+"Die Gebührenberechnung kann nicht zurückgesetzt werden, wenn sie sich nicht "
+"im Zustand \"erledigt\" befindet."
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:599
+#: code:addons/rental_fees/models/rental_fees_computation.py:608
 #, python-format
 msgid "Cannot reset fees computation with a non-canceled invoice"
-msgstr "Die Gebührenberechnung kann bei einer nicht stornierten Rechnung nicht zurückgesetzt werden"
+msgstr ""
+"Die Gebührenberechnung kann bei einer nicht stornierten Rechnung nicht "
+"zurückgesetzt werden"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__compensation_reason
@@ -188,7 +217,7 @@ msgstr "Vertrag"
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__contract_template_id
 msgid "Contract template"
-msgstr ""
+msgstr "Vertragsmodell"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__create_uid
@@ -255,7 +284,7 @@ msgid "Device Domain"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:224
+#: code:addons/rental_fees/models/rental_fees_definition.py:234
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_view_form
 #, python-format
 msgid "Devices"
@@ -326,13 +355,13 @@ msgid "Fees"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:489
+#: code:addons/rental_fees/models/rental_fees_computation.py:493
 #, python-format
 msgid "Fees computation details"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:503
+#: code:addons/rental_fees/models/rental_fees_computation.py:507
 #, python-format
 msgid "Fees computation job"
 msgstr ""
@@ -355,7 +384,7 @@ msgid "Fees definition lines"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:141
+#: code:addons/rental_fees/models/rental_fees_definition.py:148
 #, python-format
 msgid ""
 "Fees definition purchase orders partners must all be the same as the fees "
@@ -469,6 +498,12 @@ msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: rental_fees
+#: code:addons/rental_fees/models/rental_fees_definition.py:266
+#, python-format
+msgid "Ignoring fees def '%s', superseded by a more recent one."
+msgstr ""
+
+#. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition_line__sequence
 msgid "Index of the period in the fees definition"
 msgstr ""
@@ -574,7 +609,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__market
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_search
 msgid "Market"
-msgstr ""
+msgstr "Markt"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_has_error
@@ -602,7 +637,7 @@ msgid "Name"
 msgstr "Name"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:207
+#: code:addons/rental_fees/models/rental_fees_definition.py:217
 #, python-format
 msgid "No price for device %(serial)s: its PO line has no invoice, see %(po)s"
 msgstr ""
@@ -648,7 +683,7 @@ msgid "Number of unread messages"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:183
+#: code:addons/rental_fees/models/rental_fees_computation.py:185
 #, python-format
 msgid ""
 "Operation not allowed: there are later fees computations with invoices which "
@@ -661,9 +696,15 @@ msgid "Partner"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:535
+#: code:addons/rental_fees/models/rental_fees_computation.py:533
 #, python-format
-msgid "Please set the invoice model on the fees definition."
+msgid "Please set the invoice model on all fees definitions."
+msgstr ""
+
+#. module: rental_fees
+#: code:addons/rental_fees/models/rental_fees_computation.py:544
+#, python-format
+msgid "Please use the same invoice model on all fees definition."
 msgstr ""
 
 #. module: rental_fees
@@ -797,7 +838,7 @@ msgid "Send report for invoicing"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:128
+#: code:addons/rental_fees/models/rental_fees_definition.py:134
 #, python-format
 msgid ""
 "Some non-draft computations use this fees definition. Please remove or set "
@@ -850,7 +891,7 @@ msgid ""
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:530
+#: code:addons/rental_fees/models/rental_fees_computation.py:539
 #, python-format
 msgid "There is a later invoice for the same fees definition"
 msgstr ""
@@ -925,7 +966,13 @@ msgstr ""
 #. module: rental_fees
 #: model:mail.template,subject:rental_fees.send_report_mail_template
 msgid ""
-"[${object.company_id.name}] Fees to be invoices as of ${object.until_date}"
+"[${object.company_id.name}] Fees to be invoices as of ${format_date(object."
+"fees_computation_id.until_date)}"
+msgstr ""
+
+#. module: rental_fees
+#: model:ir.actions.act_window,name:rental_fees.action_compare_selected_computations
+msgid "[commown] Compare computations"
 msgstr ""
 
 #. module: rental_fees
@@ -936,4 +983,9 @@ msgstr ""
 #. module: rental_fees
 #: model:mail.template,name:rental_fees.send_report_mail_template
 msgid "[commown] Send fees report through the invoice"
+msgstr ""
+
+#. module: rental_fees
+#: model:ir.actions.server,name:rental_fees.update_defs_with_new_pos
+msgid "[commown] Update fees definitions with the new POs"
 msgstr ""
