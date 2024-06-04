@@ -22,7 +22,7 @@ class RentalFeesDefinition(models.Model):
         "A definition of fees to be paid back to the supplier when renting his hardware"
     )
 
-    name = fields.Char(required=True, copy=False)
+    name = fields.Char(required=True)
 
     partner_id = fields.Many2one(
         "res.partner",
