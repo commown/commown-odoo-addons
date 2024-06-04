@@ -108,13 +108,14 @@ class RentalFeesDefinition(models.Model):
     order_ids = fields.Many2many(
         comodel_name="purchase.order",
         string="Purchase orders",
+        copy=False,
     )
 
     line_ids = fields.One2many(
         comodel_name="rental_fees.definition_line",
         string="Fees definition lines",
         inverse_name="fees_definition_id",
-        copy=False,
+        copy=True,
     )
 
     # Computed on computation's state change
@@ -141,7 +142,8 @@ class RentalFeesDefinition(models.Model):
     @api.constrains("partner_id")
     def _check_partner_coherency(self):
         for fees_def in self:
-            if fees_def.mapped("order_ids.partner_id") != self.partner_id:
+            partner_ids = fees_def.mapped("order_ids.partner_id")
+            if partner_ids and partner_ids != self.partner_id:
                 raise models.ValidationError(
                     _(
                         "Fees definition purchase orders partners must all be"
