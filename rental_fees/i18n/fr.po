@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-04 09:46+0000\n"
-"PO-Revision-Date: 2024-06-04 13:05+0200\n"
+"POT-Creation-Date: 2024-06-05 14:37+0000\n"
+"PO-Revision-Date: 2024-06-05 16:55+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -355,8 +355,8 @@ msgstr "Pénalité pour exclusion de l'appareil"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__excluded_devices
-msgid "Explicitely excluded devices (with compensation)"
-msgstr "Appareils exclus manuellement (avec pénalité)"
+msgid "Explicitely excluded devices"
+msgstr "Appareils exclus"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__fees
@@ -509,10 +509,19 @@ msgid "If checked, some messages have a delivery error."
 msgstr "Si actif, certains messages ont une erreur de livraison."
 
 #. module: rental_fees
+#: model:ir.model.fields,help:rental_fees.field_rental_fees_excluded_device__with_compensation
+msgid ""
+"If inactive, the device will be completely absent of the fees computation, "
+"as if it was never bought"
+msgstr "Lorsque décoché, l'appareil sera complètement absent du calcul des commissions, comme s'il n'avait jamais été acheté"
+
+#. module: rental_fees
 #: code:addons/rental_fees/models/rental_fees_definition.py:266
 #, python-format
 msgid "Ignoring fees def '%s', superseded by a more recent one."
-msgstr "La définition de commissions '%s' a été ignorée car remplacée par une plus récente."
+msgstr ""
+"La définition de commissions '%s' a été ignorée car remplacée par une plus "
+"récente."
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition_line__sequence
@@ -718,13 +727,17 @@ msgstr "Partenaire"
 #: code:addons/rental_fees/models/rental_fees_computation.py:533
 #, python-format
 msgid "Please set the invoice model on all fees definitions."
-msgstr "Merci d'utiliser le même modèle de facture pour toutes les définitions de commissions."
+msgstr ""
+"Merci d'utiliser le même modèle de facture pour toutes les définitions de "
+"commissions."
 
 #. module: rental_fees
 #: code:addons/rental_fees/models/rental_fees_computation.py:544
 #, python-format
 msgid "Please use the same invoice model on all fees definition."
-msgstr "Merci d'utiliser le même modèle de facture pour toutes les définitions de commissions."
+msgstr ""
+"Merci d'utiliser le même modèle de facture pour toutes les définitions de "
+"commissions."
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__product_template_id
@@ -993,6 +1006,11 @@ msgid "Weeks"
 msgstr "Semaines"
 
 #. module: rental_fees
+#: model:ir.model.fields,field_description:rental_fees.field_rental_fees_excluded_device__with_compensation
+msgid "With compensation"
+msgstr "Avec pénalité"
+
+#. module: rental_fees
 #: selection:rental_fees.definition_line,duration_unit:0
 msgid "Years"
 msgstr "Années"
@@ -1002,7 +1020,9 @@ msgstr "Années"
 msgid ""
 "[${object.company_id.name}] Fees to be invoices as of ${format_date(object."
 "fees_computation_id.until_date)}"
-msgstr "[${object.company_id.name}] Commissions à facturer au ${format_date(object.fees_computation_id.until_date)}"
+msgstr ""
+"[${object.company_id.name}] Commissions à facturer au ${format_date(object."
+"fees_computation_id.until_date)}"
 
 #. module: rental_fees
 #: model:ir.actions.act_window,name:rental_fees.action_compare_selected_computations
@@ -1024,7 +1044,12 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.actions.server,name:rental_fees.update_defs_with_new_pos
 msgid "[commown] Update fees definitions with the new POs"
-msgstr "[commown] Mettre à jour des définitions de commissions avec les nouveaux achats"
+msgstr ""
+"[commown] Mettre à jour des définitions de commissions avec les nouveaux "
+"achats"
+
+#~ msgid "Explicitely excluded devices (with compensation)"
+#~ msgstr "Appareils exclus manuellement (avec pénalité)"
 
 #~ msgid "Please set the invoice model on the fees definition."
 #~ msgstr ""
