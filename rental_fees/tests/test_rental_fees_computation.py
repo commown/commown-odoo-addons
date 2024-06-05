@@ -533,7 +533,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(comp.compensation_details().mapped("fees"), [300.0])
         self.assertFalse(comp.rental_details().mapped("fees"))
 
-    def test_compute_excluded_device(self):
+    def _computation_with_excluded_device(self, **excluded_device_attrs):
         contract = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract, "2021-02-01")
         contract.date_start = "2021-02-01"
@@ -541,20 +541,33 @@ class RentalFeesComputationTC(RentalFeesTC):
         while contract.recurring_next_date <= date(2021, 3, 1):
             contract._recurring_create_invoice()
 
-        reason = "Used by an internal employee"
-        self.env["rental_fees.excluded_device"].create(
+        attrs = dict(
             {
                 "fees_definition_id": self.fees_def.id,
                 "device": device.id,
-                "reason": reason,
-            }
+            },
+            **excluded_device_attrs
         )
+        self.env["rental_fees.excluded_device"].create(attrs)
 
-        comp = self.compute("2022-03-01")
+        return self.compute("2022-03-01")
+
+    def test_compute_excluded_device_with_compensation(self):
+        comp = self._computation_with_excluded_device(
+            with_compensation=True,
+            reason="Used by an internal employee",
+        )
         self.assertEqual(
             comp.details("excluded_device_compensation").mapped("fees"),
             [300.0],
         )
+
+    def test_compute_excluded_device_without_compensation(self):
+        comp = self._computation_with_excluded_device(
+            with_compensation=False,
+            reason="Returned to the supplier",
+        )
+        self.assertFalse(comp.details("excluded_device_compensation"))
 
     def test_compute_monthly_fees_error_main_rental_line(self):
         contract = self.env["contract.contract"].of_sale(self.so)[0]

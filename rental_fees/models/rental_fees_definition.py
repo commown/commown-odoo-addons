@@ -92,7 +92,7 @@ class RentalFeesDefinition(models.Model):
 
     excluded_devices = fields.One2many(
         comodel_name="rental_fees.excluded_device",
-        string="Explicitely excluded devices (with compensation)",
+        string="Explicitely excluded devices",
         inverse_name="fees_definition_id",
         copy=False,
     )
@@ -510,6 +510,15 @@ class RentalFeesExcludedDevice(models.Model):
     )
 
     reason = fields.Char()
+
+    with_compensation = fields.Boolean(
+        string="With compensation",
+        default=True,
+        help=(
+            "If inactive, the device will be completely absent"
+            " of the fees computation, as if it was never bought"
+        ),
+    )
 
     def _default_device_domain(self):
         key = "default_fees_definition_id"
