@@ -69,6 +69,7 @@
                 <field name="device_domain" invisible="1"/>
                 <field name="device" domain="device_domain"/>
                 <field name="reason"/>
+                <field name="with_compensation"/>
               </tree>
             </field>
           </group>
