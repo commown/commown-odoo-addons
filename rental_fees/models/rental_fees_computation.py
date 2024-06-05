@@ -713,7 +713,7 @@ class RentalFeesComputation(models.Model):
     def _run_for_fees_def(self, fees_def):
 
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
-        excluded_devices = {ed.device: ed for ed in fees_def.excluded_devices}
+        excluded_devices = {ed.device: ed.reason for ed in fees_def.excluded_devices}
 
         for device, delivery_data in fees_def.devices_delivery().items():
             try:
@@ -742,15 +742,13 @@ class RentalFeesComputation(models.Model):
         delivery_date = delivery_data["date"]
 
         if device in excluded_devices:
-            excluded_device = excluded_devices[device]
-            if excluded_device.with_compensation:
-                self._add_compensation(
-                    fees_def,
-                    "excluded_device_compensation",
-                    device,
-                    delivery_date,
-                    reason=excluded_device.reason,
-                )
+            self._add_compensation(
+                fees_def,
+                "excluded_device_compensation",
+                device,
+                delivery_date,
+                reason=excluded_devices[device],
+            )
             return
 
         periods = self.rental_periods(device)
