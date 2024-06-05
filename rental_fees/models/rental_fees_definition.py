@@ -173,12 +173,18 @@ class RentalFeesDefinition(models.Model):
 
     def devices_delivery(self):
         result = {}
+
+        ignored_devices = self.excluded_devices.filtered(
+            lambda d: not d.with_compensation
+        ).mapped("device")
+
         for ol in self.mapped("order_ids.order_line").filtered(
             lambda ol: ol.product_id.product_tmpl_id == self.product_template_id
         ):
             for ml in ol.mapped("move_ids.move_line_ids"):
                 for device in ml.mapped("lot_id"):
-                    result[device] = {"order_line": ol, "date": ml.date.date()}
+                    if device not in ignored_devices:
+                        result[device] = {"order_line": ol, "date": ml.date.date()}
         return result
 
     def scrapped_devices(self, date):
