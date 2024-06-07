@@ -62,6 +62,8 @@ class CommownShippingMixin(models.AbstractModel):
 
     @api.multi
     def _default_shipping_account(self):
+        if not self._shipping_parent().mapped("shipping_account_id"):
+            raise UserError(_("No shipping account defined"))
         return self._shipping_parent().mapped("shipping_account_id")
 
     @api.multi

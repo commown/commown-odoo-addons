@@ -308,6 +308,12 @@ msgid "Name"
 msgstr "Nom"
 
 #. module: commown_shipping
+#: code:addons/commown_shipping/models/shipping_mixin.py:66
+#, python-format
+msgid "No shipping account defined"
+msgstr "Aucun compte de livraison défini"
+
+#. module: commown_shipping
 #: code:addons/commown_shipping/models/delivery_mixin.py:104
 #, python-format
 msgid "No mail email template specified for %s (neither in current record nor its parent)"
