@@ -176,3 +176,11 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             ),
             "Adding new POs to fees def 'Old def': %s" % older_po.name,
         )
+
+        prev_warning = self.get_notifications("warning")
+        (old_fees_def | self.fees_def).action_update_with_new_pos()
+        self.assertNewNotifs(
+            "warning",
+            prev_warning,
+            "No fees definition needs updating.",
+        )
