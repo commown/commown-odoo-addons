@@ -264,6 +264,8 @@ class RentalFeesDefinition(models.Model):
         Notify the user of added POs and when a PO is still draft or not fully received.
         """
 
+        update_done = False
+
         for fees_def in self:
 
             _pt = fees_def.product_template_id
@@ -313,8 +315,12 @@ class RentalFeesDefinition(models.Model):
                     msg % (fees_def.name, ", ".join(new_pos.mapped("name"))),
                     sticky=True,
                 )
-
                 fees_def.order_ids |= new_pos
+                update_done = True
+
+        if update_done is False:
+            msg = _("No fees definition needs updating.")
+            self.env.user.notify_warning(msg, sticky=True)
 
 
 class RentalFeesDefinitionLine(models.Model):
