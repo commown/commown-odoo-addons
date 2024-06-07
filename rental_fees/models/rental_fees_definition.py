@@ -21,6 +21,7 @@ class RentalFeesDefinition(models.Model):
     _description = (
         "A definition of fees to be paid back to the supplier when renting his hardware"
     )
+    _order = "partner_id, product_template_id, valid_from"
 
     name = fields.Char(required=True)
 
@@ -56,6 +57,17 @@ class RentalFeesDefinition(models.Model):
         help="The product concerned by this fees definition",
         required=True,
         domain=[("type", "=", "product")],
+    )
+
+    valid_from = fields.Date(
+        string="Valid from",
+        help=(
+            "From this date on and until a new fees definition with the same"
+            " (partner, product) couple and with a more recent date arrives, all POs"
+            " with an order date after this will be attributed to this fees definition."
+        ),
+        default=lambda self: fields.Date.today(),
+        required=True,
     )
 
     agreed_to_std_price_ratio = fields.Float(
@@ -244,45 +256,39 @@ class RentalFeesDefinition(models.Model):
             "res_model": "stock.production.lot",
         }
 
-    def _active_fees_defs(self):
-        """Return a fees_def: from_date dictionary telling which fees defs are still
-        active and from which date should new POs be associated: for a given (supplier,
-        product) couple, the one with the more recent purchase order.
-
-        """
-        active_fees_def = {}
-
-        for fees_def in self.env["rental_fees.definition"].search([]):
-            key = (fees_def.partner_id, fees_def.product_template_id)
-            from_date = max(
-                fees_def.mapped("order_ids.date_order") or [fees_def.create_date]
-            )
-
-            if key not in active_fees_def or from_date > active_fees_def[key][1]:
-                active_fees_def[key] = (fees_def, from_date)
-
-        return dict(active_fees_def.values())
-
     def action_update_with_new_pos(self):
-        _active_fees_defs = self._active_fees_defs()
+        """Update orders of each fees def with the purchase orders which date is after
+        the current fees def valid_from and the next valid_from date of the other fees
+        defs with the same partner and product.
+
+        Notify the user of added POs and when a PO is still draft or not fully received.
+        """
 
         for fees_def in self:
 
-            if fees_def not in _active_fees_defs:
-                msg = _("Ignoring fees def '%s', superseded by a more recent one.")
-                self.env.user.notify_info(msg % fees_def.name, sticky=True)
-                continue
-
             _pt = fees_def.product_template_id
-            new_pos = self.env["purchase.order"].search(
+
+            next_fees_def = self.env["rental_fees.definition"].search(
                 [
                     ("partner_id", "=", fees_def.partner_id.id),
-                    ("order_line.product_id.product_tmpl_id", "=", _pt.id),
-                    ("date_order", ">", _active_fees_defs[fees_def]),
-                    ("state", "!=", "cancel"),
+                    ("product_template_id", "=", _pt.id),
+                    ("valid_from", ">", fees_def.valid_from),
                 ],
-                order="id",
+                order="valid_from asc",
+                limit=1,
             )
+
+            po_domain = [
+                ("partner_id", "=", fees_def.partner_id.id),
+                ("order_line.product_id.product_tmpl_id", "=", _pt.id),
+                ("date_order", ">=", fees_def.valid_from),
+                ("state", "!=", "cancel"),
+                ("id", "not in", fees_def.order_ids.ids),
+            ]
+            if next_fees_def:
+                po_domain.append(("date_order", "<", next_fees_def.valid_from))
+
+            new_pos = self.env["purchase.order"].search(po_domain, order="id")
 
             for new_po in new_pos:
                 if new_po.state not in ("purchase", "done"):

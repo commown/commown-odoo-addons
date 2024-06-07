@@ -26,6 +26,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
             {
                 "name": "Test fees_def",
                 "partner_id": self.po.partner_id.id,
+                "valid_from": date(2000, 1, 1),
                 "product_template_id": self.storable_product.id,
                 "order_ids": [(6, 0, self.po.ids)],
                 "agreed_to_std_price_ratio": 0.4,
