@@ -4,6 +4,7 @@ import os
 import re
 import sys
 from base64 import b64encode
+from datetime import datetime
 from subprocess import CalledProcessError, run as _run
 from tempfile import gettempdir, mktemp
 
@@ -84,8 +85,12 @@ class CommownShippingMixin(models.AbstractModel):
         if meta_data and not label_data:
             raise ValueError(json.dumps(meta_data))
         assert meta_data and label_data
-
-        return self._attachment_from_label(parcel.name + ".pdf", meta_data, label_data)
+        datetime.now()
+        return self._attachment_from_label(
+            datetime.now().strftime("%d-%m-%Y--%H:%M ") + parcel.name + ".pdf",
+            meta_data,
+            label_data,
+        )
 
     @api.multi
     def _attachment_from_label(self, name, meta_data, label_data):
