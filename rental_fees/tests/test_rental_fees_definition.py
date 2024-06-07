@@ -38,6 +38,17 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             ),
         )
 
+    def test_purchase_order_no_exclude_from_fees(self):
+        po2 = self.po.copy({"exclude_from_fees": True})
+
+        with self.assertRaises(ValidationError) as err:
+            self.fees_def.order_ids |= po2
+
+        self.assertEqual(
+            err.exception.name,
+            "Cannot add an excluded-from-fees PO to a fees definition",
+        )
+
     def test_purchase_order_no_override(self):
         "Check fees def cannot have partner & product & po in common"
         po2 = self.create_po_and_picking(

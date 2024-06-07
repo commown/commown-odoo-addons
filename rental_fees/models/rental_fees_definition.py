@@ -163,6 +163,13 @@ class RentalFeesDefinition(models.Model):
                     )
                 )
 
+    @api.constrains("order_ids")
+    def _check_no_po_exclude_from_fees(self):
+        for fees_def in self:
+            if any(fees_def.mapped("order_ids.exclude_from_fees")):
+                msg = _("Cannot add an excluded-from-fees PO to a fees definition")
+                raise models.ValidationError(msg)
+
     @api.constrains("partner_id", "product_template_id", "order_ids")
     def _check_no_po_override(self):
         for fees_def in self:
@@ -286,6 +293,7 @@ class RentalFeesDefinition(models.Model):
                 ("date_order", ">=", fees_def.valid_from),
                 ("state", "!=", "cancel"),
                 ("id", "not in", fees_def.order_ids.ids),
+                ("exclude_from_fees", "=", False),
             ]
             if next_fees_def:
                 po_domain.append(("date_order", "<", next_fees_def.valid_from))

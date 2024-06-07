@@ -23,6 +23,7 @@
         "security/ir.model.access.csv",
         "data/actions.xml",
         "data/mail_template.xml",
+        "views/purchase_order.xml",
         "views/rental_fees_computation.xml",
         "views/rental_fees_definition.xml",
         "views/rental_fees_report.xml",
