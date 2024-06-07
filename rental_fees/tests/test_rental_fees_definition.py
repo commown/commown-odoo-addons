@@ -144,26 +144,25 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         mol0.update({"lot_name": "test-serial", "qty_done": 1})
         newer_partial_po.picking_ids.action_done()
 
-        prev_info = self.get_notifications("info")
+        self.get_notifications("info")
         prev_danger = self.get_notifications("danger")
         prev_success = self.get_notifications("success")
 
-        older_po = self.po.copy({"date_order": self.po.date_order - one_day})
-        old_fees_def = self.fees_def.copy({"name": "Old def"})
-        old_fees_def.order_ids |= older_po
+        older_po = self.po.copy({"date_order": self.fees_def.valid_from - one_day})
+        old_fees_def = self.fees_def.copy(
+            {"name": "Old def", "valid_from": date(1970, 1, 1)},
+        )
 
         (old_fees_def | self.fees_def).action_update_with_new_pos()
 
-        self.assertNewNotifs(
-            "info",
-            prev_info,
-            "Ignoring fees def '%s', superseded by a more recent one."
-            % old_fees_def.name,
-        )
+        self.assertIn(newer_partial_po, self.fees_def.order_ids)
+        self.assertIn(newer_draft_po, self.fees_def.order_ids)
+        self.assertIn(older_po, old_fees_def.order_ids)
 
         self.assertNewNotifs(
             "danger",
             prev_danger,
+            "%s is still in an early state." % older_po.name,
             "%s is still in an early state." % newer_draft_po.name,
             "%s is not fully delivered." % newer_partial_po.name,
         )
@@ -171,6 +170,9 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         self.assertNewNotifs(
             "success",
             prev_success,
-            "Adding new POs to fees def 'Test fees_def': %s, %s"
-            % (newer_draft_po.name, newer_partial_po.name),
+            (
+                "Adding new POs to fees def 'Test fees_def': %s, %s"
+                % (newer_draft_po.name, newer_partial_po.name)
+            ),
+            "Adding new POs to fees def 'Old def': %s" % older_po.name,
         )
