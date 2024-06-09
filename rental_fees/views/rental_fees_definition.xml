@@ -10,6 +10,7 @@
         <field name="name"/>
         <field name="partner_id"/>
         <field name="product_template_id"/>
+        <field name="valid_from"/>
         <field name="agreed_to_std_price_ratio" widget="percentage"/>
         <field name="order_ids" widget="many2many_tags" options="{'open': true}"/>
       </tree>
@@ -58,6 +59,7 @@
           <group name="main">
             <field name="partner_id"/>
             <field name="product_template_id"/>
+            <field name="valid_from"/>
             <field name="model_invoice_id"/>
             <field name="agreed_to_std_price_ratio" widget="percentage"/>
           </group>
@@ -74,7 +76,7 @@
             </field>
           </group>
           <group name="orders">
-            <field name="order_ids" widget="many2many" domain="[('partner_id', '=', partner_id), ('order_line.product_id.product_tmpl_id', '=', product_template_id)]"/>
+            <field name="order_ids" widget="many2many" domain="[('partner_id', '=', partner_id), ('order_line.product_id.product_tmpl_id', '=', product_template_id), ('exclude_from_fees', '=', False)]"/>
           </group>
           <group name="lines">
             <field name="line_ids">

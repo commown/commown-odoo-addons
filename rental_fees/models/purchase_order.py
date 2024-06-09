@@ -1,8 +1,14 @@
-from odoo import _, api, models
+from odoo import _, api, fields, models
 
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
+
+    exclude_from_fees = fields.Boolean(
+        string="Exclude from fees",
+        help="Force exclusion from fees even if a matching fees definition exists",
+        default=False,
+    )
 
     @api.constrains("partner_id")
     def _check_partner_coherency(self):
