@@ -13,7 +13,7 @@
     "depends": [
         "crm",
         "mail",
-        "product_rental",
+        "commown_devices",
         "website_sale",
     ],
     "external_dependencies": {},
