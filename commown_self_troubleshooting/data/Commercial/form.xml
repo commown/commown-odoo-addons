@@ -1,0 +1,93 @@
+<odoo>
+
+  <record id="commercial" model="ir.ui.view">
+    <field name="name">Self-troubleshoot - Commercial</field>
+    <field name="type">qweb</field>
+    <field name="key">website.self-troubleshoot-commercial</field>
+    <field name="arch" type="xml">
+
+      <t t-name="website.self-troubleshoot-commercial">
+        <t t-call="portal.portal_layout">
+          <t t-set="title">Commown - Demandes Commerciales</t>
+
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $('#smartwizard').smartWizard({
+                toolbarSettings: {
+                  toolbarPosition: 'none'
+                }
+              });
+            });
+          </script>
+
+          <t t-set="issue_title">Demande commerciale</t>
+          <t t-set="issue_description_template">issue-description-commercial</t>
+
+          <div class="bg-white border m-0 p-3 rounded">
+            <h1>Demandes Commerciales</h1>
+
+            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+
+              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+
+              <div id="smartwizard">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#step-0">
+                      Votre demande
+                      <br />
+                    </a>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div id="step-0" class="tab-pane" role="tabpanel" aria-labelledby="step-0">
+                    <h2>
+                      <i class="fas fa-hands-helping" />
+                      Contacter un humain
+                    </h2>
+                    <p>
+                      Si vous avez des questions sur votre commande non-livrée en cours ou besoin de conseils concernant un appareil ou un service, nous vous invitons à préciser votre demande ci-dessous.
+                    </p>
+                    <p>
+                      NB: pour toute assistance technique ou administrative relative à un appareil déjà en contrat, nous vous invitons à utiliser les autres menus d'assistance dédiés.
+                    </p>
+                    <t t-call="commown_self_troubleshooting.commown-signature" />
+
+                    <div id="form-step-0" role="form" data-toggle="validator">
+
+                      <div class="form-group">
+                        <label for="more_info_step_0">En quoi pouvons-nous vous aider ?</label>
+                        <textarea class="form-control" rows="3" required="required" id="more_info_step_0" name="more_info" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="hidden" name="project_ref" value="commown_self_troubleshooting.commercial_project" />
+                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
+        </t>
+      </t>
+
+    </field>
+  </record>
+
+  <record id="commercial-page" model="website.page">
+    <field name="website_published">True</field>
+    <field name="url">/page/self-troubleshoot-commercial</field>
+    <field name="view_id" ref="commercial" />
+    <field name="website_meta_title">Demandes Commerciales</field>
+    <field name="website_meta_description">J'ai besoin de conseil/information pour une commande en cours, un appareil ou un service</field>
+  </record>
+
+</odoo>

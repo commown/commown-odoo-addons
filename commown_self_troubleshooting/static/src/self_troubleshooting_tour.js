@@ -524,4 +524,18 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
     ]
   );
 
+  tour.register(
+    "commown_self_troubleshooting_commercial_request",
+    { url: "/my" },
+    [
+      {
+        content: "Go to Commercial request page",
+        trigger: 'a[href="/page/self-troubleshoot-commercial"]',
+      },
+      ...commonSteps.funcAddMoreInfo("I have a commercial request!"),
+      ...commonSteps.funcCreateAndCheckTicket("Informations complémentaires"),
+    ]
+  );
+
+
 });

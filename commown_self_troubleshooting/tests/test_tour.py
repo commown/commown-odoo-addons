@@ -138,3 +138,8 @@ class TestPageGSDay(TestPageTC):
 
     def test_gs_day_audio(self):
         self._run_tour("commown_self_troubleshooting_tour_gs_day_audio")
+
+
+class TestPageCommercialRequest:
+    def test_commercial_request(self):
+        self._run_tour("commown_self_troubleshooting_tour_commercial_request")

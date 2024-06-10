@@ -93,6 +93,10 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
                     ],
                 },
                 {
+                    "title": "Demandes commerciales",
+                    "pages": [{"url_path": "/page/self-troubleshoot-commercial"}],
+                },
+                {
                     "title": "Demandes spéciales",
                     "pages": [{"url_path": "/page/self-troubleshoot-other"}],
                 },
@@ -141,3 +145,6 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
 
     def test_other_page(self):
         self.assertFalse(self.partner.self_troubleshooting_contracts("other-page"))
+
+    def test_commercial_page(self):
+        self.assertFalse(self.partner.self_troubleshooting_contracts("commercial-page"))
