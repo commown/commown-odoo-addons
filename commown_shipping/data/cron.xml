@@ -25,4 +25,16 @@
     <field name="code">model._cron_delivery_auto_track()</field>
   </record>
 
+  <record id="late_pickings_with_lots_cron" model="ir.cron">
+    <field name="name">Late pickings with lots</field>
+    <field name="active" eval="True" />
+    <field name="user_id" ref="base.user_root" />
+    <field name="interval_number">1</field>
+    <field name="interval_type">days</field>
+    <field name="numbercall">-1</field>
+    <field name="doall" eval="False" />
+    <field name="model_id" ref="stock.model_stock_picking" />
+    <field name="code">model._cron_count_late_lot_pickings()</field>
+  </record>
+
 </odoo>

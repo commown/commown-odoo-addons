@@ -8,4 +8,5 @@ from . import project_task
 from . import product
 from . import res_partner
 from . import shipping_account
+from . import stock_picking
 from . import wizard_print_label

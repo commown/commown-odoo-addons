@@ -11,7 +11,15 @@
       <field name="lang">${object.user_id.lang}</field>
       <field name="auto_delete" eval="True"/>
       <field name="body_html"><![CDATA[<p>The parcel is waiting at the postoffice.</p>]]></field>
-  </record>
+    </record>
+
+    <record id="late_pickings_with_lots_mail" model="mail.template">
+      <field name="name">[commown] Late pickings with lots</field>
+      <field name="subject">Late pickings with lots</field>
+      <field name="model_id" ref="stock.model_stock_picking"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="body_html"><![CDATA[<p>${object.env.context.get('late_pickings')} late pickings</p>]]></field>
+    </record>
 
   </data>
 

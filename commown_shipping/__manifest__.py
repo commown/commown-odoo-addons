@@ -16,6 +16,7 @@
         "project",
         "queue_job",
         "server_environment",
+        "stock",
         "web_ir_actions_act_multi",
     ],
     "external_dependencies": {
@@ -25,6 +26,8 @@
     "data": [
         "data/actions.xml",
         "data/cron.xml",
+        "data/ir_filters.xml",
+        "data/mail_channel.xml",
         "data/mail_template.xml",
         "data/parcels.xml",
         "data/shipping_accounts.xml",
