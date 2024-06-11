@@ -5,6 +5,7 @@ from . import test_project_task
 from . import test_product
 from . import test_product_service_config
 from . import test_res_partner
+from . import test_stock_picking
 from . import test_stock_production_lot
 from . import test_stock_scrap
 from . import test_wizard_crm_lead

@@ -20,6 +20,10 @@
     ],
     "data": [
         "data/action_crm_lead.xml",
+        "data/cron.xml",
+        "data/ir_filters.xml",
+        "data/mail_channel.xml",
+        "data/mail_template.xml",
         "data/action_picking.xml",
         "data/action_project_task.xml",
         "data/action_purchase_order.xml",
