@@ -4,7 +4,7 @@
     <field name="name">[commown] Po invoice link wizard form view</field>
     <field name="model">po.invoice.link.wizard</field>
     <field name="arch" type="xml">
-      <form string="Descripe Po invoice Link">
+      <form string="Describe Po invoice Link">
         <sheet>
           <group>
             <field name="po_id" invisible="1"/>
