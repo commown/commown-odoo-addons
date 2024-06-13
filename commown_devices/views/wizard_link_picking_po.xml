@@ -4,7 +4,7 @@
     <field name="name">[commown] Picking Po link wizard form view</field>
     <field name="model">picking.po.link.wizard</field>
     <field name="arch" type="xml">
-      <form string="Descripe Picking Po Link">
+      <form string="Describe Picking Po Link">
         <sheet>
           <group>
             <field name="picking_id" invisible="1"/>
