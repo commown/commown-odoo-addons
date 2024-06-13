@@ -62,6 +62,10 @@ class POInvoiceLinkWizard(models.TransientModel):
         .purchase_id,
     )
 
+    po_id_is_readonly = fields.Boolean(
+        "Cannot change po if picking already has a linked po"
+    )
+
     link_line_ids = fields.One2many(
         "move.po.link.line",
         "wizard_id",
@@ -95,6 +99,10 @@ class POInvoiceLinkWizard(models.TransientModel):
                     ]
                 }
             }
+
+    @api.onchange("picking_id")
+    def _compute_po_id_is_readonly(self):
+        self.po_id_is_readonly = bool(self.picking_id.purchase_id)
 
     def action_assign_po(self):
         for link in self.link_line_ids:
