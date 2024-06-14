@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import requests_mock
 from mock import patch
@@ -138,6 +138,7 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
             lead.partner_id,
             lead.get_label_ref(),
         )
+        date_str = datetime.now().strftime("%d-%m-%Y--%H:%M ")
 
         self.assertEqual(lead.expedition_ref, "6X0000000000")
         self.assertEqual(lead.expedition_date, date.today())
@@ -147,8 +148,16 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         self.assertEqual(len(attachments), 1)
         att = attachments[0]
         self.assertEqual(att.datas_fname, "6X0000000000.pdf")
-        self.assertEqual(att.name, self.parcel_type.name + ".pdf")
+        self.assertEqual(att.name, date_str + self.parcel_type.name + ".pdf")
         self.assertEqualFakeLabel(att)
+
+    @requests_mock.Mocker()
+    def test_error_when_no_shipping_account_id(self, mocker):
+        self.lead._shipping_parent().shipping_account_id = False
+        with self.assertRaises(UserError) as err:
+            self.lead._default_shipping_account()
+        error_message = "No shipping account defined"
+        self.assertEqual(err.exception.args, (error_message, ""))
 
     def test_print_parcel_action(self):
         leads = self.env["crm.lead"]
