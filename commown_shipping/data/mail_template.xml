@@ -11,7 +11,7 @@
       <field name="lang">${object.user_id.lang}</field>
       <field name="auto_delete" eval="True"/>
       <field name="body_html"><![CDATA[<p>The parcel is waiting at the postoffice.</p>]]></field>
-  </record>
+    </record>
 
   </data>
 
