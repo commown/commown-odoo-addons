@@ -25,7 +25,6 @@ class Contract(models.Model):
 
     lot_ids = fields.One2many("stock.production.lot", "contract_id", string="Lots")
 
-
     def pending_picking(self):
         return self.move_ids.mapped("picking_id").filtered(_assigned)
 
@@ -43,7 +42,6 @@ class Contract(models.Model):
         send_lots_from=None,
         origin=None,
         date=None,
-        reuse_picking=None,
         do_transfer=False,
     ):
         """Create a picking of lot to partner's location.
@@ -61,7 +59,7 @@ class Contract(models.Model):
             send_lots_from = default_stock
         if origin is None:
             origin = self.name
-        return self._create_or_reuse_picking(
+        return self._create_picking(
             lots,
             products,
             send_nonserial_products_from,
@@ -69,7 +67,6 @@ class Contract(models.Model):
             dest_location,
             origin=origin,
             date=date,
-            reuse_picking=reuse_picking,
             do_transfer=do_transfer,
         )
 
@@ -81,7 +78,6 @@ class Contract(models.Model):
         dest_location,
         origin=None,
         date=False,
-        reuse_picking=None,
         do_transfer=False,
     ):
         """Create a picking from partner's location to `dest_location`.
@@ -94,7 +90,7 @@ class Contract(models.Model):
 
         location = self.partner_id.get_or_create_customer_location()
 
-        return self._create_or_reuse_picking(
+        return self._create_picking(
             lots,
             products,
             location,
@@ -102,11 +98,10 @@ class Contract(models.Model):
             dest_location,
             origin=origin,
             date=date,
-            reuse_picking=reuse_picking,
             do_transfer=do_transfer,
         )
 
-    def _create_or_reuse_picking(
+    def _create_picking(
         self,
         lots,
         products,
@@ -115,7 +110,6 @@ class Contract(models.Model):
         dest_location,
         origin,
         date=None,
-        reuse_picking=None,
         do_transfer=False,
     ):
         self.ensure_one()
@@ -127,7 +121,6 @@ class Contract(models.Model):
             dest_location,
             origin,
             date=date,
-            picking=reuse_picking,
         )
         self.move_ids |= new_moves
         if do_transfer:
