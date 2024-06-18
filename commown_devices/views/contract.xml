@@ -19,7 +19,7 @@
                 <field name="name"/>
               </tree>
             </field>
-            <field name="move_line_ids">
+            <field name="move_line_ids" context='{"short_location_name": True}'>
               <tree
                   colors="red:move_id.scrapped"
                   default_order="date ASC, id ASC"
