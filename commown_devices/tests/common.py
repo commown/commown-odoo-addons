@@ -3,6 +3,7 @@ import json
 import dateutil.parser
 from lxml import etree
 
+from odoo.tests.common import SavepointCase
 from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
@@ -30,6 +31,46 @@ def add_attributes_to_product(product, attribute, attribute_values):
             "value_ids": [(6, 0, attribute_values.ids)],
         }
     )
+
+
+class BaseLotTC(SavepointCase):
+    def setUp(self):
+        super().setUp()
+
+        self.product_tmpl = self.env["product.template"].create(
+            {
+                "name": "Fairphone 3",
+                "type": "product",
+                "tracking": "serial",
+            }
+        )
+        self.product = self.product_tmpl.product_variant_id
+        self.lot = self.env["stock.production.lot"].create(
+            {
+                "name": "test-lot",
+                "product_id": self.product.id,
+            }
+        )
+        self.location_available_for_rent = self.env.ref(
+            "commown_devices.stock_location_available_for_rent"
+        )
+        self.location_internal_available = self.env["stock.location"].create(
+            {
+                "name": "Test internal available location",
+                "usage": "internal",
+                "partner_id": 1,
+                "location_id": self.location_available_for_rent.id,
+            }
+        )
+
+        self.quant = self.env["stock.quant"].create(
+            {
+                "product_id": self.lot.product_id.id,
+                "lot_id": self.lot.id,
+                "location_id": self.location_internal_available.id,
+                "quantity": 1,
+            }
+        )
 
 
 class DeviceAsAServiceTC(RentalSaleOrderTC):
