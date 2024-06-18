@@ -2,10 +2,10 @@ from datetime import datetime
 
 from odoo.exceptions import UserError
 
-from .test_stock_production_lot import StockProductionLotTC
+from .common import BaseLotTC
 
 
-class StockScrapTC(StockProductionLotTC):
+class StockScrapTC(BaseLotTC):
     def test_force_scrap_date(self):
         date = datetime(1111, 11, 11, 11, 11, 11, 11)
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
