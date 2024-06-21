@@ -689,6 +689,18 @@ class RentalFeesComputationTC(RentalFeesTC):
             ),
         )
 
+    def test_split_periods_wrt_fees_def_error_no_line(self):
+        fees_def = self.fees_def.copy({"name": "error_fees_def", "line_ids": False})
+        compute = self.compute("2100-01-01", fees_def)
+
+        with self.assertRaises(UserError) as exc:
+            compute.split_periods_wrt_fees_def(fees_def, [])
+
+        self.assertEqual(
+            exc.exception.name,
+            "Fees definition error_fees_def (id %d) has no line." % fees_def.id,
+        )
+
     def test_action_invoice_error(self):
         "All computation fees defs must have the same invoice model to be invoiceable"
         p2 = self.storable_product.copy()

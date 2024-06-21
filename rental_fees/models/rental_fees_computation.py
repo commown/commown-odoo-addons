@@ -305,6 +305,10 @@ class RentalFeesComputation(models.Model):
         periods. Each given fees definition line defines a period on
         which the amount of the fees is uniform.
         """
+        if not fees_def.line_ids:
+            msg = _("Fees definition %s (id %d) has no line.")
+            raise UserError(msg % (fees_def.name, fees_def.id))
+
         result = []
         line_iter = iter(fees_def.line_ids)
         fees_def_line = next(line_iter)
