@@ -10,7 +10,7 @@
       <t t-if="action=='ship'">
         <t t-if="type_contrat=='me'">
           <p>
-          Après avoir effectué un auto-dépannage, il ressort que l'écran de mon FP3 doit être changé.
+          Il ressort que l'écran de mon FP3 doit être changé.
           </p>
         </t>
 
@@ -22,7 +22,7 @@
       </t>
 
       <p t-elif="action=='inform'">
-        Suite à l'auto-dépannage, le nettoyage des contacts a permis de résoudre le problème !
+        Suite à un besoin d'assistance, le nettoyage des contacts a permis de résoudre le problème !
       </p>
 
       <t t-call="commown_self_troubleshooting.more_customer_info" />

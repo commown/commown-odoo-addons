@@ -9,7 +9,7 @@
 
         <t t-name="website.self-troubleshoot-fp2-battery">
           <t t-call="portal.portal_layout">
-            <t t-set="title">Commown - Auto-dépannage - Fairphone 2 : Batterie</t>
+            <t t-set="title">Commown - Besoin d'assistance - Fairphone 2 : Batterie</t>
 
             <script type="text/javascript">
               $(document).ready(function() {
@@ -34,7 +34,7 @@
 
               <div class="d-flex flex-row" style="justify-content: space-between;">
                 <div class="d-flex flex-column">
-                  <h1>Auto-dépannage : Fairphone 2</h1>
+                  <h1>Besoin d'assistance : Fairphone 2</h1>
                   <h2>Ma batterie se décharge rapidement</h2>
                 </div>
                 <button id="contactAHuman" class="btn btn-warning" style="align-self: flex-start">
