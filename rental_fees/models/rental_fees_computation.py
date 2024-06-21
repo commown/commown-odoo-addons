@@ -298,20 +298,6 @@ class RentalFeesComputation(models.Model):
 
         return no_rental_limit, result
 
-    def _fees_def_split_dates(self, fees_def, origin_date):
-        """Return the end dates defined by all fees def line from given origin_date
-
-        The result is a {date: definition_line} dict
-        """
-        split_dates = {}
-
-        for line in fees_def.line_ids:
-            new_date = line.compute_end_date(origin_date)
-            split_dates[new_date] = line
-            origin_date = new_date
-
-        return split_dates
-
     def split_periods_wrt_fees_def(self, fees_def, periods):
         """Split given periods into smaller ones wrt. given fees def
 
@@ -319,15 +305,18 @@ class RentalFeesComputation(models.Model):
         periods. Each given fees definition line defines a period on
         which the amount of the fees is uniform.
         """
+        if not fees_def.line_ids:
+            msg = _("Fees definition %s (id %d) has no line.")
+            raise UserError(msg % (fees_def.name, fees_def.id))
+
         result = []
+        line_iter = iter(fees_def.line_ids)
+        fees_def_line = next(line_iter)
 
-        split_dates = self._fees_def_split_dates(fees_def, periods[0]["from_date"])
+        split_date = fees_def_line.compute_end_date(periods[0]["from_date"])
 
-        for period in periods:
-            for split_date, fees_def_line in split_dates.items():
-
-                if split_date and split_date < period["from_date"]:
-                    continue
+        for p_num, period in enumerate(periods):
+            while True:
 
                 from_date = (
                     max(result[-1]["to_date"], period["from_date"])
@@ -346,6 +335,9 @@ class RentalFeesComputation(models.Model):
                         }
                     )
 
+                    fees_def_line = next(line_iter)
+                    split_date = fees_def_line.compute_end_date(split_date)
+
                 else:
                     result.append(
                         {
@@ -356,6 +348,11 @@ class RentalFeesComputation(models.Model):
                             "fees_def_line": fees_def_line,
                         }
                     )
+
+                    if split_date and p_num < len(periods) - 1:
+                        gap = periods[p_num + 1]["from_date"] - period["to_date"]
+                        split_date += gap
+
                     break
 
         return result
