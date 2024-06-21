@@ -592,18 +592,6 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertIn(contract.name, exc)
         self.assertIn(self.fees_def.name, exc)
 
-    def test_fees_def_split_dates(self):
-        self.assertEqual(
-            {
-                date(2021, 3, 10): self.fees_def.line_ids[0],
-                date(2021, 6, 10): self.fees_def.line_ids[1],
-                None: self.fees_def.line_ids[2],
-            },
-            self.compute("2100-01-01")._fees_def_split_dates(
-                self.fees_def, date(2021, 1, 10)
-            ),
-        )
-
     def test_split_periods_wrt_fees_def_1(self):
         periods = [
             {
@@ -632,6 +620,13 @@ class RentalFeesComputationTC(RentalFeesTC):
                 {
                     "contract": 1,
                     "from_date": date(2021, 3, 15),
+                    "to_date": date(2021, 4, 7),
+                    "fees_def_line": self.fees_def.line_ids[0],
+                    "is_forecast": False,
+                },
+                {
+                    "contract": 1,
+                    "from_date": date(2021, 4, 7),
                     "to_date": date(2021, 4, 15),
                     "fees_def_line": self.fees_def.line_ids[1],
                     "is_forecast": False,
