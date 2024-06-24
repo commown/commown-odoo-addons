@@ -114,17 +114,17 @@ class PortalProjectTaskIrRulesTC(PortalIrRulesTC, SavepointCase):
 
     def setUp(self):
         super().setUp()
+        ref = self.env.ref
 
-        partner1 = self.env.ref("base.partner_demo_portal").copy(
-            {"email": "test1@example.com"}
-        )
-        partner1.parent_id = self.env.ref("base.res_partner_1")
+        partner1 = ref("base.partner_demo_portal").copy({"email": "test1@example.com"})
+        partner1.parent_id = ref("base.res_partner_1")
         self.user1 = self._give_portal_access(partner1)
 
         partner2 = partner1.copy({"email": "test2@example.com"})
         self.user2 = self._give_portal_access(partner2)
 
-        project = self.env.ref("project.project_project_1")
+        project = ref("project.project_project_1")
+        project.portal_visibility_extend_to_group_ids |= ref(self.allowed_group_ref)
         self.obj = self.env["project.task"].create(
             {
                 "name": "test task",
@@ -135,3 +135,16 @@ class PortalProjectTaskIrRulesTC(PortalIrRulesTC, SavepointCase):
 
         self.assertNotIn(partner1, self.obj.message_partner_ids)
         self.assertNotIn(partner2, self.obj.message_partner_ids)
+
+    def test_allow_all_portal_when_no_group_restriction(self):
+        self.obj.project_id.portal_visibility_extend_to_group_ids = False
+        self.assertTrue(self.seen(self.obj, self.user1))
+        self.assertTrue(self.seen(self.obj, self.user2))
+
+    def test_check_no_regression_with_non_portal_projects(self):
+        "Project with privacy_visibility!=portal should not be affected by new rules"
+
+        self.obj.project_id.privacy_visibility = "employees"
+        customer_grp = self.env.ref(self.allowed_group_ref)
+        customer_grp.users |= self.user1
+        self.assertFalse(self.seen(self.obj, self.user1))

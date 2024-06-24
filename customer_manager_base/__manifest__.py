@@ -20,6 +20,7 @@
         "security/groups.xml",
         "security/rules.xml",
         "views/customer_group_wizard.xml",
+        "views/project.xml",
     ],
     "installable": True,
 }

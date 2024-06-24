@@ -2,11 +2,21 @@
 
   <!-- Project tasks for it support customers -->
 
-  <record model="ir.rule" id="project_task_rule_customer_it_support">
-    <field name="name">Portal: see company project tasks if IT support customer</field>
+  <record model="ir.rule" id="project_task_rule_customer_group_match_restrictions">
+    <field name="name">Portal: see company project tasks if visibility restriction groups match</field>
     <field name="model_id" ref="project.model_project_task"/>
-    <field name="domain_force">[('partner_id', 'child_of', user.commercial_partner_id.id)]</field>
-    <field name="groups" eval="[(6, 0, [ref('group_customer_it_support')])]"/>
+    <field name="domain_force"><![CDATA[
+      [
+        '&',
+          '&',
+            ('project_id.privacy_visibility', '=', 'portal'),
+            ('partner_id', 'child_of', user.commercial_partner_id.id),
+          '|',
+            ('project_id.portal_visibility_extend_to_group_ids', '=', False),
+            ('project_id.portal_visibility_extend_to_group_ids', '=', user.groups_id.ids)
+      ]
+    ]]></field>
+    <field name="groups" eval="[(6, 0, [ref('base.group_portal')])]"/>
     <field name="perm_read" eval="1"/>
     <field name="perm_write" eval="1"/>
     <field name="perm_create" eval="1"/>
