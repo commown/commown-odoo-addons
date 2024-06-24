@@ -41,8 +41,8 @@ class SelfHelp(http.Controller):
         return contract_id
 
     @http.route(["/self-troubleshoot"], type="http", auth="user", website=True)
-    def create_support_card(self, **kw):
-        _logger.info("create_support_card called with parameters %s", kw)
+    def create_project_task(self, **kw):
+        _logger.info("create_project_task called with parameters %s", kw)
         env = request.env
         partner = env.user.partner_id
         post = request.params.copy()
