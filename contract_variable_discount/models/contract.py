@@ -132,6 +132,9 @@ class ContractLine(models.Model):
                 result["total"] += value
                 result["discounts"].append(discount_line)
 
+        # Cap the discount to 100 percent:
+        result["total"] = min(result["total"], 100)
+
         return result
 
     def _applicable_discount_lines(self):

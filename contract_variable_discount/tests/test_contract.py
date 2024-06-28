@@ -169,6 +169,19 @@ class ContractTC(TestContractBase):
         invoice = self.contract.recurring_create_invoice()
         self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [2.0])
 
+    def test_discount_capped_to_100_percent(self):
+        self.set_cdiscounts(
+            self.cdiscount(
+                name="Fix discount",
+                amount_type="fix",
+                amount_value=1e6,
+            )
+        )
+        invoice = self.contract.recurring_create_invoice()
+        self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [100])
+        invoice.action_invoice_open()
+        self.assertEqual(invoice.amount_total, 0)
+
     def _discounts_1(self):
         return (
             self.cdiscount(
