@@ -34,6 +34,30 @@
     </field>
   </record>
 
+  <record id="contract_contract_customer_form_view" model="ir.ui.view">
+    <field name="name">Contract customer form</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+    <field name="arch" type="xml">
+
+      <!-- Add taken_over_contract_id before date_start -->
+      <field name="date_start" position="before">
+        <field name="taken_over_contract_id"/>
+      </field>
+
+      <!-- Hide commitment period computation parameters when contract has a taken over contract  -->
+
+      <field name="commitment_period_number" position="attributes">
+        <attribute name="attrs">{'invisible': [('taken_over_contract_id', '!=', False)]}</attribute>
+      </field>
+
+      <field name="commitment_period_type" position="attributes">
+        <attribute name="attrs">{'invisible': [('taken_over_contract_id', '!=', False)]}</attribute>
+      </field>
+
+    </field>
+  </record>
+
   <record id="contract_line_form_view" model="ir.ui.view">
     <field name="name">contract.line form view (in contract_variable_discount)</field>
     <field name="model">contract.line</field>
