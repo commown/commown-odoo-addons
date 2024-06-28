@@ -1,5 +1,7 @@
 from datetime import date, timedelta
 
+from odoo.exceptions import ValidationError
+
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
 from .common import ContractSaleWithCouponTC
@@ -96,6 +98,26 @@ class DiscountLineTC(TestContractBase):
                 [discount],
                 "incorrect discount at %s" % _date,
             )
+
+    def test_reference_errors(self):
+        self.contract.commitment_end_date = False
+
+        cdline = self.env["contract.discount.line"].create(
+            {
+                "name": "Error: wrong date field",
+                "amount_type": "fix",
+                "amount_value": 5.0,
+                "start_reference": "contract:commitment_end_date",
+                "start_value": 1,
+                "start_unit": "months",
+                "end_type": "relative",
+                "contract_line_id": self.acct_line.id,
+            }
+        )
+
+        with self.assertRaises(ValidationError) as err:
+            cdline._compute_date(cdline.contract_line_id, "start")
+        self.assertIn("incorrect reference date value", err.exception.name.lower())
 
 
 class CouponConditionTC(ContractSaleWithCouponTC):
