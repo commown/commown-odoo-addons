@@ -211,6 +211,14 @@ class ProjectTask(models.Model):
         if not self.lot_id:
             raise UserError(_("Device field is not set"))
 
+        current_loc = (
+            self.env["stock.quant"]
+            .search([("lot_id", "=", self.lot_id.id), ("quantity", ">", 0)])
+            .location_id
+        )
+        if current_loc.scrap_location:
+            raise UserError(_("Device is already in a scrap location"))
+
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
 
         ctx = {
@@ -221,16 +229,6 @@ class ProjectTask(models.Model):
             "default_contract_id": self.contract_id.id,
         }
 
-        current_loc = (
-            self.env["stock.quant"]
-            .search(
-                [
-                    ("lot_id", "=", self.lot_id.id),
-                    ("quantity", ">", 0),
-                ]
-            )
-            .location_id
-        )
         if current_loc:
             ctx["default_location_id"] = current_loc[0].id
 
