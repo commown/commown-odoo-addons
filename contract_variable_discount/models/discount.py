@@ -161,6 +161,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         if reference.startswith("contract:"):
             ref_entity = contract_line.contract_id
             ref_field = reference[len("contract:") :]
+            if ref_entity.taken_over_contract_id:
+                ref_entity = ref_entity.taken_over_contract_id
 
         cfields = ref_entity.fields_get()
 

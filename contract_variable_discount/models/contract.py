@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 import logging
+from datetime import timedelta
 
 from odoo import _, api, fields, models
 
@@ -61,6 +62,16 @@ class ContractLine(models.Model):
 
     variable_discount = fields.Boolean(
         "Variable discount?", store=False, compute="_compute_variable_discount"
+    )
+
+    taken_over_contract_id = fields.Many2one(
+        related="contract_id.taken_over_contract_id",
+    )
+
+    taken_over_contract_line_id = fields.Many2one(
+        "contract.line",
+        string="Taken over contract line",
+        domain='[("contract_id", "=", taken_over_contract_id)]',
     )
 
     @api.model
@@ -138,3 +149,34 @@ class ContractLine(models.Model):
 
         for line in c_lines:
             yield line
+
+
+class Contract(models.Model):
+    _inherit = "contract.contract"
+
+    taken_over_contract_id = fields.Many2one(
+        "contract.contract",
+        string="Taken over contract",
+        help=(
+            "Enter here a previous contract that was taken over by present one."
+            " If this field is not empty, related contract seniority will be used"
+            " instead of present one to compute discounts that depend on the contract's"
+            " start date."
+        ),
+        domain=lambda self: [("date_end", "!=", False)],
+    )
+
+    @api.depends("taken_over_contract_id")  # concatened with the base implementation
+    def _compute_commitment_end_date(self):
+        for record in self:
+            toc = record.taken_over_contract_id
+            if toc:
+                oneday = timedelta(days=1)
+                record.update(
+                    {
+                        "date_start": toc.date_end + oneday,
+                        "commitment_end_date": toc.commitment_end_date,
+                    }
+                )
+            else:
+                super(Contract, record)._compute_commitment_end_date()

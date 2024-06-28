@@ -133,6 +133,31 @@ class ContractTC(TestContractBase):
             date(2016, 2, 20),
         )
 
+    def test_discount_compute_date_contract_with_takeover_ok(self):
+        "Start date must be computed correctly with contract taken over too"
+
+        old_commitment_end_date = self.contract.commitment_end_date
+
+        self.contract2.date_start = "2015-06-01"
+        self.contract2.date_end = "2015-08-31"
+        self.contract.taken_over_contract_id = self.contract2
+
+        self.assertEqual(fields.Date.to_string(self.contract.date_start), "2015-09-01")
+        self.assertNotEqual(old_commitment_end_date, self.contract.commitment_end_date)
+        self.assertEqual(
+            self.contract.commitment_end_date, self.contract2.commitment_end_date
+        )
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10, start_unit="days", start_reference="contract:date_start"
+            ),
+            date(2015, 6, 11),
+        )
+
+        self.contract.taken_over_contract_id = False
+        self.assertEqual(old_commitment_end_date, self.contract.commitment_end_date)
+
     def test_discount_compute_0(self):
         self.set_cdiscounts(
             self.cdiscount(
