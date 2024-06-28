@@ -43,8 +43,11 @@ class ContractTC(TestContractBase):
     def setUpClass(cls):
         super(ContractTC, cls).setUpClass()
         cls._init_test_model(TestConditionDiscountLine)
-        # Adjust dates to our test needs:
-        cls.contract.date_start = "2016-02-15"
+        # Adjust dates to our test needs (with different contract and line start dates):
+        cls.contract.date_start = "2016-02-10"
+        cls.contract.contract_line_ids.update(
+            {"recurring_next_date": "2016-02-15", "date_start": "2016-02-15"}
+        )
         cls.contract.recurring_next_date = "2016-02-29"
 
     def tdiscount(self, ct_line=None, **kwargs):
@@ -98,8 +101,9 @@ class ContractTC(TestContractBase):
         self.assertEqual(invl.mapped(ctd_rel), ctd_names)
         self.assertEqual(invl.mapped(cd_rel), cd_names)
 
-    def test_discount_compute_date_ok(self):
+    def test_discount_compute_date_contract_line_ok(self):
         "Start date must be computed correctly"
+
         self.assertEqual(
             self._discount_date(start_value=-5, start_unit="days"), date(2016, 2, 10)
         )
@@ -118,6 +122,16 @@ class ContractTC(TestContractBase):
         )
         self.assertEqual(self._discount_date(prefix="start"), date(2016, 2, 15))
         self.assertIsNone(self._discount_date(prefix="end"))
+
+    def test_discount_compute_date_contract_ok(self):
+        "Start date must be computed correctly with contract start date reference too"
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10, start_unit="days", start_reference="contract:date_start"
+            ),
+            date(2016, 2, 20),
+        )
 
     def test_discount_compute_0(self):
         self.set_cdiscounts(
