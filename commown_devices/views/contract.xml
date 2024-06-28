@@ -19,7 +19,8 @@
                 <field name="name"/>
               </tree>
             </field>
-            <field name="move_line_ids" context='{"short_location_name": True}'>
+            <field name="show_all_view_move_lines" widget="boolean_toggle"/>
+            <field name="move_line_view_ids" context='{"short_location_name": True}'>
               <tree
                   colors="red:move_id.scrapped"
                   default_order="date ASC, id ASC"
