@@ -611,3 +611,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             initial_contract_lots - lot,
             self.task.contract_id.lot_ids,
         )
+
+        with self.assertRaises(UserError) as err:
+            self.task.action_scrap_device()
+        self.assertEqual(err.exception.name, "Device is already in a scrap location")
