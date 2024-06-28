@@ -22,15 +22,21 @@
             <field name="show_all_view_move_lines" widget="boolean_toggle"/>
             <field name="move_line_view_ids" context='{"short_location_name": True}'>
               <tree
-                  colors="red:move_id.scrapped"
+                  decoration-it="not lot_id"
+                  decoration-bf="state != 'done'"
+                  decoration-success="is_contract_in"
+                  decoration-danger="not is_contract_in"
                   default_order="date ASC, id ASC"
                   >
+                <field name="is_contract_in" invisible="1"/>
+                <field name="show_validate_picking" invisible="1"/>
                 <field name="product_id"/>
                 <field name="lot_id"/>
                 <field name="location_id"/>
                 <field name="location_dest_id"/>
                 <field name="date"/>
                 <field name="state"/>
+                <button name="action_validate_linked_picking" string="Validate" class="btn-primary" type="object" attrs="{'invisible': [('show_validate_picking', '=', False)]}"/>
               </tree>
             </field>
           </group>
