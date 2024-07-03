@@ -1,5 +1,6 @@
 import datetime
 
+from odoo.exceptions import UserError
 from odoo.tests.common import SavepointCase
 
 
@@ -88,6 +89,15 @@ class StockPickingTC(SavepointCase):
         picking.move_lines.update({"contract_id": contract.id})
 
         self.assertEqual(picking.contract_ids, contract)
+
+    def test_error_case_action_set_date_done_to_scheduled(self):
+        lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
+        date = datetime.datetime.now()
+        picking = self.create_picking(lot, date)
+
+        with self.assertRaises(UserError) as err:
+            picking.action_set_date_done_to_scheduled()
+        self.assertEqual("Transfer must be done to use this action", err.exception.name)
 
     def test_cron_late_pickings(self):
         lot1 = create_lot_and_quant(self.env, "lot1", self.product, self.orig_location)
