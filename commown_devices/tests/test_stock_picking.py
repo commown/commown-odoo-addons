@@ -48,7 +48,6 @@ class StockPickingTC(SavepointCase):
 
     def create_picking(self, lot, date):
         partner = self.env.ref("base.res_partner_2")
-        base_move_line = {"product_uom_qty": 1}
         picking = self.env["stock.picking"].create(
             {
                 "move_type": "direct",
