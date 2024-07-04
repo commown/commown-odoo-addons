@@ -43,7 +43,7 @@ class CrmLead(models.Model):
                 self.action_check_waiting_picking()
 
     def action_check_waiting_picking(self):
-        if self.so_line_id.product_id.product_tmpl_id.storable_product_id:
+        if self.so_line_id.product_id.primary_storable_variant_id:
             if not self.contract_id.picking_ids.filtered(_assigned):
                 raise UserError(_("Lead has no assigned picking."))
 
