@@ -5,12 +5,6 @@ from odoo.exceptions import UserError
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    storable_product_id = fields.Many2one(
-        "product.template",
-        string="Storable product",
-        domain='[("type", "=", "product")]',
-    )
-
     storable_config_ids = fields.One2many(
         string="Storable configurations",
         comodel_name="product.service_storable_config",

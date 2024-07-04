@@ -9,11 +9,6 @@
       <field name="inherit_id" ref="product.product_template_only_form_view"/>
       <field name="arch" type="xml">
 
-        <xpath expr="//field[@name='list_price']" position="before">
-          <field name="storable_product_id"
-                 attrs="{'invisible': [('type', '!=', 'service')]}"/>
-        </xpath>
-
         <xpath expr="//page[@name='variants']" position="after">
           <page name="storable_configs" string="Storable Configurations" groups="product.group_product_variant" attrs="{'invisible': [('type', '!=', 'service')]}">
             <field name="storable_config_ids" context="{'default_service_tmpl_id': id}" widget="one2many_list">

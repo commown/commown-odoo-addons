@@ -59,7 +59,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             list_price=60.0,
             rental_price=30.0,
             property_contract_template_id=contract_tmpl.id,
-            storable_product_id=self.storable_product.id,
+            primary_storable_variant_id=self.storable_product.product_variant_id.id,
             followup_sales_team_id=team.id,
         )
 
