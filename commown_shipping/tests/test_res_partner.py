@@ -53,7 +53,6 @@ class ResPartnerColissimoDeliveryDataTC(SavepointCase):
                 "phone": "0352535455",
             }
         )
-        self.partner.update({})
         self.expected = {
             "city": "Strasbourg",
             "countryCode": "FR",
@@ -68,6 +67,22 @@ class ResPartnerColissimoDeliveryDataTC(SavepointCase):
 
     def test_ok(self):
         self.assertEqual(self.partner.colissimo_delivery_data(), self.expected)
+
+    def test_b2c_delivery(self):
+        partner = self.partner.copy({"email": "a@b.coop", "parent_id": self.partner.id})
+        partner.lastname = "Lasttest"  # Avoid automatic 'copy' suffix
+
+        expected = dict(self.expected, email="a@b.coop")
+        self.assertEqual(partner.colissimo_delivery_data(), expected)
+
+    def test_b2b_delivery(self):
+        company = self.partner.copy({"is_company": True, "name": "Test Company"})
+        self.partner.parent_id = company.id
+        partner = self.partner.copy({"type": "delivery", "parent_id": self.partner.id})
+        partner.lastname = "Lasttest"  # Avoid automatic 'copy' suffix
+
+        expected = dict(self.expected, companyName="Test Company")
+        self.assertEqual(partner.colissimo_delivery_data(), expected)
 
     def test_phone_mobile_in_fixed(self):
         "Output correct partner's mobile even when it is in the fixed phone field"

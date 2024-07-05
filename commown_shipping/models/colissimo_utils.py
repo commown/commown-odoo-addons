@@ -83,8 +83,8 @@ def delivery_data(partner, raise_on_error=True):
         partner_data["line1"] = partner.street
         partner_data["line2"] = partner.street2
 
-    if partner.parent_id and partner.parent_id.is_company:
-        partner_data["companyName"] = partner.parent_id.name
+    if partner.commercial_company_name:
+        partner_data["companyName"] = partner.commercial_company_name
 
     if raise_on_error and not (
         partner_data["phoneNumber"] or partner_data["mobileNumber"]
