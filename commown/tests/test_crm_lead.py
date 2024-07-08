@@ -34,6 +34,9 @@ class CrmLeadTC(RentalSaleOrderTC):
         self.assertFalse(lead.contract_id)  # Check pre-requisite
         self.assertFalse(lead.send_email_on_delivery)
 
+        # Check delivery does not crash
+        lead.delivery_date = date(2017, 1, 1)
+
     def test_default_no_action_on_delivery(self):
         self.so.team_id.default_perform_actions_on_delivery = False
         lead = self._create_ra_leads()[0]

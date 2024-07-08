@@ -23,7 +23,7 @@ class CrmLead(models.Model):
     def delivery_perform_actions(self):
         super().delivery_perform_actions()
         today = date.today()
-        for record in self:
+        for record in self.filtered("contract_id"):
             # Current method may be called by users not allowed to update
             # contracts, so we use sudo here:
             contract = record.contract_id.sudo()
