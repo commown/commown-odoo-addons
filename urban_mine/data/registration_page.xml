@@ -75,12 +75,16 @@
                     </label>
                     <input name="city" type="text" required="required" class="form-control o_website_form_input"/>
                   </div>
-                  <div class="form-group form-field  form-field-many2one o_required css_non_editable_mode_hidden" data-model-field="true" data-optional="true">
+                  <div class="form-group form-field  form-field-many2one o_required" data-model-field="true" data-optional="true">
                     <label class="col-form-label" for="country_id" tc-textcontent="true" data-tc-id="w-0.8527748110967593">
                       <span class="o_default_snippet_text" tc-textcontent="true" data-tc-id="w-0.5006927962308493"> Pays </span>
                     </label>
                     <select name="country_id" class="form-control custom-select o_website_form_input" required="required">
-                      <option value="76" selected="selected"> France </option>
+                      <option style="display:none"></option>
+                      <option value="76">France</option>
+                      <option value="63">Belgium</option>
+                      <option value="58">Germany</option>
+                      <option value="13">Austria</option>
                     </select>
                   </div>
                   <div class="form-group form-field  form-field-date o_required" data-model-field="false" data-optional="true">
