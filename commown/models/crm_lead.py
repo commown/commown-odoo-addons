@@ -11,9 +11,6 @@ class CrmLead(models.Model):
         domain="[('commercial_partner_id', '=', commercial_partner_id)]",
     )
 
-    def _default_perform_actions_on_delivery(self):
-        return super(CrmLead, self)._default_perform_actions_on_delivery()
-
     @api.multi
     def delivery_perform_actions(self):
         super().delivery_perform_actions()
