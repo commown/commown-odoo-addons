@@ -11,6 +11,14 @@ class CrmLead(models.Model):
         domain="[('commercial_partner_id', '=', commercial_partner_id)]",
     )
 
+    @api.model
+    @api.returns("self", lambda value: value.id)
+    def create(self, vals):
+        result = super().create(vals)
+        if not result.contract_id:
+            result.send_email_on_delivery = False
+        return result
+
     @api.multi
     def delivery_perform_actions(self):
         super().delivery_perform_actions()
