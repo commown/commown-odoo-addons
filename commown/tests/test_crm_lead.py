@@ -14,9 +14,7 @@ class CrmLeadTC(RentalSaleOrderTC):
         self.so = self.create_sale_order()
         self.so.team_id.default_perform_actions_on_delivery = True
         self.so.mapped("order_line.product_id").update(
-            {
-                "followup_sales_team_id": self.so.team_id.id,
-            }
+            {"followup_sales_team_id": self.so.team_id.id}
         )
 
     def test_default_action_on_delivery(self):

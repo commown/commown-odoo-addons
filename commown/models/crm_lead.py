@@ -16,7 +16,7 @@ class CrmLead(models.Model):
 
     @api.multi
     def delivery_perform_actions(self):
-        super(CrmLead, self).delivery_perform_actions()
+        super().delivery_perform_actions()
         today = date.today()
         for record in self:
             # Current method may be called by users not allowed to update
