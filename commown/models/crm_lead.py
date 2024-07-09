@@ -11,14 +11,19 @@ class CrmLead(models.Model):
         domain="[('commercial_partner_id', '=', commercial_partner_id)]",
     )
 
-    def _default_perform_actions_on_delivery(self):
-        return super(CrmLead, self)._default_perform_actions_on_delivery()
+    @api.model
+    @api.returns("self", lambda value: value.id)
+    def create(self, vals):
+        result = super().create(vals)
+        if not result.contract_id:
+            result.send_email_on_delivery = False
+        return result
 
     @api.multi
     def delivery_perform_actions(self):
-        super(CrmLead, self).delivery_perform_actions()
+        super().delivery_perform_actions()
         today = date.today()
-        for record in self:
+        for record in self.filtered("contract_id"):
             # Current method may be called by users not allowed to update
             # contracts, so we use sudo here:
             contract = record.contract_id.sudo()

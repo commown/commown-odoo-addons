@@ -44,6 +44,14 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     )
     delivery_date = fields.Date("Delivery Date", copy=False)
 
+    send_email_on_delivery = fields.Boolean(
+        default=lambda self: self._default_send_email_on_delivery(),
+        string="Automatic email on delivery",
+    )
+    on_delivery_email_template_id = fields.Many2one(
+        "mail.template", string="Custom email model for this entity"
+    )
+
     _delivery_tracking_stage_rel = "stage_id"
 
     # Need to be overloaded
@@ -70,7 +78,8 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     def _delivery_tracking_parent(self):
         return self.mapped(self._delivery_tracking_parent_rel)
 
-    def _default_perform_actions_on_delivery(self):
+    def _default_send_email_on_delivery(self):
+        "By default, send email if parent config says to perform actions on delivery"
         parent = self._delivery_tracking_parent()
         if not parent:
             context = self.env.context
@@ -78,14 +87,6 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             if default_rel in context:
                 parent = self.env[parent._name].browse(context[default_rel])
         return parent.default_perform_actions_on_delivery if parent else True
-
-    send_email_on_delivery = fields.Boolean(
-        default=_default_perform_actions_on_delivery,
-        string="Automatic email on delivery",
-    )
-    on_delivery_email_template_id = fields.Many2one(
-        "mail.template", string="Custom email model for this entity"
-    )
 
     @api.multi
     def write(self, values):
