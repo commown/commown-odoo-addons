@@ -155,14 +155,16 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
         reference = getattr(self, "%s_reference" % date_attr_prefix)
 
-        ref_entity = contract_line
-        ref_field = reference
-
         if reference.startswith("contract:"):
             ref_entity = contract_line.contract_id
             ref_field = reference[len("contract:") :]
             if ref_entity.taken_over_contract_id:
                 ref_entity = ref_entity.taken_over_contract_id
+        else:
+            ref_entity = contract_line
+            ref_field = reference
+            if ref_entity.taken_over_contract_line_id:
+                ref_entity = ref_entity.taken_over_contract_line_id
 
         cfields = ref_entity.fields_get()
 
