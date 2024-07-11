@@ -57,5 +57,6 @@ def migrate(cr, version):
             if scrap.move_id:
                 scrap.move_id.contract_id = task.contract_id.id
 
-    for contract in env["contract.contract"].search([]):
+    cmodel = env["contract.contract"].with_context(no_raise_in_update_lot_contract=True)
+    for contract in cmodel.search([]):
         contract.move_ids.sorted("date").update_lot_contract()
