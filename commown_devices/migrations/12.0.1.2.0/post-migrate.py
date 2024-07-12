@@ -57,6 +57,54 @@ def migrate(cr, version):
             if scrap.move_id:
                 scrap.move_id.contract_id = task.contract_id.id
 
-    cmodel = env["contract.contract"].with_context(no_raise_in_update_lot_contract=True)
-    for contract in cmodel.search([]):
-        contract.move_ids.sorted("date").update_lot_contract()
+    # Fix a reception with wrong type
+    env["stock.picking"].browse([1860, 10085]).update({"picking_type_id": 1})
+
+    # Fix wrong history order
+    pick1 = env["stock.picking"].browse(1309)
+    date1 = pick1.move_lines.date
+
+    pick2 = env["stock.picking"].browse(1622)
+    date2 = pick2.move_lines.date
+
+    pick1.scheduled_date = date2
+    pick2.scheduled_date = date1
+
+    pick1.action_set_date_done_to_scheduled()
+    pick2.action_set_date_done_to_scheduled()
+
+    model = env["stock.production.lot"].with_context(
+        no_raise_in_update_lot_contract=True
+    )
+    for lot in model.search([]):
+        lines = (
+            lot.env["stock.move.line"]
+            .search(
+                [
+                    "&",
+                    "&",
+                    "|",
+                    ("move_id.picking_id.picking_type_id", "not in", [1, 10]),
+                    ("move_id.scrapped", "=", True),
+                    ("lot_id", "=", lot.id),
+                    ("state", "=", "done"),
+                ]
+            )
+            .sorted(lambda l: l.move_id.date)
+        )
+
+        for line in lines:
+            line.move_id.update_lot_contract()
+
+    # Ignore following errors:
+    # -Contrat 975, Factice contract (no location)
+    # -Contract 1032, Luc Blondy scrap cancel.
+    # -Contract 3612, Julie Agor Cae location not created
+    # -Contract 2192, Railcoop corrected in prod
+    # -Contract 1466, corrected in prod
+    # -Contract 1566, wrong device (nv41) sent on Bi Pharma instead of n131
+    # -Contract 3370/3371, "Transition Developpement durable" corrected in prod
+    # -Contract 1124, a scrap move made on picking can be ignored
+    # -Contract 3889, double scrap corrected in prod and test
+
+    env["ir.ui.view"].search([("arch_db", "like", "quant_nb")]).unlink()
