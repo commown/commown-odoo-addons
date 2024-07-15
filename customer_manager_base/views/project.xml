@@ -1,0 +1,15 @@
+<odoo>
+
+  <record id="edit_project" model="ir.ui.view">
+    <field name="name">customer_manager_base.project.form</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.edit_project"/>
+    <field name="arch" type="xml">
+      <field name="privacy_visibility" position="after">
+        <field name="portal_visibility_extend_to_group_ids"
+               attrs="{'invisible': [('privacy_visibility', '!=', 'portal')]}"/>
+      </field>
+    </field>
+  </record>
+
+</odoo>

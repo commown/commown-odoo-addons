@@ -5,10 +5,9 @@
 
     <!-- Add variables to detect Big B2B -->
     <xpath expr="//*[@t-call='payment.payment_tokens_list']" position="inside">
-      <t t-set="is_b2b"
-         t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website')" />
-      <t t-set="is_big_b2b"
-         t-value="is_b2b and sum(order.order_line.filtered('product_id.property_contract_template_id').mapped('product_uom_qty')) > float(env['ir.config_parameter'].sudo().get_param('website_sale_b2b.big_b2b_min_qty'))" />
+      <t t-set="is_big_b2b" t-value="order.is_big_b2b()" />
+      <t t-set="is_authorized_to_order" t-value="env.user.is_authorized_to_order()" />
+      <t t-set="can_order" t-value="is_authorized_to_order and not is_big_b2b" />
     </xpath>
 
   </template>
@@ -16,29 +15,50 @@
   <template id="payment_tokens_list" inherit_id="payment.payment_tokens_list">
 
     <xpath expr="//form" position="attributes">
-      <attribute name="t-if">not is_big_b2b</attribute>
+      <attribute name="t-if">can_order</attribute>
     </xpath>
 
     <xpath expr="//form" position="before">
 
-      <form t-if="is_big_b2b" action="/shop/submit_order" method="post" class="clearfix">
+      <!-- Too big order: post a demand instead -->
+      <form t-if="is_big_b2b and is_authorized_to_order"
+            action="/shop/submit_order"
+            method="post"
+            class="clearfix">
         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
         <input type="hidden" name="order_id" t-att-value="order.id"/>
         <div class="float-left mt-2">
           <a role="button" href="/shop/cart" class="btn btn-secondary">
             <i class="fa fa-chevron-left"/>
-            <span>Revenir au panier</span>
+            <span>Back to shopping cart</span>
           </a>
         </div>
         <div class="float-right mt-2">
           <button type="submit" class="btn btn-primary">
-            <span>Soumettre ma demande</span> <i class="fa fa-chevron-right"/>
+            <span>Submit my request</span> <i class="fa fa-chevron-right"/>
           </button>
         </div>
       </form>
 
-      <div t-if="is_big_b2b" class="float-right col-4 pr-0 mt-1 text-right">
-        En raison du nombre important d’appareils souhaités, un membre de l’équipe commerciale vous recontactera rapidement pour finaliser la commande.
+      <div t-if="is_big_b2b" class="mt-2 alert alert-warning" role="alert">
+        Due to the large number of units required, a member of our sales team will
+        contact you shortly to finalize your order.
+      </div>
+
+      <!-- Not authorized to order: contact a purchase group member -->
+      <div t-if="not is_authorized_to_order">
+        <div class="clearfix">
+          <div class="float-left mt-2">
+            <a role="button" href="/shop/cart" class="btn btn-secondary">
+              <i class="fa fa-chevron-left"/>
+              <span>Back to shopping cart</span>
+            </a>
+          </div>
+        </div>
+        <div class="mt-2 alert alert-warning" role="alert">
+          You are not allowed to place an order on this website in the name of your
+          company. Please contact your administrator.
+        </div>
       </div>
 
     </xpath>

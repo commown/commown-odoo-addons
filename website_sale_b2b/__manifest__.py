@@ -15,6 +15,7 @@
         "mail",
         "commown_devices",
         "website_sale",
+        "customer_manager_base",
     ],
     "external_dependencies": {},
     "data": [
