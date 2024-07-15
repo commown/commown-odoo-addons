@@ -28,7 +28,7 @@ class Employee(models.Model):
     partner = fields.Many2one(
         "res.partner",
         string="Partner",
-        groups="customer_team_manager.group_manager",
+        groups="sales_team.group_sale_manager",
         index=True,
         copy=False,
     )
@@ -109,7 +109,7 @@ class Employee(models.Model):
 
     @api.onchange("company")
     def _onchange_company_set_partner_domain(self):
-        if self.env.user.has_group("customer_team_manager.group_manager"):
+        if self.env.user.has_group("sales_team.group_sale_manager"):
             return {
                 "domain": {
                     "partner": [
@@ -224,7 +224,7 @@ class Employee(models.Model):
         if (
             "email" in vals
             and self.sudo().partner
-            and not self.env.user.has_group("customer_team_manager.group_manager")
+            and not self.env.user.has_group("sales_team.group_sale_manager")
         ):
             raise models.ValidationError(
                 _("Employee is now active: its email cannot be modified anymore!")

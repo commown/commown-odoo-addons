@@ -27,7 +27,7 @@ class Team(models.Model):
 
     @api.onchange("company")
     def _onchange_company_set_parent_team_domain(self):
-        if self.env.user.has_group("customer_team_manager.group_manager"):
+        if self.env.user.has_group("sales_team.group_sale_manager"):
             return {
                 "domain": {
                     "parent_team": [("company", "=", self.company.id)],

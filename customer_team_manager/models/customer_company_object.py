@@ -9,7 +9,7 @@ class CustomerCompanyObject(models.AbstractModel):
     company = fields.Many2one(
         "res.partner",
         string="Company",
-        groups="customer_team_manager.group_manager",
+        groups="sales_team.group_sale_manager",
         default=lambda self: self._default_company(),
         domain=[("is_company", "=", True)],
         required=True,

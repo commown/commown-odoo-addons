@@ -16,7 +16,7 @@ class CustomerTeamAbstractTC(SavepointCase):
         partner = self.user.partner_id
         partner.update({"parent_id": self.company.id, "firstname": "F"})
 
-        self.env.ref("customer_team_manager.group_manager").users |= self.env.user
+        self.env.ref("sales_team.group_sale_manager").users |= self.env.user
 
         partner.action_create_employee(admin=True)
         self.assertTrue(

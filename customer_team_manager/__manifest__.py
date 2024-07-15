@@ -20,6 +20,7 @@
         "web_notify",
         # Commown modules
         "server_actions_auth",
+        "customer_manager_base",
     ],
     "data": [
         "security/groups.xml",
