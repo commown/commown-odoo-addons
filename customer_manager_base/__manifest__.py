@@ -3,7 +3,7 @@
 {
     "name": "Customer manager base",
     "summary": "Base module to allow customers to manage things efficiently",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "development_status": "Alpha",
     "category": "Manager customer",
     "website": "https://commown.coop",
