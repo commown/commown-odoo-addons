@@ -540,7 +540,7 @@ msgstr "Produit stockable primaire"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_product_product__primary_storable_variant_id
 msgid "Primary storable variant"
-msgstr "Produits stockables secondaires"
+msgstr "Produit stockable primaire"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_product_product
