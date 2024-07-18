@@ -1,5 +1,6 @@
 import datetime
 
+from odoo.exceptions import UserError
 from odoo.tests.common import SavepointCase
 
 
@@ -47,7 +48,6 @@ class StockPickingTC(SavepointCase):
 
     def create_picking(self, lot, date):
         partner = self.env.ref("base.res_partner_2")
-        base_move_line = {"product_uom_qty": 1}
         picking = self.env["stock.picking"].create(
             {
                 "move_type": "direct",
@@ -74,6 +74,29 @@ class StockPickingTC(SavepointCase):
             }
         )
         return picking
+
+    def test_compute_contract_ids(self):
+        lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
+        date = datetime.datetime.now()
+        picking = self.create_picking(lot, date)
+
+        self.assertFalse(picking.contract_ids)
+
+        contract = self.env["contract.contract"].create(
+            {"name": "contract", "partner_id": 1}
+        )
+        picking.move_lines.update({"contract_id": contract.id})
+
+        self.assertEqual(picking.contract_ids, contract)
+
+    def test_error_case_action_set_date_done_to_scheduled(self):
+        lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
+        date = datetime.datetime.now()
+        picking = self.create_picking(lot, date)
+
+        with self.assertRaises(UserError) as err:
+            picking.action_set_date_done_to_scheduled()
+        self.assertEqual("Transfer must be done to use this action", err.exception.name)
 
     def test_cron_late_pickings(self):
         lot1 = create_lot_and_quant(self.env, "lot1", self.product, self.orig_location)

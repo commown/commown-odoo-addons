@@ -1,6 +1,6 @@
 from odoo.tests.common import HttpCase, at_install, post_install
 
-from ..models.common import internal_picking
+from ..models.common import do_new_transfer, internal_picking
 
 
 @at_install(False)
@@ -83,7 +83,10 @@ class ResPartnerLocationTC(HttpCase):
         return lot
 
     def _send(self, lot, orig, dest):
-        return internal_picking(lot, {}, None, orig, dest, False, do_transfer=True)
+        moves = internal_picking(lot, {}, None, orig, dest, False)
+        picking = moves[0].picking_id
+        do_new_transfer(picking, picking.scheduled_date)
+        return picking
 
     def test_merge_partner_merge_locations(self):
         new_dev_loc = self.env["stock.location"].create(

@@ -3,6 +3,8 @@ import json
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, Warning
 
+from .common import _assigned
+
 CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.diagnostic_stage",
     "commown_devices.resiliated_stage",
@@ -61,7 +63,7 @@ class ProjectTask(models.Model):
 
     def _may_be_related_lots(self):
         """Return lots that lay be related to current task:
-        - those already in charge of the partner (contract.quant_ids)
+        - those already in charge of the partner (contract.lots_ids)
         - those sent to the partner but not arrived yet.
         """
         lots = self.env["stock.production.lot"]
@@ -77,10 +79,10 @@ class ProjectTask(models.Model):
             contracts = contracts.search(domain)
 
         for contract in contracts:
-            lots |= contract.quant_ids.mapped("lot_id")
-            lots |= contract.picking_ids.filtered(
-                lambda c: c.state == "assigned"
-            ).mapped("move_line_ids.lot_id")
+            lots |= contract.lot_ids
+            lots |= contract.move_line_ids.filtered(
+                lambda ml: _assigned(ml.picking_id)
+            ).mapped("lot_id")
 
         return lots
 
@@ -154,14 +156,8 @@ class ProjectTask(models.Model):
     def onchange_lot_id(self):
         if self.lot_id:
             self.storable_product_id = self.lot_id.product_id
-            if not self.contract_id:
-                contracts = (
-                    self.lot_id.mapped("quant_ids")
-                    .filtered(lambda q: q.quantity > 0)
-                    .mapped("contract_id")
-                )
-                if len(contracts) == 1:
-                    self.contract_id = contracts.id
+            if not self.contract_id and self.lot_id.contract_id:
+                self.contract_id = self.lot_id.contract_id
 
     @api.constrains("stage_id")
     def onchange_stage_id_prevent_contract_resiliation_with_device(self):
@@ -171,10 +167,9 @@ class ProjectTask(models.Model):
         erroneous_task = self.search(
             [
                 ("id", "in", self.ids),
-                ("contract_id.quant_nb", ">", 0),
                 ("stage_id", "in", check_stage_ids),
             ]
-        )
+        ).filtered(lambda t: t.contract_id.lot_ids)
         if erroneous_task:
             raise Warning(
                 _(
@@ -199,7 +194,7 @@ class ProjectTask(models.Model):
                     and picking.state == "assigned"
                     and "/" + str(stock_location.id) + "/"
                     in picking.location_id.parent_path
-                    for picking in task.contract_id.picking_ids
+                    for picking in task.contract_id.move_line_ids.mapped("picking_id")
                 ]
             )
         )
@@ -216,6 +211,14 @@ class ProjectTask(models.Model):
         if not self.lot_id:
             raise UserError(_("Device field is not set"))
 
+        current_loc = (
+            self.env["stock.quant"]
+            .search([("lot_id", "=", self.lot_id.id), ("quantity", ">", 0)])
+            .location_id
+        )
+        if current_loc.scrap_location:
+            raise UserError(_("Device is already in a scrap location"))
+
         scrap_loc = self.env.ref("stock.stock_location_scrapped")
 
         ctx = {
@@ -223,18 +226,9 @@ class ProjectTask(models.Model):
             "default_lot_id": self.lot_id.id,
             "default_origin": self.get_name_for_origin(),
             "default_scrap_location_id": scrap_loc.id,
+            "default_contract_id": self.contract_id.id,
         }
 
-        current_loc = (
-            self.env["stock.quant"]
-            .search(
-                [
-                    ("lot_id", "=", self.lot_id.id),
-                    ("quantity", ">", 0),
-                ]
-            )
-            .location_id
-        )
         if current_loc:
             ctx["default_location_id"] = current_loc[0].id
 

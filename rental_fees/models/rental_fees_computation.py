@@ -13,11 +13,6 @@ _one_day = relativedelta(days=1)
 _logger = logging.getLogger(__file__)
 
 
-def _move_contract(move_line):
-    "Helper to return the contract related to a device move"
-    return move_line.move_id.picking_id.contract_id
-
-
 def _not_canceled(invoice):
     "Helper to filter opened and paid invoices"
     return invoice.state != "cancel"
@@ -239,7 +234,7 @@ class RentalFeesComputation(models.Model):
                 if not current_period:
                     current_period["is_forecast"] = False
                     current_period["from_date"] = move_date
-                    current_period["contract"] = move.picking_id.contract_id
+                    current_period["contract"] = move.contract_id
                 else:
                     raise ValueError(
                         "Device %s was already at customer location" % device.name
