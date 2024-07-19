@@ -29,6 +29,10 @@ class CrmLeadTC(DeviceAsAServiceTC):
         self.assertEqual(move_lines.mapped("product_qty"), [1.0])
         self.assertEqual(move_lines.mapped("picking_id.state"), ["assigned"])
 
+        # Now we should be able to move the lead
+        lead.stage_id = stage.id
+        self.assertEqual(lead.stage_id, stage)
+
         # Set delivery date to trigger the actions and check picking is now done
         lead.delivery_date = fields.Date.today()
         self.assertEqual(move_lines.mapped("picking_id.state"), ["done"])

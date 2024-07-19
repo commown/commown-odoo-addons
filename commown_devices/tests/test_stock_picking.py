@@ -3,21 +3,7 @@ import datetime
 from odoo.exceptions import UserError
 from odoo.tests.common import SavepointCase
 
-
-def create_lot_and_quant(env, lot_name, product, location):
-    lot = env["stock.production.lot"].create(
-        {"name": lot_name, "product_id": product.id}
-    )
-
-    quant = env["stock.quant"].create(
-        {
-            "product_id": product.id,
-            "lot_id": lot.id,
-            "location_id": location.id,
-            "quantity": 1,
-        }
-    )
-    return lot
+from .common import create_lot_and_quant
 
 
 class StockPickingTC(SavepointCase):
