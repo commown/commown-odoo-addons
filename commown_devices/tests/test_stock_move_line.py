@@ -3,7 +3,7 @@ from odoo.tests.common import SavepointCase
 from ..models.common import internal_picking
 
 
-class StockMoveTC(SavepointCase):
+class StockMoveLineTC(SavepointCase):
     def setUp(self):
         super().setUp()
         partner = self.env.ref("base.partner_demo_portal")
@@ -28,7 +28,7 @@ class StockMoveTC(SavepointCase):
                 }
             ]
         )
-        self.moves = internal_picking(
+        move = internal_picking(
             [lot],
             {},
             None,
@@ -36,17 +36,32 @@ class StockMoveTC(SavepointCase):
             partner_loc,
             "origin",
         )
-        self.moves.update({"contract_id": contract.id})
+        move.update({"contract_id": contract.id})
+        self.move_line = move.move_line_ids
+        self.picking = move.picking_id
 
     def test_compute_is_contact_in(self):
-        ml = self.moves.move_line_ids
+        self.assertTrue(self.move_line.is_contract_in)
+        self.move_line.location_dest_id = self.stock_location.id
 
-        self.assertTrue(ml.is_contract_in)
-        ml.location_dest_id = self.stock_location.id
+        self.move_line._compute_is_contract_in()
+        self.assertFalse(self.move_line.is_contract_in)
 
-        ml._compute_is_contract_in()
-        self.assertFalse(ml.is_contract_in)
+        self.move_line.move_id.contract_id = False
+        self.move_line._compute_is_contract_in()
+        self.assertFalse(self.move_line.is_contract_in)
 
-        ml.move_id.contract_id = False
-        ml._compute_is_contract_in()
-        self.assertFalse(ml.is_contract_in)
+    def test_compute_show_move_lines(self):
+        self.assertTrue(self.move_line.show_validate_picking)
+
+        self.picking.button_validate()
+
+        self.env.cache.invalidate()
+        self.assertFalse(self.move_line.show_validate_picking)
+
+    def test_action_validate_linked_picking(self):
+        self.assertEqual(self.picking.state, "assigned")
+
+        self.move_line.action_validate_linked_picking()
+
+        self.assertEqual(self.picking.state, "done")
