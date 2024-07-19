@@ -30,7 +30,7 @@
         <p t-if="error" class="medium text-danger">
           Or am I at the wrong place?
           <t t-foreach="request.env['website'].search([('id', '!=', request.website.id)])" t-as="other_website">
-            <br/>Connect to <a t-attf-href="https://{{ other_website.domain }}/my" t-esc="other_website.name"></a>
+            <br/>Connect to <a t-attf-href="{{ other_website.domain }}/my" t-esc="other_website.name"></a>
           </t>
         </p>
       </xpath>
