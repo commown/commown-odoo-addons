@@ -270,3 +270,19 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             possible_values[name] = self.env[fields[name]["relation"]].search(domain)
 
         return values, possible_values
+
+
+def create_lot_and_quant(env, lot_name, product, location):
+    lot = env["stock.production.lot"].create(
+        {"name": lot_name, "product_id": product.id}
+    )
+
+    quant = env["stock.quant"].create(
+        {
+            "product_id": product.id,
+            "lot_id": lot.id,
+            "location_id": location.id,
+            "quantity": 1,
+        }
+    )
+    return lot
