@@ -37,7 +37,7 @@ class StockMove(models.Model):
                 "move_id": rec.id,
                 "picking_id": rec.picking_id.id,
                 "contract_id": rec.contract_id.id,
-                "lot_contract_id": rec.mapped("move_line_ids.lot_id.contract_id"),
+                "lot_contract_id": rec.mapped("move_line_ids.lot_id.contract_id").ids,
             }
             if no_raise:
                 _logger.error(err_msg, err_args)
