@@ -78,9 +78,7 @@ class ResPartner(models.Model):
 
         today = fields.Date.today()
 
-        holding = self.commercial_partner_id
-        while holding.parent_id:
-            holding = holding.parent_id.commercial_partner_id
+        holding = self.get_holding()
 
         clines = self.env["contract.line"].search(
             [
