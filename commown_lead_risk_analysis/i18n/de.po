@@ -1,16 +1,16 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* commown_lead_risk_analysis
+# 	* product_rental
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0\n"
+"Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-23 10:17+0000\n"
-"PO-Revision-Date: 2024-07-23 12:19+0200\n"
-"Last-Translator: <>\n"
-"Language-Team: \n"
-"Language: \n"
+"PO-Revision-Date: 2024-05-14 19:27+0200\n"
+"Last-Translator: <florent@commown.coop>\n"
+"Language-Team: Commown\n"
+"Language: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -19,241 +19,241 @@ msgstr ""
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__first_phone_call
 msgid "1st phone call"
-msgstr "1er appel"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__second_phone_call
 msgid "2nd phone call"
-msgstr "2nd appel"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__third_phone_call
 msgid "3rd phone call"
-msgstr "3ème appel"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__address_hesitation
 msgid "Address spelling hesitation"
-msgstr "Hésitation marquée élocution addresse"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Before call"
-msgstr "Éval. risque avant appel"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__billing_address_validated
 msgid "Billing address validated"
-msgstr "Adresse de facturation validée"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0
 msgid "Cold"
-msgstr "Froid"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__comments
 msgid "Comments"
-msgstr "Commentaires"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Communication process"
-msgstr "Suivi des appels"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.company_product_summary
 msgid "Company has no order."
-msgstr "Cette entreprise n'a pas de commande."
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Conflicting contacts"
-msgstr "Ultimes tentatives"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model,name:commown_lead_risk_analysis.model_res_partner
 msgid "Contact"
-msgstr "Contact"
+msgstr "Kontakt"
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__contract_id
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Contract"
-msgstr "Contrat"
+msgstr "Vertrag"
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__questions
 msgid "Customer questions"
-msgstr "Questions du client"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__delivery_address_validated
 msgid "Delivery address validated"
-msgstr "Adresse de livraison validée"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__email_rating
 msgid "Email Rating"
-msgstr "Évaluation mail"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__email_boost
 msgid "Email boost sent"
-msgstr "Relance mail"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__email_ultimatum
 msgid "Email ultimatum"
-msgstr "Ultimatum mail"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__email_validated
 msgid "Email validated"
-msgstr "Mail validé"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_product__followup_sales_team_id
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_template__followup_sales_team_id
 msgid "Followup sales team"
-msgstr "Équipe commerciale de suivi"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__global_feeling
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Global feeling"
-msgstr "Impression générale"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__identity_validated
 msgid "Identity validated"
-msgstr "Identité validée"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Initial personal data"
-msgstr "Données personnelles initiales"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Initial product data"
-msgstr "Données de commandes initiales"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,webid_rating:0
 msgid "Known Coherent"
-msgstr "Connu cohérent"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,webid_rating:0
 msgid "Known neutral"
-msgstr "Connu neutre"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,webid_rating:0
 msgid "Known strange"
-msgstr "Connu étrange"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model,name:commown_lead_risk_analysis.model_crm_lead
 msgid "Lead/Opportunity"
-msgstr "Piste/opportunité"
+msgstr "Lead/Möglichkeit"
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Marketing"
-msgstr "Marketing"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,global_feeling:0
 msgid "Medium"
-msgstr "Ça passe"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__mobile_validated
 msgid "Mobile phone validated"
-msgstr "N° mobile validé"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0
 msgid "Motivated"
-msgstr "Motivé"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0
 msgid "Neutral"
-msgstr "Neutre"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0 selection:crm.lead,global_feeling:0
 #: selection:crm.lead,technical_skills:0 selection:crm.lead,webid_rating:0
 msgid "No data"
-msgstr "Pas de données"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,global_feeling:0
 msgid "No go"
-msgstr "No go"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,global_feeling:0
 msgid "No hesitation"
-msgstr "Pas d'hésitation"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0
 msgid "No mail received"
-msgstr "Aucun mail reçu"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Normal contacts"
-msgstr "Tentatives normales"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__initial_data_notes
 msgid "Notes initiales"
-msgstr "Notes initiales"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__webid_notes
 msgid "Notes web"
-msgstr "Notes Web"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__orders_description
 msgid "Orders at date"
-msgstr "Commandes passées"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.partner_orders_tmpl
 msgid "Partner has no order."
-msgstr "Ce partenaire n'a pas de commande."
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Phone call"
-msgstr "Éval. risque pendant l'appel"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Phone call validation"
-msgstr "Validations pendant l'appel"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,global_feeling:0
 msgid "Pretty good"
-msgstr "Plutôt bien"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model,name:commown_lead_risk_analysis.model_product_template
 msgid "Product Template"
-msgstr "Modèle d'article"
+msgstr "Produktvorlage"
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__registered_mail_sent
 msgid "Registered mail sent"
-msgstr "Courrier recommandé"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: code:addons/commown_lead_risk_analysis/models/crm_lead.py:170
@@ -261,105 +261,96 @@ msgstr "Courrier recommandé"
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 #, python-format
 msgid "Sale Order"
-msgstr "Commande"
+msgstr "Verkauf"
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__so_line_id
 msgid "Sale order line"
-msgstr "Ligne de bons de commande"
+msgstr "Verkaufsauftragszeile"
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model,name:commown_lead_risk_analysis.model_crm_team
 msgid "Sales Channels"
-msgstr "Canaux de vente"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__web_searchurl
 msgid "Search on the web"
-msgstr "Rechercher sur le web"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__sent_collective_email
 msgid "Sent collective email"
-msgstr "Mail collectif"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.company_product_summary
 msgid "Summary for company:"
-msgstr "Synthèse des commandes de l'entreprise :"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,global_feeling:0
 msgid "Suspicious"
-msgstr "Méfiance"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__technical_skills
 msgid "Technical skills"
-msgstr "Évaluation technique"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Technicalities"
-msgstr "Connaissances techniques"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__webid_unknown
 msgid "Unknown on the web"
-msgstr "Inconnu sur le web"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__used_for_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_team__used_for_risk_analysis
 msgid "Used for risk analysis"
-msgstr "Usage pour l'analyse de risque"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0
 msgid "Warm"
-msgstr "Cordial"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__webid_rating
 msgid "Web identity Rating"
-msgstr "Évaluation identité Web"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: code:addons/commown_lead_risk_analysis/models/crm_lead.py:160
 #, python-format
 msgid "Web search link"
-msgstr "Lien de recherche sur le web"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,technical_skills:0
 msgid "confirmed"
-msgstr "Confirmé"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,technical_skills:0
 msgid "intermediary"
-msgstr "Intermédiaire"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,technical_skills:0
 msgid "neophyte"
-msgstr "Néophyte"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,help:commown_lead_risk_analysis.field_crm_lead__second_phone_call
 msgid "with a message"
-msgstr "Avec message vocal"
+msgstr ""
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,help:commown_lead_risk_analysis.field_crm_lead__first_phone_call
 msgid "without leaving a message"
-msgstr "Sans message vocal"
-
-#~ msgid "Sales Team"
-#~ msgstr "Équipe commerciale"
-
-#~ msgid "Notes"
-#~ msgstr "Notes"
-
-#~ msgid "Orders"
-#~ msgstr "Commandes"
+msgstr ""
