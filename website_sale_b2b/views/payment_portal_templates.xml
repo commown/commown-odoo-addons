@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <template id="sale_order_portal_template" inherit_id="sale.sale_order_portal_template">
-
-    <!-- Add variables to detect Big B2B -->
-    <!-- WARNING: on this page, the user is NOT authenticated, as an
-         access token is used instead. `is_authorized_to_order` is
-         considered always True because current user has this token.
-    -->
-    <xpath expr="//*[@t-call='payment.payment_tokens_list']" position="inside">
-      <t t-set="is_big_b2b" t-value="sale_order.is_big_b2b()" />
-      <t t-set="is_authorized_to_order" t-value="True" />
-      <t t-set="can_order" t-value="is_authorized_to_order and not is_big_b2b" />
-    </xpath>
-
-  </template>
-
   <template id="payment" inherit_id="website_sale.payment">
 
     <!-- Add variables to detect Big B2B -->
