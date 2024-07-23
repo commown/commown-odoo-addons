@@ -15,16 +15,17 @@
     </xpath>
 
     <xpath expr="//td[@id='product_name']" position="inside">
-        <div t-if="line.product_id.is_rental" class="rent m-4 p-4 bg-light">
-
-          <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
-          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
+      <t t-if="line.product_id.is_rental">
+        <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
+        <div t-if="first_cline" class="rent m-4 p-4 bg-light">
 
           <p class="mb-0">Loyer unitaire :
             <span t-esc="first_cline.price_unit * first_cline.quantity"
                   t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
             / <span t-field="first_cline.recurring_rule_type"/>
           </p>
+
+          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
 
           <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :
             <ul class="contract-list">
@@ -41,6 +42,8 @@
           </p>
 
         </div>
+      </t>
+
         <p>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                   t-attf-data-target="#myModal{{line.id}}">
