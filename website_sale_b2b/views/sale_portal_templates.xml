@@ -8,6 +8,17 @@
       <t t-set="order_id" t-value="sale_order.id"/>
     </xpath>
 
+    <!-- Add variables to detect Big B2B -->
+    <!-- WARNING: on this page, the user is NOT authenticated, as an
+         access token is used instead. `is_authorized_to_order` is
+         considered always True because current user has this token.
+    -->
+    <xpath expr="//*[@t-call='payment.payment_tokens_list']" position="inside">
+      <t t-set="is_big_b2b" t-value="sale_order.is_big_b2b()" />
+      <t t-set="is_authorized_to_order" t-value="True" />
+      <t t-set="can_order" t-value="is_authorized_to_order and not is_big_b2b" />
+    </xpath>
+
   </template>
 
 </odoo>
