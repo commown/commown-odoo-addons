@@ -1,4 +1,5 @@
 import cgi
+from collections import defaultdict
 from urllib.parse import urlencode
 
 from odoo import _, api, fields, models
@@ -65,7 +66,9 @@ class CommownCrmLead(models.Model):
     email_ultimatum = fields.Boolean("Email ultimatum", default=False)
     registered_mail_sent = fields.Boolean("Registered mail sent", default=False)
 
-    orders_description = fields.Html("Orders at date", sanitize_attributes=False)
+    orders_description = fields.Html(
+        "Orders at date", sanitize_attributes=False, compute="_compute_orders_descr"
+    )
     initial_data_notes = fields.Text("Notes initiales")
     identity_validated = fields.Boolean("Identity validated", default=False)
     mobile_validated = fields.Boolean("Mobile phone validated", default=False)
@@ -89,44 +92,58 @@ class CommownCrmLead(models.Model):
         "Used for risk analysis", related="team_id.used_for_risk_analysis"
     )
 
-    def _onchange_partner_id_values(self, partner_id):
-        vals = super()._onchange_partner_id_values(partner_id)
-        vals["orders_description"] = self._compute_orders_descr(partner_id)
-        return vals
+    @api.onchange("partner_id")
+    def _compute_orders_descr(self):
+        "Compute the orders_description of every record in current resultset"
 
-    def _compute_orders_descr(self, partner_id=None):
-        # XXX Use a qweb template
-        if partner_id is None:
-            partner_id = self.partner_id.id
-        if not partner_id:
-            return ""
-        orders = self.env["sale.order"].search(
-            [
-                ("partner_id", "=", partner_id),
-                ("state", "=", "sale"),
-            ]
-        )
-        descr = []
-        for order in orders:
-            descr.append("<h4>%s</h4>" % cgi.escape(order.name, quote=True))
-            oline_descr = []
-            for oline in order.order_line:
-                oline_descr.append(
-                    "<li>%s</li>"
-                    % cgi.escape(oline.product_id.display_name, quote=True)
+        def ref(xml_id):
+            return self.env.ref(f"commown_lead_risk_analysis.{xml_id}")
+
+        orders_tmpl = ref("partner_orders_tmpl")
+        products_tmpl = ref("company_product_summary")
+
+        def get_orders(partner):
+            return self.env["sale.order"].search(
+                [("partner_id", "child_of", partner.id), ("state", "=", "sale")]
+            )
+
+        def _product_summary(partner):
+            order_lines = (
+                get_orders(partner)
+                .mapped("order_line")
+                .sorted(
+                    lambda ol: ol.product_id.product_tmpl_id.property_contract_template_id.name
+                    or "",
+                    reverse=True,
                 )
-            descr.append("<ul>%s</ul>" % "\n".join(oline_descr))
-        return "\n".join(descr)
+            )
 
-    @api.model
-    @api.returns("self", lambda value: value.id)
-    def create(self, vals):
-        partner_id = vals.get("partner_id", False)
-        if "orders_description" not in vals:
-            vals["orders_description"] = self._compute_orders_descr(partner_id)
-        # CRM module does not seem to update partner values for now
-        vals.update(self._onchange_partner_id_values(partner_id))
-        return super().create(vals)
+            summary = defaultdict(int)
+            for oline in order_lines:
+                summary[oline.product_id.product_tmpl_id] += 1
+
+            return products_tmpl.render({"company": partner, "summary": summary})
+
+        for record in self:
+
+            # Possible when changing the partner of the lead in the UI (onchange):
+            if not record.partner_id:
+                record.orders_description = ""
+                continue
+
+            descr = []
+            partner = record.partner_id.commercial_partner_id
+
+            descr.append(orders_tmpl.render({"orders": get_orders(partner)}))
+
+            if record.partner_id != partner:
+                descr.append(_product_summary(partner))
+
+                holding = record.partner_id.get_holding()
+                if holding != partner:
+                    descr.append(_product_summary(holding))
+
+            record.orders_description = (b"\n".join(descr)).decode("utf-8")
 
     @api.multi
     def _compute_web_searchurl(self):
