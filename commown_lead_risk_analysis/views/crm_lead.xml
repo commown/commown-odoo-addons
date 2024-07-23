@@ -151,7 +151,8 @@
         <ul t-if="summary">
           <t t-foreach="summary" t-as="product">
             <li>
-              <b t-esc="summary[product]"/>
+              <!-- Use "g" format to avoid trailing .0 for int quantities -->
+              <b t-esc="'{:g}'.format(summary[product])"/>
               <span t-esc="product.display_name"/>
             </li>
           </t>

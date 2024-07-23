@@ -118,9 +118,9 @@ class CommownCrmLead(models.Model):
                 )
             )
 
-            summary = defaultdict(int)
+            summary = defaultdict(float)
             for oline in order_lines:
-                summary[oline.product_id.product_tmpl_id] += 1
+                summary[oline.product_id.product_tmpl_id] += oline.product_uom_qty
 
             return products_tmpl.render({"company": partner, "summary": summary})
 

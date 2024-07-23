@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-26 12:57+0000\n"
-"PO-Revision-Date: 2024-04-26 12:57+0000\n"
+"POT-Creation-Date: 2024-07-23 10:17+0000\n"
+"PO-Revision-Date: 2024-07-23 10:17+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -61,8 +61,18 @@ msgid "Communication process"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
+#: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.company_product_summary
+msgid "Company has no order."
+msgstr ""
+
+#. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Conflicting contacts"
+msgstr ""
+
+#. module: commown_lead_risk_analysis
+#: model:ir.model,name:commown_lead_risk_analysis.model_res_partner
+msgid "Contact"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
@@ -217,6 +227,11 @@ msgid "Orders at date"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
+#: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.partner_orders_tmpl
+msgid "Partner has no order."
+msgstr ""
+
+#. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Phone call"
 msgstr ""
@@ -242,7 +257,7 @@ msgid "Registered mail sent"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
-#: code:addons/commown_lead_risk_analysis/models/crm_lead.py:153
+#: code:addons/commown_lead_risk_analysis/models/crm_lead.py:170
 #: model:ir.model,name:commown_lead_risk_analysis.model_sale_order
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 #, python-format
@@ -267,6 +282,11 @@ msgstr ""
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__sent_collective_email
 msgid "Sent collective email"
+msgstr ""
+
+#. module: commown_lead_risk_analysis
+#: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.company_product_summary
+msgid "Summary for company:"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
@@ -306,7 +326,7 @@ msgid "Web identity Rating"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
-#: code:addons/commown_lead_risk_analysis/models/crm_lead.py:143
+#: code:addons/commown_lead_risk_analysis/models/crm_lead.py:160
 #, python-format
 msgid "Web search link"
 msgstr ""

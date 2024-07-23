@@ -17,12 +17,12 @@ class CrmLeadTC(RentalSaleOrderTC):
         self.product2 = self._create_rental_product(name="Crosscall")
 
         self.so1 = self.create_so(self.partner1, self.product1)
-        self.so2 = self.create_so(self.partner2, self.product2)
+        self.so2 = self.create_so(self.partner2, self.product2, qty=2)
 
         self.lead = self.create_lead_from_so(self.so1)
 
-    def create_so(self, partner, product):
-        so_line = self._oline(product, product_uom_qty=1)
+    def create_so(self, partner, product, qty=1):
+        so_line = self._oline(product, product_uom_qty=qty)
         return self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
@@ -89,7 +89,7 @@ class CrmLeadTC(RentalSaleOrderTC):
             return " ".join(t.strip() for t in el.itertext() if t.strip())
 
         self.assertEqual(len(sum_el.xpath(".//li")), 2)
-        self.assertEqual(text(sum_el.xpath(".//li")[0]), "1 Crosscall")
+        self.assertEqual(text(sum_el.xpath(".//li")[0]), "2 Crosscall")
         self.assertEqual(text(sum_el.xpath(".//li")[1]), "1 Fairphone Premium")
 
         # Also test with a holding
@@ -111,5 +111,5 @@ class CrmLeadTC(RentalSaleOrderTC):
         self.assertEqual(sum_el.xpath(".//h3/text()"), ["Summary for company: Holding"])
 
         self.assertEqual(len(sum_el.xpath(".//li")), 2)
-        self.assertEqual(text(sum_el.xpath(".//li")[0]), "2 Crosscall")
+        self.assertEqual(text(sum_el.xpath(".//li")[0]), "3 Crosscall")
         self.assertEqual(text(sum_el.xpath(".//li")[1]), "1 Fairphone Premium")
