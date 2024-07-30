@@ -145,6 +145,14 @@ class CommownContractForecastFunctionalTC(RentalSaleOrderTC):
                 [0.0, 10.0, 10.0, 10.0],
             )
 
+        # Check forecasts get synchronously recomputed on dedication action use:
+        contract = contract_lines[0].contract_id
+        old_forecasts = contract.mapped("contract_line_ids.forecast_period_ids")
+        self.assertTrue(old_forecasts.exists(), "Test pre-requisite")
+        contract.action_regenerate_forecast()
+        self.assertFalse(old_forecasts.exists())
+        self.assertTrue(contract.mapped("contract_line_ids.forecast_period_ids"))
+
         # Check forecasts get recomputed on contract programmed end
         new_duration = relativedelta(months=7, days=-1)
         with trap_jobs() as trap:
