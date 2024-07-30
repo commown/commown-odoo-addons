@@ -49,9 +49,16 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         ]
 
     def _compute_condition_coupon_from_campaign(self, line, date):
+        order = line.sale_order_line_id.order_id
+        if not order:
+            _logger.warning(
+                f"Contract line id {line.id} (contract {line.contract_id.name})"
+                f" has no related order line."
+            )
+            return False
+
         try:
-            coupons = line.sale_order_line_id.order_id.used_coupons()
-            return self.coupon_campaign_id in coupons.mapped("campaign_id")
+            return self.coupon_campaign_id in order.used_coupons().mapped("campaign_id")
         except:
             import traceback as tb
 
