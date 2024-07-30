@@ -139,10 +139,13 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             )
         return discount
 
-    def _compute_date(self, contract_line, date_attr_prefix):
+    def _compute_date(self, contract_line, date_attr_prefix, force_contract_ref=False):
         """Return the start or end date (depending on `date_attr_prefix`)
 
         If the date type is 'empty', return None.
+
+        `force_contract_ref` is there for data migration purpose only and should be
+        removed afterwards.
         """
 
         assert date_attr_prefix in ("start", "end")
@@ -155,9 +158,12 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
         reference = getattr(self, "%s_reference" % date_attr_prefix)
 
-        if reference.startswith("contract:"):
+        if reference.startswith("contract:") or force_contract_ref:
             ref_entity = contract_line.contract_id
-            ref_field = reference[len("contract:") :]
+            if force_contract_ref:
+                ref_field = reference
+            else:
+                ref_field = reference[len("contract:") :]
             if ref_entity.taken_over_contract_id:
                 ref_entity = ref_entity.taken_over_contract_id
         else:
