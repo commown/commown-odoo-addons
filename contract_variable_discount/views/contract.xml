@@ -16,21 +16,6 @@
         <attribute name="context">{"default_contract_id": active_id, "default_contract_template_id": contract_template_id}</attribute>
       </xpath>
 
-      <!-- Insert `variable_discount` before `discount` -->
-
-      <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='discount']"
-             position="before">
-        <field name="contract_template_id" invisible="1"/>
-        <field name="contract_template_line_id"/>
-        <field name="variable_discount"/>
-      </xpath>
-
-      <!-- Do not show discount if `variable_discount` is True -->
-      <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='discount']"
-             position="attributes">
-        <attribute name="attrs">{'invisible': [('variable_discount', '=', True)]}</attribute>
-      </xpath>
-
     </field>
   </record>
 
