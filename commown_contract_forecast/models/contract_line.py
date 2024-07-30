@@ -54,11 +54,14 @@ class ContractLine(models.Model):
         return result
 
     @api.multi
-    def generate_forecast_periods(self):
+    def generate_forecast_periods(self, force_sync=False):
         "Don't generate forecasts when creating a contract from sale in product_rental"
         if "contract_descr" not in self.env.context:
             for contract_line in self:
                 if contract_line.contract_id.company_id.enable_contract_forecast:
-                    contract_line.with_delay(
-                        identity_key=identity_exact
-                    )._generate_forecast_periods()
+                    if not force_sync:
+                        contract_line = contract_line.with_delay(
+                            identity_key=identity_exact
+                        )
+
+                    contract_line._generate_forecast_periods()

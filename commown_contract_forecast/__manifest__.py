@@ -18,6 +18,7 @@
         "contract_queue_job",  # Make tests behave as when the commown module is installed
     ],
     "data": [
+        "views/contract.xml",
         "views/contract_line_forecast_period.xml",
     ],
 }
