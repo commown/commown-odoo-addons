@@ -12,19 +12,6 @@
         <attribute name="editable"></attribute>
       </xpath>
 
-      <!-- Insert `variable_discount` before `discount` -->
-      <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='discount']"
-             position="before">
-        <field name="discount_line_ids" invisible="1"/>
-        <field name="variable_discount"/>
-      </xpath>
-
-      <!-- Do not show discount if `variable_discount` is True -->
-      <xpath expr="//field[@name='contract_line_ids']/tree/field[@name='discount']"
-             position="attributes">
-        <attribute name="attrs">{'invisible': [('variable_discount', '=', True)]}</attribute>
-      </xpath>
-
     </field>
   </record>
 
@@ -35,9 +22,8 @@
     <field name="arch" type="xml">
       <group name="note_invoicing_mode" position="before">
         <group name="Discount">
-          <field name="variable_discount" invisible="1"/>
           <field name="discount_line_ids"/>
-          <field name="discount" attr="{'invisible': [('variable_discount', '=', True)]}"/>
+          <field name="discount"/>
         </group>
       </group>
     </field>
