@@ -99,17 +99,24 @@ class ContractLine(models.Model):
             .filtered(lambda l: l.contract_line_id == self)
         )
 
-    def last_invoice_discount_state(self):
-        """Return for each applicable discount if it was applied on last invoice
+    def last_invoice_cooperative_discount_state(self):
+        """Return for each applicable cooperative campaign discount
+        if it was applied on last invoice
 
         The returned value is a dict of the form {discount: boolean}.
         If there is no last invoice, return False for all given discounts.
         """
 
         self.ensure_one()
+        result, last_inv_line = {}, None
 
-        last_inv_line = self._last_invoice_self_generated_line()
-        return {
-            discount: last_inv_line and last_inv_line.is_discount_applied(discount)
-            for discount in self._applicable_discount_lines()
-        }
+        for discount in self._applicable_discount_lines():
+            campaign = discount.coupon_campaign_id
+            if campaign and campaign.is_coop_campaign:
+                if last_inv_line is None:
+                    last_inv_line = self._last_invoice_self_generated_line()
+                result[discount] = last_inv_line and last_inv_line.is_discount_applied(
+                    discount
+                )
+
+        return result
