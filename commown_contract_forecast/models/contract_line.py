@@ -26,12 +26,7 @@ class ContractLine(models.Model):
 
         # Forecast the applicability of cooperative-campaign discounts based on
         # their results on their last generated invoice line:
-        last_discount_state = self.last_invoice_discount_state()
-        bypass_coop_campaigns = {
-            d: state
-            for (d, state) in last_discount_state.items()
-            if d.coupon_campaign_id and d.coupon_campaign_id.is_coop_campaign
-        }
+        bypass_coop_campaigns = self.last_invoice_cooperative_discount_state()
 
         # Compute all discounts and apply them to the forecast:
         discount_values = self.with_context(
