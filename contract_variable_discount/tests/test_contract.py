@@ -43,8 +43,11 @@ class ContractTC(TestContractBase):
     def setUpClass(cls):
         super(ContractTC, cls).setUpClass()
         cls._init_test_model(TestConditionDiscountLine)
-        # Adjust dates to our test needs:
-        cls.contract.date_start = "2016-02-15"
+        # Adjust dates to our test needs (with different contract and line start dates):
+        cls.contract.date_start = "2016-02-10"
+        cls.contract.contract_line_ids.update(
+            {"recurring_next_date": "2016-02-15", "date_start": "2016-02-15"}
+        )
         cls.contract.recurring_next_date = "2016-02-29"
 
     def tdiscount(self, ct_line=None, **kwargs):
@@ -75,11 +78,15 @@ class ContractTC(TestContractBase):
             else:
                 raise ValueError("Expected inv date %s never reached" % discount_date)
 
-    def _discount_date(self, prefix="start", **kwargs):
+    def _discount_date(self, prefix="start", cline=None, **kwargs):
+        force_contract_ref = kwargs.pop("force_contract_ref", False)
         kwargs.setdefault("name", "Test discount")
         kwargs.setdefault("amount_value", 1.0)
         discount = self.cdiscount(**kwargs)
-        return discount._compute_date(self.acct_line, prefix)
+        cline = cline or self.acct_line
+        return discount._compute_date(
+            cline, prefix, force_contract_ref=force_contract_ref
+        )
 
     def _check_applied_discounts(self, invl, prefix, ctd_names=(), cd_names=()):
         ctd_names, cd_names = list(ctd_names), list(cd_names)
@@ -98,10 +105,19 @@ class ContractTC(TestContractBase):
         self.assertEqual(invl.mapped(ctd_rel), ctd_names)
         self.assertEqual(invl.mapped(cd_rel), cd_names)
 
-    def test_discount_compute_date_ok(self):
+    def test_discount_compute_date_contract_line_ok(self):
         "Start date must be computed correctly"
+
         self.assertEqual(
             self._discount_date(start_value=-5, start_unit="days"), date(2016, 2, 10)
+        )
+        self.assertEqual(
+            self._discount_date(
+                start_value=-5,
+                start_unit="days",
+                force_contract_ref=True,
+            ),
+            date(2016, 2, 5),
         )
         self.assertEqual(
             self._discount_date(start_unit="weeks", start_value=3), date(2016, 3, 7)
@@ -119,6 +135,72 @@ class ContractTC(TestContractBase):
         self.assertEqual(self._discount_date(prefix="start"), date(2016, 2, 15))
         self.assertIsNone(self._discount_date(prefix="end"))
 
+    def test_discount_compute_date_contract_ok(self):
+        "Start date must be computed correctly with contract start date reference too"
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10, start_unit="days", start_reference="contract:date_start"
+            ),
+            date(2016, 2, 20),
+        )
+
+    def test_discount_compute_date_contract_with_takeover_ok(self):
+        "Start date must be computed correctly with contract taken over too"
+
+        old_commitment_end_date = self.contract.commitment_end_date
+
+        self.contract2.date_start = "2015-06-01"
+
+        cl21 = self.contract2.contract_line_ids[0]
+        cl22 = self.env["contract.line"].create(
+            {
+                "name": "line 2",
+                "date_start": "2015-08-01",
+                "contract_id": self.contract2.id,
+                "product_id": cl21.product_id.id,
+            }
+        )
+
+        cl12 = self.env["contract.line"].create(
+            {
+                "name": "line 2",
+                "date_start": self.contract.date_start,
+                "contract_id": self.contract.id,
+                "product_id": cl22.product_id.id,
+            }
+        )
+
+        self.contract2.date_end = "2015-08-31"
+        self.contract.taken_over_contract_id = self.contract2
+        cl12.taken_over_contract_line_id = cl22.id
+
+        self.assertEqual(fields.Date.to_string(self.contract.date_start), "2015-09-01")
+        self.assertNotEqual(old_commitment_end_date, self.contract.commitment_end_date)
+        self.assertEqual(
+            self.contract.commitment_end_date, self.contract2.commitment_end_date
+        )
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10, start_unit="days", start_reference="contract:date_start"
+            ),
+            date(2015, 6, 11),
+        )
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10,
+                start_unit="days",
+                start_reference="date_start",
+                cline=cl12,
+            ),
+            date(2015, 8, 11),
+        )
+
+        self.contract.taken_over_contract_id = False
+        self.assertEqual(old_commitment_end_date, self.contract.commitment_end_date)
+
     def test_discount_compute_0(self):
         self.set_cdiscounts(
             self.cdiscount(
@@ -129,6 +211,19 @@ class ContractTC(TestContractBase):
         )
         invoice = self.contract.recurring_create_invoice()
         self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [2.0])
+
+    def test_discount_capped_to_100_percent(self):
+        self.set_cdiscounts(
+            self.cdiscount(
+                name="Fix discount",
+                amount_type="fix",
+                amount_value=1e6,
+            )
+        )
+        invoice = self.contract.recurring_create_invoice()
+        self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [100])
+        invoice.action_invoice_open()
+        self.assertEqual(invoice.amount_total, 0)
 
     def _discounts_1(self):
         return (

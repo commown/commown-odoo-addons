@@ -50,7 +50,10 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     start_date = fields.Date(string="Start date")
 
     start_reference = fields.Selection(
-        [("date_start", "Contract start date")],
+        [
+            ("date_start", "Contract line start date"),
+            ("contract:date_start", "Contract start date"),
+        ],
         default="date_start",
         string="Start reference date",
         help="Date reference used to compute the discount start date",
@@ -84,7 +87,10 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     end_date = fields.Date(string="End date")
 
     end_reference = fields.Selection(
-        [("date_start", "Contract start date")],
+        [
+            ("date_start", "Contract line start date"),
+            ("contract:date_start", "Contract start date"),
+        ],
         default="date_start",
         string="End reference date",
         help="Date reference used to compute the discount end date",
@@ -133,10 +139,13 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             )
         return discount
 
-    def _compute_date(self, contract_line, date_attr_prefix):
+    def _compute_date(self, contract_line, date_attr_prefix, force_contract_ref=False):
         """Return the start or end date (depending on `date_attr_prefix`)
 
         If the date type is 'empty', return None.
+
+        `force_contract_ref` is there for data migration purpose only and should be
+        removed afterwards.
         """
 
         assert date_attr_prefix in ("start", "end")
@@ -147,10 +156,25 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         elif date_type == "absolute":
             return getattr(self, "%s_date" % date_attr_prefix)
 
-        cfields = contract_line.contract_id.fields_get()
-
         reference = getattr(self, "%s_reference" % date_attr_prefix)
-        if reference not in cfields or cfields[reference]["type"] != "date":
+
+        if reference.startswith("contract:") or force_contract_ref:
+            ref_entity = contract_line.contract_id
+            if force_contract_ref:
+                ref_field = reference
+            else:
+                ref_field = reference[len("contract:") :]
+            if ref_entity.taken_over_contract_id:
+                ref_entity = ref_entity.taken_over_contract_id
+        else:
+            ref_entity = contract_line
+            ref_field = reference
+            if ref_entity.taken_over_contract_line_id:
+                ref_entity = ref_entity.taken_over_contract_line_id
+
+        cfields = ref_entity.fields_get()
+
+        if ref_field not in cfields or cfields[ref_field]["type"] != "date":
             raise ValidationError(
                 _(
                     "Incorrect reference '%s' in discount date of contract %s"
@@ -159,7 +183,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
                 % (reference, contract_line.contract_id.name, contract_line.id)
             )
 
-        reference_date = getattr(contract_line.contract_id, reference)
+        reference_date = getattr(ref_entity, ref_field)
         if not reference_date:
             raise ValidationError(
                 _(

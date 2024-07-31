@@ -15,3 +15,7 @@ class Contract(models.Model):
         graph_view = self.env.ref("commown_contract_forecast.forecast_view_graph")
         result["views"] = [(graph_view.id, "graph"), (None, "pivot"), (None, "tree")]
         return result
+
+    @api.multi
+    def action_regenerate_forecast(self):
+        self.mapped("contract_line_ids").generate_forecast_periods(force_sync=True)

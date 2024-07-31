@@ -18,7 +18,7 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
         before1 = partial(ts_before, days=1)
         inv1 = self.invoice(before1, mock_optin=True)
         self.assertEqual(
-            self.contract.contract_line_ids.last_invoice_discount_state(),
+            self.contract.contract_line_ids.last_invoice_cooperative_discount_state(),
             {inv1.invoice_line_ids.applied_discount_template_line_ids: True},
         )
         self.assertEqual(inv1.amount_untaxed, 6.0)
