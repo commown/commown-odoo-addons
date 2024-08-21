@@ -22,4 +22,15 @@
     <field name="perm_unlink" eval="1"/>
   </record>
 
+  <record model="ir.rule" id="project_users_project_task_type">
+    <field name="name">[Commown] Steps of project with privacy visibility on employees can be managed by employees</field>
+    <field name="model_id" ref="project.model_project_task_type"/>
+    <field name="domain_force">[("project_ids.privacy_visibility", "=", "employees")]</field>
+    <field name="groups" eval="[(6, 0, [ref('project.group_project_user')])]"/>
+    <field name="perm_read" eval="0"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="1"/>
+  </record>
+
 </odoo>
