@@ -88,3 +88,49 @@ class StockMoveLineTC(SavepointCase):
         # When only obe unvalidated move, the picking is validated directly
         self.move_line2.action_validate_linked_picking()
         self.assertEqual(self.picking2.state, "done")
+
+    def test_action_open_parent(self):
+        # Check result on picking move line
+        expected_result = {
+            "name": "Source",
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": "stock.picking",
+            "res_id": self.picking1.id,
+            "target": "current",
+        }
+        self.assertEqual(self.move_line1.action_open_parent(), expected_result)
+
+        # Create scrap
+        self.picking2.button_validate()
+        lot = self.move_line2.lot_id
+        scrap_loc = self.env.ref("stock.stock_location_scrapped")
+        scrap = self.env["stock.scrap"].create(
+            {
+                "product_id": lot.product_id.id,
+                "lot_id": lot.id,
+                "location_id": self.picking2.location_dest_id.id,
+                "scrap_location_id": scrap_loc.id,
+                "product_uom_id": lot.product_id.uom_id.id,
+                "date_expected": self.picking2.date_done,
+            }
+        )
+        scrap.action_validate()
+        scrap_move_line = scrap.move_id.move_line_ids
+
+        # Check result on a scrap
+        expected_result = {
+            "name": "Source",
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": "stock.scrap",
+            "res_id": scrap.id,
+            "target": "current",
+        }
+        self.assertEqual(scrap_move_line.action_open_parent(), expected_result)
+
+        self.move_line1.move_id.picking_id = False
+        res = self.move_line1.action_open_parent()
+        self.assertTrue(res is None)
