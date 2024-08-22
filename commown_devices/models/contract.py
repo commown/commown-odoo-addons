@@ -27,7 +27,7 @@ class Contract(models.Model):
 
     lot_nb = fields.Integer("Number of lots", compute="_compute_lot_nb", store=True)
 
-    show_all_view_move_lines = fields.Boolean("Show all move lines", default=False)
+    show_all_view_move_lines = fields.Boolean("Show all move lines", default=True)
 
     move_line_view_ids = fields.One2many(
         "stock.move.line",
