@@ -27,4 +27,18 @@ class StockMoveLine(models.Model):
             )
 
     def action_validate_linked_picking(self):
-        self.move_id.picking_id.button_validate()
+        unvalidated_contract_ml = self.move_id.contract_id.move_line_ids.filtered(
+            lambda ml: ml.state == "assigned"
+        )
+        if len(unvalidated_contract_ml) > 1:
+            return {
+                "type": "ir.actions.act_window",
+                "name": "Message",
+                "res_model": "move.line.validation.wizard",
+                "view_type": "form",
+                "view_mode": "form",
+                "target": "new",
+                "context": {"default_move_line_id": self.id},
+            }
+        else:
+            self.move_id.picking_id.button_validate()
