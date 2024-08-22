@@ -1,0 +1,21 @@
+<odoo>
+  <record id="wizard_move_line_validation_form" model="ir.ui.view">
+    <field name="name">[commown] Move line validation confirmation wizard</field>
+    <field name="model">move.line.validation.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Confirm validation">
+        <sheet>
+          <group>
+            <field name="move_line_id" invisible="1"/>
+            <field name="message" nolabel="1" readonly="1"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="action_validate" string="Validate" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>
