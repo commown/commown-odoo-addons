@@ -26,6 +26,22 @@ class StockMoveLine(models.Model):
                 rec.move_id.picking_id and rec.move_id.picking_id.state == "assigned"
             )
 
+    def action_open_parent(self):
+        parent = self.move_id.scrap_ids or self.move_id.picking_id
+        if not parent:
+            return None
+        else:
+            parent = parent[0]
+            return {
+                "name": "Source",
+                "type": "ir.actions.act_window",
+                "view_type": "form",
+                "view_mode": "form",
+                "res_model": parent._name,
+                "res_id": parent.id,
+                "target": "current",
+            }
+
     def action_validate_linked_picking(self):
         unvalidated_contract_ml = self.move_id.contract_id.move_line_ids.filtered(
             lambda ml: ml.state == "assigned"
