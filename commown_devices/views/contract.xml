@@ -37,6 +37,7 @@
                 <field name="location_id"/>
                 <field name="location_dest_id"/>
                 <field name="date"/>
+                <field name="origin"/>
                 <field name="state"/>
                 <button name="action_validate_linked_picking" string="Validate" class="btn-primary" type="object" attrs="{'invisible': [('show_validate_picking', '=', False)]}"/>
               </tree>
