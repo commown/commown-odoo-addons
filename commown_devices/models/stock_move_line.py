@@ -9,6 +9,8 @@ class StockMoveLine(models.Model):
         compute="_compute_show_validate_picking", store=False
     )
 
+    origin = fields.Char(string="origin", compute="_compute_origin", store=False)
+
     def _compute_is_contract_in(self):
         for rec in self:
             contract = rec.move_id.contract_id
@@ -17,6 +19,13 @@ class StockMoveLine(models.Model):
                 rec.is_contract_in = loc == rec.location_dest_id
             else:
                 rec.is_contract_in = False
+
+    @api.depends("move_id.picking_id", "move_id.scrap_ids")
+    def _compute_origin(self):
+        for rec in self:
+            parent = rec._get_parent()
+            if parent is not None:
+                rec.origin = parent.origin
 
     @api.onchange("move_id.picking_id.state")
     def _compute_show_validate_picking(self):
