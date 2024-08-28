@@ -13,14 +13,15 @@
       <xpath expr="//notebook" position="inside">
         <page name="devices" string="Devices">
           <group name="devices" string="Devices">
-            <field name="lot_ids">
+            <field name="lot_ids" nolabel="1">
               <tree>
                 <field name="product_id"/>
                 <field name="name"/>
               </tree>
             </field>
-            <field name="show_all_view_move_lines" widget="boolean_toggle"/>
-            <field name="move_line_view_ids" context='{"short_location_name": True}'>
+          </group>
+          <group name="move_lines" string="Move lines">
+            <field name="move_line_ids" nolabel="1" context='{"short_location_name": True}'>
               <tree
                   decoration-it="not lot_id"
                   decoration-bf="state != 'done'"
@@ -44,6 +45,15 @@
               </tree>
             </field>
           </group>
+          <a href="#" id="toggleMoveLines" class="btn btn-dark mb-2" role="button">Toggle non-serial</a>
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $('#toggleMoveLines').on('click', function(event) {
+                event.preventDefault();
+                $(".o_field_widget[name='move_line_ids'] tr.text-it").toggle()
+              });
+            });
+          </script>
         </page>
 
       </xpath>
