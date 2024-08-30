@@ -1,3 +1,5 @@
+from freezegun import freeze_time
+
 from odoo import fields
 
 from .common import ContractRelatedPaymentTokenUniquifyTC
@@ -98,11 +100,12 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         # (that way it is no more a secondary token)
         self.company_s1_w2.payment_token_id = self.contract2.payment_token_id
 
-        self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-19"))
-        self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-28"))
+        self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-28"))
+        self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-19"))
 
         # Configure acquirer with invoice merge prefs set and trigger obsolescence:
-        new_token = self._trigger_obsolescence("set_partner_invoice_merge_prefs")
+        with freeze_time("2018-02-10"):
+            new_token = self._trigger_obsolescence("set_partner_invoice_merge_prefs")
 
         # Check the results: payment prefs must have been smartly set on new partner
         self.check_payment_prefs(
@@ -110,17 +113,20 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         )
 
     def test_action_set_partner_invoice_merge_prefs_2(self):
-        "Do not change a partner's payment prefs on new mandate signature"
-        self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-19"))
-        self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-28"))
+        "Make sure the invoice merge date is in the future"
+        self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-28"))
+        self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-19"))
 
         # Configure acquirer with invoice merge prefs setting, preset the new
         # partner's payment preferences and trigger obsolescence
-        payment_prefs = _payment_prefs(1, "monthly", "2018-02-03")
-        new_token = self._trigger_obsolescence(
-            "set_partner_invoice_merge_prefs",
-            **payment_prefs,
-        )
+        with freeze_time("2018-05-01"):
+            new_token = self._trigger_obsolescence(
+                "set_partner_invoice_merge_prefs",
+                **_payment_prefs(1, "monthly", "2017-03-03"),
+            )
 
         # Check the results: payment prefs of the new signee must be untouched
-        self.check_payment_prefs(new_token.partner_id, payment_prefs)
+        self.check_payment_prefs(
+            new_token.partner_id,
+            _payment_prefs(2, "monthly", "2018-06-28"),
+        )

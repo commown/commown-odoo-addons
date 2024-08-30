@@ -81,44 +81,31 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
 
     @api.model
     def _run_action_set_partner_invoice_merge_prefs(self, obsolete_tokens, new_token):
-        """Set new token's partner invoice merge/ payment preferences if not already set
-
-        Following choices are made for the merge preferences:
-
-        - Recurring type will be the smallest of the obsolete_tokens' partners
-        - The recurring interval is the one corresponding to the chosen
-          recurring type
-        - Next merge date is computed as the max merge date of the
-          obsoleted token partners.
-
-        Note that most of the time there will be only one partner
-        whose token has become obsolete.
-
-        """
+        "Set new token's partner invoice merge/ payment preferences"
 
         field_rtype = "invoice_merge_recurring_rule_type"
         field_rinterval = "invoice_merge_recurring_interval"
         field_date = "invoice_merge_next_date"
 
-        if new_token.partner_id[field_date]:
+        # Select the partner with the most recent invoice merge date
+        # (= who has the more recently used invoice merge preferences):
+        partners = (obsolete_tokens | new_token).mapped("partner_id")
+        max_date, max_date_partner = None, None
+        for partner in partners.filtered(field_date):
+            if max_date is None or max_date < partner[field_date]:
+                max_date = partner[field_date]
+                max_date_partner = partner
+
+        # If no partner has an invoice merge date, return for the sake of robustness:
+        if max_date is None:
             return
 
-        partners = obsolete_tokens.mapped("partner_id")
+        # Use the more recently used invoice merge preferences with a date in the future
+        rtype, rint = max_date_partner[field_rtype], max_date_partner[field_rinterval]
+        new_prefs = {field_date: max_date, field_rtype: rtype, field_rinterval: rint}
 
-        rtypes = [
-            rt[0] for rt in partners.fields_get(field_rtype)[field_rtype]["selection"]
-        ]
-        rtype, rinterval = (partners[0][field_rtype], partners[0][field_rinterval])
+        date_int = self.env["res.partner"].invoice_merge_time_interval(rtype, rint)
+        while new_prefs[field_date] < fields.Date.context_today(self):
+            new_prefs[field_date] += date_int
 
-        for partner in partners:
-            if rtypes.index(partner[field_rtype]) < rtypes.index(rtype):
-                rtype = partner[field_rtype]
-                rinterval = partner[field_rinterval]
-
-        new_token.partner_id.update(
-            {
-                field_rtype: rtype,
-                field_rinterval: rinterval,
-                field_date: max(partners.mapped(field_date)),
-            }
-        )
+        new_token.partner_id.update(new_prefs)
