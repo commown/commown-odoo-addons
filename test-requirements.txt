@@ -1,7 +1,8 @@
-requests-mock
+freezegun
 odfpy
 pyexcel-odsr
 pyexcel
+requests-mock
 
 # https://github.com/OCA/contract/pull/798 (12.0 port of contract_payment_auto)
 git+https://github.com/fcayre/contract@12.0-mig-contract_payment_auto-fix#subdirectory=setup/contract_payment_auto
