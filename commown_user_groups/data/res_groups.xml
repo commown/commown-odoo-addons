@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <record id="admin" model="res.groups">
+      <field name="name">Admin Odoo</field>
+    </record>
+
+    <record id="support" model="res.groups">
+      <field name="name">Support</field>
+    </record>
+
+    <record id="commercial" model="res.groups">
+      <field name="name">Commercial</field>
+    </record>
+
+  </data>
+</odoo>
