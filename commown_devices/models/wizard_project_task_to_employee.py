@@ -25,7 +25,7 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
     )
 
     delivered_by_hand = fields.Boolean(
-        "Delivered by hand",
+        "Delivered by hand?",
         help="Unset if the device must be sent by post",
         default=True,
     )
