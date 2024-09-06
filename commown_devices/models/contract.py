@@ -25,6 +25,8 @@ class Contract(models.Model):
 
     lot_ids = fields.One2many("stock.production.lot", "contract_id", string="Lots")
 
+    lot_nb = fields.Integer("Number of lots", compute="_compute_lot_nb", store=True)
+
     show_all_view_move_lines = fields.Boolean("Show all move lines", default=False)
 
     move_line_view_ids = fields.One2many(
@@ -50,6 +52,11 @@ class Contract(models.Model):
             move_ids = self.move_line_ids.filtered("lot_id")
 
         self.update({"move_line_view_ids": [(6, 0, move_ids.ids)]})
+
+    @api.depends("lot_ids")
+    def _compute_lot_nb(self):
+        for rec in self:
+            rec.lot_nb = len(rec.lot_ids)
 
     @api.multi
     def send_devices(

@@ -47,4 +47,15 @@
     </field>
   </record>
 
+  <record model="ir.ui.view" id="contract_contract_tree_view">
+    <field name="name">Contract tree view</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_tree_view"/>
+    <field name="arch" type="xml">
+      <field name="date_end" position="after">
+        <field name="lot_nb"/>
+      </field>
+    </field>
+  </record>
+
 </odoo>
