@@ -12,7 +12,7 @@
         <group name="partner_contract">
           <field name="partner_id"/>
           <field name="contract_id"
-                 attrs="{'required': [('require_contract', '=', True)], 'invisible': [('require_contract', '=', False)]}"
+                 attrs="{'required': [('require_contract', '=', True)], 'invisible': [('require_contract', '=', False), ('contract_id', '=', False)]}"
                  options="{'no_create': True}"/>
           <field name="commercial_partner_id" invisible="True"/>
           <field name="require_contract" invisible="True"/>
