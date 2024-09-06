@@ -1,5 +1,16 @@
 <odoo>
 
+  <record id="action_wizard_project_task_hand_over_to_employee" model="ir.actions.act_window">
+    <field name="name">[commown] Hand over a device to an employee</field>
+    <field name="src_model">project.task</field>
+    <field name="res_model">project.task.to.employee.wizard</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
   <record id="action_wizard_project_task_involved_product_picking" model="ir.actions.server">
     <field name="name">[commown] REPAIR: Move involved product</field>
     <field name="model_id" ref="project.model_project_task"/>
