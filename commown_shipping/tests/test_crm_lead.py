@@ -44,6 +44,7 @@ class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
         )
         team = self.env.ref("sales_team.salesteam_website_sales")
         team.shipping_account_id = self.shipping_account
+        team.delivery_tracking = True
 
         so = self.env["sale.order"].create(
             {
