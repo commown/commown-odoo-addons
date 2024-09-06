@@ -1,5 +1,6 @@
 freezegun
 odfpy
+odoo-test-helper
 pyexcel-odsr
 pyexcel
 requests-mock

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data>
+  <data noupdate="1">
 
     <record id="mail_warn_user" model="mail.template">
       <field name="name">Warn partner of a payment issue</field>
@@ -36,8 +36,8 @@
   </p>
 </div>
 ]]>
-    </field>
-  </record>
+      </field>
+    </record>
 
     <record id="mail_max_trial" model="mail.template">
       <field name="name">Max Slimpay payment trials reached</field>
@@ -51,8 +51,17 @@
       <p>Max trial number reached for payment issue ${object.name} id ${object.id}.</p>
       ]]>
       </field>
-  </record>
+    </record>
+
+    <record id="smspro_payment_issue" model="mail.template">
+      <field name="name">[commown] SMS impayé</field>
+      <field name="model_id" ref="project.model_project_task"/>
+      <field name="lang">fr_FR</field>
+      <field name="auto_delete">True</field>
+      <field name="body_html"><![CDATA[
+<p>Contenu du SMS à rédiger</p>
+]]></field>
+    </record>
 
   </data>
-
 </odoo>

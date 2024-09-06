@@ -4,6 +4,8 @@ import requests
 
 from odoo import _, api, fields, models
 
+from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
+
 _logger = logging.getLogger(__name__)
 
 
@@ -466,3 +468,21 @@ class ProjectTask(models.Model):
                 }
             )
         return task
+
+    def _slimpay_payment_issue_send_sms(self):
+        country_code = self.partner_id.country_id.code
+        phone = normalize_phone(
+            self.partner_id.get_mobile_phone(),
+            country_code,
+        )
+        if phone:
+            template = self.env.ref("payment_slimpay_issue.smspro_payment_issue")
+            self.with_delay().message_post_send_sms_html(
+                template.body_html, numbers=[phone], log_error=True
+            )
+
+        else:
+            _logger.warning(
+                "Could not send SMS to %s (id %s): no phone number found"
+                % (self.partner_id.name, self.partner_id.id)
+            )

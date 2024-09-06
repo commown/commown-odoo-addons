@@ -2,6 +2,8 @@ from datetime import date
 
 from odoo import api, fields, models
 
+from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
+
 
 class CrmLead(models.Model):
     _name = "crm.lead"
@@ -31,3 +33,12 @@ class CrmLead(models.Model):
             if contract.date_start and contract.date_start <= today:
                 continue
             contract.date_start = record.delivery_date
+
+    def _action_send_sms_doc_reminder(self):
+        template = self.env.ref("commown.sms_template_lead_doc_reminder")
+        country_code = self.partner_id.country_id.code
+        phone = normalize_phone(self.partner_id.get_mobile_phone(), country_code)
+        # Send the SMS
+        self.message_post_send_sms_html(
+            template.body_html, numbers=[phone], log_error=True
+        )
