@@ -28,6 +28,7 @@
         "data/action_project_task.xml",
         "data/action_purchase_order.xml",
         "data/action_stock_scrap.xml",
+        "data/contract_template.xml",
         "data/project_task.xml",
         "data/stock_location.xml",
         "security/ir.model.access.csv",
@@ -41,6 +42,7 @@
         "views/wizard_link_picking_po.xml",
         "views/wizard_link_po_invoice.xml",
         "views/wizard_project_task_picking.xml",
+        "views/wizard_project_task_to_employee.xml",
     ],
     "demo": [
         "demo/project_task.xml",
