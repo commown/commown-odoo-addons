@@ -1,5 +1,3 @@
-from datetime import date
-
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -31,14 +29,8 @@ class CrmLead(models.Model):
 
     @api.multi
     def _attachment_from_label(self, name, meta_data, label_data):
-        self.update(
-            {
-                "expedition_ref": meta_data["labelResponse"]["parcelNumber"],
-                "expedition_date": date.today(),
-                "delivery_date": False,
-            }
-        )
-        return super(CrmLead, self)._attachment_from_label(name, meta_data, label_data)
+        self.initialize_expedition_data(meta_data["labelResponse"]["parcelNumber"])
+        return super()._attachment_from_label(name, meta_data, label_data)
 
     @api.multi
     def parcel_labels(self, parcel_name=None, force_single=False):
