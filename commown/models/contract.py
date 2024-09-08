@@ -40,11 +40,7 @@ class Contract(models.Model):
         for record in self:
             record.payment_issue_ids = (
                 self.env["project.task"]
-                .search(
-                    [
-                        ("invoice_id", "in", record._get_related_invoices().ids),
-                    ]
-                )
+                .search([("invoice_id", "in", record._get_related_invoices().ids)])
                 .ids
             )
 
@@ -59,11 +55,7 @@ class Contract(models.Model):
 
     def _format_transaction_label(self, invoice, last_date_invoiced):
         self.ensure_one()
-        lang = self.env["res.lang"].search(
-            [
-                ("code", "=", self.partner_id.lang),
-            ]
-        )
+        lang = self.env["res.lang"].search([("code", "=", self.partner_id.lang)])
         date_format = lang.date_format or "%m/%d/%Y"
         label = self.transaction_label
         label = label.replace("#START#", invoice.date_invoice.strftime(date_format))
