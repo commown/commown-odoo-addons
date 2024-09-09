@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-07 13:01+0000\n"
-"PO-Revision-Date: 2024-06-07 17:41+0200\n"
+"POT-Creation-Date: 2024-09-07 15:12+0000\n"
+"PO-Revision-Date: 2024-09-09 10:49+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -163,10 +163,12 @@ msgstr "B2C"
 #: code:addons/rental_fees/models/rental_fees_definition.py:170
 #, python-format
 msgid "Cannot add an excluded-from-fees PO to a fees definition"
-msgstr "Il n'est pas possible de rajouter un achat paramétré comme exclu du commissionnement"
+msgstr ""
+"Il n'est pas possible de rajouter un achat paramétré comme exclu du "
+"commissionnement"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:604
+#: code:addons/rental_fees/models/rental_fees_computation.py:596
 #, python-format
 msgid "Cannot reset fees computation if not in the 'done' state"
 msgstr ""
@@ -174,7 +176,7 @@ msgstr ""
 "l'état 'fait'"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:608
+#: code:addons/rental_fees/models/rental_fees_computation.py:600
 #, python-format
 msgid "Cannot reset fees computation with a non-canceled invoice"
 msgstr ""
@@ -294,6 +296,12 @@ msgid "Device Domain"
 msgstr "Domaine de sélection de l'appareil"
 
 #. module: rental_fees
+#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:27
+#, python-format
+msgid "Device used by an employee (%s)"
+msgstr "Appareil utilisé par un.e employé.e (%s)"
+
+#. module: rental_fees
 #: code:addons/rental_fees/models/rental_fees_definition.py:259
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_view_form
 #, python-format
@@ -375,13 +383,13 @@ msgid "Fees"
 msgstr "Frais"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:493
+#: code:addons/rental_fees/models/rental_fees_computation.py:485
 #, python-format
 msgid "Fees computation details"
 msgstr "Détails du calcul"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:507
+#: code:addons/rental_fees/models/rental_fees_computation.py:499
 #, python-format
 msgid "Fees computation job"
 msgstr "Job de calcul"
@@ -392,6 +400,12 @@ msgstr "Job de calcul"
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_search
 msgid "Fees definition"
 msgstr "Définition des commissions"
+
+#. module: rental_fees
+#: code:addons/rental_fees/models/rental_fees_computation.py:304
+#, python-format
+msgid "Fees definition %s (id %d) has no line."
+msgstr "La définition de commissions %s (id %d) n'a aucune ligne."
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__fees_definition_line_id
@@ -466,7 +480,9 @@ msgstr "Abonnés (Partenaires)"
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_purchase_order__exclude_from_fees
 msgid "Force exclusion from fees even if a matching fees definition exists"
-msgstr "Exclure de force du commissionnement même si une définition de commissions correspond"
+msgstr ""
+"Exclure de force du commissionnement même si une définition de commissions "
+"correspond"
 
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_search
@@ -737,7 +753,7 @@ msgid "Number of unread messages"
 msgstr "Nombre de messages non lus"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:185
+#: code:addons/rental_fees/models/rental_fees_computation.py:180
 #, python-format
 msgid ""
 "Operation not allowed: there are later fees computations with invoices which "
@@ -752,7 +768,7 @@ msgid "Partner"
 msgstr "Partenaire"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:533
+#: code:addons/rental_fees/models/rental_fees_computation.py:525
 #, python-format
 msgid "Please set the invoice model on all fees definitions."
 msgstr ""
@@ -760,7 +776,7 @@ msgstr ""
 "commissions."
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:544
+#: code:addons/rental_fees/models/rental_fees_computation.py:536
 #, python-format
 msgid "Please use the same invoice model on all fees definition."
 msgstr ""
@@ -963,7 +979,7 @@ msgstr ""
 "modèle défini sur la définition des commissions, ou ajoutées manuellement."
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:539
+#: code:addons/rental_fees/models/rental_fees_computation.py:531
 #, python-format
 msgid "There is a later invoice for the same fees definition"
 msgstr ""
@@ -1044,6 +1060,11 @@ msgid "With compensation"
 msgstr "Avec pénalité"
 
 #. module: rental_fees
+#: model:ir.model,name:rental_fees.model_project_task_to_employee_wizard
+msgid "Wizard to give a device to an employee"
+msgstr "Utilitaire pour confier un appareil à un.e employé.e"
+
+#. module: rental_fees
 #: selection:rental_fees.definition_line,duration_unit:0
 msgid "Years"
 msgstr "Années"
@@ -1080,22 +1101,3 @@ msgid "[commown] Update fees definitions with the new POs"
 msgstr ""
 "[commown] Mettre à jour des définitions de commissions avec les nouveaux "
 "achats"
-
-#~ msgid "Ignoring fees def '%s', superseded by a more recent one."
-#~ msgstr ""
-#~ "La définition de commissions '%s' a été ignorée car remplacée par une "
-#~ "plus récente."
-
-#~ msgid "Explicitely excluded devices (with compensation)"
-#~ msgstr "Appareils exclus manuellement (avec pénalité)"
-
-#~ msgid "Please set the invoice model on the fees definition."
-#~ msgstr ""
-#~ "Il est nécessaire de paramétrer un modèle de facture sur la définition "
-#~ "des commissions"
-
-#~ msgid ""
-#~ "[${object.company_id.name}] Fees to be invoices as of ${object.until_date}"
-#~ msgstr ""
-#~ "[${object.company_id.name}] Facturation des commissions sur les loyers au "
-#~ "${object.until_date}"
