@@ -4,35 +4,18 @@ from odoo.exceptions import UserError
 
 from odoo.addons.commown_shipping.tests.common import BaseShippingTC
 
-from .common import create_lot_and_quant
+from .common import BaseWizardToEmployeeMixin, create_lot_and_quant
 
 
-class WizardProjectTaskToEmployeeTC(BaseShippingTC):
+class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
     def setUp(self):
         super().setUp()
-        project = self.env["project.project"].create(
+
+        self.task.project_id.update(
             {
-                "name": "Test",
                 "delivery_tracking": True,
                 "shipping_account_id": self.shipping_account.id,
             }
-        )
-        partner = self.env["res.partner"].create(
-            {
-                "firstname": "Firsttest",
-                "lastname": "Lasttest",
-                "street": "8A rue Schertz",
-                "zip": "67200",
-                "city": "Strasbourg",
-                "country_id": self.env.ref("base.fr").id,
-                "email": "contact@commown.coop",
-                "mobile": "0601020304",
-                "parent_id": 1,
-            }
-        )
-
-        self.task = self.env["project.task"].create(
-            {"name": "test", "project_id": project.id, "partner_id": partner.id}
         )
 
         new_dev_loc = self.env.ref("commown_devices.stock_location_new_devices")
@@ -47,14 +30,10 @@ class WizardProjectTaskToEmployeeTC(BaseShippingTC):
         )
 
     def get_wizard(self, **kwargs):
-        kwargs.setdefault("task_id", self.task.id)
         kwargs.setdefault("lot_id", self.lot.id)
-        kwargs.setdefault("delivered_by_hand", False)
         kwargs.setdefault("shipping_account_id", self.shipping_account.id)
         kwargs.setdefault("parcel_type", self.parcel_type.id)
-        wizard = self.env["project.task.to.employee.wizard"].create(kwargs)
-        wizard.onchange_reset_shipping_data_if_delivered_by_hand()
-        return wizard
+        return super().get_wizard(**kwargs)
 
     def test_delivered_by_hand_ok(self):
         contract = self.get_wizard(delivered_by_hand=True).execute()

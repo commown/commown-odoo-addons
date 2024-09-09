@@ -286,3 +286,33 @@ def create_lot_and_quant(env, lot_name, product, location):
         }
     )
     return lot
+
+
+class BaseWizardToEmployeeMixin:
+    def setUp(self):
+        super().setUp()
+        project = self.env["project.project"].create({"name": "Test"})
+        partner = self.env["res.partner"].create(
+            {
+                "firstname": "Firsttest",
+                "lastname": "Lasttest",
+                "street": "8A rue Schertz",
+                "zip": "67200",
+                "city": "Strasbourg",
+                "country_id": self.env.ref("base.fr").id,
+                "email": "contact@commown.coop",
+                "mobile": "0601020304",
+                "parent_id": 1,
+            }
+        )
+
+        self.task = self.env["project.task"].create(
+            {"name": "test", "project_id": project.id, "partner_id": partner.id}
+        )
+
+    def get_wizard(self, **kwargs):
+        kwargs.setdefault("task_id", self.task.id)
+        kwargs.setdefault("delivered_by_hand", False)
+        wizard = self.env["project.task.to.employee.wizard"].create(kwargs)
+        wizard.onchange_reset_shipping_data_if_delivered_by_hand()
+        return wizard
