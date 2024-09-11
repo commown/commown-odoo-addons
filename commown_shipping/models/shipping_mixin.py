@@ -180,7 +180,7 @@ class CommownShippingMixin(models.AbstractModel):
         result_path = None
         try:
             run(
-                ["pdftk"] + paths + ["cat", "output", fpath],
+                ["pdfunite"] + paths + [fpath],
                 capture_output=True,
                 check=True,
             )
