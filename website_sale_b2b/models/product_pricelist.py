@@ -2,7 +2,7 @@ import logging
 
 from odoo import api, fields, models
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 class Pricelist(models.Model):

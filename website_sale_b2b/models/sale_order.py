@@ -4,7 +4,7 @@ from odoo import _, api, models
 
 from odoo.addons.mail.models.mail_template import format_amount, mako_template_env
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 class SaleOrder(models.Model):
