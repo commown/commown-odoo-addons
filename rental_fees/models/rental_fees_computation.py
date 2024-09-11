@@ -10,7 +10,7 @@ from odoo.tools import format_date
 from odoo.addons.queue_job.job import job
 
 _one_day = relativedelta(days=1)
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 def _not_canceled(invoice):
