@@ -20,7 +20,7 @@
         "web_ir_actions_act_multi",
     ],
     "external_dependencies": {
-        "bin": ["pdfjam", "pdftk"],
+        "bin": ["pdfjam", "pdfunite"],
         "python": ["requests_toolbelt"],
     },
     "data": [
