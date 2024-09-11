@@ -4,7 +4,7 @@ from odoo import fields, models
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 class ProjectTask(models.Model):
