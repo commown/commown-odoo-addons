@@ -14,7 +14,7 @@ from odoo.exceptions import UserError
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 def coop_ws_important_events(base_url, campaign_ref, customer_key):

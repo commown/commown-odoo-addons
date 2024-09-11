@@ -10,7 +10,7 @@ from odoo import api, models
 
 from odoo.addons.queue_job.job import job
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
