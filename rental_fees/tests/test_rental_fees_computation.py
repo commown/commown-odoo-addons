@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import mute_logger
 
 from .common import RentalFeesTC
 
@@ -583,8 +584,9 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         # Do the same computation but with an error in get_main_rental_service:
         rental_service.property_contract_template_id = False
-        with self.assertRaises(RuntimeError) as err:
-            self.compute("2021-05-01")
+        with mute_logger("odoo.addons.rental_fees.models.rental_fees_computation"):
+            with self.assertRaises(RuntimeError) as err:
+                self.compute("2021-05-01")
 
         # Check the generated error contains useful information
         exc = str(err.exception)
