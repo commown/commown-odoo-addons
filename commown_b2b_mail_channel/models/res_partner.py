@@ -13,3 +13,55 @@ class ResPartner(models.Model):
         string="Support mail channel",
         domain=[("public", "=", "private"), ("channel_type", "=", "channel")],
     )
+
+    def write(self, vals):
+        """Override write function to add/remove company's partners when support channel is modified."""
+        if "mail_channel_id" in vals.keys():
+            new_chan_id = vals["mail_channel_id"]
+            if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
+                self.remove_partners_from_channel(self.mail_channel_id, self.child_ids)
+
+            if new_chan_id != False:
+                partners_to_add = self.child_ids.filtered(
+                    lambda p: p.company_type == "person" and p.user_ids
+                )
+                self.env["mail.channel"].browse(new_chan_id).channel_invite(
+                    partners_to_add.ids
+                )
+        return super().write(vals)
+
+    def remove_partners_from_channel(self, channel, partners):
+        self.env["mail.channel.partner"].search(
+            [
+                ("channel_id", "=", channel.id),
+                ("partner_id", "in", partners.ids),
+            ]
+        ).unlink()
+
+    def create_mail_channel(self):
+        if self.is_company and not self.mail_channel_id:
+            ref_roles_to_subscribe = (
+                self.env["ir.config_parameter"]
+                .sudo()
+                .get_param("commown_b2b_mail_channel.roles_subscribed_to_support_chan")
+                .split(",")
+            )
+            groups_to_subscribe = self.env["res.groups"]
+            for ref_role in ref_roles_to_subscribe:
+                groups_to_subscribe += self.env.ref(ref_role).group_id
+
+            self.mail_channel_id = self.env["mail.channel"].create(
+                {
+                    "name": " ".join(["Support", self.name]),
+                    "public": "private",
+                    "partner_company": self.id,
+                }
+            )
+            self.mail_channel_id.group_ids += groups_to_subscribe
+
+            # Remove the user that created the channel
+            self.mail_channel_id.channel_last_seen_partner_ids.filtered(
+                lambda cp: cp.partner_id == self.env.user.partner_id
+            ).unlink()
+            # Compute name
+            self.set_support_channel_name()

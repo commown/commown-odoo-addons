@@ -11,8 +11,9 @@
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
-    "depends": ["mail"],
+    "depends": ["commown_user_roles", "contract", "mail"],
     "data": [
+        "data/ir_config_parameter.xml",
         "views/res_partner.xml",
         "views/mail_channel.xml",
     ],

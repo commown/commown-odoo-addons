@@ -1,0 +1,13 @@
+<odoo noupdate="1">
+
+  <record id="delta_weeks_contract_start" model="ir.config_parameter">
+    <field name="key">commown_b2b_mail_channel.delta_contract_start</field>
+    <field name="value">6</field>
+  </record>
+
+  <record id="roles_subscribed_to_support_chan" model="ir.config_parameter">
+    <field name="key">commown_b2b_mail_channel.roles_subscribed_to_support_chan</field>
+    <field name="value">commown_user_roles.admin,commown_user_roles.support,commown_user_roles.commercial</field>
+  </record>
+
+</odoo>
