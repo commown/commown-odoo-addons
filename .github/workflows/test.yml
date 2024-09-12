@@ -38,7 +38,7 @@ jobs:
           persist-credentials: false
 
       - name: Install Debian librairies
-        run: apt-get update -y && apt install pdftk texlive-extra-utils texlive-latex-recommended libreoffice libmagic1 librsvg2-bin -y
+        run: apt-get update -y && apt install poppler-utils texlive-extra-utils texlive-latex-recommended libreoffice libmagic1 librsvg2-bin -y
 
       - name: Install addons and dependencies
         run: oca_install_addons
@@ -46,6 +46,8 @@ jobs:
       #   run: manifestoo -d . check-licenses
       # - name: Check development status
       #   run: manifestoo -d . check-dev-status --default-dev-status=Beta
+      - name: Configure odoo
+        run: echo "limit_memory_hard = 5368709120" >> /etc/odoo.cfg && cat /etc/odoo.cfg
       - name: Initialize test db
         run: oca_init_test_database
       - name: Run tests

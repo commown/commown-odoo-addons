@@ -1,0 +1,29 @@
+<odoo>
+
+  <record id="wizard_project_task_to_employee" model="ir.ui.view">
+    <field name="name">[commown] Wizard to give a device to an employee</field>
+    <field name="model">project.task.to.employee.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Give a device to an employee">
+        <sheet>
+          <group name="base">
+            <field name="task_id" invisible="1"/>
+            <field name="lot_id"/>
+            <field name="date"/>
+          </group>
+          <group name="delivery">
+            <field name="delivered_by_hand"/>
+            <field name="shipping_account_id" invisible="1"/>
+            <field name="parcel_type" attrs="{'invisible': ['|', ('delivered_by_hand', '=', True), ('shipping_account_id', '=', False)]}"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="execute" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>
