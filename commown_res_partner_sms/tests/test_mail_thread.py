@@ -24,7 +24,7 @@ class MailThreadTC(SavepointCase):
     def test_message_post_send_sms_html(self):
         mail_thread = self.env["mail.thread.test"].create({})
         template = self.env["mail.template"].create(
-            {"body_html": "<div>TEST template</div>"}
+            {"body_html": r"<div>TEST message to ${object.name}</div>"}
         )
         # Use partner as the record to wich template apply
         partner = self.env.ref("base.main_partner")
@@ -36,7 +36,10 @@ class MailThreadTC(SavepointCase):
             mail_thread.message_post_send_sms_html(
                 template, partner.id, numbers=["0600070022"]
             )
+
         self.assertEqual(len(mail_thread.message_ids), message_num + 1)
         sms = mail_thread.message_ids[0]
         self.assertEqual(sms.subtype_id, self.env.ref("mail.mt_note"))
-        self.assertIn("SMS message sent", sms.body)
+
+        expected_message = "<p>SMS message sent: TEST message to %s</p>" % partner.name
+        self.assertEqual(expected_message, sms.body)
