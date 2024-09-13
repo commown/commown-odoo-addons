@@ -90,7 +90,7 @@ class CrmLeadTC(RentalSaleOrderTC):
             lead._action_send_sms_doc_reminder()
             post_message.assert_called_once_with(
                 template,
-                lead.id,
+                lead,
                 numbers=[partner_mobile],
                 log_error=True,
             )

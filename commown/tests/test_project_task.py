@@ -157,7 +157,7 @@ class ProjectTaskActionTC(TransactionCase):
             trap.perform_enqueued_jobs()
             post_message.assert_called_once_with(
                 template,
-                self.task.id,
+                self.task,
                 numbers=[partner_mobile],
                 log_error=True,
             )
