@@ -40,8 +40,8 @@ def delivery_data(partner, raise_on_error=True):
 
     country = partner.country_id.code or "FR"
 
-    mobile = normalize_phone(partner.mobile, country, raise_on_error)
-    fixed = normalize_phone(partner.phone, country, raise_on_error)
+    mobile = normalize_phone(partner.mobile, country, "national", raise_on_error)
+    fixed = normalize_phone(partner.phone, country, "national", raise_on_error)
 
     if not mobile and fixed:
         fixed_obj = phonenumbers.parse(partner.phone, partner.country_id.code)
