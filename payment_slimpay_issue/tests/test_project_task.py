@@ -712,7 +712,7 @@ class ProjectTC(SavepointCase):
             trap.perform_enqueued_jobs()
             post_message.assert_called_once_with(
                 template,
-                task.id,
+                task,
                 numbers=[partner_mobile],
                 log_error=True,
             )
