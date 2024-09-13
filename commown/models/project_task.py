@@ -41,7 +41,7 @@ class ProjectTask(models.Model):
             # Send the SMS
             template = self.env.ref("commown.sms_template_issue_reminder")
             self.with_delay().message_post_send_sms_html(
-                template, self.id, numbers=[phone], log_error=True
+                template, self, numbers=[phone], log_error=True
             )
 
         else:
