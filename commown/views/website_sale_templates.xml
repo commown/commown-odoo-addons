@@ -15,10 +15,9 @@
     </xpath>
 
     <xpath expr="//td[@id='product_name']" position="inside">
-        <div t-if="line.product_id.is_rental" class="rent m-4 p-4 bg-light">
-
-          <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
-          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
+      <t t-if="line.product_id.is_rental">
+        <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
+        <div t-if="first_cline" class="rent m-4 p-4 bg-light">
 
           <p class="mb-0">Loyer unitaire :
             <span t-esc="first_cline.price_unit * first_cline.quantity"
@@ -26,58 +25,61 @@
             / <span t-field="first_cline.recurring_rule_type"/>
           </p>
 
-          <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :
-            <ul class="contract-list">
-              <t t-foreach="contracts" t-as="contract">
-                <li>Contrat <span t-field="contract.name"/> :
-                  <span t-if="contract.date_start &lt; datetime.date(2030, 1, 1)"
-                        class="commitment-end-date"
-                        t-field="contract.commitment_end_date"
-                        t-options="{'widget': 'date'}"/>
-                  <span t-else="">Location non démarrée</span>
-                </li>
-              </t>
-            </ul>
-          </p>
+          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
+
+          <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :</p>
+          <ul class="contract-list">
+            <t t-foreach="contracts" t-as="contract">
+              <li>Contrat <span t-field="contract.name"/> :
+              <span t-if="contract.date_start &lt; datetime.date(2030, 1, 1)"
+                    class="commitment-end-date"
+                    t-field="contract.commitment_end_date"
+                    t-options="{'widget': 'date'}"/>
+              <span t-else="">Location non démarrée</span>
+              </li>
+            </t>
+          </ul>
 
         </div>
-        <p>
-          <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                  t-attf-data-target="#myModal{{line.id}}">
-            See product details
-          </button>
-        </p>
+      </t>
 
-        <!-- Modal -->
-        <div class="modal fade" t-attf-id="myModal{{line.id}}"
-             tabindex="-1" role="dialog">
-          <div class="modal-dialog" role="document" style="width:80%">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                  <span aria-hidden="true">x</span>
-                </button>
-                <h4 class="modal-title">
-                  <t t-esc="line.product_id.name"/>
-                </h4>
-              </div>
-              <div class="modal-body">
-                <t t-raw="line.product_id.product_tmpl_id.website_description"/>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                  Fermer
-                </button>
-              </div>
+      <p>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+                t-attf-data-target="#myModal{{line.id}}">
+          See product details
+        </button>
+      </p>
+
+      <!-- Modal -->
+      <div class="modal fade" t-attf-id="myModal{{line.id}}"
+           tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document" style="width:80%">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                      aria-label="Close">
+                <span aria-hidden="true">x</span>
+              </button>
+              <h4 class="modal-title">
+                <t t-esc="line.product_id.name"/>
+              </h4>
+            </div>
+            <div class="modal-body">
+              <t t-raw="line.product_id.product_tmpl_id.website_description"/>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default"
+                      data-dismiss="modal">
+                Fermer
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Display order line description sale converted to HTML -->
-        <p class="mx-4 p-4 bg-light"
-           t-raw="env['ir.qweb.field.text'].value_to_html(line.name, None)"/>
+      <!-- Display order line description sale converted to HTML -->
+      <p class="mx-4 p-4 bg-light"
+         t-raw="env['ir.qweb.field.text'].value_to_html(line.name, None)"/>
 
     </xpath>
 
