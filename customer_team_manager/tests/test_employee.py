@@ -127,8 +127,18 @@ class EmployeeTC(CustomerTeamAbstractTC):
 
         empl.image_medium = old_image
         self.assertTrue(self.has_attachment(empl))
-        empl.unlink()
+        empl.sudo().unlink()
         self.assertFalse(self.has_attachment(empl))
+
+    def test_unlink_not_granted_to_customers(self):
+        "Even group_customer_admin members are not granted unlink permission"
+        empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
+        _empl = empl.sudo(self.user)
+
+        with self.assertRaises(AccessError) as err:
+            _empl.unlink()
+        self.assertIn("customer_team_manager.employee", err.exception.name)
+        self.assertIn("Operation: unlink", err.exception.name)
 
     def test_write_with_role_error(self):
         user_role = self.env.ref("customer_team_manager.customer_role_user")
