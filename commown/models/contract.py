@@ -65,8 +65,12 @@ class Contract(models.Model):
 
     @api.multi
     def _pay_invoice(self, invoice):
-        """Insert custom payment transaction label into the context
-        before executing the standard payment process."""
+        """Add slimpay specific context keys before standard payment:
+
+        - slimpay_payin_label: a custom payment transaction bank label
+        - slimpay_async_http: True to use jobs for slimpay's http calls
+
+        """
         if self.transaction_label:
             last_date_invoiced = max(
                 invoice.mapped("invoice_line_ids.contract_line_id.last_date_invoiced")
@@ -74,6 +78,9 @@ class Contract(models.Model):
             label = self._format_transaction_label(invoice, last_date_invoiced)
             _logger.debug("Bank label for invoice %s: %s", invoice.number, label)
             self = self.with_context(slimpay_payin_label=label)
+
+        self = self.with_context(slimpay_async_http=True)
+
         return super()._pay_invoice(invoice)
 
     def amount(self):
