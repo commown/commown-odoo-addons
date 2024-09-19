@@ -19,12 +19,7 @@ class ResPartner(models.Model):
         if "mail_channel_id" in vals.keys():
             new_chan_id = vals["mail_channel_id"]
             if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
-                self.env["mail.channel.partner"].search(
-                    [
-                        ("channel_id", "=", self.mail_channel_id.id),
-                        ("partner_id", "in", self.child_ids.ids),
-                    ]
-                ).unlink()
+                self.remove_partners_from_channel(self.mail_channel_id, self.child_ids)
 
             if new_chan_id != False:
                 partners_to_add = self.child_ids.filtered(
@@ -34,6 +29,14 @@ class ResPartner(models.Model):
                     partners_to_add.ids
                 )
         return super().write(vals)
+
+    def remove_partners_from_channel(self, channel, partners):
+        self.env["mail.channel.partner"].search(
+            [
+                ("channel_id", "=", channel.id),
+                ("partner_id", "in", partners.ids),
+            ]
+        ).unlink()
 
     def create_mail_channel(self):
         if self.is_company and not self.mail_channel_id:
