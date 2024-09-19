@@ -4,7 +4,7 @@ from .common import CustomerTeamAbstractTC
 
 
 class EmployeeTC(CustomerTeamAbstractTC):
-    "Test class for team behaviour"
+    "Test class for employee behaviour"
 
     def test_name_get(self):
         "Employee display name should be a concatenation of first and last names"
@@ -44,6 +44,10 @@ class EmployeeTC(CustomerTeamAbstractTC):
         empl = self.create_employee(
             sudo=False, partner=partner.id, company=self.company.id, **attrs
         )
+
+        self.assertNotEqual(empl.portal_status, "not_granted")  # test pre-requisite
+
+        # Check setting the email using a sale manager does not raise:
         empl.email = "i_know_what_i_am_doing@test.coop"
 
         empl_seen_by_customer = empl.sudo(self.user.id)
@@ -165,3 +169,34 @@ class EmployeeTC(CustomerTeamAbstractTC):
         user_role = self.env.ref("customer_team_manager.customer_role_user")
         admin.write({"roles": [(6, 0, user_role.ids)]})
         self.assertIsUser(admin)
+
+    def test_sync_employee_to_partner(self):
+        empl = self.create_employee(firstname="V", lastname="C", email="vc@test.coop")
+        empl.action_grant_portal_access()
+        new_attrs = {
+            "firstname": "V_",
+            "lastname": "C_",
+            "phone": "0102030405",
+            "email": "toto@test.coop",
+        }
+        empl.update(new_attrs)
+
+        partner = empl.sudo().partner
+        for name, value in new_attrs.items():
+            self.assertEqual(getattr(partner, name), value, name)
+
+    def test_sync_partner_to_employee(self):
+        empl = self.create_employee(firstname="V", lastname="C", email="vc@test.coop")
+        empl.action_grant_portal_access()
+        partner = empl.sudo().partner
+
+        new_attrs = {
+            "firstname": "V_",
+            "lastname": "C_",
+            "phone": "0102030405",
+            "email": "toto@test.coop",
+        }
+        partner.update(new_attrs)
+
+        for name, value in new_attrs.items():
+            self.assertEqual(getattr(empl, name), value, name)

@@ -9,6 +9,10 @@ class Employee(models.Model):
     _inherit = "customer_team_manager.customer_company_object"
     _description = "An employee of a customer"
 
+    _sync_fields_with_partner = frozenset(
+        ("firstname", "lastname", "phone", "email", "image_medium")
+    )
+
     firstname = fields.Char(
         string="First name",
         required=True,
@@ -132,7 +136,7 @@ class Employee(models.Model):
 
         warnings = []
 
-        for fieldname in ("firstname", "lastname", "phone", "email"):
+        for fieldname in self._sync_fields_with_partner:
             if self[fieldname] != self.partner[fieldname]:
                 if self[fieldname]:
                     warnings.append(fieldname)
@@ -226,8 +230,8 @@ class Employee(models.Model):
     def write(self, vals):
         if (
             "email" in vals
-            and self.sudo().partner
             and not self.env.user.has_group("sales_team.group_sale_manager")
+            and self.portal_status != "not_granted"
         ):
             raise models.ValidationError(
                 _("Employee is now active: its email cannot be modified anymore!")
@@ -246,6 +250,10 @@ class Employee(models.Model):
         if "roles" in vals:
             self._reset_roles()
 
+        to_sync = self._sync_fields_with_partner.intersection(vals)
+        if to_sync and not self.env.context.get("_in_res_partner_write_sync"):
+            partner = self.sudo().partner.with_context(_in_employee_write_sync=True)
+            partner.update({attr: vals[attr] for attr in to_sync})
         return result
 
     @api.multi

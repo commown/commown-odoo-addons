@@ -140,10 +140,9 @@
               <field name="lastname"/>
             </group>
             <group name="contact">
-              <field
-                  name="email"
+              <field name="email"
                   attrs="{'readonly': [('portal_status', '!=', 'not_granted')]}"
-                  help="Cannot be modified when employee was granted portal access"
+                  help="Cannot be modified when employee was granted portal access. Remove the portal access first"
                   />
               <field name="phone"/>
             </group>

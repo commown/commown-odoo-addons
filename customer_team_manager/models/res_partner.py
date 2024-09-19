@@ -1,5 +1,7 @@
-from odoo import _, models
+from odoo import _, api, models
 from odoo.exceptions import UserError
+
+from .employee import Employee
 
 
 class ResPartner(models.Model):
@@ -77,3 +79,20 @@ class ResPartner(models.Model):
     def get_employees(self):
         empl_model = self.env["customer_team_manager.employee"]
         return empl_model.search([("partner", "in", self.ids)])
+
+    @api.multi
+    def write(self, vals):
+        result = super().write(vals)
+
+        to_sync = Employee._sync_fields_with_partner.intersection(vals)
+        if to_sync and not self.env.context.get("_in_employee_res_partner_write_sync"):
+            employee = (
+                self.env["customer_team_manager.employee"]
+                .sudo()
+                .search([("partner", "=", self.id)])
+            )
+            employee.with_context(_in_res_partner_write_sync=True).update(
+                {attr: vals[attr] for attr in to_sync}
+            )
+
+        return result
