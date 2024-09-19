@@ -49,3 +49,30 @@ class ResPartnerTC(SavepointCase):
             self.part1 + self.part2 + self.user_support.partner_id,
         )
         self.assertEqual(company_chan.group_ids, expected_groups)
+
+    def test_partner_is_added_when_parent_has_channel(self):
+        self.company.create_mail_channel()
+        mail_channel = self.company.mail_channel_id
+        self.assertTrue(mail_channel)
+
+        self.part1.parent_id = self.company
+        self.assertIn(
+            self.part1,
+            mail_channel.channel_last_seen_partner_ids.mapped("partner_id"),
+        )
+
+        self.part1.parent_id = False
+        self.assertNotIn(
+            self.part1,
+            mail_channel.channel_last_seen_partner_ids.mapped("partner_id"),
+        )
+
+    def test_channel_creation_on_active_contract_join_company(self):
+        """Test if channel is created when a partner with an active contract join
+        company"""
+        self.part2.parent_id = self.company
+        self.assertFalse(self.company.mail_channel_id)
+
+        self.contract.date_start = date.today()
+        self.part1.parent_id = self.company
+        self.assertTrue(self.company.mail_channel_id)
