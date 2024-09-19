@@ -28,6 +28,23 @@ class ResPartner(models.Model):
                 self.env["mail.channel"].browse(new_chan_id).channel_invite(
                     partners_to_add.ids
                 )
+        if "parent_id" in vals and not self.is_company:
+            new_parent_id = vals["parent_id"]
+            if new_parent_id:
+                new_parent = self.env["res.partner"].browse(new_parent_id)
+                if new_parent.mail_channel_id:
+                    new_parent.mail_channel_id.channel_invite(self.id)
+
+                elif not new_parent.mail_channel_id and self.contract_ids.filtered(
+                    lambda c: c.is_active_contract()
+                ):
+                    new_parent.sudo().create_mail_channel()
+
+            if not new_parent_id:
+                old_parent = self.parent_id
+                if old_parent and old_parent.mail_channel_id:
+                    self.remove_partners_from_channel(old_parent.mail_channel_id, self)
+
         return super().write(vals)
 
     def remove_partners_from_channel(self, channel, partners):
