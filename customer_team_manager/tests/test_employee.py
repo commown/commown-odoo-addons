@@ -71,7 +71,13 @@ class EmployeeTC(CustomerTeamAbstractTC):
     def test_grant_and_revoke_portal_access(self):
         "Customer can grant and revoke portal access"
 
-        empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
+        role_accounting = self.env.ref("customer_team_manager.customer_role_accounting")
+        empl = self.create_employee(
+            firstname="J",
+            lastname="C",
+            email="jc@test.coop",
+            roles=[(6, 0, role_accounting.ids)],
+        )
         self.assertEqual(empl.portal_status, "not_granted")
 
         self._grant_portal_access(empl)

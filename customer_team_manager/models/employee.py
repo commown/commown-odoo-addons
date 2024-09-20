@@ -161,8 +161,9 @@ class Employee(models.Model):
     @api.multi
     def action_revoke_portal_access(self):
         self.ensure_one()
-        wizard = self.prepare_portal_wizard(False)
-        wizard.action_apply()
+        users = self.sudo().partner.user_ids
+        if users:
+            users[0].groups_id -= self.env.ref("base.group_portal")
         self._reset_roles()
 
     def _reset_roles(self):
@@ -176,7 +177,8 @@ class Employee(models.Model):
         if users:
             user = users[0]
             user.groups_id -= all_role_groups
-            user.groups_id |= self.roles.mapped("groups")
+            if user.has_group("base.group_portal"):
+                user.groups_id |= self.roles.mapped("groups")
 
     @api.model
     @api.returns("self", lambda value: value.id)
