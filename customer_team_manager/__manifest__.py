@@ -28,7 +28,9 @@
         "security/rules.xml",
         "data/action_res_partner.xml",
         "data/roles.xml",
+        "views/wizard_portal_access.xml",  # referenced in customer_team_manager.xml!
         "views/customer_team_manager.xml",
+        "views/portal_templates.xml",
     ],
     "installable": True,
 }

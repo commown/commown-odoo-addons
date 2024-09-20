@@ -1,0 +1,66 @@
+<odoo>
+
+  <record id="wizard_portal_access_form" model="ir.ui.view">
+    <field name="name">[commown] Grant employee portal access form view</field>
+    <field name="model">customer_team_manager.portal_access_wizard</field>
+    <field name="arch" type="xml">
+      <form string="Grant portal access to employees">
+        <sheet>
+          <field name="info" string=""/>
+          <group>
+            <field name="employees" invisible="1"/>
+            <field name="password" readonly="0" password="True" required="True"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="grant_portal_access" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_wizard_portal_access" model="ir.actions.act_window">
+    <field name="name">Grant employee portal access wizard</field>
+    <field name="res_model">customer_team_manager.portal_access_wizard</field>
+    <field name="groups_id" eval="[(4, ref('customer_team_manager.group_customer_admin'))]"/>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_employees': active_ids}</field>
+    <field name="binding_model_id" ref="model_customer_team_manager_employee"/>
+  </record>
+
+  <record id="portal_access_info" model="ir.ui.view">
+    <field name="name">grant-employee-portal-access-info</field>
+    <field name="type">qweb</field>
+    <field name="key">customer_team_manager.portal-access-info</field>
+    <field name="arch" type="xml">
+      <t t-name="grant-employee-portal-access-info">
+        <div class="alert-warning p-3">
+          <p>
+            You are going to grant people permission to have an account on this platform on behalf of your organization.
+          </p>
+          <p>
+            Make sure this permission doesn't fall into the wrong hands: carefully check the e-mails and roles you've granted.
+          </p>
+        </div>
+        <div t-if="len(email_domains) > 1" class="alert-danger p-3 mt-2">
+          <p class="text-danger">Warning: possible fraud attempt!</p>
+          <p>
+            The e-mails of the people to whom you grant access do not all come from the
+            same domain. Are you sure this is normal? If unsure, please cancel and check
+            again before proceeding.
+          </p>
+          <ul>
+            <t t-foreach="email_domains" t-as="email_domain">
+              <li t-esc="email_domain"/>
+            </t>
+          </ul>
+        </div>
+      </t>
+    </field>
+  </record>
+
+</odoo>

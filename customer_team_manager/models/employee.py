@@ -151,28 +151,19 @@ class Employee(models.Model):
             )
 
     def prepare_portal_wizard(self, in_portal):
-        "Return the configured wizard. May be overriden by another module."
-
-        partner_id = self.sudo().partner.id
-        model = self.env["portal.wizard"].with_context(active_ids=[partner_id])
+        "Return the configured wizard. Warning: uses sudo, must not be exposed!"
+        partner_ids = self.sudo().mapped("partner").ids
+        model = self.env["portal.wizard"].with_context(active_ids=partner_ids)
         portal_wizard = model.sudo().create({})
         portal_wizard.user_ids.update({"in_portal": in_portal})
         return portal_wizard
 
-    def set_portal_access(self, in_portal):
-        "Use portal wizard to grant or remove portal access according to in_portal"
-        self.ensure_one()
-        wizard = self.prepare_portal_wizard(in_portal)
-        wizard.action_apply()
-        self._reset_roles()
-
-    @api.multi
-    def action_grant_portal_access(self):
-        self.set_portal_access(True)
-
     @api.multi
     def action_revoke_portal_access(self):
-        self.set_portal_access(False)
+        self.ensure_one()
+        wizard = self.prepare_portal_wizard(False)
+        wizard.action_apply()
+        self._reset_roles()
 
     def _reset_roles(self):
         "Remove and set the res.users.role for the employee according to its roles"

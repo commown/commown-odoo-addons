@@ -62,7 +62,7 @@ class EmployeeTC(CustomerTeamAbstractTC):
         "Setting an employee as inactive should revoke is portal access"
 
         empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
-        empl.action_grant_portal_access()
+        self._grant_portal_access(empl)
         self.assertEqual(empl.portal_status, "never_connected")
 
         empl.active = False
@@ -74,13 +74,13 @@ class EmployeeTC(CustomerTeamAbstractTC):
         empl = self.create_employee(firstname="J", lastname="C", email="jc@test.coop")
         self.assertEqual(empl.portal_status, "not_granted")
 
-        empl.action_grant_portal_access()
+        self._grant_portal_access(empl)
         self.assertEqual(empl.portal_status, "never_connected")
 
         empl.action_revoke_portal_access()
         self.assertEqual(empl.portal_status, "not_granted")
 
-        empl.action_grant_portal_access()
+        self._grant_portal_access(empl)
         self.assertEqual(empl.portal_status, "never_connected")
 
         self.simulate_user_login(empl.sudo().partner.user_ids)
@@ -154,12 +154,12 @@ class EmployeeTC(CustomerTeamAbstractTC):
 
     def test_create_and_write_with_role_ok(self):
         admin = self.create_admin(firstname="J", lastname="C", email="jc@test.coop")
-        admin.action_grant_portal_access()
+        self._grant_portal_access(admin)
 
         self.assertIsAdmin(admin)
 
         empl = self.create_employee(firstname="V", lastname="C", email="vc@test.coop")
-        empl.action_grant_portal_access()
+        self._grant_portal_access(empl)
         self.assertIsUser(empl)
 
         admin_role = self.env.ref("customer_team_manager.customer_role_admin")
@@ -172,7 +172,6 @@ class EmployeeTC(CustomerTeamAbstractTC):
 
     def test_sync_employee_to_partner(self):
         empl = self.create_employee(firstname="V", lastname="C", email="vc@test.coop")
-        empl.action_grant_portal_access()
         new_attrs = {
             "firstname": "V_",
             "lastname": "C_",
@@ -187,7 +186,7 @@ class EmployeeTC(CustomerTeamAbstractTC):
 
     def test_sync_partner_to_employee(self):
         empl = self.create_employee(firstname="V", lastname="C", email="vc@test.coop")
-        empl.action_grant_portal_access()
+        self._grant_portal_access(empl)
         partner = empl.sudo().partner
 
         new_attrs = {

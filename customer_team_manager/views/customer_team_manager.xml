@@ -100,8 +100,8 @@
           <button
               string="Grant portal access"
               class="oe_highlight"
-              name="action_grant_portal_access"
-              type="object"
+              name="%(action_wizard_portal_access)d"
+              type="action"
               attrs="{'invisible': ['|', ('portal_status', '!=', 'not_granted'), ('active', '=', False)]}"
               />
           <button

@@ -16,7 +16,9 @@ class CustomerTeamAbstractTC(SavepointCase):
         partner = self.user.partner_id
         partner.update({"parent_id": self.company.id, "firstname": "F"})
 
-        self.env.ref("sales_team.group_sale_manager").users |= self.env.user
+        self.env.ref(
+            "sales_team.group_sale_manager"
+        ).users |= self.env.user | self.env.ref("base.user_admin")
 
         partner.action_create_employee(admin=True)
         self.assertTrue(
@@ -71,3 +73,11 @@ class CustomerTeamAbstractTC(SavepointCase):
         user = employee.sudo().partner.user_ids[0]
         self.assertTrue(user.has_group("base.group_portal"))
         self.assertFalse(user.has_group("customer_team_manager.group_customer_admin"))
+
+    def _grant_portal_access(self, employee, passwd="admin"):
+        "Use the admin user to grant portal access to given employee"
+        _adm = self.env.ref("base.user_admin")
+        wmod = self.env["customer_team_manager.portal_access_wizard"].sudo(_adm.id)
+        wizard = wmod.create({"employees": [(6, 0, employee.ids)], "password": passwd})
+        wizard.grant_portal_access()
+        return wizard

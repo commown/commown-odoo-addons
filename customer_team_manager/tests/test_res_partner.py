@@ -64,7 +64,7 @@ class ResPartnerTC(CustomerTeamAbstractTC):
 
         # Create an pre-existing admin employee and a partner to become employee:
         admin = self.create_admin(firstname="J", lastname="C", email="jc@test.coop")
-        admin.action_grant_portal_access()
+        self._grant_portal_access(admin)
         partner = self.create_partner()
         prev_notifs = self.info_notifs()
 
@@ -90,7 +90,7 @@ class ResPartnerTC(CustomerTeamAbstractTC):
         "Create employees action must notify when nothing was done"
 
         admin = self.create_admin(firstname="J", lastname="C", email="jc@test.coop")
-        admin.action_grant_portal_access()
+        self._grant_portal_access(admin)
         prev_notifs = self.info_notifs()
 
         # Select both and call the action
