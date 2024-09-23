@@ -330,11 +330,6 @@ msgid "Slimpay payment label"
 msgstr "Libellé bancaire"
 
 #. module: payment_slimpay_issue
-#: model:product.template,name:payment_slimpay_issue.bank_supplier_fees_product
-msgid "Slimpay supplier fees"
-msgstr "Frais bancaires sans taxes (pour impayés)"
-
-#. module: payment_slimpay_issue
 #: model:ir.model,name:payment_slimpay_issue.model_project_task
 msgid "Task"
 msgstr "Tâche"
