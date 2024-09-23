@@ -1,0 +1,9 @@
+<odoo>
+
+  <template id="customer_manager_portal_menu" inherit_id="portal.my_account_link">
+    <xpath expr="//a[@href='/my/home']" position="after">
+      <a href="/web" role="menuitem" class="dropdown-item">My Applications</a>
+    </xpath>
+  </template>
+
+</odoo>

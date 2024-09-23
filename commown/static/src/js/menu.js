@@ -9,7 +9,7 @@ odoo.define('commown.menu_settings', function (require) {
       this._super();
 
       if (session.is_in_group_user) {
-        $("#menu-personal-area").remove();
+        $(".customer-menu").remove();
       } else {
         $("a[data-menu='settings']").remove();
       }
