@@ -129,6 +129,9 @@
               <field name="display_name" class="oe_inline"/>
             </h1>
           </div>
+          <div class="alert alert-danger" role="alert">
+            For legal reasons, please never reuse an account for someone else.
+          </div>
           <group name="admin">
             <field name="company" groups="sales_team.group_sale_manager"/>
             <field name="partner" groups="sales_team.group_sale_manager"/>
