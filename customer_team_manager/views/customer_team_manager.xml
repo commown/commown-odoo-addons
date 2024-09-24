@@ -22,6 +22,7 @@
         <field name="phone"/>
         <field name="team"/>
         <field name="image_medium"/>
+        <field name="portal_status"/>
         <templates>
           <t t-name="kanban-box">
             <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
@@ -34,13 +35,17 @@
               <t t-else="">
                 <img class="o_kanban_image" alt="Avatar" t-att-src='_s + "/base/static/img/avatar.png"'/>
               </t>
-              <div class="oe_kanban_details">
-                <strong class="o_kanban_record_title oe_partner_heading">
+              <div class="oe_kanban_details text-truncate">
+                <strong>
+                  <span class="float-right fa fa-user-check text-success" t-if="record.portal_status.raw_value == 'already_connected'" t-att-title="record.portal_status.value"/>
+                  <span class="float-right fa fa-user-plus text-warning" t-elif="record.portal_status.raw_value == 'never_connected'" t-att-title="record.portal_status.value"/>
+                  <span class="float-right fa fa-user-minus text-danger" t-else="" t-att-title="record.portal_status.value"/>
                   <field name="display_name"/>
                 </strong>
-                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>
                 <ul>
-                  <li t-if="record.email.raw_value" class="o_text_overflow"><field name="email"/></li>
+                  <li t-if="record.team.raw_value"><i class="fa fa-users"/> <field name="team"/></li>
+                  <li t-if="record.phone.raw_value"><i class="fa fa-phone"/> <field name="phone" widget="phone"/></li>
+                  <li style="text-wrap: nowrap" t-if="record.email.raw_value"><i class="fa fa-envelope"/> <field name="email" widget="email"/></li>
                 </ul>
               </div>
             </div>
