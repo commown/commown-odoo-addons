@@ -1,6 +1,7 @@
 from odoo.tests.common import SavepointCase
 
 from ..models.common import internal_picking
+from ..models.stock_move_line import get_origin_record
 from .common import create_lot_and_quant
 
 
@@ -133,4 +134,39 @@ class StockMoveLineTC(SavepointCase):
 
         self.move_line1.move_id.picking_id = False
         res = self.move_line1.action_open_parent()
+        self.assertTrue(res is None)
+
+    def test_get_origin_record(self):
+        po = self.env.ref("purchase.purchase_order_1")
+        res = get_origin_record(self.env, po.name)
+        self.assertEquals(res, po)
+
+        task = self.env.ref("project.project_task_1")
+        res = get_origin_record(self.env, task.get_name_for_origin())
+        self.assertEquals(res, task)
+
+        self.contract.name = "SO0001-23"
+        res = get_origin_record(self.env, "SO0001-23")
+        self.assertEquals(res, self.contract)
+
+        res = get_origin_record(self.env, "Retour de %s" % self.picking1.name)
+        self.assertEquals(res, self.picking1)
+
+    def test_action_open_parent_origin(self):
+        po = self.env.ref("purchase.purchase_order_1")
+        self.move_line1.picking_id.origin = po.name
+
+        expected_result = {
+            "name": "Source",
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": po._name,
+            "res_id": po.id,
+            "target": "current",
+        }
+        self.assertEquals(self.move_line1.action_open_parent_origin(), expected_result)
+
+        self.move_line1.move_id.picking_id = False
+        res = self.move_line1.action_open_parent_origin()
         self.assertTrue(res is None)
