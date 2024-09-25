@@ -54,12 +54,31 @@ class ProjectTask(models.Model):
         "Use for device tracking?", related="project_id.device_tracking"
     )
 
+    show_related_move_lines = fields.Boolean(
+        "Show related move lines", related="project_id.show_related_move_lines"
+    )
+
+    move_line_ids = fields.One2many(
+        "stock.move.line",
+        string="Move Lines",
+        compute="_compute_move_line_ids",
+        store=False,
+    )
+
     def _compute_storable_product_domain(self):
         domain = [("type", "=", "product")]
         if self.require_contract:
             products = self._may_be_related_lots().mapped("product_id")
             domain = [("id", "in", products.ids)]
         self.storable_product_id_domain = json.dumps(domain)
+
+    @api.depends("contract_id.move_line_ids")
+    def _compute_move_line_ids(self):
+        for rec in self:
+            if rec.contract_id:
+                rec.move_line_ids = rec.contract_id.move_line_ids.filtered(
+                    lambda ml: ml.origin == self.get_name_for_origin()
+                )
 
     def _may_be_related_lots(self):
         """Return lots that lay be related to current task:

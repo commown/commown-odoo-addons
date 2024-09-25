@@ -10,6 +10,7 @@
       <xpath expr="//group[@name='misc']" position="inside">
         <group string="Devices">
           <field name="device_tracking"/>
+          <field name="show_related_move_lines"/>
         </group>
       </xpath>
     </field>
