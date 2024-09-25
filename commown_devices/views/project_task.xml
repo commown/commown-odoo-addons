@@ -18,4 +18,40 @@
     </field>
   </record>
 
+
+  <record model="ir.ui.view" id="view_task_move_lines">
+    <field name="name">project.task.form</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="commown_contractual_issue.view_task_form2"/>
+    <field name="arch" type="xml">
+      <!-- Add internal follow-up in it's own page-->
+      <xpath expr="//notebook" position="inside">
+        <page name="move_lines" string="Related move lines" attrs="{'invisible': [('show_related_move_lines', '=', False)]}">
+        <field name="show_related_move_lines" invisible="1"/>
+        <field name="move_line_ids" context='{"short_location_name": True}'>
+          <tree
+              decoration-it="not lot_id"
+              decoration-bf="state != 'done'"
+              decoration-success="is_contract_in"
+              decoration-danger="not is_contract_in"
+              default_order="date ASC, id ASC"
+              >
+            <field name="is_contract_in" invisible="1"/>
+            <field name="show_validate_picking" invisible="1"/>
+            <button string="Operation" class="oe_highlight" type="object" name="action_open_parent"/>
+
+            <field name="product_id"/>
+            <field name="lot_id"/>
+            <field name="location_id"/>
+            <field name="location_dest_id"/>
+            <field name="date"/>
+            <field name="state"/>
+            <button name="action_validate_linked_picking" string="Validate" class="btn-primary" type="object" attrs="{'invisible': [('show_validate_picking', '=', False)]}"/>
+          </tree>
+        </field>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
 </odoo>
