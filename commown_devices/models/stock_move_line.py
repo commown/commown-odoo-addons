@@ -24,6 +24,9 @@ class StockMoveLine(models.Model):
 
     origin = fields.Char(string="origin", compute="_compute_origin", store=False)
 
+    def _get_parent(self):
+        return self.move_id.scrap_ids or self.move_id.picking_id
+
     def _compute_is_contract_in(self):
         for rec in self:
             contract = rec.move_id.contract_id
@@ -49,7 +52,7 @@ class StockMoveLine(models.Model):
             )
 
     def action_open_parent(self):
-        parent = self.move_id.scrap_ids or self.move_id.picking_id
+        parent = self._get_parent()
         if not parent:
             return None
         else:
@@ -65,7 +68,7 @@ class StockMoveLine(models.Model):
             }
 
     def action_open_parent_origin(self):
-        parent = self.move_id.scrap_ids or self.move_id.picking_id
+        parent = self._get_parent()
         if not parent:
             return None
         else:
