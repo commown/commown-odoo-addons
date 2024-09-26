@@ -4,7 +4,7 @@
 {
     "name": "Slimpay statements automatic import",
     "summary": "Regularly fetch Slimpay statements and import them",
-    "version": "12.0.1.0.1",
+    "version": "12.0.1.0.2",
     "development_status": "Alpha",
     "category": "Accounting/Accounting",
     "website": "https://commown.coop",
