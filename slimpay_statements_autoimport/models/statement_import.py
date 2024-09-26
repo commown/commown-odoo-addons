@@ -80,6 +80,15 @@ class SlimpayStatementImport(models.Model):
             start_date = last_import.date + timedelta(days=1)
 
         end_date = start_date + timedelta(duration_days)
+
+        # Restrict to the end of the fiscal year to avoid account_move crossing
+        # the fiscal year limit:
+        fiscal_year = self.env["account.fiscal.year"].search(
+            [("date_from", "<=", start_date), ("date_to", ">=", start_date)]
+        )
+        if fiscal_year:
+            end_date = min(end_date, fiscal_year.date_to)
+
         max_end_date = date.today() - timedelta(older_days)
 
         if end_date > max_end_date:
