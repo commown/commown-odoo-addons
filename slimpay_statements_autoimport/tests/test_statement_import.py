@@ -4,6 +4,7 @@ from urllib import parse
 
 import requests_mock
 
+from odoo import fields
 from odoo.tests.common import SavepointCase
 from odoo.tools.config import config
 
@@ -165,6 +166,26 @@ class SlimpayStatementImportCronTC(SlimpayStatementImportBaseTC):
     def test_no_suitable_start_date_nothing_done_3(self):
         "Cron should do nothing if start_date is not old enough"
         self._run_reporting_cron(date.today() - timedelta(days=4))
+
+    def test_end_date_with_fiscal_year(self):
+        model = self.env["slimpay_statements_autoimport.statement_import"]
+        duration = model._get_int_param("import_duration_days", 0)
+
+        report_date = date.today() - timedelta(days=30)
+
+        fy = self.env["account.fiscal.year"].create(
+            {
+                "name": "test_fy",
+                "date_from": report_date - timedelta(days=363),
+                "date_to": report_date + timedelta(days=2),
+            }
+        )
+        # Check test pre-requisites:
+        self.assertTrue(fy.date_to >= report_date >= fy.date_from)
+        self.assertTrue(report_date + timedelta(days=duration) > fy.date_to)
+
+        date_from, date_to = model._compute_reporting_dates(report_date)
+        self.assertEqual(date_to, fields.Date.to_string(fy.date_to))
 
     def test_ok_with_previous_import(self):
         si = self.create_statement_import()
