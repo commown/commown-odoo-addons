@@ -71,10 +71,6 @@ class ProjectTask(models.Model):
         report_name="urban_mine.report_autoinvoice",
     ):
 
-        # Use task's user to perform all actions: invoice, payment, a.s.o.
-        if self.user_id:
-            self = self.sudo(self.user_id)
-
         ref = self.env.ref
         product = ref("urban_mine.product").product_variant_id
 
