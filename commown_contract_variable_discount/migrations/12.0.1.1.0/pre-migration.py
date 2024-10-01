@@ -10,6 +10,7 @@ def migrate(cr, version):
     for table in ("contract_discount_line", "contract_template_discount_line"):
         for attr in ("start_reference", "end_reference"):
             cr.execute(
-                f"UPDATE {table} SET {attr}='contract:commitment_end_date'"
-                f" WHERE {attr}='commitment_end_date';"
+                "UPDATE {table} SET {attr}='contract:commitment_end_date' WHERE {attr}='commitment_end_date';".format(
+                    table=table, attr=attr
+                )
             )

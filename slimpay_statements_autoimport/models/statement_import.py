@@ -163,7 +163,9 @@ class SlimpayStatementImport(models.Model):
             resp = requests.get(urls[0])
             if resp.status_code != 200:
                 raise ValueError(
-                    f"{resp.status_code} {resp.reason}\nResponse:\n{resp.text}"
+                    "{resp.status_code} {resp.reason}\nResponse:\n{resp.text}".format(
+                        resp=resp
+                    )
                 )
             else:
                 fname = urlparse(urls[0]).path.rsplit("/", 1)[-1]

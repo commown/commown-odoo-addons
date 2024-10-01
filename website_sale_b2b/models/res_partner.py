@@ -29,7 +29,7 @@ class ResPartner(models.Model):
         if erroneous:
             msg = _("Partners not suitable for intermediate company creation:\n- %s")
             raise UserError(
-                msg % "\n- ".join(f"{c.name} (id {c.id})" for c in erroneous)
+                msg % "\n- ".join("{c.name} (id {c.id})".format(c=c) for c in erroneous)
             )
 
         for record in self:

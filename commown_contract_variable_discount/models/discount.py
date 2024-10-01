@@ -52,8 +52,9 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         order = line.sale_order_line_id.order_id
         if not order:
             _logger.warning(
-                f"Contract line id {line.id} (contract {line.contract_id.name})"
-                f" has no related order line."
+                "Contract line id {line.id} (contract {line.contract_id.name}) has no related order line.".format(
+                    line=line
+                )
             )
             return False
 

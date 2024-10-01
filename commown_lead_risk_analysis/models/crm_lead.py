@@ -97,7 +97,7 @@ class CommownCrmLead(models.Model):
         "Compute the orders_description of every record in current resultset"
 
         def ref(xml_id):
-            return self.env.ref(f"commown_lead_risk_analysis.{xml_id}")
+            return self.env.ref("commown_lead_risk_analysis.%s" % xml_id)
 
         orders_tmpl = ref("partner_orders_tmpl")
         products_tmpl = ref("company_product_summary")
