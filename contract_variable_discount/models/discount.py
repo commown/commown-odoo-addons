@@ -43,7 +43,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     )
 
     start_value = fields.Integer(
-        string="Value",
+        string="Start Value",
         default=0,
     )
 
@@ -67,7 +67,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             ("months", "Months"),
             ("years", "Years"),
         ],
-        string="Units",
+        string="Start Units",
         help="Units of the discount start difference with the reference date",
         default="months",
         required=True,
@@ -80,7 +80,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         required=True,
     )
     end_value = fields.Integer(
-        string="Value",
+        string="End Value",
         help="No value means no end for this discount",
     )
 
@@ -104,7 +104,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             ("months", "Months"),
             ("years", "Years"),
         ],
-        string="Units",
+        string="End Units",
         help="Units of the discount end difference with the reference date",
         default="months",
         required=True,
