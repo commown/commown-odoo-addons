@@ -33,9 +33,10 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
         "Partners having no phone or country do not benefit from the discount"
         self.so.partner_id.phone = False
         before1 = partial(ts_before, days=1)
-        self.assertEqual(
-            self.invoice(before1, check_mock_calls=False).amount_untaxed, 30.0
-        )
+        with mute_logger("odoo.addons.commown_cooperative_campaign.models.discount"):
+            self.assertEqual(
+                self.invoice(before1, check_mock_calls=False).amount_untaxed, 30.0
+            )
 
     def test_invoice_double_optin(self):
         "Double-optin specific 422 error must not raise"
