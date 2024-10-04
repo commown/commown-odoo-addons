@@ -78,6 +78,7 @@ class Contract(models.Model):
         string="Commitment end date",
         compute="_compute_commitment_end_date",
         store=True,
+        index=True,
     )
 
     date_start = fields.Date(inverse="_inverse_date_start")
