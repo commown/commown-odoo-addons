@@ -1,8 +1,7 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_devices
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
@@ -42,12 +41,17 @@ msgstr "Modèle abstrait pour la génération d'expéditions depuis une tâche"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__all_products
 msgid "All product to send"
-msgstr "Tout les produits à envoyer"
+msgstr "Tous les produits à envoyer"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task__storable_product_id
 msgid "Article"
 msgstr "Article"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_move_line_validation_wizard
+msgid "Ask confirmation for move line action validate linked picking"
+msgstr "Confirmation de l'action Valider le transfert lié aux mouvements"
 
 #. module: commown_devices
 #: model:project.task.type,legend_blocked:commown_devices.diagnostic_stage
@@ -60,11 +64,11 @@ msgstr "Bloqué"
 #: code:addons/commown_devices/models/wizard_project_task_picking.py:300
 #, python-format
 msgid "Can't move device: no device set on this task!"
-msgstr ""
-"Mouvement impossible : aucun appareil n'est paramétré sur cette tâche !"
+msgstr "Mouvement impossible : aucun appareil n'est paramétré sur cette tâche !"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
+#: model_terms:ir.ui.view,arch_db:commown_devices.wizard_move_line_validation_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_picking_po_link_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_po_invoice_link_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_contract_transfer_form
@@ -81,9 +85,7 @@ msgstr "Annuler"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__po_id_is_readonly
 msgid "Cannot change po if picking already has a linked po"
-msgstr ""
-"Impossible de changer l'ordre d'achat si le picking a déjàun ordre d'achat "
-"asocié"
+msgstr "Impossible de changer l'ordre d'achat si le picking a déjà un ordre d'achat asocié"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:83
@@ -108,6 +110,11 @@ msgstr "Check that there are no more open tickets - Support and/or Transfer and/
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__service_tmpl_id
 msgid "Configured product template"
 msgstr "Product template configuré"
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.wizard_move_line_validation_form
+msgid "Confirm validation"
+msgstr "Confirmer la validation"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_res_partner
@@ -145,6 +152,7 @@ msgstr "Faire une expédition d'un module ou accéssoire lié à une tache"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__create_uid
@@ -163,6 +171,7 @@ msgstr "Créé par"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__create_date
@@ -225,8 +234,7 @@ msgstr "Décrit un lien entre un ordre d'achat et une facture"
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_po_invoice_link_line
 msgid "Describe a relation between a po_line and an invoice line"
-msgstr ""
-"Décrit une relation entre une ligne d'ordre d'achat et une ligne de facture"
+msgstr "Décrit une relation entre une ligne d'ordre d'achat et une ligne de facture"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_move_po_link_line
@@ -258,13 +266,13 @@ msgid "Device"
 msgstr "Appareil"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:212
+#: code:addons/commown_devices/models/project_task.py:231
 #, python-format
 msgid "Device field is not set"
 msgstr "Le chanp appareil n'est pas renseigné"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:220
+#: code:addons/commown_devices/models/project_task.py:239
 #, python-format
 msgid "Device is already in a scrap location"
 msgstr "L'appareil se trouve déja dans un emplacement de scrap"
@@ -277,6 +285,7 @@ msgstr "Appareils"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__display_name
@@ -331,6 +340,7 @@ msgstr "Confier l'appareil à un.e employé.e"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__id
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__id
@@ -397,6 +407,7 @@ msgstr "Le produit stockable est primaire ou secondaire"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line____last_update
@@ -416,6 +427,7 @@ msgstr "Dernière Modification le"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__write_uid
@@ -434,6 +446,7 @@ msgstr "Dernière mise à jour par"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__write_date
@@ -512,6 +525,11 @@ msgid "Merge Partner Wizard"
 msgstr "Utilitaire de fusion de partenaires"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__message
+msgid "Message"
+msgstr "Message"
+
+#. module: commown_devices
 #: code:addons/commown_devices/models/stock_move.py:53
 #, python-format
 msgid "More than one contract on move %s lots"
@@ -521,13 +539,11 @@ msgstr "Plus d'un contrat sur les appareils du mouvement %s"
 #: code:addons/commown_devices/models/product.py:59
 #, python-format
 msgid "More than one primary variant configured for %s with attributes %s"
-msgstr ""
-"Il y a plus d'une variante primaire configurée pour le produit %s (avec les "
-"attributs %s)"
+msgstr "Il y a plus d'une variante primaire configurée pour le produit %s (avec les attributs %s)"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_line_ids
-#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_line_view_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__move_line_ids
 msgid "Move Lines"
 msgstr "Lignes de mouvements"
 
@@ -542,10 +558,20 @@ msgid "Move involved nonserial product"
 msgstr "Déplacer le module/accessoire"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:256
+#: code:addons/commown_devices/models/project_task.py:275
 #, python-format
 msgid "Move involved product"
 msgstr "Transférer les produits concernés"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__move_line_id
+msgid "Move line id"
+msgstr "Ligne de mouvement"
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
+msgid "Move lines"
+msgstr "Lignes de mouvements"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__move_product_name
@@ -582,6 +608,17 @@ msgstr "Nombre d'appareils"
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_to_employee
 msgid "OK"
 msgstr "OK"
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_task_move_lines
+msgid "Operation"
+msgstr "Opération"
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
+msgid "Origin"
+msgstr "Origine"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__picking_id
@@ -702,6 +739,11 @@ msgid "Receive a not tracked product"
 msgstr "Rapatrier un produit non suivi"
 
 #. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_task_move_lines
+msgid "Related move lines"
+msgstr "Lignes de mouvements liées"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__attribute_value_ids
 msgid "Restrict to variants with following attribute values"
 msgstr "S'applique aux variantes ayant ces valeurs d'attribut"
@@ -714,10 +756,10 @@ msgstr "Résiliation traitée"
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_scrap
 msgid "Scrap"
-msgstr "Scrap"
+msgstr "Mise au rebut"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:238
+#: code:addons/commown_devices/models/project_task.py:257
 #, python-format
 msgid "Scrap device"
 msgstr "Mise au rebut"
@@ -783,9 +825,14 @@ msgid "Show Validate Picking"
 msgstr "Cacher/montrer les transferts non validés"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__show_all_view_move_lines
-msgid "Show all move lines"
-msgstr "Voir toutes les move line"
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__show_related_move_lines
+msgid "Show related move lines"
+msgstr "Montrer les lignes de mouvements liées"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_project__show_related_move_lines
+msgid "Show related move lines?"
+msgstr "Monter les lignes de mouvements liées"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_move
@@ -846,46 +893,40 @@ msgstr "Étape de tâche"
 #. module: commown_devices
 #: code:addons/commown_devices/models/crm_lead.py:18
 #, python-format
-msgid ""
-"The contract has already assigned picking(s)!\n"
+msgid "The contract has already assigned picking(s)!\n"
 "Either cancel, scrap or validate it."
-msgstr ""
-"Le contrat est déjà associé à une expédition au moins !\n"
+msgstr "Le contrat est déjà associé à une expédition au moins !\n"
 "Il faut d'abord l'annuler, la valider ou mettre l'appareil au rebut."
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:203
+#: code:addons/commown_devices/models/project_task.py:222
 #, python-format
-msgid ""
-"These tasks can not be moved forward. There are no picking linked to those "
-"tasks: %s"
-msgstr ""
-"Ces taches ne peuvent pas être avancée(s) à cette étape car il n'y a pas de "
-"transfert associés aux taches suivantes: %s"
+msgid "These tasks can not be moved forward. There are no picking linked to those tasks: %s"
+msgstr "Cette tâche ne peut pas être avancée à cette étape car il n'y a pas de transfert associé : %s"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:175
+#: code:addons/commown_devices/models/project_task.py:194
 #, python-format
-msgid ""
-"These tasks can not be moved forward. There are still device(s) associated "
-"with their contract: %s"
-msgstr ""
-"Ces tâches ne peuvent pas être avancées à cette étape. Il y a encore un ou "
-"plusieurs appareils associé au(x) contrat(s) : %s"
+msgid "These tasks can not be moved forward. There are still device(s) associated with their contract: %s"
+msgstr "Ces tâches ne peuvent pas être avancées à cette étape. Il y a encore un ou plusieurs appareils associé au(x) contrat(s) : %s"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/wizard_project_task_picking.py:88
 #: code:addons/commown_devices/models/wizard_project_task_picking.py:133
 #, python-format
 msgid "This action should not be used in resiliation project"
-msgstr ""
-"Cette action ne doit pas être utilisée dans le projet résiliation.\n"
+msgstr "Cette action ne doit pas être utilisée dans le projet résiliation.\n"
 "Utilisez plutôt l'action 'Rapatrier un appareil'"
 
 #. module: commown_devices
 #: model:project.task.type,name:commown_devices.diagnostic_stage
 msgid "To be invoiced"
 msgstr "À facturer"
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
+msgid "Toggle non-serial"
+msgstr "Montrer/Cacher les appareils non-suivis"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__lot_ids
@@ -922,6 +963,8 @@ msgstr "Suivi des appareils ?"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_task_move_lines
+#: model_terms:ir.ui.view,arch_db:commown_devices.wizard_move_line_validation_form
 msgid "Validate"
 msgstr "Valider"
 
@@ -1029,6 +1072,7 @@ msgstr "[commown] Mettre l'appareil concerné au rebut"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
+#: model_terms:ir.ui.view,arch_db:commown_devices.wizard_move_line_validation_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_picking_po_link_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_po_invoice_link_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_contract_transfer_form
@@ -1041,6 +1085,11 @@ msgstr "[commown] Mettre l'appareil concerné au rebut"
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_to_employee
 msgid "or"
 msgstr "ou"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__origin
+msgid "origin"
+msgstr "origine"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_contract_transfer_wizard
