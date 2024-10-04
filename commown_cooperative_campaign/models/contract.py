@@ -115,8 +115,10 @@ class ContractLine(models.Model):
             if campaign and campaign.is_coop_campaign:
                 if last_inv_line is None:
                     last_inv_line = self._last_invoice_self_generated_line()
-                result[discount] = last_inv_line and last_inv_line.is_discount_applied(
-                    discount
+                result[discount] = (
+                    last_inv_line
+                    and last_inv_line.is_discount_applied(discount)
+                    or False
                 )
 
         return result
