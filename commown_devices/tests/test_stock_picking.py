@@ -3,6 +3,7 @@ import datetime
 from odoo.exceptions import UserError
 from odoo.tests.common import SavepointCase
 
+from ..models.common import internal_picking
 from .common import create_lot_and_quant
 
 
@@ -33,33 +34,16 @@ class StockPickingTC(SavepointCase):
         )
 
     def create_picking(self, lot, date):
-        partner = self.env.ref("base.res_partner_2")
-        picking = self.env["stock.picking"].create(
-            {
-                "move_type": "direct",
-                "partner_id": partner.id,
-                "picking_type_id": 5,
-                "location_id": self.orig_location.id,
-                "location_dest_id": self.dest_location.id,
-                "date": date,
-                "scheduled_date": date,
-                "date_done": date,
-                "move_lines": [
-                    (
-                        0,
-                        0,
-                        {
-                            "product_uom_qty": 1,
-                            "product_id": lot.product_id.id,
-                            "name": lot.product_id.name,
-                            "product_uom": lot.product_id.uom_id.id,
-                            "lot_id": lot.id,
-                        },
-                    )
-                ],
-            }
+        moves = internal_picking(
+            lot,
+            {},
+            None,
+            self.orig_location,
+            self.dest_location,
+            False,
+            date,
         )
-        return picking
+        return moves.mapped("picking_id")
 
     def test_compute_contract_ids(self):
         lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
