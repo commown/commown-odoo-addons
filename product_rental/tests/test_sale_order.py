@@ -8,10 +8,8 @@ from .common import RentalSaleOrderTC
 
 
 def fake_s2s_do_transaction(self, **kwargs):
-    for tx in self:
-        tx._set_transaction_done()
-        tx._post_process_after_done()
-        return True
+    self._set_transaction_done()
+    return True
 
 
 @at_install(False)
