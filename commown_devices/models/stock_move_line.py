@@ -43,9 +43,7 @@ class StockMoveLine(models.Model):
             if parent is not None:
                 rec.origin = parent.origin
 
-    @api.onchange("move_id.picking_id.state")
     def _compute_show_validate_picking(self):
-        "Onchange is used by UI to hide the validate button once picking is validated"
         for rec in self:
             rec.show_validate_picking = (
                 rec.move_id.picking_id and rec.move_id.picking_id.state == "assigned"
