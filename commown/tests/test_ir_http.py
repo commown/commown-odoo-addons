@@ -5,6 +5,7 @@ from werkzeug.wrappers import BaseResponse
 
 from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase
+from odoo.tools import mute_logger
 
 
 class IrHttpTC(HttpCase):
@@ -29,7 +30,8 @@ class IrHttpTC(HttpCase):
         pt1.website_published = False
 
         # Check Prerequisite
-        response = test_client.get(pt1.website_url, follow_redirects=False)
+        with mute_logger("odoo.addons.website.models.ir_http"):
+            response = test_client.get(pt1.website_url, follow_redirects=False)
         self.assertEqual(response.status_code, 403)
 
         self.env["website.redirect"].create(
