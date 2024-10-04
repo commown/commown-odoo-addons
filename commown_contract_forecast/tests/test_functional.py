@@ -14,15 +14,7 @@ from .common import fake_today
 @post_install(True)
 class CommownContractForecastFunctionalTC(RentalSaleOrderTC):
     def setUp(self):
-        "Revert synchronous job definition - Should refactor this!"
         super().setUp()
-
-        self.env = self.env(
-            context=dict(
-                self.env.context,
-                test_queue_job_no_delay=False,
-            )
-        )
 
         if not self.env["account.journal"].search([("type", "=", "sale")]):
             # When running in a db where the commown module is not installed
