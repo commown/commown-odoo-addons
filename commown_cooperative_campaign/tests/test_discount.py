@@ -9,6 +9,8 @@ from requests_mock.exceptions import NoMockAddress
 from odoo.fields import Date
 from odoo.tools import mute_logger
 
+from odoo.addons.queue_job.tests.common import trap_jobs
+
 from .common import CooperativeCampaignTC, ts_after, ts_before
 
 
@@ -81,6 +83,15 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
                 rm.post("/campaigns/test-campaign/opt-in", exc=requests.ConnectTimeout)
                 self.contract.recurring_create_invoice()
 
+    def _set_contract_date_end(self, date_end, check_job=True):
+        with trap_jobs() as trap:
+            self.contract.date_end = date_end
+
+        if check_job:
+            trap.assert_jobs_count(1, only=self.contract._coop_ws_optout)
+
+        trap.perform_enqueued_jobs()
+
     def test_contract_end(self):
         inv = self.invoice(partial(ts_before, days=7), mock_optin=True)
         date_end = inv.date_invoice + timedelta(days=10)
@@ -95,7 +106,7 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
                     "optout_ts": ts_after(date_end, 0),
                 },
             )
-            self.contract.with_context(test_queue_job_no_delay=True).date_end = date_end
+            self._set_contract_date_end(date_end)
 
         self.assertEqual(rm.request_history[0].path, "/campaigns/test-campaign/opt-out")
         self.assertEqual(
@@ -117,7 +128,7 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
                 "/campaigns/test-campaign/opt-out",
                 exc=Exception("Test failure: service should not be called"),
             )
-            self.contract.with_context(test_queue_job_no_delay=True).date_end = date_end
+            self._set_contract_date_end(date_end, check_job=False)
 
     def test_bypass_coop_campaigns(self):
         "Don't call optin WS when bypass_coop_campaigns is in the context"
