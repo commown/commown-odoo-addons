@@ -2,6 +2,8 @@ from mock import patch
 
 from odoo.tests.common import SavepointCase
 
+from odoo.addons.queue_job.tests.common import trap_jobs
+
 from ..models.contract import NO_DATE
 
 
@@ -17,13 +19,6 @@ class MockedEmptySessionMixin(object):
         self.addCleanup(request_patcher.stop)
 
         super(MockedEmptySessionMixin, self).setUp()
-
-        self.env = self.env(
-            context=dict(
-                self.env.context,
-                test_queue_job_no_delay=True,  # contract_queue_job uses jobs
-            )
-        )
 
 
 class RentalSaleOrderMixin:
@@ -200,7 +195,9 @@ class RentalSaleOrderMixin:
         # contract_queue_job (installed in the CI) returns an empty invoice set
         # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
         #  /models/contract_contract.py#L21)
-        contracts._recurring_create_invoice()
+        with trap_jobs() as trap:
+            contracts._recurring_create_invoice()
+        trap.perform_enqueued_jobs()
         invoices = self.env["account.invoice"].search(
             [
                 ("invoice_line_ids.contract_line_id.contract_id", "in", contracts.ids),
