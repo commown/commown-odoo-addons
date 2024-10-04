@@ -165,6 +165,9 @@ class ProjectTC(SavepointCase):
         self.partner = ref("base.res_partner_3")
         self.partner.update(
             {
+                # Avoid SMS not sent warnings:
+                "mobile": "+33612345678",
+                "country_id": self.env.ref("base.fr").id,
                 "property_account_receivable_id": self.customer_account.id,
                 "payment_token_ids": [
                     (
