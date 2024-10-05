@@ -19,10 +19,16 @@ class StockLocation(models.Model):
         We rely on the child_of relation of partners to avoid data duplication between
         the partner and location child_of hierarchies.
         """
-        return bool(
-            self.env["res.partner"]
-            .with_context(active_test=False)
-            .search_count(
-                [("id", "=", self.partner_id.id), ("id", "child_of", loc.partner_id.id)]
+        if self.partner_id and loc.partner_id:
+            return bool(
+                self.env["res.partner"]
+                .with_context(active_test=False)
+                .search_count(
+                    [
+                        ("id", "=", self.partner_id.id),
+                        ("id", "child_of", loc.partner_id.id),
+                    ]
+                )
             )
-        )
+        else:
+            return False

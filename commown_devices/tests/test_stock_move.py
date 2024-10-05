@@ -44,17 +44,13 @@ class StockMoveTC(SavepointCase):
             error.exception.name,
             expected_message,
         )
-        # Check same error is log depending on context
-        expected_message = (
-            "ERROR:odoo.addons.commown_devices.models.stock_move:" + expected_message
-        )
-        with self.assertLogs(
-            "odoo.addons.commown_devices.models.stock_move", level="WARNING"
-        ) as cm:
+        # Check same error is logged depending on context
+        chan = "odoo.addons.commown_devices.models.stock_move"
+        with self.assertLogs(chan, level="WARNING") as cm:
             moves.with_context(
                 no_raise_in_update_lot_contract=True
             ).update_lot_contract()
-        self.assertEqual(expected_message, cm.output[0])
+        self.assertEqual("ERROR:%s:%s" % (chan, expected_message), cm.output[0])
 
     def test_update_lot_location_move_contract_consistency(self):
         self.partner.get_or_create_customer_location()
