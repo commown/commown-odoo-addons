@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 import mock
 
 from odoo.exceptions import AccessError
@@ -7,9 +9,19 @@ from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 from odoo.addons.queue_job.tests.common import trap_jobs
 
 
+class NoSMSAssertMixin:
+    @contextmanager
+    def assertNoSMSLogged(self):
+        chan = "odoo.addons.commown.models.project_task"
+        with self.assertLogs(chan, level="WARNING") as logged:
+            yield
+        self.assertEqual(len(logged.output), 1)
+        self.assertIn("No SMS reminder sent", logged.output[0])
+
+
 @at_install(False)
 @post_install(True)
-class ProjectTaskModelTC(TransactionCase):
+class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
     def test_followup_view(self):
         project = self.env.ref("commown_self_troubleshooting.support_project")
         project.show_internal_followup = True
@@ -46,7 +58,7 @@ class ProjectTaskModelTC(TransactionCase):
 
 @at_install(False)
 @post_install(True)
-class ProjectTaskActionTC(TransactionCase):
+class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
     def setUp(self):
         super(ProjectTaskActionTC, self).setUp()
 
@@ -89,7 +101,7 @@ class ProjectTaskActionTC(TransactionCase):
         )
 
         self.partner = self.env.ref("base.partner_demo_portal")
-        self.partner.update({"firstname": "Flo", "phone": "0000000000"})
+        self.partner.update({"firstname": "Flo", "phone": "+33747397654"})
 
         self.task = self.env["project.task"].create(
             {
@@ -175,7 +187,8 @@ class ProjectTaskActionTC(TransactionCase):
         # Simulate partner sending a message, then put task back to reminder
         self._send_partner_email()
         message_num = len(self.task.message_ids)
-        self.task.update({"stage_id": self.stage_reminder.id})
+        with self.assertNoSMSLogged():
+            self.task.update({"stage_id": self.stage_reminder.id})
 
         # 2 expected messages: email, stage change (in reverse order)
         self.assertEqual(len(self.task.message_ids), message_num + 2)
@@ -220,8 +233,9 @@ class ProjectTaskActionTC(TransactionCase):
         self._send_partner_email()
         self.assertEqual(self.task.stage_id, self.stage_pending)
 
+        with self.assertNoSMSLogged():
+            self.task.update({"stage_id": self.stage_reminder.id})
         other_partner = self.env.ref("base.partner_demo_portal")
-        self.task.update({"stage_id": self.stage_reminder.id})
         self._send_partner_email(author_id=other_partner.id)
         self.assertEqual(self.task.stage_id, self.stage_pending)
 
