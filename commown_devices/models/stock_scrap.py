@@ -20,5 +20,5 @@ class StockScrap(models.Model):
     def action_validate(self):
         return super(
             StockScrap,
-            self.with_context(default_contract_id=self.contract_id),
+            self.with_context(default_contract_id=self.contract_id.id),
         ).action_validate()
