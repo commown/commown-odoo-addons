@@ -42,3 +42,22 @@ class StockScrapTC(BaseLotTC):
         self.assertEqual(self.scrap.move_id.date, self.scrap_date)
         self.assertEqual(self.scrap.move_id.move_line_ids.date, self.scrap_date)
         self.assertEqual(quant.in_date, self.scrap_date)
+
+    def test_scrap_moves_contract_association(self):
+        partner = self.env.ref("base.partner_demo_portal")
+        partner_loc = partner.get_or_create_customer_location()
+
+        # Change quant and scrap location to scrap lot from partner's location
+        self.quant.location_id = partner_loc
+        self.scrap.location_id = partner_loc
+
+        # Associate a contract to the lot and to the scrap
+        contract = self.env["contract.contract"].create(
+            {"name": "TESST", "partner_id": partner.id}
+        )
+        self.scrap.contract_id = contract
+        self.lot.contract_id = contract
+
+        # Check association
+        self.scrap.action_validate()
+        self.assertEquals(self.scrap.move_id.contract_id, contract)
