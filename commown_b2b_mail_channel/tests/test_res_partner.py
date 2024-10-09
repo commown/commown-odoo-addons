@@ -72,3 +72,18 @@ class ResPartnerTC(SavepointCase):
 
         self.part1.parent_id = self.company
         self.assertTrue(self.company.mail_channel_id)
+
+    def test_set_support_channel_name(self):
+        self.company.create_mail_channel()
+        self.assertEqual(
+            self.company.mail_channel_id.name,
+            "Support %s" % self.company.name,
+        )
+
+        new_name = "New name"
+
+        self.company.name = new_name
+        self.assertEqual(
+            self.company.mail_channel_id.name,
+            "Support %s" % new_name,
+        )

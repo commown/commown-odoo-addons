@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class ResPartner(models.Model):
@@ -62,7 +62,7 @@ class ResPartner(models.Model):
             group_commercial = self.env.ref("commown_user_groups.commercial")
             self.mail_channel_id = self.env["mail.channel"].create(
                 {
-                    "name": " ".join(["Support", self.name]),
+                    "name": self.compute_support_channel_name(),
                     "public": "private",
                     "company_id": self.id,
                 }
@@ -74,3 +74,11 @@ class ResPartner(models.Model):
             self.mail_channel_id.group_ids += (
                 group_admin + group_commercial + group_support
             )
+
+    def compute_support_channel_name(self):
+        return " ".join(["Support", self.name])
+
+    @api.constrains("name")
+    def set_support_channel_name(self):
+        if self.mail_channel_id:
+            self.mail_channel_id.name = self.compute_support_channel_name()
