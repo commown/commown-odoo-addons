@@ -45,7 +45,12 @@ class ResPartner(models.Model):
                 if old_parent and old_parent.mail_channel_id:
                     self.remove_partners_from_channel(old_parent.mail_channel_id, self)
 
-        return super().write(vals)
+        result = super().write(vals)
+
+        if "name" in vals:
+            self.set_support_channel_name()
+
+        return result
 
     def remove_partners_from_channel(self, channel, partners):
         self.env["mail.channel.partner"].search(
@@ -69,7 +74,7 @@ class ResPartner(models.Model):
 
             self.mail_channel_id = self.env["mail.channel"].create(
                 {
-                    "name": " ".join(["Support", self.name]),
+                    "name": self.compute_support_channel_name(),
                     "public": "private",
                     "partner_company": self.id,
                 }
@@ -82,3 +87,10 @@ class ResPartner(models.Model):
             ).unlink()
             # Compute name
             self.set_support_channel_name()
+
+    def compute_support_channel_name(self):
+        return " ".join(["Support", self.name])
+
+    def set_support_channel_name(self):
+        if self.mail_channel_id:
+            self.mail_channel_id.name = self.compute_support_channel_name()
