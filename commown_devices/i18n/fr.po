@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
-"PO-Revision-Date: 2024-09-11 10:33+0200\n"
+"PO-Revision-Date: 2024-10-10 11:15+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -741,12 +741,12 @@ msgstr "Produits stockables secondaires"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__invoice_id
 msgid "Select invoice line from this invoice"
-msgstr "Séléctionner les lignes de factures depuis cette facture"
+msgstr "Sélectionner les lignes de factures depuis cette facture"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__po_id
 msgid "Select purchase order line from this purchase order"
-msgstr "Séléctionner les lignes d'achat depuis cet achat"
+msgstr "Sélectionner les lignes d'achat depuis cet achat"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/crm_lead.py:29
