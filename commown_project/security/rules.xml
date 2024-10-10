@@ -12,9 +12,9 @@
   </record>
 
   <record model="ir.rule" id="project_leader_project_task_type">
-    <field name="name">[Commown] Project leader can manage its steps</field>
+    <field name="name">[Commown] Unless with privacy "employees", only the project leader can manage its steps</field>
     <field name="model_id" ref="project.model_project_task_type"/>
-    <field name="domain_force">[("project_ids.user_id", "=", user.id)]</field>
+    <field name="domain_force">["|", ("project_ids.privacy_visibility", "=", "employees"), ("project_ids.user_id", "=", user.id)]</field>
     <field name="groups" eval="[(6, 0, [ref('project.group_project_user')])]"/>
     <field name="perm_read" eval="0"/>
     <field name="perm_write" eval="1"/>
