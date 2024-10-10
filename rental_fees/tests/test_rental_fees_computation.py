@@ -5,6 +5,9 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import mute_logger
+
+from odoo.addons.queue_job.tests.common import trap_jobs
 
 from .common import RentalFeesTC
 
@@ -81,7 +84,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-    def compute(self, until_date, fees_def=None, run=True, invoice=False):
+    def compute(self, until_date, fees_def=None, run=True, invoice=False, sync=True):
         fees_def = fees_def or self.fees_def
 
         computation = self.env["rental_fees.computation"].create(
@@ -90,9 +93,13 @@ class RentalFeesComputationTC(RentalFeesTC):
                 "until_date": until_date,
             }
         )
-
         if run:
-            computation.action_run()
+            if sync:
+                with trap_jobs() as trap:
+                    computation.action_run()
+                trap.perform_enqueued_jobs()
+            else:
+                computation.action_run()
 
         if invoice:
             computation.action_invoice()
@@ -118,13 +125,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         ).post()
 
     def test_open_job(self):
-        "Method open job should"
-        old_env = self.env
-        try:
-            self.env = self.env(context=dict(test_queue_job_no_delay=False))
-            comp = self.compute("2021-01-31")
-        finally:
-            self.env = old_env
+        comp = self.compute("2021-01-31", sync=False)
 
         self.assertEqual(comp.state, "running")
 
@@ -373,7 +374,12 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         contract = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract, date=send_datetime)
-        contract.date_start = start_date
+        with trap_jobs() as trap:
+            contract.date_start = start_date
+        trap.assert_jobs_count(
+            1, only=contract.contract_line_ids._generate_forecast_periods
+        )
+        trap.perform_enqueued_jobs()
         self.create_invoices_until(contract, base_date)
 
         computation = self.compute(compute_date)
@@ -583,8 +589,9 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         # Do the same computation but with an error in get_main_rental_service:
         rental_service.property_contract_template_id = False
-        with self.assertRaises(RuntimeError) as err:
-            self.compute("2021-05-01")
+        with mute_logger("odoo.addons.rental_fees.models.rental_fees_computation"):
+            with self.assertRaises(RuntimeError) as err:
+                self.compute("2021-05-01")
 
         # Check the generated error contains useful information
         exc = str(err.exception)

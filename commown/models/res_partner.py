@@ -99,7 +99,9 @@ class CommownPartner(models.Model):
 
     country_id = fields.Many2one(default=_default_country)
 
-    parent_payment_token_id = fields.Many2one(related="parent_id.payment_token_id")
+    parent_payment_token_id = fields.Many2one(
+        string="Parent Payment token", related="parent_id.payment_token_id"
+    )
 
     def _apply_bin_field_size_policy(self, vals):
         """Apply the binary field limit policy: resize images, raise if the

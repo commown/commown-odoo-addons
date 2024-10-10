@@ -10,7 +10,7 @@ from odoo import api, models
 
 from odoo.addons.queue_job.job import job
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 
 def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
@@ -115,8 +115,10 @@ class ContractLine(models.Model):
             if campaign and campaign.is_coop_campaign:
                 if last_inv_line is None:
                     last_inv_line = self._last_invoice_self_generated_line()
-                result[discount] = last_inv_line and last_inv_line.is_discount_applied(
-                    discount
+                result[discount] = (
+                    last_inv_line
+                    and last_inv_line.is_discount_applied(discount)
+                    or False
                 )
 
         return result

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import mock
 
 from odoo.tests.common import SavepointCase, at_install, post_install
+from odoo.tools import mute_logger
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
@@ -164,6 +165,9 @@ class ProjectTC(SavepointCase):
         self.partner = ref("base.res_partner_3")
         self.partner.update(
             {
+                # Avoid SMS not sent warnings:
+                "mobile": "+33612345678",
+                "country_id": self.env.ref("base.fr").id,
                 "property_account_receivable_id": self.customer_account.id,
                 "payment_token_ids": [
                     (
@@ -732,26 +736,27 @@ class ProjectTC(SavepointCase):
 
         # Execute test: generate 3 issues and simulate a crash when the
         # second is acknowledged to Slimpay
-        act, get = self._execute_cron(
-            [
-                fake_issue_doc(
-                    id="i0",
-                    payment_ref=tx0.acquirer_reference,
-                    subscriber_ref=self.partner.id,
-                ),
-                fake_issue_doc(
-                    id="i1",
-                    payment_ref=tx1.acquirer_reference,
-                    subscriber_ref=self.partner.id,
-                ),
-                fake_issue_doc(
-                    id="i2",
-                    payment_ref=tx2.acquirer_reference,
-                    subscriber_ref=self.partner.id,
-                ),
-            ],
-            fake_action_crash_for("ack-payment-issue", "i1"),
-        )
+        with mute_logger("odoo.addons.payment_slimpay_issue.models.project_task"):
+            act, get = self._execute_cron(
+                [
+                    fake_issue_doc(
+                        id="i0",
+                        payment_ref=tx0.acquirer_reference,
+                        subscriber_ref=self.partner.id,
+                    ),
+                    fake_issue_doc(
+                        id="i1",
+                        payment_ref=tx1.acquirer_reference,
+                        subscriber_ref=self.partner.id,
+                    ),
+                    fake_issue_doc(
+                        id="i2",
+                        payment_ref=tx2.acquirer_reference,
+                        subscriber_ref=self.partner.id,
+                    ),
+                ],
+                fake_action_crash_for("ack-payment-issue", "i1"),
+            )
 
         # Check the http ack method was called for all issue docs
         self.assertIssuesAcknowledged(act, "i0", "i1", "i2")

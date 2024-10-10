@@ -11,7 +11,7 @@
             model="account.mass.reconcile.method">
       <field name="name">mass.reconcile.simple.partner_commown</field>
       <field name="sequence" eval="1" />
-      <field name="writeoff" eval="0.0" />
+      <field name="write_off" eval="0.0" />
       <field name="date_base_on">newest</field>
       <field name="journal_id" ref="slimpay_statements_autoimport.slimpay_journal" />
       <field name="task_id" ref="mass_reconcile" />

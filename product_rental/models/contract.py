@@ -5,7 +5,7 @@ from datetime import date
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
-_logger = logging.getLogger(__file__)
+_logger = logging.getLogger(__name__)
 
 CONTRACT_PROD_MARKER = "##PRODUCT##"
 CONTRACT_ACCESSORY_MARKER = "##ACCESSORY##"
