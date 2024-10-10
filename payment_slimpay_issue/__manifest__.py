@@ -5,7 +5,7 @@
 {
     "name": "Payment Slimpay issue",
     "category": "Website",
-    "version": "12.0.1.0.5",
+    "version": "12.0.1.0.6",
     "author": "Commown SCIC SAS",
     "license": "AGPL-3",
     "website": "https://commown.coop",
