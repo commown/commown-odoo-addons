@@ -31,6 +31,16 @@ class ProjectPermissionTC(SavepointCase):
     def create_task(self, as_user, **kwargs):
         return self.env["project.task"].sudo(as_user.id).create(kwargs)
 
+    def create_task_type(self, as_user, **kwargs):
+        legends = {
+            "legend_normal": "normal",
+            "legend_blocked": "blocked",
+            "legend_done": "done",
+        }
+        return (
+            self.env["project.task.type"].sudo(as_user.id).create({**legends, **kwargs})
+        )
+
     def is_follower(self, user, project):
         followers = project.sudo().message_follower_ids
         return user.partner_id in followers.mapped("partner_id")
@@ -168,3 +178,36 @@ class ProjectOtherUsersPermissions(ProjectPermissionTC):
 
         # .. and can remove the project:
         p1_as_user2.unlink()
+
+    def test_privacy_employees_task_type_rule(self):
+        "Any internal user in project user group can create, write and unlink task type"
+        self.project1.sudo().privacy_visibility = "employees"
+
+        self.assertTrue(1 in self.user1.groups_id.ids)
+        task_type1 = self.create_task_type(
+            as_user=self.user1,
+            name="Task type 1",
+            project_ids=[(6, 0, self.project1.ids)],
+        )
+        self.assertEquals(self.project1.ids, task_type1.project_ids.ids)
+
+        tt1_as_user1 = self.entity_as(task_type1, self.user1)
+
+        new_name = "New Name"
+        tt1_as_user1.write({"name": new_name})
+        self.assertEquals(task_type1.name, new_name)
+
+        tt1_as_user1.unlink()
+
+        # A user that is not in project user group can't create a task type
+        self.user2.groups_id -= self.env.ref("project.group_project_user")
+        with self.assertRaises(AccessError) as err:
+            self.create_task_type(
+                as_user=self.user2,
+                name="Task type 2",
+                project_ids=[(6, 0, self.project1.ids)],
+            )
+        self.assertIn(
+            "Sorry, you are not allowed to create this kind of document.",
+            err.exception.name,
+        )
