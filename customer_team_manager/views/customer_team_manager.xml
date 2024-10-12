@@ -65,7 +65,7 @@
         <field name="email"/>
         <field name="phone"/>
         <field name="team"/>
-        <field name="roles" widget="many2many_tags"/>
+        <field name="roles" widget="many2many_tags_help_widget"/>
         <field name="partner"/>
         <field name="company"/>
         <field name="portal_status"/>
@@ -140,7 +140,7 @@
           <group name="admin">
             <field name="company" groups="sales_team.group_sale_manager"/>
             <field name="partner" groups="sales_team.group_sale_manager"/>
-            <field name="roles" widget="many2many_tags"/>
+            <field name="roles" widget="many2many_tags_help_widget"/>
           </group>
           <group>
             <group name="main">
@@ -162,6 +162,14 @@
       </form>
     </field>
   </record>
+
+  <template id="assets_common" inherit_id="web.assets_common">
+    <xpath expr="." position="inside">
+      <script
+          src="/customer_team_manager/static/src/js/field_widget.js"
+          type="text/javascript" />
+    </xpath>
+  </template>
 
   <record id="action_teams" model="ir.actions.act_window">
     <field name="name">Teams</field>

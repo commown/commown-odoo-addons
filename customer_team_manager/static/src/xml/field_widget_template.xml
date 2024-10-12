@@ -1,0 +1,9 @@
+<templates id="template" xml:space="preserve">
+
+  <t t-name="FieldMany2ManyTagsHelp" t-extend="FieldMany2ManyTag">
+    <t t-jquery="span.o_badge_text" t-operation="attributes">
+      <attribute name="t-att-title">el.description</attribute>
+    </t>
+  </t>
+
+</templates>
