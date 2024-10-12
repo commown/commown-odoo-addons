@@ -1,8 +1,20 @@
 <odoo>
 
-  <template id="customer_manager_portal_menu" inherit_id="portal.my_account_link">
-    <xpath expr="//a[@href='/my/home']" position="after">
-      <a href="/web" role="menuitem" class="dropdown-item">My Applications</a>
+  <template id="my-managment-space-portal-access" inherit_id="portal.portal_my_home">
+    <xpath expr="//div[hasclass('o_portal_my_home')]//h3" position="before">
+      <div t-if="env.user.has_group('customer_team_manager.group_customer_admin')"
+           id="o_portal_managment_space" class="mb-4">
+        <h3>My managment space</h3>
+        <div class="list-group">
+
+          <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+             t-att-href="'/web#menu_id=%daction_id=%d' % (env.ref('customer_team_manager.menu_customer_team_manager_root').id, env.ref('customer_team_manager.action_employees').id)">
+            Employees
+            <span t-esc="env['customer_team_manager.employee'].search_count([])"
+                  class="badge badge-secondary badge-pill"/>
+          </a>
+        </div>
+      </div>
     </xpath>
   </template>
 
