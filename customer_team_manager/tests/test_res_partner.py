@@ -82,7 +82,7 @@ class ResPartnerTC(CustomerTeamAbstractTC):
                 "- F L (Employee)<br>"
                 "<br>"
                 "<b>Already existing employee(s):</b><br>"
-                "- J C (Administrator)"
+                "- J C (Administration)"
             ],
         )
 
@@ -103,6 +103,6 @@ class ResPartnerTC(CustomerTeamAbstractTC):
                 "<b>No employee created!</b><br>"
                 "<br>"
                 "<b>Already existing employee(s):</b><br>"
-                "- J C (Administrator)"
+                "- J C (Administration)"
             ],
         )

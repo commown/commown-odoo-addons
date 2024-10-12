@@ -14,6 +14,9 @@ class CustomerEmployeeRole(models.Model):
         required=True,
         translate=True,
     )
+    description = fields.Char(
+        translate=True,
+    )
     groups = fields.Many2many(
         "res.groups",
         string="Corresponding groups",
