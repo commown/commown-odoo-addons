@@ -1,8 +1,15 @@
 <templates id="template" xml:space="preserve">
 
-  <t t-name="FieldMany2ManyTagsHelp" t-extend="FieldMany2ManyTag">
-    <t t-jquery="span.o_badge_text" t-operation="attributes">
-      <attribute name="t-att-title">el.description</attribute>
+  <t t-name="FieldEmployeeRoleTags">
+    <t t-foreach="elements" t-as="el">
+      <t t-set="color" t-value="el.color || '#fff'"/>
+      <div t-attf-style="background-color: #{color}; border: 1px solid black;" class="badge badge-pill" t-att-data-index="el_index" t-att-title="el.description">
+        <span t-att-data-id="el.id" style="background: inherit; background-clip: text; color: transparent; filter: invert(1) grayscale(1) contrast(10); font-weight: bold;">
+          <i t-attf-class="fa #{el.icon_name}"/>
+          <t t-esc="el.display_name"/>
+          <a t-if="!readonly" href="#" class="fa fa-times o_delete" title="Delete" aria-label="Delete"/>
+        </span>
+      </div>
     </t>
   </t>
 

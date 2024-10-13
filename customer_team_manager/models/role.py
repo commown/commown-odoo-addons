@@ -17,7 +17,15 @@ class CustomerEmployeeRole(models.Model):
     description = fields.Char(
         translate=True,
     )
+    color = fields.Char(
+        string="Color",
+    )
+    icon_name = fields.Char(
+        string="Icon name (fontawesome)",
+        help="Example: 'fa-lock'",
+    )
     groups = fields.Many2many(
         "res.groups",
         string="Corresponding groups",
+        domain=lambda self: [("category_id.name", "=", "Manager customer")],
     )

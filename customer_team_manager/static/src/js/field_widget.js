@@ -1,4 +1,4 @@
-odoo.define("many2many_tags_help_widget", function (require) {
+odoo.define("employee_role_tag_widget", function (require) {
   "use strict";
 
   var ajax = require('web.ajax');
@@ -8,14 +8,16 @@ odoo.define("many2many_tags_help_widget", function (require) {
 
   ajax.loadXML('/customer_team_manager/static/src/xml/field_widget_template.xml', core.qweb);
 
-  var FieldMany2ManyTagsHelp = FieldMany2ManyTags.extend({
-    tag_template: "FieldMany2ManyTagsHelp",
+  var FieldEmployeeRoleTags = FieldMany2ManyTags.extend({
+    tag_template: "FieldEmployeeRoleTags",
     fieldsToFetch: {
         display_name: {type: 'char'},
         description: {type: 'char'},
+        color: {type: 'char'},
+        icon_name: {type: 'char'},
     },
   });
 
-  fieldRegistry.add('many2many_tags_help_widget', FieldMany2ManyTagsHelp);
+  fieldRegistry.add('employee_role_tag_widget', FieldEmployeeRoleTags);
 
 });

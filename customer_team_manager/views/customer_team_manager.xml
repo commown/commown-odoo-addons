@@ -65,11 +65,35 @@
         <field name="email"/>
         <field name="phone"/>
         <field name="team"/>
-        <field name="roles" widget="many2many_tags_help_widget"/>
+        <field name="roles" widget="employee_role_tag_widget"/>
         <field name="partner"/>
         <field name="company"/>
         <field name="portal_status"/>
       </tree>
+    </field>
+  </record>
+
+  <record id="view_employee_role_form" model="ir.ui.view">
+    <field name="name">customer_team_manager.role.form</field>
+    <field name="model">customer_team_manager.employee.role</field>
+    <field name="arch" type="xml">
+      <form string="Employee roles">
+        <sheet>
+          <div class="oe_title">
+            <h1>
+              <field name="name" class="oe_inline"/>
+            </h1>
+          </div>
+          <group name="main">
+            <field name="description"/>
+            <field name="groups"/>
+          </group>
+          <group name="appareance">
+            <field name="color" widget="color"/>
+            <field name="icon_name"/>
+          </group>
+        </sheet>
+      </form>
     </field>
   </record>
 
@@ -140,7 +164,7 @@
           <group name="admin">
             <field name="company" groups="sales_team.group_sale_manager"/>
             <field name="partner" groups="sales_team.group_sale_manager"/>
-            <field name="roles" widget="many2many_tags_help_widget"/>
+            <field name="roles" widget="employee_role_tag_widget"/>
           </group>
           <group>
             <group name="main">
