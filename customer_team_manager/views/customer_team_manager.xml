@@ -23,9 +23,11 @@
         <field name="team"/>
         <field name="image_medium"/>
         <field name="portal_status"/>
+        <field name="roles"/>
         <templates>
           <t t-name="kanban-box">
             <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+
               <t t-if="record.image_medium.raw_value">
                 <div
                     class="o_kanban_image_fill_left d-none d-md-block"
@@ -46,9 +48,10 @@
                 </strong>
 
                 <ul>
-                  <li t-if="record.team.raw_value"><i class="fa fa-users"/> <field name="team"/></li>
-                  <li t-if="record.phone.raw_value"><i class="fa fa-phone"/> <field name="phone" widget="phone"/></li>
-                  <li style="text-wrap: nowrap" t-if="record.email.raw_value"><i class="fa fa-envelope"/> <field name="email" widget="email"/></li>
+                  <li><i class="fa fa-users"/> <field name="team"/></li>
+                  <li><i class="fa fa-phone"/> <field t-if="record.phone.raw_value" name="phone" widget="phone"/></li>
+                  <li style="text-wrap: nowrap"><i class="fa fa-envelope"/> <field name="email" widget="email"/></li>
+                  <li><field name="roles" widget="employee_role_tag_widget" options="{'short': true}"/></li>
                 </ul>
 
               </div>

@@ -16,6 +16,11 @@ odoo.define("employee_role_tag_widget", function (require) {
         color: {type: 'char'},
         icon_name: {type: 'char'},
     },
+    _getRenderTagsContext: function () {
+      let result = this._super.apply(this, arguments);
+      result.short = !!this.nodeOptions.short
+      return result;
+    },
   });
 
   fieldRegistry.add('employee_role_tag_widget', FieldEmployeeRoleTags);
