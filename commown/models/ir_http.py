@@ -17,3 +17,10 @@ class IrHttp(models.AbstractModel):
             )
 
         return super(IrHttp, cls)._handle_exception(exc)
+
+    def session_info(self):
+        "Complete session info with is_in_group_user info"
+        result = super().session_info()
+        group_user = self.env.ref("base.group_user")
+        result["is_in_group_user"] = group_user in self.env.user.groups_id
+        return result

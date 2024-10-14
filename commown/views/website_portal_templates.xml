@@ -60,6 +60,13 @@
 
   <template id="portal_my_details" inherit_id="portal.portal_my_details">
 
+    <!-- -->
+    <xpath expr="//form" position="before">
+      <div class="alert alert-danger">
+        For legal reasons, please never use someone else's account.
+      </div>
+    </xpath>
+
     <!-- Replace name by firstname + lastname -->
     <xpath expr="//form" position="attributes">
       <attribute name="enctype">multipart/form-data</attribute>

@@ -1,0 +1,23 @@
+<templates id="template" xml:space="preserve">
+
+  <t t-name="FieldEmployeeRoleTags">
+    <t t-foreach="elements" t-as="el">
+      <t t-set="color" t-value="el.color || '#fff'"/>
+      <div class="field_employee_role_tags badge badge-pill"
+           t-attf-style="background-color: #{color}"
+           t-att-data-index="el_index"
+           t-att-title="el.description">
+        <span t-att-data-id="el.id">
+          <i t-attf-class="fa #{el.icon_name}"/>
+          <t t-if="!short" t-esc="el.display_name"/>
+          <a t-if="!readonly and !el.nodelete"
+             href="#"
+             class="fa fa-times o_delete"
+             title="Delete"
+             aria-label="Delete"/>
+        </span>
+      </div>
+    </t>
+  </t>
+
+</templates>

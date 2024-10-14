@@ -1,0 +1,11 @@
+.field_employee_role_tags {
+    border: 1px solid black;
+}
+
+.field_employee_role_tags > span {
+    background: inherit;
+    background-clip: text;
+    color: transparent;
+    filter: invert(1) grayscale(1) contrast(10);
+    font-weight: bold;
+}
