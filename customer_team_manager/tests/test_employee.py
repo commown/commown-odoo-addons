@@ -205,3 +205,10 @@ class EmployeeTC(CustomerTeamAbstractTC):
 
         for name, value in new_attrs.items():
             self.assertEqual(getattr(empl, name), value, name)
+
+    def test_admin_can_change_its_own_roles(self):
+        it_role = self.env.ref("customer_team_manager.customer_role_it")
+        self.assertNotIn(it_role, self.admin.roles)
+
+        self.admin.sudo(self.user.id).roles |= it_role
+        self.assertIn(it_role, self.admin.roles)

@@ -178,7 +178,7 @@ class Employee(models.Model):
             user = users[0]
             user.groups_id -= all_role_groups
             if user.has_group("base.group_portal"):
-                user.groups_id |= self.roles.mapped("groups")
+                user.groups_id |= self.sudo().roles.mapped("groups")
 
     @api.model
     @api.returns("self", lambda value: value.id)
