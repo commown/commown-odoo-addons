@@ -10,7 +10,7 @@
         <span t-att-data-id="el.id">
           <i t-attf-class="fa #{el.icon_name}"/>
           <t t-if="!short" t-esc="el.display_name"/>
-          <a t-if="!readonly"
+          <a t-if="!readonly and !el.nodelete"
              href="#"
              class="fa fa-times o_delete"
              title="Delete"

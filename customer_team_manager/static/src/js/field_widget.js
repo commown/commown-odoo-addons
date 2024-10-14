@@ -15,6 +15,7 @@ odoo.define("employee_role_tag_widget", function (require) {
         description: {type: 'char'},
         color: {type: 'char'},
         icon_name: {type: 'char'},
+        nodelete: {type: 'boolean'},
     },
     _getRenderTagsContext: function () {
       let result = this._super.apply(this, arguments);

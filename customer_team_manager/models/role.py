@@ -24,8 +24,17 @@ class CustomerEmployeeRole(models.Model):
         string="Icon name (fontawesome)",
         help="Example: 'fa-lock'",
     )
+    nodelete = fields.Boolean(
+        compute="_compute_nodelete",
+        store=False,
+    )
     groups = fields.Many2many(
         "res.groups",
         string="Corresponding groups",
         domain=lambda self: [("category_id.name", "=", "Manager customer")],
     )
+
+    def _compute_nodelete(self):
+        employee_role = self.env.ref("customer_team_manager.customer_role_user")
+        for rec in self:
+            rec.nodelete = bool(rec.id == employee_role.id)
