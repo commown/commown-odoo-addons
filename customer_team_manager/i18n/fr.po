@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 07:45+0000\n"
-"PO-Revision-Date: 2024-09-24 09:50+0200\n"
+"POT-Creation-Date: 2024-10-14 10:21+0000\n"
+"PO-Revision-Date: 2024-10-14 13:02+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -20,19 +20,19 @@ msgstr ""
 #: code:addons/customer_team_manager/models/res_partner.py:74
 #, python-format
 msgid "<b>Already existing employee(s):</b>"
-msgstr "<b>Employé.e(s) qui existent déjà :</b>"
+msgstr "<b>Bénéficiaires qui existent déjà :</b>"
 
 #. module: customer_team_manager
 #: code:addons/customer_team_manager/models/res_partner.py:67
 #, python-format
 msgid "<b>Created %d employees:</b>"
-msgstr "<b>%d employé.e.s créé.e.s:</b>"
+msgstr "<b>%d Bénéficiaires créé.e.s :</b>"
 
 #. module: customer_team_manager
 #: code:addons/customer_team_manager/models/res_partner.py:70
 #, python-format
 msgid "<b>No employee created!</b>"
-msgstr "<b>Aucun.e employé.e créé.e</b>"
+msgstr "<b>Aucun.e bénéficiaire créé.e</b>"
 
 #. module: customer_team_manager
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_customer_company_object
@@ -42,11 +42,11 @@ msgstr "Un objet abstrait pour un.e client.e, lié à son entreprise"
 #. module: customer_team_manager
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_team
 msgid "A team of a customer"
-msgstr "L'équipe d'un.e employé.e"
+msgstr "L'équipe d'un.e bénéficiaire"
 
 #. module: customer_team_manager
 #: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_accounting
-msgid "Accountant"
+msgid "Accounting"
 msgstr "Comptabilité"
 
 #. module: customer_team_manager
@@ -56,7 +56,7 @@ msgstr "Actif"
 
 #. module: customer_team_manager
 #: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_admin
-msgid "Administrator"
+msgid "Administration"
 msgstr "Administration"
 
 #. module: customer_team_manager
@@ -67,7 +67,7 @@ msgstr "Déjà connecté au site"
 #. module: customer_team_manager
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_employee
 msgid "An employee of a customer"
-msgstr "Un.e employé.e"
+msgstr "Un.e bénéficiairee"
 
 #. module: customer_team_manager
 #: code:addons/customer_team_manager/models/employee.py:95
@@ -90,9 +90,7 @@ msgstr "Annuler"
 msgid ""
 "Cannot be modified when employee was granted portal access. Remove the "
 "portal access first"
-msgstr ""
-"Ne peut être modifié lorsque l'employé.e a déjà été autorisé à accéder au "
-"site. Révoquez d'abord cette autorisation."
+msgstr "Ne peut être modifié lorsque la/le bénéficiaire a déjà été autorisé.e à accéder au site. Révoquez d'abord cette autorisation."
 
 #. module: customer_team_manager
 #: code:addons/customer_team_manager/models/res_partner.py:12
@@ -101,6 +99,11 @@ msgid "Cannot create more than one admin at once!"
 msgstr ""
 "La création de plus d'une administratrice / d'un administrateur à la fois "
 "n'est pas autorisée !"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__color
+msgid "Color"
+msgstr "Couleur"
 
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_company_object__company
@@ -136,6 +139,18 @@ msgid "Created on"
 msgstr "Créé le"
 
 #. module: customer_team_manager
+#. openerp-web
+#: code:addons/customer_team_manager/static/src/xml/field_widget_template.xml:17
+#, python-format
+msgid "Delete"
+msgstr "Supprimer"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__description
+msgid "Description"
+msgstr "Description"
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_company_object__display_name
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__display_name
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__display_name
@@ -152,13 +167,13 @@ msgstr "Courriel"
 #. module: customer_team_manager
 #: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_user
 msgid "Employee"
-msgstr "Employé.e"
+msgstr "Bénéficiaire"
 
 #. module: customer_team_manager
 #: model:ir.actions.act_window,name:customer_team_manager.action_roles
 #: model:ir.ui.menu,name:customer_team_manager.menu_role
 msgid "Employee Roles"
-msgstr "Rôles des employé.e.s"
+msgstr "Rôles des bénéficiaires"
 
 #. module: customer_team_manager
 #: code:addons/customer_team_manager/models/employee.py:230
@@ -171,20 +186,36 @@ msgstr ""
 #. module: customer_team_manager
 #: sql_constraint:customer_team_manager.employee.role:0
 msgid "Employee role already exists!"
-msgstr "Ce rôle d'employé existe déjà !"
+msgstr "Ce rôle de bénéficiaire existe déjà !"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_employee_role_form
+msgid "Employee roles"
+msgstr "Rôles des bénéficiaires"
 
 #. module: customer_team_manager
 #: model:ir.actions.act_window,name:customer_team_manager.action_employees
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__employees
 #: model:ir.ui.menu,name:customer_team_manager.menu_employees
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_employee_form
 msgid "Employees"
-msgstr "Employé.e.s"
+msgstr "Bénéficiaires"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,help:customer_team_manager.field_customer_team_manager_employee_role__icon_name
+msgid "Example: 'fa-lock'"
+msgstr "Exemple : 'fa-lock'"
 
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__firstname
 msgid "First name"
 msgstr "Prénom"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_fleet_manager
+msgid "Fleet managment"
+msgstr "Gestion de la flotte"
 
 #. module: customer_team_manager
 #: code:addons/customer_team_manager/models/employee.py:146
@@ -195,9 +226,7 @@ msgstr "Les champs suivants ont été écrasés :<br>- %s"
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_employee_form
 msgid "For legal reasons, please never reuse an account for someone else."
-msgstr ""
-"Pour des raisons légales, merci de ne jamais réutiliser un compte pour une "
-"autre personne. Archivez-le et créez un.e autre employé.e à la place."
+msgstr "Pour des raisons légales, merci de ne jamais réutiliser un compte pour une autre personne. Archivez-le et créez un.e autre bénéficiaire à la place."
 
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__full_name
@@ -227,6 +256,16 @@ msgstr "Autoriser l'accès au site Commown"
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__id
 msgid "ID"
 msgstr "ID"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_it
+msgid "IT"
+msgstr "Informatique"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__icon_name
+msgid "Icon name (fontawesome)"
+msgstr "Nom de l'icône (fontawesome)"
 
 #. module: customer_team_manager
 #: code:addons/customer_team_manager/models/wizard_portal_access.py:56
@@ -288,14 +327,12 @@ msgstr "Image de taille moyenne"
 msgid ""
 "Medium-sized image of this employee. It is automatically resized as a "
 "128x128px image, with aspect ratio preserved."
-msgstr ""
-"Avatar de taille moyenne de cet.te employé.e. L'image est redimensionnée "
-"automatiquement en 128x128 pixels max, en préservant son rapport d'aspect."
+msgstr "Avatar de taille moyenne de cet.te bénéficiaire. L'image est redimensionnée automatiquement en 128x128 pixels max, en préservant son rapport d'aspect."
 
 #. module: customer_team_manager
-#: model_terms:ir.ui.view,arch_db:customer_team_manager.customer_manager_portal_menu
-msgid "My Applications"
-msgstr "Mes applications"
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
+msgid "My managment space"
+msgstr "Mon espace Gestionnaire"
 
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__name
@@ -307,6 +344,11 @@ msgstr "Nom"
 #: selection:customer_team_manager.employee,portal_status:0
 msgid "Never connected"
 msgstr "Jamais connecté"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__nodelete
+msgid "Nodelete"
+msgstr "Ne pas effacer"
 
 #. module: customer_team_manager
 #: selection:customer_team_manager.employee,portal_status:0
@@ -347,6 +389,34 @@ msgid "Partner '%s' (id %d) is of type '%s', not 'contact'"
 msgstr "Le partenaire '%s' (id %d) est de type '%s', et non 'contact'"
 
 #. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_user
+msgid "People who benefit from the assistance"
+msgstr "Personne qui bénéficie du service"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_admin
+msgid "People who can grant roles to others in their organization"
+msgstr "Personne qui attribue les rôles aux autres personnes de son organisation"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_it
+msgid "People who have access to all assistance tickets of their organization"
+msgstr "Personne qui peut créer et accéder à tous les tickets d'assistance au sein de son organisation"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_accounting
+msgid ""
+"People who have access to the orders and the invoices of their organization"
+msgstr "Personne qui peut accéder à toutes les commandes et factures de son organisation"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_fleet_manager
+msgid ""
+"People who manage the device fleet of their organization (new orders, "
+"contract termination, device attribution)"
+msgstr "Personne qui gère la flotte des appareils de son organisation (nouvelles commandes, résiliation de contrats, attribution des appareils)"
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__phone
 msgid "Phone"
 msgstr "N° de téléphone"
@@ -364,12 +434,17 @@ msgstr "Révoquer son accès au site Commown"
 #. module: customer_team_manager
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_employee_role
 msgid "Role of the employee of a customer has in its organization"
-msgstr "Rôle d'un.e employé.e au sein de son entreprise"
+msgstr "Rôle d'un.e bénéficiaire au sein de son entreprise"
 
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__roles
 msgid "Role(s)"
 msgstr "Rôle(s)"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__sequence
+msgid "Sequence"
+msgstr "N° d'ordre"
 
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__team
@@ -419,10 +494,9 @@ msgstr ""
 "entreprise sur notre site."
 
 #. module: customer_team_manager
-#: model:ir.model,name:customer_team_manager.model_customer_team_manager_grant_employee_portal_access_wizard
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_portal_access_wizard
 msgid "Wizard to grant portal access to employees"
-msgstr "Action pour autoriser l'accès au site à des employé.e.s"
+msgstr "Action pour autoriser l'accès au site à des bénéficiaires"
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
@@ -437,7 +511,7 @@ msgstr ""
 #: code:addons/customer_team_manager/models/wizard_portal_access.py:39
 #, python-format
 msgid "You are not allowed to manage employees."
-msgstr "Vous n'avez pas l'autorisation de gérer les employé.e.s sur ce site."
+msgstr "Vous n'avez pas l'autorisation de gérer les bénéficiaires sur ce site."
 
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__password
@@ -447,21 +521,14 @@ msgstr "Votre mot de passe sur ce site :"
 #. module: customer_team_manager
 #: model:ir.actions.server,name:customer_team_manager.action_create_admin
 msgid "[commown] Create customer admin"
-msgstr ""
-"[commown] Créer un.e employé.e administratrice / administrateur pour ce "
-"partenaire"
+msgstr "[commown] Créer un.e bénéficiaire administrat.eur.rice pour ce partenaire"
 
 #. module: customer_team_manager
 #: model:ir.actions.server,name:customer_team_manager.action_create_employee
 msgid "[commown] Create customer employees"
-msgstr "[commown] Créer des employé.e.s"
+msgstr "[commown] Créer des bénéficiaires"
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.wizard_portal_access_form
 msgid "or"
 msgstr "ou"
-
-#~ msgid "For legal reasons, please never use someone else's account."
-#~ msgstr ""
-#~ "Pour des raisons légales, merci de ne jamais utiliser le compte de "
-#~ "quelqu'un d'autre."

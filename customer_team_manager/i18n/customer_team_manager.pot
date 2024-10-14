@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 07:46+0000\n"
-"PO-Revision-Date: 2024-09-24 07:46+0000\n"
+"POT-Creation-Date: 2024-10-14 10:22+0000\n"
+"PO-Revision-Date: 2024-10-14 10:22+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_accounting
-msgid "Accountant"
+msgid "Accounting"
 msgstr ""
 
 #. module: customer_team_manager
@@ -55,7 +55,7 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_admin
-msgid "Administrator"
+msgid "Administration"
 msgstr ""
 
 #. module: customer_team_manager
@@ -96,6 +96,11 @@ msgid "Cannot create more than one admin at once!"
 msgstr ""
 
 #. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__color
+msgid "Color"
+msgstr ""
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_company_object__company
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__company
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__company
@@ -126,6 +131,18 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__create_date
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: customer_team_manager
+#. openerp-web
+#: code:addons/customer_team_manager/static/src/xml/field_widget_template.xml:17
+#, python-format
+msgid "Delete"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__description
+msgid "Description"
 msgstr ""
 
 #. module: customer_team_manager
@@ -165,16 +182,32 @@ msgid "Employee role already exists!"
 msgstr ""
 
 #. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_employee_role_form
+msgid "Employee roles"
+msgstr ""
+
+#. module: customer_team_manager
 #: model:ir.actions.act_window,name:customer_team_manager.action_employees
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__employees
 #: model:ir.ui.menu,name:customer_team_manager.menu_employees
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_employee_form
 msgid "Employees"
 msgstr ""
 
 #. module: customer_team_manager
+#: model:ir.model.fields,help:customer_team_manager.field_customer_team_manager_employee_role__icon_name
+msgid "Example: 'fa-lock'"
+msgstr ""
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__firstname
 msgid "First name"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_fleet_manager
+msgid "Fleet managment"
 msgstr ""
 
 #. module: customer_team_manager
@@ -215,6 +248,16 @@ msgstr ""
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__id
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__id
 msgid "ID"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,name:customer_team_manager.customer_role_it
+msgid "IT"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__icon_name
+msgid "Icon name (fontawesome)"
 msgstr ""
 
 #. module: customer_team_manager
@@ -274,8 +317,8 @@ msgid "Medium-sized image of this employee. It is automatically resized as a 128
 msgstr ""
 
 #. module: customer_team_manager
-#: model_terms:ir.ui.view,arch_db:customer_team_manager.customer_manager_portal_menu
-msgid "My Applications"
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
+msgid "My managment space"
 msgstr ""
 
 #. module: customer_team_manager
@@ -287,6 +330,11 @@ msgstr ""
 #. module: customer_team_manager
 #: selection:customer_team_manager.employee,portal_status:0
 msgid "Never connected"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__nodelete
+msgid "Nodelete"
 msgstr ""
 
 #. module: customer_team_manager
@@ -328,6 +376,31 @@ msgid "Partner '%s' (id %d) is of type '%s', not 'contact'"
 msgstr ""
 
 #. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_user
+msgid "People who benefit from the assistance"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_admin
+msgid "People who can grant roles to others in their organization"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_it
+msgid "People who have access to all assistance tickets of their organization"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_accounting
+msgid "People who have access to the orders and the invoices of their organization"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:customer_team_manager.employee.role,description:customer_team_manager.customer_role_fleet_manager
+msgid "People who manage the device fleet of their organization (new orders, contract termination, device attribution)"
+msgstr ""
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__phone
 msgid "Phone"
 msgstr ""
@@ -350,6 +423,11 @@ msgstr ""
 #. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee__roles
 msgid "Role(s)"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_employee_role__sequence
+msgid "Sequence"
 msgstr ""
 
 #. module: customer_team_manager
@@ -392,7 +470,6 @@ msgid "We ask your password to enforce your company's security"
 msgstr ""
 
 #. module: customer_team_manager
-#: model:ir.model,name:customer_team_manager.model_customer_team_manager_grant_employee_portal_access_wizard
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_portal_access_wizard
 msgid "Wizard to grant portal access to employees"
 msgstr ""
