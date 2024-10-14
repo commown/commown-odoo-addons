@@ -199,6 +199,10 @@
       <script
           src="/customer_team_manager/static/src/js/field_widget.js"
           type="text/javascript" />
+      <link
+          href="/customer_team_manager/static/src/scss/field_widget.scss"
+          rel="stylesheet"
+          type="text/scss" />
     </xpath>
   </template>
 
