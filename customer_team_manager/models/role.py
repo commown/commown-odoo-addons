@@ -9,6 +9,7 @@ class CustomerEmployeeRole(models.Model):
     _sql_constraints = [
         ("name_uniq", "unique (name)", "Employee role already exists!"),
     ]
+    _order = "sequence, id"
 
     name = fields.Char(
         required=True,
@@ -28,6 +29,7 @@ class CustomerEmployeeRole(models.Model):
         compute="_compute_nodelete",
         store=False,
     )
+    sequence = fields.Integer()
     groups = fields.Many2many(
         "res.groups",
         string="Corresponding groups",
