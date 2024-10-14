@@ -16,11 +16,18 @@ class Employee(models.Model):
     firstname = fields.Char(
         string="First name",
         required=True,
+        index=True,
     )
 
     lastname = fields.Char(
         string="Last name",
         required=True,
+        index=True,
+    )
+
+    name = fields.Char(
+        compute="_compute_name",
+        store=True,
     )
 
     email = fields.Char(
@@ -41,6 +48,7 @@ class Employee(models.Model):
         "customer_team_manager.team",
         index=True,
         ondelete="restrict",
+        domain="[('company', '=', company)]",
     )
 
     active = fields.Boolean(default=True)
@@ -72,6 +80,14 @@ class Employee(models.Model):
         default=lambda self: self._compute_default_roles(),
         required=True,
     )
+
+    @api.depends("firstname", "lastname")
+    def _compute_name(self):
+        for record in self:
+            record.name = self.env["res.partner"]._get_computed_name(
+                record.lastname,
+                record.firstname,
+            )
 
     def _compute_default_image(self):
         img_path = get_module_resource("base", "static/img", "avatar.png")

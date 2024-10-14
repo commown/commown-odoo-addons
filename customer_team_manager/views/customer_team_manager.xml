@@ -104,6 +104,27 @@
     </field>
   </record>
 
+  <record id="view_employee_search" model="ir.ui.view">
+    <field name="name">customer_team_manager.employee.search</field>
+    <field name="model">customer_team_manager.employee</field>
+    <field name="arch" type="xml">
+      <search string="Employees">
+        <field
+            name="name"
+            filter_domain="['|', '|', ('name', 'ilike', self), ('email', 'ilike', self)]"/>
+        <field name="team"/>
+        <field name="company"/>
+        <field name="roles"/>
+        <group expand="0" string="Group By">
+          <filter string="Company" name="company"
+                  context="{'group_by': 'company'}"/>
+          <filter string="Team" name="team"
+                  context="{'group_by': 'team'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
   <record id="view_team_form" model="ir.ui.view">
     <field name="name">customer_team_manager.team.form</field>
     <field name="model">customer_team_manager.team</field>
