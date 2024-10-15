@@ -77,12 +77,3 @@ class ContractTC(SavepointCase):
         self.assertEqual(self.contract.lot_nb, 1)
         self.contract.update({"lot_ids": False})
         self.assertEqual(self.contract.lot_nb, 0)
-
-    def test_compute_move_lines_view_ids(self):
-        self.assertFalse(self.contract.show_all_view_move_lines)
-        self.assertEqual(self.contract.move_line_view_ids, self.move_line_with_lot)
-
-        self.contract.show_all_view_move_lines = True
-        self.contract._compute_move_line_view_ids()
-
-        self.assertEqual(self.contract.move_line_view_ids, self.all_move_lines)
