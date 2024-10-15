@@ -9,7 +9,12 @@
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
-    "depends": ["server_environment", "web"],
+    "depends": [
+        "auth_session_timeout",
+        "server_environment",
+        "server_environment_ir_config_parameter",
+        "web",
+    ],
     "data": ["views/template.xml"],
     "installable": True,
     "active": False,
