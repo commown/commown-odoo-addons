@@ -1,43 +1,20 @@
-import lxml.html
-from mock import patch
-
-from odoo import api
-
-from odoo.addons.website.models.website import Website  # see mock
-from odoo.addons.website.tools import MockRequest
-
-from .common import RentalSaleOrderTC
+from .common import WebsiteBaseTC
 
 
 def _clean_text(node):
     return " ".join(t.strip() for t in node.itertext() if t.strip())
 
 
-class WebsiteTC(RentalSaleOrderTC):
+class WebsiteTC(WebsiteBaseTC):
     def setUp(self):
         super().setUp()
-        partner = self.env.ref("base.partner_demo_portal")
-        self.so = self.create_sale_order(partner)
+        self.so = self.create_sale_order(self.partner)
         self.so.action_confirm()
-        # Use a portal user to avoid language selector rendering
-        # (other page is editable and the selector is more complex)
-        env = api.Environment(self.env.cr, partner.user_ids[0].id, {})
-        self.website = self.env.ref("website.default_website").with_env(env)
         self.contracts = self.env["contract.contract"].search(
             [
                 ("name", "ilike", "%" + self.so.name + "%"),
             ]
         )
-
-    def render_view(self, ref, **render_kwargs):
-        view = self.env.ref(ref)
-        with patch.object(Website, "get_alternate_languages", return_value=()):
-            with MockRequest(self.env, website=self.website) as request:
-                request.httprequest.args = []
-                request.httprequest.query_string = ""
-                request.endpoint_arguments = {}
-                html = view.render(render_kwargs)
-        return lxml.html.fromstring(html)
 
     def test_portal_sale_order_view(self):
         doc = self.render_view(
