@@ -1,8 +1,12 @@
+import lxml.html
 from mock import patch
 
+from odoo import api
 from odoo.tests.common import SavepointCase
 
 from odoo.addons.queue_job.tests.common import trap_jobs
+from odoo.addons.website.models.website import Website  # see mock
+from odoo.addons.website.tools import MockRequest
 
 from ..models.contract import NO_DATE
 
@@ -250,3 +254,23 @@ class RentalSaleOrderMixin:
 
 class RentalSaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderMixin, SavepointCase):
     pass
+
+
+class WebsiteBaseTC(RentalSaleOrderTC):
+    def setUp(self):
+        super().setUp()
+        self.partner = self.env.ref("base.partner_demo_portal")
+        # Use a portal user to avoid language selector rendering
+        # (other page is editable and the selector is more complex)
+        env = api.Environment(self.env.cr, self.partner.user_ids[0].id, {})
+        self.website = self.env.ref("website.default_website").with_env(env)
+
+    def render_view(self, ref, **render_kwargs):
+        view = self.env.ref(ref)
+        with patch.object(Website, "get_alternate_languages", return_value=()):
+            with MockRequest(self.env, website=self.website) as request:
+                request.httprequest.args = []
+                request.httprequest.query_string = ""
+                request.endpoint_arguments = {}
+                html = view.render(render_kwargs)
+        return lxml.html.fromstring(html)
