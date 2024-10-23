@@ -30,28 +30,27 @@
     <xpath expr="//form" position="before">
 
       <!-- Too big order: post a demand instead -->
-      <form t-if="is_big_b2b and is_authorized_to_order"
-            action="/shop/submit_order"
-            method="post"
-            class="clearfix">
-        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-        <div class="float-left mt-2">
-          <a role="button" href="/shop/cart" class="btn btn-secondary">
-            <i class="fa fa-chevron-left"/>
-            <span>Back to shopping cart</span>
-          </a>
-        </div>
-        <div class="float-right mt-2">
-          <button type="submit" class="btn btn-primary">
-            <span>Submit my request</span> <i class="fa fa-chevron-right"/>
-          </button>
-        </div>
-      </form>
+      <t t-if="is_big_b2b and is_authorized_to_order">
+        <form action="/shop/submit_order" method="post" class="clearfix">
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+          <div class="float-left mt-2">
+            <a role="button" href="/shop/cart" class="btn btn-secondary">
+              <i class="fa fa-chevron-left"/>
+              <span>Back to shopping cart</span>
+            </a>
+          </div>
+          <div class="float-right mt-2">
+            <button type="submit" class="btn btn-primary">
+              <span>Submit my request</span> <i class="fa fa-chevron-right"/>
+            </button>
+          </div>
+        </form>
 
-      <div t-if="is_big_b2b" class="mt-2 alert alert-warning" role="alert">
-        Due to the large number of units required, a member of our sales team will
-        contact you shortly to finalize your order.
-      </div>
+        <div class="mt-2 alert alert-warning" role="alert">
+          Due to the large number of units required, a member of our sales team will
+          contact you shortly to finalize your order.
+        </div>
+      </t>
 
       <!-- Not authorized to order: contact a purchase group member -->
       <div t-if="not is_authorized_to_order">
