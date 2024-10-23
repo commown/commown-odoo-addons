@@ -12,6 +12,15 @@
 
   </template>
 
+  <!-- /!\ See also website_sale_b2b/views/sale_portal_templates.xml /!\
+
+       Used in two different templates:
+       - payment (see above): user is paying its just filled basket
+       - sale_order_portal_template: user is validating a quotation
+
+       Warning the order is NOT available here (and it has not the same name in both
+       templates named above: order in one case, sale_order in the other).
+  -->
   <template id="payment_tokens_list" inherit_id="payment.payment_tokens_list">
 
     <xpath expr="//form" position="attributes">
@@ -26,7 +35,6 @@
             method="post"
             class="clearfix">
         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-        <input type="hidden" name="order_id" t-att-value="order_id"/>
         <div class="float-left mt-2">
           <a role="button" href="/shop/cart" class="btn btn-secondary">
             <i class="fa fa-chevron-left"/>
