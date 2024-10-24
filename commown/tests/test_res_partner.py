@@ -115,7 +115,7 @@ class ResPartnerSimpleTC(SavepointCase):
     def test_create_child_supplier(self):
         p1 = self.env["res.partner"].create({"name": "p1", "is_company": True})
         p2 = self.env["res.partner"].create({"name": "p2", "parent_id": p1.id})
-        p3 = self.env["res.partner"].create({"name": "p2", "parent_id": p1.id})
+        p3 = self.env["res.partner"].create({"name": "p3", "parent_id": p1.id})
 
         p3.supplier = True
 
