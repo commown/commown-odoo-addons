@@ -265,8 +265,11 @@ class WebsiteBaseTC(RentalSaleOrderTC):
         env = api.Environment(self.env.cr, self.partner.user_ids[0].id, {})
         self.website = self.env.ref("website.default_website").with_env(env)
 
-    def render_view(self, ref, **render_kwargs):
+    def render_view(self, ref, sudo_as=None, **render_kwargs):
         view = self.env.ref(ref)
+        if sudo_as:
+            view = view.sudo(sudo_as)
+
         with patch.object(Website, "get_alternate_languages", return_value=()):
             with MockRequest(self.env, website=self.website) as request:
                 request.httprequest.args = []
