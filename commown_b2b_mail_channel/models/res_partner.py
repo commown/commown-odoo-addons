@@ -14,36 +14,49 @@ class ResPartner(models.Model):
         domain=[("public", "=", "private"), ("channel_type", "=", "channel")],
     )
 
+    def has_to_be_subscribed_to_channel(self, mail_channel):
+        """Return true if partner has to be subscribed to a given mail channel"""
+        chan_partner = mail_channel.mapped("channel_last_seen_partner_ids.partner_id")
+        return self not in chan_partner and self.user_ids
+
+    def _update_subscription_on_mail_channel_change(self, new_chan_id):
+        if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
+            self.remove_partners_from_channel(self.mail_channel_id, self.child_ids)
+        if new_chan_id:
+            partners_to_add = self.child_ids.filtered(
+                lambda p: p.company_type == "person" and p.user_ids
+            )
+            self.env["mail.channel"].browse(new_chan_id).channel_invite(
+                partners_to_add.ids
+            )
+
+    def _update_subscription_on_parent_change(self, new_parent_id):
+        if new_parent_id:
+            new_parent = self.env["res.partner"].browse(new_parent_id)
+            new_parent_chan = new_parent.mail_channel_id
+            if (
+                new_parent_chan
+                and self.has_to_be_subscribed_to_channel(new_parent_chan)
+            ):
+                new_parent.mail_channel_id.channel_invite(self.id)
+
+            elif not new_parent_chan and self.contract_ids.filtered(
+                lambda c: c.is_active_contract()
+            ):
+                new_parent.sudo().create_mail_channel()
+
+        if not new_parent_id:
+            old_parent = self.parent_id
+            if old_parent and old_parent.mail_channel_id:
+                self.remove_partners_from_channel(old_parent.mail_channel_id, self)
+
     def write(self, vals):
         """Override write function to add/remove company's partners when support channel is modified."""
-        if "mail_channel_id" in vals.keys():
-            new_chan_id = vals["mail_channel_id"]
-            if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
-                self.remove_partners_from_channel(self.mail_channel_id, self.child_ids)
+        if "mail_channel_id" in vals:
+            self._update_subscription_on_mail_channel_change(vals["mail_channel_id"])
 
-            if new_chan_id != False:
-                partners_to_add = self.child_ids.filtered(
-                    lambda p: p.company_type == "person" and p.user_ids
-                )
-                self.env["mail.channel"].browse(new_chan_id).channel_invite(
-                    partners_to_add.ids
-                )
         if "parent_id" in vals and not self.is_company:
-            new_parent_id = vals["parent_id"]
-            if new_parent_id:
-                new_parent = self.env["res.partner"].browse(new_parent_id)
-                if new_parent.mail_channel_id:
-                    new_parent.mail_channel_id.channel_invite(self.id)
-
-                elif not new_parent.mail_channel_id and self.contract_ids.filtered(
-                    lambda c: c.is_active_contract()
-                ):
-                    new_parent.sudo().create_mail_channel()
-
-            if not new_parent_id:
-                old_parent = self.parent_id
-                if old_parent and old_parent.mail_channel_id:
-                    self.remove_partners_from_channel(old_parent.mail_channel_id, self)
+            self._update_subscription_on_parent_change(vals["parent_id"])
 
         result = super().write(vals)
 
