@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import _, fields, models
 
 
 class ResPartner(models.Model):
@@ -102,7 +102,7 @@ class ResPartner(models.Model):
 
             self.mail_channel_id = self.env["mail.channel"].create(
                 {
-                    "name": self.compute_support_channel_name(),
+                    "name": "TEMP NAME",
                     "public": "private",
                     "partner_company": self.id,
                 }
@@ -116,9 +116,17 @@ class ResPartner(models.Model):
             # Compute name
             self.set_support_channel_name()
 
-    def compute_support_channel_name(self):
-        return " ".join(["Support", self.name])
+    def set_support_channel_name(self, channel=None):
+        channel = channel or self.mail_channel_id
+        if channel:
+            channel.with_context(lang="en_US").name = (
+                "Support of company %s" % self.name
+            )
 
-    def set_support_channel_name(self):
-        if self.mail_channel_id:
-            self.mail_channel_id.name = self.compute_support_channel_name()
+            for lang, _lang_name in self.env["res.lang"].get_installed():
+                if lang == "en_US":
+                    continue
+                context = {"lang": lang}  # Used below by _ (using python magic)
+                channel.with_context(lang=lang).name = (
+                    _("Support of company %s") % self.name
+                )

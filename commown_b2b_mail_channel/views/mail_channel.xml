@@ -15,6 +15,17 @@
       </field>
     </record>
 
+    <record model="ir.ui.view" id="view_mail_channel_tree">
+      <field name="name">mail.channel.tree</field>
+      <field name="model">mail.channel</field>
+      <field name="inherit_id" ref="mail.mail_channel_view_tree"/>
+      <field name="arch" type="xml">
+        <field name="name" position="replace">
+          <field name="display_name"/>
+        </field>
+      </field>
+    </record>
+
   </data>
 
 </odoo>
