@@ -57,10 +57,14 @@ class ResPartner(models.Model):
             ):
                 new_parent.sudo().create_mail_channel()
 
-        if not new_parent_id:
-            old_parent = self.parent_id
-            if old_parent and old_parent.mail_channel_id:
-                self.remove_partners_from_channel(old_parent.mail_channel_id, self)
+        old_parent = self.parent_id
+        if old_parent and old_parent.mail_channel_id:
+            self.env["mail.channel.partner"].search(
+                [
+                    ("partner_id", "=", self.id),
+                    ("channel_id", "=", old_parent.mail_channel_id.id),
+                ]
+            ).unlink()
 
     def write(self, vals):
         """Override write function to add/remove company's partners when support channel is modified."""
