@@ -19,10 +19,15 @@ class MailChannel(models.Model):
         store=False,
     )
 
-    @api.depends("company_ids")
-    def _compute_company_id(self):
-        for rec in self.filtered("company_ids"):
-            rec.company_id = rec.company_ids[0]
+    @api.depends("partner_companies")
+    def _compute_partner_company(self):
+        for rec in self.filtered("partner_companies"):
+            rec.partner_company = rec.partner_companies[0]
+            rec.partner_company.set_support_channel_name(self)
+
+    @api.onchange("partner_company")
+    def onchange_partner_companies_set_name(self):
+        self.partner_company.set_support_channel_name(self)
 
     def _inverse_partner_company(self):
         for rec in self:

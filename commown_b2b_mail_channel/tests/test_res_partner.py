@@ -43,7 +43,7 @@ class ResPartnerTC(SavepointCase):
         for name in ["support", "commercial", "admin"]:
             expected_groups |= self.env.ref("commown_user_roles.%s" % name).group_id
 
-        self.assertEqual(company_chan.name, "Support %s" % self.company.name)
+        self.assertEqual(company_chan.name, "Support of company %s" % self.company.name)
         self.assertEqual(
             company_chan.channel_last_seen_partner_ids.mapped("partner_id"),
             self.part1 + self.part2 + self.user_support.partner_id,
@@ -103,7 +103,7 @@ class ResPartnerTC(SavepointCase):
         self.company.create_mail_channel()
         self.assertEqual(
             self.company.mail_channel_id.name,
-            "Support %s" % self.company.name,
+            "Support of company %s" % self.company.name,
         )
 
         new_name = "New name"
@@ -111,5 +111,5 @@ class ResPartnerTC(SavepointCase):
         self.company.name = new_name
         self.assertEqual(
             self.company.mail_channel_id.name,
-            "Support %s" % new_name,
+            "Support of company %s" % new_name,
         )
