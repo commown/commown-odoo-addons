@@ -113,3 +113,59 @@ class ResPartnerTC(SavepointCase):
             self.company.mail_channel_id.name,
             "Support of company %s" % new_name,
         )
+
+    def test_partner_are_unsubscribed_when_company_is_changed(self):
+        company_2 = self.company.copy()
+
+        self.part1.parent_id = self.company
+        self.part2.parent_id = company_2
+
+        self.company.create_mail_channel()
+        mail_channel = self.company.mail_channel_id
+
+        self.assertIn(
+            self.part1,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+        self.assertNotIn(
+            self.part2,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+
+        mail_channel.partner_company = company_2
+        self.assertEquals(mail_channel.partner_company, mail_channel.partner_companies)
+        self.assertIn(
+            self.part2,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+        self.assertNotIn(
+            self.part1,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+
+    def test_only_concerned_partner_are_unubscribed_on_parent_change(self):
+        self.part1.parent_id = self.company
+        self.part2.parent_id = self.company
+
+        self.company.create_mail_channel()
+        mail_channel = self.company.mail_channel_id
+
+        self.assertIn(
+            self.part1,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+        self.assertIn(
+            self.part2,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+
+        self.part1.parent_id = False
+        self.assertNotIn(
+            self.part1,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+        self.assertIn(
+            self.part2,
+            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+        )
+
