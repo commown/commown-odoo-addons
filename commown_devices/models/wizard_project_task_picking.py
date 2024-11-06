@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, Warning
 
@@ -296,6 +298,8 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
     def create_transfer(self):
         lot = self.task_id.lot_id
 
+        date = self.date or fields.Datetime.now()
+
         if not lot:
             raise UserError(_("Can't move device: no device set on this task!"))
 
@@ -307,7 +311,7 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             [self.task_id.lot_id],
             {},
             transfer_location,
-            date=self.date,
+            date=date,
             do_transfer=True,
         )
 
@@ -315,7 +319,7 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             [self.task_id.lot_id],
             {},
             send_lots_from=transfer_location,
-            date=self.date,
+            date=date + timedelta(seconds=1),
             do_transfer=True,
         )
 

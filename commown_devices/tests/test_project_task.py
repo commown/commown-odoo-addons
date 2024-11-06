@@ -455,6 +455,21 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.assertNotIn(self.task.lot_id, self.c1.lot_ids)
         self.assertIn(self.task.lot_id, self.c2.lot_ids[0])
+        lot_pickings = self.env["stock.picking"].search(
+            [("move_line_ids.lot_id", "=", self.task.lot_id.id)]
+        )
+        transfer_location = self.env.ref(
+            "commown_devices.stock_location_contract_transfer"
+        )
+        p1 = lot_pickings.filtered(
+            lambda p, loc=transfer_location: p.location_dest_id == loc
+        )
+        p2 = lot_pickings.filtered(
+            lambda p, loc=transfer_location: p.location_id == loc
+        )
+        self.assertTrue(
+            p2.move_lines.date - p1.move_lines.date == datetime.timedelta(seconds=1)
+        )
 
     def test_contract_resiliation_with_devices(self):
         diagnostic_stage = self.env.ref("commown_devices.diagnostic_stage")
