@@ -48,7 +48,12 @@ class ResPartnerWithContractStockTC(DeviceAsAServiceTC):
         # Send a device in the context of this contract
         lot1 = self.adjust_stock(serial="my-fp3-1")
         picking1 = contract.send_devices(lot1, {}, date="2024-01-01", do_transfer=True)
-        loc_init = p1.get_customer_location()
+        loc_init_rental = p1.get_customer_locations("internal")
+        loc_init_sale = p1.get_or_create_customer_location("customer")
+
+        self.assertEqual(
+            p1.get_customer_locations(limit=None), loc_init_rental | loc_init_sale
+        )
 
         # Create another partner in the base company
         p2 = self.env["res.partner"].create({"name": "p2", "parent_id": comp.id})
@@ -68,27 +73,32 @@ class ResPartnerWithContractStockTC(DeviceAsAServiceTC):
 
         # ... but not partner 2, whose location is still the initial one
         self.assertEqual(p2.parent_id, comp)
-        self.assertEqual(p2.get_customer_location(), loc_init)
+        self.assertEqual(p2.get_customer_locations("internal"), loc_init_rental)
+        self.assertEqual(p2.get_customer_locations("customer"), loc_init_sale)
 
         # ... and check that the contract stock has moved to the new
         # partner 1's location
-        loc_new = p1.get_customer_location()
-        self.assertTrue(loc_init != loc_new)
-        self.assertEqual(loc_new.partner_id, p1.parent_id)
-        self.assertEqual(picking1.location_dest_id, loc_new)
+        loc_new_rental = p1.get_customer_locations("internal")
+        self.assertTrue(loc_init_rental != loc_new_rental)
+        self.assertEqual(loc_new_rental.partner_id, p1.parent_id)
+        self.assertEqual(picking1.location_dest_id, loc_new_rental)
         quant1 = self.env["stock.quant"].search(
             [("lot_id", "=", lot1.id), ("quantity", ">", 0)],
         )
-        self.assertEqual(quant1.location_id, loc_new)
+        self.assertEqual(quant1.location_id, loc_new_rental)
+
+        # Check new loc is created for sale location too
+        loc_new_sale = p1.get_customer_locations("customer")
+        self.assertTrue(loc_init_sale != loc_new_sale)
 
         # ... but that contract 2 stock is still in the initial location
-        self.assertEqual(picking2.location_dest_id, loc_init)
+        self.assertEqual(picking2.location_dest_id, loc_init_rental)
         quant2 = self.env["stock.quant"].search(
             [("lot_id", "=", lot2.id), ("quantity", ">", 0)],
         )
-        self.assertEqual(quant2.location_id, loc_init)
+        self.assertEqual(quant2.location_id, loc_init_rental)
 
         # Check that lots are still associated with the rigth contract
         self.assertEqual(contract.lot_ids, lot1)
         self.assertEqual(contract2.lot_ids, lot2)
-        self.assertEqual(quant2.location_id, loc_init)
+        self.assertEqual(quant2.location_id, loc_init_rental)

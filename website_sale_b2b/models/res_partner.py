@@ -33,8 +33,9 @@ class ResPartner(models.Model):
             )
 
         for record in self:
+
             # Get partner location BEFORE changing its parent
-            old_loc = record.get_customer_location()
+            old_locs = record.get_customer_locations(limit=None)
 
             # Re-parent the partner
             name = _("%(name)s (indep. - %(company_name)s)") % {
@@ -44,11 +45,13 @@ class ResPartner(models.Model):
             new_company = record.copy({"is_company": True, "name": name})
             record.parent_id = new_company.id
 
-            # Move partner's contract stock to its new location
-            if old_loc:
+            for old_loc in old_locs:
+
+                # Move partner's contract stock to its new location
                 partner_running_contracts = record.env["contract.contract"].search(
                     [
                         ("partner_id", "=", record.id),
+                        ("stock_ownership", "=", old_loc.usage),
                         "|",
                         ("date_end", "=", False),
                         ("date_end", ">", fields.Date.context_today(record)),
