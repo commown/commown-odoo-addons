@@ -1,0 +1,37 @@
+<odoo>
+
+  <record model="ir.ui.view" id="view_commown_grade_tree">
+    <field name="name">commown.grade.tree</field>
+    <field name="model">commown_grade.grade</field>
+    <field name="arch" type="xml">
+      <tree editable="bottom">
+        <field name="name"/>
+        <field name="description"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_grade" model="ir.actions.act_window">
+    <field name="name">Commown Grade</field>
+    <field name="res_model">commown_grade.grade</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_type">form</field>
+    <field name="view_id" ref="view_commown_grade_tree"/>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem
+      id="grade_parent_menu"
+      parent="stock.menu_stock_root"
+      name="Grades"
+      groups="commown_grade.group_manager"
+      sequence="40" />
+
+  <menuitem
+      id="commwon_grade_menu"
+      parent="commown_grade.grade_parent_menu"
+      action="action_grade"
+      groups="commown_grade.group_manager"
+      sequence="10" />
+
+</odoo>
