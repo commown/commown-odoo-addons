@@ -565,12 +565,12 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         module = self.nontracked_product.product_variant_id
         storable_product_variant = self.storable_product.product_variant_id
 
-        stock_location = self.env.ref("stock.stock_location_stock")
+        rental_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
         quant = self.env["stock.quant"].search(
             [
                 ("product_id", "=", storable_product_variant.id),
                 ("quantity", ">", 0),
-                ("location_id", "child_of", stock_location.id),
+                ("location_id", "child_of", rental_loc.id),
             ]
         )[0]
 

@@ -42,6 +42,14 @@ class Contract(models.Model):
             rec.lot_nb = len(rec.lot_ids)
 
     @api.multi
+    def send_default_location(self):
+        loc_ref = {
+            "internal": "commown_devices.stock_location_available_for_rent",
+            "customer": "stock.stock_location_stock",
+        }
+        return self.env.ref(loc_ref[self.stock_ownership])
+
+    @api.multi
     def send_devices(
         self,
         lots,
@@ -57,6 +65,7 @@ class Contract(models.Model):
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
+
         ungraded_lots = lots.filtered(lambda l: not l.grade_id)
         if ungraded_lots:
             raise UserError(
@@ -64,10 +73,10 @@ class Contract(models.Model):
                 % (ungraded_lots.mapped("name"), ungraded_lots.ids)
             )
 
-        dest_location = self.partner_id.get_or_create_customer_location()
-        default_stock = self.env.ref(
-            "commown_devices.stock_location_available_for_rent"
+        dest_location = self.partner_id.get_or_create_customer_location(
+            self.stock_ownership
         )
+        default_stock = self.send_default_location()
         if send_nonserial_products_from is None:
             send_nonserial_products_from = default_stock
         if send_lots_from is None:
@@ -103,7 +112,7 @@ class Contract(models.Model):
         if origin is None:
             origin = self.name
 
-        location = self.partner_id.get_or_create_customer_location()
+        location = self.partner_id.get_or_create_customer_location(self.stock_ownership)
 
         return self._create_picking(
             lots,
@@ -157,7 +166,7 @@ class Contract(models.Model):
         self.ensure_one()
         if old_location is None:
             old_location = self.env.ref("stock.stock_location_customers")
-        new_loc = self.partner_id.get_or_create_customer_location()
+        new_loc = self.partner_id.get_or_create_customer_location(self.stock_ownership)
 
         for picking in self.move_ids.mapped("picking_id"):
             for attr in ("location_id", "location_dest_id"):
