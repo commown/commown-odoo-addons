@@ -58,7 +58,9 @@ class ContractTC(SavepointCase):
         self.contract = self.env["contract.contract"].create(
             {"name": "Test contract", "partner_id": partner.id}
         )
-        dest_location = partner.get_or_create_customer_location()
+        dest_location = partner.get_or_create_customer_location(
+            self.contract.stock_ownership
+        )
 
         new_moves = internal_picking(
             [lot],

@@ -22,7 +22,7 @@ class WizardMoveLineValidationTC(SavepointCase):
             {},
             None,
             self.stock_location,
-            self.partner.get_or_create_customer_location(),
+            self.partner.get_or_create_customer_location(self.contract.stock_ownership),
             "origin",
         )
         self.move.update({"contract_id": self.contract})

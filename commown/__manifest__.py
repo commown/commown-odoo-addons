@@ -28,6 +28,7 @@
         "product_rental",
         "project_rating_nps",
         "sale_product_email",
+        "stock_account_rental",
         "custom_report",
         "slimpay_statements_autoimport",
         "stock_account_rental",
