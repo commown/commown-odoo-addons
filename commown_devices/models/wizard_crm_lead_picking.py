@@ -49,8 +49,8 @@ class CrmLeadPickingWizard(models.TransientModel):
         are tracked by serial number (tracking = 'serial')
         and with no lot already selected in lot_ids
         """
-        avail_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
         for rec in self:
+            avail_loc = rec.lead_id.contract_id.send_default_location()
             picked_product_ids = rec.lot_ids.mapped("product_id").ids
             ids_to_include = rec.all_products.filtered(
                 lambda p: p.tracking == "serial" and p.id not in picked_product_ids

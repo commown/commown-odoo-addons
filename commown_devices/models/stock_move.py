@@ -47,13 +47,16 @@ class StockMove(models.Model):
         for rec in self:
             lots = rec.mapped("move_line_ids.lot_id")
 
-            if rec.contract_id and lots:
+            contract = rec.contract_id
+            if contract and lots:
 
                 if len(lots.mapped("contract_id")) > 1:
                     msg = _("More than one contract on move %s lots")
                     _logger.warning(msg, rec.id)
 
-                contract_loc = rec.contract_id.partner_id.get_customer_location()
+                contract_loc = contract.partner_id.get_customer_locations(
+                    contract.stock_ownership
+                )
 
                 if not contract_loc:
                     _error(
@@ -61,10 +64,10 @@ class StockMove(models.Model):
                     )
 
                 if rec.location_dest_id.has_partner_child_of(contract_loc):
-                    lots.update({"contract_id": rec.contract_id})
+                    lots.update({"contract_id": contract})
 
                 elif rec.location_id.has_partner_child_of(contract_loc):
-                    if lots.mapped("contract_id") != rec.contract_id:
+                    if lots.mapped("contract_id") != contract:
                         msg = _(
                             "Inconsistent move (id: %(move_id)s, picking id:"
                             " %(picking_id)s) contract (id: %(contract_id)s) and lot"

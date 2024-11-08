@@ -31,7 +31,9 @@ class StockMoveLine(models.Model):
         for rec in self:
             contract = rec.move_id.contract_id
             if contract:
-                loc = contract.partner_id.get_customer_location()
+                loc = contract.partner_id.get_customer_locations(
+                    contract.stock_ownership
+                )
                 rec.is_contract_in = loc == rec.location_dest_id
             else:
                 rec.is_contract_in = False

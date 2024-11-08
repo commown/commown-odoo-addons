@@ -45,7 +45,7 @@ class StockScrapTC(BaseLotTC):
 
     def test_scrap_moves_contract_association(self):
         partner = self.env.ref("base.partner_demo_portal")
-        partner_loc = partner.get_or_create_customer_location()
+        partner_loc = partner.get_or_create_customer_location("internal")
 
         # Change quant and scrap location to scrap lot from partner's location
         self.quant.location_id = partner_loc

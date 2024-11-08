@@ -11,9 +11,6 @@ CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
 ]
 
 
-STOCK_XML_ID = "stock.stock_location_stock"
-
-
 class ProjectTaskType(models.Model):
     _inherit = "project.task.type"
 
@@ -200,7 +197,6 @@ class ProjectTask(models.Model):
 
     @api.constrains("stage_id")
     def onchange_stage_id_check_assigned_picking(self):
-        stock_location = self.env.ref(STOCK_XML_ID)
         erroneous_task = self.search(
             [
                 ("id", "in", self.ids),
@@ -211,7 +207,7 @@ class ProjectTask(models.Model):
                 [
                     picking["origin"] == task.get_name_for_origin()
                     and picking.state == "assigned"
-                    and "/" + str(stock_location.id) + "/"
+                    and "/" + str(task.contract_id.send_default_location().id) + "/"
                     in picking.location_id.parent_path
                     for picking in task.contract_id.move_line_ids.mapped("picking_id")
                 ]

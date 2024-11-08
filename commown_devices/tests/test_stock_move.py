@@ -57,7 +57,7 @@ class StockMoveTC(SavepointCase):
         self.assertEqual("ERROR:%s:%s" % (chan, expected_message), cm.output[0])
 
     def test_update_lot_location_move_contract_consistency(self):
-        self.partner.get_or_create_customer_location()
+        self.partner.get_or_create_customer_location(self.contract.stock_ownership)
         moves = self.move_to(self.stock_location)
 
         # Check error when the move and contract location are inconsistent
@@ -74,7 +74,9 @@ class StockMoveTC(SavepointCase):
 
     def test_update_lot_contract_multiple_contract(self):
         "Test warning if move line's lots are linked to several contracts"
-        partner_loc = self.partner.get_or_create_customer_location()
+        partner_loc = self.partner.get_or_create_customer_location(
+            self.contract.stock_ownership
+        )
 
         contract2 = self.contract.copy({"name": "Contract 2"})
 

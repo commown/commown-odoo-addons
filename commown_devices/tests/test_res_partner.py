@@ -16,11 +16,15 @@ class ResPartnerLocationTC(HttpCase):
             individual.property_stock_customer == loc_customer
         ), "test prerequisite failed"
 
-        location = individual.sudo(employee.id).get_or_create_customer_location()
+        location = individual.sudo(employee.id).get_or_create_customer_location(
+            "internal"
+        )
         self.assertNotEqual(location, loc_customer)
         self.assertEqual(location.usage, "internal")
         self.assertIn(individual.name, location.name)
-        self.assertEqual(location, individual.get_or_create_customer_location())
+        self.assertEqual(
+            location, individual.get_or_create_customer_location("internal")
+        )
 
     def test_customer_location_pro(self):
         company = self.env.ref("base.res_partner_2")
@@ -32,9 +36,9 @@ class ResPartnerLocationTC(HttpCase):
             limit=2,
         )
 
-        location1 = pro1.get_or_create_customer_location()
-        location2 = pro2.get_or_create_customer_location()
-        location3 = company.get_or_create_customer_location()
+        location1 = pro1.get_or_create_customer_location("internal")
+        location2 = pro2.get_or_create_customer_location("internal")
+        location3 = company.get_or_create_customer_location("internal")
 
         self.assertEqual(location3, location1)
         self.assertEqual(location3, location2)
@@ -53,8 +57,8 @@ class ResPartnerLocationTC(HttpCase):
         )
 
         self.assertNotEqual(
-            pro.get_or_create_customer_location(),
-            company.get_or_create_customer_location(),
+            pro.get_or_create_customer_location("internal"),
+            company.get_or_create_customer_location("internal"),
         )
 
     def _new_dev(self, name, product, location):
@@ -102,22 +106,30 @@ class ResPartnerLocationTC(HttpCase):
         customer_loc = self.env.ref("stock.stock_location_customers")
 
         p1 = self.env.ref("base.partner_demo_portal")
-        loc_p1 = p1.get_or_create_customer_location()
+        loc_p1_rental = p1.get_or_create_customer_location("internal")
+        loc_p1_sale = p1.get_or_create_customer_location("customer")
 
         p2 = p1.copy({"email": p1.email.capitalize()})
-        loc_p2 = p2.get_or_create_customer_location()
+        loc_p2_rental = p2.get_or_create_customer_location("internal")
+        loc_p2_sale = p2.get_or_create_customer_location("customer")
 
         pt = self.env["product.template"].create(
             {"name": "My test product", "type": "product", "tracking": "serial"}
         )
         lot1 = self._new_dev("lot1", pt.product_variant_id, new_dev_loc)
         lot2 = self._new_dev("lot2", pt.product_variant_id, new_dev_loc)
+        lot3 = self._new_dev("lot3", pt.product_variant_id, new_dev_loc)
+        lot4 = self._new_dev("lot4", pt.product_variant_id, new_dev_loc)
 
-        picking_1 = self._send(lot1, new_dev_loc, loc_p1)
-        picking_2 = self._send(lot2, new_dev_loc, loc_p2)
+        picking_1 = self._send(lot1, new_dev_loc, loc_p1_rental)
+        picking_2 = self._send(lot2, new_dev_loc, loc_p2_rental)
+        picking_3 = self._send(lot3, new_dev_loc, loc_p1_sale)
+        picking_4 = self._send(lot4, new_dev_loc, loc_p2_sale)
 
-        self.assertEqual(lot1.current_location(customer_loc), loc_p1)
-        self.assertEqual(lot2.current_location(customer_loc), loc_p2)
+        self.assertEqual(lot1.current_location(customer_loc), loc_p1_rental)
+        self.assertEqual(lot2.current_location(customer_loc), loc_p2_rental)
+        self.assertEqual(lot3.current_location(customer_loc), loc_p1_sale)
+        self.assertEqual(lot4.current_location(customer_loc), loc_p2_sale)
 
         wiz = self.env["base.partner.merge.automatic.wizard"].create(
             {"partner_ids": [(6, 0, [p1.id, p2.id])], "dst_partner_id": p2.id}
@@ -127,14 +139,20 @@ class ResPartnerLocationTC(HttpCase):
         self.assertFalse(p1.exists())
         self.assertTrue(p2.exists())
 
-        self.assertTrue(loc_p1.exists())
-        self.assertFalse(loc_p2.exists())
+        self.assertTrue(loc_p1_rental.exists())
+        self.assertFalse(loc_p2_rental.exists())
+        self.assertTrue(loc_p1_sale.exists())
+        self.assertFalse(loc_p2_sale.exists())
 
-        self.assertEqual(picking_1.location_dest_id, loc_p1)
-        self.assertEqual(picking_2.location_dest_id, loc_p1)
+        self.assertEqual(picking_1.location_dest_id, loc_p1_rental)
+        self.assertEqual(picking_2.location_dest_id, loc_p1_rental)
+        self.assertEqual(picking_3.location_dest_id, loc_p1_sale)
+        self.assertEqual(picking_4.location_dest_id, loc_p1_sale)
 
-        self.assertEqual(lot1.current_location(customer_loc), loc_p1)
-        self.assertEqual(lot2.current_location(customer_loc), loc_p1)
+        self.assertEqual(lot1.current_location(customer_loc), loc_p1_rental)
+        self.assertEqual(lot2.current_location(customer_loc), loc_p1_rental)
+        self.assertEqual(lot3.current_location(customer_loc), loc_p1_sale)
+        self.assertEqual(lot4.current_location(customer_loc), loc_p1_sale)
 
     def test_location_individual_becomes_pro(self):
         partner = self.env.ref("base.partner_demo_portal")
@@ -143,7 +161,7 @@ class ResPartnerLocationTC(HttpCase):
         self.assertFalse(partner.parent_id)
 
         # Insert test data: a lot in the partner's location
-        loc_init = partner.get_or_create_customer_location()
+        loc_init = partner.get_or_create_customer_location("internal")
         new_dev_loc = self.env["stock.location"].create(
             {
                 "name": "New devices",
@@ -168,7 +186,7 @@ class ResPartnerLocationTC(HttpCase):
         # - initial location has disappeared
         self.assertFalse(loc_init.exists())
         # - partner's location is now the company's one
-        new_loc = partner.get_customer_location()
+        new_loc = partner.get_customer_locations(usage="internal")
         self.assertEqual(new_loc.partner_id, company)
         # - ... and the lot is there
         q = self.env["stock.quant"].search(

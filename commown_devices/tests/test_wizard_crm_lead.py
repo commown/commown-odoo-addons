@@ -252,7 +252,7 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
 
         moves = picking.move_lines
         self.assertEqual(len(moves), 3)
-        loc_partner = self.so.partner_id.get_or_create_customer_location()
+        loc_partner = self.so.partner_id.get_or_create_customer_location("internal")
         self.assertEqual(
             sorted(moves.mapped("location_id").ids),
             sorted([self.location_fp3_new.id, self.loc_new_untracked.id]),
