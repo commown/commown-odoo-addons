@@ -1,0 +1,11 @@
+<templates>
+
+  <t t-extend="UserMenu.Actions">
+
+    <t t-jquery=".dropdown-divider" t-operation="before">
+      <a href="/my/home" id="menu-personal-area" class="customer-menu dropdown-item d-none d-md-inline-block">My Account</a>
+    </t>
+
+  </t>
+
+</templates>
