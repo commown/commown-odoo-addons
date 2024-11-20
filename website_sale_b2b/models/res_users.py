@@ -11,7 +11,6 @@ class ResUsers(models.Model):
         - or is in the group_customer_purchase group
         """
         if self.partner_id.commercial_partner_id.is_company:
-            _group_ref = "customer_manager_base.group_customer_purchase"
-            return self in self.env.ref(_group_ref).users
+            return self.has_group("customer_manager_base.group_customer_purchase")
 
         return True
