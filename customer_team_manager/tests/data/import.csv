@@ -1,0 +1,3 @@
+id,email,lastname,firstname,customer_roles/id,phone,team/id
+__export__.res_partner_empl,fc@test.coop,Cay,Flo,"customer_team_manager.customer_role_it,customer_team_manager.customer_role_accounting",+33 1 02 03 04 05,0
+,person.new@test.coop,New,Person,customer_team_manager.customer_role_fleet_manager,+33 6 02 03 04 05,0
