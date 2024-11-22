@@ -28,12 +28,16 @@ class ResPartner(models.Model):
         if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
             self.remove_partners_from_channel(self.mail_channel_id, self.child_ids)
         if new_chan_id and not self.disable_channel_subscription:
-            partners_to_add = self.child_ids.filtered(
-                lambda p: p.company_type == "person" and p.user_ids
-            )
-            self.env["mail.channel"].browse(new_chan_id).channel_invite(
-                partners_to_add.ids
-            )
+
+            new_chan = self.env["mail.channel"].browse(new_chan_id)
+            new_chan.remove_partners_but_employees()
+
+            chan_partner_to_create = [
+                {"partner_id": p.id, "channel_id": new_chan_id}
+                for p in self.child_ids
+                if p.has_to_be_subscribed_to_channel(new_chan)
+            ]
+            self.env["mail.channel.partner"].create(chan_partner_to_create)
 
     def _update_subscription_on_parent_change(self, new_parent_id):
         if new_parent_id:
@@ -44,7 +48,9 @@ class ResPartner(models.Model):
                 and self.has_to_be_subscribed_to_channel(new_parent_chan)
                 and not new_parent.disable_channel_subscription
             ):
-                new_parent.mail_channel_id.channel_invite(self.id)
+                self.env["mail.channel.partner"].create(
+                    {"partner_id": self.id, "channel_id": new_parent.mail_channel_id.id}
+                )
 
             elif not new_parent_chan and self.contract_ids.filtered(
                 lambda c: c.is_active_contract()
@@ -60,6 +66,9 @@ class ResPartner(models.Model):
         """Override write function to add/remove company's partners when support channel is modified."""
         if "mail_channel_id" in vals:
             self._update_subscription_on_mail_channel_change(vals["mail_channel_id"])
+            self.set_support_channel_name(
+                self.env["mail.channel"].browse(vals["mail_channel_id"])
+            )
 
         if "parent_id" in vals and not self.is_company:
             self._update_subscription_on_parent_change(vals["parent_id"])
