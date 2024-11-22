@@ -126,7 +126,15 @@ class ResPartner(models.Model):
         Return in this case, false otherwise.
         Raises AccessError if vals had not allowed attributes.
         """
-        if set(vals) - self.ALLOWED_CUSTOMER_ADMIN_ATTRS:
+        allowed = set(self.ALLOWED_CUSTOMER_ADMIN_ATTRS)
+
+        if vals.get("parent_id", False) == self.env.user.commercial_partner_id.id:
+            allowed.add("parent_id")
+
+        if vals.get("company_name", True) is False:
+            allowed.add("company_name")
+
+        if set(vals) - allowed:
             raise AccessError(
                 "You are not allowed to perform this operation on this partner"
             )
@@ -245,3 +253,17 @@ class ResPartner(models.Model):
             user.groups_id -= role_model.search([]).mapped("groups")
             if user.has_group("base.group_portal"):
                 user.groups_id |= self.customer_roles.mapped("groups")
+
+    def _load_records_create(self, vals_list):
+        """Override to enforce security for customer admin before using sudo
+
+        This method is used by the import UI when new records are created.
+        """
+
+        if self._current_user_is_customer_admin():
+            for vals in vals_list:
+                self._check_customer_allowed_attrs(vals)
+                vals["parent_id"] = self.env.user.commercial_partner_id.id
+            return super(ResPartner, self.sudo())._load_records_create(vals_list)
+        else:
+            return super()._load_records_create(vals_list)

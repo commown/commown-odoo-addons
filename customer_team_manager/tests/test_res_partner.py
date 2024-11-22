@@ -1,6 +1,10 @@
+from pathlib import Path
+
 from odoo.exceptions import AccessError, ValidationError
 
 from .common import CustomerTeamManagerAbstractTC
+
+HERE = (Path(__file__) / "..").resolve()
 
 
 class ResPartnerTC(CustomerTeamManagerAbstractTC):
@@ -277,3 +281,120 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         all_roles = self.env["customer_team_manager.customer_role"].search([])
         self.assertEqual(p1.customer_roles, all_roles)
         self.assertFalse(p2.customer_roles)
+
+    def import_csv(self, fname, sudo_as=None):
+        import_model = self._model("base_import.import", sudo_as=sudo_as)
+        with (HERE / "data" / fname).open("rb") as fobj:
+            wizard = import_model.create(
+                {
+                    "res_model": "res.partner",
+                    "file": fobj.read(),
+                    "file_name": fname,
+                    "file_type": "text/csv",
+                }
+            )
+
+        columns = fields = wizard.file.splitlines()[0].decode("utf-8").split(",")
+        options = {
+            "headers": True,
+            "advanced": True,
+            "keep_matches": False,
+            "encoding": "utf-8",
+            "separator": ",",
+            "quoting": '"',
+            "date_format": "",
+            "datetime_format": "",
+            "float_thousand_separator": "",
+            "float_decimal_separator": ".",
+            "fields": [],
+        }
+        return wizard.do(fields, columns, options)
+
+    def colleagues(self, partner=None):
+        partner = partner or self.customer_partner_admin
+        return partner.commercial_partner_id.child_ids.filtered(
+            lambda p: p.type == "contact" and p.id != partner.id
+        )
+
+    def create_xmlid(self, entity, name):
+        return self.env["ir.model.data"].create(
+            {
+                "model": "res.partner",
+                "module": "__export__",
+                "name": name,
+                "res_id": entity.id,
+            }
+        )
+
+    def test_import_ok(self):
+        "Partner import by a customer admin must work and respect security constraints"
+
+        role_accounting = self.env.ref("customer_team_manager.customer_role_accounting")
+
+        empl = self.create_partner(
+            sudo_as=self.customer_user_admin,
+            name="F C",
+            email="fc@test.coop",
+            customer_roles=[(6, 0, role_accounting.ids)],
+        )
+        self.create_xmlid(self.customer_company, "res_partner_company")
+        self.create_xmlid(empl, "res_partner_empl")
+
+        # Check test prerequisite:
+        self.assertEqual(self.colleagues(), empl)
+
+        result = self.import_csv("import.csv", sudo_as=self.customer_user_admin)
+        self.assertTrue(result.get("ids", None), result)
+
+        # Check result:
+        colleagues = self.colleagues()
+        self.assertEqual(len(colleagues), 2)
+
+        self.assertIn(empl, colleagues)
+        self.assertEqual(empl.firstname, "Flo")
+        self.assertEqual(empl.lastname, "Cay")
+        self.assertEqual(empl.phone, "+33 1 02 03 04 05")
+        self.assertEqual(
+            sorted(empl.customer_roles.get_xml_id().values()),
+            [
+                "customer_team_manager.customer_role_accounting",
+                "customer_team_manager.customer_role_it",
+            ],
+        )
+        self.assertEqual(empl.commercial_partner_id, self.customer_company)
+
+        other = colleagues - empl
+        self.assertEqual(other.firstname, "Person")
+        self.assertEqual(other.lastname, "New")
+        self.assertEqual(other.phone, "+33 6 02 03 04 05")
+        self.assertEqual(
+            sorted(other.customer_roles.get_xml_id().values()),
+            ["customer_team_manager.customer_role_fleet_manager"],
+        )
+        self.assertEqual(other.commercial_partner_id, self.customer_company)
+
+    def test_import_error(self):
+        "Security must be enforced when customer admin imports partners"
+
+        role_accounting = self.env.ref("customer_team_manager.customer_role_accounting")
+
+        empl = self.create_partner(
+            sudo_as=self.customer_user_admin,
+            name="F C",
+            email="fc@test.coop",
+            customer_roles=[(6, 0, role_accounting.ids)],
+        )
+        self.create_xmlid(empl, "res_partner_empl")
+
+        # Make company references in the imported data point to a company that is NOT
+        # the customer admin's one: this is not authorized and should result in errors
+        company = self.customer_company.copy()
+        self.create_xmlid(company, "res_partner_company")
+
+        result = self.import_csv("import_error.csv", sudo_as=self.customer_user_admin)
+
+        self.assertIs(result["ids"], False)
+        messages = [m["message"] for m in result["messages"]]
+        expected = "You are not allowed to perform this operation on this partner"
+        self.assertIn(expected, messages[0])
+        self.assertIn(expected, messages[1])
