@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-22 10:17+0000\n"
-"PO-Revision-Date: 2024-11-22 10:17+0000\n"
+"POT-Creation-Date: 2025-02-27 15:11+0000\n"
+"PO-Revision-Date: 2025-02-27 15:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,47 +18,53 @@ msgstr ""
 #. module: commown_b2b_mail_channel
 #: sql_constraint:res.partner:0
 msgid "Channel already used!"
-msgstr "Ce canal est déjà utilisé !"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
 #: model:ir.model,name:commown_b2b_mail_channel.model_res_partner
 msgid "Contact"
-msgstr "Contact"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
 #: model:ir.model,name:commown_b2b_mail_channel.model_contract_contract
 msgid "Contract"
-msgstr "Contrat"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_res_partner__disable_channel_subscription
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_res_users__disable_channel_subscription
 msgid "Disable automatic subscription to mail channel"
-msgstr "Désactiver l'inscription automatique au canal d'assistance"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
 #: model:ir.model,name:commown_b2b_mail_channel.model_mail_channel
 msgid "Discussion Channel"
-msgstr "Canal de discussion"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_mail_channel__partner_companies
 msgid "Partner Companies"
-msgstr "entreprises associée"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_mail_channel__partner_company
 msgid "Support channel of"
-msgstr "Cannal d'assistance de"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_res_partner__mail_channel_id
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_res_users__mail_channel_id
 msgid "Support mail channel"
-msgstr "Canal d'assitance"
+msgstr ""
 
 #. module: commown_b2b_mail_channel
-#: code:addons/commown_b2b_mail_channel/models/res_partner.py:117
+#: code:addons/commown_b2b_mail_channel/models/res_partner.py:140
 #, python-format
 msgid "Support of company %s"
-msgstr "Assistance de %s"
+msgstr ""
+
+#. module: commown_b2b_mail_channel
+#: model:ir.model,name:commown_b2b_mail_channel.model_res_users
+msgid "Users"
+msgstr ""
+
