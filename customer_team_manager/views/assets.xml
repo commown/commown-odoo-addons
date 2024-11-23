@@ -1,0 +1,12 @@
+<odoo>
+
+  <template id="assets_backend" name="async export assets" inherit_id="web.assets_backend">
+    <xpath expr="." position="inside">
+
+      <script type="text/javascript" src="/customer_team_manager/static/src/js/data_export.js"/>
+      <link href="/customer_team_manager/static/src/css/export.css" rel="stylesheet" type="text/css"/>
+
+    </xpath>
+  </template>
+
+</odoo>

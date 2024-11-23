@@ -27,6 +27,7 @@
         "security/ir.model.access.csv",
         "security/rules.xml",
         "data/customer_roles.xml",
+        "views/assets.xml",
         "views/wizard_portal_access.xml",  # referenced in customer_team_manager.xml!
         "views/customer_team_manager.xml",
         "views/portal_templates.xml",
