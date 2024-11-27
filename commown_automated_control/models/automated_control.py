@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError, Warning
 
 
 class AutomatedControl(models.Model):
@@ -72,6 +72,28 @@ class AutomatedControl(models.Model):
         for rec in self:
             rec.model_name = rec.sudo().model_id.model
 
+    @api.constrains("filter_domain")
+    def _constrains_filter_domain(self):
+        model = self.model_id.model
+        domain = self.base_automation_id.filter_domain
+        self._check_domain_restrictivity(model, domain)
+
+    def _check_domain_restrictivity(self, model_name, domain):
+        # Replace "required" attribute that doesn't work well on related fields
+        if not domain:
+            raise ValidationError(_("Application domain is mandatory, please set one"))
+
+        # Check restrictivity
+        required_field = {"project.task": "project_id", "crm.lead": "team_id"}[
+            model_name
+        ]
+        field_name = self.env[model_name].fields_get()[required_field]["string"]
+
+        if required_field not in domain:
+            raise ValidationError(
+                _("Domain is not restrictive enough. Please add a %s") % field_name
+            )
+
     @api.model
     def execute(self):
         if self.behaviour == "raise":
@@ -102,6 +124,9 @@ class AutomatedControl(models.Model):
             if d_name in vals
         }
 
+        self._check_domain_restrictivity(
+            self.env["ir.model"].browse(vals["model_id"]).model, vals["filter_domain"]
+        )
         base_automation = (
             self.env["base.automation"]
             .sudo()
