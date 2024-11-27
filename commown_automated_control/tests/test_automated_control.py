@@ -1,6 +1,6 @@
 import json
 
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError, Warning
 from odoo.tests.common import TransactionCase
 
 
@@ -34,7 +34,12 @@ class AutomatedControlTC(TransactionCase):
         self.assertEqual(self.control.model_name, "project.task")
 
         # Change model
-        self.control.model_id = self.env.ref("crm.model_crm_lead")
+        self.control.update(
+            {
+                "model_id": self.env.ref("crm.model_crm_lead"),
+                "filter_domain": '[("team_id", "=", 1)]',
+            }
+        )
         self.control.onchange_model_id()
 
         # Check results
@@ -52,6 +57,19 @@ class AutomatedControlTC(TransactionCase):
             self.control.base_automation_id.name,
             "[Commown][Automated Control] New name",
         )
+
+    def test_check_domain_restrictivity(self):
+        with self.assertRaises(ValidationError) as err:
+            self.control.filter_domain = False
+        self.assertIn("Application domain is mandatory", err.exception.name)
+
+        # Check Pre-requisite
+        self.assertEqual(self.control.model_name, "project.task")
+
+        expected_message = "Domain is not restrictive enough. Please add a Project"
+        with self.assertRaises(ValidationError) as err:
+            self.control.filter_domain = '[("stage_id", "=", 1)]'
+        self.assertEqual(expected_message, err.exception.name)
 
     def test_execute(self):
         self.assertEqual(self.control.behaviour, "raise")
