@@ -91,3 +91,9 @@ class AutomatedControlTC(TransactionCase):
             new_infos,
             ["Test Error"],
         )
+
+    def test_base_automation(self):
+        self.env.cache.invalidate()
+        self.assertEqual(
+            self.control.base_automation_id.automated_control_id, self.control
+        )
