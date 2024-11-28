@@ -25,7 +25,7 @@
           </xpath>
           <xpath expr="//group[@name='group_standard_price']//field[@name='list_price']"
                  position="after">
-            <field name="list_price" t-if="is_rental" string="Deposit"/>
+            <field name="list_price" string="Deposit" attrs='{"invisible": [("is_rental", "!=", True)]}'/>
           </xpath>
           <!-- END - Improve labels for rental products -->
 
