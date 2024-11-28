@@ -17,6 +17,7 @@
         "product_rental",
         "purchase",
         "stock",
+        "stock_account_rental",
     ],
     "data": [
         "data/action_crm_lead.xml",
