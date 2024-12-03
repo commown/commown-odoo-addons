@@ -4,6 +4,7 @@ from . import product
 from . import product_service_config
 from . import project_project
 from . import project_task
+from . import purchase_order
 from . import res_partner
 from . import stock_location
 from . import stock_picking

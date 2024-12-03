@@ -50,3 +50,9 @@ class StockPicking(models.Model):
             channel.with_context(
                 {"late_pickings": late_pickings}
             ).message_post_with_template(template.id)
+
+    def action_done(self):
+        super().action_done()
+        grade = self.purchase_id.default_product_grade
+        if grade:
+            self.move_line_ids.mapped("lot_id").update({"grade_id": grade.id})

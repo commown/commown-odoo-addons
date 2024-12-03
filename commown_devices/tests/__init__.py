@@ -1,6 +1,7 @@
 from . import test_common
 from . import test_contract
 from . import test_crm_lead
+from . import test_po
 from . import test_project_task
 from . import test_product
 from . import test_product_service_config
