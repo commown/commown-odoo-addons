@@ -1,6 +1,7 @@
 import logging
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 from .common import _assigned, do_new_transfer, internal_picking
 
@@ -56,6 +57,13 @@ class Contract(models.Model):
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
+        ungraded_lots = lots.filtered(lambda l: not l.grade_id)
+        if ungraded_lots:
+            raise UserError(
+                _("Please set the grade on lots %s (ids: %s)")
+                % (ungraded_lots.mapped("name"), ungraded_lots.ids)
+            )
+
         dest_location = self.partner_id.get_or_create_customer_location()
         default_stock = self.env.ref(
             "commown_devices.stock_location_available_for_rent"
