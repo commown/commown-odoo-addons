@@ -21,7 +21,7 @@ class StockMoveTC(SavepointCase):
 
     def move_to(self, destination, orig_location=None, lots=None, contract=None):
         moves = internal_picking(
-            lots or [self.lot1, self.lot2],
+            lots or (self.lot1 + self.lot2),
             {},
             None,
             orig_location or self.stock_location,

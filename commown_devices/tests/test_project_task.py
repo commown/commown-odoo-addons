@@ -575,7 +575,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )[0]
 
         self.task_test_checks.contract_id.send_devices(
-            [],
+            self.env["stock.production.lot"],
             {module: 1},
             origin=self.task_test_checks.get_name_for_origin(),
         )
@@ -584,7 +584,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertTrue(self.task_test_checks.stage_id == self.ongoing_stage)
 
         self.task_test_checks2.contract_id.send_devices(
-            [quant.lot_id],
+            quant.lot_id,
             {},
             origin=self.task_test_checks2.get_name_for_origin(),
         )
