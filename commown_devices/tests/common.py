@@ -129,14 +129,22 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         )
 
     def adjust_stock(
-        self, product=None, qty=1.0, serial="serial-0", location=None, date="2000-01-01"
+        self,
+        product=None,
+        qty=1.0,
+        serial="serial-0",
+        location=None,
+        date="2000-01-01",
+        grade_lot=True,
     ):
         if product is None:
             product = self.storable_product.product_variant_id
+        grade = self.env.ref("commown_grade.grade_A0")
         lot = self.env["stock.production.lot"].create(
             {
                 "name": serial,
                 "product_id": product.id,
+                "grade_id": grade_lot and grade.id,
             }
         )
         location = location or self.location_fp3_new
@@ -275,7 +283,11 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 def create_lot_and_quant(env, lot_name, product, location):
     # XXX Duplicate of adjust stock
     lot = env["stock.production.lot"].create(
-        {"name": lot_name, "product_id": product.id}
+        {
+            "name": lot_name,
+            "product_id": product.id,
+            "grade_id": env.ref("commown_grade.grade_A0").id,
+        }
     )
 
     quant = env["stock.quant"].create(
