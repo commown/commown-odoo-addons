@@ -209,7 +209,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         location = location or self.env.ref("stock.stock_location_stock")
         lot = self.env["stock.production.lot"].search([("name", "=", serial)])
         contract.send_devices(
-            [lot.ensure_one()], {}, send_lots_from=location, date=date, do_transfer=True
+            lot.ensure_one(), {}, send_lots_from=location, date=date, do_transfer=True
         )
 
     def prepare_ui(
@@ -273,6 +273,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
 
 def create_lot_and_quant(env, lot_name, product, location):
+    # XXX Duplicate of adjust stock
     lot = env["stock.production.lot"].create(
         {"name": lot_name, "product_id": product.id}
     )
