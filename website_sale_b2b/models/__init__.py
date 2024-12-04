@@ -1,4 +1,5 @@
 from . import portal_wizard
+from . import pricelist_item
 from . import product_pricelist
 from . import product_public_category
 from . import product_template
