@@ -72,7 +72,12 @@ class StockMove(models.Model):
                         )
                         _error(rec, msg)
 
-                    lots.update({"contract_id": False})
+                    attrs = {"contract_id": False}
+                    if rec.location_dest_id != self.env.ref(
+                        "commown_devices.stock_location_contract_transfer"
+                    ):
+                        attrs["grade_id"] = False
+                    lots.update(attrs)
 
                 else:
                     msg = _(
