@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class StockProductionLot(models.Model):
@@ -35,4 +35,29 @@ class StockProductionLot(models.Model):
                         "grade_id": lot.grade_id.id,
                         "lot_id": lot.id,
                     }
+                )
+
+    def _compute_grade_history_line_ids(self):
+        for lot in self:
+            lot.grade_history_line_ids = lot.env[
+                "commown_grade.grade_history_line"
+            ].search(
+                [("lot_id", "=", lot.id)],
+                order="date",
+            )
+
+    @api.onchange("grade_id")
+    def _onchange_grade_id(self):
+        if self.grade_history_line_ids and self.grade_id:
+            # Use history line instead of _origin to get old grade so we can notify even when grade was empty
+            old_grade = self.grade_history_line_ids.sorted("date", reverse=True)[
+                0
+            ].grade_id
+            if self.grade_id.name < old_grade.name:
+                self.env.user.notify_info(
+                    message=_(
+                        "New grade is better than the last known grade, are you sure of this change?"
+                    ),
+                    title=_("Grade Improvement"),
+                    sticky=False,
                 )

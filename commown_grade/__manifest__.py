@@ -9,7 +9,7 @@
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://commown.coop",
-    "depends": ["stock"],
+    "depends": ["stock", "web_notify"],
     "installable": True,
     "data": [
         "security/groups.xml",
