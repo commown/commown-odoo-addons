@@ -7,6 +7,7 @@ from odoo import fields
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import mute_logger
 
+from odoo.addons.commown_devices.models.common import do_new_transfer, internal_picking
 from odoo.addons.queue_job.tests.common import trap_jobs
 
 from .common import RentalFeesTC
@@ -82,6 +83,11 @@ class RentalFeesComputationTC(RentalFeesTC):
                 "type": "bank",
                 "update_posted": True,
             }
+        )
+
+        repack_loc = self.env.ref("commown_devices.stock_location_repackaged_devices")
+        self.repackaged_fp_loc = self.env["stock.location"].create(
+            {"name": "Repackaged FP", "location_id": repack_loc.id},
         )
 
     def compute(self, until_date, fees_def=None, run=True, invoice=False, sync=True):
@@ -508,6 +514,8 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.receive_device("N/S 1", contract1, "2021-03-15")
         contract1.end_date = "2021-03-15"
 
+        self.repackage_lot("N/S 1", "2021-03-16")
+
         contract2 = self.env["contract.contract"].of_sale(self.so)[1]
         self.send_device("N/S 1", contract2, "2021-09-14")
         contract2.date_start = "2021-09-14"
@@ -516,6 +524,14 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         comp = self.compute("2021-10-01")
         self.assertFalse(comp.details("no_rental_compensation").mapped("fees"))
+
+    def repackage_lot(self, lot_name, date):
+        lot = self.env["stock.production.lot"].search([("name", "=", lot_name)])
+        orig = self.env.ref("commown_devices.stock_location_devices_to_check")
+        dest = self.repackaged_fp_loc
+        moves = internal_picking(lot, {}, None, orig, dest, False, date)
+        picking = moves[0].picking_id
+        do_new_transfer(picking, picking.scheduled_date)
 
     def test_compute_no_rental_compensation_non_zero_1(self):
         "No rental conditions fulfilled: compensation occurs, then no more fees"
@@ -526,6 +542,8 @@ class RentalFeesComputationTC(RentalFeesTC):
             contract1._recurring_create_invoice()
         self.receive_device("N/S 1", contract1, "2021-04-01")
         contract1.end_date = "2021-04-01"
+
+        self.repackage_lot("N/S 1", "2021-04-02")
 
         contract2 = self.env["contract.contract"].of_sale(self.so)[1]
         self.send_device("N/S 1", contract2, "2022-02-01")
