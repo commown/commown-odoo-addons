@@ -259,11 +259,17 @@ class RentalFeesComputationTC(RentalFeesTC):
             ],
         )
 
+        def _find_row_by_text(text, from_row=0):
+            for row in range(from_row, len(s_sum)):
+                if text in s_sum.row_at(row):
+                    return row
+            self.fail("Text %s not found after row %s" % (text, from_row))
+
         # Check the summary sheet:
         s_sum = ods.sheet_by_name("Global figures")
 
         # - Until date
-        self.assertEquals(s_sum[8, 2], "Situation at date: 04/30/2021")
+        _find_row_by_text("Situation at date: 04/30/2021")
 
         # - Amounts per fees definition
         expected = {
@@ -273,10 +279,15 @@ class RentalFeesComputationTC(RentalFeesTC):
             "Already invoiced since the beginning": 7.5,
             "Fees to be invoiced": 310.0,
         }
-        self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[11][2:7])), expected)
+        _row = _find_row_by_text("Agreement")
+        self.assertEquals(
+            dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 1)[2:7])), expected
+        )
         # - Amount totals
         expected["Agreement"] = "Totals"
-        self.assertEquals(dict(zip(s_sum.row[10][2:7], s_sum.row[12][2:7])), expected)
+        self.assertEquals(
+            dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 2)[2:7])), expected
+        )
 
         # - Devices per fees def
         expected = {
@@ -286,10 +297,15 @@ class RentalFeesComputationTC(RentalFeesTC):
             "Nb of devices no longer operable": 1,
             "Nb of devices generating fees": 1,
         }
-        self.assertEquals(dict(zip(s_sum.row[14][2:7], s_sum.row[15][2:7])), expected)
+        _row = _find_row_by_text("Agreement", from_row=_row + 1)
+        self.assertEquals(
+            dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 1)[2:7])), expected
+        )
         # - Devices totals
         expected["Agreement"] = "Totals"
-        self.assertEquals(dict(zip(s_sum.row[14][2:7], s_sum.row[16][2:7])), expected)
+        self.assertEquals(
+            dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 2)[2:7])), expected
+        )
 
         s_dev = ods.sheet_by_name("Per device revenues")
         product_col = [c for c in s_dev.column[3] if c != "" and type(c) == str]
