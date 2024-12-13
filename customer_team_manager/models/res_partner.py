@@ -267,3 +267,12 @@ class ResPartner(models.Model):
             return super(ResPartner, self.sudo())._load_records_create(vals_list)
         else:
             return super()._load_records_create(vals_list)
+
+    @api.model
+    def get_import_templates(self):
+        return [
+            {
+                "label": _("Import Template for Users"),
+                "template": "/customer_team_manager/static/xls/Commown_User_Import_Model.xlsx",
+            }
+        ]
