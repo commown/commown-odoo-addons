@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from odoo.exceptions import AccessError, ValidationError
+from odoo.modules.module import get_resource_path
 
 from .common import CustomerTeamManagerAbstractTC
 
@@ -398,3 +399,14 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         expected = "You are not allowed to perform this operation on this partner"
         self.assertIn(expected, messages[0])
         self.assertIn(expected, messages[1])
+
+    def test_get_import_templates(self):
+        "The get_import_templates method should not crash"
+
+        result = self.env["res.partner"].get_import_templates()
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 1)
+        self.assertIsInstance(result[0], dict)
+        template = result[0].get("template", "")
+        self.assertTrue(template.startswith("/"))
+        self.assertTrue(bool(get_resource_path(*template[1:].split("/"))))
