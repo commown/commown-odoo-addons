@@ -37,3 +37,18 @@ class CustomerRole(models.Model):
         readonly=True,  # Would not user group sync, not yet available
         domain=lambda self: [("category_id.name", "=", "Manager customer")],
     )
+
+    readonly = fields.Boolean(
+        compute="_compute_readonly",
+        store=False,
+    )
+
+    def _compute_readonly(self):
+        is_current = self._context.get("partner_id") == self.env.user.partner_id.id
+        if is_current:
+            is_admin = self.env.user.has_group(
+                "customer_team_manager.group_customer_admin"
+            )
+            role_admin = self.env.ref("customer_team_manager.customer_role_admin")
+        for rec in self:
+            rec.readonly = is_current and is_admin and rec == role_admin

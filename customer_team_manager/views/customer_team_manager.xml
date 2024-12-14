@@ -55,7 +55,7 @@
                   <li><i class="fa fa-users"/> <field name="team"/></li>
                   <li><i class="fa fa-phone"/> <field t-if="record.phone.raw_value" name="phone" widget="phone"/></li>
                   <li style="text-wrap: nowrap"><i class="fa fa-envelope"/> <field name="email" widget="email"/></li>
-                  <li><field name="customer_roles" widget="customer_role_tag_widget" options="{'short': true}"/></li>
+                  <li><field name="customer_roles" widget="customer_role_tag_kanban_widget"/></li>
                 </ul>
 
               </div>
@@ -198,7 +198,7 @@
           </div>
           <group name="admin">
             <field name="parent_id" groups="sales_team.group_sale_manager"/>
-            <field name="customer_roles" widget="customer_role_tag_widget"/>
+            <field name="customer_roles" widget="customer_role_tag_widget" context="{'partner_id': id}"/>
           </group>
           <group>
             <group name="main">
