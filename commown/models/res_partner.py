@@ -206,6 +206,7 @@ class CommownPartner(models.Model):
     def write(self, vals):
         self._apply_bin_field_size_policy(vals)
 
+        old_recv_acc = False
         if "parent_id" in vals:
             old_recv_acc = self.property_account_receivable_id
 
@@ -228,7 +229,7 @@ class CommownPartner(models.Model):
         if "supplier" in vals and vals["supplier"]:
             self._create_payable_account()
 
-        if "parent_id" in vals and old_recv_acc:
+        if old_recv_acc:
             data = _PROPERTY_ACCOUNT_DATA["receivable"]
             ref_account = self.env.ref(data["ref_account"])
             if (

@@ -1,0 +1,9 @@
+<odoo>
+
+  <record id="group_customer_admin" model="res.groups">
+    <field name="name">Team manager Customer</field>
+    <field name="category_id" ref="base.module_category_manager_customer"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+  </record>
+
+</odoo>

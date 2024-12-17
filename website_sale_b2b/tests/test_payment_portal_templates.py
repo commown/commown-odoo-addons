@@ -53,6 +53,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
             # User is B2B but not in the dedicated group
             self.order.partner_id.parent_id = self.env.ref("base.res_partner_1").id
             _group_ref = "customer_manager_base.group_customer_purchase"
+            user.groups_id -= self.env.ref(_group_ref)
             self.assertFalse(user.has_group(_group_ref))
         self.assertIs(bool(authorized), user.is_authorized_to_order(), failed)
 

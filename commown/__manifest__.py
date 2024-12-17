@@ -29,6 +29,7 @@
         "project_rating_nps",
         "sale_product_email",
         "custom_report",
+        "customer_team_manager",
         "slimpay_statements_autoimport",
         "website_sale_affiliate_portal",
         "website_sale_affiliate_product_restriction",
@@ -94,6 +95,7 @@
     ],
     "qweb": [
         "static/src/xml/account_reconciliation.xml",
+        "static/src/xml/menu.xml",
     ],
     "installable": True,
     "application": True,
