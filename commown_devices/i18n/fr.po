@@ -203,6 +203,17 @@ msgid "Date"
 msgstr "Date"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_purchase_order__default_product_grade
+msgid "Default Product Grade"
+msgstr "Grade par défaut"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/contract.py:63
+#, python-format
+msgid "Please set the grade on lots %s (ids: %s)"
+msgstr "Mettez un grade sur les appareils %s (ids: %s)"
+
+#. module: commown_devices
 #: model:ir.model.fields,help:commown_devices.field_crm_lead_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_abstract_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_contract_transfer_wizard__date

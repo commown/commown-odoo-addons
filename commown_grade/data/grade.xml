@@ -1,0 +1,41 @@
+<odoo noupdate="1">
+
+    <record id="grade_A0" model="commown_grade.grade">
+      <field name="name">Grade A0</field>
+      <field name="description">Etat parfait</field>
+    </record>
+
+    <record id="grade_A1" model="commown_grade.grade">
+      <field name="name">Grade A1</field>
+      <field name="description">Très bon état</field>
+    </record>
+
+    <record id="grade_A2" model="commown_grade.grade">
+      <field name="name">Grade A2</field>
+      <field name="description">Bon état</field>
+    </record>
+
+    <record id="grade_B1" model="commown_grade.grade">
+      <field name="name">Grade B1</field>
+      <field name="description">Etat correct</field>
+    </record>
+
+    <record id="grade_B2" model="commown_grade.grade">
+      <field name="name">Grade B2</field>
+      <field name="description">Usé mais fonctionnel</field>
+    </record>
+
+    <record id="grade_C2" model="commown_grade.grade">
+      <field name="name">Grade C2</field>
+      <field name="description">Très très usé</field>
+    </record>
+
+    <record id="grade_D1" model="commown_grade.grade">
+      <field name="name">Grade D1</field>
+    </record>
+
+    <record id="grade_D2" model="commown_grade.grade">
+      <field name="name">Grade D2</field>
+    </record>
+
+</odoo>

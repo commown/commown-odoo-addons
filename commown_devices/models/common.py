@@ -137,7 +137,7 @@ def search_or_create_move_from_products(picking, located_products):
 
 
 def internal_picking(
-    lots,  # list of lot
+    lots,  # recordset of stock.production.lot
     products,  # dict {product : quantity}
     send_nonserial_products_from,
     send_lots_from,

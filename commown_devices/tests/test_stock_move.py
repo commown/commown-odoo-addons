@@ -12,7 +12,11 @@ class StockMoveTC(SavepointCase):
         self.contract = self.env["contract.contract"].create(
             {"name": "Contract", "partner_id": self.partner.id}
         )
-        self.stock_location = self.env.ref("stock.stock_location_stock")
+        parent_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
+        self.stock_location = self.env["stock.location"].create(
+            {"name": "Test Loc", "usage": "internal", "location_id": parent_loc.id}
+        )
+
         product = self.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}
         )
@@ -21,7 +25,7 @@ class StockMoveTC(SavepointCase):
 
     def move_to(self, destination, orig_location=None, lots=None, contract=None):
         moves = internal_picking(
-            lots or [self.lot1, self.lot2],
+            lots or (self.lot1 + self.lot2),
             {},
             None,
             orig_location or self.stock_location,
@@ -108,3 +112,15 @@ class StockMoveTC(SavepointCase):
             expected_error,
         )
         self.assertEqual(expected_log, cm2.output[0])
+
+    def test_grade_contract_empty_on_return(self):
+        self.contract.send_devices(self.lot1, {}, do_transfer=True)
+
+        # Check Pre-requisite
+        self.assertTrue(self.lot1.grade_id)
+        self.assertTrue(self.lot1.contract_id)
+
+        loc_to_check = self.env.ref("commown_devices.stock_location_devices_to_check")
+        self.contract.receive_devices(self.lot1, {}, loc_to_check, do_transfer=True)
+        self.assertFalse(self.lot1.grade_id)
+        self.assertFalse(self.lot1.contract_id)
