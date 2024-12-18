@@ -127,6 +127,12 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         self.assertIs(bool(true_false), found, err_msg)
 
     def assertCommercialSubmitButton(self, html_doc, true_false):
+        if true_false:
+            self.assertEqual(
+                html_doc.xpath("//form//input[@name='order_id']/@value"),
+                [str(self.order.id)],
+            )
+
         self.assertSubmitButton(html_doc, true_false, "Submit my request")
 
     def assertCommercialRequestMessage(self, html_doc, true_false):
