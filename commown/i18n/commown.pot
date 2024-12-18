@@ -1,0 +1,888 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-18 18:10+0000\n"
+"PO-Revision-Date: 2024-12-18 18:10+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown
+#: model:mail.template,body_html:commown.mail_template_issue_reminder
+msgid "\n"
+"<div>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Bonjour ${object.partner_id.firstname},</p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Pas de nouvelles, bonnes nouvelles&nbsp;?&nbsp;&nbsp;;-)</p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    En effet, nous faisons suite à nos précédents échanges\n"
+"    d’assistance et conseil, pour lesquels nous n’avons pas reçu\n"
+"    d’autres retours de votre part à ce jour.\n"
+"  </p>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    C’est peut-être tout à fait normal, et nous supposons que\n"
+"    l’incident est bien résolu&nbsp;! Nous nous permettrons donc de\n"
+"    vous envoyer un questionnaire de satisfaction dans les prochains\n"
+"    jours.\n"
+"  </p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    Belle journée&nbsp;!\n"
+"  </p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown qui reste à votre écoute.</p>\n"
+"  <br>\n"
+"  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"    NB&nbsp;: Bien entendu, si ce n’est pas le cas, contactez-nous au plus\n"
+"    vite en répondant directement à ce message…\n"
+"  </p>\n"
+"</div>\n"
+""
+msgstr ""
+
+#. module: commown
+#: model:mail.template,body_html:commown.mail_template_lead_start_error
+msgid "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Error is: ${object.env.context.get('error', 'Unknown!')}</p>\n"
+""
+msgstr ""
+
+#. module: commown
+#: model:mail.template,body_html:commown.email_send_invoice_from_contract
+msgid "\n"
+"<p>Bonjour ${object.partner_id.firstname},</p>\n"
+"<br/>\n"
+"<p>Votre facture <strong>${object.number}</strong>\n"
+"% if object.origin:\n"
+"(référence : ${object.origin} )\n"
+"% endif\n"
+"d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre espace Commown.</p>\n"
+"\n"
+"<br><br>\n"
+"<div>\n"
+"  <center>\n"
+"    <a href=\"https://shop.commown.fr/my/invoices\" style=\"background-color: #1abc9c; padding: 20px; text-decoration: none; color: #fff; border-radius: 5px; font-size: 16px;\" title=\"\">Accéder à mes factures</a>\n"
+"  </center>\n"
+"</div>\n"
+"\n"
+"<br><br>\n"
+"\n"
+"% if object.state=='paid':\n"
+"    <p>Cette facture est déjà payée.</p>\n"
+"% else:\n"
+"    <p>Veuillez effectuer le paiement dès que possible.</p>\n"
+"% endif\n"
+"\n"
+"<p>Merci,</p>\n"
+"\n"
+"<p>--</p>\n"
+"\n"
+"<div>\n"
+"  <div>L'équipe Commown<br></div>\n"
+"</div>\n"
+""
+msgstr ""
+
+#. module: commown
+#: model:mail.template,body_html:commown.sms_template_issue_reminder
+msgid "\n"
+"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.</p>\n"
+""
+msgstr ""
+
+#. module: commown
+#: model:mail.template,body_html:commown.sms_template_lead_doc_reminder
+msgid "\n"
+"Rappel finalisation de votre commande : Pensez à mettre vos documents en ligne svp !\n"
+""
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.product
+msgid "<b>Product is not available for the moment</b>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "<em>Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société Anonyme</em>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "<em>SIREN 828 811 489</em>"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "<font style=\"font-size: 14px;\">Le processus vous demandera de vous connecter à votre espace Commown avec les   </font>"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "<font style=\"font-size: 14px;\">              identifiants choisis lors de votre commande.</font>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">ID card</span>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+msgid "<i title=\"Download document\" class=\"fa fa-download\"/>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.view_partner_form
+msgid "<i title=\"Send invoices to this contact\" class=\"far fa-envelope\"/>\n"
+"            <span class=\"d-none d-sm-inline\">Send invoices to this contact</span>"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_coupon_campaign
+msgid "A coupon campaign that describes the coupon benefits"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_res_groups
+msgid "Access Groups"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_reconciliation_widget
+msgid "Account Reconciliation widget"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "Accueil"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_payment_token_uniquify_obsolescence_action
+msgid "Action to be taken when a payment token becomes obsolete"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.payment
+msgid "Adresse de livraison"
+msgstr ""
+
+#. module: commown
+#: model:project.task.type,name:commown.investment_followup_start_stage
+msgid "Advance payment 10% Web receipt"
+msgstr ""
+
+#. module: commown
+#: model:product.public.category,name:commown.categ_de
+msgid "Alle produkte"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.view_account_invoice_filter
+msgid "Analytic tags"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_ir_attachment
+msgid "Attachment"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_bank_statement
+msgid "Bank Statement"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Base de connaissance Commown"
+msgstr ""
+
+#. module: commown
+#: model:project.task.type,legend_blocked:commown.investment_followup_start_stage
+msgid "Blocked"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Channel"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Close"
+msgstr ""
+
+#. module: commown
+#: model:mail.template,subject:commown.mail_template_issue_reminder
+msgid "Commown : Votre demande d'assistance se languit de vous !"
+msgstr ""
+
+#. module: commown
+#: model:mail.template,report_name:commown.email_send_invoice_from_contract
+msgid "Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "Company Name"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Company record"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Contact us"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "Contactez-nous"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_contract_contract
+#: model:ir.model.fields,field_description:commown.field_crm_lead__contract_id
+#: model_terms:ir.ui.view,arch_db:commown.sale_order_portal_content
+msgid "Contract"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_contract_template
+msgid "Contract Template"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.sale_order_portal_content
+msgid "Contractual documents"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Contrat"
+msgstr ""
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_res_partner__country_id
+#: model:ir.model.fields,field_description:commown.field_res_users__country_id
+msgid "Country"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "De quoi ai-je besoin ?<br>"
+msgstr ""
+
+#. module: commown
+#: selection:payment_token_uniquify.obsolescence_action,technical_name:0
+msgid "Deactivate"
+msgstr ""
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_coupon_campaign__description
+msgid "Description"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Documentation - Tutoriels"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+#: model_terms:ir.ui.view,arch_db:commown.view_partner_form
+msgid "Documents"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_mail_template
+msgid "Email Templates"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
+msgid "En cliquant sur \"Accepter et payer\", je reconnais avoir pris connaissance des"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
+msgid "En cliquant sur \"Valider et payer\", je reconnais avoir pris connaissance des"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Entraide - Communauté"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "FAQ"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Fermer"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Fin des périodes d'engagement :"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+#: model_terms:ir.ui.view,arch_db:commown.signup_field
+msgid "First name"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+msgid "For legal reasons, please never use someone else's account."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Forum Commown"
+msgstr ""
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_account_move_line__full_reconcile_id
+msgid "Full Reconcile"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.view_attachment_search
+msgid "Group by"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_ir_http
+msgid "HTTP Routing"
+msgstr ""
+
+#. module: commown
+#: model:project.task.type,legend_normal:commown.investment_followup_start_stage
+msgid "In Progress"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.edit_project
+#: model_terms:ir.ui.view,arch_db:commown.view_task_form2
+msgid "Internal Followup"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_invoice
+msgid "Invoice"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_move_line
+msgid "Journal Item"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_res_lang
+msgid "Languages"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+#: model_terms:ir.ui.view,arch_db:commown.signup_field
+msgid "Last name"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.view_partner_form
+msgid "Le mandat de paiement est paramétrable sur le partenaire parent et\n"
+"            synchronisé automatiquement ici."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.short_cart_summary
+msgid "Le règlement se fait par prélèvement bancaire. Pour finaliser\n"
+"        la demande, vous aurez donc besoin de l'IBAN de votre compte."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.res_partner_risk_form
+msgid "Lead Partner"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.view_partner_form
+msgid "Les préférences de paiement sont paramétrables sur le partenaire parent et\n"
+"            synchronisées automatiquement ici."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "Liens"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Location non démarrée"
+msgstr ""
+
+#. module: commown
+#: selection:project.task,priority:0
+msgid "Low"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "Loyer unitaire :"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Ma pièce d'identité<br>"
+msgstr ""
+
+#. module: commown
+#: model:product.template,name:commown.sepa_mandate
+msgid "Mandat SEPA"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "Mentions légales"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.payment
+msgid "Merci de vérifier vos adresses"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Mes identifiants Commown"
+msgstr ""
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_product_product__sale_line_warn_msg
+#: model:ir.model.fields,field_description:commown.field_product_template__sale_line_warn_msg
+msgid "Message for Sales Order Line"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_utm_commown_utils_mixin
+msgid "Mixin for utm classes, to easily merge/ safely remove them"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.view_attachment_search
+msgid "Model"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Mon IBAN<br>"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Mon numéro de téléphone<br>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_home
+msgid "My interactions with Commown team"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_home_sale
+msgid "My orders"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_home_sale
+msgid "My quotations"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_home_invoice
+msgid "My receipts, invoices and payments"
+msgstr ""
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_email_template_preview__name
+#: model:ir.model.fields,field_description:commown.field_mail_template__name
+msgid "Name"
+msgstr ""
+
+#. module: commown
+#: selection:project.task,priority:0
+msgid "Normal"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "Nous suivre"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.contract_contract_customer_form_view
+msgid "Ouvrir"
+msgstr ""
+
+#. module: commown
+#: model:crm.stage,name:commown.parcel_preparation_stage
+msgid "Package preparation"
+msgstr ""
+
+#. module: commown
+#: model:account.payment.term,name:commown.investment_payment_term
+msgid "Paiement immédiat 10% prélèvement auto + Solde virement"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_partial_reconcile
+msgid "Partial Reconcile"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_payment_acquirer
+msgid "Payment Acquirer"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "Please enter a valid VAT number"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Pour aller au bout du processus, munissez vous des éléments ci-dessous."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Pour contacter l'équipe parcourez la section \"Vos besoins d'assistance\"."
+msgstr ""
+
+#. module: commown
+#: model:product.template,description_sale:commown.sepa_mandate
+msgid "Pour créer le mandat SEPA et le valider, ce processus vous guide dans la signature du mandat en ligne et un premier paiement de test d'une valeur de 1 centime."
+msgstr ""
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_project_task__priority
+msgid "Priority"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_project_project
+msgid "Project"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Proof of address"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.footer_custom
+msgid "Qui sommes-nous ?"
+msgstr ""
+
+#. module: commown
+#: model:project.task.type,legend_done:commown.investment_followup_start_stage
+msgid "Ready for Next Stage"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Rejoignez la communauté pour résoudre vos problèmes, échanger des astuces..."
+msgstr ""
+
+#. module: commown
+#: model:mail.template,subject:commown.sms_template_issue_reminder
+msgid "Relance"
+msgstr ""
+
+#. module: commown
+#: model:mail.template,subject:commown.sms_template_lead_doc_reminder
+msgid "Relance documents"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_layout
+msgid "Retrouvez nos tutoriels et toute la documentation de Commown..."
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_sale_order
+msgid "Sale Order"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.optional_product_items
+msgid "See details in a new window <i class=\"fa fa-external-link\"/>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
+msgid "See product details"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Si vous n'avez pas déjà déposé une copie de votre pièce d'identité dans votre espace Commown, ce sera l'occasion."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+msgid "Street 2"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_project_task
+msgid "Task"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_project_task_type
+msgid "Task Stage"
+msgstr ""
+
+#. module: commown
+#: model:project.project,label_tasks:commown.investment_followup_project
+msgid "Tasks"
+msgstr ""
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_payment_token_uniquify_obsolescence_action__technical_name
+msgid "Technical name"
+msgstr ""
+
+#. module: commown
+#: model:project.task.type,description:commown.investment_followup_start_stage
+msgid "The card is created here when an investor places an online order for 10%.\n"
+"As soon as we have checked if the amount of the investment is really the one displayed (!! with the trap of the quantities, we have to go to the Purchase Order as long as Florent has not added the field \"total of the order line\" in the card), we pass the card in the following column (ID dunning and 90% balance request (auto mail)."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_invoices
+msgid "Total amount"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+msgid "Trash document"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_utm_campaign
+msgid "UTM Campaign"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_utm_source
+msgid "UTM Source"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.portal_my_details
+msgid "Undo removal"
+msgstr ""
+
+#. module: commown
+#: model:product.template,uom_name:commown.sepa_mandate
+msgid "Unit(s)"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_res_users
+msgid "Users"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "VAT"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
+msgid "Valider et payer \n"
+"            <span class=\"fa fa-long-arrow-right\"/>"
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Vous allez recevoir un SMS avec un code pour valider le mandat."
+msgstr ""
+
+#. module: commown
+#: model_terms:product.template,website_description:commown.sepa_mandate
+msgid "Vous devrez entrer l'IBAN de votre compte pour créer le mandat."
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
+msgid "Vous serez redirigé·e vers un formulaire de signature de mandat\n"
+"        SEPA (Slimpay), sauf si vous êtes déjà client."
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_website
+msgid "Website"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_customer_team_manager_portal_access_wizard
+msgid "Wizard for customers to grant portal access to colleagues"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.address
+msgid "Zip Code"
+msgstr ""
+
+#. module: commown
+#: model:mail.template,subject:commown.email_send_invoice_from_contract
+msgid "[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})"
+msgstr ""
+
+#. module: commown
+#: model:mail.template,subject:commown.mail_template_lead_start_error
+msgid "[Commown] ERROR starting crm.lead id ${object.id}"
+msgstr ""
+
+#. module: commown
+#: model:base.automation,name:commown.mail_message_arrival_concerning_issue
+#: model:ir.actions.server,name:commown.action_awaken_issue_on_partner_message_arrival
+#: model:ir.actions.server,name:commown.mail_message_arrival_concerning_issue_ir_actions_server
+msgid "[commown] A email concerning an issue just arrived"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.issue_reminder_delay_expired_ir_actions_server
+msgid "[commown] Delay after issue reminder email expired"
+msgstr ""
+
+#. module: commown
+#: model:base.automation,name:commown.issue_reminder_delay_expired
+#: model:base.automation,name:commown.issue_waiting_customer_for_too_long
+#: model:base.automation,name:commown.issue_waiting_return_delay
+#: model:base.automation,name:commown.manual_issue_waiting_for_too_long
+#: model:base.automation,name:commown.sending_pieces_issue_waiting_for_too_long
+#: model:ir.actions.server,name:commown.action_move_issue_to_stop_waiting_stage
+msgid "[commown] Delay waiting for the customer to return the hardware back expired"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_crm_lead_send_sms_doc_reminder
+msgid "[commown] Envoyer le SMS de relance doc"
+msgstr ""
+
+#. module: commown
+#: model:base.automation,name:commown.issue_put_in_reminder_email_stage
+#: model:ir.actions.server,name:commown.issue_put_in_reminder_email_stage_ir_actions_server
+msgid "[commown] Issue was put in the reminder email stage"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_merge_utm_campaigns
+msgid "[commown] Merge campaigns"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_merge_utm_sources
+msgid "[commown] Merge sources"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.fix_invoice_investment_line_price
+msgid "[commown] Multiply by 10 investments' line amount"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_remove_utm_campaigns
+msgid "[commown] Remove campaigns"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_remove_utm_sources
+msgid "[commown] Remove sources"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_send_issue_reminder_sms
+msgid "[commown] Send a reminder SMS concerning an issue"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_send_issue_reminder_email
+msgid "[commown] Send a reminder email concerning an issue"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.action_res_partner_reattribute_commercial_contracts
+msgid "[commown] Set partner as its company's contract partner"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.manual_issue_waiting_for_too_long_ir_actions_server
+msgid "[commown] Time spent in the manual followup stage was too long"
+msgstr ""
+
+#. module: commown
+#: model:ir.actions.server,name:commown.issue_waiting_customer_for_too_long_ir_actions_server
+msgid "[commown] Time spent waiting for the customer was too long"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
+msgid "conditions de services et informations légales"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.payment_tokens_list
+#: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
+msgid "et je les accepte."
+msgstr ""
+
+#. module: commown
+#: model:product.template,weight_uom_name:commown.sepa_mandate
+msgid "kg"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_mass_reconcile_simple_partner_commown
+msgid "mass.reconcile.simple.partner_commown"
+msgstr ""
+
+#. module: commown
+#: model:ir.model,name:commown.model_account_mass_reconcile_method
+msgid "reconcile method for account_mass_reconcile"
+msgstr ""
+
