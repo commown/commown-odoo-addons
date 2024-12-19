@@ -401,6 +401,55 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
   );
 
   tour.register(
+    "commown_self_troubleshooting_need_new_screen_for_crosscall",
+    { url : "/my "},
+    [
+      {
+        content: "Go to the screen replacement page with a Crosscall contract",
+        trigger: 'a[href="/page/self-troubleshoot-crosscall-screen"]',
+      },
+      commonSteps.fillInContract,
+      commonSteps.gotoNextStep,
+      {
+        content: "Select yes on the presence of screen protection on this device",
+        trigger: "input[id=has_protection_yes]",
+        run: "text Non",
+      },
+      {
+        content: "Check step 2 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(2):not(.disabled)",
+        run: function() {},
+      },
+      {
+        content: "Check step 3 nav link is disabled",
+        trigger: "#smartwizard a.nav-link:eq(3).disabled",
+        run: function() {},
+      },
+      commonSteps.gotoNextStep,
+      {
+        content: "Select my display needs to be replaced",
+        trigger: "input[id=replace_screen_yes_step2]",
+        run: "text Mon écran doit être remplacé",
+      },
+      {
+        content: "Check step 4 nav link is disabled",
+        trigger: "#smartwizard a.nav-link:eq(4).disabled",
+        run: function() {},
+      },
+      {
+        content: "Check step 5 nav link is not disabled",
+        trigger: "#smartwizard a.nav-link:eq(5):not(.disabled)",
+        run: function() {},
+      },
+      commonSteps.gotoNextStep,
+      commonSteps.checkInputNamesMatchesUser,
+      commonSteps.gotoNextStep,
+      ...commonSteps.funcAddMoreInfo("text My display need to be replaced!"),
+      ...commonSteps.funcCreateAndCheckTicket("écran muni"),
+    ]
+  );
+
+  tour.register(
     "commown_self_troubleshooting_need_new_fairphone",
     { url: "/my" },
     [
