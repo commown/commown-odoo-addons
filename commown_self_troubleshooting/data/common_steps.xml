@@ -22,7 +22,7 @@
     <template id="tool_form">
       <div class="form-group" id="tool_form">
         <p>
-          Afin d'effectuer le remplacment du module, vous aurez besoin d’un tournevis 
+          Afin d'effectuer le remplacment du module, vous aurez besoin d’un tournevis
           <a t-if="model == 'Shiftphone'">
             Torx, de taille #5 (voir
             <a target="_blank" href="https://www.ifixit.com/fr-fr/products/t5-torx-screwdriver">ici <i class="fas fa-external-link-alt"></i></a>
@@ -141,7 +141,7 @@
             </select>
             <div class="help-block with-errors" />
           </div>
-          
+
           <t t-call="commown_self_troubleshooting.tool_form">
             <t t-set="model" t-value="model"/>
           </t>
@@ -164,7 +164,7 @@
         </div>
       </div>
 
-      
+
     </template>
 
     <template id="step-ship-module">
