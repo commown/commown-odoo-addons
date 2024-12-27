@@ -14,6 +14,8 @@ class AutomatedControl(models.Model):
         ),
     ]
 
+    active = fields.Boolean("Active", default=True)
+
     base_automation_id = fields.Many2one(
         "base.automation",
         "Linked base automation",
@@ -161,6 +163,9 @@ class AutomatedControl(models.Model):
             self.sudo().base_automation_id.name = self._compute_automation_name(
                 vals["name"]
             )
+
+        if "active" in vals:
+            self.sudo().base_automation_id.active = vals["active"]
 
         return super().write(vals)
 
