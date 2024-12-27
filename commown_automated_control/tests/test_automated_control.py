@@ -97,3 +97,15 @@ class AutomatedControlTC(TransactionCase):
         self.assertEqual(
             self.control.base_automation_id.automated_control_id, self.control
         )
+
+    def test_active_switch(self):
+        self.assertTrue(self.control.active)
+        self.assertTrue(self.control.base_automation_id.active)
+
+        self.control.active = False
+        self.env.cache.invalidate()
+        self.assertFalse(self.control.base_automation_id.active)
+
+        self.control.active = True
+        self.env.cache.invalidate()
+        self.assertTrue(self.control.base_automation_id.active)
