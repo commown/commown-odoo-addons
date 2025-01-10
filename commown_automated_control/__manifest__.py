@@ -13,6 +13,7 @@
         "base_automation",
         "project",
         "crm",
+        "queue_job",
         "web_notify",
     ],
     "data": [

@@ -96,14 +96,25 @@ class AutomatedControl(models.Model):
                 _("Domain is not restrictive enough. Please add a %s") % field_name
             )
 
+    def _raise_warning(self, error_message):
+        raise Warning(error_message)
+
     @api.model
-    def execute(self):
+    def execute(self, record):
         if self.behaviour == "raise":
             error_message = _(
-                '%s\n\nThis message comes from automated control "%s" (id: %s)'
-                % (self.user_message, self.name, self.id)
+                '%s\n\n\nThis message comes from automated control "%s" (id: %s)\nRaised by %s'
+                % (self.user_message, self.name, self.id, record)
             )
-            raise Warning(error_message)
+            if self.env.ref(
+                "base.group_user"
+            ) in self.env.user.groups_id and self.env.user != self.env.ref(
+                "base.user_root"
+            ):
+                self._raise_warning(error_message)
+
+            else:  # External user
+                self.with_delay()._raise_warning(error_message)
 
         elif self.behaviour == "notify":
             title = "Message from automated control %r (id: %d)" % (self.name, self.id)
@@ -149,7 +160,7 @@ class AutomatedControl(models.Model):
 
         new_rec.sudo().base_automation_id = base_automation.id
         new_rec.sudo().base_automation_id.code = (
-            "env['commown_automated_control.automated_control'].browse(%d).execute()"
+            "env['commown_automated_control.automated_control'].browse(%d).execute(record)"
             % new_rec.id
         )
 

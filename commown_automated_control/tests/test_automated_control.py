@@ -3,6 +3,8 @@ import json
 from odoo.exceptions import ValidationError, Warning
 from odoo.tests.common import TransactionCase
 
+from odoo.addons.queue_job.tests.common import trap_jobs
+
 
 class AutomatedControlTC(TransactionCase):
     def setUp(self):
@@ -71,20 +73,35 @@ class AutomatedControlTC(TransactionCase):
             self.control.filter_domain = '[("stage_id", "=", 1)]'
         self.assertEqual(expected_message, err.exception.name)
 
-    def test_execute(self):
+    def test_execute_raise(self):
+        user_internal = self.env.ref("base.user_demo")
+        user_root = self.env.ref("base.user_root")
+        self.env.ref("commown_automated_control.group_manager").users |= (
+            user_root + user_internal
+        )
+        record = self.env["project.task"].search([])[0]
+
         self.assertEqual(self.control.behaviour, "raise")
         expected_message = (
-            'Test Error\nThis message comes from automated control "Test control" (id: %s)'
-            % self.control.id
+            'Test Error\n\n\nThis message comes from automated control "Test control" (id: %s)\nRaised by %s'
+            % (self.control.id, record)
         )
         with self.assertRaises(Warning) as err:
-            self.control.execute()
+            self.control.sudo(user_internal).execute(record)
         self.assertEqual(err.exception.args[0], expected_message)
 
+        with trap_jobs() as trap:
+            self.control.sudo(user_root).execute(record)
+        trap.assert_jobs_count(1, only=self.control._raise_warning)
+        with self.assertRaises(Warning) as err:
+            trap.perform_enqueued_jobs()
+        self.assertEqual(err.exception.args[0], expected_message)
+
+    def test_execute_notify(self):
         self.control.behaviour = "notify"
 
         old_infos = self.get_infos()
-        self.control.execute()
+        self.control.execute(self.env["project.task"].search([])[0])
         new_infos = self.get_infos(old_infos)
 
         self.assertEqual(
