@@ -26,7 +26,7 @@ class ResPartner(models.Model):
 
     def _update_subscription_on_mail_channel_change(self, new_chan_id):
         if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
-            self.remove_partners_from_channel(self.mail_channel_id, self.child_ids)
+            self.mail_channel_id.remove_partners_but_employees()
         if new_chan_id and not self.disable_channel_subscription:
 
             new_chan = self.env["mail.channel"].browse(new_chan_id)
@@ -83,14 +83,6 @@ class ResPartner(models.Model):
             self.set_support_channel_name()
 
         return result
-
-    def remove_partners_from_channel(self, channel, partners):
-        self.env["mail.channel.partner"].search(
-            [
-                ("channel_id", "=", channel.id),
-                ("partner_id", "in", partners.ids),
-            ]
-        ).unlink()
 
     def create_mail_channel(self):
         if self.is_company and not self.mail_channel_id:
