@@ -14,5 +14,9 @@
       <field name="name">Commercial</field>
     </record>
 
+    <record id="employee" model="res.users.role">
+      <field name="name">Employés Commown</field>
+    </record>
+
   </data>
 </odoo>

@@ -39,3 +39,14 @@ class MailChannel(models.Model):
             )
 
             chan.partner_companies = new_company
+
+    def remove_partners_but_employees(self):
+        employee_partners = self.env.ref("commown_user_roles.employee").user_ids.mapped(
+            "partner_id"
+        )
+        self.env["mail.channel.partner"].search(
+            [
+                ("channel_id", "=", self.id),
+                ("partner_id", "not in", employee_partners.ids),
+            ]
+        ).unlink()
