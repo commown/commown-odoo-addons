@@ -9,6 +9,7 @@ from .common import RentalSaleOrderTC
 
 def fake_s2s_do_transaction(self, **kwargs):
     self._set_transaction_done()
+    self._post_process_after_done()
     return True
 
 
