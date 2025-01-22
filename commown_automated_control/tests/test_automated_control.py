@@ -25,8 +25,9 @@ class AutomatedControlTC(TransactionCase):
 
         return self.env["commown_automated_control.automated_control"].create(vals)
 
-    def get_infos(self, old_infos=None):
-        name = json.dumps(self.env.user.notify_info_channel_name)
+    def get_notify(self, old_infos=None, level="info"):
+        param_name = "notify_" + level + "_channel_name"
+        name = json.dumps(getattr(self.env.user, param_name))
         objs = self.env["bus.bus"].search([("channel", "=", name)], order="id")
         msgs = [json.loads(m)["message"] for m in objs.mapped("message")]
         return msgs[len(old_infos or ()) :]
@@ -58,6 +59,33 @@ class AutomatedControlTC(TransactionCase):
         self.assertEqual(
             self.control.base_automation_id.name,
             "[Commown][Automated Control] New name",
+        )
+
+    def test_check_filter_pre_domain_is_defined(self):
+        # Test on create
+        old_infos = self.get_notify(level="warning")
+        self._create_control(filter_pre_domain='["id", "=", 1]')
+        new_infos = self.get_notify(old_infos, "warning")
+        self.assertFalse(new_infos)
+
+        self._create_control(filter_pre_domain=None)
+        new_infos = self.get_notify(old_infos, "warning")
+        self.assertEqual(
+            new_infos,
+            ["This could lead to unexpected results"],
+        )
+
+        # Test on write
+        old_infos = self.get_notify(level="warning")
+        self.control.filter_pre_domain = '["id", "=", 1]'
+        new_infos = self.get_notify(old_infos, "warning")
+        self.assertFalse(new_infos)
+
+        self.control.filter_pre_domain = "[]"
+        new_infos = self.get_notify(old_infos, "warning")
+        self.assertEqual(
+            new_infos,
+            ["This could lead to unexpected results"],
         )
 
     def test_check_domain_restrictivity(self):
@@ -100,9 +128,9 @@ class AutomatedControlTC(TransactionCase):
     def test_execute_notify(self):
         self.control.behaviour = "notify"
 
-        old_infos = self.get_infos()
+        old_infos = self.get_notify()
         self.control.execute(self.env["project.task"].search([])[0])
-        new_infos = self.get_infos(old_infos)
+        new_infos = self.get_notify(old_infos)
 
         self.assertEqual(
             new_infos,

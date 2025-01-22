@@ -1,5 +1,6 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError, Warning
+from odoo.tools.safe_eval import safe_eval
 
 
 class AutomatedControl(models.Model):
@@ -80,6 +81,14 @@ class AutomatedControl(models.Model):
         domain = self.base_automation_id.filter_domain
         self._check_domain_restrictivity(model, domain)
 
+    def _check_filter_pre_domain_is_defined(self, filter_pre_domain):
+        if not safe_eval(filter_pre_domain):
+            self.env.user.notify_warning(
+                title=_("Before Update Domain not defined"),
+                message=_("This could lead to unexpected results"),
+                sticky=True,
+            )
+
     def _check_domain_restrictivity(self, model_name, domain):
         # Replace "required" attribute that doesn't work well on related fields
         if not domain:
@@ -154,7 +163,8 @@ class AutomatedControl(models.Model):
             )
         )
         vals.pop("filter_domain")
-        vals.pop("filter_pre_domain", None)
+
+        self._check_filter_pre_domain_is_defined(vals.pop("filter_pre_domain", "[]"))
 
         new_rec = super().create(vals)
 
@@ -177,6 +187,9 @@ class AutomatedControl(models.Model):
 
         if "active" in vals:
             self.sudo().base_automation_id.active = vals["active"]
+
+        if "filter_pre_domain" in vals:
+            self._check_filter_pre_domain_is_defined(vals["filter_pre_domain"])
 
         return super().write(vals)
 
