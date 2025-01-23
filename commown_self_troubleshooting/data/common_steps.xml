@@ -31,7 +31,7 @@
 
         <t t-elif="screwdriver_type == 'T3'">
           <t t-set="screwdriver_general_type">Torx</t>
-          <t t-set="screwdriver_dize">3</t>
+          <t t-set="screwdriver_size">3</t>
           <t t-set="screwdriver_store_link">
             https://www.ifixit.com/fr-fr/products/t3-torx-screwdriver
           </t>
