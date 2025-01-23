@@ -12,10 +12,6 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.user = partner.user_ids
         self.so = self.create_sale_order(partner)
 
-        self.g1 = self.env["res.groups"].create({"name": "standard"})
-        self.g2 = self.env["res.groups"].create({"name": "premium"})
-        self.g3 = self.env["res.groups"].create({"name": "computer"})
-
         def p_by_name(name):
             return (
                 self.env["product.product"]
@@ -30,8 +26,6 @@ class SaleOrderTC(RentalSaleOrderTC):
 
         p1 = p_by_name("Fairphone Premium")
         p2 = p_by_name("PC")
-        p1.product_tmpl_id.support_group_ids |= self.g1 + self.g2
-        p2.product_tmpl_id.support_group_ids |= self.g3
         p1.followup_sales_team_id = self._create_sales_team(1).id
         p2.followup_sales_team_id = self._create_sales_team(3).id
 
@@ -47,20 +41,6 @@ class SaleOrderTC(RentalSaleOrderTC):
                 }
             )
         return team
-
-    def test_add_to_product_support_group(self):
-        """Buying a product must add buyer to product's support groups"""
-
-        # Check test prerequisites
-        self.assertFalse(self.user.groups_id & (self.g1 | self.g2 | self.g3))
-
-        # Trigger the automatic action
-        self.so.action_confirm()
-
-        # Check effects
-        self.assertIn(self.g1, self.user.groups_id)
-        self.assertIn(self.g2, self.user.groups_id)
-        self.assertIn(self.g3, self.user.groups_id)
 
     def test_add_followup_card_name_with_coupon(self):
         """Followup card name must indicate sale coupons were used if any"""

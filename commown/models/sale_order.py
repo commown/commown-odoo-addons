@@ -56,18 +56,11 @@ class SaleOrder(models.Model):
                 }
             )
 
-    def _add_buyer_to_support_group(self):
-        for group in self.mapped(
-            "order_line.product_id.product_tmpl_id.support_group_ids"
-        ):
-            group.add_users(self.partner_id.user_ids)
-
     @api.multi
     def action_confirm(self):
         self.ensure_one()
         self.partner_id._create_receivable_account()
         self._create_investment_followup_task()
-        self._add_buyer_to_support_group()
         return super(SaleOrder, self).action_confirm()
 
     def risk_analysis_lead_title(self, so_line, contract=None, secondary_index=None):
