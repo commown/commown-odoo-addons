@@ -21,19 +21,28 @@
 
     <template id="tool_form">
       <div class="form-group" id="tool_form">
-        <p>
-          Afin d'effectuer le remplacment du module, vous aurez besoin d’un tournevis
-          <a t-if="model == 'Shiftphone'">
-            Torx, de taille #5 (voir
-            <a target="_blank" href="https://www.ifixit.com/fr-fr/products/t5-torx-screwdriver">ici <i class="fas fa-external-link-alt"></i></a>
-            ).
-          </a>
+        <t t-if="screwdriver_type == 'PH00'">
+          <t t-set="screwdriver_general_type">cruciforme</t>
+          <t t-set="screwdriver_size">00</t>
+          <t t-set="screwdriver_store_link">
+            https://www.ifixit.com/fr-fr/products/phillips-00-screwdriver
+          </t>
+        </t>
 
-          <a t-else="">
-            cruciforme, de taille #0 (voir
-            <a target="_blank" href="https://www.ifixit.com/fr-fr/products/phillips-0-screwdriver">ici <i class="fas fa-external-link-alt"></i></a>
-            ).
-          </a>
+        <t t-elif="screwdriver_type == 'T3'">
+          <t t-set="screwdriver_general_type">Torx</t>
+          <t t-set="screwdriver_dize">3</t>
+          <t t-set="screwdriver_store_link">
+            https://www.ifixit.com/fr-fr/products/t3-torx-screwdriver
+          </t>
+        </t>
+
+        <p>
+          Afin d'effectuer le remplacement du module, vous aurez besoin d’un tournevis
+          <t t-esc="screwdriver_general_type"/> de taille #<t t-esc="screwdriver_size"/> (voir
+          <a target="_blank" t-attf-href="{{ screwdriver_store_link }}">ici <i class="fas fa-external-link-alt"></i></a>
+          ).
+
           Nous pouvons vous en prêter un à nous renvoyer ensuite avec le module en panne.
         </p>
 
@@ -142,8 +151,10 @@
             <div class="help-block with-errors" />
           </div>
 
-          <t t-call="commown_self_troubleshooting.tool_form">
-            <t t-set="model" t-value="model"/>
+          <t t-if="screwdriver_type and screwdriver_type != 'None'">
+            <t t-call="commown_self_troubleshooting.tool_form">
+              <t t-set="screwdriver_type" t-value="screwdriver_type"/>
+            </t>
           </t>
 
           <script type="text/javascript">

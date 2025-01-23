@@ -9,6 +9,7 @@
       <t t-name="website.self-troubleshoot-shiftphone-screen">
         <t t-call="website.self-troubleshoot-smartphone-screen">
           <t t-set="model">Shiftphone</t>
+          <t t-set="screwdriver_type">T3</t>
         </t>
       </t>
     </field>

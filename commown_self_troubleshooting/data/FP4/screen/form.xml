@@ -9,6 +9,7 @@
       <t t-name="website.self-troubleshoot-fp4-screen">
         <t t-call="website.self-troubleshoot-smartphone-screen">
           <t t-set="model">FP4</t>
+          <t t-set="screwdriver_type">PH00</t>
         </t>
       </t>
     </field>

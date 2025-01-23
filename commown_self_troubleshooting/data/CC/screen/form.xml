@@ -9,6 +9,7 @@
       <t t-name="website.self-troubleshoot-crosscall-screen">
         <t t-call="website.self-troubleshoot-smartphone-screen">
           <t t-set="model">Crosscall</t>
+          <t t-set="screwdriver_type">None</t>
         </t>
       </t>
     </field>
