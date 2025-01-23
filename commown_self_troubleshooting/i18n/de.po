@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-09 09:44+0000\n"
-"PO-Revision-Date: 2025-01-09 10:50+0100\n"
+"POT-Creation-Date: 2024-06-27 16:11+0000\n"
+"PO-Revision-Date: 2024-06-27 18:50+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -1256,7 +1256,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_long_term_followup
 msgid "Exchanges in progress"
-msgstr "Austausch in Gang\n"
+msgstr "Austausch in Gang"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
@@ -2268,7 +2268,12 @@ msgstr "Die Karten werden automatisch wieder in die Spalte \"Zugewiesen - in Bea
 #. module: commown_self_troubleshooting
 #: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_pending
 msgid "The team takes care of it!"
-msgstr "Das Team kümmert sich darum!\n"
+msgstr "Das Team kümmert sich darum!"
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "Torx, de taille #5 (voir"
+msgstr "Torx, Größe #5 (siehe"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
