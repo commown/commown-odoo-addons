@@ -1,0 +1,11 @@
+<odoo noupdate="1">
+
+    <record id="parcel_type" model="commown.parcel.type">
+      <field name="name">Urban mine</field>
+      <field name="technical_name">urban-mine</field>
+      <field name="weight">0.75</field>
+      <field name="insurance_value">0</field>
+      <field name="is_return">True</field>
+    </record>
+
+</odoo>

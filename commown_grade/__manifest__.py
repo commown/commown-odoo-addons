@@ -1,0 +1,22 @@
+# Copyright (C) 2024 - Commown (https://commown.coop)
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+{
+    "name": "Commown Grade",
+    "description": "This modules create grades on lots",
+    "category": "stock",
+    "version": "12.0.1.1.2",
+    "author": "Commown SCIC",
+    "license": "AGPL-3",
+    "website": "https://commown.coop",
+    "depends": ["stock", "web_notify"],
+    "installable": True,
+    "data": [
+        "security/groups.xml",
+        "security/ir.model.access.csv",
+        "data/grade.xml",
+        "views/grade.xml",
+        "views/grade_history_line.xml",
+        "views/stock_production_lot.xml",
+    ],
+}

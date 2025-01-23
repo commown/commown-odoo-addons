@@ -24,3 +24,4 @@ from . import sale_order
 from . import simple_reconciliation
 from . import utm
 from . import website
+from . import wizard_portal_access

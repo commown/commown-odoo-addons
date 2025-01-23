@@ -1,0 +1,430 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* customer_team_manager
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-17 13:54+0000\n"
+"PO-Revision-Date: 2024-12-17 15:09+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: customer_team_manager
+#: model:ir.model,name:customer_team_manager.model_customer_team_manager_team
+msgid "A team of a customer"
+msgstr "Ein Team eines Kunden"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,name:customer_team_manager.customer_role_accounting
+msgid "Accounting"
+msgstr "Buchhaltung"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,name:customer_team_manager.customer_role_admin
+msgid "Administration"
+msgstr "Verwaltung"
+
+#. module: customer_team_manager
+#: selection:res.partner,portal_status:0
+msgid "Already connected"
+msgstr "Bereits eingeloggt"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
+msgid "Archived users"
+msgstr "Archivierte Benutzer"
+
+#. module: customer_team_manager
+#: code:addons/customer_team_manager/models/res_partner.py:167
+#, python-format
+msgid "At least one administrator is mandatory"
+msgstr "Mindestens ein Administrator ist erforderlich"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
+msgid "Avatar"
+msgstr "Avatar"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.wizard_portal_access_form
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
+msgid "Cannot be modified when the user was granted portal access. Remove the portal access first"
+msgstr "Kann nicht geändert werden, wenn dem Benutzer Portalzugang gewährt wurde. Entfernen Sie zuerst den Portalzugang."
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__color
+msgid "Color"
+msgstr "Farbe"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__customer_company
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
+msgid "Company"
+msgstr "Unternehmen"
+
+#. module: customer_team_manager
+#: model:ir.model,name:customer_team_manager.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__groups
+msgid "Corresponding groups"
+msgstr "Entsprechende Gruppen\n"
+""
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__create_uid
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__create_uid
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__create_uid
+msgid "Created by"
+msgstr "Erstellt von"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__create_date
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__create_date
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__create_date
+msgid "Created on"
+msgstr "Erstellt am:"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_partner__customer_note
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_users__customer_note
+msgid "Customer Note"
+msgstr "Anmerkung für Kunden"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__customer_partners
+msgid "Customer Partners"
+msgstr "Kunden-Partner"
+
+#. module: customer_team_manager
+#: sql_constraint:customer_team_manager.customer_role:0
+msgid "Customer role already exists!"
+msgstr "Kundenrolle existiert bereits!"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_partner__customer_roles
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_users__customer_roles
+msgid "Customer role(s)"
+msgstr "Kundenrolle(n)"
+
+#. module: customer_team_manager
+#. openerp-web
+#: code:addons/customer_team_manager/static/src/xml/field_widget_template.xml:19
+#, python-format
+msgid "Delete"
+msgstr "Löschen"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__description
+msgid "Description"
+msgstr "Beschreibung"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__display_name
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__display_name
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,help:customer_team_manager.field_customer_team_manager_customer_role__icon_name
+msgid "Example: 'fa-lock'"
+msgstr "Beispiel: 'fa-lock'"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,name:customer_team_manager.customer_role_fleet_manager
+msgid "Fleet managment"
+msgstr "Verwaltung der Flotte"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
+msgid "For legal reasons, please never reuse an account for someone else."
+msgstr "Aus rechtlichen Gründen sollten Sie niemals ein Konto für eine andere Person wiederverwenden."
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__full_name
+msgid "Full Name"
+msgstr "Voller Name"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
+msgid "Grant portal access"
+msgstr "Zugang zum Portal gewähren"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.wizard_portal_access_form
+msgid "Grant portal access to users"
+msgstr "Gewährung des Portalzugangs für Benutzer"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
+msgid "Group By"
+msgstr "Gruppieren nach"
+
+#. module: customer_team_manager
+#: model:ir.model,name:customer_team_manager.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP Routing"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__id
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__id
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__id
+msgid "ID"
+msgstr "ID"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,name:customer_team_manager.customer_role_it
+msgid "IT"
+msgstr "IT"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__icon_name
+msgid "Icon name (fontawesome)"
+msgstr "Icon-Name (fontawesome)"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
+msgid "If unsure, please cancel and check again before proceeding."
+msgstr "Wenn Sie sich nicht sicher sind, sagen Sie bitte ab und überprüfen Sie es noch einmal, bevor Sie fortfahren."
+
+#. module: customer_team_manager
+#: code:addons/customer_team_manager/models/res_partner.py:275
+#, python-format
+msgid "Import Template for Users"
+msgstr "Vorlage für Benutzer importieren"
+
+#. module: customer_team_manager
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:71
+#, python-format
+msgid "Incorrect password."
+msgstr "Falsches Passwort."
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__info
+msgid "Info"
+msgstr "Info"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role____last_update
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard____last_update
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team____last_update
+msgid "Last Modified on"
+msgstr "Zuletzt geändert am"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__write_uid
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__write_uid
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert von"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__write_date
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__write_date
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
+msgid "Make sure this permission doesn't fall into the wrong hands: carefully check the e-mails and roles you've granted."
+msgstr "Achten Sie darauf, dass diese Erlaubnis nicht in die falschen Hände gerät: Überprüfen Sie sorgfältig die E-Mails und Rollen, die Sie vergeben haben."
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
+msgid "My managment space"
+msgstr "Mein Verwaltungsbereich"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__name
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__name
+msgid "Name"
+msgstr "Name"
+
+#. module: customer_team_manager
+#: selection:res.partner,portal_status:0
+msgid "Never connected"
+msgstr "Nie verbunden"
+
+#. module: customer_team_manager
+#: selection:res.partner,portal_status:0
+msgid "Not granted"
+msgstr "Nicht gewährt"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.wizard_portal_access_form
+msgid "OK"
+msgstr "OK"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__parent_team
+msgid "Parent Team"
+msgstr "Übergeordnetes Team"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,description:customer_team_manager.customer_role_admin
+msgid "People who can grant Roles to others in their organization"
+msgstr "Personen, die anderen in ihrer Organisation Rollen zuweisen können"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,description:customer_team_manager.customer_role_it
+msgid "People who have access to all assistance tickets of their organization"
+msgstr "Personen, die Zugang zu allen Support-Tickets ihrer Organisation haben"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,description:customer_team_manager.customer_role_accounting
+msgid "People who have access to the orders and the invoices of their organization"
+msgstr "Personen, die Zugang zu den Bestellungen und Rechnungen ihrer Organisation haben"
+
+#. module: customer_team_manager
+#: model:customer_team_manager.customer_role,description:customer_team_manager.customer_role_fleet_manager
+msgid "People who manage the device fleet of their organization (new orders, contract termination, device attribution)"
+msgstr "Personen, die die Geräteflotte ihres Unternehmens verwalten (neue Bestellungen, Vertragskündigungen, Gerätezuordnung)"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_partner__portal_status
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_users__portal_status
+msgid "Portal status"
+msgstr "Portalzustand"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__readonly
+msgid "Readonly"
+msgstr "Nur Lesen"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_partner__parent_id
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_users__parent_id
+msgid "Related Company"
+msgstr "Verbundenes Unternehmen"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
+msgid "Revoke portal access"
+msgstr "Entzug des Portalzugangs"
+
+#. module: customer_team_manager
+#: model:ir.model,name:customer_team_manager.model_customer_team_manager_customer_role
+msgid "Role of the customer in its organization"
+msgstr "Die Rolle des Kunden in seiner Organisation"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__sequence
+msgid "Sequence"
+msgstr "Reihenfolge"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_partner__team
+#: model:ir.model.fields,field_description:customer_team_manager.field_res_users__team
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
+msgid "Team"
+msgstr "Team"
+
+#. module: customer_team_manager
+#: model:ir.ui.menu,name:customer_team_manager.menu_customer_team_manager_root
+msgid "Team manager"
+msgstr "Teamleiter"
+
+#. module: customer_team_manager
+#: model:res.groups,name:customer_team_manager.group_customer_admin
+msgid "Team manager Customer"
+msgstr "Teamleiter Kunde"
+
+#. module: customer_team_manager
+#: model:ir.actions.act_window,name:customer_team_manager.action_teams
+#: model:ir.ui.menu,name:customer_team_manager.menu_team
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_team_form
+msgid "Teams"
+msgstr "Teams"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
+msgid "The e-mails of the people to whom you grant access do not all come from the\n"
+"            same domain. Please make sure the following domain list is normal:"
+msgstr ""
+"Die E-Mails der Personen, denen Sie Zugang gewähren, stammen nicht alle von der\\n\n"
+"            gleichen Domäne. Bitte vergewissern Sie sich, dass die folgende Domänenliste normal ist:"
+
+#. module: customer_team_manager
+#: code:addons/customer_team_manager/models/res_partner.py:186
+#, python-format
+msgid "The email of partners having portal access cannot be modified!"
+msgstr "Die E-Mail der Partner mit Portalzugang kann nicht geändert werden!"
+
+#. module: customer_team_manager
+#: model:ir.actions.act_window,name:customer_team_manager.action_customer_roles
+#: model:ir.ui.menu,name:customer_team_manager.menu_role
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_role_form
+msgid "User Roles"
+msgstr "Benutzer-Rollen"
+
+#. module: customer_team_manager
+#: model:ir.actions.act_window,name:customer_team_manager.action_customer_users
+#: model:ir.model,name:customer_team_manager.model_res_users
+#: model:ir.ui.menu,name:customer_team_manager.menu_partners
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
+msgid "Users"
+msgstr "Benutzer"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
+msgid "Warning: possible fraud attempt!"
+msgstr "Warnung: Möglicher Betrugsversuch!"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,help:customer_team_manager.field_customer_team_manager_portal_access_wizard__password
+msgid "We ask your password to enforce your company's security"
+msgstr "Wir bitten Sie um Ihr Passwort, um die Sicherheit Ihres Organisation zu gewährleisten."
+
+#. module: customer_team_manager
+#: model:ir.model,name:customer_team_manager.model_customer_team_manager_portal_access_wizard
+msgid "Wizard for customers to grant portal access to colleagues"
+msgstr "Assistent für Kunden zur Gewährung des Portalzugangs für Kollegen"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
+msgid "You are going to grant people permission to have an account on this platform on behalf of your organization."
+msgstr "Sie werden Personen die Erlaubnis erteilen, im Namen Ihrer Organisation ein Konto auf dieser Plattform zu führen."
+
+#. module: customer_team_manager
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:50
+#, python-format
+msgid "You are not allowed to manage users."
+msgstr "Sie sind nicht berechtigt, Benutzer zu verwalten."
+
+#. module: customer_team_manager
+#: model:ir.model.fields,help:customer_team_manager.field_res_partner__customer_note
+#: model:ir.model.fields,help:customer_team_manager.field_res_users__customer_note
+msgid "You may need to take some notes, you can do that here"
+msgstr "Möglicherweise müssen Sie sich Notizen machen, das können Sie hier tun"
+
+#. module: customer_team_manager
+#: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__password
+msgid "Your password"
+msgstr "Ihr Passwort"
+
+#. module: customer_team_manager
+#: model:ir.actions.act_window,name:customer_team_manager.action_wizard_portal_access
+msgid "[commown] Customer users dedicated portal access grant wizard action"
+msgstr "[commown] Assistent für die Gewährung von Zugriffsrechten für Kundenbenutzer"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.wizard_portal_access_form
+msgid "or"
+msgstr "oder"
+

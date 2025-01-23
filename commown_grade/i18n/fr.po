@@ -1,0 +1,225 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_grade
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-04 17:07+0000\n"
+"PO-Revision-Date: 2024-12-04 17:07+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_grade
+#: model:ir.actions.act_window,name:commown_grade.action_grade
+#: model:ir.ui.menu,name:commown_grade.commwon_grade_menu
+msgid "Commown Grade"
+msgstr "Commown Grade"
+
+#. module: commown_grade
+#: model:res.groups,name:commown_grade.group_manager
+msgid "Commown Grade manager"
+msgstr "Commown Grade Manager"
+
+#. module: commown_grade
+#: model:res.groups,name:commown_grade.group_user
+msgid "Commown Grade user"
+msgstr "Commown Grade user"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__create_uid
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__create_date
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_stock_production_lot__grade_id
+msgid "Current grade"
+msgstr "Grade Actuel"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__date
+msgid "Date"
+msgstr "Date"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__description
+msgid "Description"
+msgstr "Description"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__display_name
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__display_name
+msgid "Display Name"
+msgstr "Afficher Nom"
+
+#. module: commown_grade
+#: code:addons/commown_grade/models/stock_production_lot.py:60
+#, python-format
+msgid "New grade is better than the last known grade, are you sure of this change?"
+msgstr "Le nouveau grade est meilleur que le dernier connu, êtes vous sur de ce changement ?"
+
+#. module: commown_grade
+#: code:addons/commown_grade/models/stock_production_lot.py:61
+#, python-format
+msgid "Grade Improvement"
+msgstr "Amélioration du Grade"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_B1
+msgid "Etat correct"
+msgstr "Etat correct"
+
+#. module: commown_grade
+#: model:ir.model,name:commown_grade.model_commown_grade_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__grade_id
+#: model_terms:ir.ui.view,arch_db:commown_grade.view_grade_history_line_search
+msgid "Grade"
+msgstr "Grade"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_A0
+#: model:commown_grade.grade,name:commown_grade.grade_A0
+msgid "Grade A0"
+msgstr "Grade A0"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_A1
+#: model:commown_grade.grade,name:commown_grade.grade_A1
+msgid "Grade A1"
+msgstr "Grade A1"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_A2
+#: model:commown_grade.grade,name:commown_grade.grade_A2
+msgid "Grade A2"
+msgstr "Grade A2"
+
+#. module: commown_grade
+#: model:commown_grade.grade,name:commown_grade.grade_B1
+msgid "Grade B1"
+msgstr "Grade B1"
+
+#. module: commown_grade
+#: model:commown_grade.grade,name:commown_grade.grade_B2
+msgid "Grade B2"
+msgstr "Grade B2"
+
+#. module: commown_grade
+#: model:commown_grade.grade,name:commown_grade.grade_C2
+msgid "Grade C2"
+msgstr "Grade C2"
+
+#. module: commown_grade
+#: model:commown_grade.grade,name:commown_grade.grade_D1
+msgid "Grade D1"
+msgstr "Grade D1"
+
+#. module: commown_grade
+#: model:commown_grade.grade,name:commown_grade.grade_D2
+msgid "Grade D2"
+msgstr "Grade D2"
+
+#. module: commown_grade
+#: model:ir.actions.act_window,name:commown_grade.action_grade_history_line
+#: model:ir.ui.menu,name:commown_grade.grade_history_line_menu
+#: model_terms:ir.ui.view,arch_db:commown_grade.view_grade_history_line_search
+msgid "Grade History"
+msgstr "Historique des grades"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_stock_production_lot__grade_history_line_ids
+msgid "Grade History Line"
+msgstr "Ligne d'historique de grade"
+
+#. module: commown_grade
+#: model:ir.ui.menu,name:commown_grade.grade_parent_menu
+msgid "Grades"
+msgstr "Grades"
+
+#. module: commown_grade
+#: model_terms:ir.ui.view,arch_db:commown_grade.view_grade_history_line_search
+msgid "Group By"
+msgstr "Grouper par"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__id
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade____last_update
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line____last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__write_uid
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__write_date
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__lot_id
+msgid "Lot"
+msgstr "Lot"
+
+#. module: commown_grade
+#: model_terms:ir.ui.view,arch_db:commown_grade.view_grade_history_line_search
+msgid "Lot name"
+msgstr "Lot name"
+
+#. module: commown_grade
+#: model:ir.model,name:commown_grade.model_stock_production_lot
+msgid "Lot/Serial"
+msgstr "Lot/N° série"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: commown_grade
+#: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__product_id
+#: model_terms:ir.ui.view,arch_db:commown_grade.view_grade_history_line_search
+msgid "Product"
+msgstr "Article"
+
+#. module: commown_grade
+#: model:ir.model,name:commown_grade.model_commown_grade_grade_history_line
+msgid "Store the grade a lot had at one given date"
+msgstr "Stock le grade qu'un appareil avait à une date"
+
+#. module: commown_grade
+#: sql_constraint:commown_grade.grade:0
+msgid "The grade name must be unique"
+msgstr "Le nom des grades doivent être unique"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_C2
+msgid "Très très usé"
+msgstr "Très très usé"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_B2
+msgid "Usé mais fonctionnel"
+msgstr "Usé mais fonctionnel"
+
