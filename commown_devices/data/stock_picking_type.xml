@@ -1,0 +1,31 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="in_sequence_rental" model="ir.sequence">
+      <field name="name">CommownSequence in</field>
+      <field name="implementation">standard</field>
+      <field name="prefix">WH/IN/</field>
+    </record>
+
+    <record id="out_sequence_rental" model="ir.sequence">
+      <field name="name">CommownSequence out</field>
+      <field name="implementation">standard</field>
+      <field name="prefix">WH/OUT</field>
+    </record>
+
+    <record id="stock_picking_type_in_rental" model="stock.picking.type">
+      <field name="name">Receipts - Rental</field>
+      <field name="code">incoming</field>
+      <field name="use_create_lots" eval="True"/>
+      <field name="use_existing_lots" eval="False"/>
+      <field name="default_location_src_id" eval="False"/>
+      <field name="default_location_dest_id" ref="stock_location_rental"/>
+      <field name="sequence">100</field>
+      <field name="barcode">WH-RECEIPTS-RENTAL</field>
+      <field name="sequence_id" ref="in_sequence_rental"/>
+    </record>
+
+  </data>
+
+</odoo>

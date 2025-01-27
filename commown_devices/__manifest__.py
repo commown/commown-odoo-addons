@@ -32,6 +32,7 @@
         "data/contract_template.xml",
         "data/project_task.xml",
         "data/stock_location.xml",
+        "data/stock_picking_type.xml",
         "security/ir.model.access.csv",
         "views/contract.xml",
         "views/product.xml",
