@@ -177,7 +177,7 @@ def parse_multipart(http_resp):
 
 def parse_response(resp):
     ctype_main, _ctype_details = parse_header(resp.headers["Content-Type"])
-    if ctype_main == "multipart/mixed":
+    if ctype_main.startswith("multipart/"):
         return parse_multipart(resp)
     elif ctype_main == "application/json":
         return resp.json(), None
