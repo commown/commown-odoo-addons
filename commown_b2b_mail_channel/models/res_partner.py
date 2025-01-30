@@ -14,6 +14,11 @@ class ResPartner(models.Model):
         domain=[("public", "=", "private"), ("channel_type", "=", "channel")],
     )
 
+    disable_channel_subscription = fields.Boolean(
+        "Disable automatic subscription to mail channel",
+        default=False,
+    )
+
     def has_to_be_subscribed_to_channel(self, mail_channel):
         """Return true if partner has to be subscribed to a given mail channel"""
         chan_partner = mail_channel.mapped("channel_last_seen_partner_ids.partner_id")
@@ -22,7 +27,7 @@ class ResPartner(models.Model):
     def _update_subscription_on_mail_channel_change(self, new_chan_id):
         if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
             self.remove_partners_from_channel(self.mail_channel_id, self.child_ids)
-        if new_chan_id:
+        if new_chan_id and not self.disable_channel_subscription:
             partners_to_add = self.child_ids.filtered(
                 lambda p: p.company_type == "person" and p.user_ids
             )
@@ -37,6 +42,7 @@ class ResPartner(models.Model):
             if (
                 new_parent_chan
                 and self.has_to_be_subscribed_to_channel(new_parent_chan)
+                and not new_parent.disable_channel_subscription
             ):
                 new_parent.mail_channel_id.channel_invite(self.id)
 
