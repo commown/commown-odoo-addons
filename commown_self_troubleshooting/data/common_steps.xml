@@ -85,7 +85,7 @@
           <label class="form-check-label" for="screwdriver-yes">Oui</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required"/>
+          <input class="form-check-input" type="radio" name="screwdriver" id="screwdriver-no" value="no" required="required" checked="checked"/>
           <label class="form-check-label" for="screwdriver-no">Non</label>
         </div>
       </div>
@@ -117,10 +117,11 @@
             d'un téléphone à l'autre).
           </p>
           <p>
-          NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,
-          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
-</p>
+            NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,
+            le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)
+          </p>
         </div>
+
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
           <div class="form-group">
             <label for="type_contrat">Option choisie lors de votre souscription</label>
@@ -131,6 +132,24 @@
             </select>
             <div class="help-block with-errors" />
           </div>
+
+          <t t-call="commown_self_troubleshooting.tool_form"/>
+
+          <script type="text/javascript">
+            $(document).ready(function() {
+              // Initialisation (disabling the form)
+              $("#tool_form").toggle(false);
+              $("#tool_form input").attr('disabled', true);
+
+              // Showing the form if the customers picks "I manipulate the modules"
+              $("#type_contrat").change(function () {
+                var customer_manipulating = $("#type_contrat").val() === "me";
+
+                $("#tool_form").toggle(customer_manipulating);
+                $("#tool_form input").attr('disabled', !customer_manipulating);
+              });
+            });
+          </script>
         </div>
 
       </div>

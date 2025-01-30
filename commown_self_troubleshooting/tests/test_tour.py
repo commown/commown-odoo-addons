@@ -102,6 +102,14 @@ class TestPageSmartphone(TestPageTC):
             "commown_self_troubleshooting_smartphone_need_display_with_protection"
         )
 
+    def test_smartphone_need_display_option_commown_manipulates(self):
+        self._run_tour(
+            "commown_self_troubleshooting_smartphone_need_display_option_commown_manipulates"
+        )
+
+    def test_smartphone_need_display_and_tool(self):
+        self._run_tour("commown_self_troubleshooting_smartphone_need_display_and_tool")
+
     def test_need_new_fairphone(self):
         self.contract_name = "FP5/B2C"
         self._run_tour("commown_self_troubleshooting_need_new_fairphone")
