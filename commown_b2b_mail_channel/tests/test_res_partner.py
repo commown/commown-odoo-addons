@@ -50,6 +50,28 @@ class ResPartnerTC(SavepointCase):
         )
         self.assertEqual(company_chan.group_ids, expected_groups)
 
+    def test_disable_automatic_subscription(self):
+        self.company.disable_channel_subscription = True
+        self.part1.parent_id = self.company
+        self.company.create_mail_channel()
+        mail_channel = self.company.mail_channel_id
+        self.assertTrue(mail_channel)
+
+        channel_partners = mail_channel.channel_last_seen_partner_ids.mapped(
+            "partner_id"
+        )
+        self.assertNotIn(self.part1, channel_partners)
+        self.assertIn(self.user_support.partner_id, channel_partners)
+
+        self.company.disable_channel_subscription = False
+        self.part2.parent_id = self.company
+
+        channel_partners = mail_channel.channel_last_seen_partner_ids.mapped(
+            "partner_id"
+        )
+        self.assertNotIn(self.part1, channel_partners)
+        self.assertIn(self.part2, channel_partners)
+
     def test_partner_is_added_when_parent_has_channel(self):
         self.company.create_mail_channel()
         mail_channel = self.company.mail_channel_id
