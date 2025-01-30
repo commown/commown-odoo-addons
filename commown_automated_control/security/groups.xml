@@ -1,0 +1,8 @@
+<odoo>
+
+  <record id="group_manager" model="res.groups">
+    <field name="name">Automated control manager</field>
+    <field name="category_id" ref="base.module_category_technical"/>
+  </record>
+
+</odoo>
