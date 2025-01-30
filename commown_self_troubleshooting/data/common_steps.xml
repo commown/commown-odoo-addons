@@ -73,10 +73,28 @@
 
     <template id="tool_form">
       <div class="form-group" id="tool_form">
+        <t t-if="screwdriver_codename == 'PH00'">
+          <t t-set="screwdriver_type">cruciforme</t>
+          <t t-set="screwdriver_size">00</t>
+          <t t-set="screwdriver_store_link">
+              https://www.ifixit.com/fr-fr/products/phillips-00-screwdriver
+          </t>
+        </t>
+
+        <t t-if="screwdriver_codename == 'T3'">
+          <t t-set="screwdriver_type">Torx</t>
+          <t t-set="screwdriver_size">3</t>
+          <t t-set="screwdriver_store_link">
+              https://www.ifixit.com/fr-fr/products/t3-torx-screwdriver
+          </t>
+        </t>
+
         <p>
-          Afin d'effectuer le remplacement du module, vous aurez besoin d’un tournevis cruciforme, de taille #0 (voir
-          <a target="_blank" href="https://eustore.ifixit.com/fr/Outils/Tournevis-Cles/Tournevis-cruciforme-Phillips-n-0-iFixit-made-in-Germany.html">ici <i class="fas fa-external-link-alt"></i></a>
-          ). Nous pouvons vous en prêter un à nous retourner ensuite avec le module en panne.
+          Afin d'effectuer le remplacement du module, vous aurez besoin d’un tournevis
+            <t t-esc="screwdriver_type"/>, de taille #<t t-esc="screwdriver_size"/> (voir
+            <a target="_blank" t-attf-href="{{ screwdriver_store_link }}">ici <i class="fas fa-external-link-alt"></i></a>
+          ).
+          Nous pouvons vous en prêter un à nous renvoyer ensuite avec le module en panne.
         </p>
 
         <p>Avez-vous besoin que nous vous prêtions un tournevis ?</p>
@@ -133,7 +151,11 @@
             <div class="help-block with-errors" />
           </div>
 
-          <t t-call="commown_self_troubleshooting.tool_form"/>
+          <t t-if="screwdriver_codename and screwdriver_codename != 'None'">
+            <t t-call="commown_self_troubleshooting.tool_form">
+              <t t-set="screwdriver_type" t-value="screwdriver_type"/>
+            </t>
+          </t>
 
           <script type="text/javascript">
             $(document).ready(function() {
