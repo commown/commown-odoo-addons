@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 16:11+0000\n"
-"PO-Revision-Date: 2024-06-27 16:11+0000\n"
+"POT-Creation-Date: 2025-02-27 11:09+0000\n"
+"PO-Revision-Date: 2025-02-27 11:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -35,10 +35,8 @@ msgid "%(product)s n°%(serial)s"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
-msgid ").\n"
-"          Nous pouvons vous en prêter un à nous retourner ensuite avec\n"
-"          le module en panne."
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "(voir"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -53,6 +51,11 @@ msgstr ""
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid ",\n"
 "                      ou toute autre alternative éthique listée sur"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid ", de taille #"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -121,6 +124,12 @@ msgid ".\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid ".\n"
+"          Nous pouvons vous en prêter un à nous renvoyer ensuite avec le module en panne."
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
 msgid ".<br/>\n"
 "          <br/>\n"
@@ -128,6 +137,11 @@ msgid ".<br/>\n"
 "          sélectionnez ici le 1er contrat de la liste et précisez-nous\n"
 "          en introduction de votre message que vous ne le trouvez pas,\n"
 "          nous nous en occuperons !"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "00"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -368,6 +382,11 @@ msgid "Afin d'anticiper un envoi de module ou d'appareil, veuillez vérifier att
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "Afin d'effectuer le remplacement du module, vous aurez besoin d’un tournevis"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid "Afin de traiter au mieux votre demande, nous vous invitons à adopter le formalisme\n"
@@ -489,8 +508,8 @@ msgid "Avec ce modèle de caméra, le cas le plus fréquent de\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
-msgid "Avez-vous besoin d'un tournevis ?"
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "Avez-vous besoin que nous vous prêtions un tournevis ?"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1139,6 +1158,11 @@ msgid "Fairphone 5"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model:ir.model,name:commown_self_troubleshooting.model_commown_self_troubleshooting_screwdriver_data
+msgid "Fields related to a type of screwdriver."
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model:project.task.type,description:commown_self_troubleshooting.stage_callback
 msgid "For cases where the customer has not responded to the ticket once, which suggests that he/she is not receiving the emails!  "
 msgstr ""
@@ -1165,11 +1189,6 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model:ir.model.fields,help:commown_self_troubleshooting.field_commown_self_troubleshooting_item__website_page_id
 msgid "If present item is related to a self troubleshooting web page that aims at creating a project task, set this field to the web page."
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
-msgid "Il ressort qu'un nouvel appareil doit m'être envoyé."
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1396,6 +1415,11 @@ msgid "L'objectif de cette étape est de savoir si l'écran a été touché. Si 
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "L'écran de mon appareil est cassé - il ressort qu'un nouvel appareil doit m'être envoyé."
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
 msgid "La cause la plus fréquente des problèmes d'écran est l'état des contacts entre le corps de l'appareil et l'écran.\n"
@@ -1507,7 +1531,7 @@ msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model:project.task.type,name:commown_self_troubleshooting.stage_long_term_followup
-msgid "Long term follow-up [after-sale: manual]"
+msgid "Long term followup"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1633,7 +1657,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-manipulation-option
 msgid "NB : En faisant un minimum attention il n'y a aucun danger d'abîmer les pièces,\n"
-"          le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)"
+"            le Fairphone est vraiment conçu pour ça, c’est la magie d’un appareil modulaire ! :-)"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1664,11 +1688,17 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Non"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.crosscall-screen
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.crosscall-screen-page
+msgid "None"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1736,11 +1766,27 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "Oui"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp4-screen
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp5-screen
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-camera-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp2-micro-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-display-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp3-screen-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp4-screen-page
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.fp5-screen-page
+msgid "PH00"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1751,7 +1797,7 @@ msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model:project.task.type,name:commown_self_troubleshooting.stage_pending
-msgid "Pending [after-sale: pending]"
+msgid "Pending"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -1814,6 +1860,10 @@ msgstr ""
 
 #. module: commown_self_troubleshooting
 #: model:project.task.type,name:commown_self_troubleshooting.stage_received
+msgid "Received"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_received
 msgid "Received request"
 msgstr ""
@@ -1962,6 +2012,12 @@ msgid "Sérénité"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.shiftphone-screen
+#: model_terms:website.page,arch_db:commown_self_troubleshooting.shiftphone-screen-page
+msgid "T3"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model:ir.model.fields,help:commown_self_troubleshooting.field_commown_self_troubleshooting_item__link_url
 msgid "Target link URL - only required when not a self troubleshooting web page"
 msgstr ""
@@ -1974,6 +2030,11 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model:project.task.type,portal_displayed_name:commown_self_troubleshooting.stage_pending
 msgid "The team takes care of it!"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "Torx"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -2069,12 +2130,6 @@ msgstr ""
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.other-page
 msgid "Votre demande\n"
 "                      <br/>"
-msgstr ""
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
-msgid "Vous aurez besoin d’un tout petit tournevis cruciforme,\n"
-"          de taille #0 (voir"
 msgstr ""
 
 #. module: commown_self_troubleshooting
@@ -2227,6 +2282,11 @@ msgid "commander un nouveau modèle (directement sur notre"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "cruciforme"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.gs-day-page
 msgid "câble"
@@ -2277,9 +2337,19 @@ msgid "et répondez à la question\n"
 msgstr ""
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "https://www.ifixit.com/fr-fr/products/phillips-00-screwdriver"
+msgstr ""
+
+#. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
+msgid "https://www.ifixit.com/fr-fr/products/t3-torx-screwdriver"
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-module-change
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-manipulation-option
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
 #: model_terms:website.page,arch_db:commown_self_troubleshooting.generic-issue-page
 msgid "ici <i class=\"fas fa-external-link-alt\"/>"
 msgstr ""
