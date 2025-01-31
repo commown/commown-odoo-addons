@@ -1,5 +1,6 @@
 from . import contract
 from . import crm_lead
+from . import account_invoice_line
 from . import product
 from . import product_category
 from . import product_service_config
