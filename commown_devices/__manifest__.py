@@ -36,6 +36,7 @@
         "security/ir.model.access.csv",
         "views/contract.xml",
         "views/product.xml",
+        "views/product_category.xml",
         "views/project_project.xml",
         "views/project_task.xml",
         "views/project_task_type.xml",

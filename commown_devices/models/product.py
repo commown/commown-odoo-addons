@@ -17,6 +17,14 @@ class ProductTemplate(models.Model):
         self.product_variant_ids._set_storable_variants()
         return res
 
+    property_rental_account_expense_id = fields.Many2one(
+        "account.account",
+        company_dependent=True,
+        string="Expense Account (rental)",
+        help="Expense account to be used when the product is to be rented, not sold",
+        domain=[("deprecated", "=", False)],
+    )
+
 
 class ProductProduct(models.Model):
     _inherit = "product.product"
