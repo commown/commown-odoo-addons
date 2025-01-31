@@ -22,6 +22,11 @@
             </field>
           </page>
         </xpath>
+
+        <field name="property_account_expense_id" position="after">
+          <field name="property_rental_account_expense_id"/>
+        </field>
+
       </field>
     </record>
 

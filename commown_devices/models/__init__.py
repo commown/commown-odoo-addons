@@ -1,6 +1,7 @@
 from . import contract
 from . import crm_lead
 from . import product
+from . import product_category
 from . import product_service_config
 from . import project_project
 from . import project_task
