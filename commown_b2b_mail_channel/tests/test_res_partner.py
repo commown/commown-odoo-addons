@@ -169,3 +169,40 @@ class ResPartnerTC(SavepointCase):
             mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
         )
 
+    def test_access_granted_on_user_creation(self):
+        self.company.create_mail_channel()
+
+        partner = self.env["res.partner"].create(
+            {"name": "test part", "email": "test@part.org"}
+        )
+        partner.parent_id = self.company
+
+        self.assertNotIn(
+            partner,
+            self.company.mail_channel_id.mapped(
+                "channel_last_seen_partner_ids.partner_id"
+            ),
+        )
+
+        user = self.env["res.users"]._create_user_from_template(
+            {
+                "email": partner.email,
+                "login": partner.email,
+                "partner_id": partner.id,
+            }
+        )
+
+        self.assertIn(
+            partner,
+            self.company.mail_channel_id.mapped(
+                "channel_last_seen_partner_ids.partner_id"
+            ),
+        )
+
+        user.unlink()
+        self.assertNotIn(
+            partner,
+            self.company.mail_channel_id.mapped(
+                "channel_last_seen_partner_ids.partner_id"
+            ),
+        )

@@ -24,6 +24,21 @@ class ResPartner(models.Model):
         chan_partner = mail_channel.mapped("channel_last_seen_partner_ids.partner_id")
         return self not in chan_partner and self.user_ids
 
+    def _update_subscription_on_user_creation(self):
+        parent_mail_chan = self.parent_id.mail_channel_id
+        if parent_mail_chan:
+            if self.user_ids and self.has_to_be_subscribed_to_channel(parent_mail_chan):
+                self.env["mail.channel.partner"].create(
+                    {"partner_id": self.id, "channel_id": parent_mail_chan.id}
+                )
+            elif not self.user_ids:
+                self.env["mail.channel.partner"].search(
+                    [
+                        ("partner_id", "=", self.id),
+                        ("channel_id", "=", parent_mail_chan.id),
+                    ]
+                ).unlink()
+
     def _update_subscription_on_mail_channel_change(self, new_chan_id):
         if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
             self.mail_channel_id.remove_partners_but_employees()
