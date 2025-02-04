@@ -1,11 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* commown_devices
+# 	* commown_devices
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
-"PO-Revision-Date: 2024-11-29 18:04+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-04 12:33+0000\n"
+"PO-Revision-Date: 2025-02-04 13:35+0100\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -16,6 +18,7 @@ msgstr ""
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:90
+#, python-format
 msgid "%(product)s for %(partner)s"
 msgstr "%(product)s pour %(partner)s"
 
@@ -31,7 +34,16 @@ msgid ""
 "picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" style=\"text-"
 "decoration:none;background-color:transparent;color:rgb(124, 123, 173);"
 "\">cette page</a> pour les traiter.<br></p>"
-msgstr "<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a ${object.env.context.get('late_pickings')} transferts en retard.</p><p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Rendez vous sur&nbsp;<a href=\"https://shop.commown.coop/web?debug#action=694&amp;active_id=5&amp;model=stock.picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" style=\"text-decoration:none;background-color:transparent;color:rgb(124, 123, 173);\">cette page</a> pour les traiter.<br></p>"
+msgstr ""
+"<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a ${object.env."
+"context.get('late_pickings')} transferts en retard.</p><p style=\"margin:0px "
+"0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
+"Verdana, Arial, sans-serif;\">Rendez vous sur&nbsp;<a href=\"https://shop."
+"commown.coop/web?debug#action=694&amp;active_id=5&amp;model=stock."
+"picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" style=\"text-"
+"decoration:none;background-color:transparent;color:rgb(124, 123, 173);"
+"\">cette page</a> pour les traiter.<br></p>"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_abstract_picking_wizard
@@ -60,11 +72,12 @@ msgid "Blocked"
 msgstr "Bloqué"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:93
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:300
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:95
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:304
 #, python-format
 msgid "Can't move device: no device set on this task!"
-msgstr "Mouvement impossible : aucun appareil n'est paramétré sur cette tâche !"
+msgstr ""
+"Mouvement impossible : aucun appareil n'est paramétré sur cette tâche !"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_crm_lead_picking_form
@@ -85,7 +98,9 @@ msgstr "Annuler"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__po_id_is_readonly
 msgid "Cannot change po if picking already has a linked po"
-msgstr "Impossible de changer l'ordre d'achat si le picking a déjà un ordre d'achat asocié"
+msgstr ""
+"Impossible de changer l'ordre d'achat si le picking a déjà un ordre d'achat "
+"asocié"
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:83
@@ -104,7 +119,10 @@ msgid ""
 "Check that there are no more open tickets - Support and/or Transfer and/or "
 "Breakage-Loss-Theft (as it doesn't make sense if the contract is terminated, "
 "or to help with end-of-contract billing if applicable ;)\n"
-msgstr "Check that there are no more open tickets - Support and/or Transfer and/or Breakage-Loss-Theft (as it doesn't make sense if the contract is terminated, or to help with end-of-contract billing if applicable ;)\n"
+msgstr ""
+"Check that there are no more open tickets - Support and/or Transfer and/or "
+"Breakage-Loss-Theft (as it doesn't make sense if the contract is terminated, "
+"or to help with end-of-contract billing if applicable ;)\n"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__service_tmpl_id
@@ -208,12 +226,6 @@ msgid "Default Product Grade"
 msgstr "Grade par défaut"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:63
-#, python-format
-msgid "Please set the grade on lots %s (ids: %s)"
-msgstr "Mettez un grade sur les appareils %s (ids: %s)"
-
-#. module: commown_devices
 #: model:ir.model.fields,help:commown_devices.field_crm_lead_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_abstract_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_contract_transfer_wizard__date
@@ -245,7 +257,8 @@ msgstr "Décrit un lien entre un ordre d'achat et une facture"
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_po_invoice_link_line
 msgid "Describe a relation between a po_line and an invoice line"
-msgstr "Décrit une relation entre une ligne d'ordre d'achat et une ligne de facture"
+msgstr ""
+"Décrit une relation entre une ligne d'ordre d'achat et une ligne de facture"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_move_po_link_line
@@ -277,13 +290,13 @@ msgid "Device"
 msgstr "Appareil"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:231
+#: code:addons/commown_devices/models/project_task.py:227
 #, python-format
 msgid "Device field is not set"
 msgstr "Le chanp appareil n'est pas renseigné"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:239
+#: code:addons/commown_devices/models/project_task.py:235
 #, python-format
 msgid "Device is already in a scrap location"
 msgstr "L'appareil se trouve déja dans un emplacement de scrap"
@@ -324,12 +337,31 @@ msgstr ""
 "produits stockable secondiare de la variante ?"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_category__property_rental_account_expense_categ_id
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__property_rental_account_expense_id
+#: model:ir.model.fields,field_description:commown_devices.field_product_template__property_rental_account_expense_id
+msgid "Expense Account (rental)"
+msgstr "Compte de dépenses (location)"
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_category_property_form
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_template_property_form
+msgid "Expense Account (resale)"
+msgstr "Compte de dépenses (revente)"
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_product_product__property_rental_account_expense_id
+#: model:ir.model.fields,help:commown_devices.field_product_template__property_rental_account_expense_id
+msgid "Expense account to be used when the product is to be rented, not sold"
+msgstr "Compte de dépenses à utiliser lorsque le produit est destiné à la location, pas la revente"
+
+#. module: commown_devices
 #: model:project.task.type,portal_displayed_name:commown_devices.diagnostic_stage
 msgid "Facturation et/ou Remboursement dépôt en cours"
 msgstr "Facturation et/ou Remboursement dépôt en cours"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/product.py:69
+#: code:addons/commown_devices/models/product.py:77
 #, python-format
 msgid ""
 "For product %s, two secondary variants derive from the same template, are "
@@ -376,25 +408,34 @@ msgid "In Progress"
 msgstr "En cours"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:78
+#: code:addons/commown_devices/models/stock_move.py:86
 #, python-format
 msgid ""
 "Inconsistent locations between move (id: %(move_id)s, picking id: "
 "%(picking_id)s) and contract (id: %(contract_id)s)"
-msgstr "Inconsistent locations between move (id: %(move_id)s, picking id: %(picking_id)s) and contract (id: %(contract_id)s)"
+msgstr ""
+"Inconsistent locations between move (id: %(move_id)s, picking id: "
+"%(picking_id)s) and contract (id: %(contract_id)s)"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:68
+#: code:addons/commown_devices/models/stock_move.py:71
 #, python-format
 msgid ""
 "Inconsistent move (id: %(move_id)s, picking id: %(picking_id)s) contract "
 "(id: %(contract_id)s) and lot contract (id: %(lot_contract_id)s)"
-msgstr "Inconsistent move (id: %(move_id)s, picking id: %(picking_id)s) contract (id: %(contract_id)s) and lot contract (id: %(lot_contract_id)s)"
+msgstr ""
+"Inconsistent move (id: %(move_id)s, picking id: %(picking_id)s) contract "
+"(id: %(contract_id)s) and lot contract (id: %(lot_contract_id)s)"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_location
 msgid "Inventory Locations"
 msgstr "Localisations d'inventaire"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Ligne de facture"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__invoice_line_id_domain
@@ -541,16 +582,18 @@ msgid "Message"
 msgstr "Message"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:53
+#: code:addons/commown_devices/models/stock_move.py:54
 #, python-format
 msgid "More than one contract on move %s lots"
 msgstr "Plus d'un contrat sur les appareils du mouvement %s"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/product.py:59
+#: code:addons/commown_devices/models/product.py:67
 #, python-format
 msgid "More than one primary variant configured for %s with attributes %s"
-msgstr "Il y a plus d'une variante primaire configurée pour le produit %s (avec les attributs %s)"
+msgstr ""
+"Il y a plus d'une variante primaire configurée pour le produit %s (avec les "
+"attributs %s)"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_line_ids
@@ -569,7 +612,7 @@ msgid "Move involved nonserial product"
 msgstr "Déplacer le module/accessoire"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:275
+#: code:addons/commown_devices/models/project_task.py:271
 #, python-format
 msgid "Move involved product"
 msgstr "Transférer les produits concernés"
@@ -642,6 +685,12 @@ msgid "Picking Po wizard"
 msgstr "Wizard Expédition/Ordre d'achat"
 
 #. module: commown_devices
+#: code:addons/commown_devices/models/contract.py:72
+#, python-format
+msgid "Please set the grade on lots %s (ids: %s)"
+msgstr "Mettez un grade sur les appareils %s (ids: %s)"
+
+#. module: commown_devices
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:66
 #, python-format
 msgid "Please set the task's partner before using this wizard"
@@ -688,6 +737,11 @@ msgid "Product"
 msgstr "Article"
 
 #. module: commown_devices
+#: model:ir.model,name:commown_devices.model_product_category
+msgid "Product Category"
+msgstr "Catégorie interne"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_move_line
 msgid "Product Moves (Stock Move Line)"
 msgstr "Mouvements de produit (lignes de mouvements)"
@@ -718,6 +772,11 @@ msgid "Purchase Line Id Domain"
 msgstr "Domaine des lignes d'achat"
 
 #. module: commown_devices
+#: model:ir.model,name:commown_devices.model_purchase_order
+msgid "Purchase Order"
+msgstr "Commande fournisseur"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__po_id
 msgid "Purchase order"
 msgstr "Ordre d'achat"
@@ -738,6 +797,11 @@ msgstr "Quants"
 #: model:project.task.type,legend_done:commown_devices.resiliated_stage
 msgid "Ready for Next Stage"
 msgstr "Prêt pour la prochaine étape"
+
+#. module: commown_devices
+#: model:stock.picking.type,name:commown_devices.stock_picking_type_in_rental
+msgid "Receipts - Rental"
+msgstr "Réception - Location"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_inward_picking_form
@@ -770,7 +834,7 @@ msgid "Scrap"
 msgstr "Mise au rebut"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:257
+#: code:addons/commown_devices/models/project_task.py:253
 #, python-format
 msgid "Scrap device"
 msgstr "Mise au rebut"
@@ -904,29 +968,40 @@ msgstr "Étape de tâche"
 #. module: commown_devices
 #: code:addons/commown_devices/models/crm_lead.py:18
 #, python-format
-msgid "The contract has already assigned picking(s)!\n"
+msgid ""
+"The contract has already assigned picking(s)!\n"
 "Either cancel, scrap or validate it."
-msgstr "Le contrat est déjà associé à une expédition au moins !\n"
+msgstr ""
+"Le contrat est déjà associé à une expédition au moins !\n"
 "Il faut d'abord l'annuler, la valider ou mettre l'appareil au rebut."
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:222
+#: code:addons/commown_devices/models/project_task.py:218
 #, python-format
-msgid "These tasks can not be moved forward. There are no picking linked to those tasks: %s"
-msgstr "Cette tâche ne peut pas être avancée à cette étape car il n'y a pas de transfert associé : %s"
+msgid ""
+"These tasks can not be moved forward. There are no picking linked to those "
+"tasks: %s"
+msgstr ""
+"Cette tâche ne peut pas être avancée à cette étape car il n'y a pas de "
+"transfert associé : %s"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:194
+#: code:addons/commown_devices/models/project_task.py:191
 #, python-format
-msgid "These tasks can not be moved forward. There are still device(s) associated with their contract: %s"
-msgstr "Ces tâches ne peuvent pas être avancées à cette étape. Il y a encore un ou plusieurs appareils associé au(x) contrat(s) : %s"
+msgid ""
+"These tasks can not be moved forward. There are still device(s) associated "
+"with their contract: %s"
+msgstr ""
+"Ces tâches ne peuvent pas être avancées à cette étape. Il y a encore un ou "
+"plusieurs appareils associé au(x) contrat(s) : %s"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:88
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:133
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:90
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:135
 #, python-format
 msgid "This action should not be used in resiliation project"
-msgstr "Cette action ne doit pas être utilisée dans le projet résiliation.\n"
+msgstr ""
+"Cette action ne doit pas être utilisée dans le projet résiliation.\n"
 "Utilisez plutôt l'action 'Rapatrier un appareil'"
 
 #. module: commown_devices

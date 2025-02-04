@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-18 18:06+0000\n"
-"PO-Revision-Date: 2024-12-18 18:06+0000\n"
+"POT-Creation-Date: 2025-02-04 12:33+0000\n"
+"PO-Revision-Date: 2025-02-04 12:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -29,6 +29,16 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_abstract_picking_wizard
 msgid "Abstract model to create a picking from a task"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__all_products
+msgid "All product to send"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__storable_product_id
+msgid "Article"
 msgstr ""
 
 #. module: commown_devices
@@ -66,15 +76,30 @@ msgid "Cancel"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__po_id_is_readonly
+msgid "Cannot change po if picking already has a linked po"
+msgstr ""
+
+#. module: commown_devices
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:83
 #, python-format
 msgid "Cannot find given device. Is it really available?"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_type__check_picking_assigned
+msgid "Check picking assigned when entering stage?"
+msgstr ""
+
+#. module: commown_devices
 #: model:project.task.type,description:commown_devices.diagnostic_stage
 msgid "Check that there are no more open tickets - Support and/or Transfer and/or Breakage-Loss-Theft (as it doesn't make sense if the contract is terminated, or to help with end-of-contract billing if applicable ;)\n"
 ""
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__service_tmpl_id
+msgid "Configured product template"
 msgstr ""
 
 #. module: commown_devices
@@ -89,6 +114,10 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_contract_contract
+#: model:ir.model.fields,field_description:commown_devices.field_stock_move__contract_id
+#: model:ir.model.fields,field_description:commown_devices.field_stock_picking__contract_ids
+#: model:ir.model.fields,field_description:commown_devices.field_stock_production_lot__contract_id
+#: model:ir.model.fields,field_description:commown_devices.field_stock_scrap__contract_id
 msgid "Contract"
 msgstr ""
 
@@ -110,6 +139,82 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_involved_nonserial_product_picking_wizard
 msgid "Create a picking of the nonserial product attached to a task"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__date
+msgid "Date"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_purchase_order__default_product_grade
+msgid "Default Product Grade"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_crm_lead_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_abstract_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_contract_transfer_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_involved_device_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_inward_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_notracking_inward_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_notracking_outward_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_outward_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_to_employee_wizard__date
+msgid "Defaults to now - To be set only to force a date"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__delivered_by_hand
+msgid "Delivered by hand?"
 msgstr ""
 
 #. module: commown_devices
@@ -138,13 +243,32 @@ msgid "Describe which storable products comes with a service"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:231
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__location_dest_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__location_dest_id
+msgid "Destination"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__contract_id
+msgid "Destination contract"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__lot_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__lot_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__lot_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__lot_id
+msgid "Device"
+msgstr ""
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/project_task.py:227
 #, python-format
 msgid "Device field is not set"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:239
+#: code:addons/commown_devices/models/project_task.py:235
 #, python-format
 msgid "Device is already in a scrap location"
 msgstr ""
@@ -156,14 +280,88 @@ msgid "Devices"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/product.py:69
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_product_service_storable_config__storable_type
+msgid "Does current config concern the primary storable or the secondary storables of current product variants ?"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_category__property_rental_account_expense_categ_id
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__property_rental_account_expense_id
+#: model:ir.model.fields,field_description:commown_devices.field_product_template__property_rental_account_expense_id
+msgid "Expense Account (rental)"
+msgstr ""
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_category_property_form
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_template_property_form
+msgid "Expense Account (resale)"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_product_product__property_rental_account_expense_id
+#: model:ir.model.fields,help:commown_devices.field_product_template__property_rental_account_expense_id
+msgid "Expense account to be used when the product is to be rented, not sold"
+msgstr ""
+
+#. module: commown_devices
+#: model:project.task.type,portal_displayed_name:commown_devices.diagnostic_stage
+msgid "Facturation et/ou Remboursement dépôt en cours"
+msgstr ""
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/product.py:77
 #, python-format
 msgid "For product %s, two secondary variants derive from the same template, are you sure that there is no configuration mistake ?"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__parcel_type
+msgid "Generate a shipping label"
+msgstr ""
+
+#. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_to_employee
 msgid "Give a device to an employee"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__id
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__id
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__id
+msgid "ID"
 msgstr ""
 
 #. module: commown_devices
@@ -173,13 +371,13 @@ msgid "In Progress"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:83
+#: code:addons/commown_devices/models/stock_move.py:86
 #, python-format
 msgid "Inconsistent locations between move (id: %(move_id)s, picking id: %(picking_id)s) and contract (id: %(contract_id)s)"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:68
+#: code:addons/commown_devices/models/stock_move.py:71
 #, python-format
 msgid "Inconsistent move (id: %(move_id)s, picking id: %(picking_id)s) contract (id: %(contract_id)s) and lot contract (id: %(lot_contract_id)s)"
 msgstr ""
@@ -187,6 +385,89 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_location
 msgid "Inventory Locations"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_account_invoice_line
+msgid "Invoice Line"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__invoice_line_id_domain
+msgid "Invoice Line Id Domain"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__invoice_line_id
+msgid "Invoice lines"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__is_contract_in
+msgid "Is Contract In"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_type
+msgid "Is storable primary or secondary"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__write_date
+msgid "Last Updated on"
 msgstr ""
 
 #. module: commown_devices
@@ -200,6 +481,11 @@ msgstr ""
 #: model:ir.cron,name:commown_devices.late_pickings_with_lots_cron
 #: model:mail.template,subject:commown_devices.late_pickings_with_lots_mail
 msgid "Late pickings with lots"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__lead_id
+msgid "Lead"
 msgstr ""
 
 #. module: commown_devices
@@ -226,8 +512,18 @@ msgid "Lot %s not found in available stock"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__lot_id_domain
+msgid "Lot Id Domain"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_production_lot
 msgid "Lot/Serial"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__lot_ids
+msgid "Lots"
 msgstr ""
 
 #. module: commown_devices
@@ -236,15 +532,26 @@ msgid "Merge Partner Wizard"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:53
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__message
+msgid "Message"
+msgstr ""
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/stock_move.py:54
 #, python-format
 msgid "More than one contract on move %s lots"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/product.py:59
+#: code:addons/commown_devices/models/product.py:67
 #, python-format
 msgid "More than one primary variant configured for %s with attributes %s"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_line_ids
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__move_line_ids
+msgid "Move Lines"
 msgstr ""
 
 #. module: commown_devices
@@ -258,9 +565,14 @@ msgid "Move involved nonserial product"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:275
+#: code:addons/commown_devices/models/project_task.py:271
 #, python-format
 msgid "Move involved product"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__move_line_id
+msgid "Move line id"
 msgstr ""
 
 #. module: commown_devices
@@ -269,9 +581,24 @@ msgid "Move lines"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__move_product_name
+msgid "Move product's name"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__link_line_ids
+msgid "Move to purchase_line link"
+msgstr ""
+
+#. module: commown_devices
 #: code:addons/commown_devices/models/common.py:65
 #, python-format
 msgid "Not enough %s under location(s) %s"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__lot_nb
+msgid "Number of lots"
 msgstr ""
 
 #. module: commown_devices
@@ -301,7 +628,17 @@ msgid "Origin"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:63
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__picking_id
+msgid "Picking"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__wizard_id
+msgid "Picking Po wizard"
+msgstr ""
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/contract.py:72
 #, python-format
 msgid "Please set the grade on lots %s (ids: %s)"
 msgstr ""
@@ -319,8 +656,42 @@ msgid "Please use an employee as a partner"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__wizard_id
+msgid "Po invoice wizard"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__link_line_ids
+msgid "Po_line to invoice_line link"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__present_location_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__present_location_id
+msgid "Present location of the product"
+msgstr ""
+
+#. module: commown_devices
+#: selection:product.service_storable_config,storable_type:0
+msgid "Primary product"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__primary_storable_variant_id
+msgid "Primary storable variant"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_product_product
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__variant_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__variant_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__product_tmpl_id
 msgid "Product"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_product_category
+msgid "Product Category"
 msgstr ""
 
 #. module: commown_devices
@@ -334,8 +705,39 @@ msgid "Product Template"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__product_location
+msgid "Product will be sent from"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__products_locations
+msgid "Products will be sent from"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_project
 msgid "Project"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__purchase_line_id_domain
+msgid "Purchase Line Id Domain"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_purchase_order
+msgid "Purchase Order"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__po_id
+msgid "Purchase order"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__purchase_line_id
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__po_line_id
+msgid "Purchase order line"
 msgstr ""
 
 #. module: commown_devices
@@ -347,6 +749,11 @@ msgstr ""
 #: model:project.task.type,legend_done:commown_devices.diagnostic_stage
 #: model:project.task.type,legend_done:commown_devices.resiliated_stage
 msgid "Ready for Next Stage"
+msgstr ""
+
+#. module: commown_devices
+#: model:stock.picking.type,name:commown_devices.stock_picking_type_in_rental
+msgid "Receipts - Rental"
 msgstr ""
 
 #. module: commown_devices
@@ -365,12 +772,22 @@ msgid "Related move lines"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__attribute_value_ids
+msgid "Restrict to variants with following attribute values"
+msgstr ""
+
+#. module: commown_devices
+#: model:project.task.type,portal_displayed_name:commown_devices.resiliated_stage
+msgid "Résiliation traitée"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_scrap
 msgid "Scrap"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:257
+#: code:addons/commown_devices/models/project_task.py:253
 #, python-format
 msgid "Scrap device"
 msgstr ""
@@ -379,6 +796,26 @@ msgstr ""
 #: code:addons/commown_devices/models/stock_scrap.py:16
 #, python-format
 msgid "Scrap must be done to use this action"
+msgstr ""
+
+#. module: commown_devices
+#: selection:product.service_storable_config,storable_type:0
+msgid "Secondary product"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__secondary_storable_variant_ids
+msgid "Secondary storable variants"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__invoice_id
+msgid "Select invoice line from this invoice"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__po_id
+msgid "Select purchase order line from this purchase order"
 msgstr ""
 
 #. module: commown_devices
@@ -395,8 +832,45 @@ msgid "Send a not tracked product"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__prioritize_repackaged
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__prioritize_repackaged
+msgid "Send from repackaged devices if possible"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_project_task_to_employee_wizard__parcel_type
+msgid "Set this if you want to generate a shipping label at the same time"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__shipping_account_id
+msgid "Shipping account"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__show_validate_picking
+msgid "Show Validate Picking"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__show_related_move_lines
+msgid "Show related move lines"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_project__show_related_move_lines
+msgid "Show related move lines?"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_move
+#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_ids
 msgid "Stock Move"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__move_id
+msgid "Stock move"
 msgstr ""
 
 #. module: commown_devices
@@ -405,7 +879,37 @@ msgid "Storable Configurations"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__storable_product_id_domain
+msgid "Storable Product Id Domain"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_tmpl_id
+msgid "Storable Tmpl"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_variant_id
+msgid "Storable Variant"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_product_product__storable_config_ids
+#: model:ir.model.fields,field_description:commown_devices.field_product_template__storable_config_ids
+msgid "Storable configurations"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_inward_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__task_id
 msgid "Task"
 msgstr ""
 
@@ -422,13 +926,13 @@ msgid "The contract has already assigned picking(s)!\n"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:222
+#: code:addons/commown_devices/models/project_task.py:218
 #, python-format
 msgid "These tasks can not be moved forward. There are no picking linked to those tasks: %s"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:194
+#: code:addons/commown_devices/models/project_task.py:191
 #, python-format
 msgid "These tasks can not be moved forward. There are still device(s) associated with their contract: %s"
 msgstr ""
@@ -451,6 +955,11 @@ msgid "Toggle non-serial"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_crm_lead_picking_wizard__lot_ids
+msgid "Tracked Devices"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_picking
 msgid "Transfer"
 msgstr ""
@@ -467,10 +976,26 @@ msgid "Transfer must be done to use this action"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_project_task_to_employee_wizard__delivered_by_hand
+msgid "Unset if the device must be sent by post"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_project__device_tracking
+#: model:ir.model.fields,field_description:commown_devices.field_project_task__device_tracking
+msgid "Use for device tracking?"
+msgstr ""
+
+#. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
 #: model_terms:ir.ui.view,arch_db:commown_devices.view_task_move_lines
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_move_line_validation_form
 msgid "Validate"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__variant_id
+msgid "Variant"
 msgstr ""
 
 #. module: commown_devices
@@ -522,6 +1047,11 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.actions.act_window,name:commown_devices.action_wizard_project_task_hand_over_to_employee
 msgid "[commown] Hand over a device to an employee"
+msgstr ""
+
+#. module: commown_devices
+#: model:mail.template,name:commown_devices.late_pickings_with_lots_mail
+msgid "[commown] Late pickings with lots"
 msgstr ""
 
 #. module: commown_devices
@@ -578,6 +1108,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_outward_picking_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_to_employee
 msgid "or"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__origin
+msgid "origin"
 msgstr ""
 
 #. module: commown_devices
