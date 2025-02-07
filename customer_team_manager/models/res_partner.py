@@ -69,8 +69,6 @@ class ResPartner(models.Model):
             not self.env.user.has_group("base.group_user")
             and self.env.user.has_group("base.group_portal")
             and self.env.user.has_group("customer_team_manager.group_customer_admin")
-            and not self.env.user.partner_id.is_company
-            and self.env.user.partner_id.type == "contact"
             and self.env.user.commercial_partner_id.is_company
         )
 
@@ -150,8 +148,8 @@ class ResPartner(models.Model):
         """
         _self = self
         if self._current_user_is_customer_admin():
-            self._check_customer_allowed_attrs(vals)
             vals["parent_id"] = self.env.user.commercial_partner_id.id
+            self._check_customer_allowed_attrs(vals)
             _self = self.sudo()
 
         return super(ResPartner, _self).create(vals)
@@ -254,19 +252,29 @@ class ResPartner(models.Model):
             if user.has_group("base.group_portal"):
                 user.groups_id |= self.customer_roles.mapped("groups")
 
-    def _load_records_create(self, vals_list):
-        """Override to enforce security for customer admin before using sudo
+    def _check_import_perms(self, values):
+        "Enforce security for customer admin before using sudo on imports"
+        for vals in values:
+            vals["parent_id"] = self.env.user.commercial_partner_id.id
+            self._check_customer_allowed_attrs(vals)
 
-        This method is used by the import UI when new records are created.
-        """
+    def _load_records_create(self, values):
+        "This method is used by the import UI when new records are created."
 
         if self._current_user_is_customer_admin():
-            for vals in vals_list:
-                self._check_customer_allowed_attrs(vals)
-                vals["parent_id"] = self.env.user.commercial_partner_id.id
-            return super(ResPartner, self.sudo())._load_records_create(vals_list)
+            self._check_import_perms(values)
+            return super(ResPartner, self.sudo())._load_records_create(values)
         else:
-            return super()._load_records_create(vals_list)
+            return super()._load_records_create(values)
+
+    def _load_records_write(self, values):
+        "This method is used by the import UI when new records are updated."
+
+        if self._current_user_is_customer_admin():
+            self._check_import_perms([values])
+            return super(ResPartner, self.sudo())._load_records_write(values)
+        else:
+            return super()._load_records_write(values)
 
     @api.model
     def get_import_templates(self):

@@ -35,14 +35,11 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
     def test_portal_user_create_cannot_force_company(self):
         "A customer cannot create a partner with a company"
 
-        with self.assertRaises(AccessError) as err:
-            partner = self.create_partner(
-                sudo_as=self.customer_user_admin, name="F Last", parent_id=1
-            )
-        self.assertEqual(
-            err.exception.name,
-            "You are not allowed to perform this operation on this partner",
+        partner = self.create_partner(
+            sudo_as=self.customer_user_admin, name="F Last", parent_id=1
         )
+
+        self.assertEqual(partner.parent_id, self.customer_user_admin.parent_id)
 
     def test_portal_user_write_cannot_force_partner_company(self):
         "A customer must not be able to change the company of an existing partner"
@@ -327,9 +324,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             }
         )
 
-    def test_import_ok(self):
-        "Partner import by a customer admin must work and respect security constraints"
-
+    def _common_test_import_ok(self, fname):
         role_accounting = self.env.ref("customer_team_manager.customer_role_accounting")
 
         empl = self.create_partner(
@@ -338,13 +333,12 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             email="fc@test.coop",
             customer_roles=[(6, 0, role_accounting.ids)],
         )
-        self.create_xmlid(self.customer_company, "res_partner_company")
         self.create_xmlid(empl, "res_partner_empl")
 
         # Check test prerequisite:
         self.assertEqual(self.colleagues(), empl)
 
-        result = self.import_csv("import.csv", sudo_as=self.customer_user_admin)
+        result = self.import_csv(fname, sudo_as=self.customer_user_admin)
         self.assertTrue(result.get("ids", None), result)
 
         # Check result:
@@ -374,31 +368,20 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         )
         self.assertEqual(other.commercial_partner_id, self.customer_company)
 
-    def test_import_error(self):
-        "Security must be enforced when customer admin imports partners"
+    def test_import_ok_correct_partner(self):
+        "Partner import by a customer admin must work and respect security constraints"
+        self.create_xmlid(self.customer_company, "res_partner_company")
+        self._common_test_import_ok("import.csv")
 
-        role_accounting = self.env.ref("customer_team_manager.customer_role_accounting")
-
-        empl = self.create_partner(
-            sudo_as=self.customer_user_admin,
-            name="F C",
-            email="fc@test.coop",
-            customer_roles=[(6, 0, role_accounting.ids)],
-        )
-        self.create_xmlid(empl, "res_partner_empl")
+    def test_import_ok_override_partner(self):
+        "Partner must be overriden when customer admin imports partners"
 
         # Make company references in the imported data point to a company that is NOT
         # the customer admin's one: this is not authorized and should result in errors
         company = self.customer_company.copy()
         self.create_xmlid(company, "res_partner_company")
 
-        result = self.import_csv("import_error.csv", sudo_as=self.customer_user_admin)
-
-        self.assertIs(result["ids"], False)
-        messages = [m["message"] for m in result["messages"]]
-        expected = "You are not allowed to perform this operation on this partner"
-        self.assertIn(expected, messages[0])
-        self.assertIn(expected, messages[1])
+        self._common_test_import_ok("import_error.csv")
 
     def test_get_import_templates(self):
         "The get_import_templates method should not crash"
