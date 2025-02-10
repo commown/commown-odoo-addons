@@ -324,13 +324,13 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             }
         )
 
-    def _common_test_import_ok(self, fname):
+    def _common_test_import_ok(self, fname, sudo_as=None):
         role_accounting = self.env.ref("customer_team_manager.customer_role_accounting")
 
         empl = self.create_partner(
-            sudo_as=self.customer_user_admin,
             name="F C",
             email="fc@test.coop",
+            parent_id=self.customer_user_admin.parent_id.id,
             customer_roles=[(6, 0, role_accounting.ids)],
         )
         self.create_xmlid(empl, "res_partner_empl")
@@ -338,7 +338,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         # Check test prerequisite:
         self.assertEqual(self.colleagues(), empl)
 
-        result = self.import_csv(fname, sudo_as=self.customer_user_admin)
+        result = self.import_csv(fname, sudo_as=sudo_as)
         self.assertTrue(result.get("ids", None), result)
 
         # Check result:
@@ -371,7 +371,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
     def test_import_ok_correct_partner(self):
         "Partner import by a customer admin must work and respect security constraints"
         self.create_xmlid(self.customer_company, "res_partner_company")
-        self._common_test_import_ok("import.csv")
+        self._common_test_import_ok("import.csv", self.customer_user_admin)
 
     def test_import_ok_override_partner(self):
         "Partner must be overriden when customer admin imports partners"
@@ -381,7 +381,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         company = self.customer_company.copy()
         self.create_xmlid(company, "res_partner_company")
 
-        self._common_test_import_ok("import_error.csv")
+        self._common_test_import_ok("import_error.csv", self.customer_user_admin)
 
     def test_get_import_templates(self):
         "The get_import_templates method should not crash"
