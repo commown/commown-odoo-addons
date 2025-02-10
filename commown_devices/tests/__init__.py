@@ -6,6 +6,7 @@ from . import test_project_task
 from . import test_product
 from . import test_product_service_config
 from . import test_res_partner
+from . import test_sale_order
 from . import test_stock_picking
 from . import test_stock_location
 from . import test_stock_production_lot

@@ -8,6 +8,7 @@ from . import project_project
 from . import project_task
 from . import purchase_order
 from . import res_partner
+from . import sale_order
 from . import stock_location
 from . import stock_picking
 from . import stock_production_lot
