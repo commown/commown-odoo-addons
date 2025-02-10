@@ -1,13 +1,14 @@
 from odoo.tests.common import SavepointCase
 
+from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 
-class SaleOrderTC(SavepointCase):
-    @classmethod
-    def setUpClass(cls):
-        super(SaleOrderTC, cls).setUpClass()
+
+class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
+    def setUp(self):
+        super().setUp()
 
         pt_args = {"name": "fp", "type": "product", "tracking": "serial"}
-        product = cls.env["product.template"].create(pt_args).product_variant_id
+        product = self.env["product.template"].create(pt_args).product_variant_id
         oline = {
             "name": product.name,
             "product_id": product.id,
@@ -16,8 +17,8 @@ class SaleOrderTC(SavepointCase):
             "price_unit": product.list_price,
         }
 
-        partner = cls.env.ref("base.res_partner_address_1")
-        cls.so = cls.env["sale.order"].create(
+        partner = self.env.ref("base.res_partner_address_1")
+        self.so = self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
                 "partner_invoice_id": partner.id,
