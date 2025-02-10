@@ -383,6 +383,11 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
         self._common_test_import_ok("import_with_parent.csv", self.customer_user_admin)
 
+    def test_import_ok_by_employee(self):
+        "Partner import by an employee must work"
+        self.create_xmlid(self.customer_company, "res_partner_company")
+        self._common_test_import_ok("import_with_parent.csv")
+
     def test_get_import_templates(self):
         "The get_import_templates method should not crash"
 
