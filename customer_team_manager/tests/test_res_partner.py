@@ -381,7 +381,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         company = self.customer_company.copy()
         self.create_xmlid(company, "res_partner_company")
 
-        self._common_test_import_ok("import_error.csv", self.customer_user_admin)
+        self._common_test_import_ok("import_with_parent.csv", self.customer_user_admin)
 
     def test_get_import_templates(self):
         "The get_import_templates method should not crash"
