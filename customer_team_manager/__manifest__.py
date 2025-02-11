@@ -3,7 +3,7 @@
 {
     "name": "Customer team manager",
     "summary": "Allow customers to manage their team and users",
-    "version": "12.0.1.0.1",
+    "version": "12.0.1.0.2",
     "development_status": "Alpha",
     "category": "Manager customer",
     "website": "https://commown.coop",
