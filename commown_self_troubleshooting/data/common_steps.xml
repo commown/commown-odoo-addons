@@ -400,7 +400,9 @@
 
         <div t-attf-id="form-step-{{ step }}" role="form" data-toggle="validator">
 
-          <t t-if="display_tool_form" t-call="commown_self_troubleshooting.tool_form"/>
+          <t t-if="display_tool_form" t-call="commown_self_troubleshooting.tool_form">
+              <t t-set="screwdriver_codename" t-value="screwdriver_codename"/>
+          </t>
 
           <div class="form-group">
             <label t-attf-for="more_info_step_{{ step }}">Ajoutez ici toute information que vous jugerez utile :</label>
@@ -421,6 +423,7 @@
     <template id="step-confirm-module-change">
       <t t-call="commown_self_troubleshooting.step-confirm-change">
         <t t-set="display_tool_form" t-value="true"/>
+        <t t-set="screwdriver_codename" t-value="screwdriver_codename"/>
       </t>
     </template>
 

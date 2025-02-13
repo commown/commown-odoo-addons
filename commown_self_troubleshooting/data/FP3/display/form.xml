@@ -74,6 +74,7 @@
 
                   <t t-call="commown_self_troubleshooting.step-manipulation-option">
                     <t t-set="step">1</t>
+                    <t t-set="screwdriver_codename">PH00</t>
                   </t>
 
                     <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
