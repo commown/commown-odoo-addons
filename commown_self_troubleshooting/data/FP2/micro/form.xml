@@ -157,6 +157,7 @@
 
                     <t t-call="commown_self_troubleshooting.step-confirm-module-change">
                       <t t-set="step">5</t>
+                      <t t-set="screwdriver_codename">PH00</t>
                     </t>
 
                     <t t-call="commown_self_troubleshooting.step-self-solved">
