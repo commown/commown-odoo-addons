@@ -11,6 +11,8 @@
     "maintainers": ["loganSIO"],
     "license": "AGPL-3",
     "depends": [
+        # OCA Modules
+        "stock",
         # Commown modules
         "customer_manager_base",
     ],
