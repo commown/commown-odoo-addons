@@ -17,6 +17,8 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
         """Same reconcile method as mass.reconcile.simple.partner but with a
         control of the maturity date gap between them: if the date difference
         is bigger than `max_reconcile_days_gap`, the moves won't be reconciled.
+
+        Also use commercial_partner_id instead of partner_id to match move lines.
         """
 
         max_reconcile_days_gap = self.env.context.get(
@@ -38,8 +40,11 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
             date_1 = lines[count]["date_maturity"]
             if count and not count % 10:
                 _logger.info("Reconcile progress: %s/%s", count, len(lines))
+            cur_commercial_partner = lines[count]["commercial_partner_id"]
             for i in range(count + 1, len(lines)):
-                if lines[count][self._key_field] != lines[i][self._key_field]:
+                # Use commercial_partner_id to avoid non-reconciliations due to move
+                # partners being translated to commercial_partner_id during import:
+                if cur_commercial_partner != lines[i]["commercial_partner_id"]:
                     _logger.info(
                         "Stop searching - %d trial(s)" " (key field changed)", i - count
                     )
@@ -87,10 +92,19 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
     @api.multi
     def _simple_order(self, *args, **kwargs):
         return (
-            "ORDER BY account_move_line.%s, " "account_move_line.date_maturity asc"
-        ) % self._key_field
+            "ORDER BY"
+            " res_partner.commercial_partner_id,"
+            " account_move_line.date_maturity asc"
+        )
 
     def _base_columns(self):
         cols = super(CommownMassReconcileSimplePartner, self)._base_columns()
         cols.append("account_move_line.date_maturity")
+        cols.append("res_partner.commercial_partner_id")
         return cols
+
+    def _from_query(self, *args, **kwargs):
+        "Add the res_partner table to join it and reach the commercial_partner_id"
+        _from = super()._from_query(*args, **kwargs)
+        _from += " JOIN res_partner ON (res_partner.id=account_move_line.partner_id) "
+        return _from
