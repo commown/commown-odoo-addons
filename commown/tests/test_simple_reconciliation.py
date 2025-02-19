@@ -10,6 +10,7 @@ class SimpleReconciliationTC(SavepointCase):
         partner1 = self.env.ref("base.res_partner_address_15")
         partner2 = self.env.ref("base.res_partner_address_28")
         self.assertEqual(partner1.commercial_partner_id, partner2.commercial_partner_id)
+        partner3 = self.env.ref("base.partner_demo_portal")
 
         self.account = self.env.ref("l10n_fr.1_pcg_5113")
 
@@ -45,6 +46,14 @@ class SimpleReconciliationTC(SavepointCase):
                 "date_maturity": date(2018, 1, 21),
                 "credit": 0,
                 "debit": 2,
+            },
+            {
+                "name": "Test aml 5",
+                "partner_id": partner3.id,
+                "account_id": self.account.id,
+                "date_maturity": date(2018, 5, 1),
+                "credit": 2,
+                "debit": 0,
             },
         ]
 
