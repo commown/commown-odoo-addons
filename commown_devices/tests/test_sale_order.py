@@ -1,6 +1,9 @@
+from odoo.exceptions import UserError
 from odoo.tests.common import SavepointCase
 
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
+
+from .common import add_attributes_to_product, create_config
 
 
 class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
@@ -59,3 +62,42 @@ class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         so2 = so.copy({"partner_shipping_id": partner2.id})
         so2.action_confirm()
         self.assertEqual(so2.partner_id.property_stock_customer, new_dest_loc)
+
+    def test_action_add_services_storable_products(self):
+        color_attr = self.env.ref("product.product_attribute_2")
+        color1 = color_attr.value_ids[1]
+
+        def colored1(pt):
+            return pt.mapped("product_variant_ids").filtered(
+                lambda pv: color1 in pv.attribute_value_ids.ensure_one()
+            )
+
+        ct = self.env["contract.template"].create(
+            {"name": "Services for a sale", "stock_ownership": "customer"}
+        )
+        service = self.env["product.template"].create(
+            {"name": "FP", "type": "service", "property_contract_template_id": ct.id}
+        )
+        storable = self.env["product.template"].create(
+            {"name": "FP", "type": "product", "tracking": "serial"}
+        )
+
+        add_attributes_to_product(service, color_attr, color_attr.value_ids)
+        add_attributes_to_product(storable, color_attr, color_attr.value_ids)
+        service.create_variant_ids()
+        storable.create_variant_ids()
+
+        for color in color_attr.value_ids:
+            create_config(service, "primary", storable, colored1(storable), color1)
+
+        so = self.create_sale_order(colored1(service))
+        so_lines = so.order_line
+
+        so.action_add_services_storable_products()
+        new_so_line = so.order_line - so_lines
+        self.assertEqual(new_so_line.product_id.product_tmpl_id, storable)
+        self.assertIn(color1, new_so_line.product_id.attribute_value_ids)
+
+        so.action_confirm()
+        with self.assertRaises(UserError):
+            so.action_add_services_storable_products()

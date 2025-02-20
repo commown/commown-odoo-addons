@@ -28,6 +28,7 @@
         "data/action_picking.xml",
         "data/action_project_task.xml",
         "data/action_purchase_order.xml",
+        "data/action_sale_order.xml",
         "data/action_stock_scrap.xml",
         "data/contract_template.xml",
         "data/project_task.xml",
