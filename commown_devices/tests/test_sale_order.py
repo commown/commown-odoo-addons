@@ -101,3 +101,6 @@ class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         so.action_confirm()
         with self.assertRaises(UserError):
             so.action_add_services_storable_products()
+
+        # Also check the picking creation on order confirmation was deactivated
+        self.assertFalse(so.picking_ids)
