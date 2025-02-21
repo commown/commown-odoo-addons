@@ -10,6 +10,7 @@
       <xpath expr="//page[@name='sales']" position="inside">
         <group name="followup">
           <field name="followup_sales_team_id"/>
+          <field name="followup_sales_project_id"/>
         </group>
       </xpath>
 

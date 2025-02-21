@@ -11,6 +11,7 @@
         "crm",
         "partner_firstname",
         "product_rental",
+        "commown_contractual_issue",
     ],
     "data": [
         "views/crm_lead.xml",
