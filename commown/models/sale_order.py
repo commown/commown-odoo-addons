@@ -63,8 +63,8 @@ class SaleOrder(models.Model):
         self._create_investment_followup_task()
         return super(SaleOrder, self).action_confirm()
 
-    def risk_analysis_lead_title(self, so_line, contract=None, secondary_index=None):
-        title = super(SaleOrder, self).risk_analysis_lead_title(
+    def _followup_entity_title(self, so_line, contract=None, secondary_index=None):
+        title = super(SaleOrder, self)._followup_entity_title(
             so_line, contract=contract, secondary_index=secondary_index
         )
         coupons = self.used_coupons()
