@@ -123,12 +123,26 @@ class PickingToCustomerWizard(models.AbstractModel):
             "You have to select a lot for each tracked product"
         )
         products = {u: 1 for u in self._compute_untracked_products()}
-        return self._get_related_entity().contract_id.send_devices(
+        contract = self._get_related_entity().contract_id
+        moves = contract.send_devices(
             self.lot_ids,
             products,
             send_nonserial_products_from=self._compute_send_non_serial_from(),
             date=self.date,
         )
+
+        # Link created picking to the initial sale
+        if contract.stock_ownership == "customer":
+            so = contract.mapped("contract_line_ids.sale_order_line_id.order_id")
+            so.picking_ids |= moves.mapped("picking_id")
+            # Also try to link moves and sale lines:
+            so_lines = so.order_line
+            for move in moves:
+                so_line = so_lines.filtered(lambda ol: ol.product_id == move.product_id)
+                if so_line:
+                    move.sale_line_id = so_line[0]
+
+        return moves
 
 
 class CrmLeadPickingToCustomerWizard(models.TransientModel):
