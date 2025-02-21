@@ -1,0 +1,56 @@
+<odoo>
+
+  <record id="wizard_abstract_to_customer_form" model="ir.ui.view">
+    <field name="name">[commown] Abstract to customer picking creation form view</field>
+    <field name="model">abstract.to.customer.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Send a device">
+        <sheet>
+          <div id="usage-title" class="h2">
+            <field name="usage" class="oe_inline"/>
+          </div>
+          <group>
+            <field name="entity_id" invisible="1"/>
+            <field name="all_products"
+                   widget="many2many_tags"
+                   options="{'no_create_edit': True, 'open': true}" readonly="1" context="{'default_public': True}"/>
+            <field name="lot_ids" widget="many2many_tags"/>
+            <field name="prioritize_repackaged" attrs='{"invisible": [("usage", "=", "customer")]}'/>
+            <field name="products_locations" readonly="1"/>
+            <field name="date"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="create_picking" string="OK" class="btn-primary" type="object"/>
+          or
+          <button string="Cancel" class="btn-default" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="wizard_crm_lead_to_customer_form_allow_edit" model="ir.ui.view">
+    <field name="name">[commown] Crm lead to customer creation form view</field>
+    <field name="model">crm.lead.to.customer.wizard</field>
+    <field name="inherit_id" ref="commown_devices.wizard_abstract_to_customer_form"/>
+    <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='all_products']" position="attributes">
+        <attribute name="readonly">False</attribute>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="wizard_project_task_to_customer_form_allow_edit" model="ir.ui.view">
+    <field name="name">[commown] Project task to customer creation form view</field>
+    <field name="model">project.task.to.customer.wizard</field>
+    <field name="inherit_id" ref="commown_devices.wizard_abstract_to_customer_form" />
+    <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='all_products']" position="attributes">
+        <attribute name="readonly">False</attribute>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

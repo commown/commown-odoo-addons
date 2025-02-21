@@ -3,34 +3,12 @@ import datetime
 from odoo import _, api, models
 from odoo.exceptions import UserError
 
-from .common import _assigned, do_new_transfer
+from .common import ToCustomerPickingMixin, _assigned, do_new_transfer
 
 
-class CrmLead(models.Model):
+class CrmLead(ToCustomerPickingMixin, models.Model):
     _inherit = "crm.lead"
     delivery_time = datetime.time(9, 0)
-
-    def action_generate_picking(self):
-        contract = self.contract_id
-
-        if contract.pending_picking():
-            raise UserError(
-                _(
-                    "The contract has already assigned picking(s)!\n"
-                    "Either cancel, scrap or validate it."
-                )
-            )
-
-        view = self.env.ref("commown_devices.wizard_crm_lead_picking_form")
-        return {
-            "type": "ir.actions.act_window",
-            "src_model": "crm.lead",
-            "res_model": "crm.lead.picking.wizard",
-            "name": _("Send a device"),
-            "views": [(view.id, "form")],
-            "target": "new",
-            "context": {"default_lead_id": self.id},
-        }
 
     @api.constrains("stage_id")
     def _check_picking_on_stage_change(self):

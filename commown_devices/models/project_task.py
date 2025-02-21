@@ -3,7 +3,7 @@ import json
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, Warning
 
-from .common import _assigned
+from .common import ToCustomerPickingMixin, _assigned
 
 CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.diagnostic_stage",
@@ -20,7 +20,7 @@ class ProjectTaskType(models.Model):
     )
 
 
-class ProjectTask(models.Model):
+class ProjectTask(ToCustomerPickingMixin, models.Model):
     _inherit = "project.task"
 
     storable_product_id = fields.Many2one(
