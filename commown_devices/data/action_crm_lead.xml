@@ -2,12 +2,12 @@
 
   <data>
 
-    <record id="action_generate_picking" model="ir.actions.server">
-      <field name="name">[commown] Generate picking</field>
+    <record id="crm_lead_action_to_customer_picking" model="ir.actions.server">
+      <field name="name">[commown] Generate picking (crm.lead)</field>
       <field name="model_id" ref="model_crm_lead"/>
       <field name="sequence">5</field>
       <field name="state">code</field>
-      <field name="code">action = record.action_generate_picking()</field>
+      <field name="code">action = record.action_to_customer_picking()</field>
       <field name="binding_model_id" ref="model_crm_lead" />
     </record>
 

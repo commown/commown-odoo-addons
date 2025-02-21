@@ -248,3 +248,27 @@ def _set_date(entity, value, attr_name):
         attr_name,
     )
     entity.env.cr.execute(sql, (str(value), entity.id))
+
+
+class ToCustomerPickingMixin:
+    def action_to_customer_picking(self):
+        contract = self.contract_id
+
+        if contract.pending_picking():
+            raise UserError(
+                _(
+                    "The contract has already assigned picking(s)!\n"
+                    "Either cancel, scrap or validate it."
+                )
+            )
+
+        view = self.env.ref("commown_devices.wizard_abstract_to_customer_form")
+        return {
+            "type": "ir.actions.act_window",
+            "src_model": self._name,
+            "res_model": self._name + ".to.customer.wizard",
+            "name": _("Send a device"),
+            "views": [(view.id, "form")],
+            "target": "new",
+            "context": {"default_entity_id": self.id},
+        }

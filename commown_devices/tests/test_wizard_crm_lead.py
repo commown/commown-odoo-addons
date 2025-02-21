@@ -104,7 +104,7 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
 
     def prepare_wizard(self, related_entity, relation_field, user_choices=None):
-        wizard_name = "%s.picking.wizard" % related_entity._name
+        wizard_name = "%s.to.customer.wizard" % related_entity._name
         return self.prepare_ui(
             wizard_name, related_entity, relation_field, user_choices=user_choices
         )
@@ -125,7 +125,7 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         )
 
         with self.assertRaises(UserError) as err:
-            defaults, possibilities = self.prepare_wizard(lead, "lead_id")
+            defaults, possibilities = self.prepare_wizard(lead, "entity_id")
         locations = loc_repackaged_modules + self.loc_new_untracked
         self.assertEqual(
             "Not enough %s under location(s) %s"
@@ -140,11 +140,11 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         )
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
         wizard = (
-            self.env["crm.lead.picking.wizard"]
-            .with_context({"default_lead_id": lead.id})
+            self.env["crm.lead.to.customer.wizard"]
+            .with_context({"default_entity_id": lead.id})
             .create(
                 {
-                    "lead_id": lead.id,
+                    "entity_id": lead.id,
                     "date": date,
                 }
             )
@@ -192,12 +192,18 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         self.adjust_stock_notracking(
             self.protective_screen.product_variant_id, self.loc_new_untracked
         )
+
+        # Check action
+        action = lead.action_to_customer_picking()
+        self.assertEqual(action.get("res_model"), "crm.lead.to.customer.wizard")
+        self.assertEqual(action.get("context").get("default_entity_id"), lead.id)
+
         # Get values to test
-        defaults, possibilities = self.prepare_wizard(lead, "lead_id")
+        defaults, possibilities = self.prepare_wizard(lead, "entity_id")
 
         # Check defaults
 
-        self.assertEqual(defaults["lead_id"], lead.id)
+        self.assertEqual(defaults["entity_id"], lead.id)
         self.assertEqual(
             sorted(defaults["all_products"][0][2]),
             sorted(
@@ -224,20 +230,22 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
             self.protective_screen.product_variant_id, self.loc_new_untracked
         )
 
-        defaults, possibilities = self.prepare_wizard(lead, "lead_id")
+        defaults, possibilities = self.prepare_wizard(lead, "entity_id")
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
         wizard = (
-            self.env["crm.lead.picking.wizard"]
-            .with_context({"default_lead_id": lead.id})
+            self.env["crm.lead.to.customer.wizard"]
+            .with_context({"default_entity_id": lead.id})
             .create(
                 {
-                    "lead_id": lead.id,
+                    "entity_id": lead.id,
                     "date": date,
                 }
             )
         )
         lot = possibilities["lot_ids"][0]
         wizard.lot_ids = lot
+
+        self.assertEqual(wizard.usage, "internal")
 
         moves = wizard.create_picking()
 
@@ -260,5 +268,3 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
         self.assertEqual(moves.mapped("location_dest_id"), loc_partner)
 
         self.assertEqual(moves.mapped("move_line_ids.lot_id.name"), [lot.name])
-
-        # COMMENT TO DELETE

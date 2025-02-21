@@ -43,12 +43,12 @@
         "views/project_task_type.xml",
         "views/purchase_order.xml",
         "views/stock_picking.xml",
-        "views/wizard_crm_lead_picking.xml",
         "views/wizard_link_picking_po.xml",
         "views/wizard_link_po_invoice.xml",
         "views/wizard_move_line_validation.xml",
         "views/wizard_project_task_picking.xml",
         "views/wizard_project_task_to_employee.xml",
+        "views/wizard_to_customer_picking.xml",
     ],
     "demo": [
         "demo/project_task.xml",
