@@ -79,8 +79,10 @@ class SaleOrder(models.Model):
             team = product.followup_sales_team_id
             if not team:
                 continue
+
+            contracts = managed_by_contract.get(product, [])
             for _num in range(int(so_line.product_uom_qty)):
-                contracts = managed_by_contract.get(product, [])
+
                 if contracts:
                     contract = contracts.pop()
                     lead = self._create_lead(
@@ -89,6 +91,7 @@ class SaleOrder(models.Model):
                         so_line,
                         contract_id=contract.id,
                     )
+
                 else:
                     count += 1
                     name = self.risk_analysis_lead_title(so_line, secondary_index=count)
