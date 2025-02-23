@@ -6,11 +6,7 @@ class ProductServiceConfigTC(DeviceAsAServiceTC):
         super().setUp(*args, **kwargs)
 
         self.attribute_color = self.env.ref("product.product_attribute_2")
-        color_values = self.env["product.attribute.value"].search(
-            [("attribute_id", "=", self.attribute_color.id)]
-        )
-        self.color1 = color_values[0]
-        self.color2 = color_values[1]
+        self.color1, self.color2 = self.attribute_color.value_ids[:2]
 
         self.fp3_service_tmpl = self._create_rental_product("fp3+").product_tmpl_id
 
