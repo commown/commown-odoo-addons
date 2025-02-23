@@ -66,7 +66,7 @@ class Contract(models.Model):
         at the previous date.
         """
 
-        ungraded_lots = lots.filtered(lambda l: not l.grade_id)
+        ungraded_lots = lots.filtered(lambda lot: not lot.grade_id)
         if ungraded_lots:
             raise UserError(
                 _("Please set the grade on lots %s (ids: %s)")

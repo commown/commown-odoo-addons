@@ -289,7 +289,7 @@ def create_lot_and_quant(env, lot_name, product, location):
         }
     )
 
-    quant = env["stock.quant"].create(
+    env["stock.quant"].create(
         {
             "product_id": product.id,
             "lot_id": lot.id,
