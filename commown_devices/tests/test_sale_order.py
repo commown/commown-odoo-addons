@@ -4,11 +4,9 @@ from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 
 
 class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
-    def setUp(self):
-        super().setUp()
+    "Test class for sale order methods"
 
-        pt_args = {"name": "fp", "type": "product", "tracking": "serial"}
-        product = self.env["product.template"].create(pt_args).product_variant_id
+    def create_sale_order(self, product):
         oline = {
             "name": product.name,
             "product_id": product.id,
@@ -18,7 +16,7 @@ class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         }
 
         partner = self.env.ref("base.res_partner_address_1")
-        self.so = self.env["sale.order"].create(
+        return self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
                 "partner_invoice_id": partner.id,
@@ -30,7 +28,12 @@ class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         )
 
     def test_action_confirm(self):
-        partner = self.so.partner_id
+        pt = self.env["product.template"].create(
+            {"name": "fp", "type": "product", "tracking": "serial"}
+        )
+        so = self.create_sale_order(pt.product_variant_id)
+
+        partner = so.partner_id
         partner2 = partner.copy({"name": "Test"})
 
         # Prerequisites: partners belong to same company and have default stock location
@@ -40,19 +43,19 @@ class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         self.assertEqual(partner2.property_stock_customer, customer_loc)
 
         # Start test:
-        self.so.action_confirm()
+        so.action_confirm()
 
         # Check a new customer loc was created...
-        new_dest_loc = self.so.partner_id.property_stock_customer
+        new_dest_loc = so.partner_id.property_stock_customer
         self.assertNotEqual(new_dest_loc, customer_loc)
         self.assertEqual(new_dest_loc.usage, "customer")
         # ... that belongs to the partner's company...
         self.assertEqual(new_dest_loc.partner_id, partner.commercial_partner_id)
         # ... and is used as the destination of the tracked products
-        self.assertEqual(self.so.mapped("picking_ids.location_dest_id"), new_dest_loc)
+        self.assertEqual(so.mapped("picking_ids.location_dest_id"), new_dest_loc)
 
         # Check another sale to the same company does not create another location
         # when confirmed, but the sale partner gets the same customer location:
-        so2 = self.so.copy({"partner_shipping_id": partner2.id})
+        so2 = so.copy({"partner_shipping_id": partner2.id})
         so2.action_confirm()
         self.assertEqual(so2.partner_id.property_stock_customer, new_dest_loc)
