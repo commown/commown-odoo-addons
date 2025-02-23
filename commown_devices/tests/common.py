@@ -10,17 +10,16 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
 def create_config(serv_tmpl, type, stor_tmpl, stor_variant, att_val_ids=None):
-    return serv_tmpl.env["product.service_storable_config"].create(
-        {
-            "service_tmpl_id": serv_tmpl.id,
-            "storable_type": type,
-            "attribute_value_ids": [(6, 0, att_val_ids.ids)]
-            if att_val_ids is not None
-            else False,
-            "storable_tmpl_id": stor_tmpl.id,
-            "storable_variant_id": stor_variant.id,
-        }
-    )
+    attrs = {
+        "service_tmpl_id": serv_tmpl.id,
+        "storable_type": type,
+        "storable_tmpl_id": stor_tmpl.id,
+        "storable_variant_id": stor_variant.id,
+    }
+    if att_val_ids:
+        attrs["attribute_value_ids"] = [(6, 0, att_val_ids.ids)]
+
+    return serv_tmpl.env["product.service_storable_config"].create(attrs)
 
 
 def add_attributes_to_product(product, attribute, attribute_values):
