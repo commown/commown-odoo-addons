@@ -146,7 +146,9 @@ class ResPartner(models.Model):
 
         by_usage = {}
         for usage in set(_partner_locations.mapped("usage")):
-            by_usage[usage] = _partner_locations.filtered(lambda l: l.usage == usage)
+            by_usage[usage] = _partner_locations.filtered(
+                lambda loc: loc.usage == usage
+            )
         for partner_locations in by_usage.values():
             if len(partner_locations) > 1:
                 dst_location, src_locations = (
