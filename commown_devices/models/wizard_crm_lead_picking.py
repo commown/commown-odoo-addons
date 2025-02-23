@@ -22,7 +22,7 @@ class CrmLeadPickingWizard(models.TransientModel):
         "product.product",
         string="All product to send",
         required=True,
-        domain=[("type", "=", "product")],
+        domain=[("product_tmpl_id.type", "=", "product")],
         default=lambda self: self._compute_default_product_ids(),
     )
 
