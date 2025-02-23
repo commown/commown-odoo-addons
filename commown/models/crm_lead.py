@@ -1,5 +1,3 @@
-from datetime import date
-
 from odoo import api, fields, models
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
@@ -20,19 +18,6 @@ class CrmLead(models.Model):
         if not result.contract_id:
             result.send_email_on_delivery = False
         return result
-
-    @api.multi
-    def delivery_perform_actions(self):
-        super().delivery_perform_actions()
-        today = date.today()
-        for record in self.filtered("contract_id"):
-            # Current method may be called by users not allowed to update
-            # contracts, so we use sudo here:
-            contract = record.contract_id.sudo()
-            # Do not restart contract that have already started
-            if contract.date_start and contract.date_start <= today:
-                continue
-            contract.date_start = record.delivery_date
 
     def _action_send_sms_doc_reminder(self):
         template = self.env.ref("commown.sms_template_lead_doc_reminder")

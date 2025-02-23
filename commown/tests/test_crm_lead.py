@@ -5,7 +5,6 @@ import mock
 from odoo.tests.common import at_install, post_install
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
-from odoo.addons.product_rental.models.contract import NO_DATE
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
@@ -50,27 +49,6 @@ class CrmLeadTC(RentalSaleOrderTC):
         "Confirm the sale and return all its just-created risk-analysis leads"
         self.so.action_confirm()
         return self.env["crm.lead"].search([("so_line_id.order_id", "=", self.so.id)])
-
-    def test_actions_on_delivery_set_contract_start_date(self):
-        lead = self._create_ra_leads().filtered("contract_id")[0]
-        contract = lead.contract_id
-        lead.send_email_on_delivery = False  # avoid setting-up email template
-
-        # Check contract state before delivery
-        self.assertFalse(contract.is_auto_pay)
-        self.assertEqual(contract.date_start, NO_DATE)
-
-        # Simulate delivery
-        lead.delivery_date = date(2018, 1, 1)
-
-        # Check results: contract started but is_auto_pay unchanged
-        self.assertEqual(contract.date_start, date(2018, 1, 1))
-        self.assertFalse(contract.is_auto_pay)
-
-        # Simulate delivery again: happens when we send a new device
-        # Contract start date should not change again!
-        lead.delivery_date = date(2017, 1, 1)
-        self.assertEqual(contract.date_start, date(2018, 1, 1))
 
     def test_action_send_sms_doc_reminder(self):
         fr = self.env.ref("base.fr")
