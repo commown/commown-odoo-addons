@@ -73,6 +73,8 @@ class BaseLotTC(SavepointCase):
 
 
 class DeviceAsAServiceTC(RentalSaleOrderTC):
+    confirm_sale = True
+
     def setUp(self):
         super(DeviceAsAServiceTC, self).setUp()
 
@@ -114,7 +116,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 "order_line": [oline],
             }
         )
-        self.so.action_confirm()
+        if self.confirm_sale:
+            self.so.action_confirm()
 
         self.location_fp3_new = self.env["stock.location"].create(
             {
