@@ -9,15 +9,15 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
     def setUp(self):
         super().setUp()
         self.so.action_confirm()
-
-    def get_lead(self):
-        return self.env["crm.lead"].search(
+        self.lead = self.env["crm.lead"].search(
             [("so_line_id", "=", self.so.order_line.ids[0])]
         )[0]
+        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-1")
+        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
 
     def test_find_nonserial_product_orig_location(self):
 
-        lead = self.get_lead()
+        lead = self.lead
 
         loc_repackaged_modules = self.env.ref(
             "commown_devices.stock_repackaged_modules_and_accessories"
@@ -86,7 +86,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
 
     def test_ui(self):
 
-        lead = self.get_lead()
+        lead = self.lead
 
         self.adjust_stock_notracking(
             self.protective_screen.product_variant_id, self.loc_new_untracked
@@ -123,7 +123,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
     def test_picking(self):
 
         # Prepare test data
-        lead = self.get_lead()
+        lead = self.lead
 
         self.adjust_stock_notracking(
             self.protective_screen.product_variant_id, self.loc_new_untracked
