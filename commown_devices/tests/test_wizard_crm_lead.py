@@ -247,6 +247,11 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
 
         moves = wizard.create_picking()
 
+        # Check error on try to run action_to_customer_picking again
+        with self.assertRaises(UserError) as err:
+            lead.action_to_customer_picking()
+        self.assertIn("contract has already assigned picking", err.exception.name)
+
         # Check the result
         picking = moves.mapped("picking_id")
         loc_new = self.env.ref("commown_devices.stock_location_available_for_rent")
