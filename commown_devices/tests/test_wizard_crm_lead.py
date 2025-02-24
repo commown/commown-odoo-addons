@@ -111,9 +111,7 @@ class WizardCrmLeadPickingTC(DeviceAsAServiceTC):
 
     def get_lead(self):
         return self.env["crm.lead"].search(
-            [
-                ("so_line_id", "=", self.so.order_line.ids[0]),
-            ]
+            [("so_line_id", "=", self.so.order_line.ids[0])]
         )[0]
 
     def test_find_nonserial_product_orig_location(self):
