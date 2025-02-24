@@ -330,3 +330,111 @@ class BaseWizardToEmployeeMixin:
         wizard = self.env["project.task.to.employee.wizard"].create(kwargs)
         wizard.onchange_reset_shipping_data_if_delivered_by_hand()
         return wizard
+
+
+class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
+    "Base class to write identical tests for picking to customer from leads and tasks"
+    confirm_sale = False
+
+    def setUp(self):
+        super().setUp()
+
+        self.fp3_plus_service_tmpl = self._create_rental_product("fp3+").product_tmpl_id
+        self.fp3_plus_storable_tmpl = self.storable_product.copy({"name": "fp3+"})
+        self.usbc_cable = self.env["product.template"].create(
+            {
+                "name": "Test USB-C Cable",
+                "type": "product",
+                "tracking": "none",
+            }
+        )
+        self.protective_screen = self.env["product.template"].create(
+            {
+                "name": "Protective Screen",
+                "type": "product",
+                "tracking": "none",
+            }
+        )
+        self.loc_new_untracked = self.env.ref(
+            "commown_devices.stock_location_modules_and_accessories"
+        )
+        self.adjust_stock_notracking(
+            self.usbc_cable.product_variant_id, self.loc_new_untracked
+        )
+        # We don't ajdust stock of protective screen because lack of stock case is
+        # tested
+        self.attribute_usbc = self.env["product.attribute"].create(
+            {"name": "Send Cable ?", "type": "select", "create_variant": "always"}
+        )
+        self.attribute_color = self.env.ref("product.product_attribute_2")
+        color_values = self.env["product.attribute.value"].search(
+            [("attribute_id.id", "=", self.attribute_color.id)]
+        )
+        usbc_values = self.env["product.attribute.value"].create(
+            [
+                {"attribute_id": self.attribute_usbc.id, "name": "Yes"},
+                {"attribute_id": self.attribute_usbc.id, "name": "No"},
+            ]
+        )
+        add_attributes_to_product(
+            self.fp3_plus_service_tmpl,
+            self.attribute_color,
+            color_values,
+        )
+        add_attributes_to_product(
+            self.fp3_plus_storable_tmpl,
+            self.attribute_color,
+            color_values,
+        )
+        add_attributes_to_product(
+            self.fp3_plus_service_tmpl,
+            self.attribute_usbc,
+            usbc_values,
+        )
+        self.fp3_plus_service_tmpl._origin = self.fp3_plus_service_tmpl
+        self.fp3_plus_storable_tmpl.create_variant_ids()
+        self.fp3_plus_service_tmpl.create_variant_ids()
+        self.color1 = color_values[0]
+        with_usbc = usbc_values.filtered(lambda v: v.name == "Yes")
+        self.fp3_plus_storable_color1 = self.env["product.product"].search(
+            [
+                ("product_tmpl_id", "=", self.fp3_plus_storable_tmpl.id),
+                ("attribute_value_ids.id", "ilike", self.color1.id),
+            ]
+        )
+        create_config(
+            self.fp3_plus_service_tmpl,
+            "primary",
+            self.fp3_plus_storable_tmpl,
+            self.fp3_plus_storable_color1,
+            att_val_ids=self.color1,
+        )
+        create_config(
+            self.fp3_plus_service_tmpl,
+            "secondary",
+            self.protective_screen,
+            self.protective_screen.product_variant_id,
+        )
+        create_config(
+            self.fp3_plus_service_tmpl,
+            "secondary",
+            self.usbc_cable,
+            self.usbc_cable.product_variant_id,
+            att_val_ids=with_usbc,
+        )
+        self.fp3_plus_service_color1_with_usb = self.env["product.product"].search(
+            [
+                ("product_tmpl_id", "=", self.fp3_plus_service_tmpl.id),
+                ("attribute_value_ids", "ilike", self.color1.id),
+                ("attribute_value_ids", "ilike", with_usbc.id),
+            ]
+        )
+        self.so.order_line[0].product_id = self.fp3_plus_service_color1_with_usb
+        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-1")
+        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
+
+    def prepare_wizard(self, related_entity, relation_field, user_choices=None):
+        wizard_name = "%s.to.customer.wizard" % related_entity._name
+        return self.prepare_ui(
+            wizard_name, related_entity, relation_field, user_choices=user_choices
+        )
