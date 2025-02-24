@@ -96,7 +96,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         )
         team = self.env.ref("sales_team.salesteam_website_sales")
 
-        sold_product = self._create_rental_product(
+        self.service_product = self._create_rental_product(
             name="Fairphone as a Service",
             list_price=60.0,
             rental_price=30.0,
@@ -105,9 +105,9 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             followup_sales_team_id=team.id,
         )
 
-        assert sold_product.is_contract  # XXX requires cache invalidation
+        assert self.service_product.is_contract  # XXX requires cache invalidation
 
-        oline = self._oline(sold_product, product_uom_qty=3)
+        oline = self._oline(self.service_product, product_uom_qty=3)
         self.so = self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
@@ -339,8 +339,7 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
     def setUp(self):
         super().setUp()
 
-        self.fp3_plus_service_tmpl = self._create_rental_product("fp3+").product_tmpl_id
-        self.fp3_plus_storable_tmpl = self.storable_product.copy({"name": "fp3+"})
+        service_template = self.service_product.product_tmpl_id
         self.usbc_cable = self.env["product.template"].create(
             {
                 "name": "Test USB-C Cable",
@@ -377,46 +376,46 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
             ]
         )
         add_attributes_to_product(
-            self.fp3_plus_service_tmpl,
+            service_template,
             self.attribute_color,
             color_values,
         )
         add_attributes_to_product(
-            self.fp3_plus_storable_tmpl,
+            self.storable_product,
             self.attribute_color,
             color_values,
         )
         add_attributes_to_product(
-            self.fp3_plus_service_tmpl,
+            service_template,
             self.attribute_usbc,
             usbc_values,
         )
-        self.fp3_plus_service_tmpl._origin = self.fp3_plus_service_tmpl
-        self.fp3_plus_storable_tmpl.create_variant_ids()
-        self.fp3_plus_service_tmpl.create_variant_ids()
+        service_template._origin = service_template
+        self.storable_product.create_variant_ids()
+        service_template.create_variant_ids()
         self.color1 = color_values[0]
         with_usbc = usbc_values.filtered(lambda v: v.name == "Yes")
         self.fp3_plus_storable_color1 = self.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.fp3_plus_storable_tmpl.id),
+                ("product_tmpl_id", "=", self.storable_product.id),
                 ("attribute_value_ids.id", "ilike", self.color1.id),
             ]
         )
         create_config(
-            self.fp3_plus_service_tmpl,
+            service_template,
             "primary",
-            self.fp3_plus_storable_tmpl,
+            self.storable_product,
             self.fp3_plus_storable_color1,
             att_val_ids=self.color1,
         )
         create_config(
-            self.fp3_plus_service_tmpl,
+            service_template,
             "secondary",
             self.protective_screen,
             self.protective_screen.product_variant_id,
         )
         create_config(
-            self.fp3_plus_service_tmpl,
+            service_template,
             "secondary",
             self.usbc_cable,
             self.usbc_cable.product_variant_id,
@@ -424,14 +423,12 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
         )
         self.fp3_plus_service_color1_with_usb = self.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.fp3_plus_service_tmpl.id),
+                ("product_tmpl_id", "=", service_template.id),
                 ("attribute_value_ids", "ilike", self.color1.id),
                 ("attribute_value_ids", "ilike", with_usbc.id),
             ]
         )
         self.so.order_line[0].product_id = self.fp3_plus_service_color1_with_usb
-        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-1")
-        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
 
     def prepare_wizard(self, related_entity, relation_field, user_choices=None):
         wizard_name = "%s.to.customer.wizard" % related_entity._name
