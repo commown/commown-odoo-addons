@@ -35,36 +35,50 @@ class SaleOrder(models.Model):
     def related_contracts(self):
         return self.env["contract.contract"].of_sale(self)
 
-    def _create_followup_entity_crm_lead(self, name, team, so_line, **kwargs):
-        data = {
-            "name": name,
-            "partner_id": self.partner_id.id,
-            "type": "opportunity",
-            "team_id": team.id,
-            "stage_id": self.choose_stage(team).id,
-            "so_line_id": so_line.id,
-        }
-        data.update(kwargs)
-        lead = self.env["crm.lead"].create(data)
+    def _create_followup_entity_crm_lead(self, prefix, team, so_line, contract=None):
+        lead = self.env["crm.lead"].create(
+            {
+                "name": " ".join([prefix, so_line.product_id.display_name]),
+                "partner_id": self.partner_id.id,
+                "type": "opportunity",
+                "team_id": team.id,
+                "stage_id": self.choose_stage(team).id,
+                "so_line_id": so_line.id,
+                "contract_id": contract.id if contract else False,
+            }
+        )
         # Override post-create behaviour that auto-assigns team_id
         lead.update({"team_id": team.id})
         return lead
 
-    def _create_followup_entity_project_task(self, name, project, so_line, **kwargs):
-        data = {
-            "name": name,
-            "partner_id": self.partner_id.id,
-            "project_id": project.id,
-            "stage_id": self.choose_stage(project).id,
-        }
-        data.update(kwargs)
-        return self.env["project.task"].create(data)
+    def _create_followup_entity_project_task(
+        self, prefix, project, so_line, contract=None
+    ):
+        template = self.env.ref("commown_lead_risk_analysis.sale_task_description")
+        description = template.render(
+            {
+                "prefix": prefix,
+                "project": project,
+                "so_line": so_line,
+                "contract": contract,
+            }
+        )
+        return self.env["project.task"].create(
+            {
+                "name": " ".join([prefix, so_line.product_id.name]),
+                "partner_id": self.partner_id.id,
+                "project_id": project.id,
+                "stage_id": self.choose_stage(project).id,
+                "contract_id": contract.id if contract else False,
+                "description": description,
+            }
+        )
 
-    def _followup_entity_title(self, so_line, contract=None, secondary_index=None):
+    def _followup_entity_title_prefix(self, contract=None, secondary_index=None):
         name = "%s-00" % self.name if contract is None else contract.name
         if secondary_index is not None:
             name += "/%s" % secondary_index
-        return "[%s] %s" % (name, so_line.product_id.display_name)
+        return "[%s]" % name
 
     def _get_usage(self):
         contracts = self.mapped("order_line.product_id.property_contract_template_id")
@@ -121,17 +135,12 @@ class SaleOrder(models.Model):
 
                 if contracts:
                     contract = contracts.pop()
-                    entity = create_entity_method(
-                        self._followup_entity_title(so_line, contract=contract),
-                        parent,
-                        so_line,
-                        contract_id=contract.id,
-                    )
-
+                    prefix = self._followup_entity_title_prefix(contract=contract)
+                    entity = create_entity_method(prefix, parent, so_line, contract)
                 else:
                     count += 1
-                    name = self._followup_entity_title(so_line, secondary_index=count)
-                    entity = create_entity_method(name, parent, so_line)
+                    prefix = self._followup_entity_title_prefix(secondary_index=count)
+                    entity = create_entity_method(prefix, parent, so_line)
                 entities |= entity
 
         return entities
