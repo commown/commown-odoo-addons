@@ -420,6 +420,13 @@ class ProjectTask(models.Model):
         task = self._slimpay_payment_issue_get_or_create(project, client, issue_doc)
         invoice = task.invoice_id
 
+        if issue_doc.get("rejectReason"):
+            _ctx = {
+                "code": issue_doc.get("rejectReasonCode", ""),
+                "text": issue_doc["rejectReason"],
+            }
+            task.message_post(body=_("Reject reason is %(code)s: %(text)s") % _ctx)
+
         if not task.slimpay_payment_issue_process_automatically():
             task.update(
                 {"stage_id": self.env.ref("payment_slimpay_issue.stage_orphan").id}
