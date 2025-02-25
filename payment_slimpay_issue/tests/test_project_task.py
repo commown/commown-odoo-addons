@@ -460,6 +460,25 @@ class ProjectTC(SavepointCase):
         self.assertEqual(len(self._project_tasks()), 0)
         self.assertIssuesAcknowledged(act, "i1")
 
+    def test_reason_message(self):
+        act, get = self._execute_cron(
+            [
+                fake_issue_doc(
+                    id="i1",
+                    rejectReason="Insufficient funds",
+                    rejectReasonCode="AM04",
+                )
+            ]
+        )
+
+        tasks = self._project_tasks()
+        self.assertEqual(len(tasks), 1)
+        self.assertIn(
+            "Reject reason is AM04: Insufficient funds",
+            "\n".join(tasks.mapped("message_ids.body")),
+        )
+        self.assertIssuesAcknowledged(act, "i1")
+
     def _reset_on_time_actions_last_run(self):
         for action in self.env["base.automation"].search([("trigger", "=", "on_time")]):
             xml_ids = list(action.get_xml_id().values())
