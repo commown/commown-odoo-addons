@@ -1,0 +1,25 @@
+<odoo>
+
+  <data noupdate="1">
+
+    <record id="sale_task_description" model="ir.ui.view">
+      <field name="name">sale-task-description</field>
+      <field name="type">qweb</field>
+      <field name="key">commown_lead_risk_analysis.sale-task-description</field>
+      <field name="arch" type="xml">
+        <t t-name="sale-task-description">
+          <div>
+            <t t-set="product" t-value="so_line.product_id"/>
+            <h2><t t-esc="prefix"/> <t t-esc="product.display_name"/></h2>
+            <h3 t-if="product.attribute_value_ids">Attributes</h3>
+            <ul t-foreach="product.attribute_value_ids" t-as="value">
+              <li><b t-esc="value.attribute_id.name"/> : <span t-esc="value.name"/></li>
+            </ul>
+          </div>
+        </t>
+      </field>
+    </record>
+
+  </data>
+
+</odoo>
