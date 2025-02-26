@@ -422,7 +422,7 @@ class ProjectTask(models.Model):
 
         if issue_doc.get("rejectReason"):
             _ctx = {
-                "code": issue_doc.get("rejectReasonCode", ""),
+                "code": issue_doc.get("returnReasonCode", ""),
                 "text": issue_doc["rejectReason"],
             }
             task.message_post(body=_("Reject reason is %(code)s: %(text)s") % _ctx)
