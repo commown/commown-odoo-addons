@@ -78,10 +78,7 @@ class ProjectTask(models.Model):
         """
         try:
             with self.env.cr.savepoint():
-                if (
-                    issue_doc.get("rejectReason", None)
-                    != "sepaReturnReasonCode.focr.reason"
-                ):
+                if issue_doc.get("returnReasonCode", None) != "FOCR":
                     self._slimpay_payment_issue_handle(project, client, issue_doc)
                 else:
                     _logger.info(

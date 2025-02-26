@@ -450,11 +450,7 @@ class ProjectTC(SavepointCase):
         """
 
         act, get = self._execute_cron(
-            [
-                fake_issue_doc(
-                    id="i1", rejectReason="sepaReturnReasonCode.focr.reason"
-                ),
-            ]
+            [fake_issue_doc(id="i1", returnReasonCode="FOCR")]
         )
 
         self.assertEqual(len(self._project_tasks()), 0)
