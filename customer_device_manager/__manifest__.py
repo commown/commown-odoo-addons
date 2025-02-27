@@ -14,10 +14,13 @@
         # OCA Modules
         "stock",
         # Commown modules
-        "customer_manager_base",
+        "customer_team_manager",
     ],
     "data": [
-
+        "security/groups.xml",
+        "data/customer_roles.xml",
+        "security/ir.model.access.csv",
+        "security/rules.xml",
     ],
     "installable": True,
 }
