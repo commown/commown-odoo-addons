@@ -58,6 +58,14 @@ class SecurityTC(SingleTransactionCase):
             self.control.sudo(self.user_control_manager.id).name,
             "Test control",
         )
+
+        # User with just base.group_user can read
+        self.assertEqual(
+            self.control.sudo(self.user_no_access.id).name,
+            "Test control",
+        )
+
+        self.user_no_access.groups_id -= self.env.ref("base.group_user")
         with self.assertRaises(AccessError) as err:
             self.control.sudo(self.user_no_access.id).name
         self.assertIn(
