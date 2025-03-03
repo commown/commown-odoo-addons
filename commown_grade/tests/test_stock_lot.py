@@ -1,7 +1,7 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class StockProductionLotTC(SavepointCase):
+class StockProductionLotTC(TransactionCase):
     def setUp(self):
         super().setUp()
         self.lot = self.env.ref("stock.lot_product_cable_management")
