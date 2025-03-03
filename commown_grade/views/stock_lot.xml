@@ -1,9 +1,9 @@
 <odoo>
 
-  <record id="view_lot_form" model="ir.ui.view">
+  <record id="view_stock_lot_form" model="ir.ui.view">
     <field name="name">stock.lot.form (in commown_grade)</field>
     <field name="model">stock.lot</field>
-    <field name="inherit_id" ref="stock.view_lot_form"/>
+    <field name="inherit_id" ref="stock.view_production_lot_form"/>
     <field name="arch" type="xml">
       <xpath expr="//group[@name='main_group']/group" position="after">
         <group name="Grade">
