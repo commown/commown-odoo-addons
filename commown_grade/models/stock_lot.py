@@ -2,7 +2,7 @@ from odoo import _, api, fields, models
 
 
 class StockProductionLot(models.Model):
-    _inherit = "stock.production.lot"
+    _inherit = "stock.lot"
 
     grade_id = fields.Many2one(
         "commown_grade.grade",

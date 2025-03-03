@@ -17,7 +17,7 @@ class GradeHistoryLine(models.Model):
     )
 
     lot_id = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         index=True,
         required=True,
     )
