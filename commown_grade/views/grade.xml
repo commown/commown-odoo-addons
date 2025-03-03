@@ -15,7 +15,6 @@
     <field name="name">Commown Grade</field>
     <field name="res_model">commown_grade.grade</field>
     <field name="type">ir.actions.act_window</field>
-    <field name="view_type">form</field>
     <field name="view_id" ref="view_commown_grade_tree"/>
     <field name="view_mode">tree,form</field>
   </record>
