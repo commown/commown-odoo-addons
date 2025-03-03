@@ -17,6 +17,6 @@
         "data/grade.xml",
         "views/grade.xml",
         "views/grade_history_line.xml",
-        "views/stock_production_lot.xml",
+        "views/stock_lot.xml",
     ],
 }
