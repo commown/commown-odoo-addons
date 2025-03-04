@@ -4,10 +4,10 @@ from io import BytesIO
 
 from odf import opendocument
 from odf.table import Table, TableCell, TableRow
-from odoo.tests import common
+from odoo.tests import TransactionCase
 
 
-class TestShareholderRegister(common.SavepointCase):
+class TestShareholderRegister(TransactionCase):
     @classmethod
     def _create_account(cls, code, name):
         account = cls.env["account.account"].create(

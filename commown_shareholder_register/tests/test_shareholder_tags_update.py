@@ -1,6 +1,6 @@
 from datetime import date
 
-from odoo.tests import common
+from odoo.tests import TransactionCase
 
 SHAREHOLDER_TAG_XML_ID = "commown_shareholder_register.shareholder_tag"
 COLLEGE_A_XML_ID = "commown_shareholder_register.shareholder_tag_col_A"
@@ -9,7 +9,7 @@ COLLEGE_C_XML_ID = "commown_shareholder_register.shareholder_tag_col_C"
 COLLEGE_D_XML_ID = "commown_shareholder_register.shareholder_tag_col_D"
 
 
-class TestShareholderTagsUpdate(common.SavepointCase):
+class TestShareholderTagsUpdate(TransactionCase):
     @classmethod
     def _create_account(cls, code, name):
         account = cls.env["account.account"].create(
