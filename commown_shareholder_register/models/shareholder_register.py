@@ -52,7 +52,7 @@ class ShareholderRegister(models.TransientModel):
             },
         }
         """
-        nominal_share_amount = self.env.user.company_id.nominal_share_amount
+        nominal_share_amount = self.env.company.nominal_share_amount
         cats = self.env["commown_shareholder_register.category"].search([])
         by_account = {c.account_id: c for c in cats}
         data = self.env["account.move.line"].read_group(
