@@ -138,7 +138,6 @@ class ShareholderRegister(models.TransientModel):
 
         return result
 
-    @api.multi
     def generate_register(self):
         report = (
             self.env["ir.actions.report"]

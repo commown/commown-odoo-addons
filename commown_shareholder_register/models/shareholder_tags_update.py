@@ -18,7 +18,6 @@ class ShareholderTagsUpdate(models.TransientModel):
         help="Date of the register",
     )
 
-    @api.multi
     def action_update_partners_tag(self):
         register = self.env["commown_shareholder_register.register"].create(
             {"date": self.date},

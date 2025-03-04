@@ -17,7 +17,6 @@
     <field name="name">Shareholder Category</field>
     <field name="res_model">commown_shareholder_register.category</field>
     <field name="type">ir.actions.act_window</field>
-    <field name="view_type">form</field>
     <field name="view_id" ref="view_shareholder_category_tree"/>
     <field name="view_mode">tree,form</field>
   </record>
