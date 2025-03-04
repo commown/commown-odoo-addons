@@ -144,7 +144,7 @@ class ShareholderRegister(models.TransientModel):
             ._get_report_from_name("commown_shareholder_register.spreadsheet")
             .ensure_one()
         )
-        result = report.render(self.ids)[0]
+        result = report._render(report, self.ids)[0]
         self.write(
             {
                 "report": base64.encodebytes(result),
