@@ -4,7 +4,6 @@ from io import BytesIO
 
 from odf import opendocument
 from odf.table import Table, TableCell, TableRow
-
 from odoo.tests import common
 
 
