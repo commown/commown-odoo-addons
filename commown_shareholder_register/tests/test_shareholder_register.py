@@ -15,7 +15,7 @@ class TestShareholderRegister(TransactionCase):
             {
                 "name": name,
                 "code": code,
-                "account_type": cls.acc_type.id,
+                "account_type": "income_other",
             }
         )
         return account
@@ -90,9 +90,6 @@ class TestShareholderRegister(TransactionCase):
         cls.partner_2 = cls.env["res.partner"].create({"name": "Partner 2"})
         cls.partner_3 = cls.env["res.partner"].create({"name": "Partner 3"})
 
-        cls.acc_type = cls.env["account.account.type"].create(
-            {"name": "Test", "type": "other"}
-        )
         cls.account_porteur = cls._create_account("10134000", "Porteur de Projet")
         cls.account_soutient = cls._create_account("10136000", "Account Soutient")
         cls.account_beneficiaire = cls._create_account(
