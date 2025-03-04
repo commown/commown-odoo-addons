@@ -14,7 +14,7 @@ class TestShareholderRegister(common.SavepointCase):
             {
                 "name": name,
                 "code": code,
-                "user_type_id": cls.acc_type.id,
+                "account_type": cls.acc_type.id,
             }
         )
         return account
