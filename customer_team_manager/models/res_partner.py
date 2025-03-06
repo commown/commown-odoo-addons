@@ -219,9 +219,13 @@ class ResPartner(models.Model):
 
     @api.multi
     def unlink(self):
-        commercial_partner = self.commercial_partner_id
+        is_b2b = not self.is_company and self.commercial_partner_id.is_company
+        if is_b2b:
+            commercial_partner = self.commercial_partner_id
+
         super().unlink()
-        if commercial_partner.is_company:
+
+        if is_b2b:
             self._check_one_customer_admin_at_least(commercial_partner)
 
     @api.multi
