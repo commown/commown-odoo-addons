@@ -5,10 +5,10 @@
     <field name="model">commown_shareholder_register.category</field>
     <field name="arch" type="xml">
       <tree editable="bottom">
-        <field name="name"/>
-        <field name="account_id"/>
-        <field name="college_id"/>
-        <field name="min_share_number"/>
+        <field name="name" />
+        <field name="account_id" />
+        <field name="college_id" />
+        <field name="min_share_number" />
       </tree>
     </field>
   </record>
@@ -18,15 +18,16 @@
     <field name="res_model">commown_shareholder_register.category</field>
     <field name="type">ir.actions.act_window</field>
     <field name="view_type">form</field>
-    <field name="view_id" ref="view_shareholder_category_tree"/>
+    <field name="view_id" ref="view_shareholder_category_tree" />
     <field name="view_mode">tree,form</field>
   </record>
 
   <menuitem
-      id="category_menu"
-      parent="commown_shareholder_register.shareholders_reporting_menu"
-      action="action_category"
-      groups="account.group_account_manager"
-      sequence="130" />
+        id="category_menu"
+        parent="commown_shareholder_register.shareholders_reporting_menu"
+        action="action_category"
+        groups="account.group_account_manager"
+        sequence="130"
+    />
 
 </odoo>

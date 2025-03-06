@@ -10,8 +10,8 @@ class ShareholderCollege(models.Model):
         ("rank_uniq", "unique (rank)", "Rank must be unique"),
     ]
 
-    name = fields.Char("Name", required=True)
-    rank = fields.Integer("Rank", required=True)
+    name = fields.Char(required=True)
+    rank = fields.Integer(required=True)
     category_ids = fields.One2many(
         "commown_shareholder_register.category",
         "college_id",

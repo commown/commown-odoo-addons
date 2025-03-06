@@ -7,13 +7,21 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="date"/>
+                        <field name="date" />
                     </group>
                 </sheet>
                 <footer>
-                    <button string="Generate" name="generate_register" type="object"
-                            class="btn-primary"/>
-                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                    <button
+                        string="Generate"
+                        name="generate_register"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        string="Cancel"
+                        class="btn btn-secondary"
+                        special="cancel"
+                    />
                 </footer>
             </form>
         </field>
@@ -30,13 +38,15 @@
         id="shareholders_reporting_menu"
         parent="account.menu_finance"
         name="Shareholders Reporting"
-        sequence="15" />
+        sequence="15"
+    />
 
     <menuitem
         id="register_report_menu"
         parent="commown_shareholder_register.shareholders_reporting_menu"
         groups="account.group_account_user"
         action="register_action"
-        sequence="110" />
+        sequence="110"
+    />
 
 </odoo>

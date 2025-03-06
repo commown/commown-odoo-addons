@@ -13,10 +13,7 @@ class ShareholderTagsUpdate(models.TransientModel):
     _name = "commown_shareholder_register.shareholder_tags_update"
     _description = "Utility class to update partner shareholder's tag"
 
-    date = fields.Date(
-        string="Date",
-        help="Date of the register",
-    )
+    date = fields.Date(help="Date of the register")
 
     @api.multi
     def action_update_partners_tag(self):

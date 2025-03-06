@@ -107,8 +107,11 @@ class ShareholderRegister(models.TransientModel):
                 )
             elif item["balance"] < 0:
                 result["warnings"].append(
-                    _("The partner %s has not enough shares for college %s")
-                    % (partner.name, cat.college_id.name)
+                    _(
+                        "The partner %(part_name)s has not enough shares for college"
+                        "%(college_name)s"
+                    )
+                    % {"part_name": partner.name, "college_name": cat.college_id.name}
                 )
 
         for partner, partner_data in result["partners"].items():
@@ -118,7 +121,7 @@ class ShareholderRegister(models.TransientModel):
             )
 
             college = partner_data["college"]
-            result["colleges"].setdefault(college, {"total": 0, "partners": [],},)[
+            result["colleges"].setdefault(college, {"total": 0, "partners": []})[
                 "total"
             ] += partner_data["total"]
             result["colleges"][college]["partners"].append(partner)
