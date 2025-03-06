@@ -1,6 +1,6 @@
 import io
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 SHAREHOLDER_TAG_XML_ID = "commown_shareholder_register.shareholder_tag"
 COLLEGE_A_XML_ID = "commown_shareholder_register.shareholder_tag_col_A"
@@ -15,7 +15,6 @@ class ShareholderTagsUpdate(models.TransientModel):
 
     date = fields.Date(help="Date of the register")
 
-    @api.multi
     def action_update_partners_tag(self):
         register = self.env["commown_shareholder_register.register"].create(
             {"date": self.date},

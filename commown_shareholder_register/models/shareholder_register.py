@@ -1,6 +1,6 @@
 import base64
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 
 
 def _by_id(env, data, attr, model):
@@ -109,7 +109,7 @@ class ShareholderRegister(models.TransientModel):
                 result["warnings"].append(
                     _(
                         "The partner %(part_name)s has not enough shares for college"
-                        "%(college_name)s"
+                        " %(college_name)s"
                     )
                     % {"part_name": partner.name, "college_name": cat.college_id.name}
                 )
@@ -141,7 +141,6 @@ class ShareholderRegister(models.TransientModel):
 
         return result
 
-    @api.multi
     def generate_register(self):
         report = (
             self.env["ir.actions.report"]

@@ -16,7 +16,6 @@
     <field name="name">Shareholder College</field>
     <field name="res_model">commown_shareholder_register.college</field>
     <field name="type">ir.actions.act_window</field>
-    <field name="view_type">form</field>
     <field name="view_id" ref="view_shareholder_college_tree" />
     <field name="view_mode">tree,form</field>
   </record>
