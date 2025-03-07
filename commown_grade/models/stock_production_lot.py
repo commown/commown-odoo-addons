@@ -49,14 +49,16 @@ class StockProductionLot(models.Model):
     @api.onchange("grade_id")
     def _onchange_grade_id(self):
         if self.grade_history_line_ids and self.grade_id:
-            # Use history line instead of _origin to get old grade so we can notify even when grade was empty
+            # Use history line instead of _origin to get old grade so we can notify even
+            # when grade was empty
             old_grade = self.grade_history_line_ids.sorted("date", reverse=True)[
                 0
             ].grade_id
             if self.grade_id.name < old_grade.name:
                 self.env.user.notify_info(
                     message=_(
-                        "New grade is better than the last known grade, are you sure of this change?"
+                        "New grade is better than the last known grade, are you sure of"
+                        " this change?"
                     ),
                     title=_("Grade Improvement"),
                     sticky=False,

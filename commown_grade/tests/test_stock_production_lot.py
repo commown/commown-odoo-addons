@@ -33,7 +33,6 @@ class StockProductionLotTC(SavepointCase):
 
     def test_inverse_grade_id(self):
         grade = self.env.ref("commown_grade.grade_A1")
-        self.env["commown_grade.grade_history_line"]
 
         # Check pre-requisite
         self.assertFalse(self.env["commown_grade.grade_history_line"].search([]))
