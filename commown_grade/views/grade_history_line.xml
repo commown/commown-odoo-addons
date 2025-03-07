@@ -37,7 +37,6 @@
     <field name="name">Grade History</field>
     <field name="res_model">commown_grade.grade_history_line</field>
     <field name="type">ir.actions.act_window</field>
-    <field name="view_type">form</field>
     <field name="view_id" ref="view_grade_history_line_tree" />
     <field name="view_mode">tree,graph,pivot</field>
     <field name="search_view_id" ref="view_grade_history_line_search" />

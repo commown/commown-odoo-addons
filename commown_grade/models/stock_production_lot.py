@@ -10,7 +10,7 @@ class StockProductionLot(models.Model):
         compute="_compute_grade_id",
         inverse="_inverse_grade_id",
         store=True,
-        track_visibility="onchange",
+        tracking=True,
     )
 
     grade_history_line_ids = fields.One2many(
