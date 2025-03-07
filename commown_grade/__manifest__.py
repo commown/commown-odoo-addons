@@ -3,7 +3,7 @@
 
 {
     "name": "Commown Grade",
-    "category": "stock",
+    "category": "Inventory",
     "version": "16.0.1.0.0",
     "author": "Commown SCIC",
     "license": "AGPL-3",
