@@ -27,15 +27,14 @@ class StockProductionLot(models.Model):
                 lot.grade_id = last_line.grade_id
 
     def _inverse_grade_id(self):
-        for lot in self:
-            if lot.grade_id:
-                self.env["commown_grade.grade_history_line"].create(
-                    {
-                        "date": fields.Datetime.now(),
-                        "grade_id": lot.grade_id.id,
-                        "lot_id": lot.id,
-                    }
-                )
+        for lot in self.filtered("grade_id"):
+            self.env["commown_grade.grade_history_line"].create(
+                {
+                    "date": fields.Datetime.now(),
+                    "grade_id": lot.grade_id.id,
+                    "lot_id": lot.id,
+                }
+            )
 
     def _compute_grade_history_line_ids(self):
         for lot in self:
