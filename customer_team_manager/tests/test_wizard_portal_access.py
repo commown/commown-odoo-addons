@@ -1,3 +1,5 @@
+from lxml.html import fromstring
+
 from odoo.exceptions import UserError
 
 from .common import CustomerTeamManagerAbstractTC
@@ -8,23 +10,38 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
 
     def test_ok(self):
         admin = self.customer_user_admin
+        admin.password = "admin"
+        admin.login = "admin@test.org"
 
         empl1 = self.create_partner(sudo_as=admin, name="E1 L", email="e1@test.coop")
         empl2 = self.create_partner(sudo_as=admin, name="E2 L", email="e2@test.coop")
         empl3 = self.create_partner(sudo_as=admin, name="E3 L", email="e3@test.com")
+        empl4 = self.create_partner(sudo_as=admin, name="E4 L", email="invalid")
 
-        all_employees = empl1 | empl2 | empl3
+        all_employees = empl1 | empl2 | empl3 | empl4
 
         wizard = self._grant_portal_access(empl1)
         self.assertEqual(
             all_employees.mapped("portal_status"),
-            ["never_connected", "not_granted", "not_granted"],
+            ["never_connected", "not_granted", "not_granted", "not_granted"],
         )
 
-        wizard = self._grant_portal_access(all_employees)
-        self.assertIn("test.coop", wizard.info)
-        self.assertIn("test.com", wizard.info)
-        self.assertEqual(all_employees.mapped("portal_status"), ["never_connected"] * 3)
+        wizard = self._grant_portal_access(all_employees, sudo_as=admin)
+
+        self.assertEqual(
+            all_employees.mapped("portal_status"),
+            ["never_connected"] * 3 + ["not_granted"],
+        )
+
+        doc = fromstring(wizard.info)
+        self.assertEqual(
+            set(doc.xpath("//*[@id='grant-access-possible-fraud-warning']//li/text()")),
+            {"test.com", "test.coop", "test.org"},
+        )
+        self.assertEqual(
+            doc.xpath("//*[@id='grant-access-invalid-emails-info']//li/text()"),
+            ["E4 L"],
+        )
 
     def test_error_wrong_password(self):
         admin = self.customer_user_admin

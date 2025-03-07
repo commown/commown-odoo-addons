@@ -65,10 +65,10 @@ class CustomerTeamManagerAbstractTC(SavepointCase):
         self.assertTrue(user.has_group("base.group_portal"))
         self.assertFalse(user.has_group("customer_team_manager.group_customer_admin"))
 
-    def _grant_portal_access(self, partner, passwd="admin"):
+    def _grant_portal_access(self, partner, sudo_as=None, passwd="admin"):
         "Use the admin user to grant portal access to given employee"
-        _adm = self.env.ref("base.user_admin")
-        wmod = self.env["customer_team_manager.portal_access_wizard"].sudo(_adm.id)
+        sudo_as = sudo_as or self.env.ref("base.user_admin")
+        wmod = self.env["customer_team_manager.portal_access_wizard"].sudo(sudo_as.id)
         wizard = wmod.create(
             {
                 "customer_partners": [(6, 0, partner.ids)],

@@ -1,5 +1,18 @@
+import re
+
 from odoo import _, api, fields, models
 from odoo.exceptions import AccessDenied, UserError
+
+# Cannot do much better without actually sending an email:
+EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
+
+
+def _has_valid_email(partner):
+    return isinstance(partner.email, str) and EMAIL_REGEX.fullmatch(partner.email)
+
+
+def _has_invalid_email(partner):
+    return not _has_valid_email(partner)
 
 
 class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
@@ -27,13 +40,26 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
 
     @api.depends("customer_partners")
     def _compute_info(self):
+        def mail_ext(email):
+            return email.rsplit("@")[-1]
+
+        email_domains = set()
+        if self.env["res.partner"]._current_user_is_customer_admin():
+            email_domains.add(mail_ext(self.env.user.login))
+
         template = self.env.ref("customer_team_manager.portal_access_info")
-        mail_ext = lambda email: email.rsplit("@")[-1]
+
         for rec in self:
-            email_domains = {mail_ext(self.env.user.login)} | {
-                mail_ext(e) for e in self.mapped("customer_partners.email")
-            }
-            rec.info = template.render({"email_domains": email_domains})
+            invalid_email_partners = rec.customer_partners.filtered(_has_invalid_email)
+            emails = (rec.customer_partners - invalid_email_partners).mapped("email")
+            email_domains |= {mail_ext(e) for e in emails}
+            rec.info = template.render(
+                {
+                    "valid_emails": emails,
+                    "email_domains": email_domains,
+                    "invalid_email_partners": invalid_email_partners,
+                }
+            )
 
     def _prepare_portal_wizard(self, partners):
         model = self.env["portal.wizard"].with_context(active_ids=partners.ids)
@@ -51,7 +77,7 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
 
         partners = self.customer_partners.filtered(
             lambda e: e.portal_status == "not_granted"
-        )
+        ).filtered(_has_valid_email)
 
         wizard = self._prepare_portal_wizard(partners)
         wizard.action_apply()

@@ -38,7 +38,7 @@
     <field name="key">customer_team_manager.portal-access-info</field>
     <field name="arch" type="xml">
       <t t-name="grant-customer-user-portal-access-info">
-        <div class="alert-warning p-3">
+        <div id="grant-access-warning" t-if="valid_emails" class="alert-warning p-3">
           <p>
             You are going to grant people permission to have an account on this platform on behalf of your organization.
           </p>
@@ -46,7 +46,17 @@
             Make sure this permission doesn't fall into the wrong hands: carefully check the e-mails and roles you've granted.
           </p>
         </div>
-        <div t-if="len(email_domains) > 1" class="alert-danger p-3 mt-2">
+
+        <div id="grant-access-invalid-emails-info" t-if="invalid_email_partners" class="alert-info p-3 mt-2">
+          <p>Some users you selected have no valid email:</p>
+          <ul>
+            <t t-foreach="invalid_email_partners" t-as="partner">
+              <li t-esc="partner.name"/>
+            </t>
+          </ul>
+        </div>
+
+        <div id="grant-access-possible-fraud-warning" t-if="valid_emails and len(email_domains) > 1" class="alert-danger p-3 mt-2">
           <p class="text-danger">Warning: possible fraud attempt!</p>
           <p>
             The e-mails of the people to whom you grant access do not all come from the
