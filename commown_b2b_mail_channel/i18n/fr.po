@@ -55,7 +55,7 @@ msgstr "Cannal d'assistance de"
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_res_partner__mail_channel_id
 #: model:ir.model.fields,field_description:commown_b2b_mail_channel.field_res_users__mail_channel_id
 msgid "Support mail channel"
-msgstr "Canal d'assitance"
+msgstr "Canal d'assistance"
 
 #. module: commown_b2b_mail_channel
 #: code:addons/commown_b2b_mail_channel/models/res_partner.py:117
