@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class Project(models.Model):
@@ -14,5 +14,5 @@ class Project(models.Model):
         for r in self:
             if r.contractual_issues_tracking and not r.require_contract:
                 raise models.ValidationError(
-                    "A contract must be set on tasks to track " "contractual issues"
+                    _("A contract must be set on tasks to track contractual issues")
                 )
