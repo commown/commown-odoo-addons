@@ -3,7 +3,6 @@
 
 {
     "name": "Commown Grade",
-    "description": "This modules create grades on lots",
     "category": "stock",
     "version": "16.0.1.0.0",
     "author": "Commown SCIC",
