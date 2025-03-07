@@ -1,0 +1,13 @@
+<odoo>
+
+  <record id="group_manager" model="res.groups">
+    <field name="name">Commown Grade manager</field>
+    <field name="category_id" ref="base.module_category_inventory_inventory" />
+  </record>
+
+  <record id="group_user" model="res.groups">
+    <field name="name">Commown Grade user</field>
+    <field name="category_id" ref="base.module_category_inventory_inventory" />
+  </record>
+
+</odoo>
