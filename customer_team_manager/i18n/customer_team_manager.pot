@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 06:27+0000\n"
-"PO-Revision-Date: 2024-12-14 06:27+0000\n"
+"POT-Creation-Date: 2025-03-07 11:45+0000\n"
+"PO-Revision-Date: 2025-03-07 11:45+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgid "Archived users"
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:167
+#: code:addons/customer_team_manager/models/res_partner.py:165
 #, python-format
 msgid "At least one administrator is mandatory"
 msgstr ""
@@ -200,13 +200,13 @@ msgid "If unsure, please cancel and check again before proceeding."
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:275
+#: code:addons/customer_team_manager/models/res_partner.py:287
 #, python-format
 msgid "Import Template for Users"
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:72
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:91
 #, python-format
 msgid "Incorrect password."
 msgstr ""
@@ -326,6 +326,11 @@ msgid "Sequence"
 msgstr ""
 
 #. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
+msgid "Some users you selected have no valid email:"
+msgstr ""
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_res_partner__team
 #: model:ir.model.fields,field_description:customer_team_manager.field_res_users__team
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
@@ -356,7 +361,7 @@ msgid "The e-mails of the people to whom you grant access do not all come from t
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:186
+#: code:addons/customer_team_manager/models/res_partner.py:184
 #, python-format
 msgid "The email of partners having portal access cannot be modified!"
 msgstr ""
@@ -399,7 +404,7 @@ msgid "You are going to grant people permission to have an account on this platf
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:51
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:70
 #, python-format
 msgid "You are not allowed to manage users."
 msgstr ""
