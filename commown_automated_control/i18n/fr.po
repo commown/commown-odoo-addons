@@ -70,7 +70,7 @@ msgstr "Manager contrôle automatisé"
 #. module: commown_automated_control
 #: sql_constraint:commown_automated_control.automated_control:0
 msgid "Automation already linked to an automated control"
-msgstr "Cette action est déjà liée à un contôle automatisé"
+msgstr "Cette action est déjà liée à un contrôle automatisé"
 
 #. module: commown_automated_control
 #: model_terms:ir.ui.view,arch_db:commown_automated_control.view_automated_control_form
