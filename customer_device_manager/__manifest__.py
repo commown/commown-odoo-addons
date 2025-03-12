@@ -20,6 +20,7 @@
         "data/customer_roles.xml",
         "security/ir.model.access.csv",
         "security/rules.xml",
+        "views/device_assignment.xml",
     ],
     "installable": True,
 }
