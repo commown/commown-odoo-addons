@@ -35,7 +35,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install Debian librairies
-        run: apt-get update -y && apt install -y poppler-utils texlive-extra-utils texlive-latex-recommended libreoffice libmagic1 librsvg2-bin
+        run: apt-get update -y && apt install -y poppler-utils texlive-extra-utils texlive-latex-recommended libreoffice libmagic1 librsvg2-bin python3-odf
       - name: Install addons and dependencies
         run: oca_install_addons
       - name: Initialize test db
