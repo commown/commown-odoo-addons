@@ -18,7 +18,8 @@ class ResPartner(models.Model):
         if not country:
             raise ValueError(
                 _(
-                    "The partner %s does not have a set country or the country has no associated country code. Impossible to parse his phone number"
+                    "The partner %s does not have a set country or the country has no"
+                    " associated country code. Impossible to parse his phone number"
                 )
                 % self.id
             )

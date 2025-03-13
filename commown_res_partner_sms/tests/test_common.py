@@ -24,7 +24,7 @@ class CommonFunctionsTC(SavepointCase):
         )
         self.assertEqual(normalize_phone(False, "FR"), "")
 
-        with self.assertRaises(phonenumbers.NumberParseException) as err:
+        with self.assertRaises(phonenumbers.NumberParseException):
             normalize_phone("not a phone", "FR")
 
         self.assertEqual(normalize_phone("not a phone", "FR", raise_on_error=False), "")
