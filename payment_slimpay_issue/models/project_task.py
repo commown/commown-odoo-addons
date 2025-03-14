@@ -6,6 +6,8 @@ from odoo import _, api, fields, models
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 
+from .utils import SLIMPAY_ERROR_CODES
+
 _logger = logging.getLogger(__name__)
 
 
@@ -421,11 +423,14 @@ class ProjectTask(models.Model):
         invoice = task.invoice_id
 
         if issue_doc.get("rejectReason"):
-            _ctx = {
-                "code": issue_doc.get("rejectReasonCode", ""),
-                "text": issue_doc["rejectReason"],
-            }
-            task.message_post(body=_("Reject reason is %(code)s: %(text)s") % _ctx)
+            msg = _("Reject reason is %(code)s: %(text)s")
+            code = issue_doc.get("rejectReasonCode", "")
+            if code in SLIMPAY_ERROR_CODES:
+                text = _(SLIMPAY_ERROR_CODES[code])
+            else:
+                text = _("Unknown reject error")
+
+            task.message_post(body=msg % {"code": code, "text": text})
 
         if not task.slimpay_payment_issue_process_automatically():
             task.update(
