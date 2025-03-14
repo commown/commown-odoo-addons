@@ -1,0 +1,4 @@
+odfpy
+
+git+https://github.com/commown/odoo-usability@16.0-fix-odoo_usability-add-setup-py#subdirectory=setup/base_usability
+git+https://github.com/commown/odoo-usability@16.0-fix-odoo_usability-add-setup-py#subdirectory=setup/base_company_extension
