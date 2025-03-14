@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 06:27+0000\n"
-"PO-Revision-Date: 2024-12-14 07:35+0100\n"
+"POT-Creation-Date: 2025-03-07 11:45+0000\n"
+"PO-Revision-Date: 2025-03-07 12:46+0100\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -42,7 +42,7 @@ msgid "Archived users"
 msgstr "Utilisateurs archivés"
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:167
+#: code:addons/customer_team_manager/models/res_partner.py:165
 #, python-format
 msgid "At least one administrator is mandatory"
 msgstr "Il faut au moins une personne chargée de l'administration"
@@ -204,16 +204,18 @@ msgstr "Nom de l'icône (fontawesome)"
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
 msgid "If unsure, please cancel and check again before proceeding."
-msgstr "En cas de doute, n'hésitez pas à annuler l'opération et vérifier quitte à recommencer."
+msgstr ""
+"En cas de doute, n'hésitez pas à annuler l'opération et vérifier quitte à "
+"recommencer."
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:275
+#: code:addons/customer_team_manager/models/res_partner.py:287
 #, python-format
 msgid "Import Template for Users"
 msgstr "Modèle de fichier d'import d'utilisateurs"
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:72
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:91
 #, python-format
 msgid "Incorrect password."
 msgstr "Mot de passe incorrect."
@@ -348,6 +350,11 @@ msgid "Sequence"
 msgstr "N° d'ordre"
 
 #. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
+msgid "Some users you selected have no valid email:"
+msgstr "Les utilisateurs suivants n'ont pas d'adresse email valide :"
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_res_partner__team
 #: model:ir.model.fields,field_description:customer_team_manager.field_res_users__team
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
@@ -377,10 +384,13 @@ msgid ""
 "The e-mails of the people to whom you grant access do not all come from the\n"
 "            same domain. Please make sure the following domain list is "
 "normal:"
-msgstr "Les adresses de courriel des personnes auxquelles vous allez autoriser à accéder au site ne se terminent pas toutes comme votre propre adresse. Merci de vérifier que les différences ci-dessous sont normales :"
+msgstr ""
+"Les adresses de courriel des personnes auxquelles vous allez autoriser à "
+"accéder au site ne se terminent pas toutes comme votre propre adresse. Merci "
+"de vérifier que les différences ci-dessous sont normales :"
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:186
+#: code:addons/customer_team_manager/models/res_partner.py:184
 #, python-format
 msgid "The email of partners having portal access cannot be modified!"
 msgstr ""
@@ -430,7 +440,7 @@ msgstr ""
 "cette plateforme au nom de votre organisation."
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:51
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:70
 #, python-format
 msgid "You are not allowed to manage users."
 msgstr ""
