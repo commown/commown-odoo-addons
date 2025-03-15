@@ -1,13 +1,13 @@
 import phonenumbers
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from ..models.common import normalize_phone
 
 
-class CommonFunctionsTC(SavepointCase):
+class CommonFunctionsTC(TransactionCase):
     def setUp(self):
-        super(SavepointCase, self).setUp()
+        super(TransactionCase, self).setUp()
 
     def test_normalize_phone(self):
         self.assertEqual(

@@ -1,7 +1,7 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class ResPartnerSmsTC(SavepointCase):
+class ResPartnerSmsTC(TransactionCase):
     def test_get_mobile_phone(self):
         partner = self.env.ref("base.partner_demo")
         country = self.env.ref("base.fr")
