@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 15:16+0000\n"
-"PO-Revision-Date: 2025-02-25 16:20+0100\n"
+"POT-Creation-Date: 2025-03-14 19:54+0000\n"
+"PO-Revision-Date: 2025-03-16 19:49+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -213,6 +213,13 @@ msgid ""
 "%endif\n"
 "</div>"
 msgstr ""
+"<div>\n"
+"%if object.invoice_unpaid_count in (0, 1):\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le prélèvement de votre dernière mensualité a été rejeté =&gt; Infos par mail (pensez à consulter vos spams).</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown - contact@commown.coop</p>\n"
+"%else:\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">RAPPEL : Rejet de prélèvement de mensualité =&gt; Contactez-nous d'urgence svp.</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown - contact@commown.coop</p>\n"
+"%endif\n"
+"</div>"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_retry_payment_and_wait
@@ -231,6 +238,30 @@ msgstr ""
 "rejeté de nouveau. À l'issue de cette période, le prélèvement est considéré "
 "comme validé et l'incident est automatiquement bougé dans la colonne "
 "correspondante."
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:4
+#, python-format
+msgid "Account Identifier incorrect"
+msgstr "Identifiant de compte incorrect"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:6
+#, python-format
+msgid "Account blocked"
+msgstr "Compte bloqué"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:5
+#, python-format
+msgid "Account closed"
+msgstr "Compte cloturé"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:25
+#, python-format
+msgid "Bank Identifier (BIC) Incorrect"
+msgstr "Identifiant de la banque (BIC) incorrect"
 
 #. module: payment_slimpay_issue
 #: model:ir.cron,cron_name:payment_slimpay_issue.ir_cron_check
@@ -253,9 +284,63 @@ msgid "Check Slimpay payment issues"
 msgstr "Vérification des impayés remontés par Slimpay"
 
 #. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:15
+#, python-format
+msgid "Creditor Bank is not registered under this BIC in the CSM"
+msgstr "La banque créditrice n'est pas enregistrée sous ce BIC dans le CSM"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:16
+#, python-format
+msgid "Debtor Bank is not registered under this BIC in the CSM"
+msgstr "La banque débitrice n'est pas enregistrée sous ce BIC dans le CSM"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:22
+#, python-format
+msgid "Debtor Deceased"
+msgstr "Le débiteur est décédé"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:7
+#, python-format
+msgid "Debtor account is a consumer account"
+msgstr "Le compte débiteur est un compte de particulier"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:8
+#, python-format
+msgid "Direct Debit forbidden on this account for regulatory reasons"
+msgstr "Prélèvement direct interdit sur ce compte pour des raisons réglementaires"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:21
+#, python-format
+msgid "Disputed authorised transaction"
+msgstr "Transaction autorisée contestée"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:13
+#, python-format
+msgid "Duplicate collection"
+msgstr "Prélèvement en doublon"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:17
+#, python-format
+msgid "File format incomplete or invalid"
+msgstr "Format de fichier incomplet ou invalide"
+
+#. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_issue_fixed
 msgid "Fixed payment issue"
 msgstr "Prélèvement validé"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:18
+#, python-format
+msgid "Following a cancellation request (by the creditor)"
+msgstr "Suite à une demande d'annulation (par le créancier)"
 
 #. module: payment_slimpay_issue
 #: model:product.template,name:payment_slimpay_issue.bank_fees_product
@@ -266,6 +351,12 @@ msgstr "Frais bancaire de rejet de prélèvement"
 #: model:product.template,name:payment_slimpay_issue.management_fees_product
 msgid "Frais de gestion rejet de prélèvement"
 msgstr "Frais de gestion rejet de prélèvement"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:14
+#, python-format
+msgid "Identifier of the Creditor Incorrect"
+msgstr "Identification du créancier incorrecte"
 
 #. module: payment_slimpay_issue
 #: model:ir.model.fields,help:payment_slimpay_issue.field_project_task__invoice_next_payment_date
@@ -284,6 +375,12 @@ msgstr ""
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid "In Progress"
 msgstr "En cours"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:12
+#, python-format
+msgid "Insufficient funds"
+msgstr "Fonds insuffisants"
 
 #. module: payment_slimpay_issue
 #: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_id
@@ -327,6 +424,12 @@ msgid "Linked invoice not determined or not linked to a contract"
 msgstr "Facture liée non déterminée ou non liée à un contrat"
 
 #. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:20
+#, python-format
+msgid "Mandate data missing or incorrect"
+msgstr "Données de mandat manquantes ou incorrectes"
+
+#. module: payment_slimpay_issue
 #: model:mail.template,name:payment_slimpay_issue.mail_max_trial
 msgid "Max Slimpay payment trials reached"
 msgstr "Nb max d'impayés Slimpay atteint"
@@ -354,7 +457,13 @@ msgid "New"
 msgstr "Nouveau"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_task.py:191
+#: code:addons/payment_slimpay_issue/models/utils.py:19
+#, python-format
+msgid "No mandate or Unauthorised Transaction"
+msgstr "Pas de mandat ou transaction non autorisée"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/project_task.py:193
 #, python-format
 msgid "No payment ref"
 msgstr "No payment ref"
@@ -363,6 +472,13 @@ msgstr "No payment ref"
 #: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_unpaid_count
 msgid "Number of payment issues"
 msgstr "Nb de tentatives en échec"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:9
+#, python-format
+msgid ""
+"Operation code/transaction code/sequence type incorrect, invalid file format"
+msgstr "Code d'opération / Code de transaction / Type de séquence incorrect, format de fichier invalide"
 
 #. module: payment_slimpay_issue
 #: model_terms:ir.ui.view,arch_db:payment_slimpay_issue.project_task_form_view
@@ -406,7 +522,28 @@ msgid "Ready for Next Stage"
 msgstr "Prêt pour la prochaine étape"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_task.py:428
+#: code:addons/payment_slimpay_issue/models/utils.py:24
+#, python-format
+msgid "Reason not specified"
+msgstr "Raison non spécifiée"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:23
+#, python-format
+msgid "Refusal by the Debtor"
+msgstr "Refus du débiteur"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:26
+#: code:addons/payment_slimpay_issue/models/utils.py:27
+#: code:addons/payment_slimpay_issue/models/utils.py:28
+#: code:addons/payment_slimpay_issue/models/utils.py:29
+#, python-format
+msgid "Regulatory Reason"
+msgstr "Raison réglementaire"
+
+#. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/project_task.py:430
 #, python-format
 msgid "Reject reason is %(code)s: %(text)s"
 msgstr "La raison du rejet est %(code)s : %(text)s"
@@ -425,7 +562,7 @@ msgstr "Re-tenter un prélèvement et attendre"
 #: model:base.automation,name:payment_slimpay_issue.retry_payment
 #: model:ir.actions.server,name:payment_slimpay_issue.action_retry_payment
 msgid "Retry payment when entering the dedicated stage"
-msgstr ""
+msgstr "Re-tenter un prélèvement lors du déplacement dans la colonne dédiée"
 
 #. module: payment_slimpay_issue
 #: model:base.automation,name:payment_slimpay_issue.set_invoice_next_date_when_entering_warn_stage
@@ -445,6 +582,12 @@ msgid "Slimpay supplier fees"
 msgstr "Frais bancaires sans taxes (pour impayés)"
 
 #. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/utils.py:30
+#, python-format
+msgid "Specific Service offered by the Debtor Bank"
+msgstr "Service spécifique offert par la banque du débiteur"
+
+#. module: payment_slimpay_issue
 #: model:ir.model,name:payment_slimpay_issue.model_project_task
 msgid "Task"
 msgstr "Tâche"
@@ -457,9 +600,15 @@ msgid "Unit(s)"
 msgstr "Unité(s)"
 
 #. module: payment_slimpay_issue
+#: code:addons/payment_slimpay_issue/models/project_task.py:428
+#, python-format
+msgid "Unknown reject error"
+msgstr "Erreur de rejet inconnue"
+
+#. module: payment_slimpay_issue
 #: model:mail.template,name:payment_slimpay_issue.mail_warn_user
 msgid "Warn partner of a payment issue"
-msgstr ""
+msgstr "Avertir l'utilisateur de l'incident de paiement"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_warn_partner_and_wait
