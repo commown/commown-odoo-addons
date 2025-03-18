@@ -7,9 +7,10 @@
     # see https://odoo-community.org/page/development-status
     "development_status": "Alpha",
     "category": "Uncategorized",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "author": "Commown SCIC",
-    # see https://odoo-community.org/page/maintainer-role for a description of the maintainer role and responsibilities
+    # see https://odoo-community.org/page/maintainer-role for a description of
+    # the maintainer role and responsibilities
     "maintainers": ["fcayre"],
     "license": "AGPL-3",
     "depends": [
