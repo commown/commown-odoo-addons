@@ -1,3 +1,4 @@
+from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
 
 
@@ -36,3 +37,8 @@ class ResPartnerSmsTC(TransactionCase):
 
         partner.update({"mobile": "0733221100"})
         self.assertFalse(partner.get_mobile_phone())
+
+        partner.country_id = False
+        self.env["res.company"]._company_default_get().country_id = False
+        with self.assertRaises(UserError):
+            partner.get_mobile_phone()

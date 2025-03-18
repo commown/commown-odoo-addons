@@ -1,4 +1,5 @@
 from odoo import _, models
+from odoo.exceptions import UserError
 
 from .common import is_mobile
 
@@ -16,7 +17,7 @@ class ResPartner(models.Model):
         )
 
         if not country:
-            raise ValueError(
+            raise UserError(
                 _(
                     "The partner %s does not have a set country or the country has no"
                     " associated country code. Impossible to parse his phone number"
