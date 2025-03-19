@@ -16,6 +16,8 @@ QUEUE_CHANNEL = "root.DELIVERY_TRACKING"
 
 MLVARS_MAX_WAIT = datetime.timedelta(days=8)
 
+TIMEOUT = 10
+
 
 class ParcelError(Exception):
     pass
@@ -23,7 +25,9 @@ class ParcelError(Exception):
 
 def colissimo_status_request(account, password, ref):
     resp = requests.get(
-        BASE_URL, {"accountNumber": account, "password": password, "skybillNumber": ref}
+        BASE_URL,
+        {"accountNumber": account, "password": password, "skybillNumber": ref},
+        timeout=TIMEOUT,
     )
     resp.raise_for_status()
     return resp.content.decode("utf-8")
@@ -34,15 +38,13 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     _description = "Class holding the fields and methods to track parcel delivery"
 
     expedition_ref = fields.Text("Expedition reference", size=64, copy=False)
-    expedition_date = fields.Date("Expedition Date", copy=False)
-    expedition_status = fields.Text("Expedition status", size=256, copy=False)
-    expedition_status_fetch_date = fields.Datetime(
-        "Expedition status fetch date", copy=False
-    )
+    expedition_date = fields.Date(copy=False)
+    expedition_status = fields.Text(size=256, copy=False)
+    expedition_status_fetch_date = fields.Datetime(copy=False)
     expedition_urgency_mail_sent = fields.Boolean(
         "Expedition urgency mail send", default=False, copy=False
     )
-    delivery_date = fields.Date("Delivery Date", copy=False)
+    delivery_date = fields.Date(copy=False)
 
     send_email_on_delivery = fields.Boolean(
         default=lambda self: self._default_send_email_on_delivery(),
@@ -116,7 +118,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                 ctx = {}
                 if status and status[0] == "[" and "]" in status:
                     ctx["postal_code"] = status[1 : status.find("]")]
-                record.with_context(ctx).message_post_with_template(template.id)
+                record.with_context(**ctx).message_post_with_template(template.id)
             else:
                 raise UserError(
                     _(
@@ -225,7 +227,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                     if self.send_email_on_delivery:
                         mail_template = self.delivery_email_template()
                         if mail_template:
-                            _self = self.with_context({"postal_code": code})
+                            _self = self.with_context(**{"postal_code": code})
                             _self.message_post_with_template(mail_template.id)
                             result.append("Urgency mail sent.")
 
@@ -256,7 +258,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             raise ParcelError(
                 "Error requesting parcel status for %s. Response was:\n%s"
                 % (self, resp)
-            )
+            ) from None
         return {"code": code, "label": label, "date": date}
 
     @api.model

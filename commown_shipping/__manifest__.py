@@ -5,7 +5,7 @@
     "version": "12.0.1.0.27",
     "author": "Commown SCIC,Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "commown_contractual_issue",
         "commown_res_partner_sms",

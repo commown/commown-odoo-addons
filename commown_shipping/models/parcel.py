@@ -17,7 +17,7 @@ class ParcelType(models.Model):
         return self.env.ref("base.main_company").partner_id
 
     sender = fields.Many2one(
-        "res.partner", string="Sender", required=True, default=_compute_default_sender
+        "res.partner", required=True, default=_compute_default_sender
     )
 
     _sql_constraints = [

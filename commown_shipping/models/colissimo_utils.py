@@ -19,6 +19,8 @@ BASE_URL = "https://ws.colissimo.fr/sls-ws/SlsServiceWSRest"
 
 MAX_ADDRESS_SIZE_COLISSIMO = 35
 
+TIMEOUT = 10
+
 
 class ColissimoError(Exception):
     pass
@@ -189,7 +191,7 @@ def ship(login, password, debug=False, **kwargs):
     data = shipping_data(**kwargs)
     data.update({"contractNumber": login, "password": password})
     _logger.debug("Shipping data: %s", data)
-    resp = requests.post(url, json=data)
+    resp = requests.post(url, json=data, timeout=TIMEOUT)
     try:
         resp.raise_for_status()
     except requests.exceptions.HTTPError:
@@ -198,7 +200,7 @@ def ship(login, password, debug=False, **kwargs):
         if err is not None:
             msg = err["messages"][0]["messageContent"]
             _logger.error("Colissimo error. Response text is:\n%s", msg)
-            raise ColissimoError(msg)
+            raise ColissimoError(msg) from None
         # But give-up in case of unexpected output
         else:
             _logger.error("Colissimo error content:\n%r", resp.content)

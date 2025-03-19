@@ -411,7 +411,7 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         return leads.sorted(lambda l: list(lead_statuses.keys()).index(l.name))
 
     def test_cron_ok1(self):
-        leads = self.exec_job_with_status({l: _status("LIVCFM") for l in ("l1", "l2")})
+        leads = self.exec_job_with_status({lead: _status("LIVCFM") for lead in ("l1", "l2")})
 
         self.assertEqual(leads.mapped("expedition_status"), ["[LIVCFM] test label"] * 2)
         self.assertEqual(leads.mapped("stage_id"), self.stage_final)

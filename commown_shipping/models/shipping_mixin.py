@@ -171,7 +171,7 @@ class CommownShippingMixin(models.AbstractModel):
                 )
             except ColissimoError as exc:
                 msg = _("Colissimo error:\n%s") % exc.args[0]
-                raise UserError(msg)
+                raise UserError(msg) from exc
             if len(self) == 1 and force_single:
                 return label
             paths.append(label._full_path(label.store_fname))

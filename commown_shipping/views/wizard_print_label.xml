@@ -7,15 +7,15 @@
       <form string="Print label">
         <sheet>
           <group>
-            <field name="shipping_ids" invisible="1"/>
-            <field name="parcel_type_id" options="{'no_create': True}"/>
-            <field name="use_full_page_per_label"/>
+            <field name="shipping_ids" invisible="1" />
+            <field name="parcel_type_id" options="{'no_create': True}" />
+            <field name="use_full_page_per_label" />
           </group>
         </sheet>
         <footer>
-          <button name="print_label" string="OK" class="btn-primary" type="object"/>
+          <button name="print_label" string="OK" class="btn-primary" type="object" />
           or
-          <button string="Cancel" class="btn-default" special="cancel"/>
+          <button string="Cancel" class="btn-default" special="cancel" />
         </footer>
       </form>
     </field>
@@ -28,15 +28,15 @@
       <form string="Print label">
         <sheet>
           <group>
-            <field name="shipping_ids" invisible="1"/>
-            <field name="parcel_type_id" options="{'no_create': True}"/>
-            <field name="use_full_page_per_label"/>
+            <field name="shipping_ids" invisible="1" />
+            <field name="parcel_type_id" options="{'no_create': True}" />
+            <field name="use_full_page_per_label" />
           </group>
         </sheet>
         <footer>
-          <button name="print_label" string="OK" class="btn-primary" type="object"/>
+          <button name="print_label" string="OK" class="btn-primary" type="object" />
           or
-          <button string="Cancel" class="btn-default" special="cancel"/>
+          <button string="Cancel" class="btn-default" special="cancel" />
         </footer>
       </form>
     </field>
