@@ -1,4 +1,4 @@
-from odoo import _, api, models
+from odoo import _, models
 
 from .colissimo_utils import MAX_ADDRESS_SIZE_COLISSIMO, delivery_data
 
@@ -24,7 +24,6 @@ class ResPartner(models.Model):
         ),
     ]
 
-    @api.multi
     def colissimo_delivery_data(self, raise_on_error=True):
         self.ensure_one()
         return delivery_data(self, raise_on_error=raise_on_error)

@@ -19,7 +19,6 @@
   <record id="action_view_parcel_types" model="ir.actions.act_window">
     <field name="name">Parcel types</field>
     <field name="res_model">commown.parcel.type</field>
-    <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
   </record>
 

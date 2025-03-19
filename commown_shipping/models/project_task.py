@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class CommownProjectTask(models.Model):
@@ -16,7 +16,6 @@ class CommownProjectTask(models.Model):
         "Delivery tracking", related="project_id.delivery_tracking"
     )
 
-    @api.multi
     def _attachment_from_label(self, name, meta_data, label_data):
         self.initialize_expedition_data(meta_data["labelResponse"]["parcelNumber"])
         return super()._attachment_from_label(name, meta_data, label_data)

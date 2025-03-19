@@ -8,7 +8,7 @@ from datetime import datetime
 from subprocess import CalledProcessError, run as _run
 from tempfile import gettempdir, mktemp
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 from odoo.tools.translate import _
 
@@ -56,17 +56,14 @@ class CommownShippingMixin(models.AbstractModel):
     # (when printing several labels at once)
     _shipping_parent_rel = None
 
-    @api.multi
     def _shipping_parent(self):
         return self.mapped(self._shipping_parent_rel)
 
-    @api.multi
     def _default_shipping_account(self):
         if not self._shipping_parent().mapped("shipping_account_id"):
             raise UserError(_("No shipping account defined"))
         return self._shipping_parent().mapped("shipping_account_id")
 
-    @api.multi
     def _create_parcel_label(self, parcel, shipping_account, recipient, ref):
         """Generate a new label from following arguments:
         - parcel: a commown.parcel.type entity
@@ -94,7 +91,6 @@ class CommownShippingMixin(models.AbstractModel):
             label_data,
         )
 
-    @api.multi
     def _attachment_from_label(self, name, meta_data, label_data):
         return self.env["ir.attachment"].create(
             {
@@ -109,7 +105,6 @@ class CommownShippingMixin(models.AbstractModel):
             }
         )
 
-    @api.multi
     def label_attachment(self, parcel):
         self.ensure_one()
         domain = [
@@ -119,7 +114,6 @@ class CommownShippingMixin(models.AbstractModel):
         ]
         return self.env["ir.attachment"].search(domain)
 
-    @api.multi
     def _get_or_create_label(self, parcel, *args, **kwargs):
         "Return current label if expedition_ref is set, or create a new one"
         self.ensure_one()
@@ -127,7 +121,6 @@ class CommownShippingMixin(models.AbstractModel):
             parcel, *args, **kwargs
         )
 
-    @api.multi
     def get_label_ref(self):
         self.ensure_one()
         entity_ref = _ref_from_name(self.name)
@@ -156,7 +149,6 @@ class CommownShippingMixin(models.AbstractModel):
             or self.partner_id
         )
 
-    @api.multi
     def _print_parcel_labels(self, parcel, account=None, force_single=False):
         paths = []
 
@@ -251,7 +243,6 @@ class CommownShippingMixin(models.AbstractModel):
                 except BaseException:
                     _logger.error("Could not remove tmp label file %r", p)
 
-    @api.multi
     def parcel_labels(self, parcel_name, force_single=False):
 
         parcel = (

@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class ProjectTaskAbstractPrintLabelWizard(models.AbstractModel):
@@ -18,7 +18,6 @@ class ProjectTaskAbstractPrintLabelWizard(models.AbstractModel):
         default=False,
     )
 
-    @api.multi
     def print_label(self):
         label = self.shipping_ids.parcel_labels(
             self.parcel_type_id.technical_name,

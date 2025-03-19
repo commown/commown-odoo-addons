@@ -76,7 +76,6 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     def _delivery_tracking_stage_type(self):
         return self.env[self._name].fields_get("stage_id")["stage_id"]["relation"]
 
-    @api.multi
     def _delivery_tracking_parent(self):
         return self.mapped(self._delivery_tracking_parent_rel)
 
@@ -90,7 +89,6 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                 parent = self.env[parent._name].browse(context[default_rel])
         return parent.default_perform_actions_on_delivery if parent else True
 
-    @api.multi
     def initialize_expedition_data(self, parcel_number):
         parent = self._delivery_tracking_parent()
         if parent and parent.delivery_tracking:
@@ -102,14 +100,12 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                 }
             )
 
-    @api.multi
     def write(self, values):
         res = super(CommownTrackDeliveryMixin, self).write(values)
         if values.get("delivery_date", False):
             self.delivery_perform_actions()
         return res
 
-    @api.multi
     def delivery_perform_actions(self):
         for record in self.filtered("send_email_on_delivery"):
             template = record.delivery_email_template()
@@ -128,7 +124,6 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                     % record
                 )
 
-    @api.multi
     def delivery_email_template(self):
         """If current entity is attached to a parent with shipping activated,
         return the entity's custom delivery mail template if any or the parent's
@@ -272,6 +267,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 class CommownDeliveryParentMixin(models.AbstractModel):
     _name = "commown.delivery.parent.mixin"
     _inherit = "commown.shipping.parent.mixin"
+    _description = "Commown shipping parent mixin"
 
     delivery_tracking = fields.Boolean("Delivery tracking", default=False)
     default_perform_actions_on_delivery = fields.Boolean(

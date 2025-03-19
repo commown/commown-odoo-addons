@@ -23,16 +23,13 @@ class CrmLead(models.Model):
         "Delivery tracking", related="team_id.delivery_tracking"
     )
 
-    @api.multi
     def _default_shipping_parcel_type(self):
         return self.mapped("so_line_id.product_id.shipping_parcel_type_id")
 
-    @api.multi
     def _attachment_from_label(self, name, meta_data, label_data):
         self.initialize_expedition_data(meta_data["labelResponse"]["parcelNumber"])
         return super()._attachment_from_label(name, meta_data, label_data)
 
-    @api.multi
     def parcel_labels(self, parcel_name=None, force_single=False):
 
         if parcel_name is not None:
