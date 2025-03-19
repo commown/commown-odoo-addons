@@ -8,11 +8,7 @@ from pytz import UTC
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from odoo.addons.queue_job.job import job
-
 BASE_URL = "https://www.coliposte.fr/tracking-chargeur-cxf/TrackingServiceWS/track"
-
-QUEUE_CHANNEL = "root.DELIVERY_TRACKING"
 
 MLVARS_MAX_WAIT = datetime.timedelta(days=8)
 
@@ -170,7 +166,6 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             ]
         )
 
-    @job(default_channel=QUEUE_CHANNEL)
     def _delivery_tracking_update(self):
         self.ensure_one()
         now = datetime.datetime.utcnow()

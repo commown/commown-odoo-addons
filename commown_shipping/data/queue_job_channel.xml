@@ -1,0 +1,6 @@
+<odoo noupdate="1">
+    <record id="delivery_tracking" model="queue.job.channel">
+        <field name="name">DELIVERY_TRACKING</field>
+        <field name="parent_id" ref="queue_job.channel_root" />
+    </record>
+</odoo>
