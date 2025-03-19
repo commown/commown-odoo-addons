@@ -8,14 +8,14 @@
       <field name="arch" type="xml">
 
         <xpath
-                  expr="//notebook/page/field[@name='description']/ancestor::page[1]"
-                  position="before"
-              >
+                expr="//notebook/page/field[@name='description']/ancestor::page[1]"
+                position="before"
+            >
           <page
-                      name="delivery"
-                      string="Delivery followup"
-                      attrs="{'invisible': [('delivery_tracking', '=', False)]}"
-                  >
+                    name="delivery"
+                    string="Delivery followup"
+                    attrs="{'invisible': [('delivery_tracking', '=', False)]}"
+                >
             <group>
               <group>
                 <field name="delivery_tracking" invisible="1" />
@@ -32,9 +32,9 @@
             <group name="delivery_actions">
               <field name="send_email_on_delivery" />
               <field
-                              name="on_delivery_email_template_id"
-                              attrs="{'invisible': [('send_email_on_delivery', '=', False)]}"
-                          />
+                            name="on_delivery_email_template_id"
+                            attrs="{'invisible': [('send_email_on_delivery', '=', False)]}"
+                        />
             </group>
           </page>
         </xpath>
@@ -42,11 +42,11 @@
         <xpath expr="//field[@name='partner_id']" position="after">
           <field name="commercial_partner_id" invisible="1" />
           <field
-                      name="recipient_partner_id"
-                      widget="res_partner_many2one"
-                      context="{'show_address': 1}"
-                      options='{"always_reload": True}'
-                  />
+                    name="recipient_partner_id"
+                    widget="res_partner_many2one"
+                    context="{'show_address': 1}"
+                    options='{"always_reload": True}'
+                />
         </xpath>
 
       </field>

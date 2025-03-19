@@ -1,17 +1,14 @@
 <odoo noupdate="1">
 
-  <record
-          id="shipping-account-colissimo-std-account"
-          model="commown.shipping_account"
-      >
+  <record id="shipping-account-colissimo-std-account" model="commown.shipping_account">
     <field name="name">Colissimo standard</field>
     <field name="account">970066</field>
   </record>
 
   <record
-          id="shipping-account-colissimo-support-account"
-          model="commown.shipping_account"
-      >
+        id="shipping-account-colissimo-support-account"
+        model="commown.shipping_account"
+    >
     <field name="name">Colissimo SAV</field>
     <field name="account">850952</field>
   </record>
