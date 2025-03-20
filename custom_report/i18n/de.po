@@ -1,15 +1,16 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* custom_report
+# 	* custom_report
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-02 10:56+0000\n"
+"POT-Creation-Date: 2025-03-20 19:34+0000\n"
 "PO-Revision-Date: 2023-02-02 10:56+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -132,8 +133,14 @@ msgstr "Rechnungsbetrag netto"
 #. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:33
 #, python-format
-msgid "No discount in case of anticipated payment. Delay penalty of 20% annual rate. For professionals, fixed-price debt collection compensation in case of payment delay: 40€."
-msgstr "Kein Skonto bei vorzeitiger Zahlung. Verzugszinsen in Höhe von 20% pro Jahr. Für Gewerbetreibende: Inkassoentschädigung zum Festpreis bei Zahlungsverzug: 40€."
+msgid ""
+"No discount in case of anticipated payment. Delay penalty of 20% annual "
+"rate. For professionals, fixed-price debt collection compensation in case of "
+"payment delay: 40€."
+msgstr ""
+"Kein Skonto bei vorzeitiger Zahlung. Verzugszinsen in Höhe von 20% pro Jahr. "
+"Für Gewerbetreibende: Inkassoentschädigung zum Festpreis bei Zahlungsverzug: "
+"40€."
 
 #. module: custom_report
 #: code:addons/custom_report/i18n/i18n.py:50
@@ -247,4 +254,3 @@ msgstr "MwSt.-Nummer"
 #, python-format
 msgid "Your reference"
 msgstr "Referenz"
-
