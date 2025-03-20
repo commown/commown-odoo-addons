@@ -6,33 +6,35 @@ from odoo.addons import decimal_precision as dp
 class ProductTemplateAttributeValue(models.Model):
     _inherit = "product.template.attribute.value"
 
-    is_rental = fields.Boolean(
+    has_recurrent_payment = fields.Boolean(
         "Is used by a rental product",
-        related="product_tmpl_id.is_rental",
+        related="product_tmpl_id.has_recurrent_payment",
     )
 
-    rental_price_extra = fields.Float(
+    recurrent_payment_amount_extra = fields.Float(
         string="Extra rental price",
         help="Extra price of the product rent for current variant",
         digits=dp.get_precision("Product Price"),
-        compute="_compute_rental_price_extra",
-        inverse="_inverse_rental_price_extra",
+        compute="_compute_recurrent_payment_amount_extra",
+        inverse="_inverse_recurrent_payment_amount_extra",
     )
 
-    def _compute_rental_price_extra(self):
+    def _compute_recurrent_payment_amount_extra(self):
         for ptav in self:
-            if ptav.is_rental:
+            if ptav.has_recurrent_payment:
                 pt = ptav.product_tmpl_id
-                ptav.rental_price_extra = (
-                    ptav.price_extra * pt.rental_price / pt.list_price
+                ptav.recurrent_payment_amount_extra = (
+                    ptav.price_extra * pt.recurrent_payment_amount / pt.list_price
                 )
             else:
-                ptav.rental_price_extra = False
+                ptav.recurrent_payment_amount_extra = False
 
-    def _inverse_rental_price_extra(self):
+    def _inverse_recurrent_payment_amount_extra(self):
         for ptav in self:
-            if ptav.is_rental:
+            if ptav.has_recurrent_payment:
                 pt = ptav.product_tmpl_id
                 ptav.price_extra = (
-                    ptav.rental_price_extra * pt.list_price / pt.rental_price
+                    ptav.recurrent_payment_amount_extra
+                    * pt.list_price
+                    / pt.recurrent_payment_amount
                 )

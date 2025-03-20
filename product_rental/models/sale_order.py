@@ -72,7 +72,7 @@ class ProductRentalSaleOrder(models.Model):
         bought_accessories = defaultdict(list)
         for l in self.order_line:
             accessory = l.product_id
-            if accessory.is_rental and not accessory.is_contract:
+            if accessory.has_recurrent_payment and not accessory.is_contract:
                 bought_accessories[l.product_id] += int(l.product_uom_qty) * [l]
         _logger.debug(
             "%s: bought %d accessories",

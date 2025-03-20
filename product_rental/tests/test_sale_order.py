@@ -42,7 +42,7 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
 
         We use tax-included in the price for tests (french
         style). Company's default tax is used for products without a
-        specific tax (see sale.order.line `compute_rental_price` method doc)
+        specific tax (see sale.order.line `compute_recurrent_payment_amount` method doc)
 
         """
         tax = self.new_tax(20.0)
@@ -266,7 +266,7 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         headset = self._create_rental_product(
             name="GS Headset",
             list_price=1.0,
-            rental_price=75.0,
+            recurrent_payment_amount=75.0,
             property_contract_template_id=contract_tmpl.id,
         )
         oline_p = self._oline(headset)
@@ -274,7 +274,7 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         micro = self._create_rental_product(
             name="micro",
             list_price=3.0,
-            rental_price=1.5,
+            recurrent_payment_amount=1.5,
             property_contract_template_id=False,
         )
         oline_a = self._oline(micro)
@@ -320,8 +320,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         product = self._create_rental_product(
             name="Fairphone",
             list_price=60.0,
-            rental_price=30.0,
-            rental_tax_ids=[(6, 0, rental_tax.ids)],
+            recurrent_payment_amount=30.0,
+            recurrent_payment_tax_ids=[(6, 0, rental_tax.ids)],
             property_contract_template_id=ct.id,
         )
 

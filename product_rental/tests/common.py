@@ -59,7 +59,7 @@ class RentalSaleOrderMixin:
         product1 = self._create_rental_product(
             name="Fairphone Premium",
             list_price=60.0,
-            rental_price=30.0,
+            recurrent_payment_amount=30.0,
             property_contract_template_id=contract_tmpl1.id,
         )
         oline_p1 = self._oline(product1)
@@ -76,7 +76,7 @@ class RentalSaleOrderMixin:
         product2 = self._create_rental_product(
             name="PC",
             list_price=130.0,
-            rental_price=65.0,
+            recurrent_payment_amount=65.0,
             property_contract_template_id=contract_tmpl2.id,
         )
         oline_p2 = self._oline(product2, product_uom_qty=2, price_unit=120)
@@ -93,7 +93,7 @@ class RentalSaleOrderMixin:
         product3 = self._create_rental_product(
             name="GS Headset",
             list_price=1.0,
-            rental_price=10.0,
+            recurrent_payment_amount=10.0,
             property_contract_template_id=contract_tmpl3.id,
             is_deposit=False,
         )
@@ -119,7 +119,7 @@ class RentalSaleOrderMixin:
         product4 = self._create_rental_product(
             name="FP2",
             list_price=40.0,
-            rental_price=20.0,
+            recurrent_payment_amount=20.0,
             property_contract_template_id=contract_tmpl4.id,
         )
         oline_p4 = self._oline(product4, product_uom_qty=1)
@@ -128,7 +128,7 @@ class RentalSaleOrderMixin:
         a1 = self._create_rental_product(
             name="headset",
             list_price=3.0,
-            rental_price=1.5,
+            recurrent_payment_amount=1.5,
             property_contract_template_id=False,
         )
         oline_a1 = self._oline(a1)
@@ -136,7 +136,7 @@ class RentalSaleOrderMixin:
         a2 = self._create_rental_product(
             name="screen",
             list_price=30.0,
-            rental_price=15.0,
+            recurrent_payment_amount=15.0,
             property_contract_template_id=False,
         )
         oline_a2 = self._oline(a2, product_uom_qty=4)
@@ -144,7 +144,7 @@ class RentalSaleOrderMixin:
         a3 = self._create_rental_product(
             name="keyboard",
             list_price=12.0,
-            rental_price=6.0,
+            recurrent_payment_amount=6.0,
             property_contract_template_id=False,
         )
         oline_a3 = self._oline(a3, discount=10)
@@ -152,7 +152,7 @@ class RentalSaleOrderMixin:
         a4 = self._create_rental_product(
             name="keyboard deluxe",
             list_price=15.0,
-            rental_price=7.5,
+            recurrent_payment_amount=7.5,
             property_contract_template_id=False,
         )
         oline_a4 = self._oline(a4)
@@ -164,7 +164,7 @@ class RentalSaleOrderMixin:
         o1 = self._create_rental_product(
             name="serenity level services",
             list_price=3.0,
-            rental_price=6.0,
+            recurrent_payment_amount=6.0,
             property_contract_template_id=False,
         )
         oline_o1 = self._oline(o1)
@@ -211,7 +211,7 @@ class RentalSaleOrderMixin:
 
     def _create_rental_product(self, name, **kwargs):
         kwargs["name"] = name
-        kwargs.setdefault("is_rental", True)
+        kwargs.setdefault("has_recurrent_payment", True)
         kwargs.setdefault("type", "service")
         kwargs.setdefault("taxes_id", False)
         kwargs["is_contract"] = bool(kwargs.get("property_contract_template_id"))
