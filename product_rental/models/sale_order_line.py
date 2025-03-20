@@ -8,15 +8,19 @@ _logger = logging.getLogger(__name__)
 class ProductRentalSaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    def compute_rental_price(self, without_tax=False):
+    def compute_recurrent_payment_amount(self, without_tax=False):
         "Return the rental recurring amount with (by default) or without tax"
         self.ensure_one()
-        ratio = self.product_id.list_price / self.product_id.rental_price
-        rental_price = self.price_unit * (1 - (self.discount or 0.0) / 100.0) / ratio
+        ratio = self.product_id.list_price / self.product_id.recurrent_payment_amount
+        recurrent_payment_amount = (
+            self.price_unit * (1 - (self.discount or 0.0) / 100.0) / ratio
+        )
         if without_tax:
-            taxes = self.product_id.product_tmpl_id.rental_tax_ids
-            rental_price = taxes.compute_all(rental_price)["total_excluded"]
-        return rental_price
+            taxes = self.product_id.product_tmpl_id.recurrent_payment_tax_ids
+            recurrent_payment_amount = taxes.compute_all(recurrent_payment_amount)[
+                "total_excluded"
+            ]
+        return recurrent_payment_amount
 
     @api.multi
     def create_contract_line(self, contract):

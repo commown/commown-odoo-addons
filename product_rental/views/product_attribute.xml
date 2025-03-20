@@ -7,8 +7,8 @@
     <field name="arch" type="xml">
 
       <xpath expr="//field[@name='price_extra']" position="before">
-        <field name="is_rental" invisible="1"/>
-        <field name="rental_price_extra"/>
+        <field name="has_recurrent_payment" invisible="1"/>
+        <field name="recurrent_payment_amount_extra"/>
       </xpath>
 
     </field>
@@ -21,12 +21,12 @@
     <field name="arch" type="xml">
 
       <xpath expr="//field[@name='price_extra']" position="before">
-        <field name="is_rental" invisible="1"/>
-        <field name="rental_price_extra" attrs="{'invisible': [('is_rental', '=', False)]}"/>
+        <field name="has_recurrent_payment" invisible="1"/>
+        <field name="recurrent_payment_amount_extra" attrs="{'invisible': [('has_recurrent_payment', '=', False)]}"/>
       </xpath>
 
       <xpath expr="//field[@name='price_extra']" position="attributes">
-        <attribute name="attrs">{'invisible': [('is_rental', '=', True)]}</attribute>
+        <attribute name="attrs">{'invisible': [('has_recurrent_payment', '=', True)]}</attribute>
       </xpath>
 
     </field>

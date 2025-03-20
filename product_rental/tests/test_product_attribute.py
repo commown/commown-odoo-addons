@@ -9,12 +9,12 @@ class ProductAttributeTemplateValueTC(TransactionCase):
             [("product_tmpl_id", "=", self.product.id)], limit=1
         )
 
-    def test_compute_rental_price_extra(self):
-        self.assertTrue(self.ptav.is_rental)
+    def test_compute_recurrent_payment_amount_extra(self):
+        self.assertTrue(self.ptav.has_recurrent_payment)
         self.ptav.price_extra = 10.0
-        self.assertEqual(self.ptav.rental_price_extra, 5.0)
+        self.assertEqual(self.ptav.recurrent_payment_amount_extra, 5.0)
 
-    def test_inverse_rental_price_extra(self):
-        self.assertTrue(self.ptav.is_rental)
-        self.ptav.rental_price_extra = 13.0
+    def test_inverse_recurrent_payment_amount_extra(self):
+        self.assertTrue(self.ptav.has_recurrent_payment)
+        self.ptav.recurrent_payment_amount_extra = 13.0
         self.assertEqual(self.ptav.price_extra, 26.0)

@@ -99,7 +99,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         self.service_product = self._create_rental_product(
             name="Fairphone as a Service",
             list_price=60.0,
-            rental_price=30.0,
+            recurrent_payment_amount=30.0,
             property_contract_template_id=contract_tmpl.id,
             primary_storable_variant_id=self.storable_product.product_variant_id.id,
             followup_sales_team_id=team.id,

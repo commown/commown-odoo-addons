@@ -26,11 +26,11 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.product1 = self.env["product.template"].create(
             {
                 "name": "Fairphone Premium",
-                "is_rental": True,
+                "has_recurrent_payment": True,
                 "is_contract": True,
                 "type": "service",
                 "list_price": 60.0,
-                "rental_price": 30.0,
+                "recurrent_payment_amount": 30.0,
                 "followup_sales_team_id": self.team1.id,
                 "property_contract_template_id": contract_tmpl1.id,
             },
@@ -64,7 +64,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.product3 = self._create_rental_product(
             name="Phone protection",
             list_price=2.0,
-            rental_price=1.0,
+            recurrent_payment_amount=1.0,
             followup_sales_team_id=self.team3.id,
         )
         so_line3 = self._oline(self.product3, product_uom_qty=1)

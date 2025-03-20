@@ -7,7 +7,7 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         self.so = self.create_sale_order()
 
     def test_description_sale(self):
-        so_line = self.so.order_line.filtered("product_id.is_rental")[0]
+        so_line = self.so.order_line.filtered("product_id.has_recurrent_payment")[0]
 
         pt = so_line.product_id.product_tmpl_id
         pt.update(
@@ -18,7 +18,7 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         )
         prefix = so_line.product_id.display_name + "\n"
 
-        pt.description_sale = "${record.display_rental_price()}"
+        pt.description_sale = "${record.display_recurrent_payment_amount()}"
         so_line.price_unit = 20
 
         company_currency = self.env["res.company"].browse(1).currency_id.name

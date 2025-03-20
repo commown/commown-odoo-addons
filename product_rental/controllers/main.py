@@ -7,11 +7,11 @@ class RentalProductWebsiteSale(WebsiteSale):
     @http.route()
     def product(self, product, category="", search="", **kwargs):
         result = super().product(product, category, search, **kwargs)
-        if product.is_rental:
+        if product.has_recurrent_payment:
             result.qcontext.update(
                 {
-                    "rental_price_base": product.rental_price,
-                    "rental_price_ratio": product.rental_price_ratio(),
+                    "recurrent_payment_amount_base": product.recurrent_payment_amount,
+                    "recurrent_payment_amount_ratio": product.recurrent_payment_amount_ratio(),
                 }
             )
             if product.is_contract:
