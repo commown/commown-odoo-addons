@@ -32,7 +32,7 @@ class AccountInvoiceReportTC(ReportTC):
         self.deposit_product = self.env["product.product"].create(
             {
                 "name": "FP2 Premium",
-                "is_rental": True,
+                "has_recurrent_payment": True,
                 "type": "service",
                 "list_price": 60,
                 "categ_id": categ_deposit.id,
