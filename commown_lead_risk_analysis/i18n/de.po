@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 10:17+0000\n"
+"POT-Creation-Date: 2025-03-20 19:33+0000\n"
 "PO-Revision-Date: 2024-05-14 19:27+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
@@ -37,6 +37,11 @@ msgid "Address spelling hesitation"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
+#: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.sale_task_description
+msgid "Attributes"
+msgstr ""
+
+#. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Before call"
 msgstr ""
@@ -44,6 +49,12 @@ msgstr ""
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__billing_address_validated
 msgid "Billing address validated"
+msgstr ""
+
+#. module: commown_lead_risk_analysis
+#: code:addons/commown_lead_risk_analysis/models/sale_order.py:88
+#, python-format
+msgid "Cannot mix rental and sale with services contracts"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
@@ -113,9 +124,15 @@ msgid "Email validated"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
+#: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_product__followup_sales_project_id
+#: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_template__followup_sales_project_id
+msgid "Followup sales project (sale)"
+msgstr ""
+
+#. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_product__followup_sales_team_id
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_template__followup_sales_team_id
-msgid "Followup sales team"
+msgid "Followup sales team (rental)"
 msgstr ""
 
 #. module: commown_lead_risk_analysis
