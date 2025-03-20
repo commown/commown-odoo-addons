@@ -1,13 +1,13 @@
 import phonenumbers
 from psycopg2 import IntegrityError
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 from odoo.tools import mute_logger
 
 from ..models.colissimo_utils import ColissimoError
 
 
-class ResPartnerContraintsTC(SavepointCase):
+class ResPartnerContraintsTC(TransactionCase):
     "Tests for partner SQL contraints of present module"
 
     def test_street_length_low_level(self):
@@ -38,7 +38,7 @@ class ResPartnerContraintsTC(SavepointCase):
         )
 
 
-class ResPartnerColissimoDeliveryDataTC(SavepointCase):
+class ResPartnerColissimoDeliveryDataTC(TransactionCase):
     "Test of the colissimo_delivery_data method"
 
     def setUp(self):
