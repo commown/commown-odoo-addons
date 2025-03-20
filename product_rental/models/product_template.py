@@ -10,12 +10,17 @@ _logger = logging.getLogger(__name__)
 class RentalProductTemplate(models.Model):
     _inherit = "product.template"
 
-    has_recurrent_payment = fields.Boolean("Is rental product")
+    has_recurrent_payment = fields.Boolean(
+        "Has recurrent payment",
+        oldname="is_rental",
+    )
 
     is_deposit = fields.Boolean("Is initial payment a deposit", default=True)
 
     recurrent_payment_amount = fields.Float(
-        "Rental price", dp.get_precision("Product Price")
+        "Recurrent payment amount",
+        dp.get_precision("Product Price"),
+        oldname="rental_price",
     )
 
     recurrent_payment_frequency = fields.Selection(
@@ -26,8 +31,8 @@ class RentalProductTemplate(models.Model):
             ("yearly", "Yearly"),
         ],
         "Rental payment frequency",
+        oldname="rental_frequency",
         default="monthly",
-        help="Frequency of the rental price payment",
         required=True,
     )
 
@@ -35,6 +40,7 @@ class RentalProductTemplate(models.Model):
         comodel_name="account.tax",
         string="Rental taxes",
         domain=[("type_tax_use", "=", "sale")],
+        oldname="rental_tax_ids",
     )
 
     @api.multi

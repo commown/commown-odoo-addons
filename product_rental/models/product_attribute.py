@@ -7,7 +7,7 @@ class ProductTemplateAttributeValue(models.Model):
     _inherit = "product.template.attribute.value"
 
     has_recurrent_payment = fields.Boolean(
-        "Is used by a rental product",
+        "Is used by a product with a recurrent payment",
         related="product_tmpl_id.has_recurrent_payment",
     )
 
