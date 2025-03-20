@@ -44,7 +44,7 @@ class ContractSaleWithCouponTC(RentalSaleOrderTC):
         product = self._create_rental_product(
             name="Fairphone Premium",
             list_price=60.0,
-            rental_price=30.0,
+            recurrent_payment_amount=30.0,
             property_contract_template_id=contract_tmpl.id,
         )
 
