@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-24 15:30+0000\n"
+"POT-Creation-Date: 2025-03-20 19:35+0000\n"
 "PO-Revision-Date: 2025-02-24 16:54+0100\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
@@ -48,7 +48,9 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_abstract_to_customer_wizard
 msgid "Abstract class for wizards to send a device after a rental or order"
-msgstr "Classe abstraite pour les assistants d'envoi d'appareil avec une vente de location ou avec service"
+msgstr ""
+"Classe abstraite pour les assistants d'envoi d'appareil avec une vente de "
+"location ou avec service"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_abstract_picking_wizard
@@ -168,12 +170,15 @@ msgstr "Créer un transfert depuis une opportunité"
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_crm_lead_to_customer_wizard
 msgid "Create a picking from a lead right after a rental sale"
-msgstr "Créer une expédition depuis une opportunité après une vente de location"
+msgstr ""
+"Créer une expédition depuis une opportunité après une vente de location"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_to_customer_wizard
 msgid "Create a picking from a task right after a sale with services order"
-msgstr "Créer une expédition depuis une tâche après une vente d'appareils avec service"
+msgstr ""
+"Créer une expédition depuis une tâche après une vente d'appareils avec "
+"service"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_involved_device_picking_wizard
@@ -836,8 +841,8 @@ msgstr "Prêt pour la prochaine étape"
 
 #. module: commown_devices
 #: model:stock.picking.type,name:commown_devices.stock_picking_type_in_rental
-msgid "Receipts"
-msgstr "Réceptions"
+msgid "Receipts - Rental"
+msgstr "Réception - Location"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_inward_picking_form
@@ -873,7 +878,8 @@ msgstr "Commande"
 #: code:addons/commown_devices/models/sale_order.py:31
 #, python-format
 msgid "Sale must be draft to use this action."
-msgstr "La commande doit être dans l'état \"devis\" pour utiliser cette action."
+msgstr ""
+"La commande doit être dans l'état \"devis\" pour utiliser cette action."
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_sale_order_line
@@ -1276,11 +1282,11 @@ msgstr "project.task.notracking.outward.picking.wizard"
 msgid "project.task.outward.picking.wizard"
 msgstr "project.task.outward.picking.wizard"
 
+#~ msgid "Receipts"
+#~ msgstr "Réceptions"
+
 #~ msgid "All product to send"
 #~ msgstr "Tous les produits à envoyer"
-
-#~ msgid "Receipts - Rental"
-#~ msgstr "Réception - Location"
 
 #~ msgid "[commown] Generate picking"
 #~ msgstr "[commown] Générer le mouvement d'appareils"

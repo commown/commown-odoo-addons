@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-24 15:30+0000\n"
+"POT-Creation-Date: 2025-03-20 19:33+0000\n"
 "PO-Revision-Date: 2025-02-24 16:47+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -277,7 +277,8 @@ msgid ""
 "contact</span>"
 msgstr ""
 "<i title=\"Envoyer les factures à ce contact\" class=\"far fa-envelope\"/>\n"
-"            <span class=\"d-none d-sm-inline\">Envoyer les factures à ce contact</span>"
+"            <span class=\"d-none d-sm-inline\">Envoyer les factures à ce "
+"contact</span>"
 
 #. module: commown
 #: code:addons/commown/models/sale_order.py:28
@@ -563,7 +564,9 @@ msgstr "Prénom"
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
 msgid "For legal reasons, please never use someone else's account."
-msgstr "Pour des raisons légales, merci de ne jamais réutiliser un compte pour une autre personne. Archivez-le et créez un.e autre bénéficiaire à la place."
+msgstr ""
+"Pour des raisons légales, merci de ne jamais réutiliser un compte pour une "
+"autre personne. Archivez-le et créez un.e autre bénéficiaire à la place."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
@@ -927,7 +930,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
 msgid ""
 "Pour contacter l'équipe parcourez la section \"Vos besoins d'assistance\"."
-msgstr "Pour contacter l'équipe parcourez la section \"Vos besoins d'assistance\"."
+msgstr ""
+"Pour contacter l'équipe parcourez la section \"Vos besoins d'assistance\"."
 
 #. module: commown
 #: model:product.template,description_sale:commown.sepa_mandate
@@ -1051,12 +1055,6 @@ msgid "Street 2"
 msgstr "Rue 2"
 
 #. module: commown
-#: model:ir.model.fields,field_description:commown.field_product_product__support_group_ids
-#: model:ir.model.fields,field_description:commown.field_product_template__support_group_ids
-msgid "Support groups"
-msgstr "Groupes de support"
-
-#. module: commown
 #: model:ir.model,name:commown.model_project_task
 msgid "Task"
 msgstr "Tâche"
@@ -1144,7 +1142,10 @@ msgstr ""
 msgid ""
 "This is the payment token that will be used to automatically reconcile debts "
 "for this partner, if there is not one already set on the analytic account."
-msgstr "C'est ce moyen de paiement qui sera utilisé automatiquement pour le lettrage des dettes de ce partenaire, à moins qu'un autre soit paramétré sur le contrat."
+msgstr ""
+"C'est ce moyen de paiement qui sera utilisé automatiquement pour le lettrage "
+"des dettes de ce partenaire, à moins qu'un autre soit paramétré sur le "
+"contrat."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_invoices
@@ -1385,6 +1386,9 @@ msgstr "mass.reconcile.simple.partner_commown"
 #: model:ir.model,name:commown.model_account_mass_reconcile_method
 msgid "reconcile method for account_mass_reconcile"
 msgstr "Méthode de lettrage"
+
+#~ msgid "Support groups"
+#~ msgstr "Groupes de support"
 
 #~ msgid ""
 #~ "Pour contacter l'équipe parcourez la section \"Auto-dépannage\" à gauche."

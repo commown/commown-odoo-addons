@@ -30,7 +30,7 @@ class RentalProductTemplate(models.Model):
             ("monthly", "Monthly"),
             ("yearly", "Yearly"),
         ],
-        "Rental payment frequency",
+        "Recurrent payment frequency",
         oldname="rental_frequency",
         default="monthly",
         required=True,
@@ -38,7 +38,7 @@ class RentalProductTemplate(models.Model):
 
     recurrent_payment_tax_ids = fields.Many2many(
         comodel_name="account.tax",
-        string="Rental taxes",
+        string="Recurrent payment taxes",
         domain=[("type_tax_use", "=", "sale")],
         oldname="rental_tax_ids",
     )

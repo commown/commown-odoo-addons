@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-24 15:31+0000\n"
-"PO-Revision-Date: 2025-02-24 16:56+0100\n"
+"POT-Creation-Date: 2025-03-20 19:33+0000\n"
+"PO-Revision-Date: 2025-03-20 20:52+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -37,6 +37,11 @@ msgid "Address spelling hesitation"
 msgstr "Hésitation marquée élocution addresse"
 
 #. module: commown_lead_risk_analysis
+#: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.sale_task_description
+msgid "Attributes"
+msgstr "Attributs"
+
+#. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Before call"
 msgstr "Éval. risque avant appel"
@@ -47,10 +52,12 @@ msgid "Billing address validated"
 msgstr "Adresse de facturation validée"
 
 #. module: commown_lead_risk_analysis
-#: code:addons/commown_lead_risk_analysis/models/sale_order.py:74
+#: code:addons/commown_lead_risk_analysis/models/sale_order.py:88
 #, python-format
 msgid "Cannot mix rental and sale with services contracts"
-msgstr "Impossible de mélanger dans la même vente des services de location et de vente"
+msgstr ""
+"Impossible de mélanger dans la même vente des services de location et de "
+"vente"
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0
