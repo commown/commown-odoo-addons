@@ -33,9 +33,9 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     _name = "commown.track_delivery.mixin"
     _description = "Class holding the fields and methods to track parcel delivery"
 
-    expedition_ref = fields.Text("Expedition reference", size=64, copy=False)
+    expedition_ref = fields.Char("Expedition reference", size=64, copy=False)
     expedition_date = fields.Date(copy=False)
-    expedition_status = fields.Text(size=256, copy=False)
+    expedition_status = fields.Char(size=256, copy=False)
     expedition_status_fetch_date = fields.Datetime(copy=False)
     expedition_urgency_mail_sent = fields.Boolean(
         "Expedition urgency mail send", default=False, copy=False
