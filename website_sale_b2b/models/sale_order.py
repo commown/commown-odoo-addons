@@ -74,7 +74,7 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    def display_rental_price(self, amount=None):
+    def display_recurrent_payment_amount(self, amount=None):
         """Format current line's product rental price in the order partner's language
         or given amount if specified.
 
@@ -82,7 +82,7 @@ class SaleOrderLine(models.Model):
         """
 
         if amount is None:
-            amount = self.compute_rental_price()
+            amount = self.compute_recurrent_payment_amount()
         str_amount = format_amount(self.env, amount, self.product_id.currency_id)
 
         if self.product_id.product_tmpl_id.is_b2b():
@@ -90,9 +90,11 @@ class SaleOrderLine(models.Model):
             str_amount = str_amount.replace(symbol, symbol + _(" excl. taxes"))
 
         # Get frequency t10n values from fields_get:
-        ftypes = dict(self.product_id.fields_get()["rental_frequency"]["selection"])
+        ftypes = dict(
+            self.product_id.fields_get()["recurrent_payment_frequency"]["selection"]
+        )
 
-        return str_amount + " " + ftypes[self.product_id.rental_frequency]
+        return str_amount + " " + ftypes[self.product_id.recurrent_payment_frequency]
 
     def display_commitment_duration(self):
         "Format current product's rental contract commitment duration"
