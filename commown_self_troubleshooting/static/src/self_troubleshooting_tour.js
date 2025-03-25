@@ -461,7 +461,7 @@ odoo.define("commown_self_troubleshooting.tour_fp2_battery", function(require) {
       commonSteps.checkInputNamesMatchesUser,
       commonSteps.gotoNextStep,
       ...commonSteps.funcAddMoreInfo("text My display need to be replaced!"),
-      ...commonSteps.funcCreateAndCheckTicket("écran muni"),
+      ...commonSteps.funcCreateAndCheckTicket("prêt de tournevis"),
     ]
   );
 
