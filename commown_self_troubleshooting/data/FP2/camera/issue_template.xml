@@ -13,8 +13,10 @@
               Il ressort que la
               caméra (<t t-esc="old_or_new"/> modèle) de mon FP2 doit être
               changée.
-            </p><br/>
-
+            </p>
+            <p t-if="screwdriver=='yes'">
+              J'ai également besoin d'un prêt de tournevis.
+            </p>
             <t t-call="commown_self_troubleshooting.display-shipping-information" />
           </t>
 

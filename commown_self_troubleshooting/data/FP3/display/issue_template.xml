@@ -12,8 +12,10 @@
           <p>
           Il ressort que l'écran de mon FP3 doit être changé.
           </p>
+          <p t-if="screwdriver=='yes'">
+            J'ai également besoin d'un prêt de tournevis.
+          </p>
         </t>
-
         <p t-else="">
           Mon écran a un souci : Commown doit m'expédier un appareil (FP3 / FP3+)
         </p><br/>
