@@ -15,6 +15,9 @@
           <t t-else="">
             <t t-if="type_contrat=='me'">
               <p>Il ressort qu'un écran muni d'une protection doit m'être envoyé.</p>
+              <p t-if="screwdriver=='yes'">
+                J'ai également besoin d'un prêt de tournevis.
+              </p>
             </t>
             <t t-else="">
               <p>L'écran de mon appareil est cassé - il ressort qu'un nouvel appareil doit m'être envoyé.</p>
