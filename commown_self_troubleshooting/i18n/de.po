@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-27 11:09+0000\n"
+"POT-Creation-Date: 2025-03-26 09:00+0000\n"
 "PO-Revision-Date: 2025-02-27 13:52+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -1533,6 +1533,11 @@ msgid "Fairphone 5"
 msgstr "Fairphone 5"
 
 #. module: commown_self_troubleshooting
+#: model:ir.model,name:commown_self_troubleshooting.model_commown_self_troubleshooting_screwdriver_data
+msgid "Fields related to a type of screwdriver."
+msgstr ""
+
+#. module: commown_self_troubleshooting
 #: model:project.task.type,description:commown_self_troubleshooting.stage_callback
 msgid ""
 "For cases where the customer has not responded to the ticket once, which "
@@ -1708,6 +1713,11 @@ msgid "J'ai une demande qui ne rentre dans aucune des cases précédentes !"
 msgstr "Ich habe eine Anfrage, die nicht zu den vorherigen Fällen gehört!"
 
 #. module: commown_self_troubleshooting
+#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-smartphone-screen
+msgid "J'ai également besoin d'un prêt de tournevis."
+msgstr "Außerdem benötige ich einen Schraubenzieher als Leihgabe."
+
+#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-manipulation-option
 msgid "Je manipule les modules en cas de panne"
 msgstr "Ich repariere die Module im Falle eines Defekts"
@@ -1876,8 +1886,8 @@ msgid ""
 "id=\"contract_name\"/>)\n"
 "                      est : <b id=\"contract_commitment_end_date\"/>."
 msgstr ""
-"Das Ende der Bindungsfrist des von Ihnen gewählten Vertrags (<b "
-"id=\"contract_name\"/>)\n"
+"Das Ende der Bindungsfrist des von Ihnen gewählten Vertrags (<b id="
+"\"contract_name\"/>)\n"
 "                      ist: <b id=\"contract_commitment_end_date\"/>."
 
 #. module: commown_self_troubleshooting
