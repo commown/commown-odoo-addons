@@ -49,3 +49,8 @@ class RentalProductTemplate(models.Model):
         return self.has_recurrent_payment and (
             (self.list_price or 1) / self.recurrent_payment_amount
         )
+
+    @api.onchange("is_contract")
+    def onchange_is_contract(self):
+        if self.is_contract:
+            self.has_recurrent_payment = True
