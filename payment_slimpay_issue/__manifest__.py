@@ -13,6 +13,7 @@
         "account_payment_partner",
         "account_payment_slimpay",
         "base_automation",
+        "contract_payment_auto",
         "commown_res_partner_sms",
         "project",
         "queue_job",
