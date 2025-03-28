@@ -3,6 +3,7 @@ import logging
 import requests
 
 from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 
@@ -363,7 +364,9 @@ class ProjectTask(models.Model):
             partner = invoice.partner_id
 
             if not partner.payment_token_ids:
-                _logger.error("Invoice %s: partner has no payment token!", invoice.id)
+                raise UserError(
+                    _("Invoice id %d: could not find a payment token!") % invoice.id
+                )
             token = partner.payment_token_ids[0]
 
             _logger.info(
