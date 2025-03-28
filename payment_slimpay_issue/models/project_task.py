@@ -363,11 +363,16 @@ class ProjectTask(models.Model):
             invoice = task.invoice_id
             partner = invoice.partner_id
 
-            if not partner.payment_token_ids:
+            payments = invoice.payment_ids.filtered(lambda p: p.state == "posted")
+            if payments:
+                token = payments.sorted("id")[-1].partner_id.payment_token_id
+            else:
+                token = partner.payment_token_id
+
+            if not token:
                 raise UserError(
                     _("Invoice id %d: could not find a payment token!") % invoice.id
                 )
-            token = partner.payment_token_ids[0]
 
             _logger.info(
                 "Task %s: retrying payment of invoice %s of %s with %s",

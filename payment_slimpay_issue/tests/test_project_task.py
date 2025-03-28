@@ -163,24 +163,22 @@ class ProjectTC(SavepointCase):
             .ensure_one()
         )
         self.partner = ref("base.res_partner_3")
+        token = self.env["payment.token"].create(
+            {
+                "name": "Test Slimpay Token",
+                "active": True,
+                "acquirer_id": self.slimpay.id,
+                "acquirer_ref": "Slimpay mandate ref",
+                "partner_id": self.partner.id,
+            },
+        )
         self.partner.update(
             {
                 # Avoid SMS not sent warnings:
                 "mobile": "+33612345678",
                 "country_id": self.env.ref("base.fr").id,
                 "property_account_receivable_id": self.customer_account.id,
-                "payment_token_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "Test Slimpay Token",
-                            "active": True,
-                            "acquirer_id": self.slimpay.id,
-                            "acquirer_ref": "Slimpay mandate ref",
-                        },
-                    )
-                ],
+                "payment_token_id": token.id,
             }
         )
 
