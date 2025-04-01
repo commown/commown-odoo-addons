@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import mock
 
+from odoo.exceptions import UserError
 from odoo.tests.common import SavepointCase, at_install, post_install
 from odoo.tools import mute_logger
 
@@ -163,24 +164,22 @@ class ProjectTC(SavepointCase):
             .ensure_one()
         )
         self.partner = ref("base.res_partner_3")
+        token = self.env["payment.token"].create(
+            {
+                "name": "Test Slimpay Token",
+                "active": True,
+                "acquirer_id": self.slimpay.id,
+                "acquirer_ref": "Slimpay mandate ref",
+                "partner_id": self.partner.id,
+            },
+        )
         self.partner.update(
             {
                 # Avoid SMS not sent warnings:
                 "mobile": "+33612345678",
                 "country_id": self.env.ref("base.fr").id,
                 "property_account_receivable_id": self.customer_account.id,
-                "payment_token_ids": [
-                    (
-                        0,
-                        0,
-                        {
-                            "name": "Test Slimpay Token",
-                            "active": True,
-                            "acquirer_id": self.slimpay.id,
-                            "acquirer_ref": "Slimpay mandate ref",
-                        },
-                    )
-                ],
+                "payment_token_id": token.id,
             }
         )
 
@@ -501,12 +500,11 @@ class ProjectTC(SavepointCase):
         return act
 
     def test_actions(self):
+        ref = self.env.ref
         task = self._create_odoo_task()
 
         # Check a message is sent when entering the warn and wait stage
-        task.stage_id = self.env.ref(
-            "payment_slimpay_issue.stage_warn_partner_and_wait"
-        ).id
+        task.stage_id = ref("payment_slimpay_issue.stage_warn_partner_and_wait").id
         last_msg = task.message_ids[0]
         self.assertEqual(last_msg.subject, "YourCompany: rejected payment")
 
@@ -524,6 +522,26 @@ class ProjectTC(SavepointCase):
         # Check the task finally goes into fixed stage 8 days later
         self._simulate_wait(task, days=8, minutes=1)
         self.assertInStage(task, "stage_issue_fixed")
+
+    def test_retry_payment_error_no_token(self):
+        # Create a task, move it to the wait stage and open the invoice
+        # to prepare the payment retry:
+        ref = self.env.ref
+        task = self._create_odoo_task()
+        task.stage_id = ref("payment_slimpay_issue.stage_warn_partner_and_wait").id
+        self.invoice.payment_move_line_ids.remove_move_reconcile()
+
+        # Now remove the payment token and launch the payment retry:
+        self.partner.payment_token_id.unlink()
+        with self.assertRaises(UserError) as err:
+            self._simulate_wait(
+                task,
+                days=6,
+                check_job_function=task._slimpay_payment_issue_retry_payment,
+            )
+
+        # Check the expected exception is raised:
+        self.assertIn("could not find a payment token!", err.exception.name)
 
     def _slimpay_supplier_invoices(self):
         slimpay_partner = self.env.ref("payment_slimpay_issue.slimpay_fees_partner")
