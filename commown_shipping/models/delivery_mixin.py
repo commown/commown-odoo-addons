@@ -224,7 +224,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
                     self.message_post_with_template(
                         self.env.ref("commown_shipping.parcel_at_postoffice").id,
                         subtype_id=self.env.ref("mail.mt_note").id,
-                        notif_layout="mail.mail_notification_light",
+                        email_layout_xmlid="mail.mail_notification_light",
                     )
                     result.append("Commown postoffice notification sent.")
         else:
