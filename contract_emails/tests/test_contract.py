@@ -19,7 +19,6 @@ class ContractTemplateMailGenerator(TestContractBase):
                 "name": kwargs.get("name", "Test template name"),
                 "subject": kwargs.get("subject", "${object.name}"),
                 "body_html": kwargs.get("body_html", "Test body"),
-                "user_signature": False,
             }
         )
 
