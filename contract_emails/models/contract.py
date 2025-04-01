@@ -176,17 +176,17 @@ class ContractSentPlannedEmail(models.Model):
 
     contract_id = fields.Many2one(
         "contract.contract",
-        String="Contract",
+        string="Contract",
         required=True,
     )
 
     planned_mail_generator_id = fields.Many2one(
         "contract_emails.planned_mail_generator",
-        String="Planned mail generator",
+        string="Planned mail generator",
         required=True,
     )
 
     send_date = fields.Datetime(
-        String="Date the planned email was sent",
+        string="Date the planned email was sent",
         required=True,
     )
