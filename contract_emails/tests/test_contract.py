@@ -4,7 +4,7 @@ from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
 def is_mail(message):
-    return list(message.subtype_id.get_xml_id().values())[0] == "mail.mt_comment"
+    return list(message.subtype_id.get_external_id().values())[0] == "mail.mt_comment"
 
 
 def get_model(obj):

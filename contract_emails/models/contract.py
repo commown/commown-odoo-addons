@@ -122,7 +122,6 @@ class ContractTemplatePlannedMailGenerator(models.Model):
                     }
                 )
 
-    @api.multi
     def send_planned_mail(self, contract):
         self.ensure_one()
         contract.message_post_with_template(self.mail_template_id.id)
