@@ -7,8 +7,8 @@ def is_mail(message):
     return list(message.subtype_id.get_xml_id().values())[0] == "mail.mt_comment"
 
 
-def get_model(object):
-    return object.env["ir.model"].search([("model", "=", object._name)])
+def get_model(obj):
+    return obj.env["ir.model"].search([("model", "=", obj._name)])
 
 
 class ContractTemplateMailGenerator(TestContractBase):
@@ -54,7 +54,7 @@ class ContractTemplateMailGenerator(TestContractBase):
 
         self.create_gen(0, text="Mail at contract start", max_delay_days=10)
         self.create_gen(6, text="Mail after 6 days", max_delay_days=10)
-        g3 = self.create_gen(25, text="Mail after 25 days", max_delay_days=10)
+        self.create_gen(25, text="Mail after 25 days", max_delay_days=10)
 
         today = date.today()
         t_30 = today - timedelta(days=30)

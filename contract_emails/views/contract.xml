@@ -6,11 +6,11 @@
     <field name="arch" type="xml">
       <form string="Planned mail generator">
         <group name="mail">
-          <field name="contract_id" invisible="1"/>
-          <field name="mail_template_id"/>
-          <field name="interval_number"/>
-          <field name="interval_type"/>
-          <field name="max_delay_days"/>
+          <field name="contract_id" invisible="1" />
+          <field name="mail_template_id" />
+          <field name="interval_number" />
+          <field name="interval_type" />
+          <field name="max_delay_days" />
         </group>
       </form>
     </field>
@@ -20,12 +20,12 @@
     <field name="name">Planned mail template form tree</field>
     <field name="model" eval="'contract_emails.planned_mail_generator'" />
     <field name="arch" type="xml">
-      <tree string="Planned emails">
-        <field name="contract_id" invisible="1"/>
-        <field name="mail_template_id"/>
-        <field name="interval_number"/>
-        <field name="interval_type"/>
-        <field name="max_delay_days"/>
+      <tree>
+        <field name="contract_id" invisible="1" />
+        <field name="mail_template_id" />
+        <field name="interval_number" />
+        <field name="interval_type" />
+        <field name="max_delay_days" />
       </tree>
     </field>
   </record>
@@ -33,13 +33,16 @@
   <record id="contract_template_form_view" model="ir.ui.view">
     <field name="name">contract.template form view (in contract_emails)</field>
     <field name="model">contract.template</field>
-    <field name="inherit_id" ref="contract.contract_template_form_view"/>
+    <field name="inherit_id" ref="contract.contract_template_form_view" />
     <field name="arch" type="xml">
 
       <xpath expr="//form" position="inside">
         <group name="Planned emails" string="Planned emails">
-          <field name="planned_mail_gen_ids" nolabel="1"
-                 context="{'default_contract_id': id}"/>
+          <field
+                        name="planned_mail_gen_ids"
+                        nolabel="1"
+                        context="{'default_contract_id': id}"
+                    />
         </group>
       </xpath>
 
@@ -49,7 +52,7 @@
   <record id="contract_contract_customer_form_view" model="ir.ui.view">
     <field name="name">contract.contract form view (in contract_emails)</field>
     <field name="model">contract.contract</field>
-    <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+    <field name="inherit_id" ref="contract.contract_contract_customer_form_view" />
     <field name="arch" type="xml">
 
       <field name="contract_template_id" position="after">
