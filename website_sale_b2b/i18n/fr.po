@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 17:23+0000\n"
-"PO-Revision-Date: 2024-05-10 12:09+0200\n"
+"POT-Creation-Date: 2025-03-20 19:34+0000\n"
+"PO-Revision-Date: 2025-02-04 13:43+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -41,7 +41,7 @@ msgstr ""
 "\"Récapitulatif de vos opérations\"} | NE PAS REPONDRE"
 
 #. module: website_sale_b2b
-#: code:addons/website_sale_b2b/models/res_partner.py:40
+#: code:addons/website_sale_b2b/models/res_partner.py:41
 #, python-format
 msgid "%(name)s (indep. - %(company_name)s)"
 msgstr "%(name)s (indep. - %(company_name)s)"
@@ -662,15 +662,6 @@ msgstr ""
 
 #. module: website_sale_b2b
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
-msgid ""
-"<i class=\"fa fa-chevron-left\"/>\n"
-"            <span>Back to shopping cart</span>"
-msgstr ""
-"<i class=\"fa fa-chevron-left\"/>\n"
-"            <span>Revenir au panier</span>"
-
-#. module: website_sale_b2b
-#: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
 msgid "<span>Submit my request</span> <i class=\"fa fa-chevron-right\"/>"
 msgstr "<span>Soumettre ma demande</span> <i class=\"fa fa-chevron-right\"/>"
 
@@ -728,10 +719,11 @@ msgstr "La description est un template"
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.payment_tokens_list
 msgid ""
 "Due to the large number of units required, a member of our sales team will\n"
-"        contact you shortly to finalize your order."
+"          contact you shortly to finalize your order."
 msgstr ""
-"En raison du nombre important d’appareils souhaités, un membre de l’équipe "
-"commerciale vous recontactera rapidement pour finaliser la commande."
+"En raison du grand nombre d'appareils demandé, un membre de notre équipe "
+"commerciale va\n"
+"          prendre contact avec vous rapidement pour finaliser votre commande."
 
 #. module: website_sale_b2b
 #: model:ir.model.fields,help:website_sale_b2b.field_portal_wizard_user__website_id
@@ -970,6 +962,22 @@ msgstr "du même modèle"
 #: model_terms:ir.ui.view,arch_db:website_sale_b2b.product_quantity
 msgid "you already have."
 msgstr "que vous avez déjà."
+
+#~ msgid ""
+#~ "<i class=\"fa fa-chevron-left\"/>\n"
+#~ "            <span>Back to shopping cart</span>"
+#~ msgstr ""
+#~ "<i class=\"fa fa-chevron-left\"/>\n"
+#~ "            <span>Revenir au panier</span>"
+
+#~ msgid ""
+#~ "Due to the large number of units required, a member of our sales team "
+#~ "will\n"
+#~ "        contact you shortly to finalize your order."
+#~ msgstr ""
+#~ "En raison du nombre important d’appareils souhaités, un membre de "
+#~ "l’équipe commerciale vous recontactera rapidement pour finaliser la "
+#~ "commande."
 
 #~ msgid ""
 #~ "<i class=\"fa fa-chevron-left\"/>\n"

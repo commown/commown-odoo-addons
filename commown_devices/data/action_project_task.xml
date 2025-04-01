@@ -83,4 +83,13 @@
     <field name="binding_model_id" ref="project.model_project_task" />
   </record>
 
+  <record id="project_task_action_to_customer_picking" model="ir.actions.server">
+    <field name="name">[commown] Generate picking (project.task)</field>
+    <field name="model_id" ref="model_project_task"/>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">action = record.action_to_customer_picking()</field>
+    <field name="binding_model_id" ref="model_project_task" />
+  </record>
+
 </odoo>

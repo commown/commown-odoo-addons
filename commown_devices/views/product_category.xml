@@ -1,0 +1,22 @@
+<odoo>
+
+  <data>
+
+    <record model="ir.ui.view" id="view_category_property_form">
+      <field name="name">product.category.property.form.inherit</field>
+      <field name="model">product.category</field>
+      <field name="inherit_id" ref="account.view_category_property_form"/>
+      <field name="arch" type="xml">
+        <field name="property_account_expense_categ_id" position="after">
+          <field name="property_rental_account_expense_categ_id"/>
+        </field>
+        <field name="property_account_expense_categ_id" position="attributes">
+          <attribute name="string">Expense Account (resale)</attribute>
+        </field>
+      </field>
+    </record>
+
+
+  </data>
+
+</odoo>

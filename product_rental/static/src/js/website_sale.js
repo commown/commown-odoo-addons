@@ -7,10 +7,10 @@ var sAnimations = require('website.content.snippets.animation');
 sAnimations.registry.WebsiteSale.include({
     _onChangeCombination: function (ev, $parent, combination){
         this._super.apply(this, arguments);
-        let $rental_price = $parent.find('.oe_rental_price');
-        let ratio = parseFloat($rental_price.data('rental-ratio'));
+        let $recurrent_payment_amount = $parent.find('.oe_recurrent_payment_amount');
+        let ratio = parseFloat($recurrent_payment_amount.data('recurrent-payment-ratio'));
         let price = this._priceToStr(combination.price / ratio);
-        $rental_price.find(".oe_currency_value").html(price);
+        $recurrent_payment_amount.find(".oe_currency_value").html(price);
     }
 });
 
@@ -27,10 +27,10 @@ var optionalProductModal = require('sale.OptionalProductsModal');
 optionalProductModal.include({
     _onChangeCombination: function (ev, $parent, combination){
         this._super.apply(this, arguments);
-        let $rental_price = $parent.find('.oe_rental_price');
-        let ratio = parseFloat($rental_price.data('rental-ratio'));
+        let $recurrent_payment_amount = $parent.find('.oe_recurrent_payment_amount');
+        let ratio = parseFloat($recurrent_payment_amount.data('recurrent-payment-ratio'));
         let price = this._priceToStr(combination.price / ratio);
-        $rental_price.find(".oe_currency_value").html(price);
+        $recurrent_payment_amount.find(".oe_currency_value").html(price);
     }
 });
 

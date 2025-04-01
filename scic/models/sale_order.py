@@ -17,7 +17,7 @@ class SCICSaleOrder(models.Model):
             )
             order.only_services = all(
                 (
-                    not l.product_id.is_rental  # we need to ship the product
+                    not l.product_id.has_recurrent_payment  # we need to ship the product
                     and l.product_id.type in ("service", "digital")
                 )
                 for l in order.website_order_line

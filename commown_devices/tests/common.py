@@ -10,17 +10,16 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
 def create_config(serv_tmpl, type, stor_tmpl, stor_variant, att_val_ids=None):
-    return serv_tmpl.env["product.service_storable_config"].create(
-        {
-            "service_tmpl_id": serv_tmpl.id,
-            "storable_type": type,
-            "attribute_value_ids": [(6, 0, att_val_ids.ids)]
-            if att_val_ids is not None
-            else False,
-            "storable_tmpl_id": stor_tmpl.id,
-            "storable_variant_id": stor_variant.id,
-        }
-    )
+    attrs = {
+        "service_tmpl_id": serv_tmpl.id,
+        "storable_type": type,
+        "storable_tmpl_id": stor_tmpl.id,
+        "storable_variant_id": stor_variant.id,
+    }
+    if att_val_ids:
+        attrs["attribute_value_ids"] = [(6, 0, att_val_ids.ids)]
+
+    return serv_tmpl.env["product.service_storable_config"].create(attrs)
 
 
 def add_attributes_to_product(product, attribute, attribute_values):
@@ -74,6 +73,8 @@ class BaseLotTC(SavepointCase):
 
 
 class DeviceAsAServiceTC(RentalSaleOrderTC):
+    confirm_sale = True
+
     def setUp(self):
         super(DeviceAsAServiceTC, self).setUp()
 
@@ -95,18 +96,18 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         )
         team = self.env.ref("sales_team.salesteam_website_sales")
 
-        sold_product = self._create_rental_product(
+        self.service_product = self._create_rental_product(
             name="Fairphone as a Service",
             list_price=60.0,
-            rental_price=30.0,
+            recurrent_payment_amount=30.0,
             property_contract_template_id=contract_tmpl.id,
             primary_storable_variant_id=self.storable_product.product_variant_id.id,
             followup_sales_team_id=team.id,
         )
 
-        assert sold_product.is_contract  # XXX requires cache invalidation
+        assert self.service_product.is_contract  # XXX requires cache invalidation
 
-        oline = self._oline(sold_product, product_uom_qty=3)
+        oline = self._oline(self.service_product, product_uom_qty=3)
         self.so = self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
@@ -115,7 +116,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 "order_line": [oline],
             }
         )
-        self.so.action_confirm()
+        if self.confirm_sale:
+            self.so.action_confirm()
 
         self.location_fp3_new = self.env["stock.location"].create(
             {
@@ -214,7 +216,6 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
     def send_device(self, serial, contract=None, date=None, location=None):
         contract = contract or self.so.order_line.contract_id
-        location = location or self.env.ref("stock.stock_location_stock")
         lot = self.env["stock.production.lot"].search([("name", "=", serial)])
         contract.send_devices(
             lot.ensure_one(), {}, send_lots_from=location, date=date, do_transfer=True
@@ -290,7 +291,7 @@ def create_lot_and_quant(env, lot_name, product, location):
         }
     )
 
-    quant = env["stock.quant"].create(
+    env["stock.quant"].create(
         {
             "product_id": product.id,
             "lot_id": lot.id,
@@ -329,3 +330,108 @@ class BaseWizardToEmployeeMixin:
         wizard = self.env["project.task.to.employee.wizard"].create(kwargs)
         wizard.onchange_reset_shipping_data_if_delivered_by_hand()
         return wizard
+
+
+class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
+    "Base class to write identical tests for picking to customer from leads and tasks"
+    confirm_sale = False
+
+    def setUp(self):
+        super().setUp()
+
+        service_template = self.service_product.product_tmpl_id
+        self.usbc_cable = self.env["product.template"].create(
+            {
+                "name": "Test USB-C Cable",
+                "type": "product",
+                "tracking": "none",
+            }
+        )
+        self.protective_screen = self.env["product.template"].create(
+            {
+                "name": "Protective Screen",
+                "type": "product",
+                "tracking": "none",
+            }
+        )
+        self.loc_new_untracked = self.env.ref(
+            "commown_devices.stock_location_modules_and_accessories"
+        )
+        self.adjust_stock_notracking(
+            self.usbc_cable.product_variant_id, self.loc_new_untracked
+        )
+        # We don't ajdust stock of protective screen because lack of stock case is
+        # tested
+        self.attribute_usbc = self.env["product.attribute"].create(
+            {"name": "Send Cable ?", "type": "select", "create_variant": "always"}
+        )
+        self.attribute_color = self.env.ref("product.product_attribute_2")
+        color_values = self.env["product.attribute.value"].search(
+            [("attribute_id.id", "=", self.attribute_color.id)]
+        )
+        usbc_values = self.env["product.attribute.value"].create(
+            [
+                {"attribute_id": self.attribute_usbc.id, "name": "Yes"},
+                {"attribute_id": self.attribute_usbc.id, "name": "No"},
+            ]
+        )
+        add_attributes_to_product(
+            service_template,
+            self.attribute_color,
+            color_values,
+        )
+        add_attributes_to_product(
+            self.storable_product,
+            self.attribute_color,
+            color_values,
+        )
+        add_attributes_to_product(
+            service_template,
+            self.attribute_usbc,
+            usbc_values,
+        )
+        service_template._origin = service_template
+        self.storable_product.create_variant_ids()
+        service_template.create_variant_ids()
+        self.color1 = color_values[0]
+        with_usbc = usbc_values.filtered(lambda v: v.name == "Yes")
+        self.fp3_plus_storable_color1 = self.env["product.product"].search(
+            [
+                ("product_tmpl_id", "=", self.storable_product.id),
+                ("attribute_value_ids.id", "ilike", self.color1.id),
+            ]
+        )
+        create_config(
+            service_template,
+            "primary",
+            self.storable_product,
+            self.fp3_plus_storable_color1,
+            att_val_ids=self.color1,
+        )
+        create_config(
+            service_template,
+            "secondary",
+            self.protective_screen,
+            self.protective_screen.product_variant_id,
+        )
+        create_config(
+            service_template,
+            "secondary",
+            self.usbc_cable,
+            self.usbc_cable.product_variant_id,
+            att_val_ids=with_usbc,
+        )
+        self.fp3_plus_service_color1_with_usb = self.env["product.product"].search(
+            [
+                ("product_tmpl_id", "=", service_template.id),
+                ("attribute_value_ids", "ilike", self.color1.id),
+                ("attribute_value_ids", "ilike", with_usbc.id),
+            ]
+        )
+        self.so.order_line[0].product_id = self.fp3_plus_service_color1_with_usb
+
+    def prepare_wizard(self, related_entity, relation_field, user_choices=None):
+        wizard_name = "%s.to.customer.wizard" % related_entity._name
+        return self.prepare_ui(
+            wizard_name, related_entity, relation_field, user_choices=user_choices
+        )

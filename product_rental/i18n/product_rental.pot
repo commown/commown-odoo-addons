@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-14 17:26+0000\n"
-"PO-Revision-Date: 2024-05-14 17:26+0000\n"
+"POT-Creation-Date: 2025-03-28 09:25+0000\n"
+"PO-Revision-Date: 2025-03-28 09:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -270,6 +270,16 @@ msgid "<strong>Commitment end date</strong>"
 msgstr ""
 
 #. module: product_rental
+#: model:ir.model,name:product_rental.model_contract_abstract_contract
+msgid "Abstract Recurring Contract"
+msgstr ""
+
+#. module: product_rental
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
+msgid "Amount"
+msgstr ""
+
+#. module: product_rental
 #: model:project.task.type,legend_blocked:product_rental.stage_declared_loss
 #: model:project.task.type,legend_blocked:product_rental.stage_declared_theft
 msgid "Blocked"
@@ -304,13 +314,13 @@ msgid "Contract"
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:316
+#: code:addons/product_rental/models/contract.py:317
 #, python-format
 msgid "Contract %s (id %d) has %d main rental service lines."
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:336
+#: code:addons/product_rental/models/contract.py:337
 #, python-format
 msgid "Contract %s (id %d) has a main rental service with an incoherent contract model %s"
 msgstr ""
@@ -352,14 +362,14 @@ msgid "Contractual documents"
 msgstr ""
 
 #. module: product_rental
-#: code:addons/product_rental/models/contract.py:282
+#: code:addons/product_rental/models/contract.py:283
 #: model_terms:ir.ui.view,arch_db:product_rental.contract_contract_form_view
 #, python-format
 msgid "Cost/Revenue"
 msgstr ""
 
 #. module: product_rental
-#: selection:product.template,rental_frequency:0
+#: selection:product.template,recurrent_payment_frequency:0
 msgid "Daily"
 msgstr ""
 
@@ -387,24 +397,29 @@ msgid "Deposit"
 msgstr ""
 
 #. module: product_rental
-#: model:ir.model.fields,help:product_rental.field_product_template_attribute_value__rental_price_extra
+#: model:ir.model.fields,help:product_rental.field_product_template_attribute_value__recurrent_payment_amount_extra
 msgid "Extra price of the product rent for current variant"
 msgstr ""
 
 #. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_template_attribute_value__rental_price_extra
+#: model:ir.model.fields,field_description:product_rental.field_product_template_attribute_value__recurrent_payment_amount_extra
 msgid "Extra rental price"
 msgstr ""
 
 #. module: product_rental
-#: model:ir.model.fields,help:product_rental.field_product_product__rental_frequency
-#: model:ir.model.fields,help:product_rental.field_product_template__rental_frequency
-msgid "Frequency of the rental price payment"
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
+msgid "Frequency"
 msgstr ""
 
 #. module: product_rental
 #: model_terms:ir.ui.view,arch_db:product_rental.products_item
 msgid "From"
+msgstr ""
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product__has_recurrent_payment
+#: model:ir.model.fields,field_description:product_rental.field_product_template__has_recurrent_payment
+msgid "Has recurrent payment"
 msgstr ""
 
 #. module: product_rental
@@ -425,14 +440,8 @@ msgid "Is initial payment a deposit"
 msgstr ""
 
 #. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product__is_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_template__is_rental
-msgid "Is rental product"
-msgstr ""
-
-#. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_template_attribute_value__is_rental
-msgid "Is used by a rental product"
+#: model:ir.model.fields,field_description:product_rental.field_product_template_attribute_value__has_recurrent_payment
+msgid "Is used by a product with a recurrent payment"
 msgstr ""
 
 #. module: product_rental
@@ -455,7 +464,7 @@ msgid "Month(s) last day"
 msgstr ""
 
 #. module: product_rental
-#: selection:product.template,rental_frequency:0
+#: selection:product.template,recurrent_payment_frequency:0
 msgid "Monthly"
 msgstr ""
 
@@ -503,22 +512,33 @@ msgid "Ready for Next Stage"
 msgstr ""
 
 #. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product__rental_frequency
-#: model:ir.model.fields,field_description:product_rental.field_product_template__rental_frequency
-msgid "Rental payment frequency"
-msgstr ""
-
-#. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product__rental_price
-#: model:ir.model.fields,field_description:product_rental.field_product_template__rental_price
 #: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
-msgid "Rental price"
+msgid "Recurrent payment"
 msgstr ""
 
 #. module: product_rental
-#: model:ir.model.fields,field_description:product_rental.field_product_product__rental_tax_ids
-#: model:ir.model.fields,field_description:product_rental.field_product_template__rental_tax_ids
-msgid "Rental taxes"
+#: model:ir.model.fields,field_description:product_rental.field_product_product__recurrent_payment_amount
+#: model:ir.model.fields,field_description:product_rental.field_product_template__recurrent_payment_amount
+msgid "Recurrent payment amount"
+msgstr ""
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product__recurrent_payment_frequency
+#: model:ir.model.fields,field_description:product_rental.field_product_template__recurrent_payment_frequency
+msgid "Recurrent payment frequency"
+msgstr ""
+
+#. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_product_product__recurrent_payment_tax_ids
+#: model:ir.model.fields,field_description:product_rental.field_product_template__recurrent_payment_tax_ids
+msgid "Recurrent payment taxes"
+msgstr ""
+
+#. module: product_rental
+#: selection:contract.abstract.contract,stock_ownership:0
+#: selection:contract.contract,stock_ownership:0
+#: selection:contract.template,stock_ownership:0
+msgid "Rental"
 msgstr ""
 
 #. module: product_rental
@@ -542,6 +562,13 @@ msgid "Sale Order"
 msgstr ""
 
 #. module: product_rental
+#: selection:contract.abstract.contract,stock_ownership:0
+#: selection:contract.contract,stock_ownership:0
+#: selection:contract.template,stock_ownership:0
+msgid "Sale with service"
+msgstr ""
+
+#. module: product_rental
 #: model:ir.model,name:product_rental.model_sale_order_line
 msgid "Sales Order Line"
 msgstr ""
@@ -554,8 +581,20 @@ msgid "Semester(s)"
 msgstr ""
 
 #. module: product_rental
+#: model:ir.model.fields,field_description:product_rental.field_contract_abstract_contract__stock_ownership
+#: model:ir.model.fields,field_description:product_rental.field_contract_contract__stock_ownership
+#: model:ir.model.fields,field_description:product_rental.field_contract_template__stock_ownership
+msgid "Stock Ownership"
+msgstr ""
+
+#. module: product_rental
 #: model:project.project,label_tasks:product_rental.contract_theft_and_loss_project
 msgid "Tasks"
+msgstr ""
+
+#. module: product_rental
+#: model_terms:ir.ui.view,arch_db:product_rental.product_template_form_view
+msgid "Taxes"
 msgstr ""
 
 #. module: product_rental
@@ -571,7 +610,7 @@ msgid "Week(s)"
 msgstr ""
 
 #. module: product_rental
-#: selection:product.template,rental_frequency:0
+#: selection:product.template,recurrent_payment_frequency:0
 msgid "Weekly"
 msgstr ""
 
@@ -583,7 +622,7 @@ msgid "Year(s)"
 msgstr ""
 
 #. module: product_rental
-#: selection:product.template,rental_frequency:0
+#: selection:product.template,recurrent_payment_frequency:0
 msgid "Yearly"
 msgstr ""
 

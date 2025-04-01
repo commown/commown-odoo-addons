@@ -2,11 +2,17 @@
 
   <data>
 
+    <record id="stock_location_rental" model="stock.location">
+      <field name="name">Stock - Rental</field>
+      <field name="usage">internal</field>
+      <field name="company_id">1</field>
+    </record>
+
     <record id="stock_location_available_for_rent" model="stock.location">
       <field name="name">Devices available for rent</field>
       <field name="usage">view</field>
       <field name="partner_id">1</field>
-      <field name="location_id" eval="ref('stock.stock_location_stock')"/>
+      <field name="location_id" ref="stock_location_rental"/>
     </record>
 
     <record id="stock_location_new_devices" model="stock.location">
@@ -41,7 +47,7 @@
       <field name="name">Devices to check/ diagnose</field>
       <field name="usage">internal</field>
       <field name="partner_id">1</field>
-      <field name="location_id" ref="stock.stock_location_stock"/>
+      <field name="location_id" ref="stock_location_rental"/>
     </record>
 
     <record id="stock_location_outsourced_repair" model="stock.location">

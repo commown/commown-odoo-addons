@@ -20,39 +20,44 @@ class ResPartner(models.Model):
         else:
             return self
 
-    def get_customer_location(self, limit=1):
+    def get_customer_locations(self, usage=None, limit=1):
         "Search for the oldest current partner's location and return it"
+
+        assert usage is not None or limit != 1, "Incoherent method call"
 
         partner = self._customer_location_partner()
         if partner != self:
-            return partner.get_customer_location()
+            return partner.get_customer_locations(usage=usage, limit=limit)
 
         parent_location = self.env.ref("stock.stock_location_customers")
 
+        domain = [
+            ("partner_id", "=", self.id),
+            ("location_id", "=", parent_location.id),
+        ]
+        if usage is not None:
+            domain.append(("usage", "=", usage))
+
         return self.env["stock.location"].search(
-            [
-                ("partner_id", "=", self.id),
-                ("usage", "=", "internal"),
-                ("location_id", "=", parent_location.id),
-            ],
+            domain,
             order="id ASC",
             limit=limit,
         )
 
-    def get_or_create_customer_location(self):
-        """Return current partner's location, creating it if it does not exist
+    def get_or_create_customer_location(self, usage):
+        """Return current partner's location with given usage creating it if it does not exist
 
         The created location is a child of standard location for all
         customers, with usage 'customer' and same name as the partner.
         """
 
-        location = self.get_customer_location()
+        location = self.get_customer_locations(usage)
         if location:
             return location
 
         partner = self._customer_location_partner()
         if partner != self:
-            return partner.get_or_create_customer_location()
+            return partner.get_or_create_customer_location(usage)
 
         parent_location = self.env.ref("stock.stock_location_customers")
 
@@ -67,7 +72,7 @@ class ResPartner(models.Model):
             .create(
                 {
                     "name": self.name,
-                    "usage": "internal",
+                    "usage": usage,
                     "partner_id": self.id,
                     "location_id": parent_location.id,
                 }
@@ -137,28 +142,40 @@ class ResPartner(models.Model):
     def merge_stock_locations(self):
         "Merge partner locations if he has several, keeping the oldest one"
         self.ensure_one()
-        partner_locations = self.get_customer_location(limit=None)
-        if len(partner_locations) > 1:
-            dst_location, src_locations = partner_locations[0], partner_locations[1:]
-            self._update_foreign_keys(src_locations, dst_location)
-            src_locations.unlink()
+        _partner_locations = self.get_customer_locations(limit=None)
+
+        by_usage = {}
+        for usage in set(_partner_locations.mapped("usage")):
+            by_usage[usage] = _partner_locations.filtered(
+                lambda loc: loc.usage == usage
+            )
+        for partner_locations in by_usage.values():
+            if len(partner_locations) > 1:
+                dst_location, src_locations = (
+                    partner_locations[0],
+                    partner_locations[1:],
+                )
+                self._update_foreign_keys(src_locations, dst_location)
+                src_locations.unlink()
 
     @api.multi
     def write(self, vals):
         "Handle individual > professional status change regarding stock location"
 
-        to_change_customer_loc = (
+        to_change_customer_locs = (
             "parent_id" in vals
             and self.commercial_partner_id == self
-            and self.get_customer_location()
+            and self.get_customer_locations(limit=None)
         )
 
         result = super().write(vals)
 
-        if to_change_customer_loc and self.commercial_partner_id != self:
-            new_loc = self.get_or_create_customer_location()
-            self._update_foreign_keys(to_change_customer_loc, new_loc)
-            to_change_customer_loc.unlink()
+        if to_change_customer_locs and self.commercial_partner_id != self:
+            for to_change_customer_loc in to_change_customer_locs:
+                usage = to_change_customer_loc.usage
+                new_loc = self.get_or_create_customer_location(usage)
+                self._update_foreign_keys(to_change_customer_loc, new_loc)
+                to_change_customer_loc.unlink()
 
         return result
 

@@ -3,7 +3,6 @@ from odoo import api, fields, models
 
 def get_origin_record(env, origin):
     """Parse picking and scrap origin field and return the target entity"""
-    model, rec_id = False, False
     if origin.startswith("PO"):
         return env["purchase.order"].search([("name", "=", origin)])
     if origin.startswith("Task-"):
@@ -31,7 +30,9 @@ class StockMoveLine(models.Model):
         for rec in self:
             contract = rec.move_id.contract_id
             if contract:
-                loc = contract.partner_id.get_customer_location()
+                loc = contract.partner_id.get_customer_locations(
+                    contract.stock_ownership
+                )
                 rec.is_contract_in = loc == rec.location_dest_id
             else:
                 rec.is_contract_in = False

@@ -23,14 +23,32 @@ class SaleOrderTC(RentalSaleOrderTC):
                 self._contract_line(2, "1 month ##ACCESSORY##", tax),
             ],
         )
-        self.product1 = self._create_rental_product(
-            name="Fairphone Premium",
-            list_price=60.0,
-            rental_price=30.0,
-            followup_sales_team_id=self.team1.id,
-            property_contract_template_id=contract_tmpl1.id,
+        self.product1 = self.env["product.template"].create(
+            {
+                "name": "Fairphone Premium",
+                "has_recurrent_payment": True,
+                "is_contract": True,
+                "type": "service",
+                "list_price": 60.0,
+                "recurrent_payment_amount": 30.0,
+                "followup_sales_team_id": self.team1.id,
+                "property_contract_template_id": contract_tmpl1.id,
+            },
         )
-        so_line1 = self._oline(self.product1, product_uom_qty=2)
+        color = self.env.ref("product.product_attribute_2")
+        color_values = self.env["product.attribute.value"].search(
+            [("attribute_id.id", "=", color.id)]
+        )
+        self.env["product.template.attribute.line"].create(
+            {
+                "product_tmpl_id": self.product1.id,
+                "attribute_id": color.id,
+                "value_ids": [(6, 0, color_values.ids)],
+            }
+        )
+        self.product1.create_variant_ids()
+
+        so_line1 = self._oline(self.product1.product_variant_id, product_uom_qty=2)
 
         self.team2 = self.team1.copy({"name": "team2"})
         self.product2 = self.env["product.product"].create(
@@ -46,7 +64,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.product3 = self._create_rental_product(
             name="Phone protection",
             list_price=2.0,
-            rental_price=1.0,
+            recurrent_payment_amount=1.0,
             followup_sales_team_id=self.team3.id,
         )
         so_line3 = self._oline(self.product3, product_uom_qty=1)
@@ -119,3 +137,33 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertEqual(new_leads, leads2 | leads3)
         self.assertEqual(len(leads2), 1)
         self.assertEqual(len(leads3), 2)
+
+    def test_create_project_tasks_with_contracts(self):
+
+        my_project = self.env["project.project"].create({"name": "my project"})
+        self.product1.followup_sales_project_id = my_project
+        self.product1.property_contract_template_id.stock_ownership = "customer"
+
+        partner = self.env.ref("base.partner_demo_portal")
+        product = self.product1.product_variant_id
+        so = self.env["sale.order"].create(
+            {
+                "partner_id": partner.id,
+                "partner_invoice_id": partner.id,
+                "partner_shipping_id": partner.id,
+                "order_line": [self._oline(product, product_uom_qty=2)],
+            }
+        )
+
+        so.action_confirm()
+        self.assertEqual(len(my_project.task_ids), 2)
+        self.assertEqual(
+            my_project.mapped("task_ids.contract_id.stock_ownership"),
+            ["customer", "customer"],
+        )
+        description = my_project.task_ids[0].description
+        self.assertIn(product.display_name, description)
+        self.assertIn("Attributes", description)
+        for av in product.mapped("attribute_value_ids"):
+            self.assertIn(av.attribute_id.name, description)
+            self.assertIn(av.name, description)

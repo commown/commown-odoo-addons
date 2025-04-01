@@ -12,7 +12,9 @@ class StockMoveLineTC(SavepointCase):
         self.contract = self.env["contract.contract"].create(
             {"name": "Contract", "partner_id": partner.id}
         )
-        partner_loc = partner.get_or_create_customer_location()
+        partner_loc = partner.get_or_create_customer_location(
+            self.contract.stock_ownership
+        )
         self.stock_location = self.env.ref("stock.stock_location_stock")
         product = self.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}

@@ -247,7 +247,7 @@ class Contract(models.Model):
                             {
                                 "name": line.name.replace(marker, product.name),
                                 "sequence": sequence,
-                                "specific_price": so_line.compute_rental_price(
+                                "specific_price": so_line.compute_recurrent_payment_amount(
                                     without_tax=True,
                                 ),
                                 "quantity": quantity * line.quantity,

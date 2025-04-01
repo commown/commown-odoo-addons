@@ -7,6 +7,10 @@
     <field name="inherit_id" ref="contract.contract_template_form_view" />
     <field name="arch" type="xml">
 
+      <field name="contract_type" position="after">
+        <field name="stock_ownership"/>
+      </field>
+
       <xpath expr="//group[@name='group_main']" position="after">
         <group name="contractual_docs">
           <field name="contractual_documents" widget="many2many_tags" options="{'open': true, 'create': true}" context="{'default_public': True}"/>
@@ -37,6 +41,10 @@
     <field name="model">contract.contract</field>
     <field name="inherit_id" ref="contract.contract_contract_form_view" />
     <field name="arch" type="xml">
+
+      <field name="partner_id" position="after">
+        <field name="stock_ownership"/>
+      </field>
 
       <xpath expr="//*[hasclass('oe_button_box')]" position="inside">
         <button type="object" name="action_show_analytic_lines"

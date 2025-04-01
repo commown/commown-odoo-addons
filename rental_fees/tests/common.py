@@ -79,7 +79,10 @@ class RentalFeesTC(DeviceAsAServiceTC):
         prices = prices or {product: 200.0 for product in set(serials_by_product)}
         partner = partner or self.env.ref("base.res_partner_1")
 
-        po = self.env["purchase.order"].create({"partner_id": partner.id})
+        rental_in = self.env.ref("commown_devices.stock_picking_type_in_rental")
+        po = self.env["purchase.order"].create(
+            {"partner_id": partner.id, "picking_type_id": rental_in.id},
+        )
         for product, serials in serials_by_product.items():
             po.order_line |= self.env["purchase.order.line"].create(
                 {
@@ -94,12 +97,15 @@ class RentalFeesTC(DeviceAsAServiceTC):
             )
         po.button_confirm()
 
+        dest = self.location_fp3_new
         for product, serials in serials_by_product.items():
             move_lines = po.picking_ids.move_line_ids.filtered(
                 lambda ml: ml.product_id == product
             )
             for lot_name, move_line in zip(serials, move_lines):
-                move_line.update({"lot_name": lot_name, "qty_done": 1})
+                move_line.update(
+                    {"lot_name": lot_name, "qty_done": 1, "location_dest_id": dest.id}
+                )
 
         po.picking_ids.button_validate()
 

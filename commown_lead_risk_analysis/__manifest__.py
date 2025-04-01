@@ -11,8 +11,10 @@
         "crm",
         "partner_firstname",
         "product_rental",
+        "commown_contractual_issue",
     ],
     "data": [
+        "data/project_task_template.xml",
         "views/crm_lead.xml",
         "views/crm_team.xml",
         "views/product_template.xml",

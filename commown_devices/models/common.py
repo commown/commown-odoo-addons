@@ -1,6 +1,7 @@
+import datetime
 from functools import partial
 
-from odoo import _, fields
+from odoo import _, api, fields
 from odoo.exceptions import UserError
 
 
@@ -248,3 +249,51 @@ def _set_date(entity, value, attr_name):
         attr_name,
     )
     entity.env.cr.execute(sql, (str(value), entity.id))
+
+
+class ToCustomerPickingMixin:
+    delivery_time = datetime.time(9, 0)
+
+    def action_to_customer_picking(self):
+        contract = self.contract_id
+
+        if contract.pending_picking():
+            raise UserError(
+                _(
+                    "The contract has already assigned picking(s)!\n"
+                    "Either cancel, scrap or validate it."
+                )
+            )
+
+        view = self.env.ref("commown_devices.wizard_abstract_to_customer_form")
+        return {
+            "type": "ir.actions.act_window",
+            "src_model": self._name,
+            "res_model": self._name + ".to.customer.wizard",
+            "name": _("Send a device"),
+            "views": [(view.id, "form")],
+            "target": "new",
+            "context": {"default_entity_id": self.id},
+        }
+
+    @api.multi
+    def delivery_perform_actions(self):
+        "Validate shipping and start contract"
+        super().delivery_perform_actions()
+
+        picking = self.contract_id.move_ids.mapped("picking_id").filtered(_assigned)
+        if len(picking) == 1:
+            # time doesn't really matter for now; ideally
+            # deliver_date would become delivery_datetime:
+            do_new_transfer(
+                picking,
+                datetime.datetime.combine(self.delivery_date, self.delivery_time),
+            )
+
+        if self.contract_id:
+            # Current method may be called by users not allowed to update
+            # contracts, so we use sudo here:
+            contract = self.contract_id.sudo()
+            # Do not restart a contract that has already started
+            if not contract.date_start or contract.date_start > datetime.date.today():
+                contract.date_start = self.delivery_date

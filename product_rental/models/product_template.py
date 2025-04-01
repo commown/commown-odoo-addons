@@ -10,32 +10,47 @@ _logger = logging.getLogger(__name__)
 class RentalProductTemplate(models.Model):
     _inherit = "product.template"
 
-    is_rental = fields.Boolean("Is rental product")
+    has_recurrent_payment = fields.Boolean(
+        "Has recurrent payment",
+        oldname="is_rental",
+    )
 
     is_deposit = fields.Boolean("Is initial payment a deposit", default=True)
 
-    rental_price = fields.Float("Rental price", dp.get_precision("Product Price"))
+    recurrent_payment_amount = fields.Float(
+        "Recurrent payment amount",
+        dp.get_precision("Product Price"),
+        oldname="rental_price",
+    )
 
-    rental_frequency = fields.Selection(
+    recurrent_payment_frequency = fields.Selection(
         [
             ("daily", "Daily"),
             ("weekly", "Weekly"),
             ("monthly", "Monthly"),
             ("yearly", "Yearly"),
         ],
-        "Rental payment frequency",
+        "Recurrent payment frequency",
+        oldname="rental_frequency",
         default="monthly",
-        help="Frequency of the rental price payment",
         required=True,
     )
 
-    rental_tax_ids = fields.Many2many(
+    recurrent_payment_tax_ids = fields.Many2many(
         comodel_name="account.tax",
-        string="Rental taxes",
+        string="Recurrent payment taxes",
         domain=[("type_tax_use", "=", "sale")],
+        oldname="rental_tax_ids",
     )
 
     @api.multi
-    def rental_price_ratio(self):
+    def recurrent_payment_amount_ratio(self):
         self.ensure_one()
-        return self.is_rental and ((self.list_price or 1) / self.rental_price)
+        return self.has_recurrent_payment and (
+            (self.list_price or 1) / self.recurrent_payment_amount
+        )
+
+    @api.onchange("is_contract")
+    def onchange_is_contract(self):
+        if self.is_contract:
+            self.has_recurrent_payment = True

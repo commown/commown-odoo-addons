@@ -67,11 +67,11 @@
   <record id="prod_fp" model="product.product">
     <field name="name">Fairphone</field>
     <field name="type">service</field>
-    <field name="is_rental">true</field>
+    <field name="has_recurrent_payment">true</field>
     <field name="is_contract">true</field>
     <field name="website_published">true</field>
     <field name="list_price">60</field>
-    <field name="rental_price">30</field>
+    <field name="recurrent_payment_amount">30</field>
     <field name="uom_id" ref="uom.product_uom_unit"/>
     <field name="property_contract_template_id" ref="contract_tmpl_basic"/>
   </record>
@@ -94,11 +94,11 @@
   <record id="prod_pc" model="product.template">
     <field name="name">PC</field>
     <field name="type">service</field>
-    <field name="is_rental">true</field>
+    <field name="has_recurrent_payment">true</field>
     <field name="is_contract">true</field>
     <field name="website_published">true</field>
     <field name="list_price">130</field>
-    <field name="rental_price">65</field>
+    <field name="recurrent_payment_amount">65</field>
     <field name="uom_id" ref="uom.product_uom_unit"/>
     <field name="property_contract_template_id" ref="contract_tmpl_advanced"/>
   </record>

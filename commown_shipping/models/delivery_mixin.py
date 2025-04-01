@@ -109,21 +109,22 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     @api.multi
     def delivery_perform_actions(self):
-        for record in self.filtered("send_email_on_delivery"):
-            template = record.delivery_email_template()
+        self.ensure_one()
+        if self.send_email_on_delivery:
+            template = self.delivery_email_template()
             if template:
-                status = record.expedition_status
+                status = self.expedition_status
                 ctx = {}
                 if status and status[0] == "[" and "]" in status:
                     ctx["postal_code"] = status[1 : status.find("]")]
-                record.with_context(ctx).message_post_with_template(template.id)
+                self.with_context(ctx).message_post_with_template(template.id)
             else:
                 raise UserError(
                     _(
                         "No mail email template specified for %s"
                         " (neither in current record nor its parent)"
                     )
-                    % record
+                    % self
                 )
 
     @api.multi

@@ -86,10 +86,10 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
 
     def test_error_no_partner(self):
         self.task.partner_id = False
-        with self.assertRaises(UserError) as err:
+        with self.assertRaises(UserError):
             self.get_wizard().execute()
 
     def test_error_not_an_employee(self):
         self.task.partner_id = self.env.ref("base.partner_demo_portal").id
-        with self.assertRaises(UserError) as err:
+        with self.assertRaises(UserError):
             self.get_wizard().execute()

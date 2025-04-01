@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 10:17+0000\n"
-"PO-Revision-Date: 2024-07-23 12:19+0200\n"
+"POT-Creation-Date: 2025-03-20 19:33+0000\n"
+"PO-Revision-Date: 2025-03-20 20:52+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -37,6 +37,11 @@ msgid "Address spelling hesitation"
 msgstr "Hésitation marquée élocution addresse"
 
 #. module: commown_lead_risk_analysis
+#: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.sale_task_description
+msgid "Attributes"
+msgstr "Attributs"
+
+#. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor
 msgid "Before call"
 msgstr "Éval. risque avant appel"
@@ -45,6 +50,14 @@ msgstr "Éval. risque avant appel"
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__billing_address_validated
 msgid "Billing address validated"
 msgstr "Adresse de facturation validée"
+
+#. module: commown_lead_risk_analysis
+#: code:addons/commown_lead_risk_analysis/models/sale_order.py:88
+#, python-format
+msgid "Cannot mix rental and sale with services contracts"
+msgstr ""
+"Impossible de mélanger dans la même vente des services de location et de "
+"vente"
 
 #. module: commown_lead_risk_analysis
 #: selection:crm.lead,email_rating:0
@@ -113,10 +126,16 @@ msgid "Email validated"
 msgstr "Mail validé"
 
 #. module: commown_lead_risk_analysis
+#: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_product__followup_sales_project_id
+#: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_template__followup_sales_project_id
+msgid "Followup sales project (sale)"
+msgstr "Projet de suivi des ventes avec service"
+
+#. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_product__followup_sales_team_id
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_product_template__followup_sales_team_id
-msgid "Followup sales team"
-msgstr "Équipe commerciale de suivi"
+msgid "Followup sales team (rental)"
+msgstr "Équipe de suivi des locations"
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__global_feeling
@@ -354,6 +373,9 @@ msgstr "Avec message vocal"
 #: model:ir.model.fields,help:commown_lead_risk_analysis.field_crm_lead__first_phone_call
 msgid "without leaving a message"
 msgstr "Sans message vocal"
+
+#~ msgid "Followup sales team"
+#~ msgstr "Équipe commerciale de suivi"
 
 #~ msgid "Sales Team"
 #~ msgstr "Équipe commerciale"
