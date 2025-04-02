@@ -27,7 +27,7 @@ class CheckMailMixin:
 
 class CrmLeadShippingTC(BaseShippingTC):
     def setUp(self):
-        super(CrmLeadShippingTC, self).setUp()
+        super().setUp()
 
         self.sender = self.env.ref("base.res_partner_2")
         self.sender.update(
@@ -147,8 +147,10 @@ class CrmLeadShippingTC(BaseShippingTC):
         )
         self.assertEqual(len(attachments), 1)
         att = attachments[0]
-        self.assertEqual(att.datas_fname, "6X0000000000.pdf")
-        self.assertEqual(att.name, date_str + self.parcel_type.name + ".pdf")
+        self.assertEqual(
+            att.name,
+            date_str + self.parcel_type.name + " 6X0000000000" + ".pdf",
+        )
         self.assertEqualFakeLabel(att)
 
     @requests_mock.Mocker()
@@ -157,7 +159,7 @@ class CrmLeadShippingTC(BaseShippingTC):
         with self.assertRaises(UserError) as err:
             self.lead._default_shipping_account()
         error_message = "No shipping account defined"
-        self.assertEqual(err.exception.args, (error_message, ""))
+        self.assertEqual(err.exception.args[0], error_message)
 
     def test_print_parcel_action(self):
         leads = self.env["crm.lead"]
@@ -217,7 +219,7 @@ class CrmLeadShippingTC(BaseShippingTC):
 
         with self.assertRaises(ValidationError) as err:
             self.lead.stage_id = stage
-        self.assertEqual(err.exception.args, (expected_msg, None))
+        self.assertEqual(err.exception.args[0], expected_msg)
 
         self.lead.expedition_ref = "TESTREFFF"
         self.lead.stage_id = stage
@@ -375,7 +377,9 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
                 "expedition_ref": ref,
             }
         )
-        return self.env["crm.lead"].create(kwargs)
+        # Imitate context passed by web UI
+        lead_model = self.env["crm.lead"].with_context(default_team_id=team.id)
+        return lead_model.create(kwargs)
 
     def test_tracked_records(self):
         team2 = self.stage_track.team_id.copy(

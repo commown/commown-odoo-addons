@@ -81,6 +81,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
         if not parent:
             context = self.env.context
             default_rel = "default_%s" % self._delivery_tracking_parent_rel
+            # Web UI passes default parent rel in context
             if default_rel in context:
                 parent = self.env[parent._name].browse(context[default_rel])
         return parent.default_perform_actions_on_delivery if parent else True
