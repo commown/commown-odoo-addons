@@ -6,7 +6,6 @@ from mock import patch
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 from odoo.addons.queue_job.tests.common import trap_jobs
 
 from ..models.colissimo_utils import shipping_data
@@ -26,7 +25,7 @@ class CheckMailMixin:
         return mail
 
 
-class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
+class CrmLeadShippingTC(BaseShippingTC):
     def setUp(self):
         super(CrmLeadShippingTC, self).setUp()
 
