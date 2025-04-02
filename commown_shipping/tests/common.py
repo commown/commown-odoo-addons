@@ -28,7 +28,7 @@ def unlimited_resource():
 
 def pdf_page_num(ir_attachment):
     pdf = PdfFileReader(BytesIO(b64decode(ir_attachment.datas)))
-    return pdf.getNumPages()
+    return len(pdf.pages)
 
 
 def colissimo_resp_ok(json_data, pdf_data):
