@@ -55,7 +55,6 @@ class AutomatedControlTC(TransactionCase):
         )
         self.control.name = "New name"
 
-        self.env.cache.invalidate()
         self.assertEqual(
             self.control.base_automation_id.name,
             "[Commown][Automated Control] New name",
@@ -138,7 +137,6 @@ class AutomatedControlTC(TransactionCase):
         )
 
     def test_base_automation(self):
-        self.env.cache.invalidate()
         self.assertEqual(
             self.control.base_automation_id.automated_control_id, self.control
         )
@@ -148,9 +146,7 @@ class AutomatedControlTC(TransactionCase):
         self.assertTrue(self.control.base_automation_id.active)
 
         self.control.active = False
-        self.env.cache.invalidate()
         self.assertFalse(self.control.base_automation_id.active)
 
         self.control.active = True
-        self.env.cache.invalidate()
         self.assertTrue(self.control.base_automation_id.active)
