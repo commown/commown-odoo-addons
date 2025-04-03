@@ -27,9 +27,9 @@ class AutomatedControlTC(TransactionCase):
 
     def get_notify(self, old_infos=None, level="info"):
         param_name = "notify_" + level + "_channel_name"
-        name = json.dumps(getattr(self.env.user, param_name))
+        name = getattr(self.env.user, param_name)
         objs = self.env["bus.bus"].search([("channel", "=", name)], order="id")
-        msgs = [json.loads(m)["message"] for m in objs.mapped("message")]
+        msgs = [json.loads(m)["payload"][0]["message"] for m in objs.mapped("message")]
         return msgs[len(old_infos or ()) :]
 
     def test_onchange_model_id(self):
