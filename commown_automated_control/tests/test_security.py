@@ -49,7 +49,7 @@ class SecurityTC(SingleTransactionCase):
             self.create_control(as_user=self.user_no_access)
         self.assertIn(
             "You are not allowed to create",
-            err.exception.name,
+            err.exception.args[0],
         )
 
     def test_can_read(self):
@@ -69,7 +69,7 @@ class SecurityTC(SingleTransactionCase):
             self.control.with_user(self.user_no_access.id).name
         self.assertIn(
             "You are not allowed to access",
-            err.exception.name,
+            err.exception.args[0],
         )
 
     def test_can_write(self):
@@ -78,7 +78,7 @@ class SecurityTC(SingleTransactionCase):
             self.control.with_user(self.user_no_access.id).name = new_name
         self.assertIn(
             "You are not allowed to modify",
-            err.exception.name,
+            err.exception.args[0],
         )
 
         self.control.with_user(self.user_control_manager.id).name = new_name
@@ -93,7 +93,7 @@ class SecurityTC(SingleTransactionCase):
             control.with_user(self.user_no_access.id).unlink()
         self.assertIn(
             "You are not allowed to delete",
-            err.exception.name,
+            err.exception.args[0],
         )
 
         base_automation = control.base_automation_id

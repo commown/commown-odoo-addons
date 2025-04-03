@@ -90,7 +90,7 @@ class AutomatedControlTC(TransactionCase):
     def test_check_domain_restrictivity(self):
         with self.assertRaises(ValidationError) as err:
             self.control.filter_domain = False
-        self.assertIn("Application domain is mandatory", err.exception.name)
+        self.assertIn("Application domain is mandatory", err.exception.args[0])
 
         # Check Pre-requisite
         self.assertEqual(self.control.model_name, "project.task")
@@ -98,7 +98,7 @@ class AutomatedControlTC(TransactionCase):
         expected_message = "Domain is not restrictive enough. Please add a Project"
         with self.assertRaises(ValidationError) as err:
             self.control.filter_domain = '[("stage_id", "=", 1)]'
-        self.assertEqual(expected_message, err.exception.name)
+        self.assertEqual(expected_message, err.exception.args[0])
 
     def test_execute_raise(self):
         user_internal = self.env.ref("base.user_demo")
