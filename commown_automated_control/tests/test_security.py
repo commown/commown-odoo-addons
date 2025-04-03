@@ -14,7 +14,6 @@ class SecurityTC(SingleTransactionCase):
                 "name": "Test control manager",
                 "login": "login",
                 "groups_id": [(6, 0, groups.ids)],
-                "user_type": "internal",
             }
         )
         cls.user_no_access = cls.env["res.users"].create(
