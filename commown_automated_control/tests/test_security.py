@@ -48,7 +48,7 @@ class SecurityTC(SingleTransactionCase):
         with self.assertRaises(AccessError) as err:
             self.create_control(as_user=self.user_no_access)
         self.assertIn(
-            "Sorry, you are not allowed to create this kind of document",
+            "You are not allowed to create",
             err.exception.name,
         )
 
@@ -68,7 +68,7 @@ class SecurityTC(SingleTransactionCase):
         with self.assertRaises(AccessError) as err:
             self.control.with_user(self.user_no_access.id).name
         self.assertIn(
-            "Sorry, you are not allowed to access this document",
+            "You are not allowed to access",
             err.exception.name,
         )
 
@@ -77,7 +77,7 @@ class SecurityTC(SingleTransactionCase):
         with self.assertRaises(AccessError) as err:
             self.control.with_user(self.user_no_access.id).name = new_name
         self.assertIn(
-            "Sorry, you are not allowed to modify this document",
+            "You are not allowed to modify",
             err.exception.name,
         )
 
@@ -92,7 +92,7 @@ class SecurityTC(SingleTransactionCase):
         with self.assertRaises(AccessError) as err:
             control.with_user(self.user_no_access.id).unlink()
         self.assertIn(
-            "Sorry, you are not allowed to delete this document",
+            "You are not allowed to delete",
             err.exception.name,
         )
 
