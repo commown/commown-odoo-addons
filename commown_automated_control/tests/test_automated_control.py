@@ -115,11 +115,11 @@ class AutomatedControlTC(TransactionCase):
             ' "Test control" (id: %s)\nRaised by %s' % (self.control.id, record)
         )
         with self.assertRaises(UserError) as err:
-            self.control.sudo(user_internal).execute(record)
+            self.control.with_user(user_internal).execute(record)
         self.assertEqual(err.exception.args[0], expected_message)
 
         with trap_jobs() as trap:
-            self.control.sudo(user_root).execute(record)
+            self.control.with_user(user_root).execute(record)
         trap.assert_jobs_count(1, only=self.control._raise_warning)
         with self.assertRaises(UserError) as err:
             trap.perform_enqueued_jobs()

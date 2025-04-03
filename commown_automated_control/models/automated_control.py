@@ -141,44 +141,49 @@ class AutomatedControl(models.Model):
     def _compute_automation_name(self, name):
         return "[Commown][Automated Control] %s" % name
 
-    @api.model
-    @api.returns("self", lambda value: value.id)
-    def create(self, vals):
-        domain_dict = {
-            d_name: vals[d_name]
-            for d_name in ["filter_pre_domain", "filter_domain"]
-            if d_name in vals
-        }
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = self.env[self._name]
+        for vals in vals_list:
+            domain_dict = {
+                d_name: vals[d_name]
+                for d_name in ["filter_pre_domain", "filter_domain"]
+                if d_name in vals
+            }
 
-        self._check_domain_restrictivity(
-            self.env["ir.model"].browse(vals["model_id"]).model, vals["filter_domain"]
-        )
-        base_automation = (
-            self.env["base.automation"]
-            .sudo()
-            .create(
-                dict(
-                    name=self._compute_automation_name(vals["name"]),
-                    state="code",
-                    trigger="on_write",
-                    model_id=vals["model_id"],
-                    **domain_dict,
-                ),
+            self._check_domain_restrictivity(
+                self.env["ir.model"].browse(vals["model_id"]).model,
+                vals["filter_domain"],
             )
-        )
-        vals.pop("filter_domain")
+            base_automation = (
+                self.env["base.automation"]
+                .sudo()
+                .create(
+                    dict(
+                        name=self._compute_automation_name(vals["name"]),
+                        state="code",
+                        trigger="on_write",
+                        model_id=vals["model_id"],
+                        **domain_dict,
+                    ),
+                )
+            )
+            vals.pop("filter_domain")
 
-        self._check_filter_pre_domain_is_defined(vals.pop("filter_pre_domain", "[]"))
+            self._check_filter_pre_domain_is_defined(
+                vals.pop("filter_pre_domain", "[]")
+            )
 
-        new_rec = super().create(vals)
+            new_rec = super().create(vals)
 
-        new_rec.sudo().base_automation_id = base_automation.id
-        new_rec.sudo().base_automation_id.code = (
-            "env['commown_automated_control.automated_control'].browse(%d).execute(record)"
-            % new_rec.id
-        )
+            new_rec.sudo().base_automation_id = base_automation.id
+            new_rec.sudo().base_automation_id.code = (
+                "env['commown_automated_control.automated_control'].browse(%d).execute(record)"
+                % new_rec.id
+            )
 
-        return new_rec
+            records += new_rec
+        return records
 
     def write(self, vals):
         if "model_id" in vals:
@@ -197,7 +202,6 @@ class AutomatedControl(models.Model):
 
         return super().write(vals)
 
-    @api.multi
     def unlink(self):
         automations = self.sudo().mapped("base_automation_id")
         res = super().unlink()

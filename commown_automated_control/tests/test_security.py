@@ -31,7 +31,7 @@ class SecurityTC(SingleTransactionCase):
         model = cls.env["commown_automated_control.automated_control"]
 
         if as_user:
-            model = model.sudo(as_user.id)
+            model = model.with_user(as_user.id)
 
         return model.create(
             {
@@ -55,19 +55,19 @@ class SecurityTC(SingleTransactionCase):
 
     def test_can_read(self):
         self.assertEqual(
-            self.control.sudo(self.user_control_manager.id).name,
+            self.control.with_user(self.user_control_manager.id).name,
             "Test control",
         )
 
         # User with just base.group_user can read
         self.assertEqual(
-            self.control.sudo(self.user_no_access.id).name,
+            self.control.with_user(self.user_no_access.id).name,
             "Test control",
         )
 
         self.user_no_access.groups_id -= self.env.ref("base.group_user")
         with self.assertRaises(AccessError) as err:
-            self.control.sudo(self.user_no_access.id).name
+            self.control.with_user(self.user_no_access.id).name
         self.assertIn(
             "Sorry, you are not allowed to access this document",
             err.exception.name,
@@ -76,13 +76,13 @@ class SecurityTC(SingleTransactionCase):
     def test_can_write(self):
         new_name = "New Name"
         with self.assertRaises(AccessError) as err:
-            self.control.sudo(self.user_no_access.id).name = new_name
+            self.control.with_user(self.user_no_access.id).name = new_name
         self.assertIn(
             "Sorry, you are not allowed to modify this document",
             err.exception.name,
         )
 
-        self.control.sudo(self.user_control_manager.id).name = new_name
+        self.control.with_user(self.user_control_manager.id).name = new_name
         self.assertEqual(
             self.control.name,
             new_name,
@@ -91,13 +91,13 @@ class SecurityTC(SingleTransactionCase):
     def test_can_unlink(self):
         control = self.create_control()
         with self.assertRaises(AccessError) as err:
-            control.sudo(self.user_no_access.id).unlink()
+            control.with_user(self.user_no_access.id).unlink()
         self.assertIn(
             "Sorry, you are not allowed to delete this document",
             err.exception.name,
         )
 
         base_automation = control.base_automation_id
-        control.sudo(self.user_control_manager.id).unlink()
+        control.with_user(self.user_control_manager.id).unlink()
         self.assertFalse(control.exists())
         self.assertFalse(base_automation.exists())

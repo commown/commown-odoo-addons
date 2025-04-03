@@ -8,14 +8,15 @@
       <form string="Base automation">
         <sheet>
           <div class="oe_button_box" name="button_box">
-            <button
-                            name="toggle_active"
-                            type="object"
-                            class="oe_stat_button"
-                            icon="fa-archive"
-                        >
-              <field name="active" widget="boolean_button" />
-            </button>
+
+            <field name="active" invisible="1" />
+            <widget
+                            name="web_ribbon"
+                            title="Archived"
+                            bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"
+                        />
+
           </div>
           <group>
             <field name="name" />
@@ -54,7 +55,6 @@
   <record id="automated_control_action" model="ir.actions.act_window">
       <field name="name">Automated control</field>
       <field name="res_model">commown_automated_control.automated_control</field>
-      <field name="view_type">form</field>
       <field name="view_mode">tree,form</field>
       <field name="view_id" ref="view_automated_control_tree" />
   </record>
