@@ -152,7 +152,7 @@ class AutomatedControl(models.Model):
             }
 
             self._check_domain_restrictivity(
-                self.env["ir.model"].browse(vals["model_id"]).model,
+                self.env["ir.model"].sudo().browse(vals["model_id"]).model,
                 vals["filter_domain"],
             )
             base_automation = (
