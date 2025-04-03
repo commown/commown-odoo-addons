@@ -1,6 +1,6 @@
 import json
 
-from odoo.exceptions import ValidationError, Warning
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 
 from odoo.addons.queue_job.tests.common import trap_jobs
@@ -111,17 +111,17 @@ class AutomatedControlTC(TransactionCase):
 
         self.assertEqual(self.control.behaviour, "raise")
         expected_message = (
-            'Test Error\n\n\nThis message comes from automated control "Test control" (id: %s)\nRaised by %s'
-            % (self.control.id, record)
+            "Test Error\n\n\nThis message comes from automated control"
+            ' "Test control" (id: %s)\nRaised by %s' % (self.control.id, record)
         )
-        with self.assertRaises(Warning) as err:
+        with self.assertRaises(UserError) as err:
             self.control.sudo(user_internal).execute(record)
         self.assertEqual(err.exception.args[0], expected_message)
 
         with trap_jobs() as trap:
             self.control.sudo(user_root).execute(record)
         trap.assert_jobs_count(1, only=self.control._raise_warning)
-        with self.assertRaises(Warning) as err:
+        with self.assertRaises(UserError) as err:
             trap.perform_enqueued_jobs()
         self.assertEqual(err.exception.args[0], expected_message)
 

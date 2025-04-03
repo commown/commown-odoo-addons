@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError, Warning
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools.safe_eval import safe_eval
 
 
@@ -15,7 +15,7 @@ class AutomatedControl(models.Model):
         ),
     ]
 
-    active = fields.Boolean("Active", default=True)
+    active = fields.Boolean(default=True)
 
     base_automation_id = fields.Many2one(
         "base.automation",
@@ -34,9 +34,7 @@ class AutomatedControl(models.Model):
         help="Model where the control is applied",
     )
 
-    model_name = fields.Char(
-        string="Model Name", compute="_compute_model_name", readonly=True, store=True
-    )
+    model_name = fields.Char(compute="_compute_model_name", readonly=True, store=True)
 
     filter_pre_domain = fields.Char(
         related="base_automation_id.filter_pre_domain",
@@ -106,14 +104,20 @@ class AutomatedControl(models.Model):
             )
 
     def _raise_warning(self, error_message):
-        raise Warning(error_message)
+        raise UserError(error_message)
 
     @api.model
     def execute(self, record):
         if self.behaviour == "raise":
             error_message = _(
-                '%s\n\n\nThis message comes from automated control "%s" (id: %s)\nRaised by %s'
-                % (self.user_message, self.name, self.id, record)
+                "%(message)s\n\n\nThis message comes from automated control"
+                ' "%(name)s" (id: %(control_id)s)\nRaised by %(record)s'
+                % {
+                    "message": self.user_message,
+                    "name": self.name,
+                    "control_id": self.id,
+                    "record": record,
+                }
             )
             if self.env.ref(
                 "base.group_user"
@@ -196,5 +200,6 @@ class AutomatedControl(models.Model):
     @api.multi
     def unlink(self):
         automations = self.sudo().mapped("base_automation_id")
-        super().unlink()
+        res = super().unlink()
         automations.unlink()
+        return res
