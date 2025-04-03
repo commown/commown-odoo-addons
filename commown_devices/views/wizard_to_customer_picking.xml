@@ -29,22 +29,10 @@
     </field>
   </record>
 
-  <record id="wizard_crm_lead_to_customer_form_allow_edit" model="ir.ui.view">
-    <field name="name">[commown] Crm lead to customer creation form view</field>
-    <field name="model">crm.lead.to.customer.wizard</field>
+  <record id="wizard_abstract_to_customer_form_allow_edit" model="ir.ui.view">
+    <field name="name">[commown] Abstract to customer creation form view (edition allowed)</field>
+    <field name="model">abstract.to.customer.wizard</field>
     <field name="inherit_id" ref="commown_devices.wizard_abstract_to_customer_form"/>
-    <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]"/>
-    <field name="arch" type="xml">
-      <xpath expr="//field[@name='all_products']" position="attributes">
-        <attribute name="readonly">False</attribute>
-      </xpath>
-    </field>
-  </record>
-
-  <record id="wizard_project_task_to_customer_form_allow_edit" model="ir.ui.view">
-    <field name="name">[commown] Project task to customer creation form view</field>
-    <field name="model">project.task.to.customer.wizard</field>
-    <field name="inherit_id" ref="commown_devices.wizard_abstract_to_customer_form" />
     <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]"/>
     <field name="arch" type="xml">
       <xpath expr="//field[@name='all_products']" position="attributes">
