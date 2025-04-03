@@ -86,7 +86,11 @@ class CommownShippingMixin(models.AbstractModel):
         assert meta_data and label_data
         datetime.now()
         return self._attachment_from_label(
-            datetime.now().strftime("%d-%m-%Y--%H:%M ") + parcel.name + ".pdf",
+            datetime.now().strftime("%d-%m-%Y--%H:%M ")
+            + parcel.name
+            + " "
+            + meta_data["labelResponse"]["parcelNumber"]
+            + ".pdf",
             meta_data,
             label_data,
         )
