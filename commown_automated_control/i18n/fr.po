@@ -1,0 +1,207 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* commown_automated_control
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-24 09:13+0000\n"
+"PO-Revision-Date: 2025-01-24 09:13+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_automated_control
+#: code:addons/commown_automated_control/models/automated_control.py:116
+#, python-format
+msgid "%s\n"
+"\n"
+"\n"
+"This message comes from automated control \"%s\" (id: %s)\n"
+"Raised by %s"
+msgstr "%s\n"
+"\n"
+"\n"
+"Ce message proviens du contrôle automatisé \"%s\" (id: %s)\n"
+"Levée par %s"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__active
+msgid "Active"
+msgstr "Actif"
+
+#. module: commown_automated_control
+#: code:addons/commown_automated_control/models/automated_control.py:95
+#, python-format
+msgid "Application domain is mandatory, please set one"
+msgstr "Le champ \"S'aplique sur\" est obligatoire. Merci de le remplir"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__filter_domain
+msgid "Apply on"
+msgstr "S'applique sur"
+
+#. module: commown_automated_control
+#: model:ir.model,name:commown_automated_control.model_base_automation
+msgid "Automated Action"
+msgstr "Action automatisée"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_base_automation__automated_control_id
+msgid "Automated Control"
+msgstr "Contôle Automatisé"
+
+#. module: commown_automated_control
+#: model:ir.actions.act_window,name:commown_automated_control.automated_control_action
+#: model:ir.ui.menu,name:commown_automated_control.menu_automated_control_from_crm
+#: model:ir.ui.menu,name:commown_automated_control.menu_automated_control_from_project
+msgid "Automated control"
+msgstr "Contôle automatisé"
+
+#. module: commown_automated_control
+#: model:res.groups,name:commown_automated_control.group_manager
+msgid "Automated control manager"
+msgstr "Manager contrôle automatisé"
+
+#. module: commown_automated_control
+#: sql_constraint:commown_automated_control.automated_control:0
+msgid "Automation already linked to an automated control"
+msgstr "Cette action est déjà liée à un contrôle automatisé"
+
+#. module: commown_automated_control
+#: model_terms:ir.ui.view,arch_db:commown_automated_control.view_automated_control_form
+msgid "Base automation"
+msgstr "Base automation"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__filter_pre_domain
+msgid "Before Update Domain"
+msgstr "Domaine avant la mise-à-jour"
+
+#. module: commown_automated_control
+#: code:addons/commown_automated_control/models/automated_control.py:87
+#, python-format
+msgid "Before Update Domain not defined"
+msgstr "Le domaine avant la mise à jour n'est pas défini"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__behaviour
+msgid "Behaviour"
+msgstr "Comportement"
+
+#. module: commown_automated_control
+#: selection:commown_automated_control.automated_control,behaviour:0
+msgid "Block the action with a message"
+msgstr "Bloque l'action avec un message"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_base_automation__automated_control_ids
+msgid "Controls"
+msgstr "Contrôles"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__display_name
+msgid "Display Name"
+msgstr "Afficher Nom"
+
+#. module: commown_automated_control
+#: code:addons/commown_automated_control/models/automated_control.py:105
+#, python-format
+msgid "Domain is not restrictive enough. Please add a %s"
+msgstr "Le filtre \"Sapplique sur\" n'est pas assez restrictif. Veuillez rajouter un(e) %s"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,help:commown_automated_control.field_commown_automated_control_automated_control__filter_domain
+msgid "If present, this condition must be satisfied before executing the action rule."
+msgstr "Si présente, la condition doit être satisfaite avant d'exécuter la règle d'action"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,help:commown_automated_control.field_commown_automated_control_automated_control__filter_pre_domain
+msgid "If present, this condition must be satisfied before the update of the record."
+msgstr "Si présent, la condition doit être satisfaite avant la mise à jour de l'enregistrement."
+
+#. module: commown_automated_control
+#: model:ir.model,name:commown_automated_control.model_commown_automated_control_automated_control
+msgid "Interface class to define restricted base automation"
+msgstr "Classe d'interface permettant de définir des action automatisée limitées"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__internal_note
+msgid "Internal note, for documentation only"
+msgstr "Note interne, a usage de documentation uniquement"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control____last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__base_automation_id
+msgid "Linked base automation"
+msgstr "Aciont automatisée liée"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__user_message
+msgid "Message to display"
+msgstr "Message à afficher"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__model_id
+msgid "Model"
+msgstr "Modèle"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__model_name
+msgid "Model Name"
+msgstr "Nom de Modèle"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,help:commown_automated_control.field_commown_automated_control_automated_control__model_id
+msgid "Model where the control is applied"
+msgstr "Modèle sur lequel s'applique le contrôle"
+
+#. module: commown_automated_control
+#: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: commown_automated_control
+#: selection:commown_automated_control.automated_control,behaviour:0
+msgid "Notify the user with a messsage"
+msgstr "Notifie l'utilisateur avec un message"
+
+#. module: commown_automated_control
+#: code:addons/commown_automated_control/models/automated_control.py:88
+#, python-format
+msgid "This could lead to unexpected results"
+msgstr "Cela pourrait générer des comportements inatendus"
+

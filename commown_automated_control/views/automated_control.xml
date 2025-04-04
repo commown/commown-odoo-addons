@@ -1,0 +1,76 @@
+<odoo>
+
+        <!-- Automation Form View -->
+  <record id="view_automated_control_form" model="ir.ui.view">
+    <field name="name">Automated Control</field>
+    <field name="model">commown_automated_control.automated_control</field>
+    <field name="arch" type="xml">
+      <form string="Base automation">
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+
+            <field name="active" invisible="1" />
+            <widget
+                            name="web_ribbon"
+                            title="Archived"
+                            bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"
+                        />
+
+          </div>
+          <group>
+            <field name="name" />
+            <field name="model_id" />
+            <field name="model_name" invisible="1" />
+            <field name="base_automation_id" invisible="1" />
+            <field
+                            name="filter_pre_domain"
+                            widget="domain"
+                            options="{'model': 'model_name', 'in_dialog': True}"
+                        />
+            <field
+                            name="filter_domain"
+                            widget="domain"
+                            options="{'model': 'model_name', 'in_dialog': True}"
+                        />
+            <field name="behaviour" />
+            <field name="user_message" />
+            <field name="internal_note" />
+         </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_automated_control_tree" model="ir.ui.view">
+    <field name="name">Automated Control Tree</field>
+    <field name="model">commown_automated_control.automated_control</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="automated_control_action" model="ir.actions.act_window">
+      <field name="name">Automated control</field>
+      <field name="res_model">commown_automated_control.automated_control</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="view_automated_control_tree" />
+  </record>
+
+  <menuitem
+        id="menu_automated_control_from_crm"
+        parent="crm.crm_menu_root"
+        action="automated_control_action"
+        sequence="10"
+    />
+
+  <menuitem
+        id="menu_automated_control_from_project"
+        parent="project.menu_main_pm"
+        action="automated_control_action"
+        sequence="10"
+    />
+
+</odoo>

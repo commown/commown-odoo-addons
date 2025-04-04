@@ -1,0 +1,209 @@
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools.safe_eval import safe_eval
+
+
+class AutomatedControl(models.Model):
+    _name = "commown_automated_control.automated_control"
+    _description = "Interface class to define restricted base automation"
+
+    _sql_constraints = [
+        (
+            "automation_uniq",
+            "unique (base_automation_id)",
+            "Automation already linked to an automated control",
+        ),
+    ]
+
+    active = fields.Boolean(default=True)
+
+    base_automation_id = fields.Many2one(
+        "base.automation",
+        "Linked base automation",
+        ondelete="cascade",
+        copy=False,
+    )
+
+    name = fields.Char(required=True)
+
+    model_id = fields.Many2one(
+        "ir.model",
+        required=True,
+        ondelete="cascade",
+        domain=[("model", "in", ["project.task", "crm.lead"])],
+        help="Model where the control is applied",
+    )
+
+    model_name = fields.Char(compute="_compute_model_name", readonly=True, store=True)
+
+    filter_pre_domain = fields.Char(
+        related="base_automation_id.filter_pre_domain",
+        readonly=False,
+        copy=True,
+    )
+
+    filter_domain = fields.Char(
+        related="base_automation_id.filter_domain",
+        readonly=False,
+        copy=True,
+    )
+
+    behaviour = fields.Selection(
+        [
+            ("raise", "Block the action with a message"),
+            ("notify", "Notify the user with a messsage"),
+        ],
+        default="raise",
+        required=True,
+    )
+
+    user_message = fields.Text("Message to display", required=True)
+
+    internal_note = fields.Text(
+        "Internal note, for documentation only",
+        copy=False,
+    )
+
+    @api.onchange("model_id")
+    def onchange_model_id(self):
+        self.model_name = self.model_id.model
+
+    @api.depends("model_id")
+    def _compute_model_name(self):
+        for rec in self:
+            rec.model_name = rec.sudo().model_id.model
+
+    @api.constrains("filter_domain")
+    def _constrains_filter_domain(self):
+        model = self.model_id.model
+        domain = self.base_automation_id.filter_domain
+        self._check_domain_restrictivity(model, domain)
+
+    def _check_filter_pre_domain_is_defined(self, filter_pre_domain):
+        if not safe_eval(filter_pre_domain):
+            self.env.user.notify_warning(
+                title=_("Before Update Domain not defined"),
+                message=_("This could lead to unexpected results"),
+                sticky=True,
+            )
+
+    def _check_domain_restrictivity(self, model_name, domain):
+        # Replace "required" attribute that doesn't work well on related fields
+        if not domain:
+            raise ValidationError(_("Application domain is mandatory, please set one"))
+
+        # Check restrictivity
+        required_field = {"project.task": "project_id", "crm.lead": "team_id"}[
+            model_name
+        ]
+        field_name = self.env[model_name].fields_get()[required_field]["string"]
+
+        if required_field not in domain:
+            raise ValidationError(
+                _("Domain is not restrictive enough. Please add a %s") % field_name
+            )
+
+    def _raise_warning(self, error_message):
+        raise UserError(error_message)
+
+    @api.model
+    def execute(self, record):
+        if self.behaviour == "raise":
+            error_message = _(
+                "%(message)s\n\n\nThis message comes from automated control"
+                ' "%(name)s" (id: %(control_id)s)\nRaised by %(record)s'
+                % {
+                    "message": self.user_message,
+                    "name": self.name,
+                    "control_id": self.id,
+                    "record": record,
+                }
+            )
+            if self.env.ref(
+                "base.group_user"
+            ) in self.env.user.groups_id and self.env.user != self.env.ref(
+                "base.user_root"
+            ):
+                self._raise_warning(error_message)
+
+            else:  # External user
+                self.with_delay()._raise_warning(error_message)
+
+        elif self.behaviour == "notify":
+            title = "Message from automated control %r (id: %d)" % (self.name, self.id)
+            self.env.user.notify_info(
+                message=self.user_message,
+                title=title,
+                sticky=True,
+            )
+
+    @api.model
+    def _compute_automation_name(self, name):
+        return "[Commown][Automated Control] %s" % name
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = self.env[self._name]
+        for vals in vals_list:
+            domain_dict = {
+                d_name: vals[d_name]
+                for d_name in ["filter_pre_domain", "filter_domain"]
+                if d_name in vals
+            }
+
+            self._check_domain_restrictivity(
+                self.env["ir.model"].sudo().browse(vals["model_id"]).model,
+                vals["filter_domain"],
+            )
+            base_automation = (
+                self.env["base.automation"]
+                .sudo()
+                .create(
+                    dict(
+                        name=self._compute_automation_name(vals["name"]),
+                        state="code",
+                        trigger="on_write",
+                        model_id=vals["model_id"],
+                        **domain_dict,
+                    ),
+                )
+            )
+            vals.pop("filter_domain")
+
+            self._check_filter_pre_domain_is_defined(
+                vals.pop("filter_pre_domain", "[]")
+            )
+
+            new_rec = super().create(vals)
+
+            new_rec.sudo().base_automation_id = base_automation.id
+            new_rec.sudo().base_automation_id.code = (
+                "env['commown_automated_control.automated_control'].browse(%d).execute(record)"
+                % new_rec.id
+            )
+
+            records += new_rec
+        return records
+
+    def write(self, vals):
+        if "model_id" in vals:
+            self.sudo().base_automation_id.model_id = vals["model_id"]
+
+        if "name" in vals:
+            self.sudo().base_automation_id.name = self._compute_automation_name(
+                vals["name"]
+            )
+
+        if "active" in vals:
+            self.sudo().base_automation_id.active = vals["active"]
+
+        if "filter_pre_domain" in vals:
+            self._check_filter_pre_domain_is_defined(vals["filter_pre_domain"])
+
+        return super().write(vals)
+
+    def unlink(self):
+        automations = self.sudo().mapped("base_automation_id")
+        res = super().unlink()
+        automations.unlink()
+        return res
