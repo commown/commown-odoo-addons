@@ -27,7 +27,7 @@ class AccountJournal(models.Model):
         "Check bank account balance after the import"
         move = super()._move_import(parser, file_stream, result_row_list, ftype=ftype)
 
-        account = self.env.ref("slimpay_statements_autoimport.slimpay_bank_account")
+        account = self.env.ref("account_move_slimpay_import.slimpay_bank_account")
         data = self.env["account.move.line"].read_group(
             [("account_id", "=", account.id)],
             ["balance:sum"],

@@ -18,8 +18,13 @@
     },
     "depends": [
         "account_move_base_import",
+        "l10n_fr",
     ],
-    "data": [],
+    "data": [
+        "data/partner.xml",
+        "data/account_account.xml",
+        "data/account_journal.xml",
+    ],
     "demo": [],
     "qweb": [],
 }

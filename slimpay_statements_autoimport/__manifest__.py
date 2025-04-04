@@ -16,13 +16,9 @@
         "account_move_slimpay_import",
         "account_payment_slimpay",
         "fetchmail",
-        "l10n_fr",
         "queue_job",
     ],
     "data": [
-        "data/partner.xml",
-        "data/account_account.xml",
-        "data/account_journal.xml",
         "data/cron.xml",
         "data/ir_config_parameter.xml",
         "data/mail_alias.xml",

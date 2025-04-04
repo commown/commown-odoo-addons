@@ -66,7 +66,7 @@ class SlimpayStatementImport(models.Model):
             return None, None
 
         if start_date is None:
-            journal = self.env.ref("slimpay_statements_autoimport.slimpay_journal")
+            journal = self.env.ref("account_move_slimpay_import.slimpay_journal")
             last_import = self.env["account.move"].search(
                 [("journal_id", "=", journal.id)],
                 order="date desc",
@@ -131,7 +131,7 @@ class SlimpayStatementImport(models.Model):
     def _import_statement(self, fname, fbinary):
         "Import a Slimpay statement, update the importer, apply some data corrections"
 
-        journal = self.env.ref("slimpay_statements_autoimport.slimpay_journal")
+        journal = self.env.ref("account_move_slimpay_import.slimpay_journal")
         importer = self.env["credit.statement.import"].create(
             {
                 "journal_id": journal.id,

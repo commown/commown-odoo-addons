@@ -57,7 +57,7 @@ class SimpleReconciliationTC(SavepointCase):
             },
         ]
 
-        journal = self.env.ref("slimpay_statements_autoimport.slimpay_journal")
+        journal = self.env.ref("account_move_slimpay_import.slimpay_journal")
         self.move = self.env["account.move"].create(
             {"name": "My move", "journal_id": journal.id}
         )
