@@ -101,26 +101,12 @@ class ContractTemplatePlannedMailGenerator(models.Model):
         """
         )
         result = self.env.cr.fetchall()
-        channel = self.env.ref("contract_emails.channel")
-        subtype = self.env.ref("mail.mt_comment")
         for contract_id, planned_mail_generator_id in result:
             contract = self.env["contract.contract"].browse(contract_id)
             pmg = self.env["contract_emails.planned_mail_generator"].browse(
                 planned_mail_generator_id
             )
             pmg.send_planned_mail(contract)
-            if not any(
-                f.channel_id.id == channel.id for f in contract.message_follower_ids
-            ):
-                self.env["mail.followers"].create(
-                    {
-                        "channel_id": channel.id,
-                        "partner_id": False,
-                        "res_id": contract.id,
-                        "res_model": contract._name,
-                        "subtype_ids": [(6, 0, subtype.ids)],
-                    }
-                )
 
     def send_planned_mail(self, contract):
         self.ensure_one()
@@ -157,6 +143,29 @@ class Contract(models.Model):
         ),
         default=False,
     )
+
+    def _message_post_after_hook(self, message, msg_vals):
+        "Forward to channel all email/comment message posted by a non-employee"
+
+        if message.message_type in ("email", "comment"):
+            employees = self.env.ref("base.group_user")
+            if employees not in message.author_id.mapped("user_ids.groups_id"):
+                channel = self.env.ref("contract_emails.channel")
+                body = self.env["ir.qweb"]._render(
+                    "contract_emails.channel_message",
+                    {"contract": self, "message": message},
+                )
+                message.copy(
+                    {
+                        "res_id": channel.id,
+                        "model": "mail.channel",
+                        "parent_id": message.id,
+                        "author_id": self.env.ref("base.partner_root").id,
+                        "subject": False,
+                        "body": body,
+                    }
+                )
+        return super()._message_post_after_hook(message, msg_vals)
 
 
 class ContractSentPlannedEmail(models.Model):

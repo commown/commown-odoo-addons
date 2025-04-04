@@ -1,0 +1,27 @@
+<odoo noupdate="1">
+
+  <record id="channel_message" model="ir.ui.view">
+    <field name="name">channel-message-template</field>
+    <field name="type">qweb</field>
+    <field name="key">contract_emails.channel-message-template</field>
+    <field name="arch" type="xml">
+      <t t-name="channel-message-template">
+        <div>
+          <h3>
+            Message posted by <t t-esc="message.author_id.name" /> in
+            <a
+                            t-attf-href="/web#model={{ contract._name }}&amp;id={{ contract.id }}&amp;view_type=form"
+                        >
+              Contract <t t-esc="contract.name" />
+            </a>
+          </h3>
+          <hr />
+          <p>Subject: <t t-esc="message.subject" /></p>
+          <hr />
+          <div t-out="message.body" />
+        </div>
+      </t>
+    </field>
+  </record>
+
+</odoo>
