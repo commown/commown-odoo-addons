@@ -34,6 +34,7 @@ class ContractTemplateMailGenerator(TestContractBase):
         contract.date_start = date_start
         if date_end:
             contract.date_end = date_end
+        contract._flush()  # Push date_start compute to DB
         return contract
 
     def create_gen(self, interval_number, text="Test body", **kwargs):
@@ -44,7 +45,11 @@ class ContractTemplateMailGenerator(TestContractBase):
             "interval_type": "daily",
         }
         values.update(kwargs)
-        return self.env["contract_emails.planned_mail_generator"].create(values)
+        pmg = self.env["contract_emails.planned_mail_generator"].create(values)
+        # Force stored fields storage:
+        pmg._compute_send_date_offset_days()
+        pmg._flush()
+        return pmg
 
     def test_cron(self):
         "Emails planned in the past must be sent"
