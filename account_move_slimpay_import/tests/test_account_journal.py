@@ -10,10 +10,20 @@ HERE = (Path(__file__) / "..").resolve()
 class AccountJournalTC(TransactionCase):
     def setUp(self):
         super().setUp()
-        journal = self.env.ref("account_move_slimpay_import.slimpay_journal")
+
         fname = "reporting_sample.csv"
         with open(HERE / fname, "rb") as fobj:
             csv_content = fobj.read()
+
+        journal = self.env.ref("account_move_slimpay_import.slimpay_journal")
+        account_receivable = self.env["account.account"].create(
+            {
+                "code": "TEST.RECE",
+                "name": "Test receivable",
+                "user_type_id": self.env.ref("account.data_account_type_liquidity").id,
+            }
+        )
+        journal.receivable_account_id = account_receivable
 
         self.importer = self.env["credit.statement.import"].create(
             {

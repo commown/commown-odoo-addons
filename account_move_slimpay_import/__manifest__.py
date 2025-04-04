@@ -18,7 +18,6 @@
     },
     "depends": [
         "account_move_base_import",
-        "l10n_fr",
     ],
     "data": [
         "data/partner.xml",
