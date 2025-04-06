@@ -114,11 +114,7 @@ class SlimpayParser(FileParser):
         if not partner and line["TransactionID"]:
             partner = (
                 self.env["payment.transaction"]
-                .search(
-                    [
-                        ("acquirer_reference", "=", line["TransactionID"]),
-                    ]
-                )
+                .search([("provider_reference", "=", line["TransactionID"])])
                 .mapped("partner_id")
             )
         if len(partner) == 1:
