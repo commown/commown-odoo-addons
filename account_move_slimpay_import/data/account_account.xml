@@ -9,7 +9,7 @@
 
   <record id="slimpay_supplier_account" model="account.account">
     <field name="name">Slimpay</field>
-    <field name="code">401-F-slimpay</field>
+    <field name="code">401.F.slimpay</field>
     <field name="account_type">liability_payable</field>
     <field name="reconcile">True</field>
   </record>
