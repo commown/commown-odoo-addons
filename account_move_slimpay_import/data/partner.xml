@@ -1,11 +1,7 @@
-<odoo>
+<odoo noupdate="1">
 
-  <data noupdate="1">
-
-    <record id="slimpay_partner" model="res.partner">
-      <field name="name">Slimpay</field>
-    </record>
-
-  </data>
+  <record id="slimpay_partner" model="res.partner">
+    <field name="name">Slimpay</field>
+  </record>
 
 </odoo>

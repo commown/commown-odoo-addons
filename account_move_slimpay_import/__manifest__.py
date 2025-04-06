@@ -1,5 +1,4 @@
-# Copyright 2018 Commown (https://commown.fr).
-# @author Florent Cayré <florent@commown.fr>
+# Copyright 2018 Commown (https://commown.coop).
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
@@ -7,8 +6,8 @@
     "summary": "Import Slimpay payment reports",
     "version": "12.0.1.1.2",
     "category": "Finance",
-    "website": "https://commown.coop",
-    "author": "Commown,Odoo Community Association (OCA)",
+    "website": "https://github.com/commown/commown-odoo-addons",
+    "author": "Commown SCIC",
     "license": "AGPL-3",
     "application": False,
     "installable": True,

@@ -40,12 +40,12 @@ class AccountJournal(models.Model):
             raise ValueError(
                 _(
                     "Account balance do not match at end of import between"
-                    " Odoo (%s) and Slimpay statement (%s)."
+                    " Odoo (%(odoo)s) and Slimpay statement (%(slimpay)s)."
                 )
-                % (
-                    cur.round(parser.expected_balance),
-                    cur.round(data[0]["balance"]),
-                )
+                % {
+                    "odoo": cur.round(parser.expected_balance),
+                    "slimpay": cur.round(data[0]["balance"]),
+                }
             )
 
         return move
