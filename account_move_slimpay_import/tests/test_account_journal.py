@@ -41,7 +41,7 @@ class AccountJournalTC(TransactionCase):
 
         imported_move = self.env[action["res_model"]].browse(action["res_id"])
         self.assertEqual(imported_move.state, "draft")
-        self.assertEqual(imported_move.amount, 85)
+        self.assertEqual(imported_move.amount_total, 85)
         self.assertEqual(len(imported_move.line_ids), 7)
         self.assertTrue(
             float_is_zero(
