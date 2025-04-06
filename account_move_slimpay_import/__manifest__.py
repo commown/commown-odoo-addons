@@ -4,7 +4,7 @@
 {
     "name": "Account Move Slimpay Import",
     "summary": "Import Slimpay payment reports",
-    "version": "12.0.1.1.2",
+    "version": "16.0.1.0.0",
     "category": "Finance",
     "website": "https://github.com/commown/commown-odoo-addons",
     "author": "Commown SCIC",
