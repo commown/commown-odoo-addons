@@ -6,7 +6,6 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     @api.model
-    @api.returns("self", lambda value: value.id)
     def create(self, vals):
         res = super().create(vals)
         if "partner_id" in vals:
