@@ -7,13 +7,13 @@
     <field name="arch" type="xml">
       <field name="vat" position="after">
         <field
-                      name="mail_channel_id"
-                      attrs="{'invisible': [('is_company', '=', False)]}"
-                  />
+                    name="mail_channel_id"
+                    attrs="{'invisible': [('is_company', '=', False)]}"
+                />
         <field
-                      name="disable_channel_subscription"
-                      attrs="{'invisible': [('is_company', '=', False)]}"
-                  />
+                    name="disable_channel_subscription"
+                    attrs="{'invisible': [('is_company', '=', False)]}"
+                />
       </field>
     </field>
   </record>

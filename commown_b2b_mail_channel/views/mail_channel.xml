@@ -9,10 +9,10 @@
         <field name="partner_companies" invisible="1" />
         <field name="channel_type" invisible="1" />
         <field
-                      name="partner_company"
-                      options="{'no_create': True, 'open': True}"
-                      attrs="{'invisible': ['|', ('public', '!=', 'private'), ('channel_type', '!=', 'channel')]}"
-                  />
+                    name="partner_company"
+                    options="{'no_create': True, 'open': True}"
+                    attrs="{'invisible': ['|', ('public', '!=', 'private'), ('channel_type', '!=', 'channel')]}"
+                />
       </field>
     </field>
   </record>

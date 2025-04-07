@@ -82,7 +82,8 @@ class ResPartner(models.Model):
             ).unlink()
 
     def write(self, vals):
-        """Override write function to add/remove company's partners when support channel is modified."""
+        """Override write function to add/remove company's
+        partners when support channel is modified."""
         if "mail_channel_id" in vals:
             self._update_subscription_on_mail_channel_change(vals["mail_channel_id"])
             self.set_support_channel_name(
