@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-  <data noupdate="1">
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
 
-    <record id="admin" model="res.users.role">
-      <field name="name">Admin Odoo</field>
-    </record>
+  <record id="admin" model="res.users.role">
+    <field name="name">Admin Odoo</field>
+  </record>
 
-    <record id="support" model="res.users.role">
-      <field name="name">Support</field>
-    </record>
+  <record id="support" model="res.users.role">
+    <field name="name">Support</field>
+  </record>
 
-    <record id="commercial" model="res.users.role">
-      <field name="name">Commercial</field>
-    </record>
+  <record id="commercial" model="res.users.role">
+    <field name="name">Commercial</field>
+  </record>
 
-    <record id="employee" model="res.users.role">
-      <field name="name">Employés Commown</field>
-    </record>
+  <record id="employee" model="res.users.role">
+    <field name="name">Employés Commown</field>
+  </record>
 
-  </data>
 </odoo>
