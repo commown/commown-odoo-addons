@@ -15,7 +15,6 @@ class ResUsers(models.Model):
             )._update_subscription_on_user_creation()
         return res
 
-    @api.multi
     def unlink(self):
         part = self.partner_id
         res = super().unlink()
