@@ -2,8 +2,5 @@ odfpy
 odoo-test-helper
 requests-mock
 
-# https://github.com/OCA/connector-telephony/pull/335
-git+https://github.com/9184Lucky/connector-telephony@16.0-mig-sms_ovh_http#subdirectory=setup/sms_ovh_http
-
 git+https://github.com/commown/odoo-usability@16.0-fix-odoo_usability-add-setup-py#subdirectory=setup/base_usability
 git+https://github.com/commown/odoo-usability@16.0-fix-odoo_usability-add-setup-py#subdirectory=setup/base_company_extension
