@@ -7,7 +7,7 @@
     "name": "Commown user roles",
     "summary": "Definition of Commown's user roles",
     "category": "User types",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
