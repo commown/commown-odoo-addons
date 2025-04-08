@@ -8,7 +8,6 @@ _logger = logging.getLogger(__name__)
 class SCICSaleOrder(models.Model):
     _inherit = "sale.order"
 
-    @api.multi
     @api.depends("website_order_line.product_uom_qty", "website_order_line.product_id")
     def _compute_cart_info(self):
         for order in self:
@@ -23,7 +22,6 @@ class SCICSaleOrder(models.Model):
                 for line in order.website_order_line
             )
 
-    @api.multi
     def _cart_update(
         self, product_id=None, line_id=None, add_qty=0, set_qty=0, **kwargs
     ):
@@ -58,7 +56,6 @@ class SCICSaleOrder(models.Model):
             line.update({"product_uom_qty": result["quantity"]})
         return result
 
-    @api.multi
     def has_crowd_equity(self):
         self.ensure_one()
         return any(
@@ -66,7 +63,6 @@ class SCICSaleOrder(models.Model):
             for line in self.order_line
         )
 
-    @api.multi
     def has_investment(self):
         self.ensure_one()
         return any(
