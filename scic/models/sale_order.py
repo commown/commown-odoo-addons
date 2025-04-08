@@ -17,10 +17,10 @@ class SCICSaleOrder(models.Model):
             )
             order.only_services = all(
                 (
-                    not l.product_id.has_recurrent_payment  # we need to ship the product
-                    and l.product_id.type in ("service", "digital")
+                    not line.product_id.has_recurrent_payment  # we need to ship the product
+                    and line.product_id.type in ("service", "digital")
                 )
-                for l in order.website_order_line
+                for line in order.website_order_line
             )
 
     @api.multi

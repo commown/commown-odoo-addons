@@ -5,16 +5,9 @@
     "category": "Custom",
     "summary": "Module that defines functionalities related to the SCIC companies",
     "version": "12.0.1.0.1",
-    "description": """
-    SCIC
-    ====
-    This module adds functionalities:
-
-- ability to mark products as equities
-    """,
-    "author": "Commown SCIC SAS",
+    "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "website_sale",
     ],
