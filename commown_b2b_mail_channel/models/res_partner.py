@@ -28,11 +28,11 @@ class ResPartner(models.Model):
         parent_mail_chan = self.parent_id.mail_channel_id
         if parent_mail_chan:
             if self.user_ids and self.has_to_be_subscribed_to_channel(parent_mail_chan):
-                self.env["mail.channel.partner"].create(
+                self.env["mail.channel.member"].create(
                     {"partner_id": self.id, "channel_id": parent_mail_chan.id}
                 )
             elif not self.user_ids:
-                self.env["mail.channel.partner"].search(
+                self.env["mail.channel.member"].search(
                     [
                         ("partner_id", "=", self.id),
                         ("channel_id", "=", parent_mail_chan.id),
@@ -52,7 +52,7 @@ class ResPartner(models.Model):
                 for p in self.child_ids
                 if p.has_to_be_subscribed_to_channel(new_chan)
             ]
-            self.env["mail.channel.partner"].create(chan_partner_to_create)
+            self.env["mail.channel.member"].create(chan_partner_to_create)
 
     def _update_subscription_on_parent_change(self, new_parent_id):
         if new_parent_id:
@@ -63,7 +63,7 @@ class ResPartner(models.Model):
                 and self.has_to_be_subscribed_to_channel(new_parent_chan)
                 and not new_parent.disable_channel_subscription
             ):
-                self.env["mail.channel.partner"].create(
+                self.env["mail.channel.member"].create(
                     {"partner_id": self.id, "channel_id": new_parent.mail_channel_id.id}
                 )
 
@@ -74,7 +74,7 @@ class ResPartner(models.Model):
 
         old_parent = self.parent_id
         if old_parent and old_parent.mail_channel_id:
-            self.env["mail.channel.partner"].search(
+            self.env["mail.channel.member"].search(
                 [
                     ("partner_id", "=", self.id),
                     ("channel_id", "=", old_parent.mail_channel_id.id),

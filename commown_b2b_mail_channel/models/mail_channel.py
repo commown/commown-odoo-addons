@@ -44,7 +44,7 @@ class MailChannel(models.Model):
         employee_partners = self.env.ref("commown_user_roles.employee").user_ids.mapped(
             "partner_id"
         )
-        self.env["mail.channel.partner"].search(
+        self.env["mail.channel.member"].search(
             [
                 ("channel_id", "=", self.id),
                 ("partner_id", "not in", employee_partners.ids),
