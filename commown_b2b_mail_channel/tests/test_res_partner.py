@@ -1,9 +1,9 @@
 from datetime import date
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class ResPartnerTC(SavepointCase):
+class ResPartnerTC(TransactionCase):
     def setUp(self):
         super().setUp()
         self.company = self.env["res.partner"].create(
