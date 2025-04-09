@@ -138,7 +138,8 @@ class ResPartner(models.Model):
             for lang, _lang_name in self.env["res.lang"].get_installed():
                 if lang == "en_US":
                     continue
-                context = {"lang": lang}  # Used below by _ (using python magic)
+                # Used below by _ (using python magic)
+                context = {"lang": lang}  # noqa: F841
                 channel.with_context(lang=lang).name = (
                     _("Support of company %s") % self.name
                 )
