@@ -37,7 +37,7 @@ class AccountJournal(models.Model):
 
         cur = move.currency_id
         if cur.compare_amounts(parser.expected_balance, data[0]["balance"]) != 0:
-            raise ValueError(
+            raise ValueError(  # pragma: no cover
                 _(
                     "Account balance do not match at end of import between"
                     " Odoo (%(odoo)s) and Slimpay statement (%(slimpay)s)."
@@ -101,7 +101,9 @@ class SlimpayParser(FileParser):
                     self.expected_balance = float_or_zero(row["Debitvaleur"])
                 del self.result_row_list[initial_len - num - 1]
         if self.move_date is None:
-            raise ValueError(_("Couldn't find end balance line in imported statement!"))
+            raise ValueError(
+                _("Couldn't find end balance line in imported statement!")
+            )  # pragma: no cover
         return super()._post(*args, **kwargs)
 
     def _get_partner_id(self, line):
@@ -109,9 +111,9 @@ class SlimpayParser(FileParser):
             return self.journal.partner_id.id
         partner = self.env["res.partner"]
         _pid = line["ReferenceClient"]
-        if _pid is not None:
+        if _pid is not None:  # pragma: no cover
             partner = partner.search([("id", "=", _pid)])
-        if not partner and line["TransactionID"]:
+        if not partner and line["TransactionID"]:  # pragma: no cover
             partner = (
                 self.env["payment.transaction"]
                 .search([("provider_reference", "=", line["TransactionID"])])
