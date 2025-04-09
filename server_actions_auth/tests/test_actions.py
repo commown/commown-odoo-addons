@@ -1,7 +1,7 @@
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 
-class IrActionsServerTC(SavepointCase):
+class IrActionsServerTC(TransactionCase):
     def setUp(self):
         super().setUp()
         partner_model = self.env.ref("base.model_res_partner")
