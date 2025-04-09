@@ -68,7 +68,6 @@ class Campaign(models.Model):
         for record in self:
             record.used_coupons = len(record.coupon_ids.filtered("used_for_sale_id"))
 
-    @api.multi
     def is_valid(self, sale_order):
         """Return True if current campaign is valid today (according to its
         start and end dates) for the given sale order (comparing its eligible

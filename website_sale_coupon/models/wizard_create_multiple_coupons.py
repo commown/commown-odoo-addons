@@ -1,4 +1,4 @@
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 
 
 class CouponCreateMultipleWizard(models.TransientModel):
@@ -21,7 +21,6 @@ class CouponCreateMultipleWizard(models.TransientModel):
         created_coupons = self.env["coupon.coupon"].create(coupons)
         return created_coupons.ids
 
-    @api.multi
     def button_create_and_open_coupons(self):
         self.ensure_one()
         created_coupons_ids = self.create_multiple_coupons()

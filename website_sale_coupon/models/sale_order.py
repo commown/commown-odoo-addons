@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -18,13 +18,11 @@ class CouponSaleOrder(models.Model):
         string="Used coupons",
     )
 
-    @api.multi
     def action_confirm(self):
         self.confirm_coupons()
         res = super(CouponSaleOrder, self).action_confirm()
         return res
 
-    @api.multi
     def confirm_coupons(self):
         for order in self:
             coupons = order.reserved_coupons().filtered(
@@ -56,7 +54,6 @@ class CouponSaleOrder(models.Model):
                                 }
                             )
 
-    @api.multi
     def reserve_coupon(self, code):
         """Return a coupon from given code if there is one with that code,
         that is also unused and valid for current sale order.
@@ -92,19 +89,16 @@ class CouponSaleOrder(models.Model):
             coupon.reserved_for_sale_id = self.id
             return coupon
 
-    @api.multi
     def reserved_coupons(self):
         self.ensure_one()
         Coupon = self.env["coupon.coupon"].sudo()
         return Coupon.search([("reserved_for_sale_id", "=", self.id)])
 
-    @api.multi
     def used_coupons(self):
         self.ensure_one()
         Coupon = self.env["coupon.coupon"].sudo()
         return Coupon.search([("used_for_sale_id", "=", self.id)])
 
-    @api.multi
     def _check_cumulative_coupon_rules(self, candidate=None):
         """Return True if coupon cumulation rules are respected, raises a
         CouponError otherwise."""

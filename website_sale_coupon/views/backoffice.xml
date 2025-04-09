@@ -145,7 +145,6 @@
       <field name="name">Coupon campaigns</field>
       <field name="res_model">coupon.campaign</field>
       <field name="type">ir.actions.act_window</field>
-      <field name="view_type">form</field>
       <field name="view_id" ref="coupon_campaign_tree" />
       <field name="view_mode">tree,form</field>
     </record>
@@ -154,7 +153,6 @@
       <field name="name">Create Coupon</field>
       <field name="res_model">coupon.coupon</field>
       <field name="type">ir.actions.act_window</field>
-      <field name="view_type">form</field>
       <field name="view_id" ref="coupon_coupon_tree" />
       <field name="view_mode">tree,form</field>
     </record>

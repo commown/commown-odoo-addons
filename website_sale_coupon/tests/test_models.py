@@ -77,7 +77,7 @@ class CouponSchemaTC(TransactionCase):
         self.assertTrue(self.env["coupon.campaign"].search([]))
         someone = self.env.ref("base.res_partner_1")
         with self.assertRaises(AccessError):
-            Campaign = self.env["coupon.campaign"].sudo(someone)
+            Campaign = self.env["coupon.campaign"].with_user(someone)
             self.assertFalse(Campaign.search([]))
 
     def test_validity_date(self):
