@@ -1,14 +1,13 @@
 from datetime import datetime, timedelta
 
 from odoo.exceptions import AccessError, ValidationError
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 from odoo.tools import mute_logger
 
 from ..models.sale_order import CouponError
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class CouponSchemaTC(TransactionCase):
     def setUp(self):
         super(CouponSchemaTC, self).setUp()
