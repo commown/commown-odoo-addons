@@ -3,7 +3,7 @@
 {
     "name": "Server actions authorization",
     "summary": "Add groups_id on ir.actions.server to restrict their usage to groups",
-    "version": "12.0.1.0.1",
+    "version": "16.0.1.0.0",
     "development_status": "Alpha",
     "category": "Tools",
     "website": "https://github.com/commown/commown-odoo-addons",

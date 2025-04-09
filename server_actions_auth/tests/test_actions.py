@@ -18,7 +18,7 @@ class IrActionsServerTC(SavepointCase):
     def get_action_ids(self, as_user=None):
         model = self.env["ir.actions.server"]
         if as_user:
-            model = model.sudo(as_user.id)
+            model = model.with_user(as_user.id)
         return [a["id"] for a in model.get_bindings("res.partner").get("action", ())]
 
     def test_without_group(self):
