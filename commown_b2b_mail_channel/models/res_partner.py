@@ -121,10 +121,6 @@ class ResPartner(models.Model):
             )
             self.mail_channel_id.group_ids += groups_to_subscribe
 
-            # Remove the user that created the channel
-            self.mail_channel_id.channel_partner_ids.filtered(
-                lambda cp: cp.partner_id == self.env.user.partner_id
-            ).unlink()
             # Compute name
             self.set_support_channel_name()
 
