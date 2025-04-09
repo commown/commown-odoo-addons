@@ -1,7 +1,7 @@
-from odoo.tests import common
+from odoo.tests.common import TransactionCase
 
 
-class TestCreateMultipleCoupons(common.SavepointCase):
+class TestCreateMultipleCoupons(TransactionCase):
     @classmethod
     def setUpClass(cls):
 

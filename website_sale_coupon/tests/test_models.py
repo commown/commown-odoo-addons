@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from odoo.exceptions import AccessError, ValidationError
-from odoo.tests.common import TransactionCase, tagged
+from odoo.tests import TransactionCase, tagged
 from odoo.tools import mute_logger
 
 from ..models.sale_order import CouponError
