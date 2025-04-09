@@ -1,8 +1,7 @@
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ProjectTaskTC(TransactionCase):
     def _send_partner_email(self, task):
         params = {
