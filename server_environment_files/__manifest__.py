@@ -8,9 +8,8 @@
     "version": "12.0.1.0.3",
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": ["server_environment", "web"],
     "data": ["views/template.xml"],
     "installable": True,
-    "active": False,
 }

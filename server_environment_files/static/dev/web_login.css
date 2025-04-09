@@ -1,10 +1,10 @@
 .navbar-light {
-  background-color: #3399ff !important;
+    background-color: #3399ff !important;
 }
-.btn-primary{
+.btn-primary {
     background-color: #3366cc !important;
     background-image: none !important;
 }
-li.nav-item.divider{
+li.nav-item.divider {
     border-right: 1px solid #330066 !important;
 }
