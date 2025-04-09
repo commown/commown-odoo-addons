@@ -11,7 +11,7 @@ class ResPartner(models.Model):
     mail_channel_id = fields.Many2one(
         "mail.channel",
         string="Support mail channel",
-        domain=[("public", "=", "private"), ("channel_type", "=", "channel")],
+        domain=[("channel_type", "=", "channel")],
     )
 
     disable_channel_subscription = fields.Boolean(
@@ -115,7 +115,7 @@ class ResPartner(models.Model):
             self.mail_channel_id = self.env["mail.channel"].create(
                 {
                     "name": "TEMP NAME",
-                    "public": "private",
+                    "channel_type": "channel",
                     "partner_company": self.id,
                 }
             )

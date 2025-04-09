@@ -11,7 +11,7 @@
         <field
                     name="partner_company"
                     options="{'no_create': True, 'open': True}"
-                    attrs="{'invisible': ['|', ('public', '!=', 'private'), ('channel_type', '!=', 'channel')]}"
+                    attrs="{'invisible': [('channel_type', '!=', 'channel')]}"
                 />
       </field>
     </field>
