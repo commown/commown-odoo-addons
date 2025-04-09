@@ -6,7 +6,7 @@
     "version": "12.0.1.0.1",
     "development_status": "Alpha",
     "category": "Tools",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "author": "Commown SCIC",
     "maintainers": ["fcayre"],
     "license": "AGPL-3",
