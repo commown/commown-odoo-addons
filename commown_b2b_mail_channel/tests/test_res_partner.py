@@ -28,7 +28,11 @@ class ResPartnerTC(SavepointCase):
         support_role.update_users()
 
         self.contract = self.env["contract.contract"].create(
-            {"name": "Test contract", "partner_id": self.part1.id}
+            {
+                "name": "Test contract",
+                "partner_id": self.part1.id,
+                "date_start": "2030-01-01",
+            }
         )
 
     def test_support_channel_creation_on_contract_start(self):
