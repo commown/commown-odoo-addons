@@ -45,7 +45,7 @@ class ResPartnerTC(SavepointCase):
 
         self.assertEqual(company_chan.name, "Support of company %s" % self.company.name)
         self.assertEqual(
-            company_chan.channel_last_seen_partner_ids.mapped("partner_id"),
+            company_chan.channel_partner_ids,
             self.part1 + self.part2 + self.user_support.partner_id,
         )
         self.assertEqual(company_chan.group_ids, expected_groups)
@@ -57,18 +57,14 @@ class ResPartnerTC(SavepointCase):
         mail_channel = self.company.mail_channel_id
         self.assertTrue(mail_channel)
 
-        channel_partners = mail_channel.channel_last_seen_partner_ids.mapped(
-            "partner_id"
-        )
+        channel_partners = mail_channel.channel_partner_ids
         self.assertNotIn(self.part1, channel_partners)
         self.assertIn(self.user_support.partner_id, channel_partners)
 
         self.company.disable_channel_subscription = False
         self.part2.parent_id = self.company
 
-        channel_partners = mail_channel.channel_last_seen_partner_ids.mapped(
-            "partner_id"
-        )
+        channel_partners = mail_channel.channel_partner_ids
         self.assertNotIn(self.part1, channel_partners)
         self.assertIn(self.part2, channel_partners)
 
@@ -80,13 +76,13 @@ class ResPartnerTC(SavepointCase):
         self.part1.parent_id = self.company
         self.assertIn(
             self.part1,
-            mail_channel.channel_last_seen_partner_ids.mapped("partner_id"),
+            mail_channel.channel_partner_ids,
         )
 
         self.part1.parent_id = False
         self.assertNotIn(
             self.part1,
-            mail_channel.channel_last_seen_partner_ids.mapped("partner_id"),
+            mail_channel.channel_partner_ids,
         )
 
     def test_channel_creation_on_active_contract_join_company(self):
@@ -125,22 +121,22 @@ class ResPartnerTC(SavepointCase):
 
         self.assertIn(
             self.part1,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
         self.assertNotIn(
             self.part2,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
 
         mail_channel.partner_company = company_2
         self.assertEqual(mail_channel.partner_company, mail_channel.partner_companies)
         self.assertIn(
             self.part2,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
         self.assertNotIn(
             self.part1,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
 
     def test_only_concerned_partner_are_unubscribed_on_parent_change(self):
@@ -152,21 +148,21 @@ class ResPartnerTC(SavepointCase):
 
         self.assertIn(
             self.part1,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
         self.assertIn(
             self.part2,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
 
         self.part1.parent_id = False
         self.assertNotIn(
             self.part1,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
         self.assertIn(
             self.part2,
-            mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),
+            mail_channel.channel_partner_ids,
         )
 
     def test_access_granted_on_user_creation(self):
@@ -179,9 +175,7 @@ class ResPartnerTC(SavepointCase):
 
         self.assertNotIn(
             partner,
-            self.company.mail_channel_id.mapped(
-                "channel_last_seen_partner_ids.partner_id"
-            ),
+            self.company.mail_channel_id.channel_partner_ids,
         )
 
         user = self.env["res.users"]._create_user_from_template(
@@ -194,15 +188,11 @@ class ResPartnerTC(SavepointCase):
 
         self.assertIn(
             partner,
-            self.company.mail_channel_id.mapped(
-                "channel_last_seen_partner_ids.partner_id"
-            ),
+            self.company.mail_channel_id.channel_partner_ids,
         )
 
         user.unlink()
         self.assertNotIn(
             partner,
-            self.company.mail_channel_id.mapped(
-                "channel_last_seen_partner_ids.partner_id"
-            ),
+            self.company.mail_channel_id.channel_partner_ids,
         )

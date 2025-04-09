@@ -21,7 +21,7 @@ class ResPartner(models.Model):
 
     def has_to_be_subscribed_to_channel(self, mail_channel):
         """Return true if partner has to be subscribed to a given mail channel"""
-        chan_partner = mail_channel.mapped("channel_last_seen_partner_ids.partner_id")
+        chan_partner = mail_channel.channel_partner_ids
         return self not in chan_partner and self.user_ids
 
     def _update_subscription_on_user_creation(self):
@@ -122,7 +122,7 @@ class ResPartner(models.Model):
             self.mail_channel_id.group_ids += groups_to_subscribe
 
             # Remove the user that created the channel
-            self.mail_channel_id.channel_last_seen_partner_ids.filtered(
+            self.mail_channel_id.channel_partner_ids.filtered(
                 lambda cp: cp.partner_id == self.env.user.partner_id
             ).unlink()
             # Compute name
