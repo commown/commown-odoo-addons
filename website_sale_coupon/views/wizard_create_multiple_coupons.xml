@@ -7,13 +7,18 @@
       <form string="Create multiple coupons">
         <sheet>
           <group>
-            <field name="campaign_id"/>
-            <field name="coupon_nb"/>
+            <field name="campaign_id" />
+            <field name="coupon_nb" />
           </group>
         </sheet>
         <footer>
-          <button name="button_create_and_open_coupons" string="Create" class="btn-primary" type="object"/>
-          <button string="Cancel" class="btn-default" special="cancel"/>
+          <button
+                        name="button_create_and_open_coupons"
+                        string="Create"
+                        class="btn-primary"
+                        type="object"
+                    />
+          <button string="Cancel" class="btn-default" special="cancel" />
         </footer>
       </form>
     </field>
@@ -27,14 +32,16 @@
   </record>
 
   <menuitem
-    id="coupon_actions"
-    parent="website_sale_coupon.coupon_main"
-    name="Actions on coupons"
-    sequence="100" />
+        id="coupon_actions"
+        parent="website_sale_coupon.coupon_main"
+        name="Actions on coupons"
+        sequence="100"
+    />
   <menuitem
-    id="create_coupons_menu"
-    parent="website_sale_coupon.coupon_actions"
-    action="create_coupons_action"
-    sequence="90" />
+        id="create_coupons_menu"
+        parent="website_sale_coupon.coupon_actions"
+        action="create_coupons_action"
+        sequence="90"
+    />
 
 </odoo>

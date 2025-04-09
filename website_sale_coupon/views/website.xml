@@ -3,12 +3,16 @@
 
   <!-- Cart page: insert a placeholder for the used coupons and
        an input form to add a new one -->
-  <template id="cart" inherit_id="website_sale.cart"
-            customize_show="True" active="False" name="Coupon input">
+  <template
+        id="cart"
+        inherit_id="website_sale.cart"
+        customize_show="True"
+        active="False"
+        name="Coupon input"
+    >
 
     <xpath expr="//t[@t-call='website_sale.cart_lines']" position="after">
-      <link rel="stylesheet"
-            href="/website_sale_coupon/static/src/css/coupon.css" />
+      <link rel="stylesheet" href="/website_sale_coupon/static/src/css/coupon.css" />
       <div id="coupons-placeholder">
         <strong>Coupons</strong>
       </div>
@@ -16,15 +20,18 @@
         <p class="text-primary"><strong>Coupons</strong></p>
         <p>Have a code? Enter it and submit:</p>
         <form id="coupon_input" action="#" method="post" class="mb32">
-          <input type="hidden" name="csrf_token"
-                 t-att-value="request.csrf_token()" />
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
           <div class="input-group">
-            <input name="coupon_code" class="form-control"
-                   type="text" placeholder="Your code..." />
+            <input
+                            name="coupon_code"
+                            class="form-control"
+                            type="text"
+                            placeholder="Your code..."
+                        />
             <div class="input-group-btn">
               <button type="submit" disabled="disabled" class="btn btn-warning">
                 <span>Submit</span>
-                <i class="fa fa-spinner fa-spin"/>
+                <i class="fa fa-spinner fa-spin" />
               </button>
             </div>
           </div>
@@ -33,8 +40,10 @@
             To reinitialize the coupons, empty your basket.
           </p>
         </form>
-        <script type="text/javascript"
-                src="/website_sale_coupon/static/src/js/coupon.js"></script>
+        <script
+                    type="text/javascript"
+                    src="/website_sale_coupon/static/src/js/coupon.js"
+                />
       </div>
     </xpath>
 
@@ -43,27 +52,28 @@
   <!-- Insert a placeholder for the coupons in the payment page -->
   <template id="payment" inherit_id="website_sale.payment">
     <xpath expr="//div[@id='payment_method']" position="before">
-      <link rel="stylesheet"
-            href="/website_sale_coupon/static/src/css/coupon.css" />
+      <link rel="stylesheet" href="/website_sale_coupon/static/src/css/coupon.css" />
       <div id="coupons-placeholder">
         <strong>Coupons</strong>
       </div>
-      <script type="text/javascript"
-              src="/website_sale_coupon/static/src/js/coupon.js"></script>
+      <script
+                type="text/javascript"
+                src="/website_sale_coupon/static/src/js/coupon.js"
+            />
     </xpath>
   </template>
 
   <!-- Display the coupons on the order followup page -->
   <template id="sale_order_portal_content" inherit_id="sale.sale_order_portal_content">
     <xpath expr="//div[@id='informations']/.." position="inside">
-      <t t-set="coupons" t-value="sale_order.used_coupons()"/>
+      <t t-set="coupons" t-value="sale_order.used_coupons()" />
       <section t-if="coupons" id="coupons" class="mt-5">
         <h3>Coupons</h3>
-        <hr class="mt-0 mb-1"/>
+        <hr class="mt-0 mb-1" />
         <dl>
           <t t-foreach="coupons" t-as="coupon">
-            <dt><code><t t-esc="coupon.display_name"/></code></dt>
-            <dd><t t-esc="coupon.campaign_id.description"/></dd>
+            <dt><code><t t-esc="coupon.display_name" /></code></dt>
+            <dd><t t-esc="coupon.campaign_id.description" /></dd>
           </t>
         </dl>
       </section>
@@ -72,17 +82,18 @@
   </template>
 
   <!-- Display the coupons on the order confirmation page -->
-  <template id="confirmation"
-            inherit_id="website_sale.confirmation">
-    <xpath expr="//div[hasclass('oe_cart')]//div[hasclass('oe_structure')]"
-           position="after">
-      <t t-set="coupons" t-value="order.used_coupons()"/>
+  <template id="confirmation" inherit_id="website_sale.confirmation">
+    <xpath
+            expr="//div[hasclass('oe_cart')]//div[hasclass('oe_structure')]"
+            position="after"
+        >
+      <t t-set="coupons" t-value="order.used_coupons()" />
       <div t-if="coupons">
         <h3><strong>Coupons</strong></h3>
         <dl>
           <t t-foreach="coupons" t-as="coupon">
-            <dt><code><t t-esc="coupon.display_name"/></code></dt>
-            <dd><t t-esc="coupon.campaign_id.description"/></dd>
+            <dt><code><t t-esc="coupon.display_name" /></code></dt>
+            <dd><t t-esc="coupon.campaign_id.description" /></dd>
           </t>
         </dl>
       </div>

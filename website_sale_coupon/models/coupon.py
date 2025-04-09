@@ -2,7 +2,7 @@ import random
 import string
 from datetime import datetime
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class Campaign(models.Model):
@@ -13,8 +13,8 @@ class Campaign(models.Model):
         ("name_uniq", "unique (name)", "Campaign already exists!"),
     ]
 
-    name = fields.Char("Name", required=True, index=True)
-    description = fields.Text("Description")
+    name = fields.Char(required=True, index=True)
+    description = fields.Text()
     date_start = fields.Date("Validity start date", help="Leave empty to start now")
     date_end = fields.Date("Validity end date", help="Leave empty for no end")
     seller_id = fields.Many2one(
@@ -57,7 +57,7 @@ class Campaign(models.Model):
     @api.constrains("date_start", "date_end")
     def _check_dates(self):
         if self.date_start and self.date_end and self.date_start > self.date_end:
-            raise models.ValidationError("Start date must be before end date")
+            raise models.ValidationError(_("Start date must be before end date"))
 
     @api.depends("coupon_ids")
     def _compute_emitted_coupons(self):
@@ -87,9 +87,9 @@ class Campaign(models.Model):
         if self.target_product_tmpl_ids:
             target_product_tmpl_ids = {pt.id for pt in self.target_product_tmpl_ids}
             sold_product_tmpl_ids = {
-                l.product_id.product_tmpl_id.id
-                for l in sale_order.order_line
-                if l.product_uom_qty > 0
+                line.product_id.product_tmpl_id.id
+                for line in sale_order.order_line
+                if line.product_uom_qty > 0
             }
             if not target_product_tmpl_ids.intersection(sold_product_tmpl_ids):
                 return False
@@ -121,7 +121,7 @@ class Coupon(models.Model):
         ondelete="cascade",
     )
     code = fields.Char(
-        string="Code", size=_coupon_code_size, index=True, default=_compute_default_code
+        size=_coupon_code_size, index=True, default=_compute_default_code
     )
     used_for_sale_id = fields.Many2one(
         "sale.order",

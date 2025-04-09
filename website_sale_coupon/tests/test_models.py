@@ -100,7 +100,7 @@ class CouponSchemaTC(TransactionCase):
                 self.campaign.target_product_tmpl_ids |= tmpl
                 break
         else:
-            assert False, "cannot find another product template"
+            raise self.assertionError("cannot find another product template")
         self.assertFalse(self.campaign.is_valid(so))
 
         # Check valid when sale product is eligible
@@ -131,7 +131,7 @@ class CouponSchemaTC(TransactionCase):
             if tmpl.id != product.id:
                 return tmpl
         else:
-            assert False, "cannot find another product template"
+            raise self.assertionError("cannot find another product template")
 
     def test_user_cannot_trick_confirm_coupon(self):
         """Check users cannot confirm a coupon with a non eligible product
@@ -171,7 +171,7 @@ class CouponSchemaTC(TransactionCase):
         )
 
         coupon11 = self._create_coupon(code="TEST11", campaign_id=campaign1.id)
-        coupon12 = self._create_coupon(code="TEST12", campaign_id=campaign1.id)
+        self._create_coupon(code="TEST12", campaign_id=campaign1.id)
         coupon21 = self._create_coupon(code="TEST21", campaign_id=campaign2.id)
         coupon22 = self._create_coupon(code="TEST22", campaign_id=campaign2.id)
 

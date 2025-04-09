@@ -7,21 +7,9 @@
         " to get an advantage when they buy a product on the online shop."
     ),
     "version": "12.0.1.1.1",
-    "description": (
-        "This module is intended to manage promotion campaigns.\n"
-        "These promotion campaigns have optional start and end validity dates."
-        " According to the campaign setup, customers must either enter a unique"
-        " secret code or directly the campaign name to benefit from the"
-        " advantages granted by the campaign when they buy a product on the"
-        " online shop.\n"
-        "Important note: the present module does NOT implement any advantage,"
-        " which must be implemented in dedicated modules. This is on purpose,"
-        " as these advantages can be various, not necessarily an immediate"
-        " price reduction."
-    ),
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "website_sale",
     ],
