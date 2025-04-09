@@ -13,11 +13,11 @@ class ProjectTaskTC(TransactionCase):
         return task.message_post(**params)
 
     def test_create(self):
-        task = self.env.ref("project.project_task_1").copy()  # calls create
+        task = self.env.ref("project.project_1_task_1").copy()  # calls create
         self.assertEqual(task.last_partner_msg_date, task.create_date)
 
     def test_message_post(self):
-        task = self.env.ref("project.project_task_1")
+        task = self.env.ref("project.project_1_task_1")
         msg = self._send_partner_email(task)
 
         self.assertEqual(task.last_partner_msg_date, msg.create_date)
