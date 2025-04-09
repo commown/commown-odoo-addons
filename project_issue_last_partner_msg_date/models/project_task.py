@@ -7,14 +7,15 @@ class ProjectTask(models.Model):
 
     last_partner_msg_date = fields.Datetime("Last partner message date")
 
-    @api.model
+    @api.model_create_multi
     @api.returns("self", lambda value: value.id)
-    def create(self, values):
+    def create(self, values_list):
         "Set last_partner_msg_date to utcnow by default"
-        task = super().create(values)
-        if task.last_partner_msg_date is False:
-            task.last_partner_msg_date = task.create_date
-        return task
+        tasks = super().create(values_list)
+        for task in tasks:
+            if task.last_partner_msg_date is False:
+                task.last_partner_msg_date = task.create_date
+        return tasks
 
     @api.returns("mail.message", lambda value: value.id)
     def message_post(self, *args, **kwargs):
