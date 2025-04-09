@@ -84,7 +84,9 @@ class TestShareholderRegister(TransactionCase):
     def setUpClass(cls):
 
         super(TestShareholderRegister, cls).setUpClass()
-        cls.env["res.company"].browse(1).nominal_share_amount = 20
+        cls.env.company = cls.env.ref("l10n_fr.demo_company_fr")
+        cls.env.user.company_id = cls.env.company.id
+        cls.env.company.nominal_share_amount = 20
 
         cls.partner_1 = cls.env["res.partner"].create({"name": "Partner 1"})
         cls.partner_2 = cls.env["res.partner"].create({"name": "Partner 2"})
