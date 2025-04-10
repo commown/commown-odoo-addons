@@ -98,7 +98,6 @@ class CommownShippingMixin(models.AbstractModel):
                 "res_id": self.id,
                 "mimetype": "application/pdf",
                 "datas": b64encode(label_data),
-                "datas_fname": meta_data["labelResponse"]["parcelNumber"] + ".pdf",
                 "name": name,
                 "public": False,
                 "type": "binary",
@@ -225,7 +224,6 @@ class CommownShippingMixin(models.AbstractModel):
                 {
                     "mimetype": "application/pdf",
                     "datas": data,
-                    "datas_fname": "colissimo.pdf",
                     "public": False,
                     "type": "binary",
                 }
