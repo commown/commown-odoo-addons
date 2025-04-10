@@ -82,9 +82,16 @@ class CouponSchemaTC(TransactionCase):
     def test_validity_date(self):
         self.campaign.update({"date_start": "2018-01-01", "date_end": "2018-02-01"})
         so = self.sale_order()
+        # Campaign has ended in 2018 -> Should not be valid
         self.assertFalse(self.campaign.is_valid(so))
+
+        # Campaign has begun in 2018 and is ending in 30 days -> Should be valid
         self.campaign.date_end = datetime.now().date() + timedelta(days=30)
         self.assertTrue(self.campaign.is_valid(so))
+
+        # Campaign is starting in 29 days -> Should not be valid
+        self.campaign.date_start = datetime.now().date() + timedelta(days=29)
+        self.assertFalse(self.campaign.is_valid(so))
 
     def test_validity_product_and_qty(self):
         # Check valid when all products are eligible
@@ -124,6 +131,17 @@ class CouponSchemaTC(TransactionCase):
         so.confirm_coupons()
         self.assertNotIn(coupon, so.reserved_coupons())
         self.assertEqual(coupon.used_for_sale_id, so)
+
+    def test_confirm_sale_order(self):
+        so = self.sale_order()
+
+        coupon = self._create_coupon(code="TEST_USE")
+        so.reserve_coupon("TEST_USE")
+        self.assertIn(coupon, so.reserved_coupons())
+
+        so.action_confirm()  # uses confirm_coupons
+        self.assertNotIn(coupon, so.reserved_coupons())
+        self.assertIn(coupon, so.used_coupon_ids)
 
     def test_coupon_description(self):
         coupon = self._create_coupon(code="TEST")
