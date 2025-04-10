@@ -21,7 +21,7 @@
     ],
     "external_dependencies": {
         "bin": ["pdfjam", "pdfunite"],
-        "python": ["requests_toolbelt"],
+        "python": ["iso8601", "requests_toolbelt"],
     },
     "data": [
         "data/actions.xml",
