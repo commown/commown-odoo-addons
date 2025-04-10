@@ -125,6 +125,13 @@ class CouponSchemaTC(TransactionCase):
         self.assertNotIn(coupon, so.reserved_coupons())
         self.assertEqual(coupon.used_for_sale_id, so)
 
+    def test_coupon_description(self):
+        coupon = self._create_coupon(code="TEST")
+        coupon_descr = coupon._coupon_descr()
+
+        self.assertEqual(coupon.display_name, coupon_descr["name"])
+        self.assertEqual(coupon.campaign_id.description, coupon_descr["descr"])
+
     def other_product_template(self, product):
         for tmpl in self.env["product.template"].search([]):
             if tmpl.id != product.id:
@@ -205,3 +212,29 @@ class CouponSchemaTC(TransactionCase):
         so.confirm_coupons()
         self.assertEqual(coupon.used_for_sale_id, so)
         self.assertEqual(coupon.display_name, "No Coupon Test Campaign")
+
+    def test_coupon_descriptions_for_sale_order(self):
+        so = self.sale_order()
+        empty_coupons_descr = so._sale_coupons_descr()
+        self.assertEqual(empty_coupons_descr, [])
+
+        campaign1 = self._create_campaign(
+            "campaign1", can_cumulate=True, can_auto_cumulate=True
+        )
+        campaign2 = self._create_campaign(
+            "campaign2", can_cumulate=True, can_auto_cumulate=True
+        )
+
+        coupon1 = self._create_coupon(code="TEST1_USE", campaign_id=campaign1.id)
+        coupon2 = self._create_coupon(code="TEST2_USE", campaign_id=campaign2.id)
+
+        so.reserve_coupon("TEST1_USE")
+        so.reserve_coupon("TEST2_USE")
+
+        coupons_descr = so._sale_coupons_descr()
+
+        self.assertEqual(coupon1.display_name, coupons_descr[0]["name"])
+        self.assertEqual(coupon1.campaign_id.description, coupons_descr[0]["descr"])
+
+        self.assertEqual(coupon2.display_name, coupons_descr[1]["name"])
+        self.assertEqual(coupon2.campaign_id.description, coupons_descr[1]["descr"])

@@ -148,6 +148,9 @@ class Coupon(models.Model):
             result.append((record.id, name))
         return result
 
+    def _coupon_descr(self):
+        return {"name": self.display_name, "descr": self.campaign_id.description}
+
     def open_coupon(self):
         return {
             "type": "ir.actions.act_window",

@@ -94,6 +94,9 @@ class CouponSaleOrder(models.Model):
         Coupon = self.env["coupon.coupon"].sudo()
         return Coupon.search([("reserved_for_sale_id", "=", self.id)])
 
+    def _sale_coupons_descr(self):
+        return [coupon._coupon_descr() for coupon in self.reserved_coupons()]
+
     def used_coupons(self):
         self.ensure_one()
         Coupon = self.env["coupon.coupon"].sudo()
