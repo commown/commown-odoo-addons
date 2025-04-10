@@ -1,0 +1,56 @@
+import logging
+
+from odoo import models
+
+_logger = logging.getLogger(__name__)
+
+
+class SCICSaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    def _cart_update(
+        self, product_id=None, line_id=None, add_qty=0, set_qty=0, **kwargs
+    ):
+        """If given product is a crowd equity one, limit its quantity to 1.
+
+        Note this does not enforce the quantity in the DB, which may
+        be too much of a constraint. We just want people to know what
+        they do when they buy an equity, is the spirit of the French
+        Financial Markets Authority (AMF) rules.
+        """
+        result = super(SCICSaleOrder, self)._cart_update(
+            product_id=product_id,
+            line_id=line_id,
+            add_qty=add_qty,
+            set_qty=set_qty,
+            **kwargs
+        )
+        product = self.env["product.product"].browse(product_id)
+        if product.product_tmpl_id.is_crowd_equity() and result["quantity"] > 1:
+            line = self.env["sale.order.line"].sudo().browse(result["line_id"])
+            result["quantity"] = 1
+            _logger.debug(
+                "Forced quantity update of line %(l)s (product %(p)s) from"
+                " %(old_qty)s to %(new_qty)s",
+                {
+                    "l": line.id,
+                    "p": product.name,
+                    "old_qty": line.product_uom_qty,
+                    "new_qty": result["quantity"],
+                },
+            )
+            line.update({"product_uom_qty": result["quantity"]})
+        return result
+
+    def has_crowd_equity(self):
+        self.ensure_one()
+        return any(
+            line.product_id.product_tmpl_id.is_crowd_equity()
+            for line in self.order_line
+        )
+
+    def has_investment(self):
+        self.ensure_one()
+        return any(
+            line.product_id.product_tmpl_id.is_investment() for line in self.order_line
+        )
