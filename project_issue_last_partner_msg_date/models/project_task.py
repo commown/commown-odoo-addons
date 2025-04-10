@@ -8,7 +8,6 @@ class ProjectTask(models.Model):
     last_partner_msg_date = fields.Datetime("Last partner message date")
 
     @api.model_create_multi
-    @api.returns("self", lambda value: value.id)
     def create(self, values_list):
         "Set last_partner_msg_date to utcnow by default"
         tasks = super().create(values_list)
@@ -17,7 +16,6 @@ class ProjectTask(models.Model):
                 task.last_partner_msg_date = task.create_date
         return tasks
 
-    @api.returns("mail.message", lambda value: value.id)
     def message_post(self, *args, **kwargs):
         """Update the last_partner_msg_date field when a message is posted.
 
