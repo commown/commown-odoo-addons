@@ -1,26 +1,12 @@
 import logging
 
-from odoo import api, models
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
 
 class SCICSaleOrder(models.Model):
     _inherit = "sale.order"
-
-    @api.depends("website_order_line.product_uom_qty", "website_order_line.product_id")
-    def _compute_cart_info(self):
-        for order in self:
-            order.cart_quantity = int(
-                sum(order.mapped("website_order_line.product_uom_qty"))
-            )
-            order.only_services = all(
-                (
-                    not line.product_id.has_recurrent_payment  # we need to ship the product
-                    and line.product_id.type in ("service", "digital")
-                )
-                for line in order.website_order_line
-            )
 
     def _cart_update(
         self, product_id=None, line_id=None, add_qty=0, set_qty=0, **kwargs
