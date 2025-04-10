@@ -169,3 +169,10 @@ class ResPartnerColissimoDeliveryDataTC(TransactionCase):
             self.partner.colissimo_delivery_data(raise_on_error=False),
             dict(self.expected, email=""),
         )
+
+    def test_part_line1_set(self):
+        self.partner.street = "street1"
+        self.partner.street2 = "street2"
+        data = self.partner.colissimo_delivery_data()
+        self.assertEqual(data["line1"], self.partner.street)
+        self.assertEqual(data["line2"], self.partner.street2)

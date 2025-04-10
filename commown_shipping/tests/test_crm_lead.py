@@ -6,9 +6,11 @@ from mock import patch
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
 
+from odoo.addons.commown_shipping.models.delivery_mixin import ParcelError
+from odoo.addons.commown_shipping.models.shipping_mixin import CommownShippingMixin
 from odoo.addons.queue_job.tests.common import trap_jobs
 
-from ..models.colissimo_utils import shipping_data
+from ..models.colissimo_utils import ColissimoError, shipping_data
 from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
 from .common import BaseShippingTC, pdf_page_num
 
@@ -335,6 +337,19 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         # Simulate delivery
         self.assertRaises(UserError, self.lead.update, {"delivery_date": "2018-01-01"})
 
+    def test_get_label_ref_no_ref(self):
+        self.lead.name = "Plouf plouf"
+        self.lead.team_id.name = "Plouf"
+
+        self.assertEqual(
+            self.lead.get_label_ref(),
+            "%(team_id)s-%(lead_id)s"
+            % {
+                "team_id": self.lead.team_id.id,
+                "lead_id": self.lead.id,
+            },
+        )
+
 
 def _status(code, label="test label", _date=None):
     return {"code": code, "label": label, "date": _date or date.today().isoformat()}
@@ -497,3 +512,54 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         )
         self._check_mail(msg1, subject, "postoffice", [lead2.company_id.name])
         self._check_mail(msg2, "Product delivered", "code: MLVARS", ["Wood Corner"])
+
+    def test_raise_on_colissimo_error(self):
+        colissimo_msg = "error with colissimo"
+        expected_msg = "Colissimo error:\n%s" % colissimo_msg
+
+        with patch.object(
+            CommownShippingMixin,
+            "_get_or_create_label",
+            side_effect=ColissimoError(colissimo_msg),
+        ):
+            with self.assertRaises(UserError) as err:
+                self.lead1._print_parcel_labels(
+                    self.lead1._default_shipping_parcel_type()
+                )
+            self.assertEqual(err.exception.args[0], expected_msg)
+
+    @patch(
+        "odoo.addons.commown_shipping.models.delivery_mixin.colissimo_status_request",
+    )
+    def test_delivery_tracking_colissimo_status(self, mock_collisimo_status):
+        code = "1"
+        label = "label"
+        date = "2023-01-01"
+
+        mock_collisimo_status.return_value = (
+            "<doc>"
+            "  <eventCode>%(code)s</eventCode>"
+            "  <eventDate>%(date)s</eventDate>"
+            "  <eventLibelle>%(label)s</eventLibelle>"
+            "</doc>"
+            % {
+                "code": code,
+                "label": label,
+                "date": date,
+            }
+        )
+
+        self.assertEqual(
+            self.lead1._delivery_tracking_colissimo_status(),
+            {"code": code, "label": label, "date": date},
+        )
+
+        bad_resp = "<doc></doc>"
+        mock_collisimo_status.return_value = bad_resp
+        expected_msg = "Error requesting parcel status for %s. Response was:\n%s" % (
+            self.lead1,
+            bad_resp,
+        )
+        with self.assertRaises(ParcelError) as err:
+            self.lead1._delivery_tracking_colissimo_status()
+        self.assertEqual(err.exception.args[0], expected_msg)
