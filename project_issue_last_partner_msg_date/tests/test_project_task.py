@@ -1,3 +1,4 @@
+from odoo import fields
 from odoo.tests.common import TransactionCase, tagged
 
 
@@ -13,8 +14,15 @@ class ProjectTaskTC(TransactionCase):
         return task.message_post(**params)
 
     def test_create(self):
-        task = self.env.ref("project.project_1_task_1").copy()  # calls create
-        self.assertEqual(task.last_partner_msg_date, task.create_date)
+        date = "2025-01-01 00:00:00"
+
+        task1 = self.env.ref("project.project_1_task_1").copy()  # calls create
+        task2 = self.env.ref("project.project_1_task_1").copy(
+            {"last_partner_msg_date": date}
+        )
+
+        self.assertEqual(task1.last_partner_msg_date, task1.create_date)
+        self.assertEqual(fields.Datetime.to_string(task2.last_partner_msg_date), date)
 
     def test_message_post(self):
         task = self.env.ref("project.project_1_task_1")
