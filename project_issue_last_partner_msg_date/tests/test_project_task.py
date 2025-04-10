@@ -7,7 +7,7 @@ class ProjectTaskTC(TransactionCase):
         params = {
             "body": "Test message",
             "message_type": "comment",
-            "subtype": "mt_comment",
+            "subtype_xmlid": "mail.mt_comment",
             "author_id": task.partner_id.id,
         }
         return task.message_post(**params)
