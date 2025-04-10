@@ -492,6 +492,8 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         )
 
         msg1, msg2 = lead2.message_ids[:2]
-        subject = "YourCompany - Customer parcel waiting at the postoffice"
-        self._check_mail(msg1, subject, "postoffice", ["YourCompany"])
+        subject = (
+            "%s - Customer parcel waiting at the postoffice" % lead2.company_id.name
+        )
+        self._check_mail(msg1, subject, "postoffice", [lead2.company_id.name])
         self._check_mail(msg2, "Product delivered", "code: MLVARS", ["Wood Corner"])
