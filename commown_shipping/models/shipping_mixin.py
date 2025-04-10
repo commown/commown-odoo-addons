@@ -134,6 +134,7 @@ class CommownShippingMixin(models.AbstractModel):
         if entity_ref:
             return entity_ref
         else:
+            coucou
             entity_ref = str(self.id)
             parent = self._shipping_parent()
             parent_ref = _ref_from_name(parent.name) or str(parent.id)
