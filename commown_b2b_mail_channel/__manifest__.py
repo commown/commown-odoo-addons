@@ -17,5 +17,10 @@
         "views/res_partner.xml",
         "views/mail_channel.xml",
     ],
+    "assets": {
+        "mail.assets_discuss_public": [
+            "commown_b2b_mail_channel/static/src/xml/channel_template.xml",
+        ],
+    },
     "installable": True,
 }

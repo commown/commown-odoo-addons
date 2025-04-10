@@ -1,0 +1,7 @@
+<t t-inherit="mail.ThreadViewTopbar" t-inherit-mode="extension" t-name="HideTopBar">
+    <xpath
+        expr="//div[contains(@class, 'o_ThreadViewTopbar_actions')]"
+        position="replace"
+    >
+    </xpath>
+</t>
