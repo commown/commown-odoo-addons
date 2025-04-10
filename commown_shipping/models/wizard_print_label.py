@@ -29,7 +29,7 @@ class ProjectTaskAbstractPrintLabelWizard(models.AbstractModel):
             "actions": [
                 {
                     "type": "ir.actions.act_url",
-                    "url": label.website_url,
+                    "url": label.local_url,
                     "target": "current",
                 },
                 {"type": "ir.actions.act_window_close"},
