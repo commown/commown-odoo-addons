@@ -9,16 +9,18 @@ from ..models.sale_order import CouponError
 
 @tagged("-at_install", "post_install")
 class CouponSchemaTC(TransactionCase):
-    def setUp(self):
-        super(CouponSchemaTC, self).setUp()
-        self.seller = self.env.ref("base.res_partner_2")
-        self.campaign = self._create_campaign()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.seller = cls.env.ref("base.res_partner_2")
+        cls.campaign = cls._create_campaign()
 
-    def _create_campaign(self, name="test", **kwargs):
+    @classmethod
+    def _create_campaign(cls, name="test", **kwargs):
         kwargs["name"] = name
-        kwargs.setdefault("seller_id", self.seller.id)
+        kwargs.setdefault("seller_id", cls.seller.id)
         kwargs.setdefault("is_without_coupons", False)
-        return self.env["coupon.campaign"].create(kwargs)
+        return cls.env["coupon.campaign"].create(kwargs)
 
     def _create_coupon(self, **kwargs):
         kwargs.setdefault("campaign_id", self.campaign.id)

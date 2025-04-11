@@ -5,7 +5,7 @@ class TestCreateMultipleCoupons(TransactionCase):
     @classmethod
     def setUpClass(cls):
 
-        super(TestCreateMultipleCoupons, cls).setUpClass()
+        super().setUpClass()
 
         cls.partner_test_campaign = cls.env["res.partner"].create(
             {"name": "Partner test campaign"}
