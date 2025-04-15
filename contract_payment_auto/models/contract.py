@@ -22,7 +22,6 @@ class Contract(models.Model):
         "bill to partner's default token will be used.",
     )
 
-    @api.multi
     @api.onchange("partner_id")
     def _onchange_partner_id_payment_token(self):
         """Clear the payment token when the partner is changed."""
@@ -52,7 +51,6 @@ class Contract(models.Model):
             if retry_time < now:
                 contract._do_auto_pay(invoice)
 
-    @api.multi
     def _recurring_create_invoice(self, date_ref=False):
         """If automatic payment is enabled, perform auto pay actions."""
         invoices = super(Contract, self)._recurring_create_invoice(date_ref)
@@ -63,7 +61,6 @@ class Contract(models.Model):
                 contract._do_auto_pay(invoice)
         return invoices
 
-    @api.multi
     def _do_auto_pay(self, invoice):
         """Perform all automatic payment operations on open invoices."""
         self.ensure_one()
@@ -72,7 +69,6 @@ class Contract(models.Model):
         self._send_invoice_message(invoice)
         self._pay_invoice(invoice)
 
-    @api.multi
     def _pay_invoice(self, invoice):
         """Pay the invoice using the account or partner token."""
 
@@ -140,7 +136,6 @@ class Contract(models.Model):
 
         return
 
-    @api.multi
     def _get_tx_vals(self, invoice, token):
         """Return values for creation of a payment.transaction for invoice."""
         amount_due = invoice.residual
@@ -165,7 +160,6 @@ class Contract(models.Model):
             "partner_email": partner.email,
         }
 
-    @api.multi
     def _send_invoice_message(self, invoice):
         """Send the appropriate emails for the invoices if needed."""
         if invoice.sent:
