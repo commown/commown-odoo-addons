@@ -45,7 +45,6 @@
   <record id="account_loan_lines_view_action" model="ir.actions.act_window">
     <field name="name">Account Loan Lines</field>
     <field name="res_model">account.loan.line</field>
-    <field name="view_type">form</field>
     <field name="view_mode">graph,pivot,tree,form</field>
     <field name="domain">[("loan_state", "!=", "cancelled")]</field>
     <field name="view_id" ref="account_loan_line_view_tree" />
