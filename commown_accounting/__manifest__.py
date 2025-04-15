@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
-        "account",
+        "account_loan",
     ],
     "data": [
         "views/account_loan_line.xml",
