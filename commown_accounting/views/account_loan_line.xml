@@ -60,6 +60,7 @@
 
   <menuitem
         id="account_loan.account_loan_menu"
+        name="Account loans"
         parent="menu_loan_category"
         sequence="20"
     />
