@@ -1,10 +1,9 @@
-from odoo import api, models
+from odoo import models
 
 
 class CrmLead(models.Model):
     _inherit = "crm.lead"
 
-    @api.multi
     def _track_template(self, tracking):
         res = super()._track_template(tracking)
         test_lead = self[0]
