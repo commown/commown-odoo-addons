@@ -58,6 +58,10 @@ class TestContract(common.HttpCase):
                 "acquirer_ref": "OtherTest",
             }
         )
+        self.env["account.journal"].create(
+            {"name": "test journal", "code": "TST", "type": "sale"}
+        )
+
         values = {
             "name": "Test Contract",
             "partner_id": self.partner.id,
@@ -85,15 +89,15 @@ class TestContract(common.HttpCase):
 
     def _validate_invoice(self, invoice):
         self.assertEqual(len(invoice), 1)
-        self.assertEqual(invoice._name, "account.invoice")
+        self.assertEqual(invoice._name, "account.move")
 
-    def _create_invoice(self, opened=False, sent=False):
+    def _create_invoice(self, posted=False, sent=False):
         self.contract.is_auto_pay = False
         invoice = self.contract._recurring_create_invoice()
-        if opened or sent:
-            invoice.action_invoice_open()
+        if posted or sent:
+            invoice.action_post()
         if sent:
-            invoice.sent = True
+            invoice.is_move_sent = True
         self.contract.is_auto_pay = True
         return invoice
 
@@ -163,14 +167,14 @@ class TestContract(common.HttpCase):
         """It should ensure_one on the invoice."""
         with self.assertRaises(ValueError):
             self.contract._do_auto_pay(
-                self.env["account.invoice"],
+                self.env["account.move"],
             )
 
     def test_do_auto_pay_open_invoice(self):
         """It should open the invoice."""
         invoice = self._create_invoice()
         self.contract._do_auto_pay(invoice)
-        self.assertEqual(invoice.state, "open")
+        self.assertEqual(invoice.state, "posted")
 
     def test_do_auto_pay_sends_message(self):
         """It should call the send message method with the invoice."""
@@ -195,7 +199,7 @@ class TestContract(common.HttpCase):
     def test_pay_invoice_no_residual(self):
         """It should return None if no residual on the invoice."""
         invoice = self._create_invoice()
-        invoice.state = "open"
+        invoice.state = "posted"
         res = self.contract._pay_invoice(invoice)
         self.assertIs(res, None)
 
@@ -308,9 +312,9 @@ class TestContract(common.HttpCase):
     def test_send_invoice_message_sets_invoice_state(self):
         """It should set the invoice to sent."""
         invoice = self._create_invoice(True)
-        self.assertFalse(invoice.sent)
+        self.assertFalse(invoice.is_move_sent)
         self.contract._send_invoice_message(invoice)
-        self.assertTrue(invoice.sent)
+        self.assertTrue(invoice.is_move_sent)
 
     def test_send_invoice_message_returns_mail(self):
         """It should create and return the message."""
