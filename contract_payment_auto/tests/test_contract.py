@@ -7,15 +7,14 @@ from datetime import date
 import mock
 
 from odoo import fields
-from odoo.tests import common
+from odoo.tests import HttpCase, tagged
 from odoo.tools import mute_logger
 
 from odoo.addons.contract_payment_auto.models import contract
 
 
-@common.at_install(False)
-@common.post_install(True)
-class TestContract(common.HttpCase):
+@tagged("-at_install", "post_install")
+class TestContract(HttpCase):
     def setUp(self):
         super(TestContract, self).setUp()
         self.Model = self.env["contract.contract"]
