@@ -93,8 +93,8 @@ class Contract(models.Model):
         valid_states = ["authorized", "done"]
 
         try:
-            result = transaction.s2s_do_transaction()
-            if not result or transaction.state not in valid_states:
+            transaction._send_payment_request()
+            if transaction.state not in valid_states:
                 _logger.debug(
                     "Payment transaction failed (%s)",
                     transaction.state_message,
@@ -147,8 +147,8 @@ class Contract(models.Model):
         )
         return {
             "reference": "%s" % reference,
-            "acquirer_id": token.acquirer_id.id,
-            "payment_token_id": token.id,
+            "provider_id": token.provider_id.id,
+            "token_id": token.id,
             "invoice_ids": [(4, invoice.id)],
             "amount": amount_due,
             "state": "draft",

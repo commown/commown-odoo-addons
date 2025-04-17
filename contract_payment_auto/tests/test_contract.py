@@ -11,7 +11,6 @@ from odoo.tests import common
 from odoo.tools import mute_logger
 
 from odoo.addons.contract_payment_auto.models import contract
-from odoo.addons.payment.models.payment_acquirer import PaymentAcquirer
 
 
 @common.at_install(False)
@@ -33,29 +32,28 @@ class TestContract(common.HttpCase):
         self.template = self.env["contract.template"].create(
             self.template_vals,
         )
-        self.acquirer = self.env["payment.acquirer"].create(
+        self.provider = self.env["payment.provider"].create(
             {
                 "name": "Test Acquirer",
-                "provider": "manual",
-                "view_template_id": self.env["ir.ui.view"].search([], limit=1).id,
+                "inline_form_view_id": self.env["ir.ui.view"].search([], limit=1).id,
             }
         )
         self.payment_token = self.env["payment.token"].create(
             {
-                "name": "Test Token",
+                "payment_details": "Test Token",
                 "partner_id": self.partner.id,
                 "active": True,
-                "acquirer_id": self.acquirer.id,
-                "acquirer_ref": "Test",
+                "provider_id": self.provider.id,
+                "provider_ref": "Test",
             }
         )
         self.other_payment_token = self.env["payment.token"].create(
             {
-                "name": "Test Other Token",
+                "payment_details": "Test Other Token",
                 "partner_id": self.partner.id,
                 "active": True,
-                "acquirer_id": self.acquirer.id,
-                "acquirer_ref": "OtherTest",
+                "provider_id": self.provider.id,
+                "provider_ref": "OtherTest",
             }
         )
         self.env["account.journal"].create(
@@ -117,7 +115,7 @@ class TestContract(common.HttpCase):
             record = TransactionsCreate(vals)
             features = {"authorize": ["manual"], "tokenize": [], "fees": []}
             with mock.patch.object(
-                PaymentAcquirer, "_get_feature_support", return_value=features
+                PaymentProvider, "_get_feature_support", return_value=features
             ):
                 record.state = state
             return record
@@ -126,13 +124,13 @@ class TestContract(common.HttpCase):
         model_create.side_effect = create
 
         Transactions._patch_method("create", model_create)
-        Transactions._patch_method("s2s_do_transaction", s2s)
+        Transactions._patch_method("_send_payment_request", s2s)
 
         try:
             yield
         finally:
             Transactions._revert_method("create")
-            Transactions._revert_method("s2s_do_transaction")
+            Transactions._revert_method("_send_payment_request")
 
     def test_onchange_partner_id_payment_token(self):
         """It should clear the payment token."""
