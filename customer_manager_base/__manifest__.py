@@ -3,7 +3,7 @@
 {
     "name": "Customer manager base",
     "summary": "Base module to allow customers to manage things efficiently",
-    "version": "12.0.1.0.3",
+    "version": "16.0.1.0.0",
     "development_status": "Alpha",
     "category": "Manager customer",
     "website": "https://github.com/commown/commown-odoo-addons",

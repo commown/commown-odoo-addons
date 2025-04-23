@@ -9,7 +9,7 @@ class PortalIrRulesTC:
     allowed_group_ref = None  # To be overriden by xml ref of the allowed customer group
 
     def seen(self, entities, user):
-        return self.env[entities._name].sudo(user).search([]) & entities
+        return self.env[entities._name].with_user(user).search([]) & entities
 
     def _give_portal_access(self, partner):
         model = self.env["portal.wizard"].with_context(active_ids=[partner.id])
