@@ -1,4 +1,4 @@
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 
 class PortalIrRulesTC:
@@ -60,7 +60,7 @@ class PortalIrRulesTC:
             self.assertTrue(self.seen(self.children, self.user2))
 
 
-class PortalInvoiceIrRulesTC(PortalIrRulesTC, SavepointCase):
+class PortalInvoiceIrRulesTC(PortalIrRulesTC, TransactionCase):
     "Test class for portal user invoice-related access rules"
 
     allowed_group_ref = "customer_manager_base.group_customer_accounting"
@@ -86,7 +86,7 @@ class PortalInvoiceIrRulesTC(PortalIrRulesTC, SavepointCase):
         self.obj.partner_id = partner.id
 
 
-class PortalSaleOrderIrRulesTC(PortalIrRulesTC, SavepointCase):
+class PortalSaleOrderIrRulesTC(PortalIrRulesTC, TransactionCase):
     "Test class for portal user sale_order-related access rules"
 
     allowed_group_ref = "customer_manager_base.group_customer_purchase"
@@ -107,7 +107,7 @@ class PortalSaleOrderIrRulesTC(PortalIrRulesTC, SavepointCase):
         self.assertNotIn(partner2, self.obj.message_partner_ids)
 
 
-class PortalProjectTaskIrRulesTC(PortalIrRulesTC, SavepointCase):
+class PortalProjectTaskIrRulesTC(PortalIrRulesTC, TransactionCase):
     "Test class for portal user project_task-related access rules"
 
     allowed_group_ref = "customer_manager_base.group_customer_it_support"
