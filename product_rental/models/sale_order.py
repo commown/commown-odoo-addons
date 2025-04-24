@@ -9,7 +9,6 @@ _logger = logging.getLogger(__name__)
 class ProductRentalSaleOrder(models.Model):
     _inherit = "sale.order"
 
-    @api.multi
     def contractual_documents(self, allow_from_template=False):
         """Return the contractual docs of the products' contract template
 
@@ -42,7 +41,6 @@ class ProductRentalSaleOrder(models.Model):
 
         return docs
 
-    @api.multi
     def action_quotation_send(self):
         "Add contractual documents to the quotation email"
         self.ensure_one()
@@ -65,7 +63,6 @@ class ProductRentalSaleOrder(models.Model):
             )
         return email_act
 
-    @api.multi
     def assign_contract_products(self):
         "Assign main product and accessories to n contracts per sale order line"
 
@@ -163,7 +160,6 @@ class ProductRentalSaleOrder(models.Model):
         )
         contract.contract_line_ids.update({"analytic_account_id": aa.id})
 
-    @api.multi
     def action_create_contract(self):
         contracts = self.env["contract.contract"]
         contract_descrs = self.assign_contract_products()
@@ -171,7 +167,7 @@ class ProductRentalSaleOrder(models.Model):
         for count, contract_descr in enumerate(contract_descrs, 1):
             contract_template = (
                 contract_descr["main"]
-                .with_context(force_company=self.company_id.id)
+                .with_company(self.company_id)
                 .property_contract_template_id
             )
 

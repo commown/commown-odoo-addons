@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class ContractTemplate(models.Model):
@@ -38,7 +38,6 @@ class ContractTemplate(models.Model):
         domain=[("payment_type", "=", "inbound")],
     )
 
-    @api.multi
     def main_product_line(self):
         self.ensure_one()
         lines = self.contract_line_ids

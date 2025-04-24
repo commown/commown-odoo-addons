@@ -2,7 +2,7 @@
     "name": "Rental product",
     "category": "Sale",
     "summary": "Define products as rental products",
-    "version": "12.0.1.1.18",
+    "version": "16.0.1.0.0",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",

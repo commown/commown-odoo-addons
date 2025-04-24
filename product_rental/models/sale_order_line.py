@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, models
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
@@ -22,7 +22,6 @@ class ProductRentalSaleOrderLine(models.Model):
             ]
         return recurrent_payment_amount
 
-    @api.multi
     def create_contract_line(self, contract):
         "v12 API must no more be called, see order's action_create_contract"
         _logger.error("Order line create_contract_line must not be called!")

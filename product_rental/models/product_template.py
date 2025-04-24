@@ -2,8 +2,6 @@ import logging
 
 from odoo import api, fields, models
 
-import odoo.addons.decimal_precision as dp
-
 _logger = logging.getLogger(__name__)
 
 
@@ -12,15 +10,13 @@ class RentalProductTemplate(models.Model):
 
     has_recurrent_payment = fields.Boolean(
         "Has recurrent payment",
-        oldname="is_rental",
     )
 
     is_deposit = fields.Boolean("Is initial payment a deposit", default=True)
 
     recurrent_payment_amount = fields.Float(
         "Recurrent payment amount",
-        dp.get_precision("Product Price"),
-        oldname="rental_price",
+        digits="Product Price",
     )
 
     recurrent_payment_frequency = fields.Selection(
@@ -31,7 +27,6 @@ class RentalProductTemplate(models.Model):
             ("yearly", "Yearly"),
         ],
         "Recurrent payment frequency",
-        oldname="rental_frequency",
         default="monthly",
         required=True,
     )
@@ -40,10 +35,8 @@ class RentalProductTemplate(models.Model):
         comodel_name="account.tax",
         string="Recurrent payment taxes",
         domain=[("type_tax_use", "=", "sale")],
-        oldname="rental_tax_ids",
     )
 
-    @api.multi
     def recurrent_payment_amount_ratio(self):
         self.ensure_one()
         return self.has_recurrent_payment and (

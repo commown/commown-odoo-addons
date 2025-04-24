@@ -85,7 +85,6 @@ class Contract(models.Model):
 
     recurring_next_date = fields.Date(inverse="_inverse_recurring_next_date")
 
-    @api.multi
     def _convert_contract_lines(self, contract):
         """On each contract line, add the relation to the contract template
         line which generated it.
@@ -276,7 +275,6 @@ class Contract(models.Model):
             ]
         )
 
-    @api.multi
     def action_show_analytic_lines(self):
         self.ensure_one()
         account = self.mapped("contract_line_ids.analytic_account_id").filtered(

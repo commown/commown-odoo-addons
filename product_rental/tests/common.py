@@ -268,7 +268,7 @@ class WebsiteBaseTC(RentalSaleOrderTC):
     def render_view(self, ref, sudo_as=None, **render_kwargs):
         view = self.env.ref(ref)
         if sudo_as:
-            view = view.sudo(sudo_as)
+            view = view.with_user(sudo_as)
 
         with patch.object(Website, "get_alternate_languages", return_value=()):
             with MockRequest(self.env, website=self.website) as request:
