@@ -108,14 +108,4 @@
     <field name="value_ids" eval="[(6, 0, [ref('val_cpu_i5'), ref('val_cpu_i7')])]" />
   </record>
 
-  <record id="prod_pc_i5" model="product.product">
-    <field name="product_tmpl_id" ref="prod_pc" />
-    <field name="attribute_value_ids" eval="[(6, 0, [ref('val_cpu_i5')])]" />
-  </record>
-
-  <record id="prod_pc_i7" model="product.product">
-    <field name="product_tmpl_id" ref="prod_pc" />
-    <field name="attribute_value_ids" eval="[(6, 0, [ref('val_cpu_i7')])]" />
-  </record>
-
 </odoo>
