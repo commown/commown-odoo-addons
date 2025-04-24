@@ -10,7 +10,6 @@
         "base_automation",
         "contract_payment_auto",
         "contract_payment_mode",
-        "document",
         "ir_attachment_lang",
         "project",
         "product_contract",
