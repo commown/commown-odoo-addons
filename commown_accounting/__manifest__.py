@@ -1,0 +1,20 @@
+# Copyright (C) 2024: Commown (https://commown.coop)
+# @author: Luc Parent
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+{
+    "name": "Commown accounting",
+    "category": "Accounting & Finance",
+    "version": "16.0.1.0.0",
+    "author": "Commown SCIC",
+    "license": "AGPL-3",
+    "website": "https://github.com/commown/commown-odoo-addons",
+    "depends": [
+        "account_loan",
+    ],
+    "data": [
+        "views/account_loan_line.xml",
+    ],
+    "demo": [],
+    "installable": True,
+}

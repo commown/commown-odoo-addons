@@ -1,0 +1,1 @@
+This modules adds menu entries to see Loans and Loan lines from the Invoicing menu.
