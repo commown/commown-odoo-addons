@@ -77,7 +77,7 @@
 
   <record id="attr_cpu" model="product.attribute">
     <field name="name">CPU</field>
-    <field name="type">select</field>
+    <field name="display_type">select</field>
   </record>
 
   <record id="val_cpu_i5" model="product.attribute.value">
