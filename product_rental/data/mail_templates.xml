@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
 
-  <data noupdate="1">
-
-    <record id="email_loss_declaration" model="mail.template">
-      <field name="name">[commown] AR déclaration Perte</field>
-      <field name="email_from">contact@commown.coop</field>
-      <field name="reply_to">contact@commown.coop</field>
-      <field name="subject">${object.company_id.name} - Votre déclaration de perte</field>
-      <field name="model_id" ref="project.model_project_task"/>
-      <field name="auto_delete" eval="True"/>
-      <field name="lang">${object.partner_id.lang}</field>
-      <field name="body_html"><![CDATA[
+  <record id="email_loss_declaration" model="mail.template">
+    <field name="name">[commown] AR déclaration Perte</field>
+    <field name="email_from">contact@commown.coop</field>
+    <field name="reply_to">contact@commown.coop</field>
+    <field name="subject">${object.company_id.name} - Votre déclaration de perte</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="auto_delete" eval="True" />
+    <field name="lang">${object.partner_id.lang}</field>
+    <field
+            name="body_html"
+        ><![CDATA[
 <p>Bonjour ${object.partner_id.firstname},</p>
 <br/>
 <p>Nous vous contactons suite à votre demande d'assistance concernant la perte de l'appareil.
@@ -65,17 +65,19 @@
 
 <p>L'équipe Commown</p>
 ]]></field>
-    </record>
+  </record>
 
-    <record id="email_theft_declaration" model="mail.template">
-      <field name="name">[commown] AR déclaration Vol</field>
-      <field name="email_from">contact@commown.coop</field>
-      <field name="reply_to">contact@commown.coop</field>
-      <field name="subject">${object.company_id.name} - Votre déclaration de vol</field>
-      <field name="model_id" ref="project.model_project_task"/>
-      <field name="auto_delete" eval="True"/>
-      <field name="lang">${object.partner_id.lang}</field>
-      <field name="body_html"><![CDATA[
+  <record id="email_theft_declaration" model="mail.template">
+    <field name="name">[commown] AR déclaration Vol</field>
+    <field name="email_from">contact@commown.coop</field>
+    <field name="reply_to">contact@commown.coop</field>
+    <field name="subject">${object.company_id.name} - Votre déclaration de vol</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="auto_delete" eval="True" />
+    <field name="lang">${object.partner_id.lang}</field>
+    <field
+            name="body_html"
+        ><![CDATA[
 <p>Bonjour ${object.partner_id.firstname},</p>
 <br/>
 <p>
@@ -142,8 +144,6 @@
 
 <p>L'équipe Commown</p>
 ]]></field>
-    </record>
-
-  </data>
+  </record>
 
 </odoo>

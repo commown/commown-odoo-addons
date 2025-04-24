@@ -3,10 +3,9 @@
     "category": "Sale",
     "summary": "Define products as rental products",
     "version": "12.0.1.1.18",
-    "description": """Rental products have a fixed deposit and recurring price, displayed on the product page""",
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "base_automation",
         "contract_payment_auto",

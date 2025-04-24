@@ -292,8 +292,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         contracts = self.env["contract.contract"].of_sale(so)
 
         self.assertEqual(len(contracts), 1)
-        self.assertEquals(
-            [(l.name, l.quantity) for l in contracts.contract_line_ids],
+        self.assertEqual(
+            [(line.name, line.quantity) for line in contracts.contract_line_ids],
             [("1 year of GS Headset", 1.0), ("1 month of micro", 12.0)],
         )
 

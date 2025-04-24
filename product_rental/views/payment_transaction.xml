@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" ?>
 <!--
 
     WARNING: This automatic payment generation is badly designed:
@@ -12,12 +11,13 @@
       payment as an example, but I'm unable to find out where).
 
  -->
-
 <odoo>
 
   <record id="action_contract_auto_account_payment" model="ir.actions.server">
-    <field name="name">[commown] Automatic account payment on contract driven transaction</field>
-    <field name="model_id" ref="payment.model_payment_transaction"/>
+    <field
+            name="name"
+        >[commown] Automatic account payment on contract driven transaction</field>
+    <field name="model_id" ref="payment.model_payment_transaction" />
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field name="code">record.autopay_contract_invoices()</field>
@@ -25,13 +25,14 @@
 
   <record id="payment_transaction_done" model="base.automation">
     <field name="name">[commown] Contract-related payment transaction done</field>
-    <field name="model_id" ref="payment.model_payment_transaction"/>
+    <field name="model_id" ref="payment.model_payment_transaction" />
     <field name="sequence">1</field>
     <field name="trigger">on_write</field>
     <field name="filter_pre_domain">[('state', '!=', 'done')]</field>
-    <field name="filter_domain">[('state', '=', 'done'), ('payment_id', '=', False)]</field>
-    <field name="action_server_id"
-           eval="ref('action_contract_auto_account_payment')"/>
+    <field
+            name="filter_domain"
+        >[('state', '=', 'done'), ('payment_id', '=', False)]</field>
+    <field name="action_server_id" eval="ref('action_contract_auto_account_payment')" />
   </record>
 
 </odoo>

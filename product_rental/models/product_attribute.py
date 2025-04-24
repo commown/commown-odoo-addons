@@ -2,7 +2,6 @@ from odoo import fields, models
 
 from odoo.addons import decimal_precision as dp
 
-
 class ProductTemplateAttributeValue(models.Model):
     _inherit = "product.template.attribute.value"
 

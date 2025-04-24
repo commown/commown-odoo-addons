@@ -1,50 +1,72 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-  <data>
-    <record model="ir.ui.view" id="product_template_form_view">
-        <field name="name">product.template.product.website.form</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product_contract.product_template_form_contract_view"/>
-        <field name="arch" type="xml">
+  <record model="ir.ui.view" id="product_template_form_view">
+      <field name="name">product.template.product.website.form</field>
+      <field name="model">product.template</field>
+      <field
+            name="inherit_id"
+            ref="product_contract.product_template_form_contract_view"
+        />
+      <field name="arch" type="xml">
 
-          <xpath expr="//field[@name='is_contract']/ancestor::div[1]" position="after">
-            <div>
-              <field name="has_recurrent_payment" attrs="{'readonly': [('is_contract', '=', True)]}"/>
-              <label for="has_recurrent_payment"/>
-            </div>
-          </xpath>
+        <xpath expr="//field[@name='is_contract']/ancestor::div[1]" position="after">
+          <div>
+            <field
+                        name="has_recurrent_payment"
+                        attrs="{'readonly': [('is_contract', '=', True)]}"
+                    />
+            <label for="has_recurrent_payment" />
+          </div>
+        </xpath>
 
-          <!-- Improve labels for rental products -->
-          <xpath expr="//group[@name='group_standard_price']" position="attributes">
-            <attribute name="string">Price</attribute>
-          </xpath>
-          <xpath expr="//group[@name='group_standard_price']//field[@name='list_price']"
-                 position="attributes">
-            <attribute name="attrs">{"invisible": [("has_recurrent_payment", "=", True)]}</attribute>
-          </xpath>
-          <xpath expr="//group[@name='group_standard_price']//field[@name='list_price']"
-                 position="after">
-            <field name="list_price" t-if="has_recurrent_payment" string="Deposit"/>
-          </xpath>
-          <!-- END - Improve labels for rental products -->
+        <!-- Improve labels for rental products -->
+        <xpath expr="//group[@name='group_standard_price']" position="attributes">
+          <attribute name="string">Price</attribute>
+        </xpath>
+        <xpath
+                expr="//group[@name='group_standard_price']//field[@name='list_price']"
+                position="attributes"
+            >
+          <attribute
+                    name="attrs"
+                >{"invisible": [("has_recurrent_payment", "=", True)]}</attribute>
+        </xpath>
+        <xpath
+                expr="//group[@name='group_standard_price']//field[@name='list_price']"
+                position="after"
+            >
+          <field name="list_price" t-if="has_recurrent_payment" string="Deposit" />
+        </xpath>
+        <!-- END - Improve labels for rental products -->
 
-          <xpath expr="//group[@name='group_standard_price']" position="after">
-            <group name="recurrent_payment" string="Recurrent payment"
-                   attrs="{'invisible':[('has_recurrent_payment','=',False)]}" >
-              <field name="recurrent_payment_amount" widget="monetary" attrs="{'required': [('has_recurrent_payment', '=', True)]}" string="Amount"/>
-              <field name="recurrent_payment_frequency" string="Frequency"/>
-              <field name="recurrent_payment_tax_ids" widget="many2many_tags" string="Taxes"/>
-            </group>
-          </xpath>
+        <xpath expr="//group[@name='group_standard_price']" position="after">
+          <group
+                    name="recurrent_payment"
+                    string="Recurrent payment"
+                    attrs="{'invisible':[('has_recurrent_payment','=',False)]}"
+                >
+            <field
+                        name="recurrent_payment_amount"
+                        widget="monetary"
+                        attrs="{'required': [('has_recurrent_payment', '=', True)]}"
+                        string="Amount"
+                    />
+            <field name="recurrent_payment_frequency" string="Frequency" />
+            <field
+                        name="recurrent_payment_tax_ids"
+                        widget="many2many_tags"
+                        string="Taxes"
+                    />
+          </group>
+        </xpath>
 
-          <!-- Make property_contract_template_id required when is_contract is True -->
-          <field name="property_contract_template_id" position="attributes">
-            <attribute name="attrs">{"required": [("is_contract", "=", True)]}</attribute>
-          </field>
-
+        <!-- Make property_contract_template_id required when is_contract is True -->
+        <field name="property_contract_template_id" position="attributes">
+          <attribute name="attrs">{"required": [("is_contract", "=", True)]}</attribute>
         </field>
-    </record>
-  </data>
+
+      </field>
+  </record>
 
 </odoo>

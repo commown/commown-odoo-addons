@@ -70,14 +70,16 @@ class ProductRentalSaleOrder(models.Model):
         "Assign main product and accessories to n contracts per sale order line"
 
         bought_accessories = defaultdict(list)
-        for l in self.order_line:
-            accessory = l.product_id
+        for line in self.order_line:
+            accessory = line.product_id
             if accessory.has_recurrent_payment and not accessory.is_contract:
-                bought_accessories[l.product_id] += int(l.product_uom_qty) * [l]
+                bought_accessories[line.product_id] += int(line.product_uom_qty) * [
+                    line
+                ]
         _logger.debug(
             "%s: bought %d accessories",
             self.name,
-            sum(len(l) for l in bought_accessories.values()),
+            sum(len(line) for line in bought_accessories.values()),
         )
 
         contract_descrs = [

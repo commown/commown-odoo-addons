@@ -1,17 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <template id="assets_frontend" inherit_id="website.assets_frontend">
     <xpath expr="." position="inside">
-      <link href="/product_rental/static/src/css/website_sale.css" rel="stylesheet" type="text/css"/>
+      <link
+                href="/product_rental/static/src/css/website_sale.css"
+                rel="stylesheet"
+                type="text/css"
+            />
     </xpath>
   </template>
 
   <!-- Sale order initial payment of rental product may be deposits: write it on portal -->
   <template
-      id="rental_sale_order_portal_content"
-      name="Orders Followup Products Links"
-      inherit_id="website_sale.sale_order_portal_content_inherit_website_sale">
+        id="rental_sale_order_portal_content"
+        name="Orders Followup Products Links"
+        inherit_id="website_sale.sale_order_portal_content_inherit_website_sale"
+    >
 
     <xpath expr="//td[@id='product_name']" position="inside">
       <t t-if="line.product_id.has_recurrent_payment and line.product_id.is_deposit">
@@ -22,44 +27,67 @@
   </template>
 
   <template id="products_item" inherit_id="website_sale.products_item">
-    <xpath expr="//div[@itemprop='offers']/b" position="replace">
+    <xpath expr="//div[@itemprop='offers']/b" position="after">
       <b t-if="product.has_recurrent_payment">
         <span>From</span>
-        <span t-esc="product.recurrent_payment_amount"
-              t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
-        <span t-field="product.recurrent_payment_frequency"/>
+        <span
+                    t-esc="product.recurrent_payment_amount"
+                    t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
+                />
+        <span t-field="product.recurrent_payment_frequency" />
       </b>
       <t t-else="">
-        <span t-if="product.product_variant_count > 1 and combination_info['price']">From</span>
+        <span
+                    t-if="product.product_variant_count > 1 and combination_info['price']"
+                >From</span>
         <t>$0</t>
       </t>
     </xpath>
+    <xpath expr="//div[@itemprop='offers']/b" t-if="False" />
 
   </template>
 
   <template id="product_price" inherit_id="website_sale.product_price">
 
     <xpath expr="//*[hasclass('oe_price')]//ancestor::div" position="attributes">
-      <attribute name="t-att-class" separator=" " add="product.has_recurrent_payment and product.is_deposit and 'is_deposit'"/>
+      <attribute
+                name="t-att-class"
+                separator=" "
+                add="product.has_recurrent_payment and product.is_deposit and 'is_deposit'"
+            />
     </xpath>
 
     <xpath expr="//*[hasclass('oe_price')]//ancestor::h4//*[1]" position="before">
-      <b class="initial_deposit_title" t-if="product.has_recurrent_payment and product.is_deposit">Initial deposit:</b>
+      <b
+                class="initial_deposit_title"
+                t-if="product.has_recurrent_payment and product.is_deposit"
+            >Initial deposit:</b>
     </xpath>
 
     <xpath expr="div" position="after">
-      <div t-if="product.has_recurrent_payment"
-           id="product_recurrent_payment_amount"
-           class="product_price mt16">
+      <div
+                t-if="product.has_recurrent_payment"
+                id="product_recurrent_payment_amount"
+                class="product_price mt16"
+            >
         <p t-if="product.is_contract and commitment_period['number'] > 0">
-          <b class="commitment"><span>Commitment duration: </span><span t-esc="commitment_period['number']"/> <span t-esc="commitment_period['type']"/></b>
+          <b class="commitment"><span>Commitment duration: </span><span
+                            t-esc="commitment_period['number']"
+                        /> <span t-esc="commitment_period['type']" /></b>
         </p>
         <h4 class="oe_price_h4 css_editable_mode_hidden">
-          <b class="oe_recurrent_payment_amount" style="white-space: nowrap;"
-             t-att-data-recurrent-payment-ratio="recurrent_payment_amount_ratio" t-esc="recurrent_payment_amount_base"
-             t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> <b t-field="product.recurrent_payment_frequency"/>
+          <b
+                        class="oe_recurrent_payment_amount"
+                        style="white-space: nowrap;"
+                        t-att-data-recurrent-payment-ratio="recurrent_payment_amount_ratio"
+                        t-esc="recurrent_payment_amount_base"
+                        t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
+                    /> <b t-field="product.recurrent_payment_frequency" />
         </h4>
-        <script type="text/javascript" src="/product_rental/static/src/js/website_sale.js"/>
+        <script
+                    type="text/javascript"
+                    src="/product_rental/static/src/js/website_sale.js"
+                />
       </div>
     </xpath>
 
@@ -69,67 +97,89 @@
   <template id="variants" inherit_id="sale.variants">
 
     <!-- Hide spans containing the extra prices in both select and radio inputs -->
-    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace"/>
-    <xpath expr="//span[@t-if='value_id.price_extra']" position="replace"/>
+    <xpath expr="//span[@t-if='value_id.price_extra']" t-if="False" />
+    <xpath expr="//span[@t-if='value_id.price_extra']" t-if="False" />
 
   </template>
 
-  <template id="cart_line_product_link" inherit_id="website_sale.cart_line_product_link">
+  <template
+        id="cart_line_product_link"
+        inherit_id="website_sale.cart_line_product_link"
+    >
     <xpath expr="//a" position="inside">
-      <t t-set="product" t-value="line.product_id"/>
-      <t t-set="product_tmpl" t-value="product.product_tmpl_id"/>
+      <t t-set="product" t-value="line.product_id" />
+      <t t-set="product_tmpl" t-value="product.product_tmpl_id" />
       <t t-if="product_tmpl.has_recurrent_payment">
-        (<t t-esc="line.price_unit / product_tmpl.recurrent_payment_amount_ratio()" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
-        <span  t-field="product.recurrent_payment_frequency"/>)
+        (<t
+                    t-esc="line.price_unit / product_tmpl.recurrent_payment_amount_ratio()"
+                    t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
+                />
+        <span t-field="product.recurrent_payment_frequency" />)
       </t>
-      <t t-if="product_tmpl.has_recurrent_payment and product_tmpl.is_deposit"><strong> - Deposit</strong></t>
+      <t t-if="product_tmpl.has_recurrent_payment and product_tmpl.is_deposit"><strong
+                > - Deposit</strong></t>
     </xpath>
   </template>
 
   <template id="cart_summary" inherit_id="website_sale.cart_summary">
 
     <!-- Add rental and deposit right after product display name -->
-    <xpath expr="//*[@id='cart_products']//td//*[@t-field='line.name_short']"
-           position="after">
-      <t t-set="product" t-value="line.product_id"/>
-      <t t-set="product_tmpl" t-value="product.product_tmpl_id"/>
+    <xpath
+            expr="//*[@id='cart_products']//td//*[@t-field='line.name_short']"
+            position="after"
+        >
+      <t t-set="product" t-value="line.product_id" />
+      <t t-set="product_tmpl" t-value="product.product_tmpl_id" />
       <t t-if="product_tmpl.has_recurrent_payment">
-        (<t t-esc="line.price_unit / product_tmpl.recurrent_payment_amount_ratio()"
-            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
-        <span t-field="product.recurrent_payment_frequency"/>)
+        (<t
+                    t-esc="line.price_unit / product_tmpl.recurrent_payment_amount_ratio()"
+                    t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
+                />
+        <span t-field="product.recurrent_payment_frequency" />)
         <p t-if="product_tmpl.is_deposit">Deposit</p>
       </t>
     </xpath>
   </template>
 
-  <template id="product_configurator_configure_optional_products"
-            inherit_id="sale.product_configurator_configure_optional_products">
+  <template
+        id="product_configurator_configure_optional_products"
+        inherit_id="sale.product_configurator_configure_optional_products"
+    >
 
     <xpath expr="//*[hasclass('td-product_name')]//strong" position="after">
-      <t t-set="product_tmpl" t-value="product_variant.product_tmpl_id"/>
+      <t t-set="product_tmpl" t-value="product_variant.product_tmpl_id" />
       <t t-if="product_tmpl.has_recurrent_payment">
-        (<span class="oe_recurrent_payment_amount" t-att-data-recurrent-payment-ratio="product_tmpl.recurrent_payment_amount_ratio()"><t
-        t-esc="combination_info['price'] / product_tmpl.recurrent_payment_amount_ratio()"
-        t-options="{'widget': 'monetary', 'display_currency': (pricelist or product).currency_id}"/>
-        <span t-field="product_variant.recurrent_payment_frequency"/>
+        (<span
+                    class="oe_recurrent_payment_amount"
+                    t-att-data-recurrent-payment-ratio="product_tmpl.recurrent_payment_amount_ratio()"
+                ><t
+                        t-esc="combination_info['price'] / product_tmpl.recurrent_payment_amount_ratio()"
+                        t-options="{'widget': 'monetary', 'display_currency': (pricelist or product).currency_id}"
+                    />
+        <span t-field="product_variant.recurrent_payment_frequency" />
         </span>)
       </t>
-      <t t-if="product_tmpl.has_recurrent_payment and product_tmpl.is_deposit"><strong> - Deposit</strong></t>
+      <t t-if="product_tmpl.has_recurrent_payment and product_tmpl.is_deposit"><strong
+                > - Deposit</strong></t>
     </xpath>
 
   </template>
 
-  <template id="optional_product_items"
-            inherit_id="sale.optional_product_items">
+  <template id="optional_product_items" inherit_id="sale.optional_product_items">
     <xpath expr="//*[hasclass('td-product_name')]//strong" position="after">
-      <t t-set="product_tmpl" t-value="product_variant.product_tmpl_id"/>
+      <t t-set="product_tmpl" t-value="product_variant.product_tmpl_id" />
       <t t-if="product_tmpl.has_recurrent_payment">
-        (<span class="oe_recurrent_payment_amount" t-att-data-recurrent-payment-ratio="product_tmpl.recurrent_payment_amount_ratio()"><t
-        t-esc="combination_info['price'] / product_tmpl.recurrent_payment_amount_ratio()"
-        t-options="{'widget': 'monetary', 'display_currency': (pricelist or product).currency_id}"/>
-        <span t-field="product_variant.recurrent_payment_frequency"/></span>)
+        (<span
+                    class="oe_recurrent_payment_amount"
+                    t-att-data-recurrent-payment-ratio="product_tmpl.recurrent_payment_amount_ratio()"
+                ><t
+                        t-esc="combination_info['price'] / product_tmpl.recurrent_payment_amount_ratio()"
+                        t-options="{'widget': 'monetary', 'display_currency': (pricelist or product).currency_id}"
+                    />
+        <span t-field="product_variant.recurrent_payment_frequency" /></span>)
       </t>
-      <t t-if="product_tmpl.has_recurrent_payment and product_tmpl.is_deposit"><strong> - Deposit</strong></t>
+      <t t-if="product_tmpl.has_recurrent_payment and product_tmpl.is_deposit"><strong
+                > - Deposit</strong></t>
     </xpath>
   </template>
 

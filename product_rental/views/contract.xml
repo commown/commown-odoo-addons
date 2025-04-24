@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <odoo>
 
   <record id="contract_template_form_view" model="ir.ui.view">
@@ -8,12 +8,17 @@
     <field name="arch" type="xml">
 
       <field name="contract_type" position="after">
-        <field name="stock_ownership"/>
+        <field name="stock_ownership" />
       </field>
 
       <xpath expr="//group[@name='group_main']" position="after">
         <group name="contractual_docs">
-          <field name="contractual_documents" widget="many2many_tags" options="{'open': true, 'create': true}" context="{'default_public': True}"/>
+          <field
+                        name="contractual_documents"
+                        widget="many2many_tags"
+                        options="{'open': true, 'create': true}"
+                        context="{'default_public': True}"
+                    />
         </group>
       </xpath>
 
@@ -29,8 +34,10 @@
       </xpath>
 
       <xpath expr="//group[@name='group_legend']" position="inside">
-        <p> <strong>##PRODUCT##</strong> (in the description): mark the rental product template line; substituted by the actual product name</p>
-        <p> <strong>##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name</p>
+        <p> <strong
+                    >##PRODUCT##</strong> (in the description): mark the rental product template line; substituted by the actual product name</p>
+        <p> <strong
+                    >##ACCESSORY##</strong> (in the description): mark the rental accessories template line; substituted by the actual accessory name</p>
       </xpath>
 
     </field>
@@ -43,13 +50,18 @@
     <field name="arch" type="xml">
 
       <field name="partner_id" position="after">
-        <field name="stock_ownership"/>
+        <field name="stock_ownership" />
       </field>
 
       <xpath expr="//*[hasclass('oe_button_box')]" position="inside">
-        <button type="object" name="action_show_analytic_lines"
-                class="oe_stat_button" icon="fa-usd"
-                string="Cost/Revenue" widget="statinfo"/>
+        <button
+                    type="object"
+                    name="action_show_analytic_lines"
+                    class="oe_stat_button"
+                    icon="fa-usd"
+                    string="Cost/Revenue"
+                    widget="statinfo"
+                />
       </xpath>
 
       <xpath expr="//field[@name='recurring_next_date']" position="before">
@@ -60,7 +72,12 @@
 
       <xpath expr="//field[@name='date_end']" position="after">
         <field name="commitment_end_date" />
-        <field name="contractual_documents" widget="many2many_tags" options="{'open': true, 'create': true}" context="{'default_public': True}"/>
+        <field
+                    name="contractual_documents"
+                    widget="many2many_tags"
+                    options="{'open': true, 'create': true}"
+                    context="{'default_public': True}"
+                />
       </xpath>
 
     </field>
@@ -71,13 +88,13 @@
     <field name="model">contract.contract</field>
     <field name="inherit_id" ref="contract.contract_contract_tree_view" />
     <field name="arch" type="xml">
-      <xpath expr="//field[@name='code']" position="replace"></xpath>
-      <xpath expr="//field[@name='journal_id']" position="replace"></xpath>
+      <xpath expr="//field[@name='code']" invisible="1" />
+      <xpath expr="//field[@name='journal_id']" invisible="1" />
       <xpath expr="//tree" position="inside">
-        <field name="date_start"/>
-        <field name="recurring_next_date"/>
-        <field name="commitment_end_date"/>
-        <field name="date_end"/>
+        <field name="date_start" />
+        <field name="recurring_next_date" />
+        <field name="commitment_end_date" />
+        <field name="date_end" />
       </xpath>
     </field>
   </record>

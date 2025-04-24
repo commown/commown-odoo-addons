@@ -1,11 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-  <template id="portal_contract_page" inherit_id="contract.portal_contract_page">
+  <template
+        id="portal_contract_page"
+        inherit_id="contract.portal_contract_page"
+        priority="110"
+    >
 
     <!-- Remove sections we do not want to display -->
-    <xpath expr="//div[@t-if='contract.user_id']" position="replace"></xpath>
-    <xpath expr="//section[hasclass('s_timeline')]" position="replace"></xpath>
+    <xpath expr="//div[@t-if='contract.user_id']" position="replace" />
+    <xpath expr="//section[hasclass('s_timeline')]" position="replace" />
 
     <!-- Add start date and commitment to general information -->
     <xpath expr="//div[@t-if='contract.date_end']" position="before">
@@ -15,7 +19,7 @@
           <strong>Commitment end date</strong>
         </div>
         <div class="col-12 col-sm-8">
-          <span t-field="contract.commitment_period_number"/>
+          <span t-field="contract.commitment_period_number" />
           <t t-if="contract.recurring_rule_type=='daily'">Day(s)</t>
           <t t-if="contract.recurring_rule_type=='weekly'">Week(s)</t>
           <t t-if="contract.recurring_rule_type=='monthly'">Month(s)</t>
@@ -23,7 +27,10 @@
           <t t-if="contract.recurring_rule_type=='quarterly'">Quarter(s)</t>
           <t t-if="contract.recurring_rule_type=='semesterly'">Semester(s)</t>
           <t t-if="contract.recurring_rule_type=='yearly'">Year(s)</t>
-          (<span t-field="contract.commitment_end_date" t-options='{"widget": "date"}'/>)
+          (<span
+                        t-field="contract.commitment_end_date"
+                        t-options='{"widget": "date"}'
+                    />)
         </div>
       </div>
     </xpath>

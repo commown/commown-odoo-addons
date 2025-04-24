@@ -138,8 +138,10 @@ class Contract(models.Model):
             )
             if not force and active_invlines:
                 raise ValidationError(
-                    "There are invoices past the new next recurring date."
-                    " Please remove or cancel them before."
+                    _(
+                        "There are invoices past the new next recurring date."
+                        " Please remove or cancel them before."
+                    )
                 )
 
             inv_dates = (
@@ -195,7 +197,7 @@ class Contract(models.Model):
         if "contractual_documents" not in self.NO_SYNC:
             self.NO_SYNC.append("contractual_documents")
 
-        super()._onchange_contract_template_id()
+        res = super()._onchange_contract_template_id()
 
         docs = self.mapped("contract_template_id.contractual_documents")
         if self.partner_id.lang:
@@ -205,6 +207,8 @@ class Contract(models.Model):
         contract_descr = self.env.context.get("contract_descr")
         if contract_descr:
             self._modify_from_description(contract_descr)
+
+        return res
 
     def _modify_from_description(self, contract_descr):
         """Implement a commown-specific way to generate the contracts from a sale:
@@ -314,8 +318,11 @@ class Contract(models.Model):
 
         if _raise and len(clines) != 1:
             raise ValidationError(
-                _("Contract %s (id %d) has %d main rental service lines.")
-                % (self.name, self.id, len(clines))
+                _(
+                    "Contract %(name)s (id %(c_id)d) has %(lines_num)d main rental"
+                    "service lines."
+                )
+                % {"name": self.name, "c_id": self.id, "lines_num": len(clines)}
             )
 
         return clines
@@ -335,10 +342,15 @@ class Contract(models.Model):
             and services.property_contract_template_id != self.contract_template_id
         ):
             msg = _(
-                "Contract %s (id %d) has a main rental service"
-                " with an incoherent contract model %s"
+                "Contract %(name)s (id %(c_id)d) has a main rental service"
+                " with an incoherent contract model %(tmpl_name)s"
             )
             raise ValidationError(
-                msg % (self.name, self.id, services.property_contract_template_id.name)
+                msg
+                % {
+                    "name": self.name,
+                    "c_id": self.id,
+                    "tmpl_name": services.property_contract_template_id.name,
+                }
             )
         return services
