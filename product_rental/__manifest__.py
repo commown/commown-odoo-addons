@@ -29,4 +29,7 @@
     ],
     "demo": ["demo/data.xml"],
     "installable": True,
+    "assets": {
+        "web.assets_frontend": ["/product_rental/static/src/css/website_sale.css"]
+    },
 }
