@@ -12,10 +12,16 @@ class PortalIrRulesTC:
         return self.env[entities._name].with_user(user).search([]) & entities
 
     def _give_portal_access(self, partner):
+        partner.ensure_one()
         model = self.env["portal.wizard"].with_context(active_ids=[partner.id])
         portal_wizard = model.sudo().create({})
-        portal_wizard.user_ids.update({"in_portal": True})
-        portal_wizard.action_apply()
+
+        non_portal_users = portal_wizard.user_ids.filtered_domain(
+            [("is_portal", "=", False)]
+        )
+        if non_portal_users:
+            non_portal_users.action_grant_access()
+
         self.assertTrue(partner.user_ids)
         return partner.user_ids[0]
 
