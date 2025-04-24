@@ -17,7 +17,7 @@
   </template>
 
   <template id="products_item" inherit_id="website_sale.products_item">
-    <xpath expr="//div[@itemprop='offers']/b" position="after">
+    <xpath expr="//div[@itemprop='offers']/t" position="after">
       <b t-if="product.has_recurrent_payment">
         <span>From</span>
         <span
@@ -39,7 +39,7 @@
 
   <template id="product_price" inherit_id="website_sale.product_price">
 
-    <xpath expr="//*[hasclass('oe_price')]//ancestor::div" position="attributes">
+    <xpath expr="//div[@itemprop='offers']" position="attributes">
       <attribute
                 name="t-att-class"
                 separator=" "
@@ -47,7 +47,7 @@
             />
     </xpath>
 
-    <xpath expr="//*[hasclass('oe_price')]//ancestor::h4//*[1]" position="before">
+    <xpath expr="//*[hasclass('oe_price')]//ancestor::h3//*[1]" position="before">
       <b
                 class="initial_deposit_title"
                 t-if="product.has_recurrent_payment and product.is_deposit"
@@ -84,11 +84,13 @@
   </template>
 
 
-  <template id="variants" inherit_id="sale.variants">
+  <template id="variants" inherit_id="sale.badge_extra_price">
 
     <!-- Hide spans containing the extra prices in both select and radio inputs -->
-    <xpath expr="//span[@t-if='value_id.price_extra']" t-if="False" />
-    <xpath expr="//span[@t-if='value_id.price_extra']" t-if="False" />
+    <xpath
+            expr="//*[hasclass('sign_badge_price_extra')]//ancestor::span"
+            t-if="False"
+        />
 
   </template>
 
@@ -133,7 +135,7 @@
 
   <template
         id="product_configurator_configure_optional_products"
-        inherit_id="sale.product_configurator_configure_optional_products"
+        inherit_id="sale_product_configurator.configure_optional_products"
     >
 
     <xpath expr="//*[hasclass('td-product_name')]//strong" position="after">
@@ -155,7 +157,10 @@
 
   </template>
 
-  <template id="optional_product_items" inherit_id="sale.optional_product_items">
+  <template
+        id="optional_product_items"
+        inherit_id="sale_product_configurator.optional_product_items"
+    >
     <xpath expr="//*[hasclass('td-product_name')]//strong" position="after">
       <t t-set="product_tmpl" t-value="product_variant.product_tmpl_id" />
       <t t-if="product_tmpl.has_recurrent_payment">
