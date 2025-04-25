@@ -27,13 +27,7 @@ class PortalIrRulesTC:
 
     def give_instance_to(self, partner):
         "By default, make partner follow the test object. May be overriden"
-        self.env["mail.followers"].create(
-            {
-                "res_id": self.obj.id,
-                "res_model": self.obj._name,
-                "partner_id": partner.id,
-            }
-        )
+        self.obj.message_subscribe([partner.id])
 
     def test_directly_accessible_object(self):
         """
