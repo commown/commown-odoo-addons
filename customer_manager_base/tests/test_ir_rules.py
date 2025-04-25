@@ -8,12 +8,19 @@ class PortalIrRulesTC:
     children = None  # To be overriden by children of the tested object, if any
     allowed_group_ref = None  # To be overriden by xml ref of the allowed customer group
 
+    @classmethod
+    def check_test_prerequisite(cls, check, msg="Prerequisite failed"):
+        "Check the `check` argument is truthy or raise a RuntimeError with give message"
+        if not check:
+            raise RuntimeError(msg)
+
     def seen(self, entities, user):
         return self.env[entities._name].with_user(user).search([]) & entities
 
-    def _give_portal_access(self, partner):
+    @classmethod
+    def _give_portal_access(cls, partner):
         partner.ensure_one()
-        model = self.env["portal.wizard"].with_context(active_ids=[partner.id])
+        model = cls.env["portal.wizard"].with_context(active_ids=[partner.id])
         portal_wizard = model.sudo().create({})
 
         non_portal_users = portal_wizard.user_ids.filtered_domain(
@@ -22,7 +29,8 @@ class PortalIrRulesTC:
         if non_portal_users:
             non_portal_users.action_grant_access()
 
-        self.assertTrue(partner.user_ids)
+        cls.check_test_prerequisite(partner.user_ids)
+
         return partner.user_ids[0]
 
     def give_instance_to(self, partner):
@@ -53,8 +61,7 @@ class PortalIrRulesTC:
             self.assertFalse(self.seen(self.children, self.user1))
             self.assertFalse(self.seen(self.children, self.user2))
 
-        customer_grp = self.env.ref(self.allowed_group_ref)
-        customer_grp.users |= self.user2
+        self.customer_grp.users |= self.user2
 
         self.assertFalse(self.seen(self.obj, self.user1))
         self.assertTrue(self.seen(self.obj, self.user2))
@@ -68,20 +75,24 @@ class PortalInvoiceIrRulesTC(PortalIrRulesTC, TransactionCase):
 
     allowed_group_ref = "customer_manager_base.group_customer_accounting"
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         # This move is generated from odoo/addons/account/demo/account_demo.py
-        self.obj = self.env.ref(f"account.{self.env.company.id}_demo_invoice_1")
-        self.children = self.obj.invoice_line_ids
+        cls.obj = cls.env.ref(f"account.{cls.env.company.id}_demo_invoice_1")
+        cls.check_test_prerequisite(cls.obj.partner_id.commercial_partner_id.is_company)
+        cls.children = cls.obj.invoice_line_ids
 
-        partner1 = self.obj.partner_id.child_ids[0]
-        self.user1 = self._give_portal_access(partner1)
+        partner1 = cls.obj.partner_id.child_ids[0]
+        cls.user1 = cls._give_portal_access(partner1)
 
-        partner2 = self.obj.partner_id.child_ids[1]
-        self.user2 = self._give_portal_access(partner2)
+        partner2 = cls.obj.partner_id.child_ids[1]
+        cls.user2 = cls._give_portal_access(partner2)
 
-        self.assertNotIn(partner1, self.obj.message_partner_ids)
-        self.assertNotIn(partner2, self.obj.message_partner_ids)
+        cls.check_test_prerequisite(partner1 not in cls.obj.message_partner_ids)
+        cls.check_test_prerequisite(partner2 not in cls.obj.message_partner_ids)
+
+        cls.customer_grp = cls.env.ref(cls.allowed_group_ref)
 
     def give_instance_to(self, partner):
         """For invoices, we use the partner_id field instead of followers
@@ -95,20 +106,23 @@ class PortalSaleOrderIrRulesTC(PortalIrRulesTC, TransactionCase):
 
     allowed_group_ref = "customer_manager_base.group_customer_purchase"
 
-    def setUp(self):
-        super().setUp()
-        self.obj = self.env.ref("sale.portal_sale_order_1")
-        self.children = self.obj.order_line
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.obj = cls.env.ref("sale.portal_sale_order_1")
+        cls.children = cls.obj.order_line
+        cls.customer_grp = cls.env.ref(cls.allowed_group_ref)
 
-        partner1 = self.obj.partner_id.copy({"email": "email1@example.com"})
-        partner1.parent_id = self.obj.partner_id
-        self.user1 = self._give_portal_access(partner1)
+        cls.obj.partner_id.parent_id = cls.env.ref("base.res_partner_1").id
 
-        partner2 = partner1.copy({"email": "email2@example.com"})
-        self.user2 = self._give_portal_access(partner2)
+        partner1 = cls.obj.partner_id.copy({"email": "test1@example.com"})
+        cls.user1 = cls._give_portal_access(partner1)
 
-        self.assertNotIn(partner1, self.obj.message_partner_ids)
-        self.assertNotIn(partner2, self.obj.message_partner_ids)
+        partner2 = partner1.copy({"email": "test2@example.com"})
+        cls.user2 = cls._give_portal_access(partner2)
+
+        cls.check_test_prerequisite(partner1.commercial_partner_id.is_company)
+        cls.check_test_prerequisite(partner2.commercial_partner_id.is_company)
 
 
 class PortalProjectTaskIrRulesTC(PortalIrRulesTC, TransactionCase):
@@ -116,20 +130,23 @@ class PortalProjectTaskIrRulesTC(PortalIrRulesTC, TransactionCase):
 
     allowed_group_ref = "customer_manager_base.group_customer_it_support"
 
-    def setUp(self):
-        super().setUp()
-        ref = self.env.ref
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        ref = cls.env.ref
+
+        cls.customer_grp = ref(cls.allowed_group_ref)
 
         partner1 = ref("base.partner_demo_portal").copy({"email": "test1@example.com"})
         partner1.parent_id = ref("base.res_partner_1")
-        self.user1 = self._give_portal_access(partner1)
+        cls.user1 = cls._give_portal_access(partner1)
 
         partner2 = partner1.copy({"email": "test2@example.com"})
-        self.user2 = self._give_portal_access(partner2)
+        cls.user2 = cls._give_portal_access(partner2)
 
         project = ref("project.project_project_1")
-        project.portal_visibility_extend_to_group_ids |= ref(self.allowed_group_ref)
-        self.obj = self.env["project.task"].create(
+        project.portal_visibility_extend_to_group_ids |= ref(cls.allowed_group_ref)
+        cls.obj = cls.env["project.task"].create(
             {
                 "name": "test task",
                 "project_id": project.id,
@@ -137,8 +154,8 @@ class PortalProjectTaskIrRulesTC(PortalIrRulesTC, TransactionCase):
             }
         )
 
-        self.assertNotIn(partner1, self.obj.message_partner_ids)
-        self.assertNotIn(partner2, self.obj.message_partner_ids)
+        cls.check_test_prerequisite(partner1 not in cls.obj.message_partner_ids)
+        cls.check_test_prerequisite(partner2 not in cls.obj.message_partner_ids)
 
     def test_allow_all_portal_when_no_group_restriction(self):
         self.obj.project_id.portal_visibility_extend_to_group_ids = False
@@ -149,6 +166,5 @@ class PortalProjectTaskIrRulesTC(PortalIrRulesTC, TransactionCase):
         "Project with privacy_visibility!=portal should not be affected by new rules"
 
         self.obj.project_id.privacy_visibility = "employees"
-        customer_grp = self.env.ref(self.allowed_group_ref)
-        customer_grp.users |= self.user1
+        self.customer_grp.users |= self.user1
         self.assertFalse(self.seen(self.obj, self.user1))
