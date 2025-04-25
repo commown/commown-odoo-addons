@@ -1,11 +1,10 @@
 <odoo>
   <record model="ir.rule" id="rule_device_assignment_portal">
-    <field name="name">Device Assignment: Portal users see only their active assignments</field>
+    <field name="name">Device Assignment: Portal users see only their assignments</field>
     <field name="model_id" ref="model_customer_device_manager_device_assignment"/>
     <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
     <field name="domain_force">
         [
-            ('active', '=', True),
             ('partner_id', 'child_of', user.commercial_partner_id.id),
         ]
     </field>
@@ -16,12 +15,11 @@
   </record>
 
   <record model="ir.rule" id="rule_device_assignment_assigner">
-    <field name="name">Device Assignment: Device Assigners see only their active assignments</field>
+    <field name="name">Device Assignment: Device Assigners see only their assignments with the device at customer</field>
     <field name="model_id" ref="model_customer_device_manager_device_assignment"/>
     <field name="groups" eval="[(4, ref('customer_device_manager.group_customer_device_assigner'))]"/>
     <field name="domain_force">
         [
-            ('active', '=', True),
             ('partner_id', 'child_of', user.commercial_partner_id.id),
         ]
     </field>
@@ -54,22 +52,6 @@
     <field name="domain_force">
         [
             ('lot_ids.device_assignment_ids.partner_id', 'child_of', user.commercial_partner_id.id),
-            ('lot_ids.device_assignment_ids.active', '=', True),
-        ]
-    </field>
-    <field name="perm_read" eval="True"/>
-    <field name="perm_write" eval="False"/>
-    <field name="perm_create" eval="False"/>
-    <field name="perm_unlink" eval="False"/>
-  </record>
-
-  <record model="ir.rule" id="rule_device_assignment_internal_user">
-    <field name="name">Device Assignment: Internal users see only active assignments</field>
-    <field name="model_id" ref="model_customer_device_manager_device_assignment"/>
-    <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-    <field name="domain_force">
-        [
-            ('active', '=', True),
         ]
     </field>
     <field name="perm_read" eval="True"/>
@@ -89,21 +71,6 @@
     </field>
     <field name="perm_read" eval="True"/>
     <field name="perm_write" eval="False"/>
-    <field name="perm_create" eval="False"/>
-    <field name="perm_unlink" eval="False"/>
-  </record>
-
-  <record model="ir.rule" id="rule_device_assignment_history_manager">
-    <field name="name">Device Assignment History: User manager can see history line and can modify it</field>
-    <field name="model_id" ref="model_customer_device_manager_device_assignment_history"/>
-    <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-    <field name="domain_force">
-        [
-            ('assignment_id.active', '=', True),
-        ]
-    </field>
-    <field name="perm_read" eval="True"/>
-    <field name="perm_write" eval="True"/>
     <field name="perm_create" eval="False"/>
     <field name="perm_unlink" eval="False"/>
   </record>
