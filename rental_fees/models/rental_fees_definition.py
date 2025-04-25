@@ -231,9 +231,10 @@ class RentalFeesDefinition(models.Model):
                 ("move_ids.move_line_ids.lot_id", "=", device.id),
             ]
         )
+
         # PO line price is indicative, use the mean price of all invoice lines
         # concerning this device's product
-        inv_lines = po_line.invoice_lines.filtered(
+        inv_lines = po_line.mapped("invoice_lines").filtered(
             lambda il: (
                 il.invoice_id.state != "cancel" and il.product_id == device.product_id
             )
