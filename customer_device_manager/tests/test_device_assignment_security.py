@@ -117,16 +117,11 @@ class TestDeviceAssignmentSecurity(SavepointCase):
 
     def test_rule_device_assignment_portal(self):
         """
-        Portal users should only read active assignments of their company, and should not be able to update them.
+        Portal users should only read assignments of their company, and should not be able to update them.
         """
         self.assertFalse(self.can_see_assignment(self.portal_user_b2c))
         self.assertTrue(self.can_see_assignment(self.portal_user_insider))
         self.assertFalse(self.can_see_assignment(self.portal_user_outsider))
-
-        self.assignment.active = False
-        self.assertFalse(self.can_see_assignment(self.portal_user_insider))
-        self.assignment.active = True
-        self.assertTrue(self.can_see_assignment(self.portal_user_insider))
 
         fresh_portal_user_insider = self.create_user(
             "login-fresh-portal", self.group_portal, parent_id=self.company.id
@@ -137,16 +132,11 @@ class TestDeviceAssignmentSecurity(SavepointCase):
 
     def test_rule_device_assignment_assigner(self):
         """
-        Device assigners should only read active assignments of their company, and should be able to update them.
+        Device assigners should only read assignments of their company, and should be able to update the ones 'at_customer'.
         """
         self.assertFalse(self.can_see_assignment(self.assigner_user_b2c))
         self.assertTrue(self.can_see_assignment(self.assigner_user_insider))
         self.assertFalse(self.can_see_assignment(self.assigner_user_outsider))
-
-        self.assignment.active = False
-        self.assertFalse(self.can_see_assignment(self.assigner_user_insider))
-        self.assignment.active = True
-        self.assertTrue(self.can_see_assignment(self.assigner_user_insider))
 
         self.update_assignment(self.assigner_user_insider, self.partner2)
 
@@ -159,17 +149,18 @@ class TestDeviceAssignmentSecurity(SavepointCase):
         with self.assertRaises(AccessError):
             self.update_assignment(fresh_assigner_user_outsider, self.partner2)
 
-    def test_rule_device_assignment_internal_user(self):
+        self.assignment.device_location = "at_commown"
+        with self.assertRaises(AccessError):
+            self.update_assignment(self.assigner_user_insider, self.partner2)
+
+    def test_access_device_assignment_internal_user(self):
         """
-        Internal users should be able to read all active assignments, but not update them.
+        Internal users should be able to read all assignments, but not update them.
         """
         self.assertTrue(self.can_see_assignment(self.internal_user))
 
         with self.assertRaises(AccessError):
             self.update_assignment(self.internal_user, self.partner2)
-
-        self.assignment.active = False
-        self.assertFalse(self.can_see_assignment(self.internal_user))
 
     def test_rule_device_assignment_manager(self):
         "User managers should be able to update and create all assignments"

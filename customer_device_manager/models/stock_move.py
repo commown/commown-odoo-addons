@@ -30,7 +30,7 @@ class StockMove(models.Model):
             [
                 ("device_id", "in", lots.ids),
                 ("partner_id", "child_of", partner.id),
-                ("active", "=", True),
+                ("device_location", "=", "at_customer"),
             ]
         )
-        assignments.update({"active": False})
+        assignments.update({"device_location": "at_commown"})

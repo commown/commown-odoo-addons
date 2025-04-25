@@ -20,6 +20,7 @@
     <field name="groups" eval="[(4, ref('customer_device_manager.group_customer_device_assigner'))]"/>
     <field name="domain_force">
         [
+            ('device_location', '=', 'at_customer'),
             ('partner_id', 'child_of', user.commercial_partner_id.id),
         ]
     </field>
