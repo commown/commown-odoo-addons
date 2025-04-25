@@ -76,17 +76,21 @@
               <field name="product_id" class="oe_inline" readonly="True" options='{"no_open": True}'/>
             </h1>
           </div>
-          <group name="main">
-            <field name="device_name"/>
-            <field name="contract_name"/>
-            <field name="partner_id" context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"/>
-            <field name="assignment_notes" style="word-break: break-word;"/>
-            <field name="history_ids">
-              <tree>
-                <field name="date"/>
-                <field name="partner_id"/>
-              </tree>
-            </field>
+          <group>
+            <group name="main">
+              <field name="device_name"/>
+              <field name="contract_name"/>
+              <field name="partner_id" context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"/>
+            </group>
+            <group name="history">
+              <field name="assignment_notes" style="word-break: break-word;"/>
+              <field name="history_ids">
+                <tree>
+                  <field name="date"/>
+                  <field name="partner_id"/>
+                </tree>
+              </field>
+            </group>
           </group>
         </sheet>
       </form>
@@ -100,7 +104,7 @@
       <tree string="Assignment History">
         <field name="date"/>
         <field name="assignment_id"/>
-        <field name="device_status"/>
+        <field name="device_location"/>
       </tree>
     </field>
   </record>
@@ -115,6 +119,7 @@
             <field name="date"/>
             <field name="partner_id" context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"/>
             <field name="assignment_id"/>
+            <field name="device_location"/>
           </group>
         </sheet>
       </form>
@@ -130,6 +135,10 @@
         <field name="partner_id" string="User"/>
         <field name="product_id" string="Product"/>
         <field name="contract_name" string="Contract"/>
+        <filter string="At Customer" name="at_customer"
+        domain="[('device_location', '=', 'at_customer')]"/>
+        <filter string="At Commown" name="at_commown"
+              domain="[('device_location', '=', 'at_commown')]"/>
       </search>
     </field>
   </record>
@@ -142,17 +151,15 @@
         <field name="partner_id"/>
         <field name="assignment_id"/>
         <field name="date"/>
-      <filter string="Current Assignments" name="current_assignments"
-              domain="[('is_current_assignment', '=', True)]"/>
-      <filter string="In House Devices" name="in_house_devices"
-              domain="[('device_status', '=', 'in_house')]"/>
-      <filter string="Returned Devices" name="returned_devices"
-              domain="[('device_status', '=', 'returned')]"/>
+      <filter string="At Customer" name="at_customer"
+              domain="[('device_location', '=', 'at_customer')]"/>
+      <filter string="At Commown" name="at_commown"
+              domain="[('device_location', '=', 'at_commown')]"/>
         <group expand="0" string="Group By">
           <filter name="group_partner" string="User" context="{'group_by': 'partner_id'}"/>
           <filter name="group_assignment" string="Serial Number / IMEI" context="{'group_by': 'assignment_id'}"/>
           <filter name="group_date" string="Date" context="{'group_by': 'date'}"/>
-          <filter name="group_device_status" string="Device Status" context="{'group_by': 'device_status'}"/>
+          <filter name="group_device_location" string="Device Location" context="{'group_by': 'device_location'}"/>
         </group>
       </search>
     </field>
@@ -163,6 +170,8 @@
     <field name="res_model">customer_device_manager.device_assignment</field>
     <field name="view_mode">kanban,tree,form</field>
     <field name="search_view_id" ref="customer_device_manager.view_device_assignment_search"/>
+    <field name="context">{'search_default_at_customer': 1}
+    </field>
   </record>
 
   <record id="action_device_assignment_view_kanban" model="ir.actions.act_window.view">
@@ -184,7 +193,7 @@
     <field name="res_model">customer_device_manager.device_assignment_history</field>
     <field name="view_mode">tree,form</field>
     <field name="search_view_id" ref="view_device_assignment_history_search"/>
-    <field name="context">{'group_by': ['partner_id']}</field>
+    <field name="context">{'search_default_group_partner': 1, 'search_default_at_customer': 1}</field>
   </record>
 
   <menuitem id="menu_device_assignment_parent"

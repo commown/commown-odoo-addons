@@ -42,7 +42,14 @@ class DeviceAssignment(models.Model):
         string="Notes",
     )
 
-    active = fields.Boolean("Active", default=True)
+    device_location = fields.Selection(
+        [
+            ("at_customer", "At Customer"),
+            ("at_commown", "At Commown"),
+        ],
+        string="Device Location",
+        default="at_customer",
+    )
 
     history_ids = fields.One2many(
         "customer_device_manager.device_assignment_history",

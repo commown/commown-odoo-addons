@@ -29,7 +29,9 @@ class DeviceAssignmentBaseTC(SavepointCase):
             }
         )
 
-    def create_assignment(self, partner=None, date=None, device_name=None, active=True):
+    def create_assignment(
+        self, partner=None, date=None, device_name=None, device_location="at_customer"
+    ):
         """Helper method to create an assignment"""
         if partner is None:
             partner = self.partner1
@@ -41,7 +43,7 @@ class DeviceAssignmentBaseTC(SavepointCase):
             "device_id": self.lot.id,
             "partner_id": partner.id,
             "assignment_date": date,
-            "active": active,
+            "device_location": device_location,
         }
 
         if device_name:
@@ -76,15 +78,6 @@ class DeviceAssignmentHistoryTC(DeviceAssignmentBaseTC):
         )
 
         self.history_record = self.assignment.history_ids[0]
-
-    def test_device_status_computation(self):
-        self.assertEqual(self.history_record.device_status, "in_house")
-
-        self.assignment.active = False
-        self.assertEqual(self.history_record.device_status, "returned")
-
-        self.assignment.active = True
-        self.assertEqual(self.history_record.device_status, "in_house")
 
     def test_name_get_method(self):
         """Test the name_get method of history records"""

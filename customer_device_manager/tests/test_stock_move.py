@@ -86,7 +86,7 @@ class StockMoveTC(SavepointCase):
         self.contract.send_devices(self.lot, {}, do_transfer=True)
         assignment = self.get_assignments(self.lot, self.company)
         self.assertEqual(len(assignment), 1)
-        self.assertTrue(assignment.active)
+        self.assertEqual(assignment.device_location, "at_customer")
 
         self.assertEqual(
             len(self.get_visible_assignments(self.lot, self.customer_employee)), 1
@@ -115,9 +115,4 @@ class StockMoveTC(SavepointCase):
         loc_to_check = self.env.ref("commown_devices.stock_location_devices_to_check")
         self.contract.receive_devices(self.lot, {}, loc_to_check, do_transfer=True)
 
-        self.assertFalse(assignment.active)
-
-        self.assertFalse(self.get_visible_assignments(self.lot, self.customer_employee))
-        self.assertFalse(
-            self.get_visible_assignments(self.lot, self.customer_device_assigner)
-        )
+        self.assertEqual(assignment.device_location, "at_commown")
