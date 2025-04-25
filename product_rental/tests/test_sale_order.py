@@ -60,8 +60,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                 "price_unit": [25.0, 1.5],
                 "quantity": [1, 1],
                 "sale_order_line_id.product_id.name": ["Fairphone Premium", "headset"],
-                "analytic_account_id.name": [c1.name],
-                "analytic_account_id.partner_id": c1.partner_id,
+                "contract_id.group_id.name": [c1.name],
+                "contract_id.group_id.partner_id": c1.partner_id,
             },
         )
 
@@ -85,8 +85,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                     "keyboard",
                     "keyboard deluxe",
                 ],
-                "analytic_account_id.name": [c2.name],
-                "analytic_account_id.partner_id": c2.partner_id,
+                "contract_id.group_id.name": [c2.name],
+                "contract_id.group_id.partner_id": c2.partner_id,
             },
         )
 
@@ -100,8 +100,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                 "price_unit": [60.0, 15.0],
                 "quantity": [1, 1],
                 "sale_order_line_id.product_id.name": ["PC", "screen"],
-                "analytic_account_id.name": [c3.name],
-                "analytic_account_id.partner_id": c3.partner_id,
+                "contract_id.group_id.name": [c3.name],
+                "contract_id.group_id.partner_id": c3.partner_id,
             },
         )
 
@@ -118,8 +118,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                     "GS Headset",
                     "serenity level services",
                 ],
-                "analytic_account_id.name": [c4.name],
-                "analytic_account_id.partner_id": c4.partner_id,
+                "contract_id.group_id.name": [c4.name],
+                "contract_id.group_id.partner_id": c4.partner_id,
             },
         )
 
@@ -133,8 +133,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                 "price_unit": [20.0, 15.0],
                 "quantity": [1, 2],
                 "sale_order_line_id.product_id.name": ["FP2", "screen"],
-                "analytic_account_id.name": [c5.name],
-                "analytic_account_id.partner_id": c5.partner_id,
+                "contract_id.group_id.name": [c5.name],
+                "contract_id.group_id.partner_id": c5.partner_id,
             },
         )
 

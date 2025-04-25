@@ -1,7 +1,7 @@
 import logging
 from collections import defaultdict
 
-from odoo import api, models
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
@@ -150,7 +150,7 @@ class ProductRentalSaleOrder(models.Model):
 
     def _add_analytic_account(self, contract):
         """Create an analytic account with the same name and partner as the
-        given contract and attach it to its lines.
+        given contract and attach it to the contract.
         """
         aa = self.env["account.analytic.account"].create(
             {
@@ -158,7 +158,7 @@ class ProductRentalSaleOrder(models.Model):
                 "partner_id": contract.partner_id.id,
             }
         )
-        contract.contract_line_ids.update({"analytic_account_id": aa.id})
+        contract.group_id = aa
 
     def action_create_contract(self):
         contracts = self.env["contract.contract"]

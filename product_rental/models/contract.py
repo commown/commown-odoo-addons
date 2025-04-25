@@ -229,13 +229,12 @@ class Contract(models.Model):
         """
         so_line = contract_descr["so_line"]  # main product so line
         order = so_line.order_id
-        aaccount = order.analytic_account_id and order.analytic_account_id
+        self.group_id = order.analytic_account_id and order.analytic_account_id
 
         self.contract_line_ids.update({"recurring_next_date": NO_DATE})
         self.contract_line_ids.update(
             {
                 "date_start": NO_DATE,
-                "analytic_account_id": aaccount.id,
                 "sale_order_line_id": so_line.id,
             }
         )
@@ -277,9 +276,7 @@ class Contract(models.Model):
 
     def action_show_analytic_lines(self):
         self.ensure_one()
-        account = self.mapped("contract_line_ids.analytic_account_id").filtered(
-            lambda acc: acc.name == self.name
-        )
+        account = self.group_id.filtered(lambda acc: acc.name == self.name)
         if account:
             return {
                 "name": _("Cost/Revenue"),
