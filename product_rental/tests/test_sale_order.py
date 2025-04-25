@@ -1,6 +1,6 @@
 from mock import patch
 
-from odoo.tests.common import at_install, post_install
+from odoo.tests.common import tagged
 
 from odoo.addons.payment.models.payment_acquirer import PaymentTransaction
 
@@ -13,8 +13,7 @@ def fake_s2s_do_transaction(self, **kwargs):
     return True
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class SaleOrderContractGenerationTC(RentalSaleOrderTC):
     def assert_contract_lines_attributes_equal(self, contract, value_dict):
         for attr, value in value_dict.items():
