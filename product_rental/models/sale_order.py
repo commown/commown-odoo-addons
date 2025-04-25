@@ -152,10 +152,13 @@ class ProductRentalSaleOrder(models.Model):
         """Create an analytic account with the same name and partner as the
         given contract and attach it to the contract.
         """
+        company = contract.company_id
         aa = self.env["account.analytic.account"].create(
             {
                 "name": contract.name,
+                "company_id": company.id,
                 "partner_id": contract.partner_id.id,
+                "plan_id": company.analytic_plan_id.id,
             }
         )
         contract.group_id = aa
