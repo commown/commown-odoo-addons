@@ -76,7 +76,8 @@ class PortalInvoiceIrRulesTC(PortalIrRulesTC, TransactionCase):
 
     def setUp(self):
         super().setUp()
-        self.obj = self.env.ref("l10n_generic_coa.demo_invoice_1")
+        # This move is generated from odoo/addons/account/demo/account_demo.py
+        self.obj = self.env.ref(f"account.{self.env.company.id}_demo_invoice_1")
         self.children = self.obj.invoice_line_ids
 
         partner1 = self.obj.partner_id.child_ids[0]
