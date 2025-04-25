@@ -105,11 +105,11 @@ class PortalSaleOrderIrRulesTC(PortalIrRulesTC, TransactionCase):
         self.obj = self.env.ref("sale.portal_sale_order_1")
         self.children = self.obj.order_line
 
-        partner1 = self.obj.partner_id
-        partner1.parent_id = self.env.ref("base.res_partner_1")
+        partner1 = self.obj.partner_id.copy({"email": "email1@example.com"})
+        partner1.parent_id = self.obj.partner_id
         self.user1 = self._give_portal_access(partner1)
 
-        partner2 = partner1.copy()
+        partner2 = partner1.copy({"email": "email2@example.com"})
         self.user2 = self._give_portal_access(partner2)
 
         self.assertNotIn(partner1, self.obj.message_partner_ids)
