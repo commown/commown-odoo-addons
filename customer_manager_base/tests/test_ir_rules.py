@@ -35,8 +35,11 @@ class PortalIrRulesTC:
             }
         )
 
-    def test_directly_owned_object(self):
-        "Portal users who follow the object directly must have read access to it"
+    def test_directly_accessible_object(self):
+        """
+        Portal users who follow (task/sale) or own (invoices) the object directly
+        must have read access to it
+        """
         self.assertFalse(self.seen(self.obj, self.user1))
         if self.children:
             self.assertFalse(self.seen(self.children, self.user1))
