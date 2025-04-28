@@ -1,1 +1,1 @@
-* Florent Cayré <florent@commown.fr> (https://commown.coop)
+* Florent Cayré <florent@commown.coop> (https://commown.coop)
