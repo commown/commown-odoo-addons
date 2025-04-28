@@ -1,3 +1,6 @@
 # generated from manifests external_dependencies
+coreapi
+hal_codec
 iso8601
+phonenumbers
 requests_toolbelt

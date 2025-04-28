@@ -2,45 +2,49 @@ import logging
 import re
 from base64 import b64encode
 
-from iso8601 import parse_date
-import requests
-import phonenumbers as pn
 import coreapi
+import phonenumbers as pn
+import requests
 from hal_codec import HALCodec
+from iso8601 import parse_date
 
-
-SLIMPAY_FORBIDEN_CHARS_RE = re.compile(r'[0-9@/\\]')
+SLIMPAY_FORBIDEN_CHARS_RE = re.compile(r"[0-9@/\\]")
+HTTP_TIMEOUT = 10
 
 _logger = logging.getLogger(__name__)
 
 
 def get_token(api_url, app_id, app_secret):
-    auth = b64encode(b':'.join((bytes(app_id, 'utf-8'),
-                                bytes(app_secret, 'utf-8'))))
+    auth = b64encode(b":".join((bytes(app_id, "utf-8"), bytes(app_secret, "utf-8"))))
     resp = requests.post(
-        '%s/oauth/token' % api_url,
-        headers={'Accept': 'application/json',
-                 'Authorization': 'Basic %s' % auth.decode('utf-8'),
-                 'Content-Type': 'application/x-www-form-urlencoded'},
-        data={'grant_type': 'client_credentials', 'scope': 'api'})
+        "%s/oauth/token" % api_url,
+        headers={
+            "Accept": "application/json",
+            "Authorization": "Basic %s" % auth.decode("utf-8"),
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        data={"grant_type": "client_credentials", "scope": "api"},
+        timeout=HTTP_TIMEOUT,
+    )
     resp.raise_for_status()
-    return resp.json()['access_token']
+    return resp.json()["access_token"]
 
 
 def get_client(api_url, app_id, app_secret, **kwargs):
     token = get_token(api_url, app_id, app_secret)
-    _logger.debug('Got token %s', token)
+    _logger.debug("Got token %s", token)
     transport = coreapi.transports.HTTPTransport(
-        headers={'Authorization': 'Bearer %s' % token})
+        headers={"Authorization": "Bearer %s" % token}
+    )
     codec = HALCodec()
     return coreapi.Client(decoders=[codec], transports=[transport])
 
 
 def _signed_date(mandate):
-    return parse_date(mandate['dateSigned'])
+    return parse_date(mandate["dateSigned"])
 
 
-def partner_mobile_phone(partner, fields=('phone', 'mobile')):
+def partner_mobile_phone(partner, fields=("phone", "mobile")):
     """If possible, supply a valid mobile phone number to Slimpay, to
     simplify end-user's life. If found, return it E164 formatted.
 
@@ -49,7 +53,7 @@ def partner_mobile_phone(partner, fields=('phone', 'mobile')):
     was found, use France as a default (slimpay is mostly a
     french company for the moment).
     """
-    region = partner.country_id.code if partner.country_id.code else 'FR'
+    region = partner.country_id.code if partner.country_id.code else "FR"
 
     for field in fields:
         phone = getattr(partner, field)
@@ -73,7 +77,7 @@ def slimpay_normalize_names(name):
 
     (see https://dev.slimpay.com/hapi/guide/checkout/setting-up-direct-debits)
     """
-    return SLIMPAY_FORBIDEN_CHARS_RE.sub('', name or '')
+    return SLIMPAY_FORBIDEN_CHARS_RE.sub("", name or "")
 
 
 def subscriber_from_partner(partner):
@@ -88,13 +92,12 @@ def subscriber_from_partner(partner):
             "postalCode": partner.zip or None,
             "city": partner.city or None,
             "country": partner.country_id.code or None,
-        }
+        },
     }
-    return {'reference': partner.id, 'signatory': data}
+    return {"reference": partner.id, "signatory": data}
 
 
 class SlimpayClient(object):
-
     def __init__(self, api_url, creditor, app_id, app_secret):
         self.api_url = api_url
         self.creditor = creditor
@@ -103,17 +106,29 @@ class SlimpayClient(object):
         self._client = get_client(api_url, app_id, app_secret)
         self._root_doc = None
 
-    def action(self, action, short_method_name, validate=False, params=None,
-               doc=None):
+    def action(self, action, short_method_name, validate=False, params=None, doc=None):
         if doc is None:
             doc = self.root_doc
         return self._client.action(
-            doc, self.method_name(short_method_name),
-            action=action, validate=validate, params=params)
+            doc,
+            self.method_name(short_method_name),
+            action=action,
+            validate=validate,
+            params=params,
+        )
 
-    def approval_url(self, tx_ref, order_id, locale, amount, currency,
-                     decimal_places, subscriber, return_url):
-        """ Return the URL a final user must visit to perform a mandate
+    def approval_url(
+        self,
+        tx_ref,
+        order_id,
+        locale,
+        amount,
+        currency,
+        decimal_places,
+        subscriber,
+        return_url,
+    ):
+        """Return the URL a final user must visit to perform a mandate
         signature with a first payment.
 
         `order_id` is the internal order db identifier (an int, e.g. 402)
@@ -124,50 +139,56 @@ class SlimpayClient(object):
         `return_url` is the URL where the user is redirected after checkout.
         """
         params = self._repr_order(
-            tx_ref, order_id, locale, amount, currency, decimal_places,
-            subscriber, return_url)
+            tx_ref,
+            order_id,
+            locale,
+            amount,
+            currency,
+            decimal_places,
+            subscriber,
+            return_url,
+        )
         _logger.debug("slimpay approval_url parameters: %s", params)
-        order = self.action('POST', 'create-orders', params=params)
-        url = order.links[self.method_name('user-approval')].url
+        order = self.action("POST", "create-orders", params=params)
+        url = order.links[self.method_name("user-approval")].url
         _logger.debug("User approval URL is: %s", url)
         return url
 
     def create_payment(self, mandate_ref, amount, currency, label, out=False):
-        """ Create a Slimpay payin or payout depending on `out` boolean value.
+        """Create a Slimpay payin or payout depending on `out` boolean value.
         Returns False if it fails, otherwise Slimpay payment's reference.
         """
         if out:
-            scheme = 'SEPA.CREDIT_TRANSFER'
-            method = 'create-payouts'
+            scheme = "SEPA.CREDIT_TRANSFER"
+            method = "create-payouts"
         else:
-            scheme = 'SEPA.DIRECT_DEBIT.CORE'
-            method = 'create-payins'
+            scheme = "SEPA.DIRECT_DEBIT.CORE"
+            method = "create-payins"
         params = {
-            'creditor': {'reference': self.creditor},
-            'mandate': {'reference': mandate_ref},
-            'label': label,
-            'amount': amount,
-            'currency': currency,
-            'scheme': scheme,
-            'executionDate': None,  # means ASAP
+            "creditor": {"reference": self.creditor},
+            "mandate": {"reference": mandate_ref},
+            "label": label,
+            "amount": amount,
+            "currency": currency,
+            "scheme": scheme,
+            "executionDate": None,  # means ASAP
         }
-        _logger.debug('Payment creation with params: %s (method: %s)',
-                      params, method)
-        response = self.action('POST', method, params=params)
-        _logger.debug('%s reponse: %s', method, response)
-        if response.get('executionStatus') != 'toprocess':
+        _logger.debug("Payment creation with params: %s (method: %s)", params, method)
+        response = self.action("POST", method, params=params)
+        _logger.debug("%s reponse: %s", method, response)
+        if response.get("executionStatus") != "toprocess":
             _logger.error(
-                'Invalid slimpay payment response for transaction:\n %r',
-                response)
+                "Invalid slimpay payment response for transaction:\n %r", response
+            )
             return False
-        return response.get('state') == 'accepted' and response['reference']
+        return response.get("state") == "accepted" and response["reference"]
 
     def get(self, url):
-        """ Expose the raw coreapi `get` method """
+        """Expose the raw coreapi `get` method"""
         return self._client.get(url)
 
     def get_from_doc(self, doc, short_method_name):
-        """ Fetch the `short_method_name` method from given document `doc` """
+        """Fetch the `short_method_name` method from given document `doc`"""
         return self._client.get(doc[self.method_name(short_method_name)].url)
 
     def last_valid_mandate(self, subscriber_ref):
@@ -175,19 +196,23 @@ class SlimpayClient(object):
         search criterias
         (see https://dev.slimpay.com/hapi/reference/mandates#search-mandates)
         """
-        search_params = {'creditorReference': self.creditor,
-                         'subscriberReference': subscriber_ref}
-        doc = self.action('GET', 'search-mandates', params=search_params)
-        if 'mandates' in doc:
+        search_params = {
+            "creditorReference": self.creditor,
+            "subscriberReference": subscriber_ref,
+        }
+        doc = self.action("GET", "search-mandates", params=search_params)
+        if "mandates" in doc:
             ordered_valid = [
-                m for m in sorted(doc['mandates'], key=_signed_date)
-                if m['state'] == 'active']
+                m
+                for m in sorted(doc["mandates"], key=_signed_date)
+                if m["state"] == "active"
+            ]
             if ordered_valid:
                 return ordered_valid[-1]
 
     def method_name(self, name):
-        """ Return complete slimpay API method from its given short name """
-        return 'https://api.slimpay.net/alps#%s' % name
+        """Return complete slimpay API method from its given short name"""
+        return "https://api.slimpay.net/alps#%s" % name
 
     @property
     def root_doc(self):
@@ -197,24 +222,33 @@ class SlimpayClient(object):
 
     def _repr_mandate(self, subscriber):
         return {
-            'type': 'signMandate',
-            'mandate': {
-                'action': 'sign',
-                'paymentScheme': 'SEPA.DIRECT_DEBIT.CORE',
-                'signatory': subscriber['signatory'],
+            "type": "signMandate",
+            "mandate": {
+                "action": "sign",
+                "paymentScheme": "SEPA.DIRECT_DEBIT.CORE",
+                "signatory": subscriber["signatory"],
             },
         }
 
-    def _repr_order(self, tx_ref, order_id, locale, amount, currency,
-                    decimal_places, subscriber, return_url):
+    def _repr_order(
+        self,
+        tx_ref,
+        order_id,
+        locale,
+        amount,
+        currency,
+        decimal_places,
+        subscriber,
+        return_url,
+    ):
         return {
-            'reference': tx_ref,
-            'locale': locale,
-            'creditor': {'reference': self.creditor},
-            'subscriber': {'reference': subscriber['reference']},
-            'started': True,
-            'returnUrl': return_url,
-            'items': [
+            "reference": tx_ref,
+            "locale": locale,
+            "creditor": {"reference": self.creditor},
+            "subscriber": {"reference": subscriber["reference"]},
+            "started": True,
+            "returnUrl": return_url,
+            "items": [
                 self._repr_mandate(subscriber),
                 self._repr_payment(order_id, amount, currency, decimal_places),
             ],
@@ -222,13 +256,13 @@ class SlimpayClient(object):
 
     def _repr_payment(self, label, amount, currency, decimal_places):
         return {
-            'type': 'payment',
-            'action': 'create',
-            'payin': {
-                'scheme': 'SEPA.DIRECT_DEBIT.CORE',
-                'direction': 'IN',
-                'amount': round(amount, decimal_places),
-                'currency': currency,
-                'label': label,
-            }
+            "type": "payment",
+            "action": "create",
+            "payin": {
+                "scheme": "SEPA.DIRECT_DEBIT.CORE",
+                "direction": "IN",
+                "amount": round(amount, decimal_places),
+                "currency": currency,
+                "label": label,
+            },
         }

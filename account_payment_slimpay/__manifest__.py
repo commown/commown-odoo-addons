@@ -6,7 +6,7 @@
     "version": "12.0.1.0.0",
     "development_status": "Beta",
     "category": "Accounting",
-    "website": "https://github.com/OCA/account-payment",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "author": "Commown SCIC, Odoo Community Association (OCA)",
     "maintainers": ["fcayre"],
     "license": "AGPL-3",
