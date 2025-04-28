@@ -45,19 +45,20 @@ def colissimo_resp_ok(json_data, pdf_data):
 
 
 class BaseShippingTC(TransactionCase):
-    def setUp(self):
-        super(BaseShippingTC, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         with open(osp.join(HERE, "fake_label.pdf"), "rb") as fobj:
-            self.fake_label_data = fobj.read()
+            cls.fake_label_data = fobj.read()
 
-        self.shipping_account = self.env["commown.shipping_account"].create(
+        cls.shipping_account = cls.env["commown.shipping_account"].create(
             {
                 "name": "ColissimoPrincipal",
                 "account": "987654",
                 # "password": "xxxxxx",
             }
         )
-        self.parcel_type = self.env.ref("commown_shipping.fp2-outward-ins300")
+        cls.parcel_type = cls.env.ref("commown_shipping.fp2-outward-ins300")
 
     def mock_colissimo_ok(self, mocker):
         fake_meta_data = {"labelResponse": {"parcelNumber": "6X0000000000"}}

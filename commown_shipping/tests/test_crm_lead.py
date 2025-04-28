@@ -28,26 +28,27 @@ class CheckMailMixin:
 
 
 class CrmLeadShippingTC(BaseShippingTC):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.sender = self.env.ref("base.res_partner_2")
-        self.sender.update(
+        cls.sender = cls.env.ref("base.res_partner_2")
+        cls.sender.update(
             {
-                "country_id": self._country("FR"),
+                "country_id": cls._country("FR"),
                 "mobile": "0601020304",
             }
         )
 
-        partner = self.env.ref("base.res_partner_1")
-        product = self.env["product.product"].create(
-            {"name": "Fairphone", "shipping_parcel_type_id": self.parcel_type.id}
+        partner = cls.env.ref("base.res_partner_1")
+        product = cls.env["product.product"].create(
+            {"name": "Fairphone", "shipping_parcel_type_id": cls.parcel_type.id}
         )
-        team = self.env.ref("sales_team.salesteam_website_sales")
-        team.shipping_account_id = self.shipping_account
+        team = cls.env.ref("sales_team.salesteam_website_sales")
+        team.shipping_account_id = cls.shipping_account
         team.delivery_tracking = True
 
-        so = self.env["sale.order"].create(
+        so = cls.env["sale.order"].create(
             {
                 "partner_id": partner.id,
                 "partner_invoice_id": partner.id,
@@ -68,7 +69,7 @@ class CrmLeadShippingTC(BaseShippingTC):
             }
         )
 
-        self.lead = self.env["crm.lead"].create(
+        cls.lead = cls.env["crm.lead"].create(
             {
                 "name": "[SO00000] Fake order",
                 "partner_id": partner.id,
@@ -78,8 +79,9 @@ class CrmLeadShippingTC(BaseShippingTC):
             }
         )
 
-    def _country(self, code):
-        return self.env["res.country"].search([("code", "=", code)])
+    @classmethod
+    def _country(cls, code):
+        return cls.env["res.country"].search([("code", "=", code)])
 
     def test_shipping_data_product_code(self):
         base_kwargs = {
