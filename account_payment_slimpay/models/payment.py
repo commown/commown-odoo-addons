@@ -2,7 +2,7 @@ import logging
 
 from coreapi.exceptions import ErrorMessage
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 
 from .slimpay_utils import SlimpayClient
 
@@ -108,7 +108,6 @@ class SlimpayTransaction(models.Model):
         payment = self.payment_id
         return bool(payment) and payment.payment_type == "outbound"
 
-    @api.multi
     def _label(self):
         """Try hard to return a useful label, using:
         - the 'slimpay_payin_label' of the context, if any
@@ -126,7 +125,6 @@ class SlimpayTransaction(models.Model):
                 return payment.communication
             return self.reference or "TR%d" % self.id
 
-    @api.multi
     def slimpay_s2s_do_transaction(self, **kwargs):
         """Perform a payment through a server to server call using a previously
         signed mandate.
