@@ -43,7 +43,7 @@ class SlimpayPartner(models.Model):
                 try:
                     checker(values[fieldname], **values)
                 except UserError as exc:
-                    errors[fieldname] = exc.name
+                    errors[fieldname] = exc.args[0]
         return errors
 
     @api.constrains("zip")
