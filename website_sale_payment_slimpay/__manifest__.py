@@ -1,13 +1,13 @@
-# Copyright 2020 Commown SCIC SAS (https://commown.coop)
+# Copyright 2020 Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
     "name": "Slimpay online payment and mandate signing for e-commerce",
-    "summary": "Provide your website customers seamless online SEPA mandate signing with Slimpay",
+    "summary": "Provide website customers online SEPA mandate signing with Slimpay",
     "version": "12.0.1.0.0",
     "development_status": "Beta",
     "category": "e-commerce",
-    "website": "https://github.com/OCA/e-commerce",
-    "author": "Commown SCIC SAS, Odoo Community Association (OCA)",
+    "website": "https://github.com/commown/commown-odoo-addons",
+    "author": "Commown SCIC",
     "maintainers": ["fcayre"],
     "license": "AGPL-3",
     "application": False,
