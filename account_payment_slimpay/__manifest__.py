@@ -23,7 +23,6 @@
     ],
     "data": [
         "views/payment_views.xml",
-        "views/payment_slimpay_templates.xml",
         "data/payment_provider.xml",
     ],
 }
