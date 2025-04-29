@@ -11,7 +11,7 @@ class TestShareholderTagsUpdate(TestShareholderRegisterTC):
         cls._add_shares(cls.partner_1, cls.account_porteur, (2018, 3, 12), 2000)
         cls._add_shares(cls.partner_1, cls.account_porteur, (2018, 8, 12), -2000)
         cls._add_shares(cls.partner_2, cls.account_beneficiaire, (2018, 3, 12), 200)
-        cls._add_shares(cls.partner_2, cls.account_soutient, (2018, 8, 12), 200)
+        cls._add_shares(cls.partner_2, cls.account_soutien, (2018, 8, 12), 200)
 
     def update_tags(self, *date_tuple):
         self.env["commown_shareholder_register.shareholder_tags_update"].create(

@@ -28,7 +28,7 @@ class TestShareholderRegisterTC(TransactionCase):
         cls.partner_3 = cls.env["res.partner"].create({"name": "Partner 3"})
 
         cls.account_porteur = cls._create_account("10134000", "Porteur de Projet")
-        cls.account_soutient = cls._create_account("10136000", "Account Soutient")
+        cls.account_soutien = cls._create_account("10136000", "Account Soutien")
         cls.account_beneficiaire = cls._create_account(
             "10135000", "Account Bénéficiaire"
         )
@@ -44,9 +44,9 @@ class TestShareholderRegisterTC(TransactionCase):
             cls.college_A,
             100,
         )
-        cls.cat_soutient = cls._create_category(
-            "Soutient",
-            cls.account_soutient,
+        cls.cat_soutien = cls._create_category(
+            "Soutien",
+            cls.account_soutien,
             cls.college_D,
             5,
         )
