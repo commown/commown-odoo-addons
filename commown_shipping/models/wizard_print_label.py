@@ -33,7 +33,7 @@ class ProjectTaskAbstractPrintLabelWizard(models.AbstractModel):
                     "target": "current",
                 },
                 {"type": "ir.actions.act_window_close"},
-                {"type": "ir.actions.act_view_reload"},
+                {"type": "ir.actions.client", "tag": "soft_reload"},
             ],
         }
 

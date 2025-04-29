@@ -88,13 +88,18 @@ class BaseShippingTC(TransactionCase):
             action_multi = wizard.print_label()
 
         self.assertEqual(action_multi["type"], "ir.actions.act_multi")
+        actions = action_multi["actions"]
         self.assertEqual(
-            [a["type"] for a in action_multi["actions"]],
+            [a["type"] for a in actions],
             [
                 "ir.actions.act_url",
                 "ir.actions.act_window_close",
-                "ir.actions.act_view_reload",
+                "ir.actions.client",
             ],
+        )
+        self.assertEqual(
+            [a for a in actions if a["type"] == "ir.actions.client"][0]["tag"],
+            "soft_reload",
         )
 
         return self._attachment_from_download_action(action_multi["actions"][0])
