@@ -42,7 +42,7 @@ class SlimpayPaymentTC(TransactionCase):
             "partner_id": self.partner.id,
             "partner_type": "customer",
             "journal_id": self.journal.id,
-            "communication": "test payment",
+            "ref": "test payment",
         }
         data.update(kwargs)
         return self.env["account.payment"].create(data)

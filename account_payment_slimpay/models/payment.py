@@ -114,8 +114,7 @@ class SlimpayTransaction(models.Model):
     def _label(self):
         """Try hard to return a useful label, using:
         - the 'slimpay_payin_label' of the context, if any
-        - the `communication` field of the payment found in the
-          transaction's payment, if any
+        - the `ref` field of the payment found in the transaction's payment, if any
         - the `reference` field of current transaction, if not empty
         - 'TR%d' % self.id as a last resort.
         """
@@ -124,8 +123,8 @@ class SlimpayTransaction(models.Model):
             return context["slimpay_payin_label"]
         else:
             payment = self.payment_id
-            if payment and payment.communication:
-                return payment.communication
+            if payment and payment.ref:
+                return payment.ref
             return self.reference or "TR%d" % self.id
 
     def slimpay_s2s_do_transaction(self, **kwargs):
