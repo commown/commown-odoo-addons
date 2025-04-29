@@ -1,3 +1,4 @@
+mock
 odfpy
 odoo-test-helper
 requests-mock

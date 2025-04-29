@@ -1,0 +1,27 @@
+<odoo>
+
+    <record id="fp2-outward-ins300" model="commown.parcel.type">
+      <field name="name">FP2 aller avec assurance</field>
+      <field name="technical_name">fp2-outward-ins300</field>
+      <field name="weight">0.5</field>
+      <field name="insurance_value">300</field>
+      <field name="is_return">False</field>
+    </record>
+
+    <record id="fp2-return-ins300" model="commown.parcel.type">
+      <field name="name">FP2 retour avec assurance</field>
+      <field name="technical_name">fp2-return-ins300</field>
+      <field name="weight">0.5</field>
+      <field name="insurance_value">300</field>
+      <field name="is_return">True</field>
+    </record>
+
+    <record id="fp2-return-ins0" model="commown.parcel.type">
+      <field name="name">FP2 retour sans assurance</field>
+      <field name="technical_name">fp2-return-ins0</field>
+      <field name="weight">0.5</field>
+      <field name="insurance_value">0</field>
+      <field name="is_return">True</field>
+    </record>
+
+</odoo>
