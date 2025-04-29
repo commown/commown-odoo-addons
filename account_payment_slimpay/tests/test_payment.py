@@ -1,28 +1,27 @@
 from mock import patch
 
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class SlimpayPaymentTC(TransactionCase):
     def setUp(self):
         patcher = patch(
             "odoo.addons.account_payment_slimpay.models." "slimpay_utils.get_client"
         )
         patcher.start()
-        super(SlimpayPaymentTC, self).setUp()
+        super().setUp()
         self.addCleanup(patcher.stop)
 
         self.partner = self.env.ref("base.res_partner_2")
 
         slimpay = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
+        slimpay.state = "enabled"
 
         self.token = self.env["payment.token"].create(
             {
-                "name": "Test Slimpay Token",
                 "partner_id": self.partner.id,
                 "provider_id": slimpay.id,
                 "provider_ref": "Slimpay mandate ref",
@@ -31,7 +30,7 @@ class SlimpayPaymentTC(TransactionCase):
 
         self.journal = (
             self.env["account.journal"]
-            .search([("type", "=", "sale")], limit=1)
+            .search([("type", "=", "bank")], limit=1)
             .ensure_one()
         )
 
@@ -47,7 +46,7 @@ class SlimpayPaymentTC(TransactionCase):
         data.update(kwargs)
         return self.env["account.payment"].create(data)
 
-    def test_s2s_do_translation(self):
+    def test_send_payment_request(self):
         def fake_action(method, func, params=None):
             """Fake code for slimpay client `action` method
 
@@ -68,19 +67,20 @@ class SlimpayPaymentTC(TransactionCase):
                     "reference": func + "-REF",
                 }  # easy check of called meth
 
-        meth_in = self.env.ref("payment.account_payment_method_electronic_in")
+        meth_in = self.env.ref("account.account_payment_method_manual_in")
         payment_in = self._create_payment(
             payment_type="inbound", payment_method_id=meth_in.id
         )
 
-        meth_out = meth_in.copy({"payment_type": "outbound"})
+        meth_out = self.env.ref("account.account_payment_method_manual_out")
+
         payment_out = self._create_payment(
             payment_type="outbound", payment_method_id=meth_out.id
         )
 
         with patch.object(SlimpayClient, "action", side_effect=fake_action):
-            payment_in.post()
-            payment_out.post()
+            payment_in.action_post()
+            payment_out.action_post()
 
         tx_in = payment_in.payment_transaction_id
         self.assertEqual(tx_in.state, "done")

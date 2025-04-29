@@ -3,6 +3,7 @@ import logging
 from coreapi.exceptions import ErrorMessage
 
 from odoo import _, fields, models
+from odoo.exceptions import ValidationError
 
 from .slimpay_utils import SlimpayClient
 
@@ -38,50 +39,81 @@ class PaymentProviderSlimpay(models.Model):
         groups="base.group_user",
     )
 
-    @property
-    def slimpay_client(self):
-        if not hasattr(self, "_slimpay_client"):
-            self._slimpay_client = SlimpayClient(
-                self.slimpay_api_url,
-                self.slimpay_creditor,
-                self.slimpay_app_id,
-                self.slimpay_app_secret,
-            )
-        return self._slimpay_client
+    def _compute_feature_support_fields(self):
+        """Override of `payment` to enable additional features."""
+        super()._compute_feature_support_fields()
+        self.filtered(lambda p: p.code == "slimpay").update(
+            {
+                "support_refund": "partial",
+                "support_express_checkout": True,
+                "support_tokenization": True,
+            }
+        )
+        return
 
-    def _slimpay_s2s_validate(self, tx, posted_data):
+    def slimpay_client(self):
+        return SlimpayClient(
+            self.slimpay_api_url,
+            self.slimpay_creditor,
+            self.slimpay_app_id,
+            self.slimpay_app_secret,
+        )
+
+
+class SlimpayTransaction(models.Model):
+    _inherit = "payment.transaction"
+
+    def _get_tx_from_notification_data(self, provider_code, notification_data):
+        tx = super()._get_tx_from_notification_data(provider_code, notification_data)
+        if provider_code != "slimpay" or len(tx) == 1:
+            return tx
+
+        ref = notification_data.get("reference")
+        tx = self.search([("reference", "=", ref), ("provider_code", "=", "slimpay")])
+        if not tx:
+            raise ValidationError(_("No transaction found matching reference %s.", ref))
+        return tx
+
+    def _process_notification_data(self, notification_data):
         """The posted data is validated using a http request to slimpay's
         server (to make sure posted data has not been forged), then the
         transaction status is updated.
         """
-        url = posted_data["_links"]["self"]["href"]
-        doc = self.slimpay_client.get(url)
+        super()._process_notification_data(notification_data)
+        if self.provider_code != "slimpay":
+            return
+
+        if self.state == "done":
+            _logger.debug("Transaction %r is already completed!", self.reference)
+            return
+
+        url = notification_data["_links"]["self"]["href"]
+        client = self.provider_id.slimpay_client()
+        doc = client.get(url)
         _logger.info("Slimpay corresponding order doc: %s", doc)
-        assert doc["reference"] == tx.reference
+        assert doc["reference"] == self.reference
         slimpay_state = doc["state"]
-        tx_attrs = {
-            "provider_reference": doc["id"],
-        }
+        tx_attrs = {"provider_reference": doc["id"]}
         if slimpay_state == "closed.completed":
-            self._slimpay_tx_completed(tx, doc, **tx_attrs)
+            self._slimpay_tx_completed(client, doc, **tx_attrs)
             return True
         elif slimpay_state.startswith("closed.aborted"):
-            tx._set_transaction_cancel()
+            self._set_canceled()
         else:
-            tx._set_transaction_pending()
-        tx.write(tx_attrs)
+            self._set_pending()
+        self.write(tx_attrs)
         return False
 
-    def _slimpay_tx_completed(self, tx, order_doc, **tx_attrs):
-        _logger.info("Trying to complete transaction id %s", tx.id)
-        tx.write(tx_attrs)
+    def _slimpay_tx_completed(self, client, order_doc, **tx_attrs):
+        _logger.info("Trying to complete transaction id %s", self.id)
+        self.write(tx_attrs)
         # Confirm sale if necessary
         _logger.info("Setting sale transaction as done...")
-        tx._set_transaction_done()
-        tx._post_process_after_done()
+        self._set_done()
+        self._reconcile_after_done()  #
+        self._finalize_post_processing()
         # Use mandate as a token for later automatic payments
-        partner = tx.partner_id
-        client = self.slimpay_client
+        partner = self.partner_id
         _logger.info("Fetching new partner's mandate...")
         mandate_doc = client.get_from_doc(order_doc, "get-mandate")
         mandate_id = mandate_doc["id"]
@@ -92,19 +124,15 @@ class PaymentProviderSlimpay(models.Model):
         )
         token = self.env["payment.token"].create(
             {
-                "name": token_name,
+                "payment_details": token_name,
                 "partner_id": partner.id,
-                "acquirer_id": tx.acquirer_id.id,
-                "acquirer_ref": mandate_id,
+                "provider_id": self.provider_id.id,
+                "provider_ref": mandate_id,
             }
         )
-        token.payment_ids |= tx
-        _logger.info("Added token id %s for %s", token.id, token.name)
+        token.transaction_ids |= self
+        _logger.info("Added token id %s for %s", token.id, token.payment_details)
         return token
-
-
-class SlimpayTransaction(models.Model):
-    _inherit = "payment.transaction"
 
     def _is_out_transaction(self):
         self.ensure_one()
@@ -127,14 +155,14 @@ class SlimpayTransaction(models.Model):
                 return payment.ref
             return self.reference or "TR%d" % self.id
 
-    def slimpay_s2s_do_transaction(self, **kwargs):
+    def _send_payment_request(self):
         """Perform a payment through a server to server call using a previously
         signed mandate.
         """
         _logger.debug("Starting auto Slimpay Transaction TR%s...", self.id)
-        client = self.acquirer_id.slimpay_client
+        client = self.provider_id.slimpay_client()
         mandate_ref = client.action(
-            "GET", "get-mandates", params={"id": self.payment_token_id.acquirer_ref}
+            "GET", "get-mandates", params={"id": self.token_id.provider_ref}
         )["reference"]
         _logger.debug("Found mandate reference: %s", mandate_ref)
         amount = round(self.amount, self.currency_id.decimal_places)
@@ -155,7 +183,6 @@ class SlimpayTransaction(models.Model):
 
         if err_msg is not None:
             self.update({"state": "error", "state_message": err_msg})
-            return False
         else:
             self.update(
                 {
@@ -163,4 +190,3 @@ class SlimpayTransaction(models.Model):
                     "provider_reference": provider_reference,
                 }
             )
-            return bool(acquirer_reference)

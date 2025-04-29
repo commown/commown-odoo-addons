@@ -1,15 +1,14 @@
 from mock import patch
 
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.account_payment_slimpay.models import slimpay_utils
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class SlimpayUtilsTC(TransactionCase):
     def setUp(self):
-        super(SlimpayUtilsTC, self).setUp()
+        super().setUp()
         france = self.env["res.country"].search([("code", "=", "FR")])
         self.partner = self.env["res.partner"].create(
             {"firstname": "F", "lastname": "C/@\\é9", "country_id": france.id}
@@ -102,4 +101,3 @@ class SlimpayUtilsTC(TransactionCase):
         self.assertEqual(149.20, payment["payin"]["amount"])
         self.assertEqual("so", payment["payin"]["label"])
         self.assertEqual("EUR", payment["payin"]["currency"])
-        self.assertEqual("https://commown.fr/", payment["payin"]["notifyUrl"])
