@@ -17,7 +17,7 @@ class SlimpayController(http.Controller):
     )
     def feedback(self):
         """Controller called by slimpay once the customer has finished the
-        checkout process. Performs basic checks then delegates to the acquirer.
+        checkout process. Performs basic checks then delegates to the provider.
         """
         post = json.loads(request.httprequest.data.decode("utf-8"))
         _logger.debug("slimpay feedback, post=%s", post)

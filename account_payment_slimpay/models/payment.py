@@ -9,10 +9,13 @@ from .slimpay_utils import SlimpayClient
 _logger = logging.getLogger(__name__)
 
 
-class PaymentAcquirerSlimpay(models.Model):
-    _inherit = "payment.acquirer"
+class PaymentProviderSlimpay(models.Model):
+    _inherit = "payment.provider"
 
-    provider = fields.Selection(selection_add=[("slimpay", "Slimpay")])
+    code = fields.Selection(
+        selection_add=[("slimpay", "Slimpay")],
+        ondelete={"slimpay": "set default"},
+    )
     slimpay_api_url = fields.Char(
         "API base url", required_if_provider="slimpay", groups="base.group_user"
     )
@@ -57,7 +60,7 @@ class PaymentAcquirerSlimpay(models.Model):
         assert doc["reference"] == tx.reference
         slimpay_state = doc["state"]
         tx_attrs = {
-            "acquirer_reference": doc["id"],
+            "provider_reference": doc["id"],
         }
         if slimpay_state == "closed.completed":
             self._slimpay_tx_completed(tx, doc, **tx_attrs)
@@ -140,14 +143,14 @@ class SlimpayTransaction(models.Model):
         with self.env.cr.savepoint():
             err_msg = None
             try:
-                acquirer_reference = client.create_payment(
+                provider_reference = client.create_payment(
                     mandate_ref,
                     amount,
                     self.currency_id.name,
                     self._label(),
                     out=self._is_out_transaction(),
                 )
-                _logger.debug("Payment creation result: %s", acquirer_reference)
+                _logger.debug("Payment creation result: %s", provider_reference)
             except ErrorMessage as exc:
                 err_msg = _(exc)
 
@@ -157,8 +160,8 @@ class SlimpayTransaction(models.Model):
         else:
             self.update(
                 {
-                    "state": "done" if acquirer_reference else "error",
-                    "acquirer_reference": acquirer_reference,
+                    "state": "done" if provider_reference else "error",
+                    "provider_reference": provider_reference,
                 }
             )
             return bool(acquirer_reference)

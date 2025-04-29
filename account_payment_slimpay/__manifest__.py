@@ -16,6 +16,7 @@
         "python": ["coreapi", "hal_codec", "iso8601", "phonenumbers"]
     },
     "depends": [
+        "account",
         "payment",
         "partner_firstname",
         "base_phone",
@@ -23,6 +24,6 @@
     "data": [
         "views/payment_views.xml",
         "views/payment_slimpay_templates.xml",
-        "data/payment_acquirer_data.xml",
+        "data/payment_provider.xml",
     ],
 }

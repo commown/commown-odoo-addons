@@ -18,14 +18,14 @@ class SlimpayPaymentTC(TransactionCase):
 
         self.partner = self.env.ref("base.res_partner_2")
 
-        slimpay = self.env.ref("account_payment_slimpay.payment_acquirer_slimpay")
+        slimpay = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
 
         self.token = self.env["payment.token"].create(
             {
                 "name": "Test Slimpay Token",
                 "partner_id": self.partner.id,
-                "acquirer_id": slimpay.id,
-                "acquirer_ref": "Slimpay mandate ref",
+                "provider_id": slimpay.id,
+                "provider_ref": "Slimpay mandate ref",
             }
         )
 
@@ -56,7 +56,7 @@ class SlimpayPaymentTC(TransactionCase):
             """
 
             if method == "GET" and func == "get-mandates":
-                self.assertEqual(params["id"], self.token.acquirer_ref)
+                self.assertEqual(params["id"], self.token.provider_ref)
                 return {"reference": "MANDATE_REF"}
 
             elif method == "POST" and func in ("create-payins", "create-payouts"):
@@ -84,8 +84,8 @@ class SlimpayPaymentTC(TransactionCase):
 
         tx_in = payment_in.payment_transaction_id
         self.assertEqual(tx_in.state, "done")
-        self.assertEqual(tx_in.acquirer_reference, "create-payins-REF")
+        self.assertEqual(tx_in.provider_reference, "create-payins-REF")
 
         tx_out = payment_out.payment_transaction_id
         self.assertEqual(tx_out.state, "done")
-        self.assertEqual(tx_out.acquirer_reference, "create-payouts-REF")
+        self.assertEqual(tx_out.provider_reference, "create-payouts-REF")

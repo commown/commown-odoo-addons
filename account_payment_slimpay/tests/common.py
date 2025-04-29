@@ -35,7 +35,7 @@ class MockedSlimpayMixin(object):
                 side_effect=lambda tx_ref, *args, **kw: tx_ref,
             )
         )
-        self.slimpay = self.env.ref("account_payment_slimpay.payment_acquirer_slimpay")
+        self.slimpay = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
         # Stop patchers in case of a test exception or normal termination
         for patcher in self._patchers:
             self.addCleanup(patcher.stop)
