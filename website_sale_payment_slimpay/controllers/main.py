@@ -11,12 +11,12 @@ _logger = logging.getLogger(__name__)
 
 class SlimpayControllerWebsiteSale(WebsiteSale):
     @http.route(
-        ["/payment/slimpay_transaction/<int:acquirer_id>"],
+        ["/payment/slimpay_transaction/<int:provider_id>"],
         type="json",
         auth="public",
         website=True,
     )
-    def payment_slimpay_transaction(self, acquirer_id, tx_ref=None):
+    def payment_slimpay_transaction(self, provider_id, tx_ref=None):
         """Handle Slimpay specific transaction online payment.
 
         This controller is called after the standard website_sale
@@ -39,17 +39,17 @@ class SlimpayControllerWebsiteSale(WebsiteSale):
             == so.partner_id.commercial_partner_id
         )
 
-        return self._approval_url(so, tx, acquirer_id, validate_payment_url)
+        return self._approval_url(so, tx, provider_id, validate_payment_url)
 
-    def _approval_url(self, so, transaction, acquirer_id, return_url):
+    def _approval_url(self, so, transaction, provider_id, return_url):
         """Helper to be used with website_sale to get a Slimpay URL for the
         end-user to sign a mandate and create a first payment online."
         """
-        acquirer = request.env["payment.acquirer"].sudo().browse(acquirer_id)
+        provider = request.env["payment.provider"].sudo().browse(provider_id)
         locale = (so.partner_id.lang or "en_US").split("_")[0]
         # May emit a direct debit only if a mandate exists; unsupported for now
         subscriber = slimpay_utils.subscriber_from_partner(so.partner_id)
-        return acquirer.slimpay_client.approval_url(
+        return provider.slimpay_client().approval_url(
             transaction.reference,
             so.id,
             locale,
