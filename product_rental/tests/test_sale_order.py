@@ -45,7 +45,9 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
 
         """
         tax = self.new_tax(20.0)
-        i5, i4, i3, i2, i1 = invs = self.generate_contract_invoices(tax=tax)
+        i5, i4, i3, i2, i1 = invs = self.generate_contract_invoices(tax=tax).sorted(
+            "id", reverse=True
+        )
         c5, c4, c3, c2, c1 = invs.mapped(
             "invoice_line_ids.contract_line_id.contract_id"
         )
@@ -161,7 +163,10 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             }
         )
 
-        i5, i4, i3, i2, i1 = invs = self.generate_contract_invoices(partner, tax_src)
+        i5, i4, i3, i2, i1 = invs = self.generate_contract_invoices(
+            partner, tax_src
+        ).sorted("id", reverse=True)
+
         c5, c4, c3, c2, c1 = invs.mapped(
             "invoice_line_ids.contract_line_id.contract_id"
         )
