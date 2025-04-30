@@ -5,7 +5,7 @@ import lxml.html
 from lxml.etree import fromstring
 from mock import patch
 
-from odoo.tests.common import HOST, PORT, HttpCase, at_install, post_install
+from odoo.tests.common import HttpCase, tagged
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
 
@@ -20,8 +20,7 @@ def _get_from_doc_mock(doc, method_name):
     }[method_name]
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class SlimpayControllersTC(HttpCase):
     def setUp(self):
         self._patchers = []
