@@ -2,12 +2,22 @@ from datetime import datetime
 from json import dumps as json_dumps
 
 import lxml.html
-from lxml.etree import fromstring
 from mock import patch
 
+import odoo.http
 from odoo.tests.common import HttpCase, tagged
 
-from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
+
+
+def tag_data(lxml_tag, **types):
+    "Helper to mimic javascript tag.data() result on a lxml tag"
+    result = {}
+    for key, val in lxml_tag.items():
+        if key.startswith("data-"):
+            new_key = key[5:].replace("-", "_")
+            result[new_key] = types.get(new_key, str)(val)
+    return result
 
 
 def _get_from_doc_mock(doc, method_name):
@@ -22,13 +32,13 @@ def _get_from_doc_mock(doc, method_name):
 
 @tagged("-at_install", "post_install")
 class SlimpayControllersTC(HttpCase):
+    timeout = 12  # Use much bigger values for interactive debugging
+
     def setUp(self):
         self._patchers = []
         # Mock SlimpayClient
         self._start_patcher(
-            patch(
-                "odoo.addons.account_payment_slimpay.models." "slimpay_utils.get_client"
-            )
+            patch("odoo.addons.account_payment_slimpay.models.slimpay_utils.get_client")
         )
         # Mock its "get" and "get_from_doc" methods (to ease their config)
         self.fake_get = self._start_patcher(patch.object(SlimpayClient, "get"))
@@ -47,8 +57,19 @@ class SlimpayControllersTC(HttpCase):
         # Stop patchers in case of a test exception or normal termination
         for patcher in self._patchers:
             self.addCleanup(patcher.stop)
-        # Setup a journal for Slimpay acquirer
-        self.slimpay = self.env.ref("account_payment_slimpay.payment_acquirer_slimpay")
+        # Setup a journal for Slimpay provider
+        self.slimpay = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
+        self.slimpay.update(
+            {
+                "state": "enabled",
+                "is_published": True,
+                "allow_express_checkout": True,
+                "maximum_amount": False,
+            }
+        )
+        self.env["account.payment.method"].create(
+            {"code": "slimpay", "name": "Slimpay", "payment_type": "inbound"}
+        )
         journal = (
             self.env["account.journal"]
             .search([("type", "=", "bank")], limit=1)
@@ -56,29 +77,32 @@ class SlimpayControllersTC(HttpCase):
         )
         self.slimpay.journal_id = journal.id
 
+        # Do not send invoice confirmation email:
+        self.env.ref("sale.mail_template_sale_confirmation").unlink()
+
+        # Automatically create invoice on sale confirmation:
+        self.env["ir.config_parameter"].sudo().set_param("sale.automatic_invoice", True)
+
     def _start_patcher(self, patcher):
         self._patchers.append(patcher)
         return patcher.start()
 
-    def post(
-        self, path, data=None, json=None, headers=None, timeout=30, assert_code=200
-    ):
+    def post(self, url, data=None, json=None, headers=None, assert_code=200):
         """POST an http request using requests. Complements HttpCase.url_open
-        with headers, json and bigger default timeout"""
-        url = "http://%s:%s%s" % (HOST, PORT, path)
+        with headers and json"""
+        if url.startswith("/"):
+            url = self.base_url() + url
         resp = self.opener.post(
-            url, data=data, json=json, timeout=timeout, headers=headers
+            url, data=data, json=json, timeout=self.timeout, headers=headers
         )
         self.assertEqual(assert_code, resp.status_code)
         return resp.text if json is None else resp.json()
 
-    def jsonrpc(self, path, params=None, timeout=30, assert_code=200):
+    def jsonrpc(self, path, params=None, assert_code=200):
         "Helper method to perform a jsonrpc request and return its result"
         headers = {"Content-Type": "application/json"}
         data = {"jsonrpc": "2.0", "method": "call", "params": params or {}}
-        json = self.post(
-            path, json=data, headers=headers, timeout=timeout, assert_code=assert_code
-        )
+        json = self.post(path, json=data, headers=headers, assert_code=assert_code)
         try:
             return json["result"]
         except KeyError:
@@ -101,9 +125,20 @@ class SlimpayControllersTC(HttpCase):
         return doc.xpath("//input[@name='csrf_token']")[0].get("value")
 
     def add_product_to_user_cart(self):
-        product = self.env["product.product"].search([])[0]
-        self.post("/shop/cart/update", data={"product_id": product.id})
-        csrf_token = self.csrf_token(self.url_open("/shop/checkout").text)
+        product = self.env.ref("product.product_delivery_02_product_template")
+        csrf_token = self.csrf_token(
+            self.url_open(product.website_url, timeout=self.timeout).text
+        )
+        self.post(
+            "/shop/cart/update",
+            data={
+                "product_id": product.product_variant_id.id,
+                "csrf_token": csrf_token,
+            },
+        )
+        csrf_token = self.csrf_token(
+            self.url_open("/shop/checkout", timeout=self.timeout).text
+        )
         self.post("/shop/confirm_order", data={"csrf_token": csrf_token})
 
     def pay_cart(self, **params):
@@ -112,13 +147,29 @@ class SlimpayControllersTC(HttpCase):
         reference instead of a Slimpay URL, so we can use it later to
         check the transaction.
         """
-        result = self.jsonrpc(
-            "/shop/payment/transaction", params={"acquirer_id": self.slimpay.id}
+        page = self.url_open("/shop/payment", timeout=self.timeout)
+        doc = lxml.html.fromstring(page.text)
+        form = doc.xpath("//form[@name='o_payment_checkout']")[0]
+        radio = doc.xpath(".//input[@name='o_payment_radio' and @checked='True']")[0]
+
+        types = dict(
+            amount=float,
+            currency_id=int,
+            payment_option_id=int,
+            partner_id=int,
+            allow_token_selection=bool,
         )
-        doc = fromstring("<div>" + result + "</div>")
-        tx_ref = doc.xpath("//input[@name='tx_ref']/@value")[0]
+        params = tag_data(form, **types)
+        params.update(tag_data(radio, **types))
+        params.update(flow="redirect", tokenization_requested=False)
+
+        # Re-read session as it was completed server-side
+        so_id = odoo.http.root.session_store.get(self.session.sid)["sale_order_id"]
+        tx_data = self.jsonrpc("/shop/payment/transaction/%d" % so_id, params=params)
+
         return self.jsonrpc(
-            "/payment/slimpay_transaction/%s" % self.slimpay.id, {"tx_ref": tx_ref}
+            "/payment/slimpay_transaction/%s" % tx_data["provider_id"],
+            {"tx_ref": tx_data["reference"]},
         )
 
     def simulate_feedback(self, tx_ref, state="closed.completed"):
@@ -144,7 +195,7 @@ class SlimpayControllersTC(HttpCase):
     def check_transaction(self, tx_ref, state):
         tx = self.search_read("payment.transaction", [("reference", "=", tx_ref)])[0]
         self.assertEqual(state, tx["state"])
-        self.assertEqual([self.slimpay.id, self.slimpay.name], tx["acquirer_id"])
+        self.assertEqual([self.slimpay.id, self.slimpay.name], tx["provider_id"])
         return tx
 
     def check_so(self, so_id, state):

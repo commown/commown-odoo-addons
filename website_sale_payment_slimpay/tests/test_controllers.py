@@ -2,7 +2,7 @@ from .common import SlimpayControllersTC
 
 
 class SlimpayPaymentControllersTC(SlimpayControllersTC):
-    def test_slimpay_portal_sale_ok(self):
+    def test_slimpay_portal_sale_ok_simple(self):
         """Perform a portal sale, paid using a mocked Slimpay and using a fake
         feedback.
         """
@@ -15,7 +15,7 @@ class SlimpayPaymentControllersTC(SlimpayControllersTC):
         self.simulate_feedback(tx_ref)
         tx = self.check_transaction(tx_ref, "done")
 
-        self.assertEqual("IBAN my-iban (my-bank)", tx["payment_token_id"][1])
+        self.assertEqual("•••• IBAN my-iban (my-bank)", tx["token_id"][1])
         self.assertEqual(1, len(tx["sale_order_ids"]))
         self.check_so(tx["sale_order_ids"][0], "sale")
 
