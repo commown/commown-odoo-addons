@@ -434,7 +434,12 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
 
     def check_sale_quotation_send_emails(self, lang):
         self.partner.lang = lang
-        self.so.force_quotation_send()
+        self.so.with_context(lang=lang).action_quotation_send()
+        email_act = self.so.action_quotation_send()
+        email_ctx = email_act["context"]
+        self.so.with_context(**email_ctx).message_post_with_template(
+            email_ctx.get("default_template_id")
+        )
         return sorted(self.so.message_ids[0].attachment_ids.mapped("name"))
 
     def test_sale_quotation_send_emails_fr(self):
