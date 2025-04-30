@@ -202,9 +202,9 @@ class RentalSaleOrderMixin:
         with trap_jobs() as trap:
             contracts._recurring_create_invoice()
         trap.perform_enqueued_jobs()
-        invoices = self.env["account.invoice"].search(
+        invoices = self.env["account.move"].search(
             [
-                ("invoice_line_ids.contract_line_id.contract_id", "in", contracts.ids),
+                ("line_ids.contract_line_id.contract_id", "in", contracts.ids),
             ]
         )
         return invoices

@@ -394,12 +394,12 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         # contract_queue_job (installed in the CI) returns an empty invoice set
         # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
         #  /models/contract_contract.py#L21)
-        inv = self.env["account.invoice"].search(
+        inv = self.env["account.move"].search(
             [
-                ("invoice_line_ids.contract_line_id.contract_id", "=", contract.id),
+                ("line_ids.contract_line_id.contract_id", "=", contract.id),
             ]
         )
-        self.assertEqual(inv.state, "paid")
+        self.assertEqual(inv.state, "posted")
 
 
 class SaleOrderAttachmentsTC(RentalSaleOrderTC):

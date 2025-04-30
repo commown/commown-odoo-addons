@@ -128,11 +128,11 @@ class Contract(models.Model):
 
         for record in self:
             new_date = record.recurring_next_date
-            active_invlines = self.env["account.invoice.line"].search_count(
+            active_invlines = self.env["account.move.line"].search_count(
                 [
                     ("contract_line_id", "in", record.contract_line_ids.ids),
-                    ("invoice_id.date_invoice", ">=", new_date),
-                    ("invoice_id.state", "!=", "cancel"),
+                    ("move_id.invoice_date", ">=", new_date),
+                    ("move_id.state", "!=", "cancel"),
                 ]
             )
             if not force and active_invlines:
@@ -146,7 +146,7 @@ class Contract(models.Model):
             inv_dates = (
                 record._get_related_invoices()
                 .filtered(lambda inv: inv.state != "cancel")
-                .mapped("date_invoice")
+                .mapped("invoice_date")
             )
             last_date_invoiced = inv_dates and max(inv_dates) or False
 
