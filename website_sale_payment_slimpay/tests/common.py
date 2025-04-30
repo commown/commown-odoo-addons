@@ -43,7 +43,7 @@ class SlimpayControllersTC(HttpCase):
                 side_effect=lambda tx_ref, *args, **kw: tx_ref,
             )
         )
-        super(SlimpayControllersTC, self).setUp()
+        super().setUp()
         # Stop patchers in case of a test exception or normal termination
         for patcher in self._patchers:
             self.addCleanup(patcher.stop)
