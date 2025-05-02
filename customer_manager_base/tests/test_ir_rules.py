@@ -78,8 +78,23 @@ class PortalInvoiceIrRulesTC(PortalIrRulesTC, TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # This move is generated from odoo/addons/account/demo/account_demo.py
-        cls.obj = cls.env.ref(f"account.{cls.env.company.id}_demo_invoice_1")
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+                coa.try_loading(company=cls.env.company, install_demo=True)
+
+        cls.obj = cls.env["account.move"].search(
+            [
+                ("company_id", "=", cls.env.company.id),
+                ("move_type", "in", ["out_invoice", "out_refund"]),
+                ("state", "not in", ["draft", "cancel"]),
+            ],
+            limit=1,
+        )
         cls.check_test_prerequisite(cls.obj.partner_id.commercial_partner_id.is_company)
         cls.children = cls.obj.invoice_line_ids
 
