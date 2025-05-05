@@ -25,10 +25,9 @@ class SlimpayControllerWebsiteSale(WebsiteSale):
         """
         env = request.env
 
-        if request.website.domain:
-            _url = "https://" + request.website.domain
-        else:
-            _url = env["ir.config_parameter"].sudo().get_param("web.base.url")
+        _url = request.website.domain or env["ir.config_parameter"].sudo().get_param(
+            "web.base.url"
+        )
 
         validate_payment_url = _url + "/shop/payment/validate"
 
