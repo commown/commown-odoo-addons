@@ -61,24 +61,20 @@ class SlimpayControllerWebsiteSale(WebsiteSale):
 
     def _get_mandatory_fields_billing(self, country_id=False):
         '''Replace "name" by "firstname" and "lastname"'''
-        fields = super(
-            SlimpayControllerWebsiteSale, self
-        )._get_mandatory_fields_billing(country_id=country_id)
+        fields = super()._get_mandatory_fields_billing(country_id=country_id)
         return ["firstname", "lastname"] + [f for f in fields if f != "name"]
 
     def _get_mandatory_fields_shipping(self, country_id=False):
         '''Replace "name" by "firstname" and "lastname"'''
-        fields = super(
-            SlimpayControllerWebsiteSale, self
-        )._get_mandatory_fields_shipping(country_id=country_id)
+        fields = super()._get_mandatory_fields_shipping(country_id=country_id)
         return ["firstname", "lastname"] + [f for f in fields if f != "name"]
 
     def values_postprocess(self, order, mode, values, errors, error_msg):
         """Do not drop firstname and lastname fields for `partner_firstname`
         module compatiblity."""
-        new_values, errors, error_msg = super(
-            SlimpayControllerWebsiteSale, self
-        ).values_postprocess(order, mode, values, errors, error_msg)
+        new_values, errors, error_msg = super().values_postprocess(
+            order, mode, values, errors, error_msg
+        )
         for field in ("firstname", "lastname"):
             if field in values:
                 _logger.debug(
@@ -91,9 +87,7 @@ class SlimpayControllerWebsiteSale(WebsiteSale):
 
     def checkout_form_validate(self, mode, all_form_values, data):
         """Validate partner constraints wrt Slimpay's rule"""
-        errors, error_msg = super(
-            SlimpayControllerWebsiteSale, self
-        ).checkout_form_validate(mode, all_form_values, data)
+        errors, error_msg = super().checkout_form_validate(mode, all_form_values, data)
         order = request.website.sale_get_order()
         partner = order.partner_id
         for field, msg in partner.slimpay_checks(all_form_values).items():
