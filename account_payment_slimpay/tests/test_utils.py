@@ -1,3 +1,4 @@
+import requests_mock
 from mock import patch
 
 from odoo.tests.common import TransactionCase, tagged
@@ -26,6 +27,10 @@ class SlimpayUtilsTC(TransactionCase):
         self.check_phone_value(None)
         self.partner.write({"phone": "06.01.02.03.04"})
         self.check_phone_value("+33601020304")
+        self.partner.write({"phone": "invalid!"})
+        self.check_phone_value(None)
+        self.partner.write({"phone": "+33 1 02 03 04 05"})
+        self.check_phone_value(None)
 
     def test_slimpay_signatory(self):
         subscriber = slimpay_utils.subscriber_from_partner(self.partner)
@@ -101,3 +106,92 @@ class SlimpayUtilsTC(TransactionCase):
         self.assertEqual(149.20, payment["payin"]["amount"])
         self.assertEqual("so", payment["payin"]["label"])
         self.assertEqual("EUR", payment["payin"]["currency"])
+
+    def test_get_client(self):
+        with requests_mock.Mocker() as rm:
+            rm.post("https://api.local/oauth/token", json={"access_token": "mytoken"})
+            client = slimpay_utils.get_client(
+                "https://api.local", "myappid", "myappsecret"
+            )
+
+        self.assertEqual(len(rm.request_history), 1)
+        req = rm.request_history[0]
+        self.assertEqual(
+            req.headers["Authorization"], "Basic bXlhcHBpZDpteWFwcHNlY3JldA=="
+        )
+
+        self.assertEqual(
+            client.transports[0].headers["authorization"], "Bearer mytoken"
+        )
+
+    def test_approval_url(self):
+        subscriber = slimpay_utils.subscriber_from_partner(self.partner)
+
+        with patch.object(slimpay_utils, "get_client") as mock:
+            client = slimpay_utils.SlimpayClient(
+                "api_url", "creditor", "app_id", "app_secret"
+            )
+
+        client.approval_url(
+            "tx_ref", "mylabel", "fr", 20.10, "EUR", 2, subscriber, "http://return.url"
+        )
+
+        def get_mock_call(name):
+            for call in mock.mock_calls:  # pragma: no branch
+                if str(call).startswith("call().%s(" % name):
+                    return call
+
+        action_mc = get_mock_call("action")
+        self.assertEqual(
+            action_mc.args[1],
+            "https://api.slimpay.net/alps#create-orders",
+        )
+        self.assertEqual(list(action_mc.kwargs), ["action", "validate", "params"])
+        self.assertEqual(action_mc.kwargs["action"], "POST")
+        self.assertEqual(action_mc.kwargs["params"]["reference"], "tx_ref")
+        self.assertEqual(action_mc.kwargs["params"]["returnUrl"], "http://return.url")
+        self.assertEqual(action_mc.kwargs["params"]["items"][0]["type"], "signMandate")
+        self.assertEqual(action_mc.kwargs["params"]["items"][1]["type"], "payment")
+        self.assertEqual(
+            action_mc.kwargs["params"]["items"][1]["payin"],
+            {
+                "scheme": "SEPA.DIRECT_DEBIT.CORE",
+                "direction": "IN",
+                "amount": 20.1,
+                "currency": "EUR",
+                "label": "mylabel",
+            },
+        )
+
+    def test_last_valid_mandate(self):
+        api_url = "https://api.local"
+        _url = "https://api.slimpay.net"
+        root_doc = {
+            "_links": {
+                _url
+                + "/alps#search-mandates": {
+                    "href": _url + "/mandates{?creditorReference,subscriberReference}",
+                    "templated": True,
+                },
+            }
+        }
+        mandates_doc = {
+            "mandates": [
+                {"id": "m1", "state": "active", "dateSigned": "2025-01-01T09:00:00"},
+                {"id": "m2", "state": "inactive", "dateSigned": "2025-02-01T09:00:00"},
+                {"id": "m3", "state": "active", "dateSigned": "2025-01-15T09:00:00"},
+            ]
+        }
+
+        with requests_mock.Mocker() as rm:
+            rm.post(api_url + "/oauth/token", json={"access_token": "mytoken"})
+            client = slimpay_utils.SlimpayClient(api_url, "cred", "app", "secret")
+
+            rm.get(api_url + "/", json=root_doc)
+            rm.get(
+                _url + "/mandates?creditorReference=cred&subscriberReference=mysubref",
+                json=mandates_doc,
+            )
+            result = client.last_valid_mandate("mysubref")
+
+        self.assertEqual(result["id"], "m3")
