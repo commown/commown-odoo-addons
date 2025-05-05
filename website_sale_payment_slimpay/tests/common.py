@@ -34,6 +34,20 @@ def _get_from_doc_mock(doc, method_name):
 class SlimpayControllersTC(HttpCase):
     timeout = 12  # Use much bigger values for interactive debugging
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
     def setUp(self):
         self._patchers = []
         # Mock SlimpayClient
@@ -72,8 +86,11 @@ class SlimpayControllersTC(HttpCase):
         )
         journal = (
             self.env["account.journal"]
-            .search([("type", "=", "bank")], limit=1)
-            .exists()
+            .search(
+                [("type", "=", "bank"), ("company_id", "=", self.env.company.id)],
+                limit=1,
+            )
+            .ensure_one()
         )
         self.slimpay.journal_id = journal.id
 
