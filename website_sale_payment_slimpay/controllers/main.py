@@ -59,18 +59,18 @@ class SlimpayControllerWebsiteSale(WebsiteSale):
             return_url,
         )
 
-    def _get_mandatory_billing_fields(self):
+    def _get_mandatory_fields_billing(self, country_id=False):
         '''Replace "name" by "firstname" and "lastname"'''
         fields = super(
             SlimpayControllerWebsiteSale, self
-        )._get_mandatory_billing_fields()
+        )._get_mandatory_fields_billing(country_id=country_id)
         return ["firstname", "lastname"] + [f for f in fields if f != "name"]
 
-    def _get_mandatory_shipping_fields(self):
+    def _get_mandatory_fields_shipping(self, country_id=False):
         '''Replace "name" by "firstname" and "lastname"'''
         fields = super(
             SlimpayControllerWebsiteSale, self
-        )._get_mandatory_shipping_fields()
+        )._get_mandatory_fields_shipping(country_id=country_id)
         return ["firstname", "lastname"] + [f for f in fields if f != "name"]
 
     def values_postprocess(self, order, mode, values, errors, error_msg):
