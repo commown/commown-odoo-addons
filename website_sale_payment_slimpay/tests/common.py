@@ -71,7 +71,8 @@ class SlimpayControllersTC(HttpCase):
         # Stop patchers in case of a test exception or normal termination
         for patcher in self._patchers:
             self.addCleanup(patcher.stop)
-        # Setup a journal for Slimpay provider
+
+        # Setup Slimpay provider
         self.slimpay = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
         self.slimpay.update(
             {
