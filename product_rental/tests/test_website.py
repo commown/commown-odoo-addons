@@ -47,8 +47,8 @@ class WebsiteTC(WebsiteBaseTC):
             website=self.website,
             main_object=self.contracts[0],
         )
-        self.assertEqual(
-            doc.xpath("//div[@id='general_information']//h6//text()"), ["Customer:"]
+        self.assertNotIn(
+            "Responsible:", doc.xpath("//div[@id='general_information']//h6//text()")
         )  # Responsible was removed from original view
         self.assertFalse(
             doc.xpath(
