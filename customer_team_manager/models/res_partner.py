@@ -104,7 +104,6 @@ class ResPartner(models.Model):
             result["toolbar"].update({"action": actions, "relate": []})
         return result
 
-    @api.returns(None, lambda value: value[0])
     def copy_data(self, default=None):
         "Filter copied data to allowed attributes when user is a customer admin"
 
@@ -137,7 +136,6 @@ class ResPartner(models.Model):
             )
 
     @api.model
-    @api.returns("self", lambda value: value.id)
     def create(self, vals):
         """Use sudo when a customer admin creates a partner, taking care of security
 

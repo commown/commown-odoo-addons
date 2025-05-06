@@ -5,7 +5,6 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     @api.model
-    @api.returns("self", lambda value: value.id)
     def create(self, vals):
         "Add all customer roles to the first user of a company"
 
