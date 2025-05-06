@@ -16,6 +16,7 @@ class Team(models.Model):
     full_name = fields.Char(
         compute="_compute_full_name",
         store=True,
+        recursive=True,
     )
 
     parent_team = fields.Many2one(
