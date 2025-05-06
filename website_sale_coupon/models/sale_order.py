@@ -20,7 +20,7 @@ class CouponSaleOrder(models.Model):
 
     def action_confirm(self):
         self.confirm_coupons()
-        res = super(CouponSaleOrder, self).action_confirm()
+        res = super().action_confirm()
         return res
 
     def confirm_coupons(self):
