@@ -27,10 +27,18 @@
         "security/ir.model.access.csv",
         "security/rules.xml",
         "data/customer_roles.xml",
-        "views/assets.xml",
         "views/wizard_portal_access.xml",  # referenced in customer_team_manager.xml!
         "views/customer_team_manager.xml",
         "views/portal_templates.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "/customer_team_manager/static/src/xml/field_widget_template.xml",
+            "/customer_team_manager/static/src/css/export.css",
+            "/customer_team_manager/static/src/scss/field_widget.scss",
+            "/customer_team_manager/static/src/js/field_widget.js",
+            "/customer_team_manager/static/src/js/data_export.js",
+        ],
+    },
     "installable": True,
 }

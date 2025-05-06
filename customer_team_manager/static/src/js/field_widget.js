@@ -1,16 +1,9 @@
 odoo.define("customer_role_tag_widget", function (require) {
     "use strict";
 
-    var ajax = require("web.ajax");
-    var core = require("web.core");
     var AbstractField = require("web.AbstractField");
     var FieldMany2ManyTags = require("web.relational_fields").FieldMany2ManyTags;
     var fieldRegistry = require("web.field_registry");
-
-    ajax.loadXML(
-        "/customer_team_manager/static/src/xml/field_widget_template.xml",
-        core.qweb
-    );
 
     var FieldCustomerRoleTags = FieldMany2ManyTags.extend({
         tag_template: "FieldCustomerRoleTags",

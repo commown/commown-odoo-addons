@@ -276,20 +276,6 @@
     </field>
   </record>
 
-  <template id="assets_common" inherit_id="web.assets_common">
-    <xpath expr="." position="inside">
-      <script
-                src="/customer_team_manager/static/src/js/field_widget.js"
-                type="text/javascript"
-            />
-      <link
-                href="/customer_team_manager/static/src/scss/field_widget.scss"
-                rel="stylesheet"
-                type="text/scss"
-            />
-    </xpath>
-  </template>
-
   <record id="action_teams" model="ir.actions.act_window">
     <field name="name">Teams</field>
     <field name="res_model">customer_team_manager.team</field>
