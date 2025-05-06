@@ -3,7 +3,7 @@
 
   <t t-name="coupon.used">
     <dt><code><t t-esc="name" /></code></dt>
-    <dd><t t-esc="descr" /></dd>
+    <dd><t t-esc="descr or ''" /></dd>
   </t>
 
   <t t-name="coupon.wrong">
@@ -26,7 +26,7 @@
                         >This coupon is not valid. Please check your input and try again.</p>
           </div>
           <div class="modal-footer">
-            <a href="#" class="btn btn-link btn-xs" data-dismiss="modal">Close</a>
+            <a href="#" class="btn btn-link btn-xs" data-bs-dismiss="modal">Close</a>
           </div>
         </div>
       </div>
@@ -51,7 +51,7 @@
             has just been applied to current order!
           </div>
           <div class="modal-footer">
-            <a href="#" class="btn btn-link btn-xs" data-dismiss="modal">Close</a>
+            <a href="#" class="btn btn-link btn-xs" data-bs-dismiss="modal">Close</a>
           </div>
         </div>
       </div>

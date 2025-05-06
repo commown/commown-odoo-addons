@@ -12,7 +12,6 @@
     >
 
     <xpath expr="//t[@t-call='website_sale.cart_lines']" position="after">
-      <link rel="stylesheet" href="/website_sale_coupon/static/src/css/coupon.css" />
       <div id="coupons-placeholder">
         <strong>Coupons</strong>
       </div>
@@ -40,10 +39,6 @@
             To reinitialize the coupons, empty your basket.
           </p>
         </form>
-        <script
-                    type="text/javascript"
-                    src="/website_sale_coupon/static/src/js/coupon.js"
-                />
       </div>
     </xpath>
 
@@ -56,10 +51,6 @@
       <div id="coupons-placeholder">
         <strong>Coupons</strong>
       </div>
-      <script
-                type="text/javascript"
-                src="/website_sale_coupon/static/src/js/coupon.js"
-            />
     </xpath>
   </template>
 

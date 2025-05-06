@@ -20,5 +20,12 @@
         "views/website.xml",
         "views/wizard_create_multiple_coupons.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "website_sale_coupon/static/src/xml/coupon_templates.xml",
+            "website_sale_coupon/static/src/css/coupon.css",
+            "website_sale_coupon/static/src/js/coupon.esm.js",
+        ],
+    },
     "installable": True,
 }
