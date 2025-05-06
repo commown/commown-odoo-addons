@@ -22,7 +22,7 @@
         <field name="phone" />
         <field name="team" />
         <field name="commercial_partner_id" />
-        <field name="image_medium" />
+        <field name="avatar_128" />
         <field name="portal_status" />
         <field name="customer_roles" />
         <templates>
@@ -31,10 +31,10 @@
                             class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban"
                         >
 
-              <t t-if="record.image_medium.raw_value">
+              <t t-if="record.avatar_128.raw_value">
                 <div
                                     class="o_kanban_image_fill_left d-none d-md-block"
-                                    t-attf-style="background-image:url('#{kanban_image('res.partner', 'image_medium', record.id.raw_value)}')"
+                                    t-attf-style="background-image:url('#{kanban_image('res.partner', 'avatar_128', record.id.raw_value)}')"
                                 >
                 </div>
               </t>
@@ -222,12 +222,14 @@
                         />
 
           </div>
+          <field name="avatar_128" invisible="1" />
           <field
-                        name="image_medium"
+                        name="image_1920"
                         widget='image'
                         class="oe_avatar"
-                        options='{"preview_image": "image_medium"}'
+                        options='{"preview_image": "avatar_128"}'
                     />
+
           <div class="oe_title">
             <h1>
               <field name="display_name" class="oe_inline" />
