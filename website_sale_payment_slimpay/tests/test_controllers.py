@@ -42,3 +42,12 @@ class SlimpayPaymentControllersTC(SlimpayControllersTC):
         self.check_so(tx2["sale_order_ids"][0], "sale")
         # Check transactions' reference start with the same SO name
         self.assertEqual(1, len({tx["reference"].split("-")[0] for tx in (tx1, tx2)}))
+
+    def test_feedback_error(self):
+        """In case of an error, feedback response in a 200 with a message
+
+        This 200 (=normal) response is to avoid useless multiple postings from Slimpay.
+        """
+        self.authenticate("portal", "portal")
+        resp = self.simulate_feedback("non-existing-ref", assert_code=200)
+        self.assertEqual(resp, "Incorrect transaction reference")

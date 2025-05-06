@@ -190,7 +190,7 @@ class SlimpayControllersTC(HttpCase):
             {"tx_ref": tx_data["reference"]},
         )
 
-    def simulate_feedback(self, tx_ref, state="closed.completed"):
+    def simulate_feedback(self, tx_ref, state="closed.completed", assert_code=200):
         """Simulate a (by default OK) Slimpay feedback.
         Requires mocks for SlimpayClient.get and SlimpayClient.get_from_doc.
         """
@@ -204,10 +204,11 @@ class SlimpayControllersTC(HttpCase):
             "id": "test-id",
             "dateClosed": datetime.today().isoformat(),
         }
-        self.post(
+        return self.post(
             "/payment/slimpay/s2s/feedback",
             data=json_dumps(feedback),
             headers={"Content-Type": "application/hal+json"},
+            assert_code=assert_code,
         )
 
     def check_transaction(self, tx_ref, state):
