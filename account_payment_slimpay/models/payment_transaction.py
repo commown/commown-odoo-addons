@@ -50,7 +50,8 @@ class SlimpayTransaction(models.Model):
             return True
         elif slimpay_state.startswith("closed.aborted"):
             self._set_canceled()
-        else:
+        else:  # pragma: no cover
+            # Should never happen
             self._set_pending()
         self.write(tx_attrs)
         return False

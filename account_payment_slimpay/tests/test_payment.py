@@ -82,7 +82,10 @@ class SlimpayPaymentTC(TransactionCase):
                 self.assertEqual(params["id"], self.token.provider_ref)
                 return {"reference": "MANDATE_REF"}
 
-            elif method == "POST" and func in ("create-payins", "create-payouts"):
+            elif method == "POST" and func in (
+                "create-payins",
+                "create-payouts",
+            ):  # pragma: no cover
                 self.assertEqual(params["mandate"]["reference"], "MANDATE_REF")
                 self.assertEqual(params["amount"], 149.2)  # rounded amount
                 params["func"] = func
