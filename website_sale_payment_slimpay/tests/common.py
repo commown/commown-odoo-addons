@@ -108,7 +108,7 @@ class SlimpayControllersTC(HttpCase):
     def post(self, url, data=None, json=None, headers=None, assert_code=200):
         """POST an http request using requests. Complements HttpCase.url_open
         with headers and json"""
-        if url.startswith("/"):
+        if url.startswith("/"):  # pragma: no cover
             url = self.base_url() + url
         resp = self.opener.post(
             url, data=data, json=json, timeout=self.timeout, headers=headers
@@ -123,7 +123,7 @@ class SlimpayControllersTC(HttpCase):
         json = self.post(path, json=data, headers=headers, assert_code=assert_code)
         try:
             return json["result"]
-        except KeyError:
+        except KeyError:  # pragma: no cover
             self.fail("jsonrpc error:\n%s" % json)
 
     def search_read(self, model, *args, kwargs=None):
