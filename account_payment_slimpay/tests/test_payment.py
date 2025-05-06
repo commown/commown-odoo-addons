@@ -2,7 +2,7 @@ from mock import patch
 
 from odoo.tests.common import TransactionCase, tagged
 
-from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
 
 
 @tagged("-at_install", "post_install")
