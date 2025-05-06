@@ -20,9 +20,7 @@ class CustomerRole(models.Model):
         translate=True,
     )
 
-    color = fields.Char(
-        string="Color",
-    )
+    color = fields.Char()
 
     icon_name = fields.Char(
         string="Icon name (fontawesome)",

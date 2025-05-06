@@ -12,7 +12,7 @@ class TeamTC(CustomerTeamManagerAbstractTC):
         self.assertEqual(team.sudo().customer_company, self.customer_company)
 
         with self.assertRaises(AccessError):
-            team.customer_company
+            team.customer_company  # pylint: disable=pointless-statement
 
     def test_full_name(self):
         admin = self.customer_user_admin
@@ -25,8 +25,8 @@ class TeamTC(CustomerTeamManagerAbstractTC):
         admin = self.customer_user_admin
         t1 = self.create_team(sudo_as=admin, name="T1")
         t2 = self.create_team(sudo_as=admin, name="T2")
-        t3 = self.create_team(sudo_as=admin, name="T3", parent_team=t2.id)
-        t4 = self.create_team(sudo_as=admin, name="T4", parent_team=t1.id)
+        self.create_team(sudo_as=admin, name="T3", parent_team=t2.id)
+        self.create_team(sudo_as=admin, name="T4", parent_team=t1.id)
 
         self.assertEqual(
             t1.search([]).mapped("full_name"),

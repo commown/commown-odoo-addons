@@ -134,7 +134,7 @@ class ResPartner(models.Model):
 
         if set(vals) - allowed:
             raise AccessError(
-                "You are not allowed to perform this operation on this partner"
+                _("You are not allowed to perform this operation on this partner")
             )
 
     @api.model
@@ -223,10 +223,12 @@ class ResPartner(models.Model):
         if is_b2b:
             commercial_partner = self.commercial_partner_id
 
-        super().unlink()
+        res = super().unlink()
 
         if is_b2b:
             self._check_one_customer_admin_at_least(commercial_partner)
+
+        return res
 
     @api.multi
     def action_revoke_portal_access(self):

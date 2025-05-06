@@ -129,7 +129,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         "No one can remove the admin role of last customer admin of a company"
 
         minor_role = self.env.ref("customer_team_manager.customer_role_accounting")
-        empl = self.create_partner(parent_id=self.customer_company.id, name="F C")
+        self.create_partner(parent_id=self.customer_company.id, name="F C")
 
         with self.assertRaises(ValidationError) as err:
             self.customer_partner_admin.write(
@@ -237,7 +237,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         admin = self.customer_user_admin
         old_count = self.count_seen_partners(sudo_as=admin)
 
-        colleague = self.create_partner(name="J C", parent_id=self.customer_company.id)
+        self.create_partner(name="J C", parent_id=self.customer_company.id)
         self.assertEqual(self.count_seen_partners(sudo_as=admin), old_count + 1)
 
         self.create_partner(name="F C")
@@ -251,8 +251,6 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         p2 = self.create_partner(name="P T", email="p2@test.com", parent_id=False)
         self._grant_portal_access(p1)
         self._grant_portal_access(p2)
-        p1.user_ids
-        p2.user_ids
 
         # Check prerequisites
         self.assertFalse(p1.commercial_partner_id.is_company)

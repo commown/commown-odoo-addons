@@ -14,7 +14,6 @@ class Team(models.Model):
     )
 
     full_name = fields.Char(
-        string="Full Name",
         compute="_compute_full_name",
         store=True,
     )

@@ -15,7 +15,7 @@ class SessionInfoTC(HttpCase):
         super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")
         self.partner.signup_prepare()
-        self.env.cr.commit()
+        self.env.cr.savepoint()
         self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
         self.headers = {}
 
