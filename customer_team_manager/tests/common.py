@@ -52,7 +52,7 @@ class CustomerTeamManagerAbstractTC(TransactionCase):
 
     def simulate_user_login(self, user):
         user.with_user(user.id)._update_last_login()
-        user.invalidate_cache()
+        user.invalidate_recordset()
         self.assertEqual(user.state, "active")
 
     def assertIsAdmin(self, partner):
@@ -68,7 +68,9 @@ class CustomerTeamManagerAbstractTC(TransactionCase):
     def _grant_portal_access(self, partner, sudo_as=None, passwd="admin"):
         "Use the admin user to grant portal access to given employee"
         sudo_as = sudo_as or self.env.ref("base.user_admin")
-        wmod = self.env["customer_team_manager.portal_access_wizard"].with_user(sudo_as.id)
+        wmod = self.env["customer_team_manager.portal_access_wizard"].with_user(
+            sudo_as.id
+        )
         wizard = wmod.create(
             {
                 "customer_partners": [(6, 0, partner.ids)],
