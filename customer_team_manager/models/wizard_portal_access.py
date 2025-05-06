@@ -87,12 +87,13 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
 
         return True
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         "Do not write the given password to the database"
         user = self.env.user.with_user(self.env.user.id)
         try:
-            user._check_credentials(vals.pop("password", None))
+            for vals in vals_list:
+                user._check_credentials(vals.pop("password", None))
         except AccessDenied as err:
             raise UserError(_("Incorrect password.")) from err
-        return super().create(vals)
+        return super().create(vals_list)

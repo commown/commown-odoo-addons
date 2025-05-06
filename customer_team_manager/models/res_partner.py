@@ -135,8 +135,8 @@ class ResPartner(models.Model):
                 _("You are not allowed to perform this operation on this partner")
             )
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         """Use sudo when a customer admin creates a partner, taking care of security
 
         There is quite a lot happening in other modules under the hood when creating a
@@ -145,11 +145,12 @@ class ResPartner(models.Model):
         """
         _self = self
         if self._current_user_is_customer_admin():
-            vals["parent_id"] = self.env.user.commercial_partner_id.id
-            self._check_customer_allowed_attrs(vals)
-            _self = self.sudo()
+            for vals in vals_list:
+                vals["parent_id"] = self.env.user.commercial_partner_id.id
+                self._check_customer_allowed_attrs(vals)
+                _self = self.sudo()
 
-        return super(ResPartner, _self).create(vals)
+        return super(ResPartner, _self).create(vals_list)
 
     @api.model
     def _check_one_customer_admin_at_least(self, company_partner):
