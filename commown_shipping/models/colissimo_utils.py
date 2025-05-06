@@ -1,10 +1,10 @@
 import json
 import logging
-from cgi import parse_header
 from datetime import datetime
 
 import phonenumbers
 import requests
+from requests.utils import _parse_content_type_header
 from requests_toolbelt.multipart import decoder
 
 from odoo import _
@@ -178,7 +178,7 @@ def parse_multipart(http_resp):
 
 
 def parse_response(resp):
-    ctype_main, _ctype_details = parse_header(resp.headers["Content-Type"])
+    ctype_main, ctype_details = _parse_content_type_header(resp.headers["Content-Type"])
     if ctype_main.startswith("multipart/"):
         return parse_multipart(resp)
     elif ctype_main == "application/json":
