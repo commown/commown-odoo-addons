@@ -5,7 +5,6 @@ from odoo import api
 from odoo.tests.common import SavepointCase
 
 from odoo.addons.queue_job.tests.common import trap_jobs
-from odoo.addons.website.models.website import Website  # see mock
 from odoo.addons.website.tools import MockRequest
 
 from ..models.contract import NO_DATE
@@ -270,10 +269,6 @@ class WebsiteBaseTC(RentalSaleOrderTC):
         if sudo_as:
             view = view.with_user(sudo_as)
 
-        with patch.object(Website, "get_alternate_languages", return_value=()):
-            with MockRequest(self.env, website=self.website) as request:
-                request.httprequest.args = []
-                request.httprequest.query_string = ""
-                request.endpoint_arguments = {}
-                html = view.render(render_kwargs)
+        with MockRequest(self.env, website=self.website):
+            html = self.env["ir.qweb"]._render(view.id, render_kwargs)
         return lxml.html.fromstring(html)

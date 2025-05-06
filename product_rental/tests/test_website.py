@@ -18,7 +18,11 @@ class WebsiteTC(WebsiteBaseTC):
 
     def test_portal_sale_order_view(self):
         doc = self.render_view(
-            "sale.sale_order_portal_template", sale_order=self.so, website=self.website
+            "sale.sale_order_portal_template",
+            sale_order=self.so,
+            website=self.website,
+            object=self.so,
+            main_object=self.so,
         )
         product_names = map(_clean_text, doc.xpath("//td[@id='product_name']"))
         self.assertEqual(
@@ -39,9 +43,9 @@ class WebsiteTC(WebsiteBaseTC):
     def test_portal_contract_view(self):
         doc = self.render_view(
             "contract.portal_contract_page",
-            page_name="Contracts",
             contract=self.contracts[0],
             website=self.website,
+            main_object=self.contracts[0],
         )
         self.assertEqual(
             doc.xpath("//div[@id='general_information']//h6//text()"), ["Customer:"]
