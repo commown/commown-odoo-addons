@@ -99,10 +99,9 @@ class Contract(models.Model):
 
     def _inverse_date_start(self):
         "Allow the direct modification of the start date"
-        for record in self:
+        for record in self.filtered("line_recurrence"):
             for cline in record.contract_line_ids:
                 cline.date_start = record.date_start
-                cline._onchange_date_start()
 
     def _inverse_recurring_next_date(self):
         """Allow the direct modification of the next recurring date
@@ -263,7 +262,6 @@ class Contract(models.Model):
             else:
                 line.sequence = sequence
 
-        self.contract_line_ids._onchange_date_start()
         self._compute_date_end()
 
     @api.model
