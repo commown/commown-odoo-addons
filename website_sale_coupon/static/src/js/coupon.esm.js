@@ -3,6 +3,15 @@
 import publicWidget from "web.public.widget";
 import {qweb} from "web.core";
 
+function displayCoupons(coupons) {
+    var $dl = $("<dl/>").appendTo($("#coupons-placeholder").empty());
+    coupons.forEach(function (coupon) {
+        $(
+            qweb.render("coupon.used", {name: coupon.name, descr: coupon.descr})
+        ).appendTo($dl);
+    });
+}
+
 publicWidget.registry.CouponForm = publicWidget.Widget.extend({
     selector: "#coupon-form",
 
@@ -15,29 +24,10 @@ publicWidget.registry.CouponForm = publicWidget.Widget.extend({
         this.$form = $("form#coupon_input");
     },
 
-    displayCoupons: function (coupons) {
-        var $dl = $("<dl/>").appendTo($("#coupons-placeholder").empty());
-        coupons.forEach(function (coupon) {
-            $(
-                qweb.render("coupon.used", {name: coupon.name, descr: coupon.descr})
-            ).appendTo($dl);
-        });
-    },
+    displayCoupons: displayCoupons,
 
     start: function () {
         this.$form.find(":submit").removeAttr("disabled");
-
-        var self = this;
-        this._rpc({
-            route: "/website_sale_coupon/reserved_coupons",
-        })
-            .then(function (result) {
-                console.log("used_coupons success! result=%o", result);
-                self.displayCoupons(result);
-            })
-            .catch((error) => {
-                console.log("An error occurred: ", error.message);
-            });
     },
 
     validateCoupon: function (ev) {
@@ -91,5 +81,25 @@ publicWidget.registry.CouponForm = publicWidget.Widget.extend({
         );
 
         return false;
+    },
+});
+
+publicWidget.registry.InitCouponPlaceholder = publicWidget.Widget.extend({
+    selector: "#coupons-placeholder",
+
+    displayCoupons: displayCoupons,
+
+    start: function () {
+        var self = this;
+        this._rpc({
+            route: "/website_sale_coupon/reserved_coupons",
+        })
+            .then(function (result) {
+                console.log("used_coupons success! result=%o", result);
+                self.displayCoupons(result);
+            })
+            .catch((error) => {
+                console.log("An error occurred: ", error.message);
+            });
     },
 });
