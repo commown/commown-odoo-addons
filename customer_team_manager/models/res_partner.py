@@ -104,7 +104,6 @@ class ResPartner(models.Model):
             result["toolbar"].update({"action": actions, "relate": []})
         return result
 
-    @api.multi
     @api.returns(None, lambda value: value[0])
     def copy_data(self, default=None):
         "Filter copied data to allowed attributes when user is a customer admin"
@@ -164,7 +163,6 @@ class ResPartner(models.Model):
         if not self.sudo().search_count(domain):
             raise ValidationError(_("At least one administrator is mandatory"))
 
-    @api.multi
     def write(self, vals):
         def is_b2c(partner):
             return not partner.commercial_partner_id.is_company
@@ -217,7 +215,6 @@ class ResPartner(models.Model):
             and self == self.commercial_partner_id.child_ids.filtered("user_ids")
         )
 
-    @api.multi
     def unlink(self):
         is_b2b = not self.is_company and self.commercial_partner_id.is_company
         if is_b2b:
@@ -230,7 +227,6 @@ class ResPartner(models.Model):
 
         return res
 
-    @api.multi
     def action_revoke_portal_access(self):
         self.ensure_one()
         users = self.sudo().user_ids

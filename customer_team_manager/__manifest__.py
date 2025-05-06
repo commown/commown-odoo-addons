@@ -3,7 +3,7 @@
 {
     "name": "Customer team manager",
     "summary": "Allow customers to manage their team and users",
-    "version": "12.0.1.0.3",
+    "version": "16.0.1.0.0",
     "development_status": "Alpha",
     "category": "Manager customer",
     "website": "https://github.com/commown/commown-odoo-addons",

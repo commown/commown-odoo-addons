@@ -33,7 +33,7 @@ class CustomerTeamManagerAbstractTC(SavepointCase):
     def _model(self, model_name, sudo_as=None):
         model = self.env[model_name]
         if sudo_as:
-            model = model.sudo(sudo_as)
+            model = model.with_user(sudo_as)
         return model
 
     def create_team(self, sudo_as=None, **kwargs):
@@ -51,7 +51,7 @@ class CustomerTeamManagerAbstractTC(SavepointCase):
         return form.save()
 
     def simulate_user_login(self, user):
-        user.sudo(user.id)._update_last_login()
+        user.with_user(user.id)._update_last_login()
         user.invalidate_cache()
         self.assertEqual(user.state, "active")
 
@@ -68,7 +68,7 @@ class CustomerTeamManagerAbstractTC(SavepointCase):
     def _grant_portal_access(self, partner, sudo_as=None, passwd="admin"):
         "Use the admin user to grant portal access to given employee"
         sudo_as = sudo_as or self.env.ref("base.user_admin")
-        wmod = self.env["customer_team_manager.portal_access_wizard"].sudo(sudo_as.id)
+        wmod = self.env["customer_team_manager.portal_access_wizard"].with_user(sudo_as.id)
         wizard = wmod.create(
             {
                 "customer_partners": [(6, 0, partner.ids)],

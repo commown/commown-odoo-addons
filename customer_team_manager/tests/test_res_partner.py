@@ -14,7 +14,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
     def test_fields_view_get(self):
         "Essentially check the syntax is correct and actions are filtered out"
 
-        model_sudo = self.env["res.partner"].sudo(self.customer_user_admin)
+        model_sudo = self.env["res.partner"].with_user(self.customer_user_admin)
         result = model_sudo.fields_view_get(toolbar=True)
         self.assertEqual(
             sorted([a["name"] for a in result["toolbar"]["action"]]),
@@ -22,7 +22,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         )
 
     def test_compute_default_parent_id(self):
-        model = self.env["res.partner"].sudo(self.customer_user_admin)
+        model = self.env["res.partner"].with_user(self.customer_user_admin)
         result = model._compute_default_parent_id()
         self.assertEqual(result, self.customer_company.id)
 
@@ -46,7 +46,9 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
         partner = self.create_partner(name="F Last")
         with self.assertRaises(AccessError):
-            partner.sudo(self.customer_user_admin).parent_id = self.customer_company.id
+            partner.with_user(
+                self.customer_user_admin
+            ).parent_id = self.customer_company.id
 
     def test_portal_user_write_cannot_change_colleagues_company(self):
         "A customer must not be able to change the company of a colleague"
@@ -54,7 +56,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         partner = self.create_partner(sudo_as=self.customer_user_admin, name="F Last")
 
         with self.assertRaises(AccessError) as err:
-            partner.sudo(self.customer_user_admin).parent_id = 1
+            partner.with_user(self.customer_user_admin).parent_id = 1
         self.assertEqual(
             err.exception.name,
             "You are not allowed to perform this operation on this partner",
@@ -95,7 +97,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         admin.write({"customer_roles": [(6, 0, minor_role.ids)]})
         self.assertIsUser(admin)
 
-        self.customer_partner_admin.sudo(self.customer_user_admin).write(
+        self.customer_partner_admin.with_user(self.customer_user_admin).write(
             {"customer_roles": [(6, 0, minor_role.ids)]}
         )
         self.assertIsUser(self.customer_user_admin)
@@ -117,7 +119,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertTrue(self.env.user.has_group("sales_team.group_sale_manager"))
         empl.email = "i_know_what_i_am_doing@test.coop"
 
-        empl_seen_by_customer = empl.sudo(self.customer_user_admin.id)
+        empl_seen_by_customer = empl.with_user(self.customer_user_admin.id)
         with self.assertRaises(ValidationError) as err:
             empl_seen_by_customer.email = "raises_error@test.coop"
         self.assertEqual(
@@ -157,7 +159,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
         self.assertEqual(empl.portal_status, "never_connected")
 
-        empl.sudo(self.customer_user_admin).active = False
+        empl.with_user(self.customer_user_admin).active = False
         self.assertEqual(empl.portal_status, "not_granted")
         self.assertFalse(empl.user_ids)
 
@@ -166,7 +168,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
         empl = self.create_partner(sudo_as=self.customer_user_admin, name="New Empl")
 
-        _empl = empl.sudo(self.customer_user_admin)
+        _empl = empl.with_user(self.customer_user_admin)
         with self.assertRaises(AccessError) as err:
             _empl.unlink()
 
@@ -196,7 +198,9 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
     def test_portal_user_copy_data(self):
         "Creating a new partner from copy should be easy (and not crash)"
-        customer_as_him = self.customer_partner_admin.sudo(self.customer_user_admin)
+        customer_as_him = self.customer_partner_admin.with_user(
+            self.customer_user_admin
+        )
 
         attrs = customer_as_him.copy_data()[0]
         colleague = self.create_partner(sudo_as=self.customer_user_admin, **attrs)
@@ -348,7 +352,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertEqual(empl.lastname, "Cay")
         self.assertEqual(empl.phone, "+33 1 02 03 04 05")
         self.assertEqual(
-            sorted(empl.customer_roles.get_xml_id().values()),
+            sorted(empl.customer_roles.get_external_id().values()),
             [
                 "customer_team_manager.customer_role_accounting",
                 "customer_team_manager.customer_role_it",
@@ -361,7 +365,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertEqual(other.lastname, "New")
         self.assertEqual(other.phone, "+33 6 02 03 04 05")
         self.assertEqual(
-            sorted(other.customer_roles.get_xml_id().values()),
+            sorted(other.customer_roles.get_external_id().values()),
             ["customer_team_manager.customer_role_fleet_manager"],
         )
         self.assertEqual(other.commercial_partner_id, self.customer_company)

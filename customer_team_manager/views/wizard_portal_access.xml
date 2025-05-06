@@ -37,7 +37,6 @@
             name="groups_id"
             eval="[(4, ref('customer_team_manager.group_customer_admin'))]"
         />
-    <field name="view_type">form</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
     <field name="context">{'default_customer_partners': active_ids}</field>

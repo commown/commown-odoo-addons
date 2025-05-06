@@ -7,7 +7,7 @@ class CustomerRoleTC(CustomerTeamManagerAbstractTC):
     def _readonly(self, short_role, as_user=None, **with_context):
         role = self.env.ref("customer_team_manager.customer_role_%s" % short_role)
         if as_user:
-            role = role.sudo(as_user)
+            role = role.with_user(as_user)
         return role.with_context(**with_context).readonly
 
     def test_compute_readonly(self):
