@@ -50,12 +50,6 @@ class ContractTemplateMailGenerator(TestContractBase):
     def create_contract(self, date_start, date_end=None, **kwargs):
         kwargs.setdefault("contract_template_id", self.template.id)
         contract = self.contract.copy(kwargs)
-        contract.contract_line_ids.update(
-            {
-                "recurring_next_date": date_start,
-                "date_start": date_start,
-            }
-        )
         contract.date_start = date_start
         if date_end:
             contract.date_end = date_end
