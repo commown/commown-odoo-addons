@@ -69,18 +69,20 @@
 
                 <ul>
                   <li groups="base.group_user">
-                    <i class="fa fa-building" /> <field name="commercial_partner_id" />
+                    <i class="fa fa-building" title="Company" /> <field
+                                            name="commercial_partner_id"
+                                        />
                   </li>
-                  <li><i class="fa fa-users" /> <field name="team" /></li>
-                  <li><i class="fa fa-phone" /> <field
+                  <li><i class="fa fa-users" title="Team" /> <field name="team" /></li>
+                  <li><i class="fa fa-phone" title="Phone" /> <field
                                             t-if="record.phone.raw_value"
                                             name="phone"
                                             widget="phone"
                                         /></li>
-                  <li style="text-wrap: nowrap"><i class="fa fa-envelope" /> <field
-                                            name="email"
-                                            widget="email"
-                                        /></li>
+                  <li style="text-wrap: nowrap"><i
+                                            class="fa fa-envelope"
+                                            title="Email"
+                                        /> <field name="email" widget="email" /></li>
                   <li><field
                                             name="customer_roles"
                                             widget="customer_role_tag_kanban_widget"
