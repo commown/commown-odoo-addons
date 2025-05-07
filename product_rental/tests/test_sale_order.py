@@ -1,20 +1,28 @@
-from mock import patch
+from odoo_test_helper import FakeModelLoader
 
 from odoo.tests.common import tagged
-
-from odoo.addons.payment.models.payment_acquirer import PaymentTransaction
 
 from .common import RentalSaleOrderTC
 
 
-def fake_s2s_do_transaction(self, **kwargs):
-    self._set_transaction_done()
-    self._post_process_after_done()
-    return True
-
-
 @tagged("-at_install", "post_install")
 class SaleOrderContractGenerationTC(RentalSaleOrderTC):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        # Create a fake model to override PaymentTransaction method
+        cls.loader = FakeModelLoader(cls.env, cls.__module__)
+        cls.loader.backup_registry()
+        from odoo.addons.contract_payment_auto.tests.models import TransactionTest
+
+        cls.loader.update_registry((TransactionTest,))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.loader.restore_registry()
+        super().tearDownClass()
+
     def assert_contract_lines_attributes_equal(self, contract, value_dict):
         for attr, value in value_dict.items():
             self.assertEqual(contract.contract_line_ids.mapped(attr), value)
@@ -389,10 +397,7 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             }
         )
 
-        with patch.object(
-            PaymentTransaction, "s2s_do_transaction", new=fake_s2s_do_transaction
-        ):
-            contract.recurring_create_invoice()
+        contract.with_context(test_target_state="done").recurring_create_invoice()
 
         # Do not use _recurring_create_invoice return value here as
         # contract_queue_job (installed in the CI) returns an empty invoice set
