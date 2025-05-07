@@ -1,7 +1,7 @@
 import logging
 from collections import defaultdict
 
-from odoo import models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -40,6 +40,20 @@ class ProductRentalSaleOrder(models.Model):
             }
 
         return docs
+
+    # pylint: disable=missing-return
+    @api.depends("order_line.product_uom_qty", "order_line.product_id")
+    def _compute_cart_info(self):
+        """In Commown activities we can have services that required a shipped product"""
+        super()._compute_cart_info()
+        for order in self:
+            order.only_services = all(
+                (
+                    not line.product_id.has_recurrent_payment  # we need to ship the product
+                    and line.product_id.type in ("service", "digital")
+                )
+                for line in order.website_order_line
+            )
 
     def action_quotation_send(self):
         "Add contractual documents to the quotation email"

@@ -1,5 +1,6 @@
 from odoo_test_helper import FakeModelLoader
 
+from odoo.fields import Command
 from odoo.tests.common import tagged
 
 from .common import RentalSaleOrderTC
@@ -437,6 +438,23 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
             }
         )
 
+    def _create_simple_order(self, products):
+        user_demo = self.env.ref("base.user_demo")
+        return self.env["sale.order"].create(
+            {
+                "partner_id": user_demo.partner_id.id,
+                "state": "draft",
+                "order_line": [
+                    Command.create(
+                        {
+                            "product_id": pt.id,
+                        }
+                    )
+                    for pt in products
+                ],
+            }
+        )
+
     def check_sale_quotation_send_emails(self, lang):
         self.partner.lang = lang
         self.so.with_context(lang=lang).action_quotation_send()
@@ -465,3 +483,14 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
             self.check_sale_quotation_send_emails(False),
             ["doc1_en.txt", "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
         )
+
+    def test_compute_order_only_services(self):
+        service = self.env["product.product"].search(
+            [("type", "=", "service")], limit=1
+        )
+        product = self.env["product.product"].search([("type", "=", "consu")], limit=1)
+        order_only_service = self._create_simple_order(service)
+        order_mix = self._create_simple_order(service + product)
+
+        self.assertTrue(order_only_service.only_services)
+        self.assertFalse(order_mix.only_services)
