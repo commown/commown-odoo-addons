@@ -208,6 +208,8 @@ class RentalSaleOrderMixin:
         kwargs.setdefault("name", "Test Contract Template %d" % num)
         kwargs.setdefault("commitment_period_number", 12)
         kwargs.setdefault("commitment_period_type", "monthly")
+        # Mandatory to make tests pass
+        self.env.flush_all()
         return self.env["contract.template"].create(kwargs)
 
     def _oline(self, product, **kwargs):
