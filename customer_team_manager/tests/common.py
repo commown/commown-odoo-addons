@@ -1,8 +1,8 @@
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 from odoo.tests.common import Form
 
 
-class CustomerTeamManagerAbstractTC(SavepointCase):
+class CustomerTeamManagerAbstractTC(TransactionCase):
     "Abstract class for present module's tests"
 
     @classmethod
