@@ -92,7 +92,9 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
         user = self.env.user.with_user(self.env.user.id)
         try:
             for vals in vals_list:
-                user._check_credentials(vals.pop("password", None))
+                user._check_credentials(
+                    vals.pop("password", None), {"interactive": True}
+                )
         except AccessDenied as err:
             raise UserError(_("Incorrect password.")) from err
         return super().create(vals_list)
