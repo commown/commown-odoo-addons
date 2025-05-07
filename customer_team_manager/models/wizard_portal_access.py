@@ -47,18 +47,17 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
         if self.env["res.partner"]._current_user_is_customer_admin():
             email_domains.add(mail_ext(self.env.user.login))
 
-        template = self.env.ref("customer_team_manager.portal_access_info")
-
         for rec in self:
             invalid_email_partners = rec.customer_partners.filtered(_has_invalid_email)
             emails = (rec.customer_partners - invalid_email_partners).mapped("email")
             email_domains |= {mail_ext(e) for e in emails}
-            rec.info = template.render(
+            rec.info = self.env["ir.qweb"]._render(
+                "customer_team_manager.portal_access_info",
                 {
                     "valid_emails": emails,
                     "email_domains": email_domains,
                     "invalid_email_partners": invalid_email_partners,
-                }
+                },
             )
 
     def _prepare_portal_wizard(self, partners):
