@@ -1,5 +1,4 @@
 import lxml.html
-from mock import patch
 
 from odoo import api
 from odoo.tests.common import SavepointCase
@@ -8,20 +7,6 @@ from odoo.addons.queue_job.tests.common import trap_jobs
 from odoo.addons.website.tools import MockRequest
 
 from ..models.contract import NO_DATE
-
-
-class MockedEmptySessionMixin(object):
-    def setUp(self):
-        request_patcher = patch(
-            "odoo.addons.website_sale_affiliate"
-            ".models.sale_affiliate_request.request"
-        )
-        self.request_mock = request_patcher.start()
-        self.request_mock.configure_mock(session={})
-        self.fake_session = self.request_mock.session
-        self.addCleanup(request_patcher.stop)
-
-        super(MockedEmptySessionMixin, self).setUp()
 
 
 class RentalSaleOrderMixin:
@@ -251,7 +236,7 @@ class RentalSaleOrderMixin:
         return (0, 0, kwargs)
 
 
-class RentalSaleOrderTC(MockedEmptySessionMixin, RentalSaleOrderMixin, SavepointCase):
+class RentalSaleOrderTC(RentalSaleOrderMixin, SavepointCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
