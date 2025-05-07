@@ -354,15 +354,15 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         so = self.create_sale_order()
         so.action_confirm()
 
-        acquirer = self.env.ref("payment.payment_acquirer_transfer")
+        provider = self.env.ref("payment.payment_provider_transfer")
 
         token = self.env["payment.token"].create(
             {
-                "name": "Test Token",
+                "payment_details": "Test Token",
                 "partner_id": so.partner_id.id,
                 "active": True,
-                "acquirer_id": acquirer.id,
-                "acquirer_ref": "my_ref",
+                "provider_id": provider.id,
+                "provider_ref": "my_ref",
             }
         )
 

@@ -23,7 +23,7 @@ class PaymentTransaction(models.Model):
                             "payment_method_id": contract.payment_mode_id.payment_method_id.id,
                             "amount": self.amount,
                             "payment_transaction_id": self.id,
-                            "invoice_ids": [(6, 0, [invoice.id])],
+                            "move_id": invoice.id,
                         }
                     )
                     payment.post()
