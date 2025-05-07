@@ -1,7 +1,7 @@
 import lxml.html
 
 from odoo import api
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from odoo.addons.queue_job.tests.common import trap_jobs
 from odoo.addons.website.tools import MockRequest
@@ -238,7 +238,7 @@ class RentalSaleOrderMixin:
         return (0, 0, kwargs)
 
 
-class RentalSaleOrderTC(RentalSaleOrderMixin, SavepointCase):
+class RentalSaleOrderTC(RentalSaleOrderMixin, TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

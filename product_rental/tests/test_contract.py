@@ -75,7 +75,7 @@ class ContractFromSale(RentalSaleOrderTC):
         with self.assertRaises(ValidationError) as err:
             self.contract.get_main_rental_service()
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "Contract %s (id %d) has a main rental service"
             " with an incoherent contract model %s"
             % (self.contract.name, self.contract.id, new_contract_tmpl.name),
