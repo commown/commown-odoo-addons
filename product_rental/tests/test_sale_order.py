@@ -375,7 +375,9 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             }
         )
 
-        pay_meth = self.env.ref("payment.account_payment_method_electronic_in")
+        pay_meth = customer_journal.inbound_payment_method_line_ids.mapped(
+            "payment_method_id"
+        )
 
         pay_mode = self.env["account.payment.mode"].create(
             {
