@@ -299,10 +299,10 @@
     <field name="name">Users</field>
     <field name="res_model">res.partner</field>
     <field name="view_mode">kanban,tree,form</field>
-    <field name="context">{}</field>
+    <field name="context">{'res_partner_search_mode': 'customer'}</field>
     <field
             name="domain"
-        >[("customer", "=", True), ("is_company", "=", False), ("type", "=", "contact"), ("commercial_partner_id.is_company", "=", True)]</field>
+        >[("customer_rank", "&gt;", 0),("is_company", "=", False), ("type", "=", "contact"), ("commercial_partner_id.is_company", "=", True)]</field>
     <field name="search_view_id" ref="view_customer_user_search" />
   </record>
 

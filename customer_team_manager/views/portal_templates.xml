@@ -16,7 +16,7 @@
                     >
             Users
             <span
-                            t-esc="env['res.partner'].search_count([('customer', '=', True), ('is_company', '=', False), ('type', '=', 'contact'), ('commercial_partner_id.is_company', '=', True)])"
+                            t-esc="env['res.partner'].search_count([('customer_rank', '>', 0), ('is_company', '=', False), ('type', '=', 'contact'), ('commercial_partner_id.is_company', '=', True)])"
                             class="badge badge-secondary badge-pill"
                         />
           </a>
