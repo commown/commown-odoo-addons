@@ -250,7 +250,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self._grant_portal_access(empl)
         self.assertEqual(empl.portal_status, "never_connected")
 
-        self.simulate_user_login(empl.sudo().user_ids)
+        self.simulate_user_login(empl)
         self.assertEqual(empl.portal_status, "already_connected")
 
         empl.action_revoke_portal_access()

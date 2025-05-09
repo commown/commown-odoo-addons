@@ -50,9 +50,12 @@ class CustomerTeamManagerAbstractTC(TransactionCase):
             setattr(form, field, value)
         return form.save()
 
-    def simulate_user_login(self, user):
+    def simulate_user_login(self, partner):
+        user = partner.sudo().user_ids
+
         user.with_user(user.id)._update_last_login()
         user.invalidate_recordset()
+        partner.invalidate_recordset()
         self.assertEqual(user.state, "active")
 
     def assertIsAdmin(self, partner):
