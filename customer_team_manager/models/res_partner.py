@@ -228,10 +228,19 @@ class ResPartner(models.Model):
 
     def action_revoke_portal_access(self):
         self.ensure_one()
-        users = self.sudo().user_ids
-        if users:
-            users[0].groups_id -= self.env.ref("base.group_portal")
-        self._reset_roles()
+        wizard_model = self.env["portal.wizard"].with_context(active_ids=[self.id])
+        role_model = self.env["customer_team_manager.customer_role"]
+
+        wizard = wizard_model.sudo().create({})
+
+        for user in wizard.user_ids:
+            if user.partner_id == self and user.is_portal:
+                # Remove all customer role groups before using the revoke actions,
+                # since they count as "portal" roles and since block the "public" role writing.
+                user.user_id.groups_id -= role_model.search([]).mapped("groups")
+
+                user.action_revoke_access()
+
         self._check_one_customer_admin_at_least(self.commercial_partner_id)
 
     def _reset_roles(self):

@@ -60,17 +60,8 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
                 },
             )
 
-    def _prepare_portal_wizard(self, partners):
-        model = self.env["portal.wizard"].with_context(active_ids=partners.ids)
-        wizard = model.sudo().create({})
-        # Filter to avoid a crash when 2 partners have the same email:
-        wizard.user_ids.filtered(lambda u: u.partner_id in partners).update(
-            {"in_portal": True}
-        )
-        return wizard
-
     def grant_portal_access(self):
-        "Use portal wizard to grant or remove portal access according to in_portal"
+        "Use portal wizard to grant or remove portal access according to is_portal"
         if not any(self.env.user.has_group(g) for g in self.allowed_groups):
             raise UserError(_("You are not allowed to manage users."))
 
@@ -78,8 +69,16 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
             lambda e: e.portal_status == "not_granted"
         ).filtered(_has_valid_email)
 
-        wizard = self._prepare_portal_wizard(partners)
-        wizard.action_apply()
+        model = self.env["portal.wizard"].with_context(active_ids=partners.ids)
+        wizard = model.sudo().create({})
+
+        non_portal_users = wizard.user_ids.filtered(
+            lambda user: user.partner_id in partners and not user.is_portal
+        )
+
+        # action_grant_access() requires only one user at a time (self.ensure_one())
+        for user in non_portal_users:
+            user.action_grant_access()
 
         for partner in partners:
             partner._reset_roles()
