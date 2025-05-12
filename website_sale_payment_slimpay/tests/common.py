@@ -59,14 +59,15 @@ class SlimpayControllersTC(HttpCase):
         self._start_patcher(
             patch.object(SlimpayClient, "get_from_doc", side_effect=_get_from_doc_mock)
         )
+
+        def fake_approval(tx_ref, *args, **kw):
+            return f"https://slimpay.test/hello?code=mycode&tx_ref={tx_ref}"
+
         # Mock approval_url
         self._start_patcher(
-            patch.object(
-                SlimpayClient,
-                "approval_url",
-                side_effect=lambda tx_ref, *args, **kw: tx_ref,
-            )
+            patch.object(SlimpayClient, "approval_url", side_effect=fake_approval)
         )
+
         super().setUp()
         # Stop patchers in case of a test exception or normal termination
         for patcher in self._patchers:
@@ -185,10 +186,11 @@ class SlimpayControllersTC(HttpCase):
         so_id = odoo.http.root.session_store.get(self.session.sid)["sale_order_id"]
         tx_data = self.jsonrpc("/shop/payment/transaction/%d" % so_id, params=params)
 
-        return self.jsonrpc(
-            "/payment/slimpay_transaction/%s" % tx_data["provider_id"],
-            {"tx_ref": tx_data["reference"]},
-        )
+        form = lxml.html.fromstring(tx_data["redirect_form_html"])
+        self.assertEqual(form.get("action"), "https://slimpay.test/hello")
+        params = dict(form.form_values())
+        self.assertEqual(params, {"code": "mycode", "tx_ref": tx_data["reference"]})
+        return tx_data["reference"]
 
     def simulate_feedback(self, tx_ref, state="closed.completed", assert_code=200):
         """Simulate a (by default OK) Slimpay feedback.

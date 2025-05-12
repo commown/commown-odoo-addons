@@ -15,5 +15,7 @@
     "depends": ["website_sale", "account_payment_slimpay"],
     "data": [
         "views/address_template.xml",
+        "views/payment_templates.xml",
+        "data/payment_provider.xml",  # After redirect_form definition!
     ],
 }

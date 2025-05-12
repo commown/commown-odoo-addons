@@ -1,0 +1,11 @@
+<odoo>
+
+  <template id="redirect_form">
+    <form t-att-action="action" method="get">
+      <t t-foreach="inputs" t-as="input">
+	<input type="hidden" t-att-name="input[0]" t-att-value="input[1]" />
+      </t>
+    </form>
+  </template>
+
+</odoo>
