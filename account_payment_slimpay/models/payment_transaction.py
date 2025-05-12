@@ -5,6 +5,8 @@ from coreapi.exceptions import ErrorMessage
 from odoo import _, models
 from odoo.exceptions import ValidationError
 
+from . import slimpay_utils
+
 _logger = logging.getLogger(__name__)
 
 
@@ -139,3 +141,34 @@ class SlimpayTransaction(models.Model):
                     "provider_reference": provider_reference,
                 }
             )
+
+    def approval_url(self, so=None):
+        "Return Slimpay approval URL for given optional sale order (1st one by default)"
+        self.ensure_one()
+
+        so = so or self.sale_order_ids[0]
+        assert (
+            self.env.user.partner_id.commercial_partner_id
+            == so.partner_id.commercial_partner_id
+        )
+
+        base_url = self.env["website"].get_current_website().domain or self.env[
+            "ir.config_parameter"
+        ].get_param("web.base.url")
+
+        approval_url = self.provider_id.slimpay_client().approval_url(
+            self.reference,
+            so.id,
+            (so.partner_id.lang or "en_US").split("_")[0],
+            so.amount_total,
+            so.currency_id.name,
+            so.currency_id.decimal_places,
+            slimpay_utils.subscriber_from_partner(so.partner_id),
+            base_url + self.landing_route,
+        )
+        _logger.debug(
+            "Approval URL for transaction reference %(ref)s: %(url)s",
+            {"url": approval_url, "ref": self.reference},
+        )
+
+        return approval_url
