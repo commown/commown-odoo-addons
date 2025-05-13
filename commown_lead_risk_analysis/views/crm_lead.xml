@@ -4,7 +4,7 @@
   <record model="ir.ui.view" id="crm_case_form_view_oppor">
     <field name="name">commown_lead_risk_analysis.lead.form.opportunity</field>
     <field name="model">crm.lead</field>
-    <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+    <field name="inherit_id" ref="crm.crm_lead_view_form" />
     <field name="arch" type="xml">
 
       <xpath expr="//div[@name='button_box']" position="inside">
@@ -29,7 +29,7 @@
       </xpath>
 
       <xpath
-                expr="//div[hasclass('oe_title')]//h2[hasclass('o_row')]"
+                expr="//field[@name='expected_revenue']/ancestor::h2"
                 position="attributes"
             >
         <attribute
