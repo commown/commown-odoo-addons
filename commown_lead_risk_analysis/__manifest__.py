@@ -3,10 +3,9 @@
     "category": "Business",
     "summary": "Add risk analysis-related fields to leads",
     "version": "12.0.1.0.7",
-    "description": "Risk analysis data storage for Commown leads",
-    "author": "Commown SCIC SAS",
+    "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "crm",
         "partner_firstname",

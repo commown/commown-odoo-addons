@@ -44,9 +44,7 @@ class CommownCrmLead(models.Model):
 
     contract_id = fields.Many2one("contract.contract", "Contract")
 
-    email_rating = fields.Selection(
-        EMAIL_RATINGS, string="Email Rating", default=EMAIL_RATINGS[0][0]
-    )
+    email_rating = fields.Selection(EMAIL_RATINGS, default=EMAIL_RATINGS[0][0])
     web_searchurl = fields.Html("Search on the web", compute="_compute_web_searchurl")
     webid_unknown = fields.Boolean("Unknown on the web", default=False)
     webid_rating = fields.Selection(
@@ -84,10 +82,8 @@ class CommownCrmLead(models.Model):
         TECHNICAL_SKILLS, string="Technical skills", default=TECHNICAL_SKILLS[0][0]
     )
     questions = fields.Text("Customer questions")
-    global_feeling = fields.Selection(
-        GLOBAL_FEELING, string="Global feeling", default=GLOBAL_FEELING[0][0]
-    )
-    comments = fields.Text("Comments")
+    global_feeling = fields.Selection(GLOBAL_FEELING, default=GLOBAL_FEELING[0][0])
+    comments = fields.Text()
     used_for_risk_analysis = fields.Boolean(
         "Used for risk analysis", related="team_id.used_for_risk_analysis"
     )
