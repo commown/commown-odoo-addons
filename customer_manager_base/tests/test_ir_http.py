@@ -57,8 +57,8 @@ class SessionInfoTC(HttpCase):
             environ_base=self.werkzeug_environ,
             headers=self.headers,
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("/my/account", str(response.data))
+        self.assertEqual(response.status_code, 303)
+        self.assertIn("/my/account", response.location)
         return test_client
 
     def get_session_info(self):
