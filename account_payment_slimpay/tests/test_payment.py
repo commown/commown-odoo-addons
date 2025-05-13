@@ -56,6 +56,7 @@ class SlimpayPaymentTC(TransactionCase):
     def _create_payment(self, **kwargs):
         data = {
             "amount": 149.20000000000002,
+            "currency_id": self.env.ref("base.EUR").id,
             "payment_token_id": self.token.id,
             "partner_id": self.partner.id,
             "partner_type": "customer",
