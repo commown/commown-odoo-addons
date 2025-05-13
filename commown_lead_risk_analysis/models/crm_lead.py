@@ -141,7 +141,6 @@ class CommownCrmLead(models.Model):
 
             record.orders_description = (b"\n".join(descr)).decode("utf-8")
 
-    @api.multi
     def _compute_web_searchurl(self):
         for lead in self:
             # XXX template me!

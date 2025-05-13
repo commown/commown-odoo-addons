@@ -14,7 +14,6 @@ class SaleOrder(models.Model):
         "customer": {"parent": "followup_sales_project_id", "child": "project.task"},
     }
 
-    @api.multi
     def action_confirm(self):
         result = super(SaleOrder, self).action_confirm()
         for record in self:
