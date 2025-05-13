@@ -1,0 +1,10 @@
+<odoo>
+
+  <record
+        id="account_payment_slimpay.payment_provider_slimpay"
+        model="payment.provider"
+    >
+    <field name="redirect_form_view_id" ref="redirect_form" />
+  </record>
+
+</odoo>
