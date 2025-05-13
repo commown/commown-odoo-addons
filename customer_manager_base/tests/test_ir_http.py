@@ -2,9 +2,9 @@ import json
 
 from lxml import html
 from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
-from odoo.service import wsgi_server
+from odoo import http
 from odoo.tests.common import HttpCase, get_db_name
 
 
@@ -41,7 +41,7 @@ class SessionInfoTC(HttpCase):
 
     def portal_client(self):
         user = self.partner.user_ids.ensure_one()
-        test_client = Client(wsgi_server.application, BaseResponse)
+        test_client = Client(http.root, Response)
 
         login_form = self.get_form(test_client, "/web/login/", db=get_db_name())
         login_form.update(
