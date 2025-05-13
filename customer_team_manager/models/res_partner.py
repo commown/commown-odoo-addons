@@ -124,11 +124,13 @@ class ResPartner(models.Model):
         return result
 
     def _check_customer_allowed_attrs(self, vals):
-        """Sanitize create/ update attributes if current user is a customer admin.
+        """Sanitize create/ update attributes if current user is a customer admin
+        without the super-user tag (set in the _fields_sync method from res.partner,
+        which is a sub-writing method only writing "commercial fields").
 
-        Return in this case, false otherwise.
-        Raises AccessError if vals had not allowed attributes.
+        Raises AccessError if vals contains unallowed attributes.
         """
+
         allowed = set(self.ALLOWED_CUSTOMER_ADMIN_ATTRS)
 
         if vals.get("parent_id", False) == self.env.user.commercial_partner_id.id:
@@ -151,7 +153,7 @@ class ResPartner(models.Model):
         need to use sudo. However
         """
         _self = self
-        if self._current_user_is_customer_admin():
+        if self._current_user_is_customer_admin() and not self.env.su:
             for vals in vals_list:
                 vals["parent_id"] = self.env.user.commercial_partner_id.id
                 self._check_customer_allowed_attrs(vals)
@@ -180,7 +182,8 @@ class ResPartner(models.Model):
         have_users = self.filtered("user_ids")
 
         self_sudo = self
-        if is_customer_admin:
+
+        if is_customer_admin and not self.env.su:
             self._check_customer_allowed_attrs(vals)
             self_sudo = self.sudo()
             if "email" in vals and have_users.filtered(email_changed):
@@ -278,7 +281,7 @@ class ResPartner(models.Model):
     def _load_records_create(self, values):
         "This method is used by the import UI when new records are created."
 
-        if self._current_user_is_customer_admin():
+        if self._current_user_is_customer_admin() and not self.env.su:
             self._check_import_perms(values)
             return super(ResPartner, self.sudo())._load_records_create(values)
         else:
