@@ -80,7 +80,7 @@ class SlimpayUtilsTC(TransactionCase):
         )
 
     def test_slimpay_api_create_order(self):
-        euro = self.env["res.currency"].search([("name", "=", "EUR")])
+        euro = self.env.ref("base.EUR")
         with patch.object(slimpay_utils, "get_client"):
             client = slimpay_utils.SlimpayClient(
                 "api_url", "creditor", "app_id", "app_secret"
