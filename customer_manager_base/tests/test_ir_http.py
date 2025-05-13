@@ -82,7 +82,6 @@ class SessionInfoTC(HttpCase):
     def test_session_info_is_customer_admin_true(self):
         with self.registry.cursor() as test_cursor:
             env = self.env(test_cursor)
-            env.ref("customer_team_manager.customer_role_admin")
             partner = env["res.partner"].browse(self.partner.id)
             partner.user_ids.groups_id |= env.ref(
                 "customer_manager_base.group_customer_admin"
