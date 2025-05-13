@@ -11,14 +11,33 @@ HERE = (Path(__file__) / "..").resolve()
 class ResPartnerTC(CustomerTeamManagerAbstractTC):
     "Test class for partner security and methods"
 
-    def test_fields_view_get(self):
+    def test_get_views(self):
         "Essentially check the syntax is correct and actions are filtered out"
 
+        # Checking the view received from a customer admin
         model_sudo = self.env["res.partner"].with_user(self.customer_user_admin)
-        result = model_sudo.fields_view_get(toolbar=True)
+        view = self.env.ref("customer_team_manager.view_customer_user_form")
+        result = model_sudo.get_views(
+            [(view.id, "form"), (view.id, "list"), (view.id, "kanban")],
+            {"toolbar": True},
+        )
+
+        # Checks if the action in the list and form views for res.partner is
+        # the dedicated customer admin portal-access grant action.
         self.assertEqual(
-            sorted([a["name"] for a in result["toolbar"]["action"]]),
+            sorted([a["name"] for a in result["views"]["form"]["toolbar"]["action"]]),
             ["[commown] Customer users dedicated portal access grant wizard action"],
+        )
+
+        self.assertEqual(
+            sorted([a["name"] for a in result["views"]["list"]["toolbar"]["action"]]),
+            ["[commown] Customer users dedicated portal access grant wizard action"],
+        )
+
+        # The kanban res.partner view has no bound action, so its toolbar should be empty.
+        self.assertEqual(
+            result["views"]["kanban"]["toolbar"],
+            {},
         )
 
     def test_compute_default_parent_id(self):

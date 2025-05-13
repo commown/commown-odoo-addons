@@ -92,16 +92,23 @@ class ResPartner(models.Model):
             partner.portal_status = result
 
     @api.model
-    def fields_view_get(self, *args, **kwargs):
-        "Empty the action menu -but Duplicate- when user is a customer admin"
-        result = super().fields_view_get(*args, **kwargs)
-        if self._current_user_is_customer_admin() and "toolbar" in result:
-            actions = [
-                action
-                for action in result["toolbar"]["action"]
-                if action.get("xml_id") in self.AUTHORIZED_ACTIONS
+    def get_views(self, views, options=None):
+        result = super().get_views(views, options)
+        if self._current_user_is_customer_admin():
+            authorized_action_ids = [
+                self.env.ref(xml_id).id for xml_id in self.AUTHORIZED_ACTIONS
             ]
-            result["toolbar"].update({"action": actions, "relate": []})
+
+            for view_type in result["views"]:
+                if "action" in result["views"][view_type].get("toolbar", {}):
+                    actions = [
+                        action
+                        for action in result["views"][view_type]["toolbar"]["action"]
+                        if action["id"] in authorized_action_ids
+                    ]
+                    result["views"][view_type]["toolbar"].update(
+                        {"action": actions, "relate": []}
+                    )
         return result
 
     def copy_data(self, default=None):
