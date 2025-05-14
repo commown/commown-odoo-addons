@@ -130,7 +130,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             sudo_as=self.customer_user_admin,
             name="New Empl",
             email="employee@test.coop",
-        )
+        ).with_user(self.env.user)
         self._grant_portal_access(empl)
         self.assertNotEqual(empl.portal_status, "not_granted")  # test pre-requisite
 
