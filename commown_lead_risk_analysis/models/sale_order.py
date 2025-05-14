@@ -46,8 +46,6 @@ class SaleOrder(models.Model):
                 "contract_id": contract.id if contract else False,
             }
         )
-        # Override post-create behaviour that auto-assigns team_id
-        lead.update({"team_id": team.id})
         return lead
 
     def _create_followup_entity_project_task(
