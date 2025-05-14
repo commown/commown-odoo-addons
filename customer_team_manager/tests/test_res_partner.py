@@ -315,7 +315,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
         columns = fields = wizard.file.splitlines()[0].decode("utf-8").split(",")
         options = {
-            "headers": True,
+            "has_headers": True,
             "advanced": True,
             "keep_matches": False,
             "encoding": "utf-8",
@@ -327,7 +327,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             "float_decimal_separator": ".",
             "fields": [],
         }
-        return wizard.do(fields, columns, options)
+        return wizard.execute_import(fields, columns, options)
 
     def colleagues(self, partner=None):
         partner = partner or self.customer_partner_admin
