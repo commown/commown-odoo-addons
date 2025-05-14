@@ -46,7 +46,7 @@ class SaleOrderTC(RentalSaleOrderTC):
                 "value_ids": [(6, 0, color_values.ids)],
             }
         )
-        self.product1.create_variant_ids()
+        self.product1._create_variant_ids()
 
         so_line1 = self._oline(self.product1.product_variant_id, product_uom_qty=2)
 
