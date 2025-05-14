@@ -117,6 +117,20 @@ class CouponSchemaTC(TransactionCase):
         self.assertFalse(self.campaign.is_valid(so))
 
     def test_reserve_and_confirm_coupon(self):
+        # Empty Sale Order (this can happen if the cart is empty)
+        empty_so = self.env["sale.order"].browse()
+        self.assertEqual(
+            empty_so.reserved_coupons(),
+            [],
+        )
+        with self.assertRaises(CouponError) as err:
+            empty_so.reserve_coupon("DUMMYCODE")
+        self.assertIn(
+            "add at least one item",
+            err.exception.args[0],
+        )
+
+        # Valid Sale Order
         so = self.sale_order()
 
         self.assertIsNone(so.reserve_coupon("DUMMYCODE"))

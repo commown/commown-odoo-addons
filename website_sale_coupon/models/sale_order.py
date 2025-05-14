@@ -58,6 +58,11 @@ class CouponSaleOrder(models.Model):
         """Return a coupon from given code if there is one with that code,
         that is also unused and valid for current sale order.
         """
+        if not self:
+            raise CouponError(
+                _("Please add at least one item in your cart to reserve a coupon.")
+            )
+
         self.ensure_one()
 
         Coupon = self.env["coupon.coupon"].sudo()
@@ -90,6 +95,8 @@ class CouponSaleOrder(models.Model):
             return coupon
 
     def reserved_coupons(self):
+        if not self:
+            return []
         self.ensure_one()
         Coupon = self.env["coupon.coupon"].sudo()
         return Coupon.search([("reserved_for_sale_id", "=", self.id)])
