@@ -192,7 +192,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             _empl.unlink()
 
         self.assertIn("res.partner", err.exception.name)
-        self.assertIn("Operation: unlink", err.exception.name)
+        self.assertIn("not allowed to delete", err.exception.name)
 
     def test_unlink_cannot_remove_last_company_admin(self):
         "Can not unlink last partner with admin role in its company"
