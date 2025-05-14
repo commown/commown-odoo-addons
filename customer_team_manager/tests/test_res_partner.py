@@ -77,7 +77,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         with self.assertRaises(AccessError) as err:
             partner.with_user(self.customer_user_admin).parent_id = 1
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "You are not allowed to perform this operation on this partner",
         )
 
@@ -142,7 +142,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         with self.assertRaises(ValidationError) as err:
             empl_seen_by_customer.email = "raises_error@test.coop"
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "The email of partners having portal access cannot be modified!",
         )
 
@@ -156,14 +156,18 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             self.customer_partner_admin.write(
                 {"customer_roles": [(6, 0, minor_role.ids)]}
             )
-        self.assertEqual(err.exception.name, "At least one administrator is mandatory")
+        self.assertEqual(
+            err.exception.args[0], "At least one administrator is mandatory"
+        )
 
     def test_revoke_portal_last_customer_admin_error(self):
         "No one can remove the portal access of the last customer admin of a company"
 
         with self.assertRaises(ValidationError) as err:
             self.customer_partner_admin.action_revoke_portal_access()
-        self.assertEqual(err.exception.name, "At least one administrator is mandatory")
+        self.assertEqual(
+            err.exception.args[0], "At least one administrator is mandatory"
+        )
 
     def test_write_active_false_removes_portal_user(self):
         "Setting an employee as inactive should revoke is portal access"
@@ -191,8 +195,8 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         with self.assertRaises(AccessError) as err:
             _empl.unlink()
 
-        self.assertIn("res.partner", err.exception.name)
-        self.assertIn("not allowed to delete", err.exception.name)
+        self.assertIn("res.partner", err.exception.args[0])
+        self.assertIn("not allowed to delete", err.exception.args[0])
 
     def test_unlink_cannot_remove_last_company_admin(self):
         "Can not unlink last partner with admin role in its company"
@@ -213,7 +217,9 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
         with self.assertRaises(ValidationError) as err:
             admin.unlink()
-        self.assertEqual(err.exception.name, "At least one administrator is mandatory")
+        self.assertEqual(
+            err.exception.args[0], "At least one administrator is mandatory"
+        )
 
     def test_portal_user_copy_data(self):
         "Creating a new partner from copy should be easy (and not crash)"

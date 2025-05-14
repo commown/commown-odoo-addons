@@ -50,7 +50,7 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
         with self.assertRaises(UserError) as err:
             self._grant_portal_access(empl, passwd="wrong password")
 
-        self.assertEqual(err.exception.name, "Incorrect password.")
+        self.assertEqual(err.exception.args[0], "Incorrect password.")
 
     def test_error_not_allowed(self):
         group_sale_manager = self.env.ref("sales_team.group_sale_manager")
@@ -61,4 +61,4 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
             self.env.ref("base.user_admin").groups_id -= group_sale_manager
             self._grant_portal_access(empl)
 
-        self.assertEqual(err.exception.name, "You are not allowed to manage users.")
+        self.assertEqual(err.exception.args[0], "You are not allowed to manage users.")
