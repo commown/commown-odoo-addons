@@ -92,11 +92,7 @@ class CommownCrmLead(models.Model):
     def _compute_orders_descr(self):
         "Compute the orders_description of every record in current resultset"
 
-        def ref(xml_id):
-            return self.env.ref(f"commown_lead_risk_analysis.{xml_id}")
-
-        orders_tmpl = ref("partner_orders_tmpl")
-        products_tmpl = ref("company_product_summary")
+        render_tmpl = self.env["ir.qweb"]._render
 
         def get_orders(partner):
             return self.env["sale.order"].search(
@@ -118,7 +114,10 @@ class CommownCrmLead(models.Model):
             for oline in order_lines:
                 summary[oline.product_id.product_tmpl_id] += oline.product_uom_qty
 
-            return products_tmpl.render({"company": partner, "summary": summary})
+            return render_tmpl(
+                "commown_lead_risk_analysis.company_product_summary",
+                {"company": partner, "summary": summary},
+            )
 
         for record in self:
 
@@ -130,7 +129,12 @@ class CommownCrmLead(models.Model):
             descr = []
             partner = record.partner_id.commercial_partner_id
 
-            descr.append(orders_tmpl.render({"orders": get_orders(partner)}))
+            descr.append(
+                render_tmpl(
+                    "commown_lead_risk_analysis.partner_orders_tmpl",
+                    {"orders": get_orders(partner)},
+                )
+            )
 
             if record.partner_id != partner:
                 descr.append(_product_summary(partner))
@@ -139,7 +143,7 @@ class CommownCrmLead(models.Model):
                 if holding != partner:
                     descr.append(_product_summary(holding))
 
-            record.orders_description = (b"\n".join(descr)).decode("utf-8")
+            record.orders_description = "\n".join(descr)
 
     def _compute_web_searchurl(self):
         for lead in self:

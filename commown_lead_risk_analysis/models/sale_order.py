@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, api, models
+from odoo import _, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -53,14 +53,14 @@ class SaleOrder(models.Model):
     def _create_followup_entity_project_task(
         self, prefix, project, so_line, contract=None
     ):
-        template = self.env.ref("commown_lead_risk_analysis.sale_task_description")
-        description = template.render(
+        description = self.env["ir.qweb"]._render(
+            "commown_lead_risk_analysis.sale_task_description",
             {
                 "prefix": prefix,
                 "project": project,
                 "so_line": so_line,
                 "contract": contract,
-            }
+            },
         )
         return self.env["project.task"].create(
             {
