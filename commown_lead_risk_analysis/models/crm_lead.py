@@ -1,5 +1,5 @@
-import cgi
 from collections import defaultdict
+from html import escape
 from urllib.parse import urlencode
 
 from odoo import _, api, fields, models
@@ -155,8 +155,8 @@ class CommownCrmLead(models.Model):
             )
             url = "http://www.google.fr/search?%s" % urlencode({"q": query})
             lead.web_searchurl = "<a target='_blank' href='%s'>%s</a>" % (
-                cgi.escape(url, quote=True),
-                cgi.escape(_("Web search link"), quote=True),
+                escape(url, quote=True),
+                escape(_("Web search link"), quote=True),
             )
 
     def button_open_sale_order(self):
