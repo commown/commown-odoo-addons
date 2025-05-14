@@ -61,6 +61,9 @@ class SaleOrderTC(RentalSaleOrderTC):
         so_line2 = self._oline(self.product2, product_uom_qty=3)
 
         self.team3 = self.team1.copy({"name": "team3"})
+
+        self.env.flush_all()
+
         self.product3 = self._create_rental_product(
             name="Phone protection",
             list_price=2.0,
