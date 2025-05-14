@@ -164,6 +164,6 @@ class SaleOrderTC(RentalSaleOrderTC):
         description = my_project.task_ids[0].description
         self.assertIn(product.display_name, description)
         self.assertIn("Attributes", description)
-        for av in product.mapped("attribute_value_ids"):
+        for av in product.mapped("product_template_attribute_value_ids"):
             self.assertIn(av.attribute_id.name, description)
             self.assertIn(av.name, description)
