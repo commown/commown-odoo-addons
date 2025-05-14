@@ -268,7 +268,7 @@ class ResPartner(models.Model):
         users = self.sudo().user_ids
         if users:
             user = users[0]
-            user.groups_id -= role_model.search([]).mapped("groups")
+            user.groups_id -= role_model.search([]).sudo().mapped("groups")
             if user.has_group("base.group_portal"):
                 user.groups_id |= self.customer_roles.mapped("groups")
 
