@@ -54,7 +54,7 @@ publicWidget.registry.CouponForm = publicWidget.Widget.extend({
                 // Done function
                 $button.removeAttr("disabled");
                 $spinner.hide();
-                console.log("use_coupon success! result=%o", result);
+                console.debug("reserve_coupon call returned %o", result);
                 if (result.success) {
                     $input.val("");
                     self.displayCoupons(result.coupons);
@@ -76,7 +76,7 @@ publicWidget.registry.CouponForm = publicWidget.Widget.extend({
                 // Failed function
                 $button.removeAttr("disabled");
                 $spinner.hide();
-                console.log("use_coupon failed! result=%o", result);
+                console.debug("reserve_coupon call failed! result=%o", result);
             }
         );
 
@@ -95,7 +95,7 @@ publicWidget.registry.InitCouponPlaceholder = publicWidget.Widget.extend({
             route: "/website_sale_coupon/reserved_coupons",
         })
             .then(function (result) {
-                console.log("used_coupons success! result=%o", result);
+                console.debug("reserved_coupons call returned %o", result);
                 self.displayCoupons(result);
             })
             .catch((error) => {
