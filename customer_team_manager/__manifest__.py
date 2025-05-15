@@ -16,6 +16,7 @@
         "portal",
         "sale",
         # OCA modules
+        "base_fontawesome",
         "partner_firstname",
         "web_notify",
         # Commown modules
