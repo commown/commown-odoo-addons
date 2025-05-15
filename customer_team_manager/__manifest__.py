@@ -36,7 +36,7 @@
             "/customer_team_manager/static/src/xml/field_widget_template.xml",
             "/customer_team_manager/static/src/css/export.css",
             "/customer_team_manager/static/src/scss/field_widget.scss",
-            "/customer_team_manager/static/src/js/field_widget.js",
+            "/customer_team_manager/static/src/js/field_widget.esm.js",
             "/customer_team_manager/static/src/js/data_export.js",
         ],
     },

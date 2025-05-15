@@ -1,29 +1,62 @@
 <templates id="template" xml:space="preserve">
-
-  <t t-name="FieldCustomerRoleTags">
-    <t t-foreach="elements" t-as="el">
-      <t t-set="color" t-value="el.color || '#fff'" />
-      <div
-                class="field_customer_role_tags badge badge-pill"
-                t-att-data-id="el.id"
-                t-att-data-readonly="el.readonly"
+  <t t-name="customer_team_manager.CustomerRoleTagsList" owl="1">
+    <t t-foreach="tags" t-as="tag" t-key="tag.id or tag_index">
+        <t t-set="color" t-value="tag.color || '#fff'" />
+          <div
+                class="field_customer_role_tags badge rounded-pill d-inline-flex align-items-center mw-100"
+                t-att-data-id="tag.id"
+                t-att-data-readonly="tag.readonly"
                 t-attf-style="background-color: #{color}"
-                t-att-data-index="el_index"
-                t-att-title="el.description"
+                t-att-data-index="tag_index"
+                t-att-title="tag.description"
+                t-on-keydown="tag.onKeydown"
             >
-        <span t-att-data-id="el.id">
-          <i t-attf-class="fa #{el.icon_name}" />
-          <t t-if="!short" t-esc="el.display_name" />
-          <a
-                        t-if="!nodelete and !el.readonly"
+            <span t-att-data-id="tag.id" class="d-inline-flex align-items-center">
+              <i t-attf-class="fa #{tag.icon_name}" /> <a
+                        t-if="!tag.short"
+                        t-esc="tag.display_name"
+                    />
+              <a
+                        t-if="tag.onDelete and !tag.readonly"
+                        t-on-click.stop.prevent="(ev) => tag.onDelete and tag.onDelete(ev)"
                         href="#"
                         class="fa fa-times o_delete"
                         title="Delete"
                         aria-label="Delete"
                     />
-        </span>
-      </div>
-    </t>
+            </span>
+        </div>
+      </t>
   </t>
+
+  <t t-name="customer_team_manager.CustomerRoleTagsField" owl="1">
+    <div
+            class="o_field_widget o_field_many2many_tags o_field_tags d-inline-flex flex-wrap"
+            t-att-class="{'o_tags_input o_input': !props.readonly}"
+        >
+        <t t-call="customer_team_manager.CustomerRoleTagsList" />
+        <div
+                t-if="!props.readonly"
+                class="o_field_many2many_selection d-inline-flex w-100"
+                t-on-keydown="onAutoCompleteKeydown"
+                t-ref="autoComplete"
+            >
+          <Many2XAutocomplete
+                    id="props.id"
+                    resModel="props.relation"
+                    autoSelect="true"
+                    fieldString="string"
+                    activeActions="activeActions"
+                    update="update"
+                    context="context"
+                    getDomain.bind="getDomain"
+                    isToMany="true"
+                />
+        </div>
+    </div>
+  </t>
+
+
+
 
 </templates>
