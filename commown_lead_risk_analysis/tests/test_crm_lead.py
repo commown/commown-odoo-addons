@@ -113,3 +113,31 @@ class CrmLeadTC(RentalSaleOrderTC):
         self.assertEqual(len(sum_el.xpath(".//li")), 2)
         self.assertEqual(text(sum_el.xpath(".//li")[0]), "3 Crosscall")
         self.assertEqual(text(sum_el.xpath(".//li")[1]), "1 Fairphone Premium")
+
+    def test_compute_web_searchurl(self):
+        expected_url = (
+            '<a target="_blank" href="http://www.google.fr/search?q=%s">Web search link</a>'
+            % self.lead.contact_name
+        )
+        self.assertEqual(self.lead.web_searchurl, expected_url)
+
+    def test_button_open_sale_order(self):
+        action = self.lead.button_open_sale_order()
+        self.assertEqual(action["type"], "ir.actions.act_window")
+        self.assertEqual(action["res_model"], "sale.order")
+        self.assertEqual(action["res_id"], self.so1.id)
+
+        self.lead.so_line_id = False
+        self.assertFalse(self.lead.button_open_sale_order())
+
+    def test_button_open_contract(self):
+        self.assertFalse(self.lead.contract_id)
+        self.assertFalse(self.lead.button_open_contract())
+
+        contract = self.env["contract.contract"].create(
+            {"name": "TOTO", "partner_id": self.lead.partner_id.id}
+        )
+        self.lead.contract_id = contract
+        self.assertEqual(
+            self.lead.button_open_contract(), contract.get_formview_action()
+        )

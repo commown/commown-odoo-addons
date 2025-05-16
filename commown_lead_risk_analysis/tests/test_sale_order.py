@@ -115,6 +115,11 @@ class SaleOrderTC(RentalSaleOrderTC):
 
         self.assertTrue(leads3.contract_id)
 
+        self.assertEqual(
+            self.so.related_contracts(),
+            (leads1 + leads2 + leads3).mapped("contract_id"),
+        )
+
     def test_create_risk_analysis_leads_without_contracts(self):
         "Also create RA leads for orphan products, ie when no contract was created"
 
