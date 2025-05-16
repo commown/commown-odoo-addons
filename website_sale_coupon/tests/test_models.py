@@ -101,12 +101,9 @@ class CouponSchemaTC(TransactionCase):
 
         # Check invalid when sale product not eligible
         so_product_tmpl = so.order_line[0].product_id.product_tmpl_id
-        for tmpl in self.env["product.template"].search([]):
-            if tmpl.id != so_product_tmpl.id:
-                self.campaign.target_product_tmpl_ids |= tmpl
-                break
-        else:
-            raise self.assertionError("cannot find another product template")
+        self.campaign.target_product_tmpl_ids |= self.other_product_template(
+            so_product_tmpl
+        )
         self.assertFalse(self.campaign.is_valid(so))
 
         # Check valid when sale product is eligible
