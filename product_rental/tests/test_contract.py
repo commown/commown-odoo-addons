@@ -57,6 +57,19 @@ class ContractFromSale(RentalSaleOrderTC):
             "Test prerequisite failed: Contract template must have a ##PRODUCT## line",
         )
 
+    def test_action_show_analytic_line(self):
+        expected_account = self.env["account.analytic.account"].search(
+            [("name", "=", self.contract.name)]
+        )
+        action = self.contract.action_show_analytic_lines()
+        self.assertEqual(action["type"], "ir.actions.act_window")
+        self.assertEqual(action["res_model"], "account.analytic.line")
+        self.assertEqual(
+            action["domain"], "[('account_id', '=', %d)]" % expected_account.id
+        )
+        self.contract.group_id = False
+        self.assertFalse(self.contract.action_show_analytic_lines())
+
     def test_main_rental_service_standard(self):
         service = self.contract.get_main_rental_service()
         self.assertEqual(
