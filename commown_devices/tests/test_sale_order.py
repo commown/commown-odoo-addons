@@ -87,7 +87,7 @@ class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
         service.create_variant_ids()
         storable.create_variant_ids()
 
-        for color in color_attr.value_ids:
+        for _color in color_attr.value_ids:
             create_config(service, "primary", storable, colored1(storable), color1)
 
         so = self.create_sale_order(colored1(service))

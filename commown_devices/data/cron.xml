@@ -1,7 +1,5 @@
 <odoo>
 
-  <data noupdate="1">
-
   <record id="late_pickings_with_lots_cron" model="ir.cron">
     <field name="name">Late pickings with lots</field>
     <field name="active" eval="True" />
@@ -13,7 +11,5 @@
     <field name="model_id" ref="stock.model_stock_picking" />
     <field name="code">model._cron_count_late_lot_pickings()</field>
   </record>
-
-  </data>
 
 </odoo>

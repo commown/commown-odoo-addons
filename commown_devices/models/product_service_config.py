@@ -18,7 +18,10 @@ class ProductServiceStorableConfig(models.Model):
             ("secondary", "Secondary product"),
         ],
         string="Is storable primary or secondary",
-        help="Does current config concern the primary storable or the secondary storables of current product variants ?",
+        help=(
+            "Does current config concern the primary storable or the secondary"
+            "storables of current product variants ?"
+        ),
         required=True,
     )
 

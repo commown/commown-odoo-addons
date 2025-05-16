@@ -48,11 +48,12 @@ class StockPicking(models.Model):
             channel = self.env.ref("commown_devices.late_pickings_with_lots_channel")
             template = self.env.ref("commown_devices.late_pickings_with_lots_mail")
             channel.with_context(
-                {"late_pickings": late_pickings}
+                late_pickings=late_pickings
             ).message_post_with_template(template.id)
 
     def action_done(self):
-        super().action_done()
+        res = super().action_done()
         grade = self.purchase_id.default_product_grade
         if grade:
             self.move_line_ids.mapped("lot_id").update({"grade_id": grade.id})
+        return res

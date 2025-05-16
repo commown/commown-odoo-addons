@@ -78,7 +78,7 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
         return (
             self.env["picking.po.link.wizard"]
             .with_context(
-                {"active_ids": [self.picking.id], "default_picking_id": self.picking.id}
+                active_ids=[self.picking.id], default_picking_id=self.picking.id
             )
             .create({})
         )
@@ -125,7 +125,7 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
         wizard = (
             self.env["picking.po.link.wizard"]
             .with_context(
-                {"active_ids": [self.picking.id], "default_picking_id": self.picking.id}
+                active_ids=[self.picking.id], default_picking_id=self.picking.id
             )
             .create({})
         )

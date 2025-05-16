@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <record model="ir.ui.view" id="contract_contract_customer_form_view">
     <field name="name">Contract customer form</field>
     <field name="model">contract.contract</field>
     <field
-        name="inherit_id"
-        ref="commown_contractual_issue.contract_contract_customer_form_view"/>
+            name="inherit_id"
+            ref="commown_contractual_issue.contract_contract_customer_form_view"
+        />
     <field name="arch" type="xml">
 
       <xpath expr="//notebook" position="inside">
@@ -15,37 +15,62 @@
           <group name="devices" string="Devices">
             <field name="lot_ids" nolabel="1">
               <tree>
-                <field name="product_id"/>
-                <field name="name"/>
+                <field name="product_id" />
+                <field name="name" />
               </tree>
             </field>
           </group>
           <group name="move_lines" string="Move lines">
-            <field name="move_line_ids" nolabel="1" context='{"short_location_name": True}'>
+            <field
+                            name="move_line_ids"
+                            nolabel="1"
+                            context='{"short_location_name": True}'
+                        >
               <tree
-                  decoration-it="not lot_id"
-                  decoration-bf="state != 'done'"
-                  decoration-success="is_contract_in"
-                  decoration-danger="not is_contract_in"
-                  default_order="date ASC, id ASC"
-                  >
-                <field name="is_contract_in" invisible="1"/>
-                <field name="show_validate_picking" invisible="1"/>
-                <button string="Operation" class="oe_highlight" type="object" name="action_open_parent"/>
+                                decoration-it="not lot_id"
+                                decoration-bf="state != 'done'"
+                                decoration-success="is_contract_in"
+                                decoration-danger="not is_contract_in"
+                                default_order="date ASC, id ASC"
+                            >
+                <field name="is_contract_in" invisible="1" />
+                <field name="show_validate_picking" invisible="1" />
+                <button
+                                    string="Operation"
+                                    class="oe_highlight"
+                                    type="object"
+                                    name="action_open_parent"
+                                />
 
-                <field name="product_id"/>
-                <field name="lot_id"/>
-                <field name="location_id"/>
-                <field name="location_dest_id"/>
-                <field name="date"/>
-                <field name="origin"/>
-                <button string="Origin" class="oe_highlight" type="object" name="action_open_parent_origin"/>
-                <field name="state"/>
-                <button name="action_validate_linked_picking" string="Validate" class="btn-primary" type="object" attrs="{'invisible': [('show_validate_picking', '=', False)]}"/>
+                <field name="product_id" />
+                <field name="lot_id" />
+                <field name="location_id" />
+                <field name="location_dest_id" />
+                <field name="date" />
+                <field name="origin" />
+                <button
+                                    string="Origin"
+                                    class="oe_highlight"
+                                    type="object"
+                                    name="action_open_parent_origin"
+                                />
+                <field name="state" />
+                <button
+                                    name="action_validate_linked_picking"
+                                    string="Validate"
+                                    class="btn-primary"
+                                    type="object"
+                                    attrs="{'invisible': [('show_validate_picking', '=', False)]}"
+                                />
               </tree>
             </field>
           </group>
-          <a href="#" id="toggleMoveLines" class="btn btn-dark mb-2" role="button">Toggle non-serial</a>
+          <a
+                        href="#"
+                        id="toggleMoveLines"
+                        class="btn btn-dark mb-2"
+                        role="button"
+                    >Toggle non-serial</a>
           <script type="text/javascript">
             $(document).ready(function() {
               $('#toggleMoveLines').on('click', function(event) {
@@ -64,10 +89,10 @@
   <record model="ir.ui.view" id="contract_contract_tree_view">
     <field name="name">Contract tree view</field>
     <field name="model">contract.contract</field>
-    <field name="inherit_id" ref="contract.contract_contract_tree_view"/>
+    <field name="inherit_id" ref="contract.contract_contract_tree_view" />
     <field name="arch" type="xml">
       <field name="date_end" position="after">
-        <field name="lot_nb"/>
+        <field name="lot_nb" />
       </field>
     </field>
   </record>

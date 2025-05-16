@@ -141,18 +141,18 @@ class StockMoveLineTC(SavepointCase):
     def test_get_origin_record(self):
         po = self.env.ref("purchase.purchase_order_1")
         res = get_origin_record(self.env, po.name)
-        self.assertEquals(res, po)
+        self.assertEqual(res, po)
 
         task = self.env.ref("project.project_task_1")
         res = get_origin_record(self.env, task.get_name_for_origin())
-        self.assertEquals(res, task)
+        self.assertEqual(res, task)
 
         self.contract.name = "SO0001-23"
         res = get_origin_record(self.env, "SO0001-23")
-        self.assertEquals(res, self.contract)
+        self.assertEqual(res, self.contract)
 
         res = get_origin_record(self.env, "Retour de %s" % self.picking1.name)
-        self.assertEquals(res, self.picking1)
+        self.assertEqual(res, self.picking1)
 
     def test_action_open_parent_origin(self):
         po = self.env.ref("purchase.purchase_order_1")
@@ -167,7 +167,7 @@ class StockMoveLineTC(SavepointCase):
             "res_id": po.id,
             "target": "current",
         }
-        self.assertEquals(self.move_line1.action_open_parent_origin(), expected_result)
+        self.assertEqual(self.move_line1.action_open_parent_origin(), expected_result)
 
         self.move_line1.move_id.picking_id = False
         res = self.move_line1.action_open_parent_origin()

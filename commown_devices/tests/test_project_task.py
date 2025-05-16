@@ -1,6 +1,6 @@
 import datetime
 
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 
 from ..models.common import do_new_transfer
 from .common import DeviceAsAServiceTC
@@ -316,7 +316,10 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             wizard.create_picking()
         self.assertEqual(
             error.exception.name,
-            "Not enough non tracked product (Module) under location(s) Devices to check/ diagnose",
+            (
+                "Not enough non tracked product (Module) under location(s) Devices to "
+                "check/ diagnose"
+            ),
         )
 
         # Check the product is moved
@@ -477,15 +480,15 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         self.assertTrue(len(self.c1.lot_ids) > 0)
         expected_message = (
-            "Error while validating constraint\n\nThese tasks can not be moved forward. There are still device(s) "
-            "associated with their contract: %s\n" % self.task_test_checks.ids
-        )
+            "These tasks can not be moved forward. There are still device(s) associated"
+            " with their contract: %s"
+        ) % self.task_test_checks.ids
 
-        with self.assertRaises(ValidationError) as err1:
+        with self.assertRaises(UserError) as err1:
             self.task_test_checks.stage_id = diagnostic_stage
         self.assertEqual(expected_message, err1.exception.name)
 
-        with self.assertRaises(ValidationError) as err2:
+        with self.assertRaises(UserError) as err2:
             self.task_test_checks.stage_id = resiliated_stage
         self.assertEqual(expected_message, err2.exception.name)
 
@@ -540,25 +543,26 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
     def test_change_stage_check(self):
 
-        with self.assertRaises(ValidationError) as err:
+        expected_message = (
+            "These tasks can not be moved forward. There are no picking linked to"
+            " those tasks: [%s]"
+        )
+        with self.assertRaises(UserError) as err:
             self.task_test_checks.stage_id = self.ongoing_stage
         self.assertEqual(
-            "Error while validating constraint\n\nThese tasks can not be moved forward. There are no picking linked to those tasks: [%s]\n"
-            % self.task_test_checks.id,
+            expected_message % self.task_test_checks.id,
             err.exception.name,
         )
-        with self.assertRaises(ValidationError) as err2:
+        with self.assertRaises(UserError) as err2:
             self.task_test_checks2.stage_id = self.ongoing_stage
         self.assertEqual(
-            "Error while validating constraint\n\nThese tasks can not be moved forward. There are no picking linked to those tasks: [%s]\n"
-            % self.task_test_checks2.id,
+            expected_message % self.task_test_checks2.id,
             err2.exception.name,
         )
-        with self.assertRaises(ValidationError) as err3:
+        with self.assertRaises(UserError) as err3:
             self.task_test_checks.stage_id = self.picking_sent_stage
         self.assertEqual(
-            "Error while validating constraint\n\nThese tasks can not be moved forward. There are no picking linked to those tasks: [%s]\n"
-            % self.task_test_checks.id,
+            expected_message % self.task_test_checks.id,
             err3.exception.name,
         )
 
@@ -616,7 +620,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
         scrap = (
             self.env["stock.scrap"]
-            .with_context(scrap_ctx)
+            .with_context(**scrap_ctx)
             .create({"product_uom_id": puom.id})
         )
         scrap.action_validate()

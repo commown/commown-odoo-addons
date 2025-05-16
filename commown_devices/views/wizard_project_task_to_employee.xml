@@ -7,20 +7,23 @@
       <form string="Give a device to an employee">
         <sheet>
           <group name="base">
-            <field name="task_id" invisible="1"/>
-            <field name="lot_id"/>
-            <field name="date"/>
+            <field name="task_id" invisible="1" />
+            <field name="lot_id" />
+            <field name="date" />
           </group>
           <group name="delivery">
-            <field name="delivered_by_hand"/>
-            <field name="shipping_account_id" invisible="1"/>
-            <field name="parcel_type" attrs="{'invisible': ['|', ('delivered_by_hand', '=', True), ('shipping_account_id', '=', False)]}"/>
+            <field name="delivered_by_hand" />
+            <field name="shipping_account_id" invisible="1" />
+            <field
+                            name="parcel_type"
+                            attrs="{'invisible': ['|', ('delivered_by_hand', '=', True), ('shipping_account_id', '=', False)]}"
+                        />
           </group>
         </sheet>
         <footer>
-          <button name="execute" string="OK" class="btn-primary" type="object"/>
+          <button name="execute" string="OK" class="btn-primary" type="object" />
           or
-          <button string="Cancel" class="btn-default" special="cancel"/>
+          <button string="Cancel" class="btn-default" special="cancel" />
         </footer>
       </form>
     </field>

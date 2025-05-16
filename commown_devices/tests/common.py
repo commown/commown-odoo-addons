@@ -9,10 +9,10 @@ from odoo.tools.safe_eval import safe_eval
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
-def create_config(serv_tmpl, type, stor_tmpl, stor_variant, att_val_ids=None):
+def create_config(serv_tmpl, storable_type, stor_tmpl, stor_variant, att_val_ids=None):
     attrs = {
         "service_tmpl_id": serv_tmpl.id,
-        "storable_type": type,
+        "storable_type": storable_type,
         "storable_tmpl_id": stor_tmpl.id,
         "storable_variant_id": stor_variant.id,
     }
@@ -225,7 +225,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         self, created_model_name, related_entity, relation_field, user_choices=None
     ):
         created_model = self.env[created_model_name].with_context(
-            {
+            **{
                 "default_%s" % relation_field: related_entity.id,
                 "active_model": related_entity._name,
                 "active_id": related_entity.id,
@@ -262,8 +262,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 # Remove builtins from eval context: "id" can be used in domains
                 context["__builtins__"] = {}
                 try:
-                    domain = eval(domain, context)
-                except:  # noqa: E722
+                    domain = safe_eval(domain, context)
+                except Exception:
                     domain = []
             if domain is None:
                 continue

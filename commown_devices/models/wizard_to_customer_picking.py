@@ -12,10 +12,7 @@ class PickingToCustomerWizard(models.AbstractModel):
 
     usage = fields.Selection(related="entity_id.contract_id.stock_ownership")
 
-    date = fields.Datetime(
-        string="Date",
-        help="Defaults to now - To be set only to force a date",
-    )
+    date = fields.Datetime(help="Defaults to now - To be set only to force a date")
 
     all_products = fields.Many2many(
         "product.product",

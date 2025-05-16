@@ -22,6 +22,6 @@ class StockPickingTC(SavepointCase):
 
         self.assertEqual(loc2.name_get()[0][1], "%s/%s" % (loc1.name, loc2.name))
         self.assertEqual(
-            loc2.with_context({"short_location_name": True}).name_get()[0][1],
+            loc2.with_context(short_location_name=True).name_get()[0][1],
             loc2.name,
         )

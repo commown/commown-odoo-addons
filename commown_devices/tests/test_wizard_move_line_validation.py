@@ -39,4 +39,4 @@ class WizardMoveLineValidationTC(SavepointCase):
         )
 
         wizard.action_validate()
-        self.assertEquals(self.move.picking_id.state, "done")
+        self.assertEqual(self.move.picking_id.state, "done")

@@ -95,8 +95,8 @@ class StockMoveTC(SavepointCase):
                 return_moves.update_lot_contract()
 
         expected_log = (
-            "WARNING:odoo.addons.commown_devices.models.stock_move:More than one contract on move %s lots"
-            % return_moves[0].id
+            "WARNING:odoo.addons.commown_devices.models.stock_move:More than one"
+            " contract on move %s lots" % return_moves[0].id
         )
         expected_error = (
             "Inconsistent move (id: %s, picking id:"

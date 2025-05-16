@@ -69,8 +69,8 @@ class Contract(models.Model):
         ungraded_lots = lots.filtered(lambda lot: not lot.grade_id)
         if ungraded_lots:
             raise UserError(
-                _("Please set the grade on lots %s (ids: %s)")
-                % (ungraded_lots.mapped("name"), ungraded_lots.ids)
+                _("Please set the grade on lots %(lots)s (ids: %(ids)s)")
+                % {"lots": ungraded_lots.mapped("name"), "ids": ungraded_lots.ids}
             )
 
         dest_location = self.partner_id.get_or_create_customer_location(

@@ -63,11 +63,11 @@ def find_products_orig_location(env, products, stocks=None, compute_summary=Fals
                 break
         else:
             raise UserError(
-                _("Not enough %s under location(s) %s")
-                % (
-                    product.name,
-                    ", ".join(stocks.mapped("name")),
-                )
+                _("Not enough %(product)s under location(s) %(location)s")
+                % {
+                    "product": product.name,
+                    "location": ", ".join(stocks.mapped("name")),
+                }
             )
 
         pts_orig[product] = {"qty": quantity_to_send, "loc": quants[0].location_id}
@@ -282,7 +282,7 @@ class ToCustomerPickingMixin:
     @api.multi
     def delivery_perform_actions(self):
         "Validate shipping and start contract"
-        super().delivery_perform_actions()
+        res = super().delivery_perform_actions()
 
         picking = self.contract_id.move_ids.mapped("picking_id").filtered(_assigned)
         if len(picking) == 1:
@@ -300,3 +300,4 @@ class ToCustomerPickingMixin:
             # Do not restart a contract that has already started
             if not contract.date_start or contract.date_start > datetime.date.today():
                 contract.date_start = self.delivery_date
+        return res

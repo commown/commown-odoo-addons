@@ -34,7 +34,7 @@ class WizardProjectTaskToCustomerPickingTC(BaseToCustomerPickingWizardTC):
 
         wizard = (
             self.env["project.task.to.customer.wizard"]
-            .with_context({"default_entity_id": self.task.id})
+            .with_context(default_entity_id=self.task.id)
             .create({"entity_id": self.task.id, "date": date})
         )
         lot = possibilities["lot_ids"][0]

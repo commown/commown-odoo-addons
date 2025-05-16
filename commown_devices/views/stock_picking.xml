@@ -3,10 +3,15 @@
   <record id="view_picking_form" model="ir.ui.view">
     <field name="name">stock.picking.form (in commown_devices)</field>
     <field name="model">stock.picking</field>
-    <field name="inherit_id" ref="stock.view_picking_form"/>
+    <field name="inherit_id" ref="stock.view_picking_form" />
     <field name="arch" type="xml">
       <xpath expr="//field[@name='origin']" position="after">
-        <field name="contract_ids" widget="many2many_tags"  options="{'no_create': True, 'open': True}" groups="account.group_account_invoice"/>
+        <field
+                    name="contract_ids"
+                    widget="many2many_tags"
+                    options="{'no_create': True, 'open': True}"
+                    groups="account.group_account_invoice"
+                />
       </xpath>
     </field>
   </record>

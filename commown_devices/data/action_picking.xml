@@ -1,23 +1,25 @@
 <odoo>
 
   <record id="action_set_picking_date_done_to_scheduled" model="ir.actions.server">
-    <field name="name">[LOG] Force picking and move dates to picking scheduled date</field>
-    <field name="model_id" ref="stock.model_stock_picking"/>
+    <field
+            name="name"
+        >[LOG] Force picking and move dates to picking scheduled date</field>
+    <field name="model_id" ref="stock.model_stock_picking" />
     <field name="sequence">5</field>
     <field name="state">code</field>
-    <field name="binding_model_id" ref="stock.model_stock_picking"/>
+    <field name="binding_model_id" ref="stock.model_stock_picking" />
     <field name="code">records.action_set_date_done_to_scheduled()</field>
   </record>
 
   <record id="action_wizard_link_picking_to_po" model="ir.actions.act_window">
     <field name="name">[commown] Link Picking to Po</field>
     <field name="res_model">picking.po.link.wizard</field>
-    <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+    <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]" />
     <field name="view_type">form</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
     <field name="context">{'default_picking_id': active_id}</field>
-    <field name="binding_model_id" ref="stock.model_stock_picking"/>
+    <field name="binding_model_id" ref="stock.model_stock_picking" />
   </record>
 
 </odoo>

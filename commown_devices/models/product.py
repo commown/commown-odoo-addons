@@ -65,10 +65,15 @@ class ProductProduct(models.Model):
                     secondary_variants |= c.storable_variant_id
             if len(primary_variant) > 1:
                 msg = _(
-                    "More than one primary variant configured for %s with attributes %s"
+                    "More than one primary variant configured for %(product)s"
+                    " with attributes %(attrs)s"
                 )
                 raise UserError(
-                    msg % (rec.name, rec.attribute_value_ids.mapped("name"))
+                    msg
+                    % {
+                        "product": rec.name,
+                        "attrs": rec.attribute_value_ids.mapped("name"),
+                    }
                 )
             if len(secondary_variants) > len(
                 secondary_variants.mapped("product_tmpl_id")

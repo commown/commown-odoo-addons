@@ -18,7 +18,10 @@ class MoveLineValidationWizard(models.TransientModel):
 
     @api.onchange("move_line_id")
     def _compute_display_message(self):
-        message = "Several unvalidated moves. Are you sure you want to validate this one: <b>%s - %s</b> ?"
+        message = (
+            "Several unvalidated moves. Are you sure you want to validate this one: "
+            "<b>%s - %s</b> ?"
+        )
         self.message = message % (
             self.move_line_id.product_id.name,
             self.move_line_id.date.strftime("%d/%m/%y"),

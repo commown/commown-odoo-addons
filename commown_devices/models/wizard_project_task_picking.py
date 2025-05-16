@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError, Warning
+from odoo.exceptions import UserError
 
 from .common import do_new_transfer, find_products_orig_location, internal_picking
 
@@ -18,10 +18,7 @@ class ProjectTaskAbstractPickingWizard(models.AbstractModel):
         required=True,
     )
 
-    date = fields.Datetime(
-        string="Date",
-        help="Defaults to now - To be set only to force a date",
-    )
+    date = fields.Datetime(help="Defaults to now - To be set only to force a date")
 
 
 class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
@@ -87,7 +84,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
     @api.multi
     def create_picking(self):
         if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
-            raise Warning(_("This action should not be used in resiliation project"))
+            raise UserError(_("This action should not be used in resiliation project"))
 
         lot = self.task_id.lot_id
 
@@ -132,7 +129,7 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
     @api.multi
     def create_picking(self):
         if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
-            raise Warning(_("This action should not be used in resiliation project"))
+            raise UserError(_("This action should not be used in resiliation project"))
 
         new_move_lines = internal_picking(
             [],

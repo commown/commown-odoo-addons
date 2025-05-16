@@ -1,7 +1,7 @@
 import json
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError, Warning
+from odoo.exceptions import UserError
 
 from .common import ToCustomerPickingMixin, _assigned
 
@@ -187,7 +187,7 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
             ]
         ).filtered(lambda t: t.contract_id.lot_ids)
         if erroneous_task:
-            raise Warning(
+            raise UserError(
                 _(
                     "These tasks can not be moved forward. There are still device(s) "
                     "associated with their contract: %s"
@@ -214,7 +214,7 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
             )
         )
         if erroneous_task:
-            raise Warning(
+            raise UserError(
                 _(
                     "These tasks can not be moved forward. There are no picking "
                     "linked to those tasks: %s"

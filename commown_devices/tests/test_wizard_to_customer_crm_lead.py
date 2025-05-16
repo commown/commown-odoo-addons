@@ -40,7 +40,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
         wizard = (
             self.env["crm.lead.to.customer.wizard"]
-            .with_context({"default_entity_id": lead.id})
+            .with_context(default_entity_id=lead.id)
             .create(
                 {
                     "entity_id": lead.id,
@@ -133,7 +133,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
         wizard = (
             self.env["crm.lead.to.customer.wizard"]
-            .with_context({"default_entity_id": lead.id})
+            .with_context(default_entity_id=lead.id)
             .create(
                 {
                     "entity_id": lead.id,

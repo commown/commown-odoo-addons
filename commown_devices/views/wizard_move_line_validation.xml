@@ -6,14 +6,19 @@
       <form string="Confirm validation">
         <sheet>
           <group>
-            <field name="move_line_id" invisible="1"/>
-            <field name="message" nolabel="1" readonly="1"/>
+            <field name="move_line_id" invisible="1" />
+            <field name="message" nolabel="1" readonly="1" />
           </group>
         </sheet>
         <footer>
-          <button name="action_validate" string="Validate" class="btn-primary" type="object"/>
+          <button
+                        name="action_validate"
+                        string="Validate"
+                        class="btn-primary"
+                        type="object"
+                    />
           or
-          <button string="Cancel" class="btn-default" special="cancel"/>
+          <button string="Cancel" class="btn-default" special="cancel" />
         </footer>
       </form>
     </field>

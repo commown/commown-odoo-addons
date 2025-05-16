@@ -50,7 +50,7 @@ class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
     def create_wizard(self):
         return (
             self.env["po.invoice.link.wizard"]
-            .with_context({"active_ids": [self.po.id], "default_po_id": self.po.id})
+            .with_context(active_ids=[self.po.id], default_po_id=self.po.id)
             .create({})
         )
 
@@ -113,7 +113,7 @@ class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
         self.assertFalse(self.po.order_line.mapped("invoice_lines"))
         wizard = (
             self.env["po.invoice.link.wizard"]
-            .with_context({"active_ids": [self.po.id], "default_po_id": self.po.id})
+            .with_context(active_ids=[self.po.id], default_po_id=self.po.id)
             .create({})
         )
         for i in range(len(self.po.order_line)):
