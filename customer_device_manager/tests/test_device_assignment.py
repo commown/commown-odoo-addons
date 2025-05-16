@@ -29,9 +29,7 @@ class DeviceAssignmentBaseTC(SavepointCase):
             }
         )
 
-    def create_assignment(
-        self, partner=None, date=None, device_name=None, device_location="at_customer"
-    ):
+    def create_assignment(self, partner=None, date=None, device_location="at_customer"):
         """Helper method to create an assignment"""
         if partner is None:
             partner = self.partner1
@@ -45,9 +43,6 @@ class DeviceAssignmentBaseTC(SavepointCase):
             "assignment_date": date,
             "device_location": device_location,
         }
-
-        if device_name:
-            values["device_name"] = device_name
 
         return self.env["customer_device_manager.device_assignment"].create(values)
 
