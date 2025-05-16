@@ -24,7 +24,7 @@ class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
             {
                 "code": "cust_acc",
                 "name": "customer account",
-                "user_type_id": self.env.ref("account.data_account_type_payable").id,
+                "account_type": self.env.ref("account.data_account_type_payable").id,
                 "reconcile": True,
             }
         )

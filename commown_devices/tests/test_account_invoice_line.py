@@ -6,21 +6,19 @@ class AccountInvoiceLineTC(SavepointCase):
     def setUpClass(cls):
         super(AccountInvoiceLineTC, cls).setUpClass()
 
-        def account(user_type_ref, group, code):
-            ref = cls.env.ref
+        def account(account_type, group, code):
             return cls.env["account.account"].create(
                 {
                     "name": "Test %s" % group,
                     "code": "01010%d" % code,
-                    "user_type_id": ref("account.%s" % user_type_ref).id,
-                    "internal_type": "other",
+                    "account_type": account_type,
                     "internal_group": group,
                 }
             )
 
         # Create accounts so that we do not depend on which l10n module is installed:
-        cls.sales_account = account("data_account_type_expenses", "expense", 1)
-        cls.rental_account = account("data_account_type_current_assets", "asset", 2)
+        cls.sales_account = account("expense", "expense", 1)
+        cls.rental_account = account("asset_current", "asset", 2)
 
         cls.product = cls.env["product.template"].create(
             {
