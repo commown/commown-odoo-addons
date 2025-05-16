@@ -1,4 +1,4 @@
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -11,7 +11,6 @@ class ProductTemplate(models.Model):
         inverse_name="service_tmpl_id",
     )
 
-    @api.multi
     def create_variant_ids(self):
         res = super(ProductTemplate, self).create_variant_ids()
         self.product_variant_ids._set_storable_variants()
@@ -44,7 +43,6 @@ class ProductProduct(models.Model):
         domain='[("type", "=", "product")]',
     )
 
-    @api.multi
     def _set_storable_variants(self, template_configs=None):
         for rec in self:
             if template_configs is None:

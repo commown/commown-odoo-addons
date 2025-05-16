@@ -158,7 +158,6 @@ class ResPartner(models.Model):
                 self._update_foreign_keys(src_locations, dst_location)
                 src_locations.unlink()
 
-    @api.multi
     def write(self, vals):
         "Handle individual > professional status change regarding stock location"
 

@@ -35,7 +35,6 @@ class MovePoLinkLine(models.TransientModel):
         store=False,
     )
 
-    @api.multi
     @api.depends("wizard_id.po_id")
     def _compute_purchase_line_id_domain(self):
         for rec in self:

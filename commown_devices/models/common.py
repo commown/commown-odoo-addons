@@ -1,7 +1,7 @@
 import datetime
 from functools import partial
 
-from odoo import _, api, fields
+from odoo import _, fields
 from odoo.exceptions import UserError
 
 
@@ -279,7 +279,6 @@ class ToCustomerPickingMixin:
             "context": {"default_entity_id": self.id},
         }
 
-    @api.multi
     def delivery_perform_actions(self):
         "Validate shipping and start contract"
         res = super().delivery_perform_actions()

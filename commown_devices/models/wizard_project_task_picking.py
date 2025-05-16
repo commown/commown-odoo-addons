@@ -81,7 +81,6 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             dest_locations = self._possible_dest_locations()
             return {"domain": {"location_dest_id": [("id", "in", dest_locations.ids)]}}
 
-    @api.multi
     def create_picking(self):
         if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
             raise UserError(_("This action should not be used in resiliation project"))
@@ -126,7 +125,6 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
             "commown_devices.stock_location_devices_to_check"
         ).id
 
-    @api.multi
     def create_picking(self):
         if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
             raise UserError(_("This action should not be used in resiliation project"))
@@ -237,7 +235,6 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
         if self.lot_id:
             self.variant_id = self.lot_id.product_id
 
-    @api.multi
     def create_picking(self):
         send_lots_from = self.env.ref(
             "commown_devices.stock_location_available_for_rent"
@@ -269,7 +266,6 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
                 self.lot_id = lots.id
             return {"domain": {"lot_id": [("id", "in", lots.ids)]}}
 
-    @api.multi
     def create_picking(self):
         return self.task_id.contract_id.receive_devices(
             self.lot_id,
@@ -291,7 +287,6 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
         domain=[("date_end", "=", False)],
     )
 
-    @api.multi
     def create_transfer(self):
         lot = self.task_id.lot_id
 
@@ -370,7 +365,6 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
             send_nonserial_products_from = loc_new + loc_repackaged
         return send_nonserial_products_from
 
-    @api.multi
     def create_picking(self):
         return self.task_id.contract_id.send_devices(
             self.env["stock.production.lot"],  # Lots
@@ -393,7 +387,6 @@ class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
         required=True,
     )
 
-    @api.multi
     def create_picking(self):
         return self.task_id.contract_id.receive_devices(
             self.env["stock.production.lot"],

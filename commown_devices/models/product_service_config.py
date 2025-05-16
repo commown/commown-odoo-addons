@@ -56,13 +56,11 @@ class ProductServiceStorableConfig(models.Model):
         res.service_tmpl_id.product_variant_ids._set_storable_variants()
         return res
 
-    @api.multi
     def write(self, values):
         res = super(ProductServiceStorableConfig, self).write(values)
         self.mapped("service_tmpl_id.product_variant_ids")._set_storable_variants()
         return res
 
-    @api.multi
     def unlink(self):
         affected_variants = self.mapped("service_tmpl_id.product_variant_ids")
         res = super(ProductServiceStorableConfig, self).unlink()

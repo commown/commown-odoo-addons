@@ -1,10 +1,9 @@
-from odoo import api, models
+from odoo import models
 
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    @api.multi
     def _action_launch_stock_rule(self):
         "Deactivate procurement/picking logic when the sale contains a contract"
 

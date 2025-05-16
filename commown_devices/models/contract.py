@@ -41,7 +41,6 @@ class Contract(models.Model):
         for rec in self:
             rec.lot_nb = len(rec.lot_ids)
 
-    @api.multi
     def send_default_location(self):
         loc_ref = {
             "internal": "commown_devices.stock_location_available_for_rent",
@@ -49,7 +48,6 @@ class Contract(models.Model):
         }
         return self.env.ref(loc_ref[self.stock_ownership])
 
-    @api.multi
     def send_devices(
         self,
         lots,
@@ -94,7 +92,6 @@ class Contract(models.Model):
             do_transfer=do_transfer,
         )
 
-    @api.multi
     def receive_devices(
         self,
         lots,

@@ -29,7 +29,6 @@ class POInvoiceLinkLine(models.TransientModel):
         store=False,
     )
 
-    @api.multi
     @api.depends("wizard_id.invoice_id")
     def _compute_invoice_line_id_domain(self):
         for rec in self:

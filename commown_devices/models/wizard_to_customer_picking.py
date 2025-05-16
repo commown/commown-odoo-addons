@@ -45,7 +45,6 @@ class PickingToCustomerWizard(models.AbstractModel):
             entity = self.env[model_name].browse(self.env.context["default_entity_id"])
         return entity
 
-    @api.multi
     @api.onchange("all_products", "lot_ids")
     def _compute_lot_domain(self):
         """The lots domain are products from all_products that
@@ -111,7 +110,6 @@ class PickingToCustomerWizard(models.AbstractModel):
         default_products |= services.mapped("secondary_storable_variant_ids")
         return default_products
 
-    @api.multi
     def create_picking(self):
         nb_of_tracked_product = len(
             self.all_products.filtered(lambda p: p.tracking == "serial")

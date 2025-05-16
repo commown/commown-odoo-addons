@@ -16,7 +16,7 @@ class ResPartnerLocationTC(HttpCase):
             individual.property_stock_customer == loc_customer
         ), "test prerequisite failed"
 
-        location = individual.sudo(employee.id).get_or_create_customer_location(
+        location = individual.with_user(employee.id).get_or_create_customer_location(
             "internal"
         )
         self.assertNotEqual(location, loc_customer)

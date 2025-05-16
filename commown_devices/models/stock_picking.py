@@ -28,7 +28,6 @@ class StockPicking(models.Model):
         for record in self:
             record.contract_ids = self.move_lines.mapped("contract_id")
 
-    @api.multi
     def action_set_date_done_to_scheduled(self):
         for rec in self:
             if not rec.state == "done":

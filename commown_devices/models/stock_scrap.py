@@ -1,4 +1,4 @@
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 from .common import _force_scrap_date
@@ -9,7 +9,6 @@ class StockScrap(models.Model):
 
     contract_id = fields.Many2one("contract.contract", string="Contract")
 
-    @api.multi
     def action_set_date_done_to_expected(self):
         for rec in self:
             if not rec.state == "done":

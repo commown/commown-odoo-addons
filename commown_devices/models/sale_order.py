@@ -1,4 +1,4 @@
-from odoo import _, api, models
+from odoo import _, models
 from odoo.exceptions import UserError
 
 
@@ -22,7 +22,6 @@ class SaleOrder(models.Model):
 
         return super().action_confirm()
 
-    @api.multi
     def action_add_services_storable_products(self):
         "Action to add the storable products configured on sale-with-contract services"
 

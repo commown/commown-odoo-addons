@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class PurchaseOrder(models.Model):
@@ -10,7 +10,6 @@ class PurchaseOrder(models.Model):
         default=lambda self: self.env["commown_grade.grade"].search([], limit=1).id,
     )
 
-    @api.multi
     def is_for_rental(self):
         "Return if current purchase picking type's destination is a rental location"
         self.ensure_one()

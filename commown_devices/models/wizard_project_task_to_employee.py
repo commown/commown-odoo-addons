@@ -52,7 +52,6 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         )
         return [("id", "in", quants.mapped("lot_id").ids)]
 
-    @api.multi
     def execute(self):
         self.ensure_one()
 
