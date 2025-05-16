@@ -18,6 +18,7 @@
     ],
     "data": [
         "security/groups.xml",
+        "views/manager_menu.xml",
         "security/rules.xml",
         "views/project.xml",
     ],
