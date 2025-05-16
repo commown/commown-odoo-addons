@@ -1,0 +1,271 @@
+from datetime import datetime, timedelta
+
+from odoo.exceptions import AccessError, ValidationError
+from odoo.tests import TransactionCase, tagged
+from odoo.tools import mute_logger
+
+from ..models.sale_order import CouponError
+
+
+@tagged("-at_install", "post_install")
+class CouponSchemaTC(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.seller = cls.env.ref("base.res_partner_2")
+        cls.campaign = cls._create_campaign()
+
+    @classmethod
+    def _create_campaign(cls, name="test", **kwargs):
+        kwargs["name"] = name
+        kwargs.setdefault("seller_id", cls.seller.id)
+        kwargs.setdefault("is_without_coupons", False)
+        return cls.env["coupon.campaign"].create(kwargs)
+
+    def _create_coupon(self, **kwargs):
+        kwargs.setdefault("campaign_id", self.campaign.id)
+        return self.env["coupon.coupon"].create(kwargs)
+
+    def sale_order(self):
+        return self.env["sale.order"].search([])[0]  # chosen SO doesn't matter
+
+    def assertCannotCumulate(
+        self, so, coupon_name, expected_msg="Cannot cumulate those coupons"
+    ):
+        with self.assertRaises(CouponError) as err:
+            so.reserve_coupon(coupon_name)
+        self.assertTrue(
+            err.exception.args[0].startswith(expected_msg), err.exception.args[0]
+        )
+
+    @mute_logger("odoo.sql_db")
+    def test_campaign_unique_name(self):
+        with self.assertRaises(Exception) as err:
+            self._create_campaign(name="test")
+        self.assertIn("coupon_campaign_name_uniq", str(err.exception))
+
+    @mute_logger("odoo.sql_db")
+    def test_coupon_unique_code(self):
+        self._create_coupon(code="TEST")
+        with self.assertRaises(Exception) as err:
+            self._create_coupon(code="TEST")
+        self.assertIn("coupon_coupon_code_uniq", str(err.exception))
+
+    def test_campaign_dates_check_1(self):
+        with self.assertRaises(ValidationError) as err:
+            self.campaign.update({"date_start": "2018-03-01", "date_end": "2018-02-01"})
+        self.assertEqual(err.exception.args[0], "Start date must be before end date")
+
+    def test_campaign_dates_check_2(self):
+        self.campaign.update({"date_start": "2035-01-01"})
+        self.campaign.update({"date_end": "2036-01-01"})
+        with self.assertRaises(ValidationError) as err:
+            self.campaign.update({"date_end": "2018-01-01"})
+        self.assertEqual(err.exception.args[0], "Start date must be before end date")
+
+    def test_number_of_coupons(self):
+        self.assertEqual(self.campaign.emitted_coupons, 0)
+        coupons = [self._create_coupon(campaign_id=self.campaign.id) for _i in range(5)]
+        self.assertEqual(self.campaign.emitted_coupons, len(coupons))
+        so = self.sale_order()
+        for coupon in coupons[:3]:
+            coupon.used_for_sale_id = so.id
+        self.assertEqual(self.campaign.used_coupons, 3)
+        self.assertEqual(len(so.used_coupons()), 3)
+        self.assertEqual(self.campaign.emitted_coupons, len(coupons))
+
+    def test_security_read(self):
+        self.assertTrue(self.env["coupon.campaign"].search([]))
+        someone = self.env.ref("base.res_partner_1")
+        with self.assertRaises(AccessError):
+            Campaign = self.env["coupon.campaign"].with_user(someone)
+            self.assertFalse(Campaign.search([]))
+
+    def test_validity_date(self):
+        self.campaign.update({"date_start": "2018-01-01", "date_end": "2018-02-01"})
+        so = self.sale_order()
+        # Campaign has ended in 2018 -> Should not be valid
+        self.assertFalse(self.campaign.is_valid(so))
+
+        # Campaign has begun in 2018 and is ending in 30 days -> Should be valid
+        self.campaign.date_end = datetime.now().date() + timedelta(days=30)
+        self.assertTrue(self.campaign.is_valid(so))
+
+        # Campaign is starting in 29 days -> Should not be valid
+        self.campaign.date_start = datetime.now().date() + timedelta(days=29)
+        self.assertFalse(self.campaign.is_valid(so))
+
+    def test_validity_product_and_qty(self):
+        # Check valid when all products are eligible
+        so = self.sale_order()
+        assert not self.campaign.target_product_tmpl_ids
+        self.assertTrue(self.campaign.is_valid(so))
+
+        # Check invalid when sale product not eligible
+        so_product_tmpl = so.order_line[0].product_id.product_tmpl_id
+        self.campaign.target_product_tmpl_ids |= self.other_product_template(
+            so_product_tmpl
+        )
+        self.assertFalse(self.campaign.is_valid(so))
+
+        # Check valid when sale product is eligible
+        self.campaign.target_product_tmpl_ids |= so_product_tmpl
+        self.assertTrue(self.campaign.is_valid(so))
+
+        # ... unless the quantity is zero
+        so.order_line[0].product_uom_qty = 0
+        self.assertFalse(self.campaign.is_valid(so))
+
+    def test_reserve_and_confirm_coupon(self):
+        # Empty Sale Order (this can happen if the cart is empty)
+        empty_so = self.env["sale.order"].browse()
+        self.assertEqual(
+            empty_so.reserved_coupons(),
+            [],
+        )
+        with self.assertRaises(CouponError) as err:
+            empty_so.reserve_coupon("DUMMYCODE")
+        self.assertIn(
+            "add at least one item",
+            err.exception.args[0],
+        )
+
+        # Valid Sale Order
+        so = self.sale_order()
+
+        self.assertIsNone(so.reserve_coupon("DUMMYCODE"))
+
+        coupon = self._create_coupon(code="TEST_USE")
+        self.assertEqual(coupon.display_name, "TEST_USE")
+
+        self.assertEqual(so.reserve_coupon("TEST_use"), coupon)
+        self.assertIn(coupon, so.reserved_coupons())
+
+        so.confirm_coupons()
+        self.assertNotIn(coupon, so.reserved_coupons())
+        self.assertEqual(coupon.used_for_sale_id, so)
+
+    def test_confirm_sale_order(self):
+        so = self.sale_order()
+
+        coupon = self._create_coupon(code="TEST_USE")
+        so.reserve_coupon("TEST_USE")
+        self.assertIn(coupon, so.reserved_coupons())
+
+        so.action_confirm()  # uses confirm_coupons
+        self.assertNotIn(coupon, so.reserved_coupons())
+        self.assertIn(coupon, so.used_coupon_ids)
+
+    def test_coupon_description(self):
+        coupon = self._create_coupon(code="TEST")
+        coupon_descr = coupon._coupon_descr()
+
+        self.assertEqual(coupon.display_name, coupon_descr["name"])
+        self.assertEqual(coupon.campaign_id.description, coupon_descr["descr"])
+
+    def other_product_template(self, product):
+        for tmpl in self.env["product.template"].search([]):
+            if tmpl.id != product.id:
+                return tmpl
+        else:
+            raise self.assertionError("cannot find another product template")
+
+    def test_user_cannot_trick_confirm_coupon(self):
+        """Check users cannot confirm a coupon with a non eligible product
+        (scenario where the user first added the coupon, then removed the
+        eligible product before finalizing the sale)"""
+
+        assert not self.campaign.target_product_tmpl_ids
+
+        so = self.sale_order()
+        so_line = so.order_line[0]
+        so_product = so_line.product_id.product_tmpl_id
+        self.campaign.target_product_tmpl_ids |= so_product
+
+        coupon = self._create_coupon(code="TEST_USE")
+
+        # Check cannot confirm if coupon is no more valid
+        self.assertEqual(so.reserve_coupon("TEST_USE"), coupon)
+        so_line.product_uom_qty = 0
+        so.confirm_coupons()
+        self.assertFalse(coupon.used_for_sale_id)
+        coupon.reserved_for_sale_id = False
+
+        # ... although confirmation works when coupon is valid
+        so_line.product_uom_qty = 1
+        self.assertEqual(so.reserve_coupon("TEST_USE"), coupon)
+        so.confirm_coupons()
+        self.assertEqual(coupon.used_for_sale_id.id, so.id)
+
+    def test_cumulation_rules(self):
+        so = self.sale_order()
+
+        campaign1 = self._create_campaign(
+            "campaign1", can_cumulate=False, can_auto_cumulate=False
+        )
+        campaign2 = self._create_campaign(
+            "campaign2", can_cumulate=False, can_auto_cumulate=False
+        )
+
+        coupon11 = self._create_coupon(code="TEST11", campaign_id=campaign1.id)
+        self._create_coupon(code="TEST12", campaign_id=campaign1.id)
+        coupon21 = self._create_coupon(code="TEST21", campaign_id=campaign2.id)
+        coupon22 = self._create_coupon(code="TEST22", campaign_id=campaign2.id)
+
+        self.assertEqual(so.reserve_coupon("TEST11"), coupon11)
+        self.assertCannotCumulate(so, "TEST21")
+        self.assertCannotCumulate(so, "TEST12", "Cannot use more than one")
+
+        # TEST11 is reserved for so, then:
+        campaign2.can_cumulate = True
+        self.assertCannotCumulate(so, "TEST12", "Cannot use more than one")
+        self.assertEqual(so.reserve_coupon("TEST21"), coupon21)
+        self.assertCannotCumulate(so, "TEST22", "Cannot use more than one")
+
+        # TEST11 and TEST21 are reserved for so, then:
+        campaign2.can_auto_cumulate = True
+        self.assertCannotCumulate(so, "TEST12", "Cannot use more than one")
+        self.assertEqual(so.reserve_coupon("TEST22"), coupon22)
+
+        # Final check:
+        so.confirm_coupons()
+        self.assertEqual(so.used_coupons(), coupon11 | coupon21 | coupon22)
+
+    def test_no_need_coupon_campaign(self):
+        campaign = self._create_campaign(
+            name="No Coupon Test Campaign",
+            is_without_coupons=True,
+        )
+
+        so = self.sale_order()
+        coupon = so.reserve_coupon("NO COUPON TEST CAMPAIGN")
+        self.assertTrue(coupon and coupon.campaign_id == campaign)
+        so.confirm_coupons()
+        self.assertEqual(coupon.used_for_sale_id, so)
+        self.assertEqual(coupon.display_name, "No Coupon Test Campaign")
+
+    def test_coupon_descriptions_for_sale_order(self):
+        so = self.sale_order()
+        empty_coupons_descr = so._sale_coupons_descr()
+        self.assertEqual(empty_coupons_descr, [])
+
+        campaign1 = self._create_campaign(
+            "campaign1", can_cumulate=True, can_auto_cumulate=True
+        )
+        campaign2 = self._create_campaign(
+            "campaign2", can_cumulate=True, can_auto_cumulate=True
+        )
+
+        coupon1 = self._create_coupon(code="TEST1_USE", campaign_id=campaign1.id)
+        coupon2 = self._create_coupon(code="TEST2_USE", campaign_id=campaign2.id)
+
+        so.reserve_coupon("TEST1_USE")
+        so.reserve_coupon("TEST2_USE")
+
+        coupons_descr = so._sale_coupons_descr()
+
+        self.assertEqual(coupon1.display_name, coupons_descr[0]["name"])
+        self.assertEqual(coupon1.campaign_id.description, coupons_descr[0]["descr"])
+
+        self.assertEqual(coupon2.display_name, coupons_descr[1]["name"])
+        self.assertEqual(coupon2.campaign_id.description, coupons_descr[1]["descr"])

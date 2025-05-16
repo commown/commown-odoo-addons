@@ -1,0 +1,10 @@
+form#coupon_input button span {
+    margin: 0 1em;
+}
+
+form#coupon_input button i {
+    display: none;
+    position: absolute;
+    top: 9px;
+    right: 6px;
+}
