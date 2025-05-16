@@ -5,7 +5,7 @@ class DeviceAssignmentHistory(models.Model):
     _name = "customer_device_manager.device_assignment_history"
     _description = "Store the partner an assignment had at one given date"
 
-    _order = "assignment_id, date desc"
+    _order = "assignment_id, date desc, id desc"
 
     assignment_id = fields.Many2one(
         "customer_device_manager.device_assignment",
@@ -24,7 +24,13 @@ class DeviceAssignmentHistory(models.Model):
     )
 
     device_location = fields.Selection(
-        related="assignment_id.device_location",
+        [
+            ("at_customer", "At Customer"),
+            ("at_commown", "At Commown"),
+        ],
+        string="Device Location",
+        required=True,
+        default="at_customer",
     )
 
     def name_get(self):
