@@ -175,13 +175,4 @@ class CommownCrmLead(models.Model):
         contract = self.contract_id
         if contract:
             result = contract.get_formview_action()
-
-            # Fix a bug (in the js engine?) that leads to a UI crash when
-            # adding a contract line to the displayed contract: without this,
-            # the active_id is the crm lead, and is (erronously) used as the
-            # contract id to add contract lines to.
-            # Note that the same bug is present in the product_contract module
-            # (button calling sale.order's action_show_contracts method)
-            result["context"] = {"active_id": contract.id}
-
             return result
