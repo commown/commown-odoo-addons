@@ -3,7 +3,7 @@
   <template id="my-managment-space-portal-access" inherit_id="portal.portal_my_home">
     <xpath expr="//div[hasclass('o_portal_my_home')]//h3" position="before">
       <div
-                t-if="env.user.has_group('customer_team_manager.group_customer_admin')"
+                t-if="env.user.has_group('customer_manager_base.group_customer_admin')"
                 id="o_portal_managment_space"
                 class="mb-4"
             >

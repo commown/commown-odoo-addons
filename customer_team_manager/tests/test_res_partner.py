@@ -85,7 +85,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertTrue(self.customer_partner_admin.customer_roles)
         self.customer_partner_admin.parent_id = False
         self.assertFalse(self.customer_partner_admin.customer_roles)
-        admin_group = self.env.ref("customer_team_manager.group_customer_admin")
+        admin_group = self.env.ref("customer_manager_base.group_customer_admin")
         self.assertNotIn(self.customer_partner_admin.user_ids, admin_group.users)
 
     def test_portal_user_create_and_write_with_role_ok(self):
@@ -120,7 +120,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             {"customer_roles": [(6, 0, minor_role.ids)]}
         )
         self.assertIsUser(self.customer_user_admin)
-        admin_group = self.env.ref("customer_team_manager.group_customer_admin")
+        admin_group = self.env.ref("customer_manager_base.group_customer_admin")
         self.assertFalse(self.customer_user_admin in admin_group.users)
 
     def test_write_email(self):

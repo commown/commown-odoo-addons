@@ -33,7 +33,7 @@ class ResPartner(models.Model):
         groups=",".join(
             (
                 "sales_team.group_sale_manager",
-                "customer_team_manager.group_customer_admin",
+                "customer_manager_base.group_customer_admin",
             )
         ),
     )
@@ -68,7 +68,7 @@ class ResPartner(models.Model):
         return (
             not self.env.user.has_group("base.group_user")
             and self.env.user.has_group("base.group_portal")
-            and self.env.user.has_group("customer_team_manager.group_customer_admin")
+            and self.env.user.has_group("customer_manager_base.group_customer_admin")
             and self.env.user.commercial_partner_id.is_company
         )
 
@@ -163,7 +163,7 @@ class ResPartner(models.Model):
 
     @api.model
     def _check_one_customer_admin_at_least(self, company_partner):
-        admin_group = self.env.ref("customer_team_manager.group_customer_admin")
+        admin_group = self.env.ref("customer_manager_base.group_customer_admin")
         domain = [
             ("commercial_partner_id", "=", company_partner.id),
             ("user_ids.groups_id", "=", admin_group.id),

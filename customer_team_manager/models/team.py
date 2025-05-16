@@ -36,7 +36,7 @@ class Team(models.Model):
     )
 
     def _default_customer_company(self):
-        if self.env.user.has_group("customer_team_manager.group_customer_admin"):
+        if self.env.user.has_group("customer_manager_base.group_customer_admin"):
             return self.env.user.commercial_partner_id.id
 
     @api.onchange("customer_company")

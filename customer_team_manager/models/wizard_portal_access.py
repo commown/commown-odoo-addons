@@ -21,7 +21,7 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
 
     allowed_groups = (
         "sales_team.group_sale_manager",
-        "customer_team_manager.group_customer_admin",
+        "customer_manager_base.group_customer_admin",
     )
 
     customer_partners = fields.Many2many(

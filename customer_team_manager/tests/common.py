@@ -58,12 +58,12 @@ class CustomerTeamManagerAbstractTC(SavepointCase):
     def assertIsAdmin(self, partner):
         user = partner.sudo().user_ids[0]
         self.assertTrue(user.has_group("base.group_portal"))
-        self.assertTrue(user.has_group("customer_team_manager.group_customer_admin"))
+        self.assertTrue(user.has_group("customer_manager_base.group_customer_admin"))
 
     def assertIsUser(self, partner):
         user = partner.sudo().user_ids[0]
         self.assertTrue(user.has_group("base.group_portal"))
-        self.assertFalse(user.has_group("customer_team_manager.group_customer_admin"))
+        self.assertFalse(user.has_group("customer_manager_base.group_customer_admin"))
 
     def _grant_portal_access(self, partner, sudo_as=None, passwd="admin"):
         "Use the admin user to grant portal access to given employee"

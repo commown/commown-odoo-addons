@@ -5,7 +5,7 @@
     <field name="model_id" ref="model_customer_team_manager_team" />
     <field
             name="groups"
-            eval="[(4, ref('customer_team_manager.group_customer_admin'))]"
+            eval="[(4, ref('customer_manager_base.group_customer_admin'))]"
         />
     <field
             name="domain_force"
@@ -23,7 +23,7 @@
     <field name="model_id" ref="model_res_partner" />
     <field
             name="groups"
-            eval="[(4, ref('customer_team_manager.group_customer_admin'))]"
+            eval="[(4, ref('customer_manager_base.group_customer_admin'))]"
         />
     <field
             name="domain_force"
@@ -39,7 +39,7 @@
     <field name="model_id" ref="base.model_ir_exports" />
     <field
             name="groups"
-            eval="[(4, ref('customer_team_manager.group_customer_admin'))]"
+            eval="[(4, ref('customer_manager_base.group_customer_admin'))]"
         />
     <field name="domain_force">[('create_uid','=', user.id)]</field>
     <field name="perm_read" eval="True" />
@@ -53,7 +53,7 @@
     <field name="model_id" ref="base.model_ir_exports_line" />
     <field
             name="groups"
-            eval="[(4, ref('customer_team_manager.group_customer_admin'))]"
+            eval="[(4, ref('customer_manager_base.group_customer_admin'))]"
         />
     <field name="domain_force">[('create_uid','=', user.id)]</field>
     <field name="perm_read" eval="True" />
@@ -67,7 +67,7 @@
     <field name="model_id" ref="base_import.model_base_import_mapping" />
     <field
             name="groups"
-            eval="[(4, ref('customer_team_manager.group_customer_admin'))]"
+            eval="[(4, ref('customer_manager_base.group_customer_admin'))]"
         />
     <field name="domain_force">[('create_uid','=', user.id)]</field>
     <field name="perm_read" eval="True" />

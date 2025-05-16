@@ -45,7 +45,7 @@ class CustomerRole(models.Model):
         is_current = self._context.get("partner_id") == self.env.user.partner_id.id
         if is_current:
             is_admin = self.env.user.has_group(
-                "customer_team_manager.group_customer_admin"
+                "customer_manager_base.group_customer_admin"
             )
             role_admin = self.env.ref("customer_team_manager.customer_role_admin")
         for rec in self:

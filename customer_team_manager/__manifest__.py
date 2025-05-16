@@ -24,7 +24,6 @@
         "customer_manager_base",
     ],
     "data": [
-        "security/groups.xml",
         "security/ir.model.access.csv",
         "security/rules.xml",
         "data/customer_roles.xml",
