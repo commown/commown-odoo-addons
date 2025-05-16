@@ -8,7 +8,7 @@ class CouponTestMixin:
     def setUpClass(cls):
         super().setUpClass()
         cls.seller = cls.env.ref("base.res_partner_2")
-        cls.campaign = cls._create_campaign()
+        cls.campaign = cls._create_campaign(description="mycampaign")
 
     @classmethod
     def _create_campaign(cls, name="test", **kwargs):
