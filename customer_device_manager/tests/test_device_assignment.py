@@ -68,6 +68,28 @@ class DeviceAssignmentTC(DeviceAssignmentBaseTC):
         assignment = self.create_assignment()
         self.assertIn(assignment.device_id.name, assignment.display_name)
 
+    def test_date_update_history_date(self):
+        date1 = fields.Datetime.from_string("2023-01-01 10:00:00")
+        date2 = fields.Datetime.from_string("2023-02-01 10:00:00")
+
+        assignment = self.create_assignment()
+        first_history_line = assignment.history_ids
+
+        self.assertNotEqual(assignment.assignment_date, date1)
+        first_history_line.date = date1
+        self.assertEqual(assignment.assignment_date, date1)
+
+        assignment.update({"partner_id": self.partner2.id})
+        new_date = assignment.assignment_date
+        self.assertTrue(new_date > date2)
+
+        first_history_line.date = date2
+        self.assertEqual(assignment.assignment_date, new_date)
+
+        second_history_line = (assignment.history_ids - first_history_line).ensure_one()
+        second_history_line.date = date2
+        self.assertEqual(assignment.assignment_date, date2)
+
 
 class DeviceAssignmentHistoryTC(DeviceAssignmentBaseTC):
     def setUp(self):
