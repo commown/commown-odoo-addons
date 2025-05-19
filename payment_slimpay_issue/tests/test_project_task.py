@@ -101,7 +101,7 @@ class ProjectTC(TransactionCase):
             "odoo.addons.account_payment_slimpay" ".models.slimpay_utils.get_client"
         )
         patcher.start()
-        super(ProjectTC, self).setUp()
+        super().setUp()
         self.addCleanup(patcher.stop)
 
         self.inv_journal = (
