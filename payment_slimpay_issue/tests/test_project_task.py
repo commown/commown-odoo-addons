@@ -159,11 +159,9 @@ class ProjectTC(TransactionCase):
             }
         )
 
-        self.slimpay = (
-            self.env["payment.acquirer"]
-            .search([("provider", "=", "slimpay")], limit=1)
-            .ensure_one()
-        )
+        self.slimpay = ref("account_payment_slimpay.payment_provider_slimpay")
+        self.slimpay.state = "enabled"
+
         self.partner = ref("base.res_partner_3")
         token = self.env["payment.token"].create(
             {
