@@ -14,6 +14,19 @@ HERE = osp.abspath(osp.dirname(__file__))
 class SlimpayStatementImportBaseTC(TransactionCase):
     "Base class for statement import tests"
 
+    def setUp(self):
+        super().setUp()
+
+        account_receivable = self.env["account.account"].create(
+            {
+                "code": "TEST.RECE",
+                "name": "Test receivable",
+                "account_type": "asset_cash",
+            }
+        )
+        journal = self.env.ref("account_move_slimpay_import.slimpay_journal")
+        journal.receivable_account_id = account_receivable
+
     def create_statement_import(self):
         model = self.env["slimpay_statements_autoimport.statement_import"]
 
