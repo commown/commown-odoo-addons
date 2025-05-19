@@ -41,15 +41,17 @@ class WebsiteTC(WebsiteBaseTC):
         )
 
     def test_portal_contract_view(self):
+        contract = self.contracts[0]
+        contract.user_id = self.env["res.users"].create(
+            {"name": "SHOULD_NOT_APPEAR", "login": "test_login"}
+        )
         doc = self.render_view(
             "contract.portal_contract_page",
-            contract=self.contracts[0],
+            contract=contract,
             website=self.website,
-            main_object=self.contracts[0],
+            main_object=contract,
         )
-        self.assertNotIn(
-            "Responsible:", doc.xpath("//div[@id='general_information']//h6//text()")
-        )  # Responsible was removed from original view
+        self.assertNotIn(contract.user_id.name, doc.text_content())
         self.assertFalse(
             doc.xpath(
                 "//section[contains(concat(' ',normalize-space(@class),' '),"
