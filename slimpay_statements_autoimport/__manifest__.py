@@ -13,6 +13,7 @@
     "license": "AGPL-3",
     "installable": True,
     "depends": [
+        "account_fiscal_year",
         "account_move_slimpay_import",
         "account_payment_slimpay",
         "mail",
