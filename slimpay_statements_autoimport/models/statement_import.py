@@ -17,6 +17,8 @@ class SlimpayStatementImport(models.Model):
     _inherit = ["mail.thread"]
     _order = "id desc"
 
+    HTTP_TIMEOUT = 12
+
     name = fields.Char("Email subject")
     mail_html = fields.Html("Email content", sanitize_attributes=False)
     imported_statement = fields.Many2one("account.move")
@@ -35,6 +37,7 @@ class SlimpayStatementImport(models.Model):
                     "+https://apis.slimpay.net/auth/report"
                 ),
             },
+            timeout=self.HTTP_TIMEOUT,
         )
         resp.raise_for_status()
         return resp.json()["access_token"]
@@ -125,6 +128,7 @@ class SlimpayStatementImport(models.Model):
                 "type": "full",
                 "locale": "fr",  # Important for csv column parsing!
             },
+            timeout=self.HTTP_TIMEOUT,
         )
         resp.raise_for_status()
 
@@ -160,7 +164,7 @@ class SlimpayStatementImport(models.Model):
         doc = lxml.html.fromstring(self.mail_html)
         urls = doc.xpath("//a[contains(text(), '%s')]/@href" % _LINK_TEXT)
         if len(urls) == 1:
-            resp = requests.get(urls[0])
+            resp = requests.get(urls[0], timeout=self.HTTP_TIMEOUT)
             if resp.status_code != 200:
                 raise ValueError(
                     f"{resp.status_code} {resp.reason}\nResponse:\n{resp.text}"
