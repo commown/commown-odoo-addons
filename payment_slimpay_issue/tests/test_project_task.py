@@ -242,7 +242,7 @@ class ProjectTC(SavepointCase):
 
     def assertInStage(self, task, ref_name):
         self.assertEqual(
-            list(task.stage_id.get_xml_id().values()),
+            list(task.stage_id.get_external_id().values()),
             ["payment_slimpay_issue.%s" % ref_name],
         )
 
@@ -482,7 +482,7 @@ class ProjectTC(SavepointCase):
 
     def _reset_on_time_actions_last_run(self):
         for action in self.env["base.automation"].search([("trigger", "=", "on_time")]):
-            xml_ids = list(action.get_xml_id().values())
+            xml_ids = list(action.get_external_id().values())
             if xml_ids and xml_ids[0].startswith("payment_slimpay_issue"):
                 action.last_run = False
 

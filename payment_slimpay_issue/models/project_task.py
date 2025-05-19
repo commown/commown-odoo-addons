@@ -356,7 +356,6 @@ class ProjectTask(models.Model):
         invoice._onchange_invoice_line_ids()
         invoice.action_invoice_open()
 
-    @api.multi
     def _slimpay_payment_issue_retry_payment(self):
         Transaction = self.env["payment.transaction"]
         for task in self:
