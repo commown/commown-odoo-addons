@@ -134,7 +134,7 @@ class ProjectTC(SavepointCase):
             {
                 "name": "Customer journal",
                 "code": "RC",
-                "company_id": self.env.user.company_id.id,
+                "company_id": self.env.company.id,
                 "type": "bank",
                 "update_posted": True,
             }
@@ -313,7 +313,7 @@ class ProjectTC(SavepointCase):
 
         payment = self.env["account.payment"].create(
             {
-                "company_id": self.env.user.company_id.id,
+                "company_id": self.env.company.id,
                 "partner_id": invoice.partner_id.id,
                 "partner_type": "customer",
                 "state": "draft",
