@@ -120,6 +120,9 @@ class SlimpayStatementImportTC(SlimpayStatementImportBaseTC):
         self.assertEqual(action["res_model"], self.job._name)
         self.assertEqual(action["res_id"], self.job.id)
 
+        self.job.unlink()
+        self.assertIsNone(self.si.button_open_job())
+
     def test_no_error(self):
         "Whole import scenario with and without errors"
 
