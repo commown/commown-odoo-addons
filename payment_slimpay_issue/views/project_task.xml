@@ -1,19 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
     <record model="ir.ui.view" id="project_task_form_view">
         <field name="name">slimpay.project.task.form.view</field>
         <field name="model">project.task</field>
-        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="inherit_id" ref="project.view_task_form2" />
         <field name="arch" type="xml">
           <xpath expr="//notebook" position="inside">
-            <page string="Payment" attrs="{'invisible': [('project_id', '!=', %(payment_slimpay_issue.project_payment_issue)d)]}" >
+            <page
+                    string="Payment"
+                    attrs="{'invisible': [('project_id', '!=', %(payment_slimpay_issue.project_payment_issue)d)]}"
+                >
               <group>
-                <field name="invoice_id"/>
-                <field name="invoice_unpaid_count"/>
-                <field name="invoice_next_payment_date"/>
-                <field name="slimpay_payment_label"/>
-                <field name="project_id" invisible="1"/>
+                <field name="invoice_id" />
+                <field name="invoice_unpaid_count" />
+                <field name="invoice_next_payment_date" />
+                <field name="slimpay_payment_label" />
+                <field name="project_id" invisible="1" />
               </group>
             </page>
           </xpath>
@@ -23,21 +26,24 @@
     <record id="project_task_kanban_view" model="ir.ui.view">
       <field name="name">slimpay.project.task.kanban.view</field>
       <field name="model">project.task</field>
-      <field name="inherit_id" ref="project.view_task_kanban"/>
+      <field name="inherit_id" ref="project.view_task_kanban" />
       <field name="arch" type="xml">
         <field name="stage_id" position="after">
-          <field name="partner_id" invisible="1"/>
-          <field name="invoice_id" invisible="1"/>
-          <field name="invoice_unpaid_count" invisible="1"/>
+          <field name="partner_id" invisible="1" />
+          <field name="invoice_id" invisible="1" />
+          <field name="invoice_unpaid_count" invisible="1" />
         </field>
         <xpath expr="//div[hasclass('o_kanban_record_body')]" position="inside">
           <div t-if="record.partner_id.raw_value !== false">
-            <t t-esc="record.partner_id.value"/>
+            <t t-esc="record.partner_id.value" />
           </div>
         </xpath>
         <xpath expr="//div[hasclass('oe_kanban_bottom_right')]" position="inside">
-          <div t-if="record.invoice_id.raw_value !== false" class="pull-left ml8 mr8 text-danger">
-            <t t-esc="record.invoice_unpaid_count.value"/> <i class="fa fa-money"/>
+          <div
+                    t-if="record.invoice_id.raw_value !== false"
+                    class="pull-left ml8 mr8 text-danger"
+                >
+            <t t-esc="record.invoice_unpaid_count.value" /> <i class="fa fa-money" />
           </div>
         </xpath>
       </field>

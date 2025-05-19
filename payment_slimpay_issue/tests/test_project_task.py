@@ -15,7 +15,9 @@ class FakeDoc(dict):
     pass
 
 
-def next_payment_reference(value=None, counter=[0]):
+def next_payment_reference(
+    value=None, counter=[0]  # noqa: B006
+):  # pylint: disable=dangerous-default-value
     if value is not None:
         counter[0] = value
     else:
@@ -60,7 +62,6 @@ def fake_action_crash_for(for_func, for_issue_id):
 
 
 def fake_issue_doc(
-    id="fake_issue",
     date="2019-03-28",
     amount="100.0",
     currency="EUR",
@@ -69,6 +70,7 @@ def fake_issue_doc(
     **kwargs
 ):
 
+    kwargs["id"] = "fake_issue"
     payment_url = "https://api.slimpay.net/alps#get-payment"
     subscriber_url = "https://api.slimpay.net/alps#get-subscriber"
 
@@ -715,7 +717,8 @@ class ProjectTC(SavepointCase):
                 ]
             )
         expected_message = (
-            "WARNING:odoo.addons.payment_slimpay_issue.models.project_task:Could not send SMS to %s (id %s): no phone number found"
+            "WARNING:odoo.addons.payment_slimpay_issue.models.project_task:"
+            "Could not send SMS to %s (id %s): no phone number found"
             % (self.partner.name, self.partner.id)
         )
         self.assertEqual(expected_message, cm.output[0])

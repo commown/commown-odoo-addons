@@ -1,14 +1,13 @@
-# Copyright (C) 2018 - Today: Commown (https://commown.fr)
-# @author: Florent Cayré
+# Copyright (C) 2018 - Today: Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Payment Slimpay issue",
     "category": "Website",
     "version": "12.0.1.0.10",
-    "author": "Commown SCIC SAS",
+    "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "account_payment_partner",
         "account_payment_slimpay",

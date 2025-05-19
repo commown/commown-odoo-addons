@@ -94,7 +94,7 @@ class ProjectTask(models.Model):
                     )
                 _logger.debug("Ack Slimpay issue id %s", issue_doc["id"])
                 self._slimpay_payment_issue_ack(client, issue_doc)
-        except:
+        except Exception:
             _logger.exception(
                 "Error occurred while handling payment issue %s (see below)."
                 "Everything concerning this specific issue has been"
@@ -178,7 +178,7 @@ class ProjectTask(models.Model):
         try:
             tr_ref = payment_doc["reference"]
             tr = tr_model.search([("acquirer_reference", "=", tr_ref)]).ensure_one()
-        except:
+        except Exception:
             _logger.info(
                 "Could not find Odoo transaction for" " Slimpay payment %r", tr_ref
             )
@@ -225,7 +225,7 @@ class ProjectTask(models.Model):
             subscriber_doc = client.get(payment_doc[meth("get-subscriber")].url)
             try:
                 _pid = int(subscriber_doc["reference"])
-            except:
+            except Exception:  # pylint: disable=except-pass
                 pass
             else:
                 partner = self.env["res.partner"].search([("id", "=", _pid)])
