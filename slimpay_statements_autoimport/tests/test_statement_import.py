@@ -5,13 +5,13 @@ from urllib import parse
 import requests_mock
 
 from odoo import fields
-from odoo.tests.common import SavepointCase
+from odoo.tests import TransactionCase
 from odoo.tools.config import config
 
 HERE = osp.abspath(osp.dirname(__file__))
 
 
-class SlimpayStatementImportBaseTC(SavepointCase):
+class SlimpayStatementImportBaseTC(TransactionCase):
     "Base class for statement import tests"
 
     def create_statement_import(self):
