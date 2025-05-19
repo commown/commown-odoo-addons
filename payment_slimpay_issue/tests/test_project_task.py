@@ -122,7 +122,7 @@ class ProjectTC(TransactionCase):
 
         self.customer_account = self.env["account.account"].create(
             {
-                "code": "cust_acc",
+                "code": "cust.acc",
                 "name": "customer account",
                 "account_type": "asset_receivable",
                 "reconcile": True,
@@ -153,7 +153,7 @@ class ProjectTC(TransactionCase):
 
         self.income_account = self.env["account.account"].create(
             {
-                "code": "rev_acc",
+                "code": "rev.acc",
                 "name": "income account",
                 "account_type": "income",
             }
@@ -203,7 +203,7 @@ class ProjectTC(TransactionCase):
 
         expenses_account = self.env["account.account"].create(
             {
-                "code": "exp_acc",
+                "code": "exp.acc",
                 "name": "expenses account",
                 "account_type": "expense",
             }
