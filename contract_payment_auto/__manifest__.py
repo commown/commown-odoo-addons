@@ -7,7 +7,7 @@
     "version": "16.0.1.0.0",
     "category": "Contract Management",
     "license": "AGPL-3",
-    "author": "LasLabs, " "Odoo Community Association (OCA)",
+    "author": "LasLabs, Odoo Community Association (OCA), Commown SCIC",
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "contract",
