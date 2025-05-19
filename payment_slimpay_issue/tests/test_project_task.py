@@ -125,7 +125,7 @@ class ProjectTC(SavepointCase):
             {
                 "code": "cust_acc",
                 "name": "customer account",
-                "user_type_id": ref("account.data_account_type_receivable").id,
+                "account_type": "asset_receivable",
                 "reconcile": True,
             }
         )
@@ -152,11 +152,11 @@ class ProjectTC(SavepointCase):
             }
         )
 
-        self.revenue_account = self.env["account.account"].create(
+        self.income_account = self.env["account.account"].create(
             {
                 "code": "rev_acc",
-                "name": "revenue account",
-                "user_type_id": ref("account.data_account_type_revenue").id,
+                "name": "income account",
+                "account_type": "income",
             }
         )
 
@@ -195,7 +195,7 @@ class ProjectTC(SavepointCase):
         )
         for _ref in ("management_fees_product", "bank_fees_product"):
             prod = self.env.ref("payment_slimpay_issue." + _ref)
-            prod.property_account_income_id = self.revenue_account.id
+            prod.property_account_income_id = self.income_account.id
             prod.taxes_id = [(6, 0, tax.ids)]
 
         # Reset payment reference between tests
@@ -206,7 +206,7 @@ class ProjectTC(SavepointCase):
             {
                 "code": "exp_acc",
                 "name": "expenses account",
-                "user_type_id": ref("account.data_account_type_expenses").id,
+                "account_type": "expense",
             }
         )
 
@@ -283,7 +283,7 @@ class ProjectTC(SavepointCase):
                         {
                             "name": "product test 5",
                             "product_id": self.env.ref("product.product_product_5").id,
-                            "account_id": self.revenue_account.id,
+                            "account_id": self.income_account.id,
                             "price_unit": 100.00,
                         },
                     )
