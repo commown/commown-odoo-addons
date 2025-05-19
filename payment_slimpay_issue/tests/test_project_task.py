@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import mock
 
 from odoo.exceptions import UserError
-from odoo.tests.common import SavepointCase, at_install, post_install
+from odoo.tests import TransactionCase, tagged
 from odoo.tools import mute_logger
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
@@ -94,9 +94,8 @@ def fake_issue_doc(
     return FakeDoc(defaults)
 
 
-@at_install(False)
-@post_install(True)
-class ProjectTC(SavepointCase):
+@tagged("-at_install", "post_install")
+class ProjectTC(TransactionCase):
     def setUp(self):
         patcher = mock.patch(
             "odoo.addons.account_payment_slimpay" ".models.slimpay_utils.get_client"
