@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="view_order_form" model="ir.ui.view">
+    <field name="name">sale.order.form (in product_rental)</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="product_contract.view_order_form" />
+
+    <field name="arch" type="xml">
+      <!-- Remove the contract creation button -->
+      <xpath expr="//button[@name='action_create_contract']" invisible="1" />
+
+      <!-- Replace the contracts show button ignoring contract_nb (which value is wrong for us) -->
+      <xpath expr="//button[@name='action_show_contracts']" position="after">
+        <button
+                    string="Contracts"
+                    icon="fa-book"
+                    type="object"
+                    name="action_show_contracts"
+                    attrs="{'invisible': [('state', 'not in', ['sale', 'done'])]}"
+                >
+        </button>
+      </xpath>
+      <xpath expr="//button[@name='action_show_contracts']" invisible="1" />
+
+    </field>
+
+  </record>
+
+</odoo>

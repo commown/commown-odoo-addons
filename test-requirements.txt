@@ -3,5 +3,8 @@ odfpy
 odoo-test-helper
 requests-mock
 
+# https://github.com/OCA/contract/pull/1231 (16.0 port of contract_payment_auto)
+git+https://github.com/9184Lucky/contract@16.0-mig-contract_payment_auto#subdirectory=setup/contract_payment_auto
+
 git+https://github.com/commown/odoo-usability@16.0-fix-odoo_usability-add-setup-py#subdirectory=setup/base_usability
 git+https://github.com/commown/odoo-usability@16.0-fix-odoo_usability-add-setup-py#subdirectory=setup/base_company_extension

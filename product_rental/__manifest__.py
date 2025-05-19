@@ -1,0 +1,35 @@
+{
+    "name": "Rental product",
+    "category": "Sale",
+    "summary": "Define products as rental products",
+    "version": "16.0.1.0.0",
+    "author": "Commown SCIC",
+    "license": "AGPL-3",
+    "website": "https://github.com/commown/commown-odoo-addons",
+    "depends": [
+        "base_automation",
+        "contract_payment_auto",
+        "contract_payment_mode",
+        "ir_attachment_lang",
+        "project",
+        "product_contract",
+        "website_sale",
+    ],
+    "external_dependencies": {},
+    "data": [
+        "data/mail_templates.xml",
+        "data/project.xml",
+        "views/contract.xml",
+        "views/portal_contract.xml",
+        "views/payment_transaction.xml",
+        "views/product_attribute.xml",
+        "views/product_template.xml",
+        "views/sale_order.xml",
+        "views/website_sale_templates.xml",
+    ],
+    "demo": ["demo/data.xml"],
+    "installable": True,
+    "assets": {
+        "web.assets_frontend": ["/product_rental/static/src/css/website_sale.css"]
+    },
+}

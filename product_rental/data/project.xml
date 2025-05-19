@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+  <record id="contract_termination_project" model="project.project">
+    <field name="name">Termination</field>
+  </record>
+
+  <record id="contract_theft_and_loss_project" model="project.project">
+    <field name="name">Theft and Loss</field>
+  </record>
+
+  <record id="stage_declared_theft" model="project.task.type">
+    <field name="name">Declared Theft</field>
+    <field name="project_ids" eval="[(4, ref('contract_theft_and_loss_project'))]" />
+    <field name="mail_template_id" ref="email_theft_declaration" />
+  </record>
+
+  <record id="stage_declared_loss" model="project.task.type">
+    <field name="name">Declared Loss</field>
+    <field name="project_ids" eval="[(4, ref('contract_theft_and_loss_project'))]" />
+    <field name="mail_template_id" ref="email_loss_declaration" />
+  </record>
+
+</odoo>
