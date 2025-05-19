@@ -184,7 +184,6 @@ class SlimpayStatementImport(models.Model):
         result.with_delay().fetch_and_import_statement()
         return result
 
-    @api.multi
     def button_open_job(self):
         self.ensure_one()
         func_str = (

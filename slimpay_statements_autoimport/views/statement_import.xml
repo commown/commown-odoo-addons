@@ -42,7 +42,6 @@
   <record id="statement_import_action" model="ir.actions.act_window">
     <field name="name">Slimpay automatic imports</field>
     <field name="res_model">slimpay_statements_autoimport.statement_import</field>
-    <field name="view_type">form</field>
     <field name="view_id" ref="statement_import_view_tree" />
   </record>
 
