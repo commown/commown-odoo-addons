@@ -111,7 +111,7 @@ class SlimpayStatementImport(models.Model):
         if start_date is None:
             return
 
-        slm = self.env.ref("account_payment_slimpay.payment_acquirer_slimpay")
+        slm = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
         token = self._get_token(slm.slimpay_api_url, conf["login"], conf["password"])
 
         resp = requests.post(
