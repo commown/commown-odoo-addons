@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 from odoo.tests import TransactionCase, tagged
 from odoo.tools import mute_logger
 
-from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 from odoo.addons.queue_job.tests.common import trap_jobs
 
