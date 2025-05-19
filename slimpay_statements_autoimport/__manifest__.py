@@ -15,7 +15,7 @@
     "depends": [
         "account_move_slimpay_import",
         "account_payment_slimpay",
-        "fetchmail",
+        "mail",
         "queue_job",
     ],
     "data": [
