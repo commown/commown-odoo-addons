@@ -79,7 +79,7 @@ class POInvoiceLinkWizard(models.TransientModel):
 
         return [
             (0, 0, {"move_id": line.id, "move_product_name": line.product_id.name})
-            for line in picking_id.move_lines
+            for line in picking_id.move_ids
             if not line.purchase_line_id
         ]
 

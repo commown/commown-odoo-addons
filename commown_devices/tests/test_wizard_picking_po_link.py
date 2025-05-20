@@ -48,7 +48,7 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
                 "location_dest_id": stock_location.id,
                 "date": date_pick,
                 "date_done": date_pick,
-                "move_lines": [
+                "move_ids": [
                     (
                         0,
                         0,
@@ -86,9 +86,7 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
     def test_default_link_lines(self):
         wizard = self.create_wizard()
         self.assertEqual(len(wizard.link_line_ids), 3)
-        self.assertEqual(
-            wizard.link_line_ids.mapped("move_id"), self.picking.move_lines
-        )
+        self.assertEqual(wizard.link_line_ids.mapped("move_id"), self.picking.move_ids)
 
     def test_po_id_domain(self):
         default, possibilities = self.prepare_wizard(self.picking, "picking_id")
@@ -140,6 +138,6 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
         self.assertEqual(self.picking.purchase_id, self.po)
         self.assertEqual(self.picking.origin, self.po.name)
         self.assertEqual(
-            self.picking.move_lines.mapped("purchase_line_id"),
+            self.picking.move_ids.mapped("purchase_line_id"),
             self.po.mapped("order_line"),
         )

@@ -471,7 +471,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             lambda p, loc=transfer_location: p.location_id == loc
         )
         self.assertTrue(
-            p2.move_lines.date - p1.move_lines.date == datetime.timedelta(seconds=1)
+            p2.move_ids.date - p1.move_ids.date == datetime.timedelta(seconds=1)
         )
 
     def test_contract_resiliation_with_devices(self):

@@ -19,14 +19,14 @@ class StockPicking(models.Model):
         store=False,
     )
 
-    @api.depends("move_lines.contract_id")
+    @api.depends("move_ids.contract_id")
     def _compute_contract_ids(self):
         """Cannot be done with a related because odoo cannot deal with it
 
         See https://github.com/odoo/odoo/blob/12.0/odoo/fields.py#L571
         """
         for record in self:
-            record.contract_ids = self.move_lines.mapped("contract_id")
+            record.contract_ids = self.move_ids.mapped("contract_id")
 
     def action_set_date_done_to_scheduled(self):
         for rec in self:

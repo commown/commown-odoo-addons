@@ -172,7 +172,7 @@ class Contract(models.Model):
                 if loc == old_location or loc.location_id == old_location:
                     setattr(picking, attr, new_loc.id)
 
-                    picking.move_lines.update({attr: new_loc.id})
+                    picking.move_ids.update({attr: new_loc.id})
                     picking.move_line_ids.update({attr: new_loc.id})
 
                     # Reset picking, moves, move lines and quant dates

@@ -55,7 +55,7 @@ class StockPickingTC(SavepointCase):
         contract = self.env["contract.contract"].create(
             {"name": "contract", "partner_id": 1}
         )
-        picking.move_lines.update({"contract_id": contract.id})
+        picking.move_ids.update({"contract_id": contract.id})
 
         self.assertEqual(picking.contract_ids, contract)
 

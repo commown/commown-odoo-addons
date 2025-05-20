@@ -189,7 +189,7 @@ def internal_picking(
     moves_by_lots = create_move_from_lots(picking, located_lots)
     moves_by_products = search_or_create_move_from_products(picking, located_products)
 
-    assert picking.move_lines
+    assert picking.move_ids
     picking.with_context(dont_merge_moves=True).action_confirm()
     picking.action_assign()
     assert picking.state == "assigned", (
@@ -223,7 +223,7 @@ def do_new_transfer(picking, date):
 def _force_picking_date(picking, date):
     _set_date(picking, date, "date_done")
     loc = picking.location_dest_id
-    for move in picking.move_lines:
+    for move in picking.move_ids:
         _set_date(move, date, "date")
     for move_line in picking.move_line_ids:
         _set_date(move_line, date, "date")

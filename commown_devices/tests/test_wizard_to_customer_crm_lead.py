@@ -162,7 +162,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         self.assertEqual(picking.move_type, "direct")
         self.assertEqual(picking.location_id, loc_new)
 
-        moves = picking.move_lines
+        moves = picking.move_ids
         self.assertEqual(len(moves), 3)
         loc_partner = self.so.partner_id.get_or_create_customer_location("internal")
         self.assertEqual(

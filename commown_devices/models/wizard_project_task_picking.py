@@ -90,7 +90,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         if not lot:
             raise UserError(_("Can't move device: no device set on this task!"))
 
-        new_move_lines = internal_picking(
+        new_move_ids = internal_picking(
             [lot],
             {},
             self.env[
@@ -102,10 +102,10 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             date=self.date,
         )
         do_new_transfer(
-            new_move_lines.mapped("picking_id"),
+            new_move_ids.mapped("picking_id"),
             self.date or fields.Datetime.now(),
         )
-        return new_move_lines
+        return new_move_ids
 
 
 class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
@@ -129,7 +129,7 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
         if self.env.ref(RESILIATION_XML_ID) == self.task_id.project_id:
             raise UserError(_("This action should not be used in resiliation project"))
 
-        new_move_lines = internal_picking(
+        new_move_ids = internal_picking(
             [],
             {self.task_id.storable_product_id: 1},
             self.present_location_id,
@@ -139,10 +139,10 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
             date=self.date,
         )
         do_new_transfer(
-            new_move_lines.mapped("picking_id"),
+            new_move_ids.mapped("picking_id"),
             self.date or fields.Datetime.now(),
         )
-        return new_move_lines
+        return new_move_ids
 
 
 class ProjectTaskOutwardPickingWizard(models.TransientModel):
