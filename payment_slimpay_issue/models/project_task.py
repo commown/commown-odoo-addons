@@ -110,16 +110,16 @@ class ProjectTask(models.Model):
         sets their status to "processed" at Slimpay.
         """
 
-        for acquirer in self.env["payment.acquirer"].search(
-            [("provider", "=", "slimpay")]
+        for provider in self.env["payment.provider"].search(
+            [("code", "=", "slimpay"), ("state", "=", "enabled")],
         ):
-            _logger.info('Checking payment issues for "%s"', acquirer.name)
+            _logger.info('Checking payment issues for "%s"', provider.name)
 
             try:
-                client = acquirer.slimpay_client
+                client = provider.slimpay_client()
             except requests.HTTPError:
                 # Invalid credentials error must not crash the transaction
-                # (one may have more than one slimpay acquirer activated
+                # (one may have more than one slimpay provider activated
                 #  or not in an environment or another -prod or debug-)
                 continue
 
@@ -177,7 +177,7 @@ class ProjectTask(models.Model):
         tr_model = self.env["payment.transaction"]
         try:
             tr_ref = payment_doc["reference"]
-            tr = tr_model.search([("acquirer_reference", "=", tr_ref)]).ensure_one()
+            tr = tr_model.search([("provider_reference", "=", tr_ref)]).ensure_one()
         except Exception:
             _logger.info(
                 "Could not find Odoo transaction for" " Slimpay payment %r", tr_ref
@@ -383,7 +383,7 @@ class ProjectTask(models.Model):
 
             transaction = Transaction.create(
                 {
-                    "acquirer_id": token.acquirer_id.id,
+                    "provider_id": token.provider_id.id,
                     "payment_token_id": token.id,
                     "amount": invoice.residual,
                     "state": "draft",
