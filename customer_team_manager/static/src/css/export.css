@@ -1,6 +1,3 @@
-.js-customer-admin .row > div:first-child {
-    display: none;
-}
-.js-customer-admin .o_export_panel {
+.js-customer-admin > *:not(.o_export_format) {
     display: none;
 }
