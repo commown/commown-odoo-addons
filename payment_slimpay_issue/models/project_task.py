@@ -354,7 +354,6 @@ class ProjectTask(models.Model):
         invoice.action_post()
 
     def _slimpay_payment_issue_retry_payment(self):
-        Transaction = self.env["payment.transaction"]
         for task in self:
             invoice = task.invoice_id
             partner = invoice.partner_id
@@ -378,48 +377,21 @@ class ProjectTask(models.Model):
                 token.payment_details,
             )
 
-            transaction = Transaction.create(
-                {
-                    "provider_id": token.provider_id.id,
-                    "payment_token_id": token.id,
-                    "amount": invoice.residual,
-                    "state": "draft",
-                    "currency_id": invoice.currency_id.id,
-                    "partner_id": partner.id,
-                    "partner_country_id": partner.country_id.id,
-                    "partner_city": partner.city,
-                    "partner_zip": partner.zip,
-                    "partner_email": partner.email,
-                    "invoice_ids": [(6, 0, invoice.ids)],
-                }
-            )
-
-            payment_mode = invoice.payment_mode_id
-            payment = self.env["account.payment"].create(
-                {
-                    "company_id": task.user_id.company_id.id,
-                    "partner_id": invoice.partner_id.id,
-                    "partner_type": "customer",
-                    "state": "draft",
-                    "payment_type": "inbound",
-                    "journal_id": payment_mode.fixed_journal_id.id,
-                    "payment_method_id": payment_mode.payment_method_id.id,
-                    "amount": invoice.residual,
-                    "payment_transaction_id": transaction.id,
-                    "invoice_ids": [(6, 0, [invoice.id])],
-                }
-            )
-            payment.post()
-
-            transaction.payment_id = payment.id
-
-            if self.slimpay_payment_label:
-                transaction = transaction.with_context(
-                    slimpay_payin_label=self.slimpay_payment_label
+            (
+                self.env["account.payment.register"]
+                .with_context(
+                    active_model="account.move",
+                    active_ids=invoice.ids,
+                    slimpay_payin_label=self.slimpay_payment_label,
                 )
-
-            if not transaction.s2s_do_transaction():
-                _logger.error("Transaction %s failed", transaction.id)
+                .create(
+                    {
+                        "journal_id": invoice.payment_mode_id.fixed_journal_id.id,
+                        "payment_token_id": token.id,
+                    }
+                )
+                ._create_payments()
+            )
 
     @api.model
     def _slimpay_payment_issue_handle(self, project, client, issue_doc):
