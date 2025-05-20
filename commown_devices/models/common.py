@@ -1,7 +1,7 @@
 import datetime
 from functools import partial
 
-from odoo import _, fields
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -251,7 +251,9 @@ def _set_date(entity, value, attr_name):
     entity.env.cr.execute(sql, (str(value), entity.id))
 
 
-class ToCustomerPickingMixin:
+class ToCustomerPickingMixin(models.AbstractModel):
+    _name = "to.customer.picking.mixin"
+
     delivery_time = datetime.time(9, 0)
 
     def action_to_customer_picking(self):
