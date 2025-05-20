@@ -19,7 +19,7 @@ def reject_date(issue_doc):
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
-    invoice_id = fields.Many2one("account.invoice", string="Invoice")
+    invoice_id = fields.Many2one("account.move", string="Invoice")
     invoice_unpaid_count = fields.Integer("Number of payment issues", default=0)
     invoice_next_payment_date = fields.Date(
         "Invoice next payment date",
@@ -196,7 +196,7 @@ class ProjectTask(models.Model):
                 "%s %s" % (issue_doc["rejectAmount"], issue_doc["currency"]),
             ]
             if invoice:
-                name.append(invoice.number)
+                name.append(invoice.name)
         else:
             name = [payment_doc["reference"], task.name]
         return " - ".join(name)
@@ -330,13 +330,13 @@ class ProjectTask(models.Model):
                 self.id,
             )
             return
-        invoice = self.env["account.invoice"].create(
+        invoice = self.env["account.move"].create(
             {
-                "type": "in_invoice",
+                "move_type": "in_invoice",
                 "partner_id": slimpay_fees_partner.id,
-                "reference": reference,
-                "date_invoice": date,
-                "invoice_line_ids": [
+                "ref": reference,
+                "invoice_date": date,
+                "line_ids": [
                     (
                         0,
                         0,
@@ -353,8 +353,7 @@ class ProjectTask(models.Model):
                 ],
             }
         )
-        invoice._onchange_invoice_line_ids()
-        invoice.action_invoice_open()
+        invoice.action_post()
 
     def _slimpay_payment_issue_retry_payment(self):
         Transaction = self.env["payment.transaction"]
@@ -376,7 +375,7 @@ class ProjectTask(models.Model):
             _logger.info(
                 "Task %s: retrying payment of invoice %s of %s with %s",
                 task.id,
-                invoice.number,
+                invoice.name,
                 partner.name,
                 token.name,
             )
@@ -459,7 +458,7 @@ class ProjectTask(models.Model):
             fees = rejected_amount - invoice.amount_total
             self._slimpay_payment_issue_invoice_fees(invoice, "bank", fees)
             self._slimpay_payment_issue_create_supplier_invoice_fees(
-                "%s-REJ%d" % (invoice.number, task.invoice_unpaid_count),
+                "%s-REJ%d" % (invoice.name, task.invoice_unpaid_count),
                 reject_date(issue_doc),
                 fees,
             )
