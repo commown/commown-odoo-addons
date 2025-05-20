@@ -492,11 +492,12 @@ class ProjectTask(models.Model):
             country_code,
         )
         if phone:
-            template = self.env.ref("payment_slimpay_issue.smspro_payment_issue")
-            self.with_delay().message_post_send_sms_html(
-                template, self, numbers=[phone], log_error=True
+            template = self.env.ref("payment_slimpay_issue.sms")
+            self.with_delay().send_sms_from_template(
+                template,
+                self,
+                sms_numbers=[phone],
             )
-
         else:
             _logger.warning(
                 "Could not send SMS to %s (id %s): no phone number found"

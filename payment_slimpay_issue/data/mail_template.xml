@@ -56,14 +56,10 @@
     </field>
   </record>
 
-  <record id="smspro_payment_issue" model="mail.template">
+  <record id="sms" model="sms.template">
     <field name="name">[commown] SMS impayé</field>
     <field name="model_id" ref="project.model_project_task" />
-    <field name="lang">fr_FR</field>
-    <field name="auto_delete">True</field>
-    <field name="body_html"><![CDATA[
-    <p>Contenu du SMS à rédiger</p>
-    ]]></field>
+    <field name="body">Contenu du SMS à rédiger</field>
   </record>
 
 </odoo>
