@@ -2,7 +2,7 @@
   <menuitem
         id="menu_customer_team_manager_root"
         name="Team manager"
-        web_icon="customer_team_manager,static/description/icon.png"
+        web_icon="customer_manager_base,static/description/icon.png"
         groups="group_customer_admin,sales_team.group_sale_manager"
     />
 </odoo>
