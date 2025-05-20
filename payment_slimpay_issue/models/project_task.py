@@ -258,10 +258,8 @@ class ProjectTask(models.Model):
 
         """
         self.ensure_one()
-        return bool(
-            self.invoice_id.payment_mode_id.payment_method_id
-            == self.env.ref("payment.account_payment_method_electronic_in")
-        )
+        pay_meth = self.invoice_id.payment_mode_id.payment_method_id
+        return pay_meth.payment_type == "inbound" and pay_meth.code == "electronic"
 
     @api.model
     def _slimpay_payment_issue_fees_product(self, fees_name):
