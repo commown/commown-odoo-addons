@@ -375,7 +375,7 @@ class ProjectTask(models.Model):
                 task.id,
                 invoice.name,
                 partner.name,
-                token.name,
+                token.payment_details,
             )
 
             transaction = Transaction.create(
