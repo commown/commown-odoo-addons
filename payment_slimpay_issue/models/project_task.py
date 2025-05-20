@@ -417,7 +417,7 @@ class ProjectTask(models.Model):
         task.invoice_unpaid_count += 1
 
         _logger.info('Unreconciling invoice "%s"', invoice.name)
-        invoice.payment_move_line_ids.remove_move_reconcile()
+        invoice.line_ids.remove_move_reconcile()
         _logger.info('Invoice payments "%s"', invoice.payment_ids.ids)
         for payment in invoice.payment_ids:
             _logger.info('Canceling payment "%s"', payment.id)
