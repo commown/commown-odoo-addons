@@ -5,7 +5,6 @@
         model="ir.actions.act_window"
     >
     <field name="name">[commown] Hand over a device to an employee</field>
-    <field name="binding_model">project.task</field>
     <field name="res_model">project.task.to.employee.wizard</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
@@ -38,7 +37,6 @@
         model="ir.actions.act_window"
     >
     <field name="name">[commown] SUPPORT: Send a not tracked product</field>
-    <field name="binding_model">project.task</field>
     <field name="res_model">project.task.notracking.outward.picking.wizard</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
@@ -48,7 +46,6 @@
 
   <record id="action_wizard_project_task_outward_picking" model="ir.actions.act_window">
     <field name="name">[commown] SUPPORT: Send a device</field>
-    <field name="binding_model">project.task</field>
     <field name="res_model">project.task.outward.picking.wizard</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
@@ -61,7 +58,6 @@
         model="ir.actions.act_window"
     >
     <field name="name">[commown] SUPPORT: Receive a not tracked product</field>
-    <field name="binding_model">project.task</field>
     <field name="res_model">project.task.notracking.inward.picking.wizard</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
@@ -71,7 +67,6 @@
 
   <record id="action_wizard_project_task_inward_picking" model="ir.actions.act_window">
     <field name="name">[commown] SUPPORT: Receive a device</field>
-    <field name="binding_model">project.task</field>
     <field name="res_model">project.task.inward.picking.wizard</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
@@ -86,7 +81,6 @@
     <field
             name="name"
         >[commown] CONTRACT: Transfer involved device to another contract</field>
-    <field name="binding_model">project.task</field>
     <field name="res_model">project.task.contract_transfer.wizard</field>
     <field name="view_mode">form</field>
     <field name="target">new</field>
