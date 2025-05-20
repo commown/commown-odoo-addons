@@ -23,6 +23,7 @@ class IrHttp(models.AbstractModel):
         result = super().session_info()
         admin_group_ref = "customer_manager_base.group_customer_admin"
         result["is_customer_admin"] = user.has_group(admin_group_ref)
+        result["is_internal_user"] = user.has_group("base.group_user")
 
         if result["is_customer_admin"]:
             menus = (
