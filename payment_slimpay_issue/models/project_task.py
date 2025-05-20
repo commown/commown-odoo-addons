@@ -283,8 +283,8 @@ class ProjectTask(models.Model):
             invoice.amount_total,
         )
 
-        invoice.action_invoice_cancel()
-        invoice.action_invoice_draft()
+        invoice.button_cancel()
+        invoice.button_draft()
 
         invoice.update(
             {
@@ -297,15 +297,14 @@ class ProjectTask(models.Model):
                             "product_id": product.id,
                             "price_unit": amount or product.list_price,
                             "account_id": product.property_account_income_id.id,
-                            "invoice_line_tax_ids": [(6, 0, product.taxes_id.ids)],
+                            "tax_ids": [(6, 0, product.taxes_id.ids)],
                         },
                     )
                 ]
             }
         )
-        invoice._onchange_invoice_line_ids()
 
-        invoice.action_invoice_open()
+        invoice.action_post()
 
         _logger.debug(
             "... new amount is %s, state %s", invoice.amount_total, invoice.state
@@ -343,9 +342,7 @@ class ProjectTask(models.Model):
                             "product_id": product.id,
                             "price_unit": amount,
                             "account_id": product.property_account_expense_id.id,
-                            "invoice_line_tax_ids": [
-                                (6, 0, product.supplier_taxes_id.ids)
-                            ],
+                            "tax_ids": [(6, 0, product.supplier_taxes_id.ids)],
                         },
                     )
                 ],
