@@ -287,48 +287,30 @@ class ProjectTC(TransactionCase):
         )
         invoice.action_post()
 
-        Transaction = self.env["payment.transaction"]
-        transaction = Transaction.create(
-            {
-                "acquirer_id": self.slimpay.id,
-                "acquirer_reference": "SDD-EXE-0000",
-                "payment_token_id": self.partner.payment_token_ids[0].id,
-                "amount": invoice.residual,
-                "state": "done",
-                "date": "2019-01-01",
-                "currency_id": invoice.currency_id.id,
-                "partner_id": self.partner.id,
-                "partner_country_id": self.partner.country_id.id,
-                "partner_city": self.partner.city,
-                "partner_zip": self.partner.zip,
-                "partner_email": self.partner.email,
-                "invoice_ids": [(6, 0, invoice.ids)],
-            }
+        token = self.partner.payment_token_ids[0]
+        journal = self.env["account.journal"].search([("type", "=", "bank")], limit=1)
+
+        register_payment = (
+            self.env["account.payment.register"]
+            .with_context(active_model="account.move", active_ids=invoice.ids)
+            .create({"journal_id": journal.id, "payment_token_id": token.id})
         )
 
-        payment = self.env["account.payment"].create(
-            {
-                "company_id": self.env.company.id,
-                "partner_id": invoice.partner_id.id,
-                "partner_type": "customer",
-                "state": "draft",
-                "payment_type": "inbound",
-                "journal_id": self.customer_journal.id,
-                "payment_method_id": self.env.ref(
-                    "payment.account_payment_method_electronic_in"
-                ).id,
-                "amount": invoice.amount_total,
-                "payment_transaction_id": transaction.id,
-                "invoice_ids": [(6, 0, [invoice.id])],
+        with requests_mock.Mocker() as mocker:
+            self._mock_slimpay_base(mocker)
+            mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
+            payin = {
+                "reference": "SDD-EXE-0000",
+                "state": "accepted",
+                "executionStatus": "toprocess",
             }
-        )
+            self._mock_slimpay_payment(mocker, mandate, payin)
+            payment = register_payment._create_payments()
 
-        payment.post()
-
-        self.assertEqual(invoice.state, "paid")
-        self.assertEqual(len(self._invoice_txs(invoice)), 1)
-
-        return invoice, transaction, payment
+        self.assertEqual(invoice.payment_state, "paid")
+        self.assertEqual(invoice.amount_residual, 0.0)
+        self.assertEqual(len(invoice.transaction_ids), 1)
+        return invoice, invoice.transaction_ids, payment
 
     def _invoice_txs(self, invoice):
         return self.env["payment.transaction"].search(
