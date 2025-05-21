@@ -253,6 +253,9 @@ def _set_date(entity, value, attr_name):
 
 class ToCustomerPickingMixin(models.AbstractModel):
     _name = "to.customer.picking.mixin"
+    _description = (
+        "Abstract class for obect that use wizard to send device to a customer"
+    )
 
     delivery_time = datetime.time(9, 0)
 

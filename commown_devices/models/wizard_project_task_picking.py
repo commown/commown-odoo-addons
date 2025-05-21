@@ -148,6 +148,7 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
 class ProjectTaskOutwardPickingWizard(models.TransientModel):
     _name = "project.task.outward.picking.wizard"
     _inherit = "project.task.abstract.picking.wizard"
+    _description = "Create outward picking for a lot"
 
     product_tmpl_id = fields.Many2one(
         "product.template",
@@ -251,6 +252,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
 class ProjectTaskInwardPickingWizard(models.TransientModel):
     _name = "project.task.inward.picking.wizard"
     _inherit = "project.task.abstract.picking.wizard"
+    _description = "Create inward picking for a lot"
 
     lot_id = fields.Many2one(
         "stock.lot",
@@ -279,6 +281,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
 class ProjectTaskContractTransferWizard(models.TransientModel):
     _name = "project.task.contract_transfer.wizard"
     _inherit = "project.task.abstract.picking.wizard"
+    _description = "Wizard to transfer contract property of a lot"
 
     contract_id = fields.Many2one(
         "contract.contract",
@@ -319,6 +322,7 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
 class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
     _name = "project.task.notracking.outward.picking.wizard"
     _inherit = "project.task.abstract.picking.wizard"
+    _description = "Create outward picking of a nonserial product"
 
     variant_id = fields.Many2one(
         "product.product",
@@ -379,6 +383,7 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
 class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
     _name = "project.task.notracking.inward.picking.wizard"
     _inherit = "project.task.abstract.picking.wizard"
+    _description = "Create inward picking of a nonserial product"
 
     variant_id = fields.Many2one(
         "product.product",
