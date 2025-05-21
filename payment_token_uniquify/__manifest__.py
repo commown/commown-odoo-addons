@@ -12,6 +12,7 @@
     "license": "AGPL-3",
     "depends": [
         "payment",
+        "contract_payment_auto",
         "queue_job",
     ],
     "data": [
