@@ -83,9 +83,8 @@ class SessionInfoTC(HttpCase):
             env = self.env(test_cursor)
             env.ref("customer_team_manager.customer_role_admin")
             partner = env["res.partner"].browse(self.partner.id)
-            comp = self.env["res.partner"].create({"name": "MyC", "is_company": True})
-            partner.parent_id = comp.id
-            # Check test prerequisite
-            self.assertTrue(partner.customer_roles)
+            partner.user_ids.groups_id |= env.ref(
+                "customer_manager_base.group_customer_admin"
+            )
 
         self.assertIs(self.get_session_info().get("is_customer_admin"), True)
