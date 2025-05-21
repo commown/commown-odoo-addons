@@ -611,9 +611,10 @@ class ProjectTC(TransactionCase):
             )
 
         task = self._project_tasks()
-        # Check that a job is created with this function. The function is tesed in a
-        # specific test
-        trap.assert_jobs_count(1, only=task.message_post_send_sms_html)
+
+        # Check that a job is created with this function.
+        # The function itself is tested in a specific test.
+        trap.assert_jobs_count(1, only=task.send_sms_from_template)
 
         self.assertEqual(len(task), 1)
         self.assertIssuesAcknowledged(mocker, "i1")
@@ -756,10 +757,10 @@ class ProjectTC(TransactionCase):
             )
 
         task = self._project_tasks()
-        trap.assert_jobs_count(1, only=task.message_post_send_sms_html)
+        trap.assert_jobs_count(1, only=task.send_sms_from_template)
 
         # Check that the job execute the function to send sms with the right argumetns
-        template = self.env.ref("payment_slimpay_issue.smspro_payment_issue")
+        template = self.env.ref("payment_slimpay_issue.sms")
 
         country_code = self.partner.country_id.code
         partner_mobile = normalize_phone(
@@ -768,14 +769,13 @@ class ProjectTC(TransactionCase):
         )
         with mock.patch(
             "odoo.addons.commown_res_partner_sms.models."
-            "mail_thread.MailThread.message_post_send_sms_html"
+            "mail_thread.MailThread.send_sms_from_template"
         ) as post_message:
             trap.perform_enqueued_jobs()
             post_message.assert_called_once_with(
                 template,
                 task,
-                numbers=[partner_mobile],
-                log_error=True,
+                sms_numbers=[partner_mobile],
             )
 
     def test_db_savepoint(self):
