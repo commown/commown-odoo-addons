@@ -518,7 +518,7 @@ class ProjectTC(TransactionCase):
         self.invoice.line_ids.remove_move_reconcile()
 
         # Now remove the payment token and launch the payment retry:
-        self.partner.payment_token_id.unlink()
+        self.partner.payment_token_id = False
         with self.assertRaises(UserError) as err:
             self._simulate_wait(
                 task,
