@@ -789,6 +789,13 @@ class ProjectTC(TransactionCase):
             self._create_inv_tx_and_payment(i + 1) for i in range(3)
         ]
 
+        # Check test pre-requisites:
+        self.assertEqual(
+            (inv0.payment_state, inv1.payment_state, inv2.payment_state),
+            ("paid", "paid", "paid"),
+        )
+        self.assertEqual((p0.state, p1.state, p2.state), ("posted", "posted", "posted"))
+
         # Execute test: generate 3 issues and simulate a crash when the
         # second is acknowledged to Slimpay
         with mute_logger("odoo.addons.payment_slimpay_issue.models.project_task"):
