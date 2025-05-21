@@ -471,12 +471,19 @@ class ProjectTC(TransactionCase):
             trap.assert_jobs_count(1, only=check_job_function)
             trap.perform_enqueued_jobs()
 
+    def flush_tracking(self):
+        """Force the creation of tracking values."""
+        self.env.flush_all()
+        self.cr.precommit.run()
+
     def test_actions(self):
         ref = self.env.ref
         task = self._create_odoo_task()
+        self.flush_tracking()  # Be sure a tracking discard will not impact next flush
 
         # Check a message is sent when entering the warn and wait stage
         task.stage_id = ref("payment_slimpay_issue.stage_warn_partner_and_wait").id
+        self.flush_tracking()
         last_msg = task.message_ids[0]
         self.assertEqual(last_msg.subject, "YourCompany: rejected payment")
 
