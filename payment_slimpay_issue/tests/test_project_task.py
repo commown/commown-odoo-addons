@@ -67,6 +67,14 @@ class ProjectTC(TransactionCase):
 
         self.project = ref("payment_slimpay_issue.project_payment_issue")
 
+        electronic_in = self.env["account.payment.method"].create(
+            {
+                "name": "Electronic In",
+                "code": "electronic",
+                "payment_type": "inbound",
+            }
+        )
+
         self.customer_journal = self.env["account.journal"].create(
             {
                 "name": "Customer journal",
@@ -79,9 +87,7 @@ class ProjectTC(TransactionCase):
         self.payment_mode = self.env["account.payment.mode"].create(
             {
                 "name": "Electronic inbound to customer journal",
-                "payment_method_id": ref(
-                    "payment.account_payment_method_electronic_in"
-                ).id,
+                "payment_method_id": electronic_in.id,
                 "payment_type": "inbound",
                 "bank_account_link": "fixed",
                 "fixed_journal_id": self.customer_journal.id,
