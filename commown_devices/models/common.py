@@ -267,9 +267,7 @@ class ToCustomerPickingMixin(models.AbstractModel):
                 )
             )
 
-        view = self.env.ref(
-            "commown_devices.wizard_abstract_to_customer_form_allow_edit"
-        )
+        view = self.env.ref("commown_devices.wizard_abstract_to_customer_form")
 
         return {
             "type": "ir.actions.act_window",

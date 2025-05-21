@@ -15,7 +15,16 @@
                             name="all_products"
                             widget="many2many_tags"
                             options="{'no_create_edit': True, 'open': true}"
+                            groups="!stock.group_stock_manager"
                             readonly="1"
+                            context="{'default_public': True}"
+                        />
+            <field
+                            name="all_products"
+                            widget="many2many_tags"
+                            options="{'no_create_edit': True, 'open': true}"
+                            groups="stock.group_stock_manager"
+                            readonly="0"
                             context="{'default_public': True}"
                         />
             <field name="lot_ids" widget="many2many_tags" />
@@ -33,20 +42,6 @@
           <button string="Cancel" class="btn-default" special="cancel" />
         </footer>
       </form>
-    </field>
-  </record>
-
-  <record id="wizard_abstract_to_customer_form_allow_edit" model="ir.ui.view">
-    <field
-            name="name"
-        >[commown] Abstract to customer creation form view (edition allowed)</field>
-    <field name="model">abstract.to.customer.wizard</field>
-    <field name="inherit_id" ref="commown_devices.wizard_abstract_to_customer_form" />
-    <field name="groups_id" eval="[(6, 0, [ref('stock.group_stock_manager')])]" />
-    <field name="arch" type="xml">
-      <xpath expr="//field[@name='all_products']" position="attributes">
-        <attribute name="readonly">False</attribute>
-      </xpath>
     </field>
   </record>
 
