@@ -1,10 +1,10 @@
 from odoo.tests.common import SavepointCase
 
 
-class AccountInvoiceLineTC(SavepointCase):
+class AccountMoveLineTC(SavepointCase):
     @classmethod
     def setUpClass(cls):
-        super(AccountInvoiceLineTC, cls).setUpClass()
+        super().setUpClass()
 
         def account(account_type, group, code):
             return cls.env["account.account"].create(
@@ -52,9 +52,9 @@ class AccountInvoiceLineTC(SavepointCase):
         )
 
     def invoice_account(self, po):
-        invoice = self.env["account.invoice"].create(
+        invoice = self.env["account.move"].create(
             {
-                "type": "in_invoice",
+                "move_type": "in_invoice",
                 "company_id": self.env.ref("base.main_company").id,
                 "currency_id": self.env.ref("base.EUR").id,
                 "partner_id": po.partner_id.id,

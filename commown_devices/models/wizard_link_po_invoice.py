@@ -19,7 +19,7 @@ class POInvoiceLinkLine(models.TransientModel):
     )
 
     invoice_line_id = fields.Many2one(
-        "account.invoice.line",
+        "account.move.line",
         string="Invoice lines",
     )
 
@@ -48,7 +48,7 @@ class POInvoiceLinkWizard(models.TransientModel):
     )
 
     invoice_id = fields.Many2one(
-        "account.invoice",
+        "account.move",
         string="Select invoice line from this invoice",
     )
 
@@ -102,6 +102,6 @@ class POInvoiceLinkWizard(models.TransientModel):
                 link.invoice_line_id.name,
             )
             link.po_line_id.invoice_lines |= link.invoice_line_id
-        self.link_line_ids.mapped("invoice_line_id.invoice_id").update(
-            {"origin": link.wizard_id.po_id.name}
+        self.link_line_ids.mapped("invoice_line_id.move_id").update(
+            {"invoice_origin": link.wizard_id.po_id.name}
         )

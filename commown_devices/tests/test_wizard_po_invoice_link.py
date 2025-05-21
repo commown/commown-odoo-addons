@@ -29,12 +29,11 @@ class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
             }
         )
         base_inv_line = {"price_unit": 10.0, "account_id": supplier_account.id}
-        self.invoice = self.env["account.invoice"].create(
+        self.invoice = self.env["account.move"].create(
             {
-                "type": "in_invoice",
+                "move_type": "in_invoice",
                 "partner_id": supplier.id,
-                "account_id": supplier_account.id,
-                "invoice_line_ids": [
+                "line_ids": [
                     (0, 0, dict(base_inv_line, product_id=p.id, name=p.name))
                     for p in [self.fp, self.pc1, self.pc2]
                 ],
@@ -117,14 +116,14 @@ class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
             .create({})
         )
         for i in range(len(self.po.order_line)):
-            wizard.link_line_ids[i].invoice_line_id = self.invoice.invoice_line_ids[i]
+            wizard.link_line_ids[i].invoice_line_id = self.invoice.line_ids[i]
         wizard.action_assign_invoice()
         self.assertEqual(
             self.po.order_line.mapped("invoice_lines"),
-            self.invoice.invoice_line_ids,
+            self.invoice.line_ids,
         )
-        self.assertEqual(self.invoice.origin, self.po.name)
+        self.assertEqual(self.invoice.invoice_origin, self.po.name)
         self.assertEqual(
-            set(self.invoice.invoice_line_ids.mapped("name")),
+            set(self.invoice.line_ids.mapped("name")),
             {"%s: %s" % (self.po.name, p.name) for p in [self.fp, self.pc1, self.pc2]},
         )
