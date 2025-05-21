@@ -3,7 +3,7 @@
 {
     "name": "Slimpay online payment and mandate signing for e-commerce",
     "summary": "Provide website customers online SEPA mandate signing with Slimpay",
-    "version": "16.0.1.0.2",
+    "version": "16.0.1.0.3",
     "development_status": "Beta",
     "category": "e-commerce",
     "website": "https://github.com/commown/commown-odoo-addons",
