@@ -526,7 +526,7 @@ class ProjectTC(TransactionCase):
             )
 
         # Check the expected exception is raised:
-        self.assertIn("could not find a payment token!", err.exception.name)
+        self.assertIn("could not find a payment token!", err.exception.args[0])
 
     def _slimpay_supplier_invoices(self):
         slimpay_partner = self.env.ref("payment_slimpay_issue.slimpay_fees_partner")
