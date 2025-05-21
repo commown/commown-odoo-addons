@@ -236,7 +236,7 @@ class ProjectTask(models.Model):
             "Slimpay Id: %s" % issue_doc["id"],
         ]
 
-        return self.env["project.task"].create(
+        task = self.env["project.task"].create(
             {
                 "name": self._slimpay_payment_issue_name(
                     issue_doc, payment_doc, invoice
@@ -248,6 +248,15 @@ class ProjectTask(models.Model):
                 "slimpay_payment_label": payment_doc["label"],
             }
         )
+
+        # Flush tracking to allow later tracking in the same
+        # transaction. This is required for stage mail_template_id
+        # emails to be sent although the tracking is cancelled at
+        # creation (see mail_thread create calling _track_discard)
+        self.env.flush_all()
+        self.env.cr.precommit.run()
+
+        return task
 
     def slimpay_payment_issue_process_automatically(self):
         """Override this if you want special rules to deny automatic
