@@ -59,17 +59,9 @@ class ProjectTC(TransactionCase):
     def setUp(self):
         super().setUp()
 
-        self.inv_journal = (
-            self.env["account.journal"]
-            .search(
-                [
-                    ("type", "=", "sale"),
-                ]
-            )
-            .ensure_one()
+        self.inv_journal = self.env["account.journal"].search(
+            [("type", "=", "sale")], limit=1
         )
-        # important for fees, see module doc:
-        self.inv_journal.update_posted = True
 
         ref = self.env.ref
 
@@ -90,7 +82,6 @@ class ProjectTC(TransactionCase):
                 "code": "RC",
                 "company_id": self.env.company.id,
                 "type": "bank",
-                "update_posted": True,
             }
         )
 
