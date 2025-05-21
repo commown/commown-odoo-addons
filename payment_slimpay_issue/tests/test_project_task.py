@@ -280,6 +280,7 @@ class ProjectTC(TransactionCase):
                             "product_id": self.env.ref("product.product_product_5").id,
                             "account_id": self.income_account.id,
                             "price_unit": 100.00,
+                            "tax_ids": False,
                         },
                     )
                 ],
