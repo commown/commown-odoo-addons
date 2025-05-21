@@ -18,6 +18,7 @@
     ],
     "data": [
         "security/groups.xml",
+        "security/ir.model.access.csv",
         "views/manager_menu.xml",
         "security/rules.xml",
         "views/project.xml",
