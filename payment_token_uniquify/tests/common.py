@@ -42,7 +42,6 @@ class PaymentTokenUniquifyTC(TransactionCase):
             provider = cls.env.ref("payment.payment_provider_transfer")
         token = cls.env["payment.token"].create(
             {
-                "name": "Token",
                 "partner_id": partner.id,
                 "provider_id": provider.id,
                 "provider_ref": "test-provider-ref",
