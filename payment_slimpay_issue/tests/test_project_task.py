@@ -355,7 +355,7 @@ class ProjectTC(TransactionCase):
 
         self.assertIn("SDD-EXE-0000", task2.name)
         self.assertIn("2019-03-28", task2.name)
-        self.assertIn(task2.invoice_id.number, task2.name)
+        self.assertIn(task2.invoice_id.name, task2.name)
 
     def test_cron_second_issue(self):
         """Second payment issue for the `self.invoice` invoice:
@@ -530,10 +530,10 @@ class ProjectTC(TransactionCase):
 
     def _slimpay_supplier_invoices(self):
         slimpay_partner = self.env.ref("payment_slimpay_issue.slimpay_fees_partner")
-        return self.env["account.invoice"].search(
+        return self.env["account.move"].search(
             [
                 ("partner_id", "=", slimpay_partner.id),
-                ("type", "=", "in_invoice"),
+                ("move_type", "=", "in_invoice"),
             ]
         )
 
@@ -589,7 +589,7 @@ class ProjectTC(TransactionCase):
         new_fee_invoices = fee_invoices_after - fee_invoices_before
         self.assertEqual(len(new_fee_invoices), 1)
         self.assertEqual(new_fee_invoices.amount_total, 10)
-        self.assertEqual(new_fee_invoices.reference, task.invoice_id.number + "-REJ1")
+        self.assertEqual(new_fee_invoices.ref, task.invoice_id.name + "-REJ1")
         self.assertEqual(
             new_fee_invoices.mapped("invoice_line_ids.product_id"),
             self.supplier_fees_product.product_variant_id,
