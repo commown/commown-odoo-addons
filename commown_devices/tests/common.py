@@ -121,6 +121,8 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         if cls.confirm_sale:
             cls.so.action_confirm()
 
+        cls.env.flush_all()
+
         cls.location_fp3_new = cls.env["stock.location"].create(
             {
                 "name": "New FP3 devices",
