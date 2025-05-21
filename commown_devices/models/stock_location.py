@@ -1,8 +1,12 @@
-from odoo import models
+from odoo import fields, models
 
 
 class StockLocation(models.Model):
     _inherit = "stock.location"
+
+    partner_id = fields.Many2one(
+        "res.partner", "Owner", help="Owner of the location if not internal"
+    )
 
     def name_get(self):
         if not self.env.context.get("short_location_name", False):

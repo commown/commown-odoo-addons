@@ -43,6 +43,7 @@
         "views/project_task_type.xml",
         "views/purchase_order.xml",
         "views/stock_picking.xml",
+        "views/stock_location.xml",
         "views/wizard_link_picking_po.xml",
         "views/wizard_link_po_invoice.xml",
         "views/wizard_move_line_validation.xml",
