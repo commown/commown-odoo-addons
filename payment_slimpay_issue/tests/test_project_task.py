@@ -265,16 +265,12 @@ class ProjectTC(TransactionCase):
         return self.env["project.task"].create(data)
 
     def _create_inv_tx_and_payment(self):
-        invoice = self.env["account.invoice"].create(
+        invoice = self.env["account.move"].create(
             {
-                "name": "Test Invoice",
-                "payment_term_id": self.env.ref(
-                    "account.account_payment_term_advance"
-                ).id,
-                "payment_mode_id": self.payment_mode.id,
                 "journal_id": self.inv_journal.id,
                 "partner_id": self.partner.id,
-                "account_id": self.customer_account.id,
+                "move_type": "out_invoice",
+                "payment_mode_id": self.payment_mode.id,
                 "invoice_line_ids": [
                     (
                         0,
@@ -289,7 +285,7 @@ class ProjectTC(TransactionCase):
                 ],
             }
         )
-        invoice.action_invoice_open()
+        invoice.action_post()
 
         Transaction = self.env["payment.transaction"]
         transaction = Transaction.create(
