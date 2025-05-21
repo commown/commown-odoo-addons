@@ -138,7 +138,7 @@ class ProjectTC(TransactionCase):
             prod.taxes_id = [(6, 0, tax.ids)]
 
         # Reset payment reference between tests
-        self.invoice, self.transaction, _p = self._create_inv_tx_and_payment()
+        self.invoice, self.transaction, self.payment = self._create_inv_tx_and_payment()
 
         expenses_account = self.env["account.account"].create(
             {
@@ -345,8 +345,8 @@ class ProjectTC(TransactionCase):
 
         self.assertFalse(task1.invoice_id)
         self.assertEqual(task2.invoice_id, self.invoice)
-        self.assertEqual(self.invoice.state, "open")
-        self.assertEqual(self.invoice.mapped("payment_ids.state"), ["cancelled"])
+        self.assertEqual(self.invoice.payment_state, "not_paid")
+        self.assertEqual(self.payment.state, "cancel")
 
         self.assertInStage(task1, "stage_orphan")
         self.assertInStage(task2, "stage_warn_partner_and_wait")
@@ -377,7 +377,7 @@ class ProjectTC(TransactionCase):
 
         self.assertEqual(len(self._project_tasks()), 1)
         self.assertEqual(task.invoice_unpaid_count, 2)
-        self.assertEqual(task.invoice_id.mapped("payment_ids.state"), ["cancelled"])
+        self.assertEqual(task.invoice_id.payment_state, "not_paid")
         self.assertInStage(task, "stage_warn_partner_and_wait")
         self.assertEqual(task.invoice_id.amount_total, 105.0)
         self.assertIssuesAcknowledged(mocker, "i2")
@@ -406,7 +406,7 @@ class ProjectTC(TransactionCase):
 
         self.assertEqual(len(self._project_tasks()), 1)
         self.assertEqual(task.invoice_unpaid_count, 3)
-        self.assertEqual(task.invoice_id.mapped("payment_ids.state"), ["cancelled"])
+        self.assertEqual(task.invoice_id.payment_state, "not_paid")
         self.assertInStage(task, "stage_max_trials_reached")
         # We haven't simulated the previous invoice amount raise due
         # to 2nd payment issue here, so the invoice amount was
@@ -556,7 +556,7 @@ class ProjectTC(TransactionCase):
         self.assertIssuesAcknowledged(mocker, "i1")
         self.assertEqual(task.invoice_id, self.invoice)
         self.assertEqual(task.invoice_unpaid_count, 1)
-        self.assertEqual(task.invoice_id.mapped("payment_ids.state"), ["cancelled"])
+        self.assertEqual(task.invoice_id.payment_state, "not_paid")
         self.assertEqual(task.invoice_id.amount_total, 112)
         self.assertInStage(task, "stage_warn_partner_and_wait")
         last_msg = task.message_ids[0]
@@ -594,7 +594,7 @@ class ProjectTC(TransactionCase):
             new_fee_invoices.mapped("invoice_line_ids.product_id"),
             self.supplier_fees_product.product_variant_id,
         )
-        self.assertEqual(new_fee_invoices.state, "open")
+        self.assertEqual(new_fee_invoices.payment_state, "not_paid")
 
     def test_functional_3_trials(self):
         fr = self.env.ref("base.fr")
@@ -619,14 +619,14 @@ class ProjectTC(TransactionCase):
         self.assertIssuesAcknowledged(mocker, "i1")
         self.assertEqual(task.invoice_id, self.invoice)
         self.assertEqual(task.invoice_unpaid_count, 1)
-        self.assertEqual(task.invoice_id.mapped("payment_ids.state"), ["cancelled"])
+        self.assertEqual(task.invoice_id.payment_state, "not_paid")
         self.assertEqual(task.invoice_id.amount_total, 100.0)
         self.assertInStage(task, "stage_warn_partner_and_wait")
         # When CI runs, commown module is installed and sends a SMS too, so
         # we use assertIn and not assertEquals below:
         emails = task_emails(task)
         self.assertIn("YourCompany: rejected payment", emails.mapped("subject"))
-        self.assertEqual(self.invoice.state, "open")
+        self.assertEqual(self.invoice.payment_state, "not_paid")
 
         token = self.partner.payment_token_id
 
@@ -653,7 +653,7 @@ class ProjectTC(TransactionCase):
         payins = self._action_calls(mocker, "create-payins")
         self.assertEqual(len(payins), 1)
         self.assertEqual(payins[0].json()["label"], "dummy label")
-        self.assertEqual(self.invoice.state, "paid")
+        self.assertEqual(self.invoice.payment_state, "paid")
         self.assertEqual(len(task_emails(task)), len(emails))  # no new email
         self.assertIn("slimpay_ref_1 ", task.name)
 
@@ -666,9 +666,7 @@ class ProjectTC(TransactionCase):
         )
         self.assertIssuesAcknowledged(mocker, "i2")
         self.assertEqual(task.invoice_unpaid_count, 2)
-        self.assertEqual(
-            task.invoice_id.mapped("payment_ids.state"), ["cancelled", "cancelled"]
-        )
+        self.assertEqual(task.invoice_id.payment_state, "not_paid")
         self.assertEqual(task.invoice_id.amount_total, 105)
         self.assertInStage(task, "stage_warn_partner_and_wait")
         emails = task_emails(task)
@@ -676,7 +674,7 @@ class ProjectTC(TransactionCase):
             [s for s in emails.mapped("subject") if "rejected" in s],
             2 * ["YourCompany: rejected payment"],
         )
-        self.assertEqual(self.invoice.state, "open")
+        self.assertEqual(self.invoice.payment_state, "not_paid")
         self.assertIn("slimpay_ref_2 - slimpay_ref_1 ", task.name)
 
         with requests_mock.Mocker() as mocker:
@@ -700,7 +698,7 @@ class ProjectTC(TransactionCase):
         payins = self._action_calls(mocker, "create-payins")
         self.assertEqual(len(payins), 1)
         self.assertEqual(payins[0].json()["label"], "dummy label")
-        self.assertEqual(self.invoice.state, "paid")
+        self.assertEqual(self.invoice.payment_state, "paid")
 
         mocker = self._execute_cron(
             [
@@ -711,10 +709,7 @@ class ProjectTC(TransactionCase):
         )
         self.assertIssuesAcknowledged(mocker, "i3")
         self.assertEqual(task.invoice_unpaid_count, 3)
-        self.assertEqual(
-            task.invoice_id.mapped("payment_ids.state"),
-            ["cancelled", "cancelled", "cancelled"],
-        )
+        self.assertEqual(task.invoice_id.payment_state, "not_paid")
         self.assertEqual(task.invoice_id.amount_total, 110)
         self.assertInStage(task, "stage_max_trials_reached")
         self.assertEqual(
@@ -819,9 +814,10 @@ class ProjectTC(TransactionCase):
 
         # Check the http ack method was called for all issue docs
         self.assertIssuesAcknowledged(mocker, "i0", "i1", "i2")
-        # Check only the 2 invoice, transaction, payment serie was
+        # Check only the 2 invoices, transactions, payments serie was
         # rolled backed, not the others:
-        self.assertEqual((inv0.state, inv1.state, inv2.state), ("open", "paid", "open"))
         self.assertEqual(
-            (p0.state, p1.state, p2.state), ("cancelled", "posted", "cancelled")
+            (inv0.payment_state, inv1.payment_state, inv2.payment_state),
+            ("not_paid", "paid", "not_paid"),
         )
+        self.assertEqual((p0.state, p1.state, p2.state), ("cancel", "posted", "cancel"))
