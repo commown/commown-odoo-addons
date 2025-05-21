@@ -328,7 +328,7 @@ class ProjectTC(TransactionCase):
             [
                 fake_issue_doc(id="i1"),
                 fake_issue_doc(
-                    id="i2", payment_ref="slimpay_ref_1", subscriber_ref=self.partner.id
+                    id="i2", payment_ref="SDD-EXE-0000", subscriber_ref=self.partner.id
                 ),
             ]
         )
@@ -353,7 +353,7 @@ class ProjectTC(TransactionCase):
 
         self.assertIssuesAcknowledged(mocker, "i1", "i2")
 
-        self.assertIn("slimpay_ref_1 ", task2.name)
+        self.assertIn("SDD-EXE-0000", task2.name)
         self.assertIn("2019-03-28", task2.name)
         self.assertIn(task2.invoice_id.number, task2.name)
 
@@ -370,7 +370,7 @@ class ProjectTC(TransactionCase):
         mocker = self._execute_cron(
             [
                 fake_issue_doc(
-                    id="i2", payment_ref="slimpay_ref_1", subscriber_ref=self.partner.id
+                    id="i2", payment_ref="SDD-EXE-0000", subscriber_ref=self.partner.id
                 ),
             ]
         )
@@ -381,7 +381,7 @@ class ProjectTC(TransactionCase):
         self.assertInStage(task, "stage_warn_partner_and_wait")
         self.assertEqual(task.invoice_id.amount_total, 105.0)
         self.assertIssuesAcknowledged(mocker, "i2")
-        self.assertIn("slimpay_ref_1 ", task.name)
+        self.assertIn("SDD-EXE-0000 ", task.name)
 
     def test_cron_third_issue(self):
         """Third payment issue for the `self.invoice` invoice:
@@ -399,7 +399,7 @@ class ProjectTC(TransactionCase):
         mocker = self._execute_cron(
             [
                 fake_issue_doc(
-                    id="i3", payment_ref="slimpay_ref_1", subscriber_ref=self.partner.id
+                    id="i3", payment_ref="SDD-EXE-0000", subscriber_ref=self.partner.id
                 ),
             ]
         )
@@ -545,7 +545,7 @@ class ProjectTC(TransactionCase):
             [
                 fake_issue_doc(
                     id="i1",
-                    payment_ref="slimpay_ref_1",
+                    payment_ref="SDD-EXE-0000",
                     subscriber_ref=self.partner.id,
                     amount=110,
                 ),
@@ -604,7 +604,7 @@ class ProjectTC(TransactionCase):
                 [
                     fake_issue_doc(
                         id="i1",
-                        payment_ref="slimpay_ref_1",
+                        payment_ref="SDD-EXE-0000",
                         subscriber_ref=self.partner.id,
                     ),
                 ]
@@ -655,12 +655,12 @@ class ProjectTC(TransactionCase):
         self.assertEqual(payins[0].json()["label"], "dummy label")
         self.assertEqual(self.invoice.payment_state, "paid")
         self.assertEqual(len(task_emails(task)), len(emails))  # no new email
-        self.assertIn("slimpay_ref_1 ", task.name)
+        self.assertIn("SDD-EXE-0000 ", task.name)
 
         mocker = self._execute_cron(
             [
                 fake_issue_doc(
-                    id="i2", payment_ref="slimpay_ref_2", subscriber_ref=self.partner.id
+                    id="i2", payment_ref="SDD-EXE-0001", subscriber_ref=self.partner.id
                 ),
             ]
         )
@@ -675,7 +675,7 @@ class ProjectTC(TransactionCase):
             2 * ["YourCompany: rejected payment"],
         )
         self.assertEqual(self.invoice.payment_state, "not_paid")
-        self.assertIn("slimpay_ref_2 - slimpay_ref_1 ", task.name)
+        self.assertIn("SDD-EXE-0001 - SDD-EXE-0000 ", task.name)
 
         with requests_mock.Mocker() as mocker:
             self._mock_slimpay_base(mocker)
@@ -703,7 +703,7 @@ class ProjectTC(TransactionCase):
         mocker = self._execute_cron(
             [
                 fake_issue_doc(
-                    id="i3", payment_ref="slimpay_ref_3", subscriber_ref=self.partner.id
+                    id="i3", payment_ref="SDD-EXE-0002", subscriber_ref=self.partner.id
                 ),
             ]
         )
@@ -717,7 +717,7 @@ class ProjectTC(TransactionCase):
         )
         self.assertFalse(self._action_calls(mocker, "create-payins"))
         self.assertEqual(len(self.invoice.transaction_ids), 3)
-        self.assertIn("slimpay_ref_3 - slimpay_ref_2 - slimpay_ref_1 ", task.name)
+        self.assertIn("SDD-EXE-0002 - SDD-EXE-0001 - SDD-EXE-0000 ", task.name)
 
     def test_warning_is_logged_if_partner_has_no_mobile(self):
         self.partner.update({"phone": "", "mobile": ""})
@@ -728,7 +728,7 @@ class ProjectTC(TransactionCase):
                 [
                     fake_issue_doc(
                         id="i1",
-                        payment_ref="slimpay_ref_1",
+                        payment_ref="SDD-EXE-0000",
                         subscriber_ref=self.partner.id,
                     ),
                 ]
@@ -749,7 +749,7 @@ class ProjectTC(TransactionCase):
                 [
                     fake_issue_doc(
                         id="i1",
-                        payment_ref="slimpay_ref_1",
+                        payment_ref="SDD-EXE-0000",
                         subscriber_ref=self.partner.id,
                     ),
                 ]
