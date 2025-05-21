@@ -107,7 +107,6 @@ def create_move_from_lots(picking, located_lots):
                 "product_uom_qty": lot.product_qty,
                 "product_uom": lot.product_uom_id.id,
                 "date": picking.date,
-                "date_expected": picking.date,
             }
         )
         moves_by_lot[lot] = stock_move
@@ -130,7 +129,6 @@ def search_or_create_move_from_products(picking, located_products):
                 "product_uom_qty": pt_info["qty"],
                 "product_uom": product.uom_id.id,
                 "date": picking.date,
-                "date_expected": picking.date,
             }
         )
         moves_by_products[product] = stock_move

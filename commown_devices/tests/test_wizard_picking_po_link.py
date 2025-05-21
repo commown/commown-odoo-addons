@@ -58,6 +58,8 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
                             product_id=p.id,
                             name=p.name,
                             product_uom=p.uom_id.id,
+                            location_id=supplier_location.id,
+                            location_dest_id=stock_location.id,
                         ),
                     )
                     for p in [cls.fp, cls.pc1, cls.pc2]
