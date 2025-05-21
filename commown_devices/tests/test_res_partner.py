@@ -1,10 +1,9 @@
-from odoo.tests.common import HttpCase, at_install, post_install
+from odoo.tests.common import HttpCase, tagged
 
 from ..models.common import do_new_transfer, internal_picking
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ResPartnerLocationTC(HttpCase):
     "Class related to partner methods implemented in present module"
 
