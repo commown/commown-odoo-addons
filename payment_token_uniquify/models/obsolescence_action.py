@@ -19,7 +19,6 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
     )
 
     sequence = fields.Integer(
-        "Sequence",
         help="Action execution order (the smallest for the first executed action)",
         required=True,
         default=1,
