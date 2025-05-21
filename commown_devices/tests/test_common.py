@@ -19,15 +19,16 @@ class CommonFunctionsTC(TransactionCase):
     that are not fully tested in other tests files.
     """
 
-    def setUp(self, *args, **kwargs):
-        super(CommonFunctionsTC, self).setUp(*args, **kwargs)
+    @classmethod
+    def setUpClass(cls, *args, **kwargs):
+        super(CommonFunctionsTC, cls).setUpClass(*args, **kwargs)
 
-        self.loc_1 = create_stock_location(self, "Loc-1")
-        self.loc_1_1 = create_stock_location(self, "Loc-1-1", self.loc_1)
-        self.loc_1_2 = create_stock_location(self, "Loc_1_2", self.loc_1)
-        self.loc_1_2_1 = create_stock_location(self, "Loc_1_2_1", self.loc_1_2)
-        self.loc_1_2_2 = create_stock_location(self, "Loc-1-2-2", self.loc_1_2)
-        self.loc_4 = create_stock_location(self, "Loc-4")
+        cls.loc_1 = create_stock_location(cls, "Loc-1")
+        cls.loc_1_1 = create_stock_location(cls, "Loc-1-1", cls.loc_1)
+        cls.loc_1_2 = create_stock_location(cls, "Loc_1_2", cls.loc_1)
+        cls.loc_1_2_1 = create_stock_location(cls, "Loc_1_2_1", cls.loc_1_2)
+        cls.loc_1_2_2 = create_stock_location(cls, "Loc-1-2-2", cls.loc_1_2)
+        cls.loc_4 = create_stock_location(cls, "Loc-4")
 
     def test_first_common_location(self):
         self.assertEqual(

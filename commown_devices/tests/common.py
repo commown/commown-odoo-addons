@@ -33,40 +33,41 @@ def add_attributes_to_product(product, attribute, attribute_values):
 
 
 class BaseLotTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.product_tmpl = self.env["product.template"].create(
+        cls.product_tmpl = cls.env["product.template"].create(
             {
                 "name": "Fairphone 3",
                 "type": "product",
                 "tracking": "serial",
             }
         )
-        self.product = self.product_tmpl.product_variant_id
-        self.lot = self.env["stock.lot"].create(
+        cls.product = cls.product_tmpl.product_variant_id
+        cls.lot = cls.env["stock.lot"].create(
             {
                 "name": "test-lot",
-                "product_id": self.product.id,
+                "product_id": cls.product.id,
             }
         )
-        self.location_available_for_rent = self.env.ref(
+        cls.location_available_for_rent = cls.env.ref(
             "commown_devices.stock_location_available_for_rent"
         )
-        self.location_internal_available = self.env["stock.location"].create(
+        cls.location_internal_available = cls.env["stock.location"].create(
             {
                 "name": "Test internal available location",
                 "usage": "internal",
                 "partner_id": 1,
-                "location_id": self.location_available_for_rent.id,
+                "location_id": cls.location_available_for_rent.id,
             }
         )
 
-        self.quant = self.env["stock.quant"].create(
+        cls.quant = cls.env["stock.quant"].create(
             {
-                "product_id": self.lot.product_id.id,
-                "lot_id": self.lot.id,
-                "location_id": self.location_internal_available.id,
+                "product_id": cls.lot.product_id.id,
+                "lot_id": cls.lot.id,
+                "location_id": cls.location_internal_available.id,
                 "quantity": 1,
             }
         )
@@ -75,40 +76,41 @@ class BaseLotTC(TransactionCase):
 class DeviceAsAServiceTC(RentalSaleOrderTC):
     confirm_sale = True
 
-    def setUp(self):
-        super(DeviceAsAServiceTC, self).setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        partner = self.env.ref("base.partner_demo_portal")
-        tax = self.get_default_tax()
-        contract_tmpl = self._create_rental_contract_tmpl(
+        partner = cls.env.ref("base.partner_demo_portal")
+        tax = cls.get_default_tax()
+        contract_tmpl = cls._create_rental_contract_tmpl(
             1,
             contract_line_ids=[
-                self._contract_line(1, "1 month ##PRODUCT##", tax),
-                self._contract_line(1, "Accessory: ##ACCESSORY##", tax),
+                cls._contract_line(1, "1 month ##PRODUCT##", tax),
+                cls._contract_line(1, "Accessory: ##ACCESSORY##", tax),
             ],
         )
-        self.storable_product = self.env["product.template"].create(
+        cls.storable_product = cls.env["product.template"].create(
             {
                 "name": "Fairphone 3",
                 "type": "product",
                 "tracking": "serial",
             }
         )
-        team = self.env.ref("sales_team.salesteam_website_sales")
+        team = cls.env.ref("sales_team.salesteam_website_sales")
 
-        self.service_product = self._create_rental_product(
+        cls.service_product = cls._create_rental_product(
             name="Fairphone as a Service",
             list_price=60.0,
             recurrent_payment_amount=30.0,
             property_contract_template_id=contract_tmpl.id,
-            primary_storable_variant_id=self.storable_product.product_variant_id.id,
+            primary_storable_variant_id=cls.storable_product.product_variant_id.id,
             followup_sales_team_id=team.id,
         )
 
-        assert self.service_product.is_contract  # XXX requires cache invalidation
+        assert cls.service_product.is_contract  # XXX requires cache invalidation
 
-        oline = self._oline(self.service_product, product_uom_qty=3)
-        self.so = self.env["sale.order"].create(
+        oline = cls._oline(cls.service_product, product_uom_qty=3)
+        cls.so = cls.env["sale.order"].create(
             {
                 "partner_id": partner.id,
                 "partner_invoice_id": partner.id,
@@ -116,22 +118,23 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                 "order_line": [oline],
             }
         )
-        if self.confirm_sale:
-            self.so.action_confirm()
+        if cls.confirm_sale:
+            cls.so.action_confirm()
 
-        self.location_fp3_new = self.env["stock.location"].create(
+        cls.location_fp3_new = cls.env["stock.location"].create(
             {
                 "name": "New FP3 devices",
                 "usage": "internal",
                 "partner_id": 1,
-                "location_id": self.env.ref(
+                "location_id": cls.env.ref(
                     "commown_devices.stock_location_new_devices"
                 ).id,
             }
         )
 
+    @classmethod
     def adjust_stock(
-        self,
+        cls,
         product=None,
         qty=1.0,
         serial="serial-0",
@@ -140,18 +143,18 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         grade_lot=True,
     ):
         if product is None:
-            product = self.storable_product.product_variant_id
-        grade = self.env.ref("commown_grade.grade_A0")
-        lot = self.env["stock.lot"].create(
+            product = cls.storable_product.product_variant_id
+        grade = cls.env.ref("commown_grade.grade_A0")
+        lot = cls.env["stock.lot"].create(
             {
                 "name": serial,
                 "product_id": product.id,
                 "grade_id": grade_lot and grade.id,
             }
         )
-        location = location or self.location_fp3_new
+        location = location or cls.location_fp3_new
 
-        inventory = self.env["stock.inventory"].create(
+        inventory = cls.env["stock.inventory"].create(
             {
                 "name": "test stock %s" % serial,
                 "location_id": location.id,
@@ -160,7 +163,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             }
         )
         inventory.action_start()
-        inventory.line_ids |= self.env["stock.inventory.line"].create(
+        inventory.line_ids |= cls.env["stock.inventory.line"].create(
             {
                 "product_id": lot.product_id.id,
                 "location_id": location.id,
@@ -174,17 +177,18 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         )
 
         assert lot.quant_ids
-        self.env.cr.execute(
+        cls.env.cr.execute(
             "UPDATE stock_quant SET in_date=%(date)s WHERE id in %(ids)s",
             {"date": date, "ids": tuple(lot.quant_ids.ids)},
         )
-        self.env.cache.invalidate()
+        cls.env.cache.invalidate()
 
         return lot
 
-    def adjust_stock_notracking(self, product, location, qty=1.0, date="2000-01-01"):
+    @classmethod
+    def adjust_stock_notracking(cls, product, location, qty=1.0, date="2000-01-01"):
 
-        inventory = self.env["stock.inventory"].create(
+        inventory = cls.env["stock.inventory"].create(
             {
                 "name": "test stock %s" % product.name,
                 "location_id": location.id,
@@ -194,7 +198,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             }
         )
         inventory.action_start()
-        inventory.line_ids |= self.env["stock.inventory.line"].create(
+        inventory.line_ids |= cls.env["stock.inventory.line"].create(
             {
                 "product_id": product.id,
                 "location_id": location.id,
@@ -206,17 +210,18 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             "Unexpected inventory state %s" % inventory.state
         )
 
-        self.env.cache.invalidate()
-        quant = self.env["stock.quant"].search(
+        cls.env.cache.invalidate()
+        quant = cls.env["stock.quant"].search(
             [("product_id.id", "=", product.id), ("location_id.id", "=", location.id)]
         )
         quant.in_date = dateutil.parser.parse(date)
 
         return product
 
-    def send_device(self, serial, contract=None, date=None, location=None):
-        contract = contract or self.so.order_line.contract_id
-        lot = self.env["stock.lot"].search([("name", "=", serial)])
+    @classmethod
+    def send_device(cls, serial, contract=None, date=None, location=None):
+        contract = contract or cls.so.order_line.contract_id
+        lot = cls.env["stock.lot"].search([("name", "=", serial)])
         contract.send_devices(
             lot.ensure_one(), {}, send_lots_from=location, date=date, do_transfer=True
         )
@@ -303,24 +308,25 @@ def create_lot_and_quant(env, lot_name, product, location):
 
 
 class BaseWizardToEmployeeMixin:
-    def setUp(self):
-        super().setUp()
-        project = self.env["project.project"].create({"name": "Test"})
-        partner = self.env["res.partner"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        project = cls.env["project.project"].create({"name": "Test"})
+        partner = cls.env["res.partner"].create(
             {
                 "firstname": "Firsttest",
                 "lastname": "Lasttest",
                 "street": "8A rue Schertz",
                 "zip": "67200",
                 "city": "Strasbourg",
-                "country_id": self.env.ref("base.fr").id,
+                "country_id": cls.env.ref("base.fr").id,
                 "email": "contact@commown.coop",
                 "mobile": "0601020304",
                 "parent_id": 1,
             }
         )
 
-        self.task = self.env["project.task"].create(
+        cls.task = cls.env["project.task"].create(
             {"name": "test", "project_id": project.id, "partner_id": partner.id}
         )
 
@@ -336,99 +342,100 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
     "Base class to write identical tests for picking to customer from leads and tasks"
     confirm_sale = False
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        service_template = self.service_product.product_tmpl_id
-        self.usbc_cable = self.env["product.template"].create(
+        service_template = cls.service_product.product_tmpl_id
+        cls.usbc_cable = cls.env["product.template"].create(
             {
                 "name": "Test USB-C Cable",
                 "type": "product",
                 "tracking": "none",
             }
         )
-        self.protective_screen = self.env["product.template"].create(
+        cls.protective_screen = cls.env["product.template"].create(
             {
                 "name": "Protective Screen",
                 "type": "product",
                 "tracking": "none",
             }
         )
-        self.loc_new_untracked = self.env.ref(
+        cls.loc_new_untracked = cls.env.ref(
             "commown_devices.stock_location_modules_and_accessories"
         )
-        self.adjust_stock_notracking(
-            self.usbc_cable.product_variant_id, self.loc_new_untracked
+        cls.adjust_stock_notracking(
+            cls.usbc_cable.product_variant_id, cls.loc_new_untracked
         )
         # We don't ajdust stock of protective screen because lack of stock case is
         # tested
-        self.attribute_usbc = self.env["product.attribute"].create(
+        cls.attribute_usbc = cls.env["product.attribute"].create(
             {"name": "Send Cable ?", "type": "select", "create_variant": "always"}
         )
-        self.attribute_color = self.env.ref("product.product_attribute_2")
-        color_values = self.env["product.attribute.value"].search(
-            [("attribute_id.id", "=", self.attribute_color.id)]
+        cls.attribute_color = cls.env.ref("product.product_attribute_2")
+        color_values = cls.env["product.attribute.value"].search(
+            [("attribute_id.id", "=", cls.attribute_color.id)]
         )
-        usbc_values = self.env["product.attribute.value"].create(
+        usbc_values = cls.env["product.attribute.value"].create(
             [
-                {"attribute_id": self.attribute_usbc.id, "name": "Yes"},
-                {"attribute_id": self.attribute_usbc.id, "name": "No"},
+                {"attribute_id": cls.attribute_usbc.id, "name": "Yes"},
+                {"attribute_id": cls.attribute_usbc.id, "name": "No"},
             ]
         )
         add_attributes_to_product(
             service_template,
-            self.attribute_color,
+            cls.attribute_color,
             color_values,
         )
         add_attributes_to_product(
-            self.storable_product,
-            self.attribute_color,
+            cls.storable_product,
+            cls.attribute_color,
             color_values,
         )
         add_attributes_to_product(
             service_template,
-            self.attribute_usbc,
+            cls.attribute_usbc,
             usbc_values,
         )
         service_template._origin = service_template
-        self.storable_product.create_variant_ids()
+        cls.storable_product.create_variant_ids()
         service_template.create_variant_ids()
-        self.color1 = color_values[0]
+        cls.color1 = color_values[0]
         with_usbc = usbc_values.filtered(lambda v: v.name == "Yes")
-        self.fp3_plus_storable_color1 = self.env["product.product"].search(
+        cls.fp3_plus_storable_color1 = cls.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.storable_product.id),
-                ("attribute_value_ids.id", "ilike", self.color1.id),
+                ("product_tmpl_id", "=", cls.storable_product.id),
+                ("attribute_value_ids.id", "ilike", cls.color1.id),
             ]
         )
         create_config(
             service_template,
             "primary",
-            self.storable_product,
-            self.fp3_plus_storable_color1,
-            att_val_ids=self.color1,
+            cls.storable_product,
+            cls.fp3_plus_storable_color1,
+            att_val_ids=cls.color1,
         )
         create_config(
             service_template,
             "secondary",
-            self.protective_screen,
-            self.protective_screen.product_variant_id,
+            cls.protective_screen,
+            cls.protective_screen.product_variant_id,
         )
         create_config(
             service_template,
             "secondary",
-            self.usbc_cable,
-            self.usbc_cable.product_variant_id,
+            cls.usbc_cable,
+            cls.usbc_cable.product_variant_id,
             att_val_ids=with_usbc,
         )
-        self.fp3_plus_service_color1_with_usb = self.env["product.product"].search(
+        cls.fp3_plus_service_color1_with_usb = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", service_template.id),
-                ("attribute_value_ids", "ilike", self.color1.id),
+                ("attribute_value_ids", "ilike", cls.color1.id),
                 ("attribute_value_ids", "ilike", with_usbc.id),
             ]
         )
-        self.so.order_line[0].product_id = self.fp3_plus_service_color1_with_usb
+        cls.so.order_line[0].product_id = cls.fp3_plus_service_color1_with_usb
 
     def prepare_wizard(self, related_entity, relation_field, user_choices=None):
         wizard_name = "%s.to.customer.wizard" % related_entity._name

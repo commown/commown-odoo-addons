@@ -8,26 +8,25 @@ from .common import BaseWizardToEmployeeMixin, create_lot_and_quant
 
 
 class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.task.project_id.update(
+        cls.task.project_id.update(
             {
                 "delivery_tracking": True,
-                "shipping_account_id": self.shipping_account.id,
+                "shipping_account_id": cls.shipping_account.id,
             }
         )
 
-        new_dev_loc = self.env.ref("commown_devices.stock_location_new_devices")
-        self.loc = self.env["stock.location"].create(
+        new_dev_loc = cls.env.ref("commown_devices.stock_location_new_devices")
+        cls.loc = cls.env["stock.location"].create(
             {"name": "new_fp", "usage": "internal", "location_id": new_dev_loc.id}
         )
-        pt = self.env["product.template"].create(
+        pt = cls.env["product.template"].create(
             {"name": "FP3", "type": "product", "tracking": "serial"}
         )
-        self.lot = create_lot_and_quant(
-            self.env, "fp3_1", pt.product_variant_id, self.loc
-        )
+        cls.lot = create_lot_and_quant(cls.env, "fp3_1", pt.product_variant_id, cls.loc)
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("lot_id", self.lot.id)

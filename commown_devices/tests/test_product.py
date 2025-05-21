@@ -4,20 +4,21 @@ from .common import DeviceAsAServiceTC, add_attributes_to_product, create_config
 
 
 class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
-    def setUp(self, *args, **kwargs):
-        super().setUp(*args, **kwargs)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.attribute_color = self.env.ref("product.product_attribute_2")
-        color_values = self.env["product.attribute.value"].search(
-            [("attribute_id", "=", self.attribute_color.id)]
+        cls.attribute_color = cls.env.ref("product.product_attribute_2")
+        color_values = cls.env["product.attribute.value"].search(
+            [("attribute_id", "=", cls.attribute_color.id)]
         )
-        self.color1 = color_values[0]
-        self.color2 = color_values[1]
+        cls.color1 = color_values[0]
+        cls.color2 = color_values[1]
 
-        self.fp3_service_tmpl = self._create_rental_product("fp3+").product_tmpl_id
-        self.fp3_storable_tmpl = self.storable_product.copy({"name": "fp3+"})
+        cls.fp3_service_tmpl = cls._create_rental_product("fp3+").product_tmpl_id
+        cls.fp3_storable_tmpl = cls.storable_product.copy({"name": "fp3+"})
 
-        self.protective_screen = self.env["product.template"].create(
+        cls.protective_screen = cls.env["product.template"].create(
             {
                 "name": "Protective Screen",
                 "type": "product",
@@ -25,7 +26,7 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
             }
         )
 
-        self.backcover = self.env["product.template"].create(
+        cls.backcover = cls.env["product.template"].create(
             {
                 "name": "Back Cover",
                 "type": "product",
@@ -33,43 +34,43 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
             }
         )
         add_attributes_to_product(
-            self.backcover,
-            self.attribute_color,
-            self.color1 + self.color2,
+            cls.backcover,
+            cls.attribute_color,
+            cls.color1 + cls.color2,
         )
-        self.backcover.create_variant_ids()
-        self.backcover1, self.backcover2 = self.backcover.product_variant_ids
+        cls.backcover.create_variant_ids()
+        cls.backcover1, cls.backcover2 = cls.backcover.product_variant_ids
 
         add_attributes_to_product(
-            self.fp3_storable_tmpl,
-            self.attribute_color,
+            cls.fp3_storable_tmpl,
+            cls.attribute_color,
             color_values,
         )
-        self.fp3_storable_tmpl.create_variant_ids()
+        cls.fp3_storable_tmpl.create_variant_ids()
 
         add_attributes_to_product(
-            self.fp3_service_tmpl,
-            self.attribute_color,
-            self.color1 + self.color2,
+            cls.fp3_service_tmpl,
+            cls.attribute_color,
+            cls.color1 + cls.color2,
         )
-        self.fp3_service_tmpl.create_variant_ids()
+        cls.fp3_service_tmpl.create_variant_ids()
 
-        self.fp3_storable_color1 = self.env["product.product"].search(
+        cls.fp3_storable_color1 = cls.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.fp3_storable_tmpl.id),
-                ("attribute_value_ids.id", "ilike", self.color1.id),
+                ("product_tmpl_id", "=", cls.fp3_storable_tmpl.id),
+                ("attribute_value_ids.id", "ilike", cls.color1.id),
             ]
         )
-        self.fp3_storable_color2 = self.env["product.product"].search(
+        cls.fp3_storable_color2 = cls.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.fp3_storable_tmpl.id),
-                ("attribute_value_ids.id", "ilike", self.color2.id),
+                ("product_tmpl_id", "=", cls.fp3_storable_tmpl.id),
+                ("attribute_value_ids.id", "ilike", cls.color2.id),
             ]
         )
-        self.fp3_service_color2 = self.env["product.product"].search(
+        cls.fp3_service_color2 = cls.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.fp3_service_tmpl.id),
-                ("attribute_value_ids.id", "ilike", self.color2.id),
+                ("product_tmpl_id", "=", cls.fp3_service_tmpl.id),
+                ("attribute_value_ids.id", "ilike", cls.color2.id),
             ]
         )
 

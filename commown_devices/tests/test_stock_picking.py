@@ -8,24 +8,25 @@ from .common import create_lot_and_quant
 
 
 class StockPickingTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.product_tmpl = self.env["product.template"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.product_tmpl = cls.env["product.template"].create(
             {
                 "name": "Fairphone 3",
                 "type": "product",
                 "tracking": "serial",
             }
         )
-        self.product = self.product_tmpl.product_variant_id
-        self.orig_location = self.env["stock.location"].create(
+        cls.product = cls.product_tmpl.product_variant_id
+        cls.orig_location = cls.env["stock.location"].create(
             {
                 "name": "Origin location",
                 "usage": "internal",
                 "partner_id": 1,
             }
         )
-        self.dest_location = self.env["stock.location"].create(
+        cls.dest_location = cls.env["stock.location"].create(
             {
                 "name": "Destination location",
                 "usage": "internal",

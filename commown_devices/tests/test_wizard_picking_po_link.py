@@ -4,10 +4,11 @@ from .common import DeviceAsAServiceTC
 
 
 class PickingPoLinkWizardTC(DeviceAsAServiceTC):
-    def setUp(self):
-        super().setUp()
-        supplier = self.env.ref("base.res_partner_3")
-        self.previous_po_of_supplier = self.env["purchase.order"].search(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        supplier = cls.env.ref("base.res_partner_3")
+        cls.previous_po_of_supplier = cls.env["purchase.order"].search(
             [
                 (
                     "partner_id.commercial_partner_id",
@@ -17,29 +18,29 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
             ]
         )
 
-        self.fp = self.env.ref("product_rental.prod_fp")
-        self.pc1 = self.env.ref("product_rental.prod_pc_i5")
-        self.pc2 = self.env.ref("product_rental.prod_pc_i7")
+        cls.fp = cls.env.ref("product_rental.prod_fp")
+        cls.pc1 = cls.env.ref("product_rental.prod_pc_i5")
+        cls.pc2 = cls.env.ref("product_rental.prod_pc_i7")
 
         date_po = date(2021, 1, 1)
 
-        oline1 = self._oline(self.fp, product_qty=3, date_planned=date_po)
-        oline2 = self._oline(self.pc1, product_qty=5, date_planned=date_po)
-        oline3 = self._oline(self.pc2, product_qty=8, date_planned=date_po)
-        self.po = self.env["purchase.order"].create(
+        oline1 = cls._oline(cls.fp, product_qty=3, date_planned=date_po)
+        oline2 = cls._oline(cls.pc1, product_qty=5, date_planned=date_po)
+        oline3 = cls._oline(cls.pc2, product_qty=8, date_planned=date_po)
+        cls.po = cls.env["purchase.order"].create(
             {
                 "partner_id": supplier.id,
                 "order_line": [oline1, oline2, oline3],
             }
         )
 
-        picking_type = self.env.ref("stock.picking_type_in")
-        supplier_location = self.env.ref("stock.stock_location_suppliers")
-        stock_location = self.env.ref("stock.stock_location_stock")
+        picking_type = cls.env.ref("stock.picking_type_in")
+        supplier_location = cls.env.ref("stock.stock_location_suppliers")
+        stock_location = cls.env.ref("stock.stock_location_stock")
         date_pick = datetime(2020, 1, 1, 12, 0, 0)
 
         base_move_line = {"product_uom_qty": 4}
-        self.picking = self.env["stock.picking"].create(
+        cls.picking = cls.env["stock.picking"].create(
             {
                 "move_type": "direct",
                 "partner_id": supplier.id,
@@ -59,7 +60,7 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
                             product_uom=p.uom_id.id,
                         ),
                     )
-                    for p in [self.fp, self.pc1, self.pc2]
+                    for p in [cls.fp, cls.pc1, cls.pc2]
                 ],
             }
         )

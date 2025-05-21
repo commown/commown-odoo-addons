@@ -6,22 +6,23 @@ from .common import create_lot_and_quant
 
 
 class StockMoveTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.partner = self.env.ref("base.partner_demo_portal")
-        self.contract = self.env["contract.contract"].create(
-            {"name": "Contract", "partner_id": self.partner.id}
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.contract = cls.env["contract.contract"].create(
+            {"name": "Contract", "partner_id": cls.partner.id}
         )
-        parent_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
-        self.stock_location = self.env["stock.location"].create(
+        parent_loc = cls.env.ref("commown_devices.stock_location_available_for_rent")
+        cls.stock_location = cls.env["stock.location"].create(
             {"name": "Test Loc", "usage": "internal", "location_id": parent_loc.id}
         )
 
-        product = self.env["product.product"].create(
+        product = cls.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}
         )
-        self.lot1 = create_lot_and_quant(self.env, "lot1", product, self.stock_location)
-        self.lot2 = create_lot_and_quant(self.env, "lot2", product, self.stock_location)
+        cls.lot1 = create_lot_and_quant(cls.env, "lot1", product, cls.stock_location)
+        cls.lot2 = create_lot_and_quant(cls.env, "lot2", product, cls.stock_location)
 
     def move_to(self, destination, orig_location=None, lots=None, contract=None):
         moves = internal_picking(

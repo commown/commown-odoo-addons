@@ -6,14 +6,15 @@ from .common import BaseToCustomerPickingWizardTC
 
 
 class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
-    def setUp(self):
-        super().setUp()
-        self.so.action_confirm()
-        self.lead = self.env["crm.lead"].search(
-            [("so_line_id", "=", self.so.order_line.ids[0])]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.so.action_confirm()
+        cls.lead = cls.env["crm.lead"].search(
+            [("so_line_id", "=", cls.so.order_line.ids[0])]
         )[0]
-        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-1")
-        self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
+        cls.adjust_stock(cls.fp3_plus_storable_color1, serial="test-fp3+-1")
+        cls.adjust_stock(cls.fp3_plus_storable_color1, serial="test-fp3+-2")
 
     def test_find_nonserial_product_orig_location(self):
 

@@ -7,91 +7,91 @@ from .common import DeviceAsAServiceTC
 
 
 class ProjectTaskPickingTC(DeviceAsAServiceTC):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.project = self.env["project.project"].create({"name": "Test"})
-        self.task = self.env["project.task"].create(
-            {"name": "test", "project_id": self.project.id}
+        cls.project = cls.env["project.project"].create({"name": "Test"})
+        cls.task = cls.env["project.task"].create(
+            {"name": "test", "project_id": cls.project.id}
         )  # for wizard tests
 
-        self.partner2 = self.so.partner_id.copy({"name": "test partner2"})
-        self.so2 = self.so.copy({"partner_id": self.partner2.id})
-        self.so2.action_confirm()
+        cls.partner2 = cls.so.partner_id.copy({"name": "test partner2"})
+        cls.so2 = cls.so.copy({"partner_id": cls.partner2.id})
+        cls.so2.action_confirm()
 
-        self.storable_product2 = self.storable_product.copy({"name": "Core-X4"})
-        cc = self.storable_product2.product_variant_ids
+        cls.storable_product2 = cls.storable_product.copy({"name": "Core-X4"})
+        cc = cls.storable_product2.product_variant_ids
 
-        contract_model = self.env["contract.contract"]
-        self.c1, self.c2, self.c3 = contract_model.of_sale(self.so)
+        contract_model = cls.env["contract.contract"]
+        cls.c1, cls.c2, cls.c3 = contract_model.of_sale(cls.so)
 
-        self._create_and_send_device("fp1", self.c1)
-        self._create_and_send_device("fp2", self.c2)
-        self._create_and_send_device("fp3", self.c3)
-        self._create_and_send_device("fp4", None)
-        self._create_and_send_device("cc1", self.c1, cc)
-        self._create_and_send_device("cc2", None, cc)
-        self._create_and_send_device("cc3", self.c3, cc, do_transfer=False)
+        cls._create_and_send_device("fp1", cls.c1)
+        cls._create_and_send_device("fp2", cls.c2)
+        cls._create_and_send_device("fp3", cls.c3)
+        cls._create_and_send_device("fp4", None)
+        cls._create_and_send_device("cc1", cls.c1, cc)
+        cls._create_and_send_device("cc2", None, cc)
+        cls._create_and_send_device("cc3", cls.c3, cc, do_transfer=False)
 
-        self.task_test_checks = self.env["project.task"].create(
+        cls.task_test_checks = cls.env["project.task"].create(
             {
                 "name": "test task",
-                "project_id": self.project.id,
-                "contract_id": self.c1.id,
+                "project_id": cls.project.id,
+                "contract_id": cls.c1.id,
             }
         )  # for checks on stage change tests
-        self.task_test_checks2 = self.env["project.task"].create(
+        cls.task_test_checks2 = cls.env["project.task"].create(
             {
                 "name": "test task 2",
-                "project_id": self.project.id,
-                "contract_id": self.c2.id,
+                "project_id": cls.project.id,
+                "contract_id": cls.c2.id,
             }
         )  # for checks on stage change tests
 
         # Create stage to assign xml_ids so constrains on stage_id pass
-        t1, t2 = self.env["project.task.type"].create(
+        t1, t2 = cls.env["project.task.type"].create(
             [
                 {"name": "t1"},
                 {"name": "t2"},
             ]
         )
-        self.ongoing_stage = self.env.ref("commown_devices.sup_picking_ongoing_stage")
-        self.picking_sent_stage = self.env.ref("commown_devices.picking_sent")
+        cls.ongoing_stage = cls.env.ref("commown_devices.sup_picking_ongoing_stage")
+        cls.picking_sent_stage = cls.env.ref("commown_devices.picking_sent")
 
         # Create a unused product and an unused service
-        self.env["product.template"].create(
+        cls.env["product.template"].create(
             {"name": "unused product", "type": "product", "tracking": "none"}
         )
-        self.env["product.template"].create(
+        cls.env["product.template"].create(
             {"name": "unused serial", "type": "product", "tracking": "serial"}
         )
-        self.env["product.template"].create(
+        cls.env["product.template"].create(
             {"name": "unused service", "type": "service"}
         )
 
-        self.nontracked_product = self.env["product.template"].create(
+        cls.nontracked_product = cls.env["product.template"].create(
             {
                 "name": "non tracked product (Module)",
                 "type": "product",
                 "tracking": "none",
             }
         )
-        location = self.env["stock.location"].create(
+        location = cls.env["stock.location"].create(
             {
                 "name": "Test Module stock location",
                 "usage": "internal",
                 "partner_id": 1,
-                "location_id": self.env.ref(
+                "location_id": cls.env.ref(
                     "commown_devices.stock_location_modules_and_accessories"
                 ).id,
             }
         )
-        self.adjust_stock_notracking(
-            self.nontracked_product.product_variant_id, location
-        )
+        cls.adjust_stock_notracking(cls.nontracked_product.product_variant_id, location)
 
-    def _create_and_send_device(self, serial, contract, product=None, do_transfer=True):
-        lot = self.adjust_stock(product, serial=serial)
+    @classmethod
+    def _create_and_send_device(cls, serial, contract, product=None, do_transfer=True):
+        lot = cls.adjust_stock(product, serial=serial)
         if contract is not None:
             contract.send_devices(lot, {}, do_transfer=do_transfer)
 

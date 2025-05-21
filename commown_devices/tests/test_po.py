@@ -2,15 +2,16 @@ from odoo.tests.common import TransactionCase
 
 
 class PurchaseOrderTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.po = self.env.ref("purchase.purchase_order_1")
-        self.product = self.po.order_line[0].product_id
-        self.po.order_line[1:].unlink()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.po = cls.env.ref("purchase.purchase_order_1")
+        cls.product = cls.po.order_line[0].product_id
+        cls.po.order_line[1:].unlink()
 
-        assert self.product.type == "product"
+        assert cls.product.type == "product"
 
-        self.product.tracking = "lot"
+        cls.product.tracking = "lot"
 
     def get_grade(self, ref):
         return self.env.ref("commown_grade.grade_%s" % ref)

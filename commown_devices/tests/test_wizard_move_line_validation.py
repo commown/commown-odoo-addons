@@ -5,27 +5,28 @@ from .common import create_lot_and_quant
 
 
 class WizardMoveLineValidationTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.partner = self.env.ref("base.partner_demo_portal")
-        self.contract = self.env["contract.contract"].create(
-            {"name": "Contract", "partner_id": self.partner.id}
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.contract = cls.env["contract.contract"].create(
+            {"name": "Contract", "partner_id": cls.partner.id}
         )
-        self.stock_location = self.env.ref("stock.stock_location_stock")
-        product = self.env["product.product"].create(
+        cls.stock_location = cls.env.ref("stock.stock_location_stock")
+        product = cls.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}
         )
-        self.lot = create_lot_and_quant(self.env, "lot1", product, self.stock_location)
+        cls.lot = create_lot_and_quant(cls.env, "lot1", product, cls.stock_location)
 
-        self.move = internal_picking(
-            self.lot,
+        cls.move = internal_picking(
+            cls.lot,
             {},
             None,
-            self.stock_location,
-            self.partner.get_or_create_customer_location(self.contract.stock_ownership),
+            cls.stock_location,
+            cls.partner.get_or_create_customer_location(cls.contract.stock_ownership),
             "origin",
         )
-        self.move.update({"contract_id": self.contract})
+        cls.move.update({"contract_id": cls.contract})
 
     def test_move_line_validation_wizard(self):
         wizard = self.env["move.line.validation.wizard"].create(

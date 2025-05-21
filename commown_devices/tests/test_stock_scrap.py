@@ -6,18 +6,19 @@ from .common import BaseLotTC
 
 
 class StockScrapTC(BaseLotTC):
-    def setUp(self):
-        super().setUp()
-        self.scrap_date = datetime(1111, 11, 11, 11, 11, 11, 11)
-        scrap_loc = self.env.ref("stock.stock_location_scrapped")
-        self.scrap = self.env["stock.scrap"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.scrap_date = datetime(1111, 11, 11, 11, 11, 11, 11)
+        scrap_loc = cls.env.ref("stock.stock_location_scrapped")
+        cls.scrap = cls.env["stock.scrap"].create(
             {
-                "product_id": self.product.id,
-                "lot_id": self.lot.id,
-                "location_id": self.location_internal_available.id,
+                "product_id": cls.product.id,
+                "lot_id": cls.lot.id,
+                "location_id": cls.location_internal_available.id,
                 "scrap_location_id": scrap_loc.id,
-                "product_uom_id": self.product.uom_id.id,
-                "date_expected": self.scrap_date,
+                "product_uom_id": cls.product.uom_id.id,
+                "date_expected": cls.scrap_date,
             }
         )
 

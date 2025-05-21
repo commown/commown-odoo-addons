@@ -8,24 +8,25 @@ from .common import BaseToCustomerPickingWizardTC
 class WizardProjectTaskToCustomerPickingTC(BaseToCustomerPickingWizardTC):
     confirm_sale = False
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        service_tmpl = self.service_product.product_tmpl_id
-        my_project = self.env["project.project"].create({"name": "my project"})
+        service_tmpl = cls.service_product.product_tmpl_id
+        my_project = cls.env["project.project"].create({"name": "my project"})
         service_tmpl.followup_sales_project_id = my_project
         service_tmpl.property_contract_template_id.stock_ownership = "customer"
 
-        self.so.action_confirm()
-        self.task = my_project.task_ids[0]
+        cls.so.action_confirm()
+        cls.task = my_project.task_ids[0]
 
-        for_sale_stock = self.env.ref("stock.stock_location_stock")
-        for pt in self.protective_screen, self.usbc_cable:
-            self.adjust_stock_notracking(pt.product_variant_id, for_sale_stock)
+        for_sale_stock = cls.env.ref("stock.stock_location_stock")
+        for pt in cls.protective_screen, cls.usbc_cable:
+            cls.adjust_stock_notracking(pt.product_variant_id, for_sale_stock)
 
-        _pt = self.fp3_plus_storable_color1
+        _pt = cls.fp3_plus_storable_color1
         for serial in ("test-fp3+-1", "test-fp3+-2"):
-            self.adjust_stock(_pt, serial=serial, location=for_sale_stock)
+            cls.adjust_stock(_pt, serial=serial, location=for_sale_stock)
 
     def test_picking(self):
 

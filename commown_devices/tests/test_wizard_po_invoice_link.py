@@ -4,38 +4,39 @@ from .common import DeviceAsAServiceTC
 
 
 class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
-    def setUp(self):
-        super().setUp()
-        supplier = self.env.ref("base.res_partner_3")
-        self.fp = self.env.ref("product_rental.prod_fp")
-        self.pc1 = self.env.ref("product_rental.prod_pc_i5")
-        self.pc2 = self.env.ref("product_rental.prod_pc_i7")
-        oline1 = self._oline(self.fp, product_qty=3, date_planned=date(2021, 1, 1))
-        oline2 = self._oline(self.pc1, product_qty=5, date_planned=date(2021, 1, 1))
-        oline3 = self._oline(self.pc2, product_qty=8, date_planned=date(2021, 1, 1))
-        self.po = self.env["purchase.order"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        supplier = cls.env.ref("base.res_partner_3")
+        cls.fp = cls.env.ref("product_rental.prod_fp")
+        cls.pc1 = cls.env.ref("product_rental.prod_pc_i5")
+        cls.pc2 = cls.env.ref("product_rental.prod_pc_i7")
+        oline1 = cls._oline(cls.fp, product_qty=3, date_planned=date(2021, 1, 1))
+        oline2 = cls._oline(cls.pc1, product_qty=5, date_planned=date(2021, 1, 1))
+        oline3 = cls._oline(cls.pc2, product_qty=8, date_planned=date(2021, 1, 1))
+        cls.po = cls.env["purchase.order"].create(
             {
                 "partner_id": supplier.id,
                 "order_line": [oline1, oline2, oline3],
             }
         )
 
-        supplier_account = self.env["account.account"].create(
+        supplier_account = cls.env["account.account"].create(
             {
                 "code": "cust_acc",
                 "name": "customer account",
-                "account_type": self.env.ref("account.data_account_type_payable").id,
+                "account_type": cls.env.ref("account.data_account_type_payable").id,
                 "reconcile": True,
             }
         )
         base_inv_line = {"price_unit": 10.0, "account_id": supplier_account.id}
-        self.invoice = self.env["account.move"].create(
+        cls.invoice = cls.env["account.move"].create(
             {
                 "move_type": "in_invoice",
                 "partner_id": supplier.id,
                 "line_ids": [
                     (0, 0, dict(base_inv_line, product_id=p.id, name=p.name))
-                    for p in [self.fp, self.pc1, self.pc2]
+                    for p in [cls.fp, cls.pc1, cls.pc2]
                 ],
             }
         )

@@ -2,15 +2,16 @@ from .common import DeviceAsAServiceTC, add_attributes_to_product, create_config
 
 
 class ProductServiceConfigTC(DeviceAsAServiceTC):
-    def setUp(self, *args, **kwargs):
-        super().setUp(*args, **kwargs)
+    @classmethod
+    def setUpClass(cls, *args, **kwargs):
+        super().setUpClass(*args, **kwargs)
 
-        self.attribute_color = self.env.ref("product.product_attribute_2")
-        self.color1, self.color2 = self.attribute_color.value_ids[:2]
+        cls.attribute_color = cls.env.ref("product.product_attribute_2")
+        cls.color1, cls.color2 = cls.attribute_color.value_ids[:2]
 
-        self.fp3_service_tmpl = self._create_rental_product("fp3+").product_tmpl_id
+        cls.fp3_service_tmpl = cls._create_rental_product("fp3+").product_tmpl_id
 
-        self.protective_screen = self.env["product.template"].create(
+        cls.protective_screen = cls.env["product.template"].create(
             {
                 "name": "Protective Screen",
                 "type": "product",
@@ -19,22 +20,22 @@ class ProductServiceConfigTC(DeviceAsAServiceTC):
         )
 
         add_attributes_to_product(
-            self.fp3_service_tmpl,
-            self.attribute_color,
-            self.color1 + self.color2,
+            cls.fp3_service_tmpl,
+            cls.attribute_color,
+            cls.color1 + cls.color2,
         )
-        self.fp3_service_tmpl.create_variant_ids()
+        cls.fp3_service_tmpl.create_variant_ids()
 
-        self.fp3_service_color1 = self.env["product.product"].search(
+        cls.fp3_service_color1 = cls.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.fp3_service_tmpl.id),
-                ("attribute_value_ids", "=", self.color1.id),
+                ("product_tmpl_id", "=", cls.fp3_service_tmpl.id),
+                ("attribute_value_ids", "=", cls.color1.id),
             ]
         )
-        self.fp3_service_color2 = self.env["product.product"].search(
+        cls.fp3_service_color2 = cls.env["product.product"].search(
             [
-                ("product_tmpl_id", "=", self.fp3_service_tmpl.id),
-                ("attribute_value_ids", "=", self.color2.id),
+                ("product_tmpl_id", "=", cls.fp3_service_tmpl.id),
+                ("attribute_value_ids", "=", cls.color2.id),
             ]
         )
 

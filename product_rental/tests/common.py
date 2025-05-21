@@ -10,8 +10,9 @@ from ..models.contract import NO_DATE
 
 
 class RentalSaleOrderMixin:
-    def get_default_tax(self, amount=20.0):
-        return self.env["account.tax"].create(
+    @classmethod
+    def get_default_tax(cls, amount=20.0):
+        return cls.env["account.tax"].create(
             {
                 "amount": amount,
                 "amount_type": "percent",
@@ -21,78 +22,79 @@ class RentalSaleOrderMixin:
             }
         )
 
-    def create_sale_order(self, partner=None, tax=None, env=None):
+    @classmethod
+    def create_sale_order(cls, partner=None, tax=None, env=None):
         """Given tax (defaults to company's default) is used for contract
         products.
         """
-        env = env or self.env
+        env = env or cls.env
         if partner is None:
             partner = env.ref("base.res_partner_3")
         if tax is None:
-            tax = self.get_default_tax()
+            tax = cls.get_default_tax()
         # Main rental products (with a rental contract template)
-        contract_tmpl1 = self._create_rental_contract_tmpl(
+        contract_tmpl1 = cls._create_rental_contract_tmpl(
             1,
             contract_line_ids=[
-                self._contract_line(
+                cls._contract_line(
                     1, "1 month Fairphone premium", tax, specific_price=25.0
                 ),
-                self._contract_line(2, "1 month ##ACCESSORY##", tax),
+                cls._contract_line(2, "1 month ##ACCESSORY##", tax),
             ],
         )
-        product1 = self._create_rental_product(
+        product1 = cls._create_rental_product(
             name="Fairphone Premium",
             list_price=60.0,
             recurrent_payment_amount=30.0,
             property_contract_template_id=contract_tmpl1.id,
         )
-        oline_p1 = self._oline(product1)
+        oline_p1 = cls._oline(product1)
 
-        contract_tmpl2 = self._create_rental_contract_tmpl(
+        contract_tmpl2 = cls._create_rental_contract_tmpl(
             2,
             contract_line_ids=[
-                self._contract_line(
+                cls._contract_line(
                     1, "1 month of ##PRODUCT##", tax, specific_price=0.0
                 ),
-                self._contract_line(2, "1 month of ##ACCESSORY##", tax),
+                cls._contract_line(2, "1 month of ##ACCESSORY##", tax),
             ],
         )
-        product2 = self._create_rental_product(
+        product2 = cls._create_rental_product(
             name="PC",
             list_price=130.0,
             recurrent_payment_amount=65.0,
             property_contract_template_id=contract_tmpl2.id,
         )
-        oline_p2 = self._oline(product2, product_uom_qty=2, price_unit=120)
+        oline_p2 = cls._oline(product2, product_uom_qty=2, price_unit=120)
 
-        contract_tmpl3 = self._create_rental_contract_tmpl(
+        contract_tmpl3 = cls._create_rental_contract_tmpl(
             3,
             contract_line_ids=[
-                self._contract_line(
+                cls._contract_line(
                     1, "1 month of ##PRODUCT##", tax, specific_price=0.0
                 ),
-                self._contract_line(2, "1 month of ##ACCESSORY##", tax),
+                cls._contract_line(2, "1 month of ##ACCESSORY##", tax),
             ],
         )
-        product3 = self._create_rental_product(
+        product3 = cls._create_rental_product(
             name="GS Headset",
             list_price=1.0,
             recurrent_payment_amount=10.0,
             property_contract_template_id=contract_tmpl3.id,
             is_deposit=False,
         )
-        oline_p3 = self._oline(product3, product_uom_qty=1, price_unit=1.0)
+        oline_p3 = cls._oline(product3, product_uom_qty=1, price_unit=1.0)
 
-        contract_tmpl4 = self._create_rental_contract_tmpl(
+        contract_tmpl4 = cls._create_rental_contract_tmpl(
             4,
             contract_line_ids=[
-                self._contract_line(
+                cls._contract_line(
                     1,
                     "1 month of ##PRODUCT##",
                     tax,
                     specific_price=0.0,
                 ),
-                self._contract_line(
+                cls._contract_line(
                     2,
                     "1 month of ##ACCESSORY##",
                     tax,
@@ -100,58 +102,58 @@ class RentalSaleOrderMixin:
                 ),
             ],
         )
-        product4 = self._create_rental_product(
+        product4 = cls._create_rental_product(
             name="FP2",
             list_price=40.0,
             recurrent_payment_amount=20.0,
             property_contract_template_id=contract_tmpl4.id,
         )
-        oline_p4 = self._oline(product4, product_uom_qty=1)
+        oline_p4 = cls._oline(product4, product_uom_qty=1)
 
         # Accessory products
-        a1 = self._create_rental_product(
+        a1 = cls._create_rental_product(
             name="headset",
             list_price=3.0,
             recurrent_payment_amount=1.5,
             property_contract_template_id=False,
         )
-        oline_a1 = self._oline(a1)
+        oline_a1 = cls._oline(a1)
 
-        a2 = self._create_rental_product(
+        a2 = cls._create_rental_product(
             name="screen",
             list_price=30.0,
             recurrent_payment_amount=15.0,
             property_contract_template_id=False,
         )
-        oline_a2 = self._oline(a2, product_uom_qty=4)
+        oline_a2 = cls._oline(a2, product_uom_qty=4)
 
-        a3 = self._create_rental_product(
+        a3 = cls._create_rental_product(
             name="keyboard",
             list_price=12.0,
             recurrent_payment_amount=6.0,
             property_contract_template_id=False,
         )
-        oline_a3 = self._oline(a3, discount=10)
+        oline_a3 = cls._oline(a3, discount=10)
 
-        a4 = self._create_rental_product(
+        a4 = cls._create_rental_product(
             name="keyboard deluxe",
             list_price=15.0,
             recurrent_payment_amount=7.5,
             property_contract_template_id=False,
         )
-        oline_a4 = self._oline(a4)
+        oline_a4 = cls._oline(a4)
 
         product1.accessory_product_ids |= a1
         product2.accessory_product_ids |= a2 + a3 + a4
 
         # Optional products
-        o1 = self._create_rental_product(
+        o1 = cls._create_rental_product(
             name="serenity level services",
             list_price=3.0,
             recurrent_payment_amount=6.0,
             property_contract_template_id=False,
         )
-        oline_o1 = self._oline(o1)
+        oline_o1 = cls._oline(o1)
         product3.optional_product_ids |= o1.product_tmpl_id
 
         return env["sale.order"].create(
@@ -173,12 +175,13 @@ class RentalSaleOrderMixin:
             }
         )
 
-    def generate_contract_invoices(self, partner=None, tax=None):
-        so = self.create_sale_order(partner, tax)
+    @classmethod
+    def generate_contract_invoices(cls, partner=None, tax=None):
+        so = cls.create_sale_order(partner, tax)
         so.action_confirm()
-        contracts = self.env["contract.contract"].of_sale(so)
+        contracts = cls.env["contract.contract"].of_sale(so)
         lines = contracts.mapped("contract_line_ids")
-        self.assertEqual(set(lines.mapped("date_start")), {NO_DATE})
+        cls().assertEqual(set(lines.mapped("date_start")), {NO_DATE})
         # Do not use _recurring_create_invoice return value here as
         # contract_queue_job (installed in the CI) returns an empty invoice set
         # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
@@ -186,33 +189,36 @@ class RentalSaleOrderMixin:
         with trap_jobs() as trap:
             contracts._recurring_create_invoice()
         trap.perform_enqueued_jobs()
-        invoices = self.env["account.move"].search(
+        invoices = cls.env["account.move"].search(
             [
                 ("line_ids.contract_line_id.contract_id", "in", contracts.ids),
             ]
         )
         return invoices
 
-    def _create_rental_product(self, name, **kwargs):
+    @classmethod
+    def _create_rental_product(cls, name, **kwargs):
         kwargs["name"] = name
         kwargs.setdefault("has_recurrent_payment", True)
         kwargs.setdefault("type", "service")
         kwargs.setdefault("taxes_id", False)
         kwargs["is_contract"] = bool(kwargs.get("property_contract_template_id"))
-        result = self.env["product.product"].create(kwargs)
+        result = cls.env["product.product"].create(kwargs)
         # Otherwise is_contract may be wrong (in one of commown_devices tests):
         result.env.cache.invalidate()
         return result
 
-    def _create_rental_contract_tmpl(self, num, **kwargs):
+    @classmethod
+    def _create_rental_contract_tmpl(cls, num, **kwargs):
         kwargs.setdefault("name", "Test Contract Template %d" % num)
         kwargs.setdefault("commitment_period_number", 12)
         kwargs.setdefault("commitment_period_type", "monthly")
         # Mandatory to make tests pass
-        self.env.flush_all()
-        return self.env["contract.template"].create(kwargs)
+        cls.env.flush_all()
+        return cls.env["contract.template"].create(kwargs)
 
-    def _oline(self, product, **kwargs):
+    @classmethod
+    def _oline(cls, product, **kwargs):
         kwargs["product_id"] = product.id
         kwargs["product_uom"] = product.uom_id.id
         kwargs.setdefault("name", product.name)
@@ -220,9 +226,10 @@ class RentalSaleOrderMixin:
         kwargs.setdefault("price_unit", product.list_price)
         return (0, 0, kwargs)
 
-    def _contract_line(self, num, name, product_tax=None, **kwargs):
+    @classmethod
+    def _contract_line(cls, num, name, product_tax=None, **kwargs):
         if "product_id" not in kwargs:
-            product = self.env["product.product"].create(
+            product = cls.env["product.product"].create(
                 {"name": "Contract product %d" % num, "type": "service"}
             )
             if product_tax is not None:

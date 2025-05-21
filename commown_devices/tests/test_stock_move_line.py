@@ -6,42 +6,43 @@ from .common import create_lot_and_quant
 
 
 class StockMoveLineTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        partner = self.env.ref("base.partner_demo_portal")
-        self.contract = self.env["contract.contract"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        partner = cls.env.ref("base.partner_demo_portal")
+        cls.contract = cls.env["contract.contract"].create(
             {"name": "Contract", "partner_id": partner.id}
         )
         partner_loc = partner.get_or_create_customer_location(
-            self.contract.stock_ownership
+            cls.contract.stock_ownership
         )
-        self.stock_location = self.env.ref("stock.stock_location_stock")
-        product = self.env["product.product"].create(
+        cls.stock_location = cls.env.ref("stock.stock_location_stock")
+        product = cls.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}
         )
-        lot1 = create_lot_and_quant(self.env, "lot1", product, self.stock_location)
-        lot2 = create_lot_and_quant(self.env, "lot2", product, self.stock_location)
+        lot1 = create_lot_and_quant(cls.env, "lot1", product, cls.stock_location)
+        lot2 = create_lot_and_quant(cls.env, "lot2", product, cls.stock_location)
 
         def create_move_and_assign_contract(lot):
             move = internal_picking(
                 [lot],
                 {},
                 None,
-                self.stock_location,
+                cls.stock_location,
                 partner_loc,
                 "origin",
             )
-            move.update({"contract_id": self.contract.id})
+            move.update({"contract_id": cls.contract.id})
             return move
 
         move1 = create_move_and_assign_contract(lot1)
         move2 = create_move_and_assign_contract(lot2)
 
-        self.move_line1 = move1.move_line_ids
-        self.picking1 = move1.picking_id
+        cls.move_line1 = move1.move_line_ids
+        cls.picking1 = move1.picking_id
 
-        self.move_line2 = move2.move_line_ids
-        self.picking2 = move2.picking_id
+        cls.move_line2 = move2.move_line_ids
+        cls.picking2 = move2.picking_id
 
     def test_compute_is_contact_in(self):
         self.assertTrue(self.move_line1.is_contract_in)
