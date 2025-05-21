@@ -108,10 +108,10 @@ class ProjectTC(TransactionCase):
         self.partner = ref("base.res_partner_3")
         token = self.env["payment.token"].create(
             {
-                "name": "Test Slimpay Token",
+                "payment_details": "Test Slimpay Token",
                 "active": True,
-                "acquirer_id": self.slimpay.id,
-                "acquirer_ref": "Slimpay mandate ref",
+                "provider_id": self.slimpay.id,
+                "provider_ref": "Slimpay mandate ref",
                 "partner_id": self.partner.id,
             },
         )
