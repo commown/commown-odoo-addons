@@ -310,14 +310,8 @@ class ProjectTC(TransactionCase):
         self.assertEqual(invoice.payment_state, "paid")
         self.assertEqual(invoice.amount_residual, 0.0)
         self.assertEqual(len(invoice.transaction_ids), 1)
-        return invoice, invoice.transaction_ids, payment
 
-    def _invoice_txs(self, invoice):
-        return self.env["payment.transaction"].search(
-            [
-                ("reference", "like", invoice.number),
-            ]
-        )
+        return invoice, invoice.transaction_ids, payment
 
     def test_cron_first_issue(self):
         """First payment issue:
@@ -652,7 +646,7 @@ class ProjectTC(TransactionCase):
             )
 
         self.assertInStage(task, "stage_retry_payment_and_wait")
-        txs = self._invoice_txs(self.invoice)
+        txs = self.invoice.transaction_ids
         self.assertEqual(len(txs), 2)
         tx1, tx0 = txs
         self.assertEqual(tx0, self.transaction)
@@ -700,7 +694,7 @@ class ProjectTC(TransactionCase):
                 check_job_function=task._slimpay_payment_issue_retry_payment,
             )
         self.assertInStage(task, "stage_retry_payment_and_wait")
-        txs = self._invoice_txs(self.invoice)
+        txs = self.invoice.transaction_ids
         self.assertEqual(len(txs), 3)
         self.assertEqual((txs[1], txs[2]), (tx1, tx0))
         payins = self._action_calls(mocker, "create-payins")
@@ -727,7 +721,7 @@ class ProjectTC(TransactionCase):
             task_emails(task)[0].subject, "YourCompany: max payment trials reached"
         )
         self.assertFalse(self._action_calls(mocker, "create-payins"))
-        self.assertEqual(len(self._invoice_txs(self.invoice)), 3)
+        self.assertEqual(len(self.invoice.transaction_ids), 3)
         self.assertIn("slimpay_ref_3 - slimpay_ref_2 - slimpay_ref_1 ", task.name)
 
     def test_warning_is_logged_if_partner_has_no_mobile(self):
