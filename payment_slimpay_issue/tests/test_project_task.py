@@ -67,15 +67,6 @@ class ProjectTC(TransactionCase):
 
         self.project = ref("payment_slimpay_issue.project_payment_issue")
 
-        self.customer_account = self.env["account.account"].create(
-            {
-                "code": "cust.acc",
-                "name": "customer account",
-                "account_type": "asset_receivable",
-                "reconcile": True,
-            }
-        )
-
         self.customer_journal = self.env["account.journal"].create(
             {
                 "name": "Customer journal",
@@ -123,7 +114,6 @@ class ProjectTC(TransactionCase):
                 # Avoid SMS not sent warnings:
                 "mobile": "+33612345678",
                 "country_id": self.env.ref("base.fr").id,
-                "property_account_receivable_id": self.customer_account.id,
                 "payment_token_id": token.id,
             }
         )
