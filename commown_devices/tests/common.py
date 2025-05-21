@@ -372,7 +372,7 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
         # We don't ajdust stock of protective screen because lack of stock case is
         # tested
         cls.attribute_usbc = cls.env["product.attribute"].create(
-            {"name": "Send Cable ?", "type": "select", "create_variant": "always"}
+            {"name": "Send Cable ?", "create_variant": "always"}
         )
         cls.attribute_color = cls.env.ref("product.product_attribute_2")
         color_values = cls.env["product.attribute.value"].search(
@@ -400,14 +400,16 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
             usbc_values,
         )
         service_template._origin = service_template
-        cls.storable_product.create_variant_ids()
-        service_template.create_variant_ids()
         cls.color1 = color_values[0]
         with_usbc = usbc_values.filtered(lambda v: v.name == "Yes")
         cls.fp3_plus_storable_color1 = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", cls.storable_product.id),
-                ("attribute_value_ids.id", "ilike", cls.color1.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "=",
+                    cls.color1.id,
+                ),
             ]
         )
         create_config(
@@ -433,8 +435,16 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
         cls.fp3_plus_service_color1_with_usb = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", service_template.id),
-                ("attribute_value_ids", "ilike", cls.color1.id),
-                ("attribute_value_ids", "ilike", with_usbc.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "=",
+                    cls.color1.id,
+                ),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "=",
+                    with_usbc.id,
+                ),
             ]
         )
         cls.so.order_line[0].product_id = cls.fp3_plus_service_color1_with_usb

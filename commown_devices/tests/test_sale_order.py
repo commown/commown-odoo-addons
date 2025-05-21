@@ -67,7 +67,10 @@ class SaleOrderTC(TransactionCase):
 
         def colored1(pt):
             return pt.mapped("product_variant_ids").filtered(
-                lambda pv: color1 in pv.attribute_value_ids.ensure_one()
+                lambda pv: color1
+                in pv.mapped(
+                    "product_template_variant_value_ids.product_attribute_value_id"
+                ).ensure_one()
             )
 
         ct = self.env["contract.template"].create(
@@ -82,8 +85,8 @@ class SaleOrderTC(TransactionCase):
 
         add_attributes_to_product(service, color_attr, color_attr.value_ids)
         add_attributes_to_product(storable, color_attr, color_attr.value_ids)
-        service.create_variant_ids()
-        storable.create_variant_ids()
+        service._create_variant_ids()
+        storable._create_variant_ids()
 
         for _color in color_attr.value_ids:
             create_config(service, "primary", storable, colored1(storable), color1)
@@ -94,7 +97,12 @@ class SaleOrderTC(TransactionCase):
         so.action_add_services_storable_products()
         new_so_line = so.order_line - so_lines
         self.assertEqual(new_so_line.product_id.product_tmpl_id, storable)
-        self.assertIn(color1, new_so_line.product_id.attribute_value_ids)
+        self.assertIn(
+            color1,
+            new_so_line.product_id.mapped(
+                "product_template_variant_value_ids.product_attribute_value_id"
+            ),
+        )
 
         so.action_confirm()
         with self.assertRaises(UserError):

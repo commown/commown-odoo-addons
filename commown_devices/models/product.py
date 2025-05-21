@@ -11,8 +11,8 @@ class ProductTemplate(models.Model):
         inverse_name="service_tmpl_id",
     )
 
-    def create_variant_ids(self):
-        res = super(ProductTemplate, self).create_variant_ids()
+    def _create_variant_ids(self):
+        res = super(ProductTemplate, self)._create_variant_ids()
         self.product_variant_ids._set_storable_variants()
         return res
 
@@ -51,7 +51,7 @@ class ProductProduct(models.Model):
             # all match current product attribute values
             configs = template_configs.filtered(
                 lambda c: set(c.attribute_value_ids.ids).issubset(
-                    rec.attribute_value_ids.ids
+                    rec.product_template_variant_value_ids.product_attribute_value_id.ids
                 )
             )
             primary_variant = self.env["product.product"]
@@ -70,7 +70,7 @@ class ProductProduct(models.Model):
                     msg
                     % {
                         "product": rec.name,
-                        "attrs": rec.attribute_value_ids.mapped("name"),
+                        "attrs": rec.product_template_variant_value_ids.mapped("name"),
                     }
                 )
             if len(secondary_variants) > len(

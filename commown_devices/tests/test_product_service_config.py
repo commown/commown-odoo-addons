@@ -24,18 +24,25 @@ class ProductServiceConfigTC(DeviceAsAServiceTC):
             cls.attribute_color,
             cls.color1 + cls.color2,
         )
-        cls.fp3_service_tmpl.create_variant_ids()
 
         cls.fp3_service_color1 = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", cls.fp3_service_tmpl.id),
-                ("attribute_value_ids", "=", cls.color1.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "=",
+                    cls.color1.id,
+                ),
             ]
         )
         cls.fp3_service_color2 = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", cls.fp3_service_tmpl.id),
-                ("attribute_value_ids", "=", cls.color2.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "=",
+                    cls.color2.id,
+                ),
             ]
         )
 

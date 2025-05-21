@@ -52,7 +52,7 @@ class ProductServiceStorableConfig(models.Model):
 
     @api.model
     def create(self, values):
-        res = super(ProductServiceStorableConfig, self).create(values)
+        res = super().create(values)
         res.service_tmpl_id.product_variant_ids._set_storable_variants()
         return res
 

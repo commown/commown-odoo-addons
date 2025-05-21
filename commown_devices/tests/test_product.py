@@ -38,7 +38,6 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
             cls.attribute_color,
             cls.color1 + cls.color2,
         )
-        cls.backcover.create_variant_ids()
         cls.backcover1, cls.backcover2 = cls.backcover.product_variant_ids
 
         add_attributes_to_product(
@@ -46,31 +45,41 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
             cls.attribute_color,
             color_values,
         )
-        cls.fp3_storable_tmpl.create_variant_ids()
 
         add_attributes_to_product(
             cls.fp3_service_tmpl,
             cls.attribute_color,
             cls.color1 + cls.color2,
         )
-        cls.fp3_service_tmpl.create_variant_ids()
 
         cls.fp3_storable_color1 = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", cls.fp3_storable_tmpl.id),
-                ("attribute_value_ids.id", "ilike", cls.color1.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "ilike",
+                    cls.color1.id,
+                ),
             ]
         )
         cls.fp3_storable_color2 = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", cls.fp3_storable_tmpl.id),
-                ("attribute_value_ids.id", "ilike", cls.color2.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "ilike",
+                    cls.color2.id,
+                ),
             ]
         )
         cls.fp3_service_color2 = cls.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", cls.fp3_service_tmpl.id),
-                ("attribute_value_ids.id", "ilike", cls.color2.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "ilike",
+                    cls.color2.id,
+                ),
             ]
         )
 
@@ -98,12 +107,15 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
             new_attr,
             new_attr.value_ids,
         )
-        self.fp3_service_tmpl.create_variant_ids()
 
         new_var = self.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", self.fp3_service_tmpl.id),
-                ("attribute_value_ids", "ilike", new_attr.value_ids[0].id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "ilike",
+                    new_attr.value_ids[0].id,
+                ),
             ],
             limit=1,
         )
@@ -149,7 +161,11 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
         fp3_service_color1 = self.env["product.product"].search(
             [
                 ("product_tmpl_id", "=", self.fp3_service_tmpl.id),
-                ("attribute_value_ids.id", "ilike", self.color1.id),
+                (
+                    "product_template_variant_value_ids.product_attribute_value_id",
+                    "ilike",
+                    self.color1.id,
+                ),
             ]
         )
         self.assertEqual(
@@ -184,7 +200,9 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
                 "More than one primary variant configured for %s with attributes %s"
                 % (
                     self.fp3_service_color2.name,
-                    self.fp3_service_color2.attribute_value_ids.mapped("name"),
+                    self.fp3_service_color2.product_template_attribute_value_ids.mapped(
+                        "name"
+                    ),
                 )
             ),
             err.exception.name,
