@@ -264,7 +264,7 @@ class ProjectTC(TransactionCase):
         data.update(kwargs)
         return self.env["project.task"].create(data)
 
-    def _create_inv_tx_and_payment(self):
+    def _create_inv_tx_and_payment(self, num=0):
         invoice = self.env["account.move"].create(
             {
                 "journal_id": self.inv_journal.id,
@@ -300,7 +300,7 @@ class ProjectTC(TransactionCase):
             self._mock_slimpay_base(mocker)
             mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
             payin = {
-                "reference": "SDD-EXE-0000",
+                "reference": "SDD-EXE-%04d" % num,
                 "state": "accepted",
                 "executionStatus": "toprocess",
             }
@@ -785,7 +785,7 @@ class ProjectTC(TransactionCase):
 
         # Create 3 invoice, transaction and payment series
         [(inv0, tx0, p0), (inv1, tx1, p1), (inv2, tx2, p2)] = [
-            self._create_inv_tx_and_payment() for i in range(3)
+            self._create_inv_tx_and_payment(i + 1) for i in range(3)
         ]
 
         # Execute test: generate 3 issues and simulate a crash when the
