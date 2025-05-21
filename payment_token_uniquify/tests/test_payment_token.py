@@ -11,7 +11,7 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         self.token2 = self.new_payment_token(self.company_s1_w2)
         self.company_s1_w2.payment_token_id = self.token2.id
 
-        self.acquirer = self.env.ref("payment.payment_acquirer_transfer")
+        self.provider = self.env.ref("payment.payment_provider_transfer")
 
     def test_action_deactivate(self):
         "Obsolete tokens must become inactive when this action is used"
@@ -20,7 +20,7 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         self.assertTrue(self.company_s1_w1.payment_token_id)
         self.assertTrue(self.company_s1_w2.payment_token_id)
 
-        # Configure acquirer and sign new token to trigger obsolescence:
+        # Configure provider and sign new token to trigger obsolescence:
         self._trigger_obsolescence(
             "payment_token_uniquify.obsolescence_action_deactivate"
         )

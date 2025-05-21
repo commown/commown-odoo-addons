@@ -17,7 +17,7 @@
     "data": [
         "data/obsolescence_action.xml",
         "security/ir.model.access.csv",
-        "views/payment_acquirer.xml",
+        "views/payment_provider.xml",
     ],
     "installable": True,
 }

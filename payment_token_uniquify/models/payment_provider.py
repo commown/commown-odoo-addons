@@ -1,8 +1,8 @@
 from odoo import fields, models
 
 
-class PaymentAcquirer(models.Model):
-    _inherit = "payment.acquirer"
+class PaymentProvider(models.Model):
+    _inherit = "payment.provider"
 
     obsolescence_action_ids = fields.Many2many(
         "payment_token_uniquify.obsolescence_action",

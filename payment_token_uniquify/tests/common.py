@@ -33,15 +33,15 @@ class PaymentTokenUniquifyTC(SavepointCase):
         )
         return self.env["res.partner"].create(kwargs)
 
-    def new_payment_token(self, partner, acquirer=None, set_as_partner_token=True):
-        if acquirer is None:
-            acquirer = self.env.ref("payment.payment_acquirer_transfer")
+    def new_payment_token(self, partner, provider=None, set_as_partner_token=True):
+        if provider is None:
+            provider = self.env.ref("payment.payment_provider_transfer")
         token = self.env["payment.token"].create(
             {
                 "name": "Token",
                 "partner_id": partner.id,
-                "acquirer_id": acquirer.id,
-                "acquirer_ref": "test-acquirer-ref",
+                "provider_id": provider.id,
+                "provider_ref": "test-provider-ref",
             }
         )
         if set_as_partner_token:
@@ -51,21 +51,21 @@ class PaymentTokenUniquifyTC(SavepointCase):
     def _trigger_obsolescence(self, *action_refs, **new_partner_kwargs):
         """Trigger the tested code: a partner of the company creates a new token
 
-        A payment acquirer is used that is first configured to trigger
+        A payment provider is used that is first configured to trigger
         the token obsolescence actions passed as xml refs (without their
         common prefix).
         """
-        acquirer = self.env.ref("payment.payment_acquirer_transfer")
+        provider = self.env.ref("payment.payment_provider_transfer")
         for action_ref in action_refs:
             if "." not in action_ref:
                 action_ref = "commown.obsolescence_action_" + action_ref
-            acquirer.obsolescence_action_ids |= self.env.ref(action_ref)
+            provider.obsolescence_action_ids |= self.env.ref(action_ref)
 
         new_partner_kwargs.setdefault("name", "s1_w3")
         company_s1_w3 = self.new_worker(self.company_s1, **new_partner_kwargs)
         cm = self._check_obsolete_token_action_job()
         with cm:
-            new_token = self.new_payment_token(company_s1_w3, acquirer)
+            new_token = self.new_payment_token(company_s1_w3, provider)
             cm.gen.send(new_token)
         return new_token
 
@@ -74,7 +74,7 @@ class PaymentTokenUniquifyTC(SavepointCase):
         with trap_jobs() as trap:
             new_token = yield trap
             yield
-            job_method = new_token.acquirer_id.run_obsolete_token_actions
+            job_method = new_token.provider_id.run_obsolete_token_actions
             trap.assert_jobs_count(1, only=job_method)
             trap.assert_enqueued_job(
                 job_method,
