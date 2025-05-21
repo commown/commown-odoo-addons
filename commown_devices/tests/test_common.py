@@ -1,4 +1,4 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from ..models.common import first_common_location
 
@@ -14,7 +14,7 @@ def create_stock_location(self, name, parent=None):
     )
 
 
-class CommonFunctionsTC(SavepointCase):
+class CommonFunctionsTC(TransactionCase):
     """This class is used to test the functions of models/commown
     that are not fully tested in other tests files.
     """

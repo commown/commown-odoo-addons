@@ -1,7 +1,7 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class AccountMoveLineTC(SavepointCase):
+class AccountMoveLineTC(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

@@ -1,12 +1,12 @@
 from odoo.exceptions import UserError
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 
 from .common import add_attributes_to_product, create_config
 
 
-class SaleOrderTC(MockedEmptySessionMixin, SavepointCase):
+class SaleOrderTC(MockedEmptySessionMixin, TransactionCase):
     "Test class for sale order methods"
 
     def create_sale_order(self, product):

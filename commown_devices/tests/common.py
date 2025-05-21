@@ -3,7 +3,7 @@ import json
 import dateutil.parser
 from lxml import etree
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
@@ -32,7 +32,7 @@ def add_attributes_to_product(product, attribute, attribute_values):
     )
 
 
-class BaseLotTC(SavepointCase):
+class BaseLotTC(TransactionCase):
     def setUp(self):
         super().setUp()
 

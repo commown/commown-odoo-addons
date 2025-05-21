@@ -1,10 +1,10 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from ..models.common import internal_picking
 from .common import create_lot_and_quant
 
 
-class WizardMoveLineValidationTC(SavepointCase):
+class WizardMoveLineValidationTC(TransactionCase):
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")

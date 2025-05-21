@@ -1,13 +1,13 @@
 import datetime
 
 from odoo.exceptions import UserError
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from ..models.common import internal_picking
 from .common import create_lot_and_quant
 
 
-class StockPickingTC(SavepointCase):
+class StockPickingTC(TransactionCase):
     def setUp(self):
         super().setUp()
         self.product_tmpl = self.env["product.template"].create(

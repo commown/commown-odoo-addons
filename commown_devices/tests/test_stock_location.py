@@ -1,7 +1,7 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class StockPickingTC(SavepointCase):
+class StockPickingTC(TransactionCase):
     def test_name_get_with_context(self):
         loc1 = self.env["stock.location"].create(
             {

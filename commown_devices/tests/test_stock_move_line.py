@@ -1,11 +1,11 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from ..models.common import internal_picking
 from ..models.stock_move_line import get_origin_record
 from .common import create_lot_and_quant
 
 
-class StockMoveLineTC(SavepointCase):
+class StockMoveLineTC(TransactionCase):
     def setUp(self):
         super().setUp()
         partner = self.env.ref("base.partner_demo_portal")

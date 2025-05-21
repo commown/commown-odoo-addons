@@ -1,7 +1,7 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class PurchaseOrderTC(SavepointCase):
+class PurchaseOrderTC(TransactionCase):
     def setUp(self):
         super().setUp()
         self.po = self.env.ref("purchase.purchase_order_1")
