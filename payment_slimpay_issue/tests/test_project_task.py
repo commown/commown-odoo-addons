@@ -482,7 +482,7 @@ class ProjectTC(TransactionCase):
         # 5 days later, task must move to pay retry stage and a payin created
 
         # Prepare to new payment:
-        self.invoice.payment_move_line_ids.remove_move_reconcile()
+        self.invoice.line_ids.remove_move_reconcile()
 
         token = self.partner.payment_token_id
 
@@ -514,7 +514,7 @@ class ProjectTC(TransactionCase):
         ref = self.env.ref
         task = self._create_odoo_task()
         task.stage_id = ref("payment_slimpay_issue.stage_warn_partner_and_wait").id
-        self.invoice.payment_move_line_ids.remove_move_reconcile()
+        self.invoice.line_ids.remove_move_reconcile()
 
         # Now remove the payment token and launch the payment retry:
         self.partner.payment_token_id.unlink()
