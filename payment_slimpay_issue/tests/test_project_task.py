@@ -795,18 +795,18 @@ class ProjectTC(TransactionCase):
                 [
                     fake_issue_doc(
                         id="i0",
-                        payment_ref=tx0.acquirer_reference,
+                        payment_ref=tx0.provider_reference,
                         subscriber_ref=self.partner.id,
                     ),
                     fake_issue_doc(
                         id="i1",
-                        payment_ref=tx1.acquirer_reference,
+                        payment_ref=tx1.provider_reference,
                         subscriber_ref=self.partner.id,
                         fake_ack_error=True,
                     ),
                     fake_issue_doc(
                         id="i2",
-                        payment_ref=tx2.acquirer_reference,
+                        payment_ref=tx2.provider_reference,
                         subscriber_ref=self.partner.id,
                     ),
                 ],
