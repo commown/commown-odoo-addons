@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class PaymentAcquirer(models.Model):
@@ -9,7 +9,6 @@ class PaymentAcquirer(models.Model):
         string="Payment token obsolescence actions",
     )
 
-    @api.multi
     def run_obsolete_token_actions(self, new_token):
         self.ensure_one()
         obsolete_tokens = new_token.partner_id.get_obsolete_tokens(new_token)

@@ -24,7 +24,6 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         default=1,
     )
 
-    @api.multi
     def run(self, obsolete_tokens, new_token):
         for action in self:
             _logger.debug(

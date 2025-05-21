@@ -3,7 +3,7 @@
 {
     "name": "Payment Token Uniquify",
     "summary": "Module summary",
-    "version": "12.0.1.0.4",
+    "version": "16.0.1.0.0",
     "development_status": "Alpha",
     "category": "Payment",
     "website": "https://github.com/commown/commown-odoo-addons",
