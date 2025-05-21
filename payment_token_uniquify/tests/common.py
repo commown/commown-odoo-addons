@@ -7,36 +7,40 @@ from odoo.addons.queue_job.tests.common import trap_jobs
 
 @tagged("post_install", "-at_install")
 class PaymentTokenUniquifyTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
         # A hierarchy of companies:
-        self.company = self.new_company()
+        cls.company = cls.new_company()
 
         # - subcompany 1 with 2 workers:
-        self.company_s1 = self.new_company(self.company, name="s1")
-        self.company_s1_w1 = self.new_worker(self.company_s1, "s1_w1")
-        self.company_s1_w2 = self.new_worker(self.company_s1, "s1_w2")
+        cls.company_s1 = cls.new_company(cls.company, name="s1")
+        cls.company_s1_w1 = cls.new_worker(cls.company_s1, "s1_w1")
+        cls.company_s1_w2 = cls.new_worker(cls.company_s1, "s1_w2")
 
         # - subcompany 2 with 2 workers and one subcompany...
-        self.company_s2 = self.new_company(self.company, name="s2")
-        self.company_s2_w1 = self.new_worker(self.company_s2, "s2_w1")
-        self.company_s2_w2 = self.new_worker(self.company_s2, "s2_w2")
+        cls.company_s2 = cls.new_company(cls.company, name="s2")
+        cls.company_s2_w1 = cls.new_worker(cls.company_s2, "s2_w1")
+        cls.company_s2_w2 = cls.new_worker(cls.company_s2, "s2_w2")
 
-    def new_worker(self, company, name="worker", **kwargs):
+    @classmethod
+    def new_worker(cls, company, name="worker", **kwargs):
         kwargs.update({"name": name, "is_company": False, "parent_id": company.id})
-        return self.env["res.partner"].create(kwargs)
+        return cls.env["res.partner"].create(kwargs)
 
-    def new_company(self, parent=False, name="company", **kwargs):
+    @classmethod
+    def new_company(cls, parent=False, name="company", **kwargs):
         kwargs.update(
             {"name": name, "is_company": True, "parent_id": parent and parent.id},
         )
-        return self.env["res.partner"].create(kwargs)
+        return cls.env["res.partner"].create(kwargs)
 
-    def new_payment_token(self, partner, provider=None, set_as_partner_token=True):
+    @classmethod
+    def new_payment_token(cls, partner, provider=None, set_as_partner_token=True):
         if provider is None:
-            provider = self.env.ref("payment.payment_provider_transfer")
-        token = self.env["payment.token"].create(
+            provider = cls.env.ref("payment.payment_provider_transfer")
+        token = cls.env["payment.token"].create(
             {
                 "name": "Token",
                 "partner_id": partner.id,
