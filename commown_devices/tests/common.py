@@ -1,6 +1,5 @@
 import json
 
-import dateutil.parser
 from lxml import etree
 
 from odoo.tests.common import TransactionCase
@@ -156,67 +155,36 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         )
         location = location or cls.location_fp3_new
 
-        inventory = cls.env["stock.inventory"].create(
+        quant = cls.env["stock.quant"].create(
             {
-                "name": "test stock %s" % serial,
+                "product_id": product.id,
                 "location_id": location.id,
-                "filter": "lot",
                 "lot_id": lot.id,
+                "inventory_quantity": qty,
             }
         )
-        inventory.action_start()
-        inventory.line_ids |= cls.env["stock.inventory.line"].create(
-            {
-                "product_id": lot.product_id.id,
-                "location_id": location.id,
-                "prod_lot_id": lot.id,
-                "product_qty": 1,
-            }
-        )
-        inventory.action_validate()
-        assert inventory.state == "done", (
-            "Unexpected inventory state %s" % inventory.state
-        )
+        quant.action_apply_inventory()
+        # I think it should not be done as i makes quant dates incoherent with moves
+        # quant.update({"in_date": date, "inventory_date": date})
 
+        assert quant.quantity == qty
         assert lot.quant_ids
-        cls.env.cr.execute(
-            "UPDATE stock_quant SET in_date=%(date)s WHERE id in %(ids)s",
-            {"date": date, "ids": tuple(lot.quant_ids.ids)},
-        )
-        cls.env.cache.invalidate()
 
         return lot
 
     @classmethod
     def adjust_stock_notracking(cls, product, location, qty=1.0, date="2000-01-01"):
 
-        inventory = cls.env["stock.inventory"].create(
-            {
-                "name": "test stock %s" % product.name,
-                "location_id": location.id,
-                "filter": "product",
-                "product_id": product.id,
-                "date": dateutil.parser.parse(date),
-            }
-        )
-        inventory.action_start()
-        inventory.line_ids |= cls.env["stock.inventory.line"].create(
+        quant = cls.env["stock.quant"].create(
             {
                 "product_id": product.id,
                 "location_id": location.id,
-                "product_qty": qty,
+                "inventory_quantity": qty,
             }
         )
-        inventory.action_validate()
-        assert inventory.state == "done", (
-            "Unexpected inventory state %s" % inventory.state
-        )
+        quant.action_apply_inventory()
 
-        cls.env.cache.invalidate()
-        quant = cls.env["stock.quant"].search(
-            [("product_id.id", "=", product.id), ("location_id.id", "=", location.id)]
-        )
-        quant.in_date = dateutil.parser.parse(date)
+        # quant.in_date = dateutil.parser.parse(date)
 
         return product
 
