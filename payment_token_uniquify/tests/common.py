@@ -1,12 +1,12 @@
 import contextlib
 
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests import TransactionCase, tagged
 
 from odoo.addons.queue_job.tests.common import trap_jobs
 
 
 @tagged("post_install", "-at_install")
-class PaymentTokenUniquifyTC(SavepointCase):
+class PaymentTokenUniquifyTC(TransactionCase):
     def setUp(self):
         super().setUp()
 
