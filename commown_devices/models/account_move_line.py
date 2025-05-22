@@ -6,6 +6,7 @@ class AccountMoveLine(models.Model):
 
     def _compute_account_id(self):
         "Set product's rental expense account if related to a for-rental purchase"
+        res = super()._compute_account_id()
 
         for line in self.filtered("purchase_order_id"):
             if line.purchase_order_id.is_for_rental():
@@ -15,4 +16,4 @@ class AccountMoveLine(models.Model):
                     or pt.categ_id.property_rental_account_expense_categ_id
                 )
 
-        return super()._compute_account_id()
+        return res
