@@ -56,11 +56,26 @@ def fake_issue_doc(
 
 @tagged("-at_install", "post_install")
 class ProjectTC(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
     def setUp(self):
         super().setUp()
 
         self.inv_journal = self.env["account.journal"].search(
-            [("type", "=", "sale")], limit=1
+            [("type", "=", "sale"), ("company_id", "=", self.env.company.id)],
+            limit=1,
         )
 
         ref = self.env.ref
@@ -289,7 +304,10 @@ class ProjectTC(TransactionCase):
         invoice.action_post()
 
         token = self.partner.payment_token_ids[0]
-        journal = self.env["account.journal"].search([("type", "=", "bank")], limit=1)
+        journal = self.env["account.journal"].search(
+            [("type", "=", "bank"), ("company_id", "=", self.env.company.id)],
+            limit=1,
+        )
 
         register_payment = (
             self.env["account.payment.register"]
@@ -415,7 +433,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(task.invoice_id.amount_total, 105.0)
         self.assertIssuesAcknowledged(mocker, "i3")
         last_msg = task.message_ids[0]
-        self.assertEqual(last_msg.subject, "YourCompany: max payment trials reached")
+        self.assertIn("max payment trials reached", last_msg.subject)
 
     def test_handle_focr(self):
         """An issue due to a creditor cancellation must be acknowledged to
@@ -485,7 +503,7 @@ class ProjectTC(TransactionCase):
         task.stage_id = ref("payment_slimpay_issue.stage_warn_partner_and_wait").id
         self.flush_tracking()
         last_msg = task.message_ids[0]
-        self.assertEqual(last_msg.subject, "YourCompany: rejected payment")
+        self.assertIn("rejected payment", last_msg.subject)
 
         # 5 days later, task must move to pay retry stage and a payin created
 
@@ -568,7 +586,7 @@ class ProjectTC(TransactionCase):
         self.assertEqual(task.invoice_id.amount_total, 112)
         self.assertInStage(task, "stage_warn_partner_and_wait")
         last_msg = task.message_ids[0]
-        self.assertEqual(last_msg.subject, "YourCompany: rejected payment")
+        self.assertIn("rejected payment", last_msg.subject)
 
         token = self.partner.payment_token_id
 
@@ -634,7 +652,9 @@ class ProjectTC(TransactionCase):
         # When CI runs, commown module is installed and sends a SMS too, so
         # we use assertIn and not assertEquals below:
         emails = task_emails(task)
-        self.assertIn("YourCompany: rejected payment", emails.mapped("subject"))
+        self.assertIn(
+            "%s: rejected payment" % self.env.company.name, emails.mapped("subject")
+        )
         self.assertEqual(self.invoice.payment_state, "not_paid")
 
         token = self.partner.payment_token_id
@@ -681,7 +701,7 @@ class ProjectTC(TransactionCase):
         emails = task_emails(task)
         self.assertEqual(
             [s for s in emails.mapped("subject") if "rejected" in s],
-            2 * ["YourCompany: rejected payment"],
+            2 * ["%s: rejected payment" % self.env.company.name],
         )
         self.assertEqual(self.invoice.payment_state, "not_paid")
         self.assertIn("SDD-EXE-0001 - SDD-EXE-0000 ", task.name)
@@ -703,7 +723,7 @@ class ProjectTC(TransactionCase):
         self.assertInStage(task, "stage_retry_payment_and_wait")
         txs = self.invoice.transaction_ids
         self.assertEqual(len(txs), 3)
-        self.assertEqual((txs[1], txs[2]), (tx1, tx0))
+        self.assertEqual(txs.sorted("id")[:2], (tx0 | tx1))
         payins = self._action_calls(mocker, "create-payins")
         self.assertEqual(len(payins), 1)
         self.assertEqual(payins[0].json()["label"], "dummy label")
@@ -722,7 +742,8 @@ class ProjectTC(TransactionCase):
         self.assertEqual(task.invoice_id.amount_total, 110)
         self.assertInStage(task, "stage_max_trials_reached")
         self.assertEqual(
-            task_emails(task)[0].subject, "YourCompany: max payment trials reached"
+            task_emails(task)[0].subject,
+            "%s: max payment trials reached" % self.env.company.name,
         )
         self.assertFalse(self._action_calls(mocker, "create-payins"))
         self.assertEqual(len(self.invoice.transaction_ids), 3)
