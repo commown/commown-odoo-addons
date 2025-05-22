@@ -19,10 +19,10 @@ class StockMove(models.Model):
 
         return super()._action_confirm(merge=merge, merge_into=merge_into)
 
-    def _action_done(self):
+    def _action_done(self, *args, **kwargs):
         """Overrride the method to trigger update_lot_contract method"""
 
-        res = super()._action_done()
+        res = super()._action_done(*args, **kwargs)
         self.update_lot_contract()
         return res
 
