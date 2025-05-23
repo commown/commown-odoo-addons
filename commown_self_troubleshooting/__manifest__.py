@@ -53,14 +53,21 @@
         "data/troubleshooting.xml",
         "security/res_groups.xml",
         "security/ir.model.access.csv",
-        "views/assets.xml",
-        "views/tours.xml",
         "views/troubleshooting.xml",
         "views/website_portal_templates.xml",
     ],
-    "demo": [
-        "demo/assets.xml",
-    ],
+    "assets": {
+        "web.assets_tests": [
+            "/commown_self_troubleshooting/static/src/js/self_troubleshooting_tour.js",
+        ],
+        "web.assets_frontend": [
+            "/commown_self_troubleshooting/static/lib/smartwizard/css/smart_wizard.min.css",
+            "/commown_self_troubleshooting/static/lib/smartwizard/css/*_arrows.min.css",
+            "/commown_self_troubleshooting/static/lib/smartwizard/js/jquery.smartWizard.js",
+            "/commown_self_troubleshooting/static/src/css/self_troubleshooting.css",
+            "/commown_self_troubleshooting/static/src/js/setup_wizard.esm.js",
+        ],
+    },
     "installable": True,
     "application": False,
 }
