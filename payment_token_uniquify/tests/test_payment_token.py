@@ -27,3 +27,13 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
 
         self.assertFalse(self.company_s1_w1.payment_token_id)
         self.assertFalse(self.company_s1_w2.payment_token_id)
+
+        # Create a token that's not the partner's main payment token,
+        # and sign it to trigger obsolescence.
+        token3 = self.new_payment_token(self.company_s1_w2, set_as_partner_token=False)
+        self.assertFalse(self.company_s1_w2.payment_token_id)
+
+        self._trigger_obsolescence(
+            "payment_token_uniquify.obsolescence_action_deactivate"
+        )
+        self.assertFalse(token3.active)
