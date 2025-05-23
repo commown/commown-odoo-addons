@@ -368,7 +368,6 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
             cls.attribute_usbc,
             usbc_values,
         )
-        service_template._origin = service_template
         cls.color1 = color_values[0]
         with_usbc = usbc_values.filtered(lambda v: v.name == "Yes")
         cls.fp3_plus_storable_color1 = cls.env["product.product"].search(
