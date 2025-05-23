@@ -10,13 +10,11 @@ class StockScrapTC(BaseLotTC):
     def setUpClass(cls):
         super().setUpClass()
         cls.scrap_date = datetime(1111, 11, 11, 11, 11, 11, 11)
-        scrap_loc = cls.env.ref("stock.stock_location_scrapped")
         cls.scrap = cls.env["stock.scrap"].create(
             {
                 "product_id": cls.product.id,
                 "lot_id": cls.lot.id,
                 "location_id": cls.location_internal_available.id,
-                "scrap_location_id": scrap_loc.id,
                 "product_uom_id": cls.product.uom_id.id,
                 "date_expected": cls.scrap_date,
             }

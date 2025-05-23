@@ -234,13 +234,10 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         if current_loc.scrap_location:
             raise UserError(_("Device is already in a scrap location"))
 
-        scrap_loc = self.env.ref("stock.stock_location_scrapped")
-
         ctx = {
             "default_product_id": self.lot_id.product_id.id,
             "default_lot_id": self.lot_id.id,
             "default_origin": self.get_name_for_origin(),
-            "default_scrap_location_id": scrap_loc.id,
             "default_contract_id": self.contract_id.id,
         }
 

@@ -109,13 +109,11 @@ class StockMoveLineTC(TransactionCase):
         # Create scrap
         self.picking2.button_validate()
         lot = self.move_line2.lot_id
-        scrap_loc = self.env.ref("stock.stock_location_scrapped")
         scrap = self.env["stock.scrap"].create(
             {
                 "product_id": lot.product_id.id,
                 "lot_id": lot.id,
                 "location_id": self.picking2.location_dest_id.id,
-                "scrap_location_id": scrap_loc.id,
                 "product_uom_id": lot.product_id.uom_id.id,
                 "date_expected": self.picking2.date_done,
             }
