@@ -31,7 +31,7 @@ class RunTourMixin:
         js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name
         js_ready = "odoo.__DEBUG__.services['web_tour.tour'].tours.%s.ready" % name
         with chrome_suppress_origin():
-            self.phantom_js("/my", js, js_ready, login="portal")
+            self.browser_js("/my", js, js_ready, login="portal")
 
 
 @odoo.tests.tagged("post_install", "-at_install")

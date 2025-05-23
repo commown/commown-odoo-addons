@@ -1,12 +1,11 @@
 from datetime import date
 
-from odoo import _, api, models
+from odoo import _, models
 
 
 class Contract(models.Model):
     _inherit = "contract.contract"
 
-    @api.multi
     def displayable_key_value(self, key, value):
         "Let a chance for i18n to reformat 'key: value' into e.g. 'key : value'"
         return _(" - %(descr_key)s: %(descr_value)s") % {
@@ -14,7 +13,6 @@ class Contract(models.Model):
             "descr_value": value,
         }
 
-    @api.multi
     def displayable_description(self):
         "Return a dict description in customer's lang"
         self.ensure_one()
