@@ -441,8 +441,7 @@ class LinkWizardTC(DeviceAsAServiceTC):
         )
 
         cls.fp = cls.env.ref("product_rental.prod_fp")
-        cls.pc1 = cls.env.ref("product_rental.prod_pc_i5")
-        cls.pc2 = cls.env.ref("product_rental.prod_pc_i7")
+        cls.pc1, cls.pc2 = cls.env.ref("product_rental.prod_pc").product_variant_ids
 
         date_po = date(2021, 1, 1)
 
