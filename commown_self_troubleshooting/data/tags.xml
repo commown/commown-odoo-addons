@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-  <data>
 
     <record id="tag-device-fp2" model="project.tags">
       <field name="name">Appareil FP2</field>
@@ -31,5 +30,4 @@
       <field name="name">Pour information</field>
     </record>
 
-  </data>
 </odoo>

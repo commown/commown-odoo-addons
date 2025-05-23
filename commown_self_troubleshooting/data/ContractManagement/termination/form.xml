@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <record id="contract-termination" model="ir.ui.view">
@@ -41,19 +41,46 @@
           </script>
 
           <t t-set="issue_title">Résiliation</t>
-          <t t-set="issue_description_template">issue-description-contract-termination</t>
+          <t
+                        t-set="issue_description_template"
+                    >issue-description-contract-termination</t>
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">
             <h1>Vie de mes contrats - Changement d'appareil</h1>
-            <h2>Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</h2>
+            <h2
+                        >Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</h2>
 
-            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+            <form
+                            action="/self-troubleshoot/"
+                            method="post"
+                            accept-charset="utf-8"
+                            id="myForm"
+                            role="form"
+                        >
 
-              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-              <input type="hidden" name="project_ref" value="product_rental.contract_termination_project" />
-              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
-              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+              <input
+                                type="hidden"
+                                name="csrf_token"
+                                t-att-value="request.csrf_token()"
+                            />
+              <input
+                                type="hidden"
+                                name="project_ref"
+                                value="product_rental.contract_termination_project"
+                            />
+              <input
+                                type="hidden"
+                                name="self-troubleshoot-type"
+                                id="self-troubleshoot-type"
+                                t-att-value="issue_title"
+                            />
+              <input
+                                type="hidden"
+                                name="issue-description-template"
+                                id="issue-description-template"
+                                t-att-value="issue_description_template"
+                            />
 
               <div id="smartwizard">
                 <ul class="nav">
@@ -73,19 +100,19 @@
                   </li>
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-2">Étape 2
-                      <br/>
+                      <br />
                       <small>Régler les loyers</small>
                     </a>
                   </li>
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-3">Étape 3
-                      <br/>
+                      <br />
                       <small>Transfert de contrat</small>
                     </a>
                   </li>
                   <li class="nav-item" disabled="disabled">
                     <a class="nav-link" href="#step-4">Étape 4
-                      <br/>
+                      <br />
                       <small>Résiliation</small>
                     </a>
                   </li>
@@ -93,38 +120,62 @@
 
                 <div class="tab-content">
                   <t t-call="commown_self_troubleshooting.step-contract-choice">
-                    <t t-set="contracts"
-                       t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"/>
+                    <t
+                                            t-set="contracts"
+                                            t-value="env.user.partner_id.self_troubleshooting_contracts('contract-termination-page')"
+                                        />
                   </t>
 
-                  <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                  <div
+                                        id="step-1"
+                                        class="tab-pane"
+                                        role="tabpanel"
+                                        aria-labelledby="step-1"
+                                    >
                     <h2>
                       Je suis toujours engagé
                     </h2>
                     <p class="alert alert-danger" id="contract_details">
-                      La fin de la période d'engagement du contrat que vous avez sélectionné (<b id="contract_name"></b>)
-                      est : <b id="contract_commitment_end_date"></b>.
+                      La fin de la période d'engagement du contrat que vous avez sélectionné (<b
+                                                id="contract_name"
+                                            />)
+                      est : <b id="contract_commitment_end_date" />.
                     </p>
 
-                    <p>À ce stade de votre contrat, nous vous invitons à attendre la fin de votre période d'engagement pour
+                    <p
+                                        >À ce stade de votre contrat, nous vous invitons à attendre la fin de votre période d'engagement pour
                        soumettre votre demande (retrouvez tous les détails utiles sur
-                       <a href="https://forum.commown.coop/t/comment-faire-pour-transferer-mon-contrat-avant-la-fin-de-mon-engagement/2528" target="_blank">
-                         cette page <i class="fas fa-external-link-alt"></i>
+                       <a
+                                                href="https://forum.commown.coop/t/comment-faire-pour-transferer-mon-contrat-avant-la-fin-de-mon-engagement/2528"
+                                                target="_blank"
+                                            >
+                         cette page <i class="fas fa-external-link-alt" />
                        </a>
                        de notre wiki).
                     </p>
 
-                    <p>Cependant, vous pouvez aussi opter pour une des deux alternatives suivantes :</p>
+                    <p
+                                        >Cependant, vous pouvez aussi opter pour une des deux alternatives suivantes :</p>
                     <ul>
-                      <li>régler les mensualités restantes jusqu'à la fin de la période d'engagement</li>
+                      <li
+                                            >régler les mensualités restantes jusqu'à la fin de la période d'engagement</li>
                       <li>ou effectuer un transfert de votre contrat à un tiers.</li>
                     </ul>
                     <br />
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="form-group">
-                        <select class="form-control" name="contract_termination" id="contract_termination" required="required">
-                          <option disabled="disabled" selected="1" value="">-- Choisir une réponse --</option>
+                        <select
+                                                    class="form-control"
+                                                    name="contract_termination"
+                                                    id="contract_termination"
+                                                    required="required"
+                                                >
+                          <option
+                                                        disabled="disabled"
+                                                        selected="1"
+                                                        value=""
+                                                    >-- Choisir une réponse --</option>
                           <option value="pay">Régler les mensualités restantes</option>
                           <option value="no">Transférer mon contrat</option>
                         </select>
@@ -132,65 +183,107 @@
                     </div>
                   </div>
 
-                  <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                  <div
+                                        id="step-2"
+                                        class="tab-pane"
+                                        role="tabpanel"
+                                        aria-labelledby="step-2"
+                                    >
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
                     </h2>
                     <p>
-                      En appuyant sur <b>"Envoyer la demande"</b>, vous acceptez de régler
+                      En appuyant sur <b
+                                            >"Envoyer la demande"</b>, vous acceptez de régler
                       l'entièreté des mensualités restantes à payer jusqu'à la fin de
                       la période d'engagement de votre contrat. Le règlement s'effectuera
                       par prélèvement automatique, puis notre équipe de gestion reviendra
                       vers vous concernant les modalités de restitution de l'appareil.
                     </p>
-                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+                    <p
+                                            class="text-danger"
+                                        >NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
                     <div id="form-step-2" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label for="more_info_step_2">
                           Informations complémentaires (si besoin) :
                         </label>
-                        <textarea class="form-control" rows="3" id="more_info_step_2" name="more_info" />
+                        <textarea
+                                                    class="form-control"
+                                                    rows="3"
+                                                    id="more_info_step_2"
+                                                    name="more_info"
+                                                />
                       </div>
 
                       <div class="form-group">
-                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                        <button
+                                                    type="submit"
+                                                    class="btn btn-primary"
+                                                    name="action"
+                                                >Envoyer la demande</button>
                       </div>
                     </div>
                   </div>
 
-                  <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                  <div
+                                        id="step-3"
+                                        class="tab-pane"
+                                        role="tabpanel"
+                                        aria-labelledby="step-3"
+                                    >
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
                     </h2>
                     <p>
                       Toutes les informations relatives au transfert de votre contrat sont décrites sur
-                      <a href="https://forum.commown.coop/t/comment-faire-pour-transferer-mon-contrat-avant-la-fin-de-mon-engagement/2528" target="_blank">
-                        cette page <i class="fas fa-external-link-alt"></i>
+                      <a
+                                                href="https://forum.commown.coop/t/comment-faire-pour-transferer-mon-contrat-avant-la-fin-de-mon-engagement/2528"
+                                                target="_blank"
+                                            >
+                        cette page <i class="fas fa-external-link-alt" />
                       </a>
                       de notre wiki.
                       Une fois celui-ci consulté, nous vous invitons à remplir ce champ de texte ci-dessous pour nous exprimer
                       l'identité (adresse mail, nom, prénom...) de votre repreneur s'il est connu.
                     </p>
-                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+                    <p
+                                            class="text-danger"
+                                        >NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
                     <div id="form-step-3" role="form" data-toggle="validator">
                       <div class="form-group">
                         <label for="more_info_step_3">
                           Merci de renseigner toutes les informations possibles :
                         </label>
-                        <textarea class="form-control" rows="3" id="more_info_step_3" name="more_info" required="required" />
+                        <textarea
+                                                    class="form-control"
+                                                    rows="3"
+                                                    id="more_info_step_3"
+                                                    name="more_info"
+                                                    required="required"
+                                                />
                       </div>
 
                       <div class="form-group">
-                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                        <button
+                                                    type="submit"
+                                                    class="btn btn-primary"
+                                                    name="action"
+                                                >Envoyer la demande</button>
                       </div>
                     </div>
                   </div>
 
-                  <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                  <div
+                                        id="step-4"
+                                        class="tab-pane"
+                                        role="tabpanel"
+                                        aria-labelledby="step-4"
+                                    >
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
@@ -200,16 +293,24 @@
                       sera envoyée à notre équipe de gestion qui reviendra vers vous par mail concernant
                       les modalités de restitution de l'appareil.
                     </p>
-                    <p class="text-danger">NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
+                    <p
+                                            class="text-danger"
+                                        >NB : merci de n'effectuer cette procédure qu'une seule fois par contrat / appareil</p>
 
                     <div id="form-step-4" role="form" data-toggle="validator">
-                      <input type="hidden" name="contract_termination" value="termination"/>
+                      <input
+                                                type="hidden"
+                                                name="contract_termination"
+                                                value="termination"
+                                            />
 
                       <p>Vous n'êtes plus engagé.e, et vous pouvez donc :</p>
                       <ul>
                         <li>
                           commander un nouveau modèle (directement sur notre
-                          <a href="/shop" target="_blank">magasin en ligne <i class="fas fa-external-link-alt"></i></a>,
+                          <a href="/shop" target="_blank">magasin en ligne <i
+                                                            class="fas fa-external-link-alt"
+                                                        /></a>,
                           ce qui vous laissera le temps d'effectuer le transfert de données entre vos 2 appareils)
                         </li>
                         <li>
@@ -222,11 +323,21 @@
                           Nous vous invitons à nous préciser les raisons qui vous y incitent à faire ce choix, ce feedback étant
                           très important pour nous dans le cadre de notre démarche d'amélioration continue :
                         </label>
-                        <textarea class="form-control" rows="3" id="more_info_step_4" name="more_info" required="required" />
+                        <textarea
+                                                    class="form-control"
+                                                    rows="3"
+                                                    id="more_info_step_4"
+                                                    name="more_info"
+                                                    required="required"
+                                                />
                       </div>
 
                       <div class="form-group">
-                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                        <button
+                                                    type="submit"
+                                                    class="btn btn-primary"
+                                                    name="action"
+                                                >Envoyer la demande</button>
                       </div>
                     </div>
                   </div>
@@ -247,7 +358,9 @@
     <field name="url">/page/self-troubleshoot-contract-termination</field>
     <field name="view_id" ref="contract-termination" />
     <field name="website_meta_title">Vie de mes contrats</field>
-    <field name="website_meta_description">Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</field>
+    <field
+            name="website_meta_description"
+        >Je souhaite changer de modèle ou me renseigner sur les modalités de fin de contrat</field>
   </record>
 
 </odoo>

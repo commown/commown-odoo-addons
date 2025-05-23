@@ -26,11 +26,31 @@
           <div class="bg-white border m-0 p-3 rounded">
             <h1>Demandes Commerciales</h1>
 
-            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+            <form
+                            action="/self-troubleshoot/"
+                            method="post"
+                            accept-charset="utf-8"
+                            id="myForm"
+                            role="form"
+                        >
 
-              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
-              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+              <input
+                                type="hidden"
+                                name="csrf_token"
+                                t-att-value="request.csrf_token()"
+                            />
+              <input
+                                type="hidden"
+                                name="self-troubleshoot-type"
+                                id="self-troubleshoot-type"
+                                t-att-value="issue_title"
+                            />
+              <input
+                                type="hidden"
+                                name="issue-description-template"
+                                id="issue-description-template"
+                                t-att-value="issue_description_template"
+                            />
 
               <div id="smartwizard">
                 <ul class="nav">
@@ -43,7 +63,12 @@
                 </ul>
 
                 <div class="tab-content">
-                  <div id="step-0" class="tab-pane" role="tabpanel" aria-labelledby="step-0">
+                  <div
+                                        id="step-0"
+                                        class="tab-pane"
+                                        role="tabpanel"
+                                        aria-labelledby="step-0"
+                                    >
                     <h2>
                       <i class="fas fa-hands-helping" />
                       Contacter un humain
@@ -59,13 +84,29 @@
                     <div id="form-step-0" role="form" data-toggle="validator">
 
                       <div class="form-group">
-                        <label for="more_info_step_0">En quoi pouvons-nous vous aider ?</label>
-                        <textarea class="form-control" rows="3" required="required" id="more_info_step_0" name="more_info" />
+                        <label
+                                                    for="more_info_step_0"
+                                                >En quoi pouvons-nous vous aider ?</label>
+                        <textarea
+                                                    class="form-control"
+                                                    rows="3"
+                                                    required="required"
+                                                    id="more_info_step_0"
+                                                    name="more_info"
+                                                />
                       </div>
 
                       <div class="form-group">
-                        <input type="hidden" name="project_ref" value="commown_self_troubleshooting.commercial_project" />
-                        <button type="submit" class="btn btn-primary" name="action">Envoyer la demande</button>
+                        <input
+                                                    type="hidden"
+                                                    name="project_ref"
+                                                    value="commown_self_troubleshooting.commercial_project"
+                                                />
+                        <button
+                                                    type="submit"
+                                                    class="btn btn-primary"
+                                                    name="action"
+                                                >Envoyer la demande</button>
                       </div>
 
                     </div>
@@ -87,7 +128,9 @@
     <field name="url">/page/self-troubleshoot-commercial</field>
     <field name="view_id" ref="commercial" />
     <field name="website_meta_title">Demandes Commerciales</field>
-    <field name="website_meta_description">J'ai besoin de conseil/information pour une commande en cours, un appareil ou un service</field>
+    <field
+            name="website_meta_description"
+        >J'ai besoin de conseil/information pour une commande en cours, un appareil ou un service</field>
   </record>
 
 </odoo>

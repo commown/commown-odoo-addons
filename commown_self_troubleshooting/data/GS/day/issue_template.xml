@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <record id="issue-description-gs" model="ir.ui.view">
@@ -20,8 +20,12 @@
 
         <p t-elif="action=='inform'">
           Il ressort que
-          <t t-if="connection_solved=='yes'">le problème provenait d'un mauvais branchement des connecteurs USB-C et j'ai donc pu résoudre le problème.</t>
-          <t t-if="branchement_solved=='yes'"> le problème provenait d'un mauvais branchement du câble jack et j'ai donc pu résoudre le problème.</t>
+          <t
+                        t-if="connection_solved=='yes'"
+                    >le problème provenait d'un mauvais branchement des connecteurs USB-C et j'ai donc pu résoudre le problème.</t>
+          <t
+                        t-if="branchement_solved=='yes'"
+                    > le problème provenait d'un mauvais branchement du câble jack et j'ai donc pu résoudre le problème.</t>
         </p>
 
         <t t-call="commown_self_troubleshooting.more_customer_info" />

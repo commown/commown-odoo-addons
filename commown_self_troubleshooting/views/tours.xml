@@ -1,7 +1,10 @@
 <odoo>
   <template id="assets_common" name="tour" inherit_id="web.assets_common">
     <xpath expr="." position="inside">
-      <script type="text/javascript" src="/commown_self_troubleshooting/static/src/self_troubleshooting_tour.js"></script>
+      <script
+                type="text/javascript"
+                src="/commown_self_troubleshooting/static/src/self_troubleshooting_tour.js"
+            />
     </xpath>
   </template>
 </odoo>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <record id="serenity" model="ir.ui.view">
@@ -24,14 +24,38 @@
             <h1>Besoin d'assistance : Option Sérénité - Être appelé</h1>
             <h2>Je rencontre un incident qui nécessite qu'on m'appelle</h2>
 
-            <form action="/self-troubleshoot/" method="post" accept-charset="utf-8" id="myForm" role="form">
+            <form
+                            action="/self-troubleshoot/"
+                            method="post"
+                            accept-charset="utf-8"
+                            id="myForm"
+                            role="form"
+                        >
 
-              <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-              <input type="hidden" name="project_ref" value="commown_self_troubleshooting.support_project" />
-              <input type="hidden" name="self-troubleshoot-type" id="self-troubleshoot-type" t-att-value="issue_title" />
+              <input
+                                type="hidden"
+                                name="csrf_token"
+                                t-att-value="request.csrf_token()"
+                            />
+              <input
+                                type="hidden"
+                                name="project_ref"
+                                value="commown_self_troubleshooting.support_project"
+                            />
+              <input
+                                type="hidden"
+                                name="self-troubleshoot-type"
+                                id="self-troubleshoot-type"
+                                t-att-value="issue_title"
+                            />
               <input type="hidden" name="tags" id="tags" t-att-value="tag_names" />
               <input type="hidden" name="priority" id="priority" value="2" />
-              <input type="hidden" name="issue-description-template" id="issue-description-template" t-att-value="issue_description_template" />
+              <input
+                                type="hidden"
+                                name="issue-description-template"
+                                id="issue-description-template"
+                                t-att-value="issue_description_template"
+                            />
 
               <div id="smartwizard">
                 <ul class="nav">
@@ -53,11 +77,18 @@
 
                 <div class="tab-content">
                   <t t-call="commown_self_troubleshooting.step-contract-choice">
-                      <t t-set="contracts"
-                         t-value="env.user.partner_id.self_troubleshooting_contracts('serenity-page')"/>
+                      <t
+                                            t-set="contracts"
+                                            t-value="env.user.partner_id.self_troubleshooting_contracts('serenity-page')"
+                                        />
                   </t>
 
-                  <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                  <div
+                                        id="step-1"
+                                        class="tab-pane"
+                                        role="tabpanel"
+                                        aria-labelledby="step-1"
+                                    >
                     <h2>
                       <i class="fas fa-check-double" />
                       Confirmation de votre demande
@@ -66,7 +97,8 @@
                       En validant ce formulaire, une demande d'assistance prioritaire
                       sera envoyée à notre équipe support qui vous appellera dès que possible.
                     </p>
-                    <p class="text-danger">NB : nous allons vous appeler <b>en numéro masqué</b> dans les heures suivant la demande (jours ouvrés uniquement).</p>
+                    <p class="text-danger">NB : nous allons vous appeler <b
+                                            >en numéro masqué</b> dans les heures suivant la demande (jours ouvrés uniquement).</p>
 
                     <div id="form-step-1" role="form" data-toggle="validator">
                       <div class="row">
@@ -75,9 +107,15 @@
                             <i class="fas fa-phone-alt" />
                             N° de téléphone pour vous joindre
                           </label>
-                          <input class="form-control" name="phone" id="phone" type="tel" required="required"
-                                  t-att-value="env.user.partner_id.mobile or env.user.partner_id.phone or ''"
-                                  data-required-error="Saisissez un numéro de téléphone pour l'appel." />
+                          <input
+                                                        class="form-control"
+                                                        name="phone"
+                                                        id="phone"
+                                                        type="tel"
+                                                        required="required"
+                                                        t-att-value="env.user.partner_id.mobile or env.user.partner_id.phone or ''"
+                                                        data-required-error="Saisissez un numéro de téléphone pour l'appel."
+                                                    />
                           <div class="help-block with-errors" />
                         </div>
                       </div>
@@ -85,12 +123,25 @@
                       <div class="form-group">
                         <label for="more_info_step_1">Décrivez-nous l'incident rencontré
                           (facultatif, mais permet une prise en charge optimale) :</label>
-                        <textarea class="form-control" rows="3" id="more_info_step_1" name="more_info" />
+                        <textarea
+                                                    class="form-control"
+                                                    rows="3"
+                                                    id="more_info_step_1"
+                                                    name="more_info"
+                                                />
                       </div>
 
                       <div class="form-group">
-                        <input type="hidden" name="stage_ref" value="commown_self_troubleshooting.stage_callback" />
-                        <button type="submit" class="btn btn-primary" name="action">Être appelé</button>
+                        <input
+                                                    type="hidden"
+                                                    name="stage_ref"
+                                                    value="commown_self_troubleshooting.stage_callback"
+                                                />
+                        <button
+                                                    type="submit"
+                                                    class="btn btn-primary"
+                                                    name="action"
+                                                >Être appelé</button>
                       </div>
                     </div>
                   </div>

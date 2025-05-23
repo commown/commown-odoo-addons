@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <record id="issue-description-fp2-micro" model="ir.ui.view">
@@ -13,7 +13,7 @@
         <p t-if="screwdriver=='yes'">
           J'ai également besoin d'un prêt de tournevis.
         </p>
-        <br/>
+        <br />
         <p t-if="action=='wait-simcard'">
           je vous informe que je vais tester avec une autre carte SIM.
         </p>
