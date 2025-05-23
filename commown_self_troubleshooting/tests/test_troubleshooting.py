@@ -1,7 +1,7 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests import TransactionCase
 
 
-class SelfTroubleshootingItemTC(SavepointCase):
+class SelfTroubleshootingItemTC(TransactionCase):
     def test_name_get(self):
         item_cat = self.env.ref("commown_self_troubleshooting.generic-issue-ts-item")
         item_link = self.env["commown_self_troubleshooting.item"].create(
