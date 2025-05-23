@@ -7,7 +7,7 @@
     <field name="auto_delete" eval="True" />
     <field
             name="body_html"
-        ><![CDATA[<p>${object.env.context.get('late_pickings')} late pickings</p>]]></field>
+        ><![CDATA[<p><t t-out="object.env.context.get('late_pickings')"/> late pickings</p>]]></field>
   </record>
 
 </odoo>
