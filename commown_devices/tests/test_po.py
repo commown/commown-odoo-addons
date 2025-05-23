@@ -24,7 +24,7 @@ class PurchaseOrderTC(TransactionCase):
 
         picking.move_line_ids.qty_done = picking.move_line_ids.product_qty
         picking.move_line_ids.lot_name = "Lot 1"
-        picking.action_done()
+        picking.button_validate()
 
     def test_default(self):
         self.assertEqual(

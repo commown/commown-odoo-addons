@@ -48,8 +48,8 @@ class StockPicking(models.Model):
                 late_pickings=late_pickings
             ).message_post_with_template(template.id)
 
-    def action_done(self):
-        res = super().action_done()
+    def button_validate(self):
+        res = super().button_validate()
         grade = self.purchase_id.default_product_grade
         if grade:
             self.move_line_ids.mapped("lot_id").update({"grade_id": grade.id})
