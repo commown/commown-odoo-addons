@@ -2,22 +2,22 @@ from .common import PaymentTokenUniquifyTC
 
 
 class PaymentTokenTC(PaymentTokenUniquifyTC):
-    def setUp(self):
-        super().setUp()
+    def test_action_deactivate(self):
+        "Obsolete tokens must become inactive when this action is used"
+        # Configure provider, and trigger obsolescence when no tokens are set
+        # (Mainly for coverage purposes)
+        self._trigger_obsolescence(
+            "payment_token_uniquify.obsolescence_action_deactivate"
+        )
 
+        # Create tokens for workers 1 and 2,
+        # then sign them to trigger obsolesence :
         self.token1 = self.new_payment_token(self.company_s1_w1)
         self.token2 = self.new_payment_token(self.company_s1_w2)
 
-        self.provider = self.env.ref("payment.payment_provider_transfer")
-
-    def test_action_deactivate(self):
-        "Obsolete tokens must become inactive when this action is used"
-
-        # Test pre-requisite
         self.assertTrue(self.company_s1_w1.payment_token_id)
         self.assertTrue(self.company_s1_w2.payment_token_id)
 
-        # Configure provider and sign new token to trigger obsolescence:
         self._trigger_obsolescence(
             "payment_token_uniquify.obsolescence_action_deactivate"
         )
