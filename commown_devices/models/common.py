@@ -46,6 +46,8 @@ def find_products_orig_location(env, products, stocks=None, compute_summary=Fals
         return q.quantity - q.reserved_quantity >= to_send
 
     for product, quantity_to_send in products.items():
+        if getattr(product, "_origin", None):
+            product = product._origin
         enough_in_quant = partial(enough_to_send, to_send=quantity_to_send)
         quants = env["stock.quant"]
         for stock in stocks:
