@@ -22,7 +22,7 @@ class PurchaseOrderTC(TransactionCase):
         picking = self.po.picking_ids
         picking.action_assign()
 
-        picking.move_line_ids.qty_done = picking.move_line_ids.product_qty
+        picking.move_line_ids.qty_done = picking.move_line_ids.reserved_qty
         picking.move_line_ids.lot_name = "Lot 1"
         picking.button_validate()
 
