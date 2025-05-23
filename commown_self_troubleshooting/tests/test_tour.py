@@ -4,7 +4,7 @@ from contextlib import contextmanager
 import websocket
 
 import odoo.tests
-from odoo.tests.common import ChromeBrowser
+from odoo.tests.common import ChromeBrowser, HttpCase
 
 from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
 
@@ -35,7 +35,7 @@ class RunTourMixin:
 
 
 @odoo.tests.tagged("post_install", "-at_install")
-class TestPageTC(RunTourMixin, odoo.tests.HttpCase):
+class TestPageTC(RunTourMixin, HttpCase):
     "Base class to ease tour test writting"
 
     contract_name = None  # Override me!
