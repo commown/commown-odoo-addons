@@ -1,10 +1,8 @@
-import datetime
-
 from dateutil import relativedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools.safe_eval import datetime, safe_eval
 
 from .common import _force_picking_date
 

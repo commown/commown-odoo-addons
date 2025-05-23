@@ -50,10 +50,10 @@ class ProductServiceStorableConfig(models.Model):
         value_ids = self.service_tmpl_id.mapped("attribute_line_ids.value_ids").ids
         return {"domain": {"attribute_value_ids": [("id", "in", value_ids)]}}
 
-    @api.model
+    @api.model_create_multi
     def create(self, values):
         res = super().create(values)
-        res.service_tmpl_id.product_variant_ids._set_storable_variants()
+        res.mapped("service_tmpl_id.product_variant_ids")._set_storable_variants()
         return res
 
     def write(self, values):
