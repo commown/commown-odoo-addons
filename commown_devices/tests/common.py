@@ -1,4 +1,5 @@
 import json
+from datetime import date
 
 from lxml import etree
 
@@ -421,4 +422,42 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
         wizard_name = "%s.to.customer.wizard" % related_entity._name
         return self.prepare_ui(
             wizard_name, related_entity, relation_field, user_choices=user_choices
+        )
+
+
+class LinkWizardTC(DeviceAsAServiceTC):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.supplier = cls.env.ref("base.res_partner_3")
+        cls.previous_po_of_supplier = cls.env["purchase.order"].search(
+            [
+                (
+                    "partner_id.commercial_partner_id",
+                    "=",
+                    cls.supplier.commercial_partner_id.id,
+                )
+            ]
+        )
+
+        cls.fp = cls.env.ref("product_rental.prod_fp")
+        cls.pc1 = cls.env.ref("product_rental.prod_pc_i5")
+        cls.pc2 = cls.env.ref("product_rental.prod_pc_i7")
+
+        date_po = date(2021, 1, 1)
+
+        oline1 = cls._oline(cls.fp, product_qty=3, date_planned=date_po)
+        oline2 = cls._oline(cls.pc1, product_qty=5, date_planned=date_po)
+        oline3 = cls._oline(cls.pc2, product_qty=8, date_planned=date_po)
+        cls.po = cls.env["purchase.order"].create(
+            {
+                "partner_id": cls.supplier.id,
+                "order_line": [oline1, oline2, oline3],
+            }
+        )
+
+    def prepare_wizard(self, base_name, rel_entity, relation_field, user_choices=None):
+        wizard_name = "%s.link.wizard" % base_name
+        return self.prepare_ui(
+            wizard_name, rel_entity, relation_field, user_choices=user_choices
         )

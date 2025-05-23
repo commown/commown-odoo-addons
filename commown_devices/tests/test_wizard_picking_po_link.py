@@ -1,39 +1,12 @@
-from datetime import date, datetime
+from datetime import datetime
 
-from .common import DeviceAsAServiceTC
+from .common import LinkWizardTC
 
 
-class PickingPoLinkWizardTC(DeviceAsAServiceTC):
+class PickingPoLinkWizardTC(LinkWizardTC):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        supplier = cls.env.ref("base.res_partner_3")
-        cls.previous_po_of_supplier = cls.env["purchase.order"].search(
-            [
-                (
-                    "partner_id.commercial_partner_id",
-                    "=",
-                    supplier.commercial_partner_id.id,
-                )
-            ]
-        )
-
-        cls.fp = cls.env.ref("product_rental.prod_fp")
-        cls.pc1 = cls.env.ref("product_rental.prod_pc_i5")
-        cls.pc2 = cls.env.ref("product_rental.prod_pc_i7")
-
-        date_po = date(2021, 1, 1)
-
-        oline1 = cls._oline(cls.fp, product_qty=3, date_planned=date_po)
-        oline2 = cls._oline(cls.pc1, product_qty=5, date_planned=date_po)
-        oline3 = cls._oline(cls.pc2, product_qty=8, date_planned=date_po)
-        cls.po = cls.env["purchase.order"].create(
-            {
-                "partner_id": supplier.id,
-                "order_line": [oline1, oline2, oline3],
-            }
-        )
-
         picking_type = cls.env.ref("stock.picking_type_in")
         supplier_location = cls.env.ref("stock.stock_location_suppliers")
         stock_location = cls.env.ref("stock.stock_location_stock")
@@ -43,7 +16,7 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
         cls.picking = cls.env["stock.picking"].create(
             {
                 "move_type": "direct",
-                "partner_id": supplier.id,
+                "partner_id": cls.supplier.id,
                 "picking_type_id": picking_type.id,
                 "location_id": supplier_location.id,
                 "location_dest_id": stock_location.id,
@@ -71,12 +44,6 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
         """Filter the recordset from previously existing pos"""
         return po_ids - self.previous_po_of_supplier
 
-    def prepare_wizard(self, related_entity, relation_field, user_choices=None):
-        wizard_name = "picking.po.link.wizard"
-        return self.prepare_ui(
-            wizard_name, related_entity, relation_field, user_choices=user_choices
-        )
-
     def create_wizard(self):
         return (
             self.env["picking.po.link.wizard"]
@@ -92,13 +59,17 @@ class PickingPoLinkWizardTC(DeviceAsAServiceTC):
         self.assertEqual(wizard.link_line_ids.mapped("move_id"), self.picking.move_ids)
 
     def test_po_id_domain(self):
-        default, possibilities = self.prepare_wizard(self.picking, "picking_id")
+        default, possibilities = self.prepare_wizard(
+            "picking.po", self.picking, "picking_id"
+        )
         self.assertEqual(
             self._filter_previous_orders(possibilities["po_id"]),
             self.po,
         )
         self.picking.partner_id = False
-        default, possibilities = self.prepare_wizard(self.picking, "picking_id")
+        default, possibilities = self.prepare_wizard(
+            "picking.po", self.picking, "picking_id"
+        )
         self.assertEqual(
             possibilities["po_id"],
             self.env["purchase.order"].search([]),

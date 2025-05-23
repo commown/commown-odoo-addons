@@ -1,26 +1,10 @@
-from datetime import date
-
-from .common import DeviceAsAServiceTC
+from .common import LinkWizardTC
 
 
-class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
+class POInvoiceLinkWizardTC(LinkWizardTC):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        supplier = cls.env.ref("base.res_partner_3")
-        cls.fp = cls.env.ref("product_rental.prod_fp")
-        cls.pc1 = cls.env.ref("product_rental.prod_pc_i5")
-        cls.pc2 = cls.env.ref("product_rental.prod_pc_i7")
-        oline1 = cls._oline(cls.fp, product_qty=3, date_planned=date(2021, 1, 1))
-        oline2 = cls._oline(cls.pc1, product_qty=5, date_planned=date(2021, 1, 1))
-        oline3 = cls._oline(cls.pc2, product_qty=8, date_planned=date(2021, 1, 1))
-        cls.po = cls.env["purchase.order"].create(
-            {
-                "partner_id": supplier.id,
-                "order_line": [oline1, oline2, oline3],
-            }
-        )
-
         supplier_account = cls.env["account.account"].create(
             {
                 "code": "cust_acc",
@@ -33,18 +17,12 @@ class POInvoiceLinkWizardTC(DeviceAsAServiceTC):
         cls.invoice = cls.env["account.move"].create(
             {
                 "move_type": "in_invoice",
-                "partner_id": supplier.id,
+                "partner_id": cls.supplier.id,
                 "line_ids": [
                     (0, 0, dict(base_inv_line, product_id=p.id, name=p.name))
                     for p in [cls.fp, cls.pc1, cls.pc2]
                 ],
             }
-        )
-
-    def prepare_wizard(self, related_entity, relation_field, user_choices=None):
-        wizard_name = "po.invoice.link.wizard"
-        return self.prepare_ui(
-            wizard_name, related_entity, relation_field, user_choices=user_choices
         )
 
     def create_wizard(self):
