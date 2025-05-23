@@ -6,10 +6,7 @@ class PaymentTokenTC(PaymentTokenUniquifyTC):
         super().setUp()
 
         self.token1 = self.new_payment_token(self.company_s1_w1)
-        self.company_s1_w1.payment_token_id = self.token1.id
-
         self.token2 = self.new_payment_token(self.company_s1_w2)
-        self.company_s1_w2.payment_token_id = self.token2.id
 
         self.provider = self.env.ref("payment.payment_provider_transfer")
 
