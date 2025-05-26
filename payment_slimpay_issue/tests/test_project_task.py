@@ -333,6 +333,28 @@ class ProjectTC(TransactionCase):
 
         return invoice, invoice.transaction_ids, payment
 
+    def test_slimpay_fetch_all_issue_pages(self):
+        "Check that when there are several issue pages all are fetched at once"
+
+        url = self.slimpay.slimpay_api_url + "/search-payment-issues?page=%s"
+        fetch_func = self.env["project.task"]._slimpay_payment_issue_fetch
+
+        issues_page0 = [fake_issue_doc(id="i%d" % i) for i in range(5)]
+        issues_page1 = [fake_issue_doc(id="i%d" % i) for i in range(5, 10)]
+
+        with requests_mock.Mocker() as mocker:
+            self._mock_slimpay_base(mocker)
+            client = self.slimpay.slimpay_client()
+
+            doc1 = {"_embedded": {"paymentIssues": issues_page0}, "next": "nomatter"}
+            doc2 = {"_embedded": {"paymentIssues": issues_page1}}
+            mocker.get(url % "0", json=doc1)
+            mocker.get(url % "1", json=doc2)
+
+            issue_docs = list(fetch_func(client))
+
+        self.assertEqual([d["id"] for d in issue_docs], ["i%d" % i for i in range(10)])
+
     def test_cron_first_issue(self):
         """First payment issue:
         - payment issue 1 cannot be attributed to an odoo
