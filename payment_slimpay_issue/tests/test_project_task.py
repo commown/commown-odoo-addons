@@ -368,7 +368,7 @@ class ProjectTC(TransactionCase):
 
         mocker = self._execute_cron(
             [
-                fake_issue_doc(id="i1"),
+                fake_issue_doc(id="i1", subscriber_ref=self.partner.id),
                 fake_issue_doc(
                     id="i2", payment_ref="SDD-EXE-0000", subscriber_ref=self.partner.id
                 ),
@@ -381,6 +381,9 @@ class ProjectTC(TransactionCase):
         task1, task2 = tasks
         self.assertIn("Slimpay Id: i1", task1.description)
         self.assertIn("Slimpay Id: i2", task2.description)
+
+        self.assertEqual(task1.partner_id, self.partner)
+        self.assertEqual(task2.partner_id, self.partner)
 
         self.assertEqual(task1.invoice_unpaid_count, 0)
         self.assertEqual(task2.invoice_unpaid_count, 1)
