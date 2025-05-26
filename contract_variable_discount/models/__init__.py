@@ -1,3 +1,3 @@
-from . import account_invoice_line
+from . import account_move_line
 from . import contract
 from . import discount

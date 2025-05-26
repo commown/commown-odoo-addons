@@ -1,8 +1,8 @@
 from odoo import fields, models
 
 
-class AccountInvoiceLine(models.Model):
-    _inherit = "account.invoice.line"
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
 
     applied_discount_template_line_ids = fields.Many2many(
         comodel_name="contract.template.discount.line",
