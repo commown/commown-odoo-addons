@@ -356,9 +356,9 @@ class ProjectTask(models.Model):
             invoice = task.invoice_id
             partner = invoice.partner_id
 
-            payments = invoice.payment_ids.filtered(lambda p: p.state == "posted")
-            if payments:
-                token = payments.sorted("id")[-1].partner_id.payment_token_id
+            txs = invoice.transaction_ids
+            if txs and (last_tx := txs.sorted("id")[-1]).token_id.active:
+                token = last_tx.token_id
             else:
                 token = partner.payment_token_id
 

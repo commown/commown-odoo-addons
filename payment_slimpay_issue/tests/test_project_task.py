@@ -575,16 +575,35 @@ class ProjectTC(TransactionCase):
         self._simulate_wait(task, days=8, minutes=1)
         self.assertInStage(task, "stage_issue_fixed")
 
-    def test_retry_payment_error_no_token(self):
-        # Create a task, move it to the wait stage and open the invoice
-        # to prepare the payment retry:
+    def _prepare_retry_payment(self):
         ref = self.env.ref
         task = self._create_odoo_task()
         task.stage_id = ref("payment_slimpay_issue.stage_warn_partner_and_wait").id
         self.invoice.line_ids.remove_move_reconcile()
+        return task
 
-        # Now remove the payment token and launch the payment retry:
-        self.partner.payment_token_id = False
+    def test_retry_payment_fallback_to_partner_token(self):
+        "When retrying payment partner's token is used if last tx token cannot be used"
+        task = self._prepare_retry_payment()
+
+        # Now remove the past transactions (last transaction token is otherwise reused)
+        # and partner's token, then launch the payment retry:
+        task.invoice_id.transaction_ids.unlink()
+
+        job_func = task._slimpay_payment_issue_retry_payment
+        with self.mocked_slimpay_payment() as mocker:
+            self._simulate_wait(task, days=6, check_job_function=job_func)
+
+        self.assertEqual(len(self._action_calls(mocker, "create-payins")), 1)
+
+    def test_retry_payment_error_no_tx_nor_partner_token(self):
+        "An exception is raised when no suitable token is found to retry payment"
+        task = self._prepare_retry_payment()
+
+        # Now remove the past transactions (last transaction token is otherwise reused)
+        # and partner's token, then launch the payment retry:
+        task.invoice_id.transaction_ids.unlink()
+        task.invoice_id.partner_id.payment_token_id = False
 
         job_func = task._slimpay_payment_issue_retry_payment
         with self.assertRaises(UserError) as err:
