@@ -601,6 +601,26 @@ class ProjectTC(TransactionCase):
         )
         self.assertEqual(new_fee_invoices.payment_state, "not_paid")
 
+    def test_without_bank_fees_product(self):
+        """When the bank fees product is not present, no crash occurs...
+
+        ...and no fees invoice is emitted
+        """
+        self.env.ref("payment_slimpay_issue.bank_supplier_fees_product").unlink()
+
+        fee_invoices_before = self._slimpay_supplier_invoices()
+        self._execute_cron(
+            [
+                fake_issue_doc(
+                    id="i1",
+                    payment_ref="SDD-EXE-0000",
+                    subscriber_ref=self.partner.id,
+                    amount=110,
+                ),
+            ]
+        )
+        self.assertEqual(self._slimpay_supplier_invoices(), fee_invoices_before)
+
     def test_functional_3_trials(self):
         fr = self.env.ref("base.fr")
         self.partner.update({"country_id": fr.id, "phone": "+33747397654"})
