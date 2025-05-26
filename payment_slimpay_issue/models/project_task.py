@@ -402,7 +402,7 @@ class ProjectTask(models.Model):
             if code in SLIMPAY_ERROR_CODES:
                 text = _(SLIMPAY_ERROR_CODES[code])
             else:
-                text = _("Unknown reject error")
+                text = _("Unknown reject error: %s") % issue_doc["rejectReason"]
 
             task.message_post(body=msg % {"code": code, "text": text})
 
