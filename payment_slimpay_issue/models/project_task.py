@@ -272,12 +272,18 @@ class ProjectTask(models.Model):
 
     @api.model
     def _slimpay_payment_issue_fees_product(self, fees_name):
-        try:
-            return self.env.ref(
-                "payment_slimpay_issue." "%s_fees_product" % fees_name
-            ).product_variant_id
-        except ValueError:
-            _logger.info("No %s fees product found", fees_name)
+        fees_pt = self.env.ref(
+            "payment_slimpay_issue.%s_fees_product" % fees_name,
+            raise_if_not_found=False,
+        )
+        if not fees_pt:
+            _logger.info(
+                "Task %s: No %s fees product: skipping fees invoice creation",
+                self.id,
+                fees_name.replace("_", " "),
+            )
+            return
+        return fees_pt.product_variant_id
 
     @api.model
     def _slimpay_payment_issue_invoice_fees(self, invoice, fees_name, amount=None):
@@ -323,19 +329,15 @@ class ProjectTask(models.Model):
     def _slimpay_payment_issue_create_supplier_invoice_fees(
         self, reference, date, amount
     ):
+        """Create a supplier invoice for the fees emitted by Slimpay"""
+        product = self._slimpay_payment_issue_fees_product("bank_supplier")
+        if not product:
+            return
+
         slimpay_fees_partner = self.env.ref(
             "payment_slimpay_issue.slimpay_fees_partner"
         )
-        product = self.env.ref(
-            "payment_slimpay_issue.bank_supplier_fees_product"
-        ).product_variant_ids
-        if not product:
-            _logger.info(
-                "Task %s: No bank supplier fees product:"
-                " skipping fees invoice creation",
-                self.id,
-            )
-            return
+
         invoice = self.env["account.move"].create(
             {
                 "move_type": "in_invoice",

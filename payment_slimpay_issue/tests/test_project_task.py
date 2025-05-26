@@ -404,16 +404,24 @@ class ProjectTC(TransactionCase):
 
     def test_cron_third_issue(self):
         """Third payment issue for the `self.invoice` invoice:
+
         - the previously created odoo task must be found and its
           unpaid invoice counter incremented
-        - the invoice must be added a line for payment issue fees
+
+        - We remove the bank fees product in this test to check it
+          does not crash and the fees are not invoices
+
         - no new payment trial must be issued
-        - the task must be moved to a "max trial number reach"
-          column so that the risk team contacts the partner and
-          handles the case manually
+
+        - the task must be moved to a "max trial number reach" column
+          so that the risk team contacts the partner and handles the
+          case manually
+
         """
 
         task = self._create_odoo_task(invoice_unpaid_count=2)
+
+        self.env.ref("payment_slimpay_issue.management_fees_product").unlink()
 
         mocker = self._execute_cron(
             [
@@ -427,10 +435,8 @@ class ProjectTC(TransactionCase):
         self.assertEqual(task.invoice_unpaid_count, 3)
         self.assertEqual(task.invoice_id.payment_state, "not_paid")
         self.assertInStage(task, "stage_max_trials_reached")
-        # We haven't simulated the previous invoice amount raise due
-        # to 2nd payment issue here, so the invoice amount was
-        # incremented with the fees amount only once:
-        self.assertEqual(task.invoice_id.amount_total, 105.0)
+        # No management fees here! (the management product was removed)
+        self.assertEqual(task.invoice_id.amount_total, 100.0)
         self.assertIssuesAcknowledged(mocker, "i3")
         last_msg = task.message_ids[0]
         self.assertIn("max payment trials reached", last_msg.subject)
