@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from datetime import datetime, timedelta
 
 import mock
@@ -194,16 +195,25 @@ class ProjectTC(TransactionCase):
             },
         )
 
-    def _mock_slimpay_payment(self, mocker, mandate, payin):
+    @contextmanager
+    def mocked_slimpay_payment(self, token=None, payin_ref="SDD-EXE-0001"):
+        token = token or self.partner.payment_token_id
+        mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
+
+        payin = {
+            "reference": payin_ref,
+            "state": "accepted",
+            "executionStatus": "toprocess",
+        }
+
         slimpay_url = self.slimpay.slimpay_api_url
-        mocker.get(
-            slimpay_url + "/get-mandates?id=%s" % mandate["id"],
-            json=mandate,
-        )
-        mocker.post(
-            slimpay_url + "/create-payins",
-            json=payin,
-        )
+        mandate_url = slimpay_url + "/get-mandates?id=%s" % mandate["id"]
+
+        with requests_mock.Mocker() as mocker:
+            self._mock_slimpay_base(mocker)
+            mocker.get(mandate_url, json=mandate)
+            mocker.post(slimpay_url + "/create-payins", json=payin)
+            yield mocker
 
     def _mock_slimpay_issues(self, mocker, issues):
         """Mock all necessary slimpay requests for handling given payment issues:
@@ -314,15 +324,7 @@ class ProjectTC(TransactionCase):
             .create({"journal_id": journal.id, "payment_token_id": token.id})
         )
 
-        with requests_mock.Mocker() as mocker:
-            self._mock_slimpay_base(mocker)
-            mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
-            payin = {
-                "reference": "SDD-EXE-%04d" % num,
-                "state": "accepted",
-                "executionStatus": "toprocess",
-            }
-            self._mock_slimpay_payment(mocker, mandate, payin)
+        with self.mocked_slimpay_payment(payin_ref="SDD-EXE-%04d" % num):
             payment = register_payment._create_payments()
 
         self.assertEqual(invoice.payment_state, "paid")
@@ -515,22 +517,9 @@ class ProjectTC(TransactionCase):
         # Prepare to new payment:
         self.invoice.line_ids.remove_move_reconcile()
 
-        token = self.partner.payment_token_id
-
-        with requests_mock.Mocker() as mocker:
-            self._mock_slimpay_base(mocker)
-            mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
-            payin = {
-                "reference": "SDD-EXE-0001",
-                "state": "accepted",
-                "executionStatus": "toprocess",
-            }
-            self._mock_slimpay_payment(mocker, mandate, payin)
-            self._simulate_wait(
-                task,
-                days=6,
-                check_job_function=task._slimpay_payment_issue_retry_payment,
-            )
+        job_func = task._slimpay_payment_issue_retry_payment
+        with self.mocked_slimpay_payment() as mocker:
+            self._simulate_wait(task, days=6, check_job_function=job_func)
 
         self.assertInStage(task, "stage_retry_payment_and_wait")
         self.assertEqual(len(self._action_calls(mocker, "create-payins")), 1)
@@ -549,12 +538,10 @@ class ProjectTC(TransactionCase):
 
         # Now remove the payment token and launch the payment retry:
         self.partner.payment_token_id = False
+
+        job_func = task._slimpay_payment_issue_retry_payment
         with self.assertRaises(UserError) as err:
-            self._simulate_wait(
-                task,
-                days=6,
-                check_job_function=task._slimpay_payment_issue_retry_payment,
-            )
+            self._simulate_wait(task, days=6, check_job_function=job_func)
 
         # Check the expected exception is raised:
         self.assertIn("could not find a payment token!", err.exception.args[0])
@@ -593,22 +580,9 @@ class ProjectTC(TransactionCase):
         last_msg = task.message_ids[0]
         self.assertIn("rejected payment", last_msg.subject)
 
-        token = self.partner.payment_token_id
-
-        with requests_mock.Mocker() as mocker:
-            self._mock_slimpay_base(mocker)
-            mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
-            payin = {
-                "reference": "SDD-EXE-0001",
-                "state": "accepted",
-                "executionStatus": "toprocess",
-            }
-            self._mock_slimpay_payment(mocker, mandate, payin)
-            self._simulate_wait(
-                task,
-                days=6,
-                check_job_function=task._slimpay_payment_issue_retry_payment,
-            )
+        job_func = task._slimpay_payment_issue_retry_payment
+        with self.mocked_slimpay_payment() as mocker:
+            self._simulate_wait(task, days=6, check_job_function=job_func)
 
         self.assertInStage(task, "stage_retry_payment_and_wait")
         self.assertEqual(len(self._action_calls(mocker, "create-payins")), 1)
@@ -662,22 +636,9 @@ class ProjectTC(TransactionCase):
         )
         self.assertEqual(self.invoice.payment_state, "not_paid")
 
-        token = self.partner.payment_token_id
-
-        with requests_mock.Mocker() as mocker:
-            self._mock_slimpay_base(mocker)
-            mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
-            payin = {
-                "reference": "SDD-EXE-0001",
-                "state": "accepted",
-                "executionStatus": "toprocess",
-            }
-            self._mock_slimpay_payment(mocker, mandate, payin)
-            self._simulate_wait(
-                task,
-                days=6,
-                check_job_function=task._slimpay_payment_issue_retry_payment,
-            )
+        job_func = task._slimpay_payment_issue_retry_payment
+        with self.mocked_slimpay_payment() as mocker:
+            self._simulate_wait(task, days=6, check_job_function=job_func)
 
         self.assertInStage(task, "stage_retry_payment_and_wait")
         txs = self.invoice.transaction_ids
@@ -711,20 +672,10 @@ class ProjectTC(TransactionCase):
         self.assertEqual(self.invoice.payment_state, "not_paid")
         self.assertIn("SDD-EXE-0001 - SDD-EXE-0000 ", task.name)
 
-        with requests_mock.Mocker() as mocker:
-            self._mock_slimpay_base(mocker)
-            mandate = {"id": token.provider_ref, "reference": "SLMP0000"}
-            payin = {
-                "reference": "SDD-EXE-0002",
-                "state": "accepted",
-                "executionStatus": "toprocess",
-            }
-            self._mock_slimpay_payment(mocker, mandate, payin)
-            self._simulate_wait(
-                task,
-                days=6,
-                check_job_function=task._slimpay_payment_issue_retry_payment,
-            )
+        job_func = task._slimpay_payment_issue_retry_payment
+        with self.mocked_slimpay_payment(payin_ref="SDD-EXE-0002") as mocker:
+            self._simulate_wait(task, days=6, check_job_function=job_func)
+
         self.assertInStage(task, "stage_retry_payment_and_wait")
         txs = self.invoice.transaction_ids
         self.assertEqual(len(txs), 3)
