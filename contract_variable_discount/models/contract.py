@@ -60,12 +60,14 @@ class ContractLine(models.Model):
         domain='[("contract_id", "=", taken_over_contract_id)]',
     )
 
-    @api.model
-    def _prepare_invoice_line(self, invoice_id=False, invoice_values=False):
+    def _prepare_invoice_line(self):
         "Compute discount and append discount description to invoice line name"
-        vals = super()._prepare_invoice_line(invoice_id, invoice_values)
+        vals = super()._prepare_invoice_line()
 
-        result = self.compute_discount(invoice_values["date_invoice"])
+        dates = self._get_period_to_invoice(
+            self.last_date_invoiced, self.recurring_next_date
+        )
+        result = self.compute_discount(dates[0])
 
         vals["discount"] = result["total"]
         discounts = result["discounts"]
