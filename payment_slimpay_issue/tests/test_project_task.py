@@ -152,7 +152,6 @@ class ProjectTC(TransactionCase):
             prod.property_account_income_id = self.income_account.id
             prod.taxes_id = [(6, 0, tax.ids)]
 
-        # Reset payment reference between tests
         self.invoice, self.transaction, self.payment = self._create_inv_tx_and_payment()
 
         expenses_account = self.env["account.account"].create(
