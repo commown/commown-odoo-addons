@@ -28,7 +28,6 @@ class ContractTemplateLine(models.Model):
         string="Variable discount lines",
         comodel_name="contract.template.discount.line",
         inverse_name="contract_template_line_id",
-        cascade="delete",
         copy=True,
     )
 
