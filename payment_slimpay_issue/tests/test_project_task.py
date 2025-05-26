@@ -710,7 +710,7 @@ class ProjectTC(TransactionCase):
         self.assertInStage(task, "stage_retry_payment_and_wait")
         txs = self.invoice.transaction_ids
         self.assertEqual(len(txs), 2)
-        tx1, tx0 = txs
+        tx0, tx1 = txs.sorted("id")
         self.assertEqual(tx0, self.transaction)
         payins = self._action_calls(mocker, "create-payins")
         self.assertEqual(len(payins), 1)
