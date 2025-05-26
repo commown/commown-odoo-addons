@@ -1,54 +1,37 @@
 from datetime import date
 
 from mock import patch
+from odoo_test_helper import FakeModelLoader
 
-from odoo import fields, models
+from odoo import fields
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
 
-class TestConditionDiscountLine(models.Model):
-    _inherit = "contract.discount.line"
-
-    condition = fields.Selection(selection_add=[("test", "Test")])
-
-    def _compute_condition_test(self, line, date_invoice):
-        "Overriden by a mock"
-
-
 class ContractTC(TestContractBase):
     @classmethod
-    def _init_test_model(cls, model_cls):
-        """Build a model from model_cls in order to test abstract models.
-        Note that this does not actually create a table in the database, so
-        there may be some unidentified edge cases.
-        Args:
-            model_cls (openerp.models.BaseModel): Class of model to initialize
-        Returns:
-            model_cls: Instance
-        """
-        registry = cls.env.registry
-        cr = cls.env.cr
-        inst = model_cls._build_model(registry, cr)
-        model = cls.env[model_cls._inherit].with_context(todo=[])
-        model._prepare_setup()
-        model._setup_base()
-        model._setup_fields()
-        model._setup_complete()
-        model._auto_init()
-        model.init()
-        return inst
-
-    @classmethod
     def setUpClass(cls):
-        super(ContractTC, cls).setUpClass()
-        cls._init_test_model(TestConditionDiscountLine)
+        super().setUpClass()
+
+        # Register the test model:
+        cls.loader = FakeModelLoader(cls.env, cls.__module__)
+        cls.loader.backup_registry()
+
+        from .models import TestConditionDiscountLine
+
+        cls.loader.update_registry((TestConditionDiscountLine,))
+
         # Adjust dates to our test needs (with different contract and line start dates):
         cls.contract.date_start = "2016-02-10"
         cls.contract.contract_line_ids.update(
             {"recurring_next_date": "2016-02-15", "date_start": "2016-02-15"}
         )
         cls.contract.recurring_next_date = "2016-02-29"
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.loader.restore_registry()
+        super().tearDownClass()
 
     def tdiscount(self, ct_line=None, **kwargs):
         kwargs.setdefault("contract_template_line_id", ct_line.id)
@@ -326,6 +309,8 @@ class ContractTC(TestContractBase):
         )
 
     def test_condition_and_description(self):
+        from .models import TestConditionDiscountLine
+
         self.set_cdiscounts(
             self.cdiscount(
                 name="Fix discount after 1 month under condition",
