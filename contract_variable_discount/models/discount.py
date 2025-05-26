@@ -107,7 +107,6 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             and self._condition_ok(contract_line, date)  # execute last, may be slow
         )
 
-    @api.multi
     def compute(self, contract_line, date_invoice):
         "Return the actual discount for given contract line and invoice date"
 
@@ -247,7 +246,6 @@ class ContractDiscountLine(models.Model):
         store=False,
     )
 
-    @api.multi
     @api.depends("contract_line_id.inherited_discount_line_ids")
     def _compute_replace_discount_line_id_domain(self):
         for rec in self:

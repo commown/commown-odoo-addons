@@ -82,7 +82,6 @@ class ContractLine(models.Model):
 
         return vals
 
-    @api.multi
     def compute_discount(self, date_invoice):
         """Compute the discount of current contract line for given invoice date
 
