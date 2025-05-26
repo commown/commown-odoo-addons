@@ -355,6 +355,13 @@ class ProjectTC(TransactionCase):
 
         self.assertEqual([d["id"] for d in issue_docs], ["i%d" % i for i in range(10)])
 
+    def test_no_partner_found(self):
+        "When the partner ref at Slimpay is wrong the task is created without a partner"
+        self._execute_cron([fake_issue_doc(id="i1", subscriber_ref=-1)])
+        tasks = self._project_tasks()
+        self.assertEqual(len(tasks), 1)
+        self.assertFalse(tasks.partner_id)
+
     def test_cron_first_issue(self):
         """First payment issue:
         - payment issue 1 cannot be attributed to an odoo
