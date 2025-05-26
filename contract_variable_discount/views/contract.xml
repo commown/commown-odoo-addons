@@ -3,17 +3,17 @@
   <record id="contract_contract_form_view" model="ir.ui.view">
     <field name="name">Contract form</field>
     <field name="model">contract.contract</field>
-    <field name="inherit_id" ref="contract.contract_contract_form_view"/>
+    <field name="inherit_id" ref="contract.contract_contract_form_view" />
     <field name="arch" type="xml">
       <!-- Remove editable on tree: a big form is needed to edit discount formula -->
-      <xpath expr="//field[@name='contract_line_ids']/tree"
-             position="attributes">
-        <attribute name="editable"></attribute>
+      <xpath expr="//field[@name='contract_line_ids']/tree" position="attributes">
+        <attribute name="editable" />
       </xpath>
 
-      <xpath expr="//field[@name='contract_line_ids']"
-             position="attributes">
-        <attribute name="context">{"default_contract_id": active_id, "default_contract_template_id": contract_template_id}</attribute>
+      <xpath expr="//field[@name='contract_line_ids']" position="attributes">
+        <attribute
+                    name="context"
+                >{"default_contract_id": active_id, "default_contract_template_id": contract_template_id}</attribute>
       </xpath>
 
     </field>
@@ -22,27 +22,31 @@
   <record id="contract_contract_customer_form_view" model="ir.ui.view">
     <field name="name">Contract customer form</field>
     <field name="model">contract.contract</field>
-    <field name="inherit_id" ref="contract.contract_contract_customer_form_view"/>
+    <field name="inherit_id" ref="contract.contract_contract_customer_form_view" />
     <field name="arch" type="xml">
 
       <!-- Add taken_over_contract_id before date_start -->
       <field name="date_start" position="before">
-        <field name="taken_over_contract_id"/>
+        <field name="taken_over_contract_id" />
       </field>
 
       <!-- Hide commitment period computation parameters when contract has a taken over contract  -->
 
       <field name="commitment_period_number" position="attributes">
-        <attribute name="attrs">{'invisible': [('taken_over_contract_id', '!=', False)]}</attribute>
+        <attribute
+                    name="attrs"
+                >{'invisible': [('taken_over_contract_id', '!=', False)]}</attribute>
       </field>
 
       <field name="commitment_period_type" position="attributes">
-        <attribute name="attrs">{'invisible': [('taken_over_contract_id', '!=', False)]}</attribute>
+        <attribute
+                    name="attrs"
+                >{'invisible': [('taken_over_contract_id', '!=', False)]}</attribute>
       </field>
 
       <xpath expr="//field[@name='contract_line_ids']/tree">
         <!-- Needed to propagate contract's value to contract line -->
-        <field name="taken_over_contract_id" invisible="1"/>
+        <field name="taken_over_contract_id" invisible="1" />
       </xpath>
 
     </field>
@@ -51,22 +55,24 @@
   <record id="contract_line_form_view" model="ir.ui.view">
     <field name="name">contract.line form view (in contract_variable_discount)</field>
     <field name="model">contract.line</field>
-    <field name="inherit_id" ref="contract.contract_line_form_view"/>
+    <field name="inherit_id" ref="contract.contract_line_form_view" />
     <field name="arch" type="xml">
 
       <field name="discount" position="after">
-        <field name="contract_template_id" invisible="1"/>
-        <field name="contract_template_line_id"/>
-        <field name="taken_over_contract_id" invisible="1"/>
-        <field name="taken_over_contract_line_id"/>
+        <field name="contract_template_id" invisible="1" />
+        <field name="contract_template_line_id" />
+        <field name="taken_over_contract_id" invisible="1" />
+        <field name="taken_over_contract_line_id" />
       </field>
 
       <group name="note_invoicing_mode" position="before">
         <group name="Variable discount">
-          <field name="inherited_discount_line_ids"/>
-          <field name="specific_discount_line_ids"
-                 context="{'default_contract_line_id': id}"/>
-          <field name="contract_template_line_id" invisible="1"/>
+          <field name="inherited_discount_line_ids" />
+          <field
+                        name="specific_discount_line_ids"
+                        context="{'default_contract_line_id': id}"
+                    />
+          <field name="contract_template_line_id" invisible="1" />
         </group>
       </group>
 

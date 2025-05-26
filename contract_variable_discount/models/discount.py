@@ -24,13 +24,11 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
     amount_type = fields.Selection(
         [("fix", "Fixed"), ("percent", "Percentage")],
-        string="Amount type",
         default="percent",
         required=True,
     )
 
     amount_value = fields.Float(
-        string="Amount value",
         help="A positive amount indicates a price discount",
         required=True,
     )
@@ -38,16 +36,12 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     start_type = fields.Selection(
         [("relative", "Relative"), ("absolute", "Absolute")],
         default="relative",
-        string="Start type",
         required=True,
     )
 
-    start_value = fields.Integer(
-        string="Start Value",
-        default=0,
-    )
+    start_value = fields.Integer(default=0)
 
-    start_date = fields.Date(string="Start date")
+    start_date = fields.Date()
 
     start_reference = fields.Selection(
         [
@@ -67,7 +61,6 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             ("months", "Months"),
             ("years", "Years"),
         ],
-        string="Start Units",
         help="Units of the discount start difference with the reference date",
         default="months",
         required=True,
@@ -76,15 +69,13 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     end_type = fields.Selection(
         [("empty", "Empty"), ("relative", "Relative"), ("absolute", "Absolute")],
         default="empty",
-        string="End type",
         required=True,
     )
     end_value = fields.Integer(
-        string="End Value",
         help="No value means no end for this discount",
     )
 
-    end_date = fields.Date(string="End date")
+    end_date = fields.Date()
 
     end_reference = fields.Selection(
         [
@@ -104,7 +95,6 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             ("months", "Months"),
             ("years", "Years"),
         ],
-        string="End Units",
         help="Units of the discount end difference with the reference date",
         default="months",
         required=True,
@@ -134,8 +124,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             discount = self.amount_value
         else:
             raise ValidationError(
-                _("Invalid discount amount type '%s' for contract %s")
-                % (self.amount_type, contract_line.contract_id.name)
+                _("Invalid discount amount type '%(type)s' for contract %(contract)s")
+                % {"type": self.amount_type, "contract": contract_line.contract_id.name}
             )
         return discount
 
@@ -177,20 +167,28 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         if ref_field not in cfields or cfields[ref_field]["type"] != "date":
             raise ValidationError(
                 _(
-                    "Incorrect reference '%s' in discount date of contract %s"
-                    " line id %d"
+                    "Incorrect reference '%(ref)s' in discount date of"
+                    " contract %(contract)s line id %(line)d"
                 )
-                % (reference, contract_line.contract_id.name, contract_line.id)
+                % {
+                    "ref": reference,
+                    "contract": contract_line.contract_id.name,
+                    "line": contract_line.id,
+                }
             )
 
         reference_date = getattr(ref_entity, ref_field)
         if not reference_date:
             raise ValidationError(
                 _(
-                    "Incorrect reference date value for '%s' of contract %s"
-                    " line id %d"
+                    "Incorrect reference date value for '%(ref)s' of"
+                    " contract %(contract)s line id %(line)d"
                 )
-                % (reference, contract_line.contract_id.name, contract_line.id)
+                % {
+                    "ref": reference,
+                    "contract": contract_line.contract_id.name,
+                    "line": contract_line.id,
+                }
             )
 
         unit = getattr(self, "%s_unit" % date_attr_prefix)
@@ -212,8 +210,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
         meth = getattr(self, "_compute_condition_%s" % self.condition, None)
         if meth is None:
             raise ValidationError(
-                _("Invalid discount condition %s in contract %s")
-                % (self.condition, contract_line.contract_id.name)
+                _("Invalid discount condition %(cond)s in contract %(contract)s")
+                % {"cond": self.condition, "contract": contract_line.contract_id.name}
             )
         return meth(contract_line, date_invoice)
 

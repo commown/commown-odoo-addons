@@ -64,9 +64,7 @@ class ContractLine(models.Model):
     @api.model
     def _prepare_invoice_line(self, invoice_id=False, invoice_values=False):
         "Compute discount and append discount description to invoice line name"
-        vals = super(ContractLine, self)._prepare_invoice_line(
-            invoice_id, invoice_values
-        )
+        vals = super()._prepare_invoice_line(invoice_id, invoice_values)
 
         result = self.compute_discount(invoice_values["date_invoice"])
 
@@ -159,4 +157,4 @@ class Contract(models.Model):
                     }
                 )
             else:
-                super(Contract, record)._compute_commitment_end_date()
+                return super()._compute_commitment_end_date()
