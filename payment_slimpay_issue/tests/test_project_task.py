@@ -525,7 +525,9 @@ class ProjectTC(TransactionCase):
     def _reset_on_time_actions_last_run(self):
         for action in self.env["base.automation"].search([("trigger", "=", "on_time")]):
             xml_ids = list(action.get_external_id().values())
-            if xml_ids and xml_ids[0].startswith("payment_slimpay_issue"):
+            if xml_ids and xml_ids[0].startswith(
+                "payment_slimpay_issue"
+            ):  # pragma: no cover
                 action.last_run = False
 
     def _simulate_wait(self, task, check_job_function=False, **timedelta_kwargs):
