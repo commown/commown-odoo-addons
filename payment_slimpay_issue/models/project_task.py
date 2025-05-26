@@ -1,7 +1,5 @@
 import logging
 
-import requests
-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -114,15 +112,7 @@ class ProjectTask(models.Model):
             [("code", "=", "slimpay"), ("state", "=", "enabled")],
         ):
             _logger.info('Checking payment issues for "%s"', provider.name)
-
-            try:
-                client = provider.slimpay_client()
-            except requests.HTTPError:
-                # Invalid credentials error must not crash the transaction
-                # (one may have more than one slimpay provider activated
-                #  or not in an environment or another -prod or debug-)
-                continue
-
+            client = provider.slimpay_client()
             issues = list(
                 self._slimpay_payment_issue_fetch(client, **(custom_issue_params or {}))
             )
