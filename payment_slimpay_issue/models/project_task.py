@@ -398,7 +398,7 @@ class ProjectTask(models.Model):
 
         if issue_doc.get("rejectReason"):
             msg = _("Reject reason is %(code)s: %(text)s")
-            code = issue_doc.get("rejectReasonCode", "")
+            code = issue_doc.get("returnReasonCode", "")
             if code in SLIMPAY_ERROR_CODES:
                 text = _(SLIMPAY_ERROR_CODES[code])
             else:
