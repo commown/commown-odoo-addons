@@ -235,6 +235,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             domain = domains[name]
             if isinstance(domain, str):
                 context = values.copy()
+                context["uid"] = self.env.user.id
                 # Remove builtins from eval context: "id" can be used in domains
                 context["__builtins__"] = {}
                 try:
@@ -243,16 +244,25 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
                     domain = []
             if domain is None:
                 continue
-            possible_values[name] = self.env[field["relation"]].search(domain)
+            possible_values[name] = self.env[field["relation"]].search(domain.copy())
 
         # Apply view domains:
         tree = etree.fromstring(created_model.fields_view_get()["arch"])
         for view_field in tree.xpath("//field[@domain]"):
             name = view_field.get("name")
-            domain = safe_eval(view_field.get("domain"), values)
+            values["uid"] = self.env.user.id
+            try:
+                domain = safe_eval(view_field.get("domain"), values)
+            except Exception:
+                domain = []
             if isinstance(domain, str):  # the domain was a field itself
                 domain = json.loads(domain)
-            possible_values[name] = self.env[fields[name]["relation"]].search(domain)
+            try:
+                possible_values[name] = self.env[fields[name]["relation"]].search(
+                    domain.copy()
+                )
+            except KeyError:
+                continue
 
         return values, possible_values
 
