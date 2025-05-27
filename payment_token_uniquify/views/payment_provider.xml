@@ -5,9 +5,16 @@
     <field name="model">payment.provider</field>
     <field name="inherit_id" ref="payment.payment_provider_form" />
     <field name="arch" type="xml">
-      <field name="journal_id" position="after">
+      <group name="payment_followup" position="attributes">
+        <attribute name="invisible">
+          0
+        </attribute>
+      </group>
+
+      <group name="payment_followup" position="inside">
         <field name="obsolescence_action_ids" widget="many2many_tags" />
-      </field>
+      </group>
+
     </field>
   </record>
 
