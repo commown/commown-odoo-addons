@@ -1,3 +1,6 @@
+from mock import patch
+
+from odoo.service import security
 from odoo.tests.common import HttpCase, tagged
 
 
@@ -84,3 +87,41 @@ class CustomerManagerControllerTC(HttpCase):
             redirected_res.headers["location"],
             self.base_url() + "/redirected",
         )
+
+    def test_session_expired(self):
+        """
+        Checking 'session expiry' when the session token is invalid.
+
+        To check if the session is invalid, the /web controller calls
+        the check_session method, to compare the session token calculated
+        from the user data, and the actual session token.
+
+        However, since check_session is also called before the controller,
+        We replicate a failure in the controller by using a mock.
+        """
+        calls = []
+
+        # pylint: disable=dangerous-default-value
+        def check_session_mock(*args, calls=calls, **kwargs):
+            """
+            This function is called twice server-side when :
+            1. Authenticating the user (needs to be True)
+            2. Checking if the session expired in the controller
+            (needs to be False to emulate session expiry)
+
+            So, on the first call, we return True, and on following calls, we return False
+            """
+            calls.append(1)
+            return len(calls) <= 1
+
+        self.authenticate("admin", "admin")
+
+        with patch.object(security, "check_session", new=check_session_mock):
+            # An invalidated session redirects the user to the login screen.
+            expired_res = self.get("/web", assert_code=303)
+            self.assertIn(
+                self.base_url() + "/web/login",
+                expired_res.headers["location"],
+            )
+
+        self.assertEqual(len(calls), 2)
