@@ -14,3 +14,12 @@ class CommownControllerWebsiteSale(WebsiteSale):
         errors, messages = super().checkout_form_validate(mode, all_form_values, data)
         http.request.env["res.partner"].validate_street_lines(data, errors, messages)
         return errors, messages
+
+    @http.route()
+    def product(self, product, category="", search="", **kwargs):
+        result = super().product(product, category, search, **kwargs)
+        result.qcontext["service_detail_url"] = (
+            http.request.website.product_service_details_url
+            or http.request.website.domain
+        )
+        return result
