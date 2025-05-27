@@ -457,7 +457,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         wizard.create_transfer()
 
         self.assertNotIn(self.task.lot_id, self.c1.lot_ids)
-        self.assertIn(self.task.lot_id, self.c2.lot_ids[0])
+        self.assertIn(self.task.lot_id, self.c2.lot_ids)
         lot_pickings = self.env["stock.picking"].search(
             [("move_line_ids.lot_id", "=", self.task.lot_id.id)]
         )
