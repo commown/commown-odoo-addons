@@ -60,8 +60,6 @@ class PaymentTokenUniquifyTC(TransactionCase):
         """
         provider = self.env.ref("payment.payment_provider_transfer")
         for action_ref in action_refs:
-            if "." not in action_ref:
-                action_ref = "commown.obsolescence_action_" + action_ref
             provider.obsolescence_action_ids |= self.env.ref(action_ref)
 
         new_partner_kwargs.setdefault("name", "s1_w3")
