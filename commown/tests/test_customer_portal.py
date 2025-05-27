@@ -212,6 +212,18 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
         self.assertNotIn("company_name", labels)
         self.assertNotIn("vat", labels)
 
+    def test_product(self):
+        website = self.env.ref("website.default_website")
+        website.product_service_details_url = "http://commown.coop/our-services"
+
+        product = self.env.ref("website_sale.product_product_1_product_template")
+        # See product in all languages:
+        product.public_categ_ids |= self.env.ref("commown.categ_de")
+
+        product_page = self.get_page(self.portal_client(), product.website_url)
+        banner_url = product_page.xpath("//*[@id='services-banner']//a/@href")[0]
+        self.assertEqual(banner_url, "http://commown.coop/our-services")
+
 
 class CustomerPortalB2BTC(CustomerPortalMixin, HttpCase):
     def setUp(self):
