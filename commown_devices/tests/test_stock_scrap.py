@@ -28,7 +28,7 @@ class StockScrapTC(BaseLotTC):
         # Check fails if scrap isn't done
         with self.assertRaises(UserError) as err:
             self.scrap.action_set_date_done_to_move_line_date()
-        self.assertEqual(err.exception.name, "Scrap must be done to use this action")
+        self.assertEqual(err.exception.args[0], "Scrap must be done to use this action")
 
         # Do scrap and set date done to expected
         self.scrap.action_validate()

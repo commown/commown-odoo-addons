@@ -9,7 +9,7 @@ class ContractTC(DeviceAsAServiceTC):
         lot = self.adjust_stock(grade_lot=False)
         with self.assertRaises(UserError) as err:
             contract.send_devices(lot, {})
-        self.assertIn("Please set the grade on lots", err.exception.name)
+        self.assertIn("Please set the grade on lots", err.exception.args[0])
 
     def test_compute_lot_number(self):
         contract = self.env["contract.contract"].of_sale(self.so)[0]

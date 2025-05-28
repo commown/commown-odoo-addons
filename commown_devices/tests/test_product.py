@@ -205,7 +205,7 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
                     ),
                 )
             ),
-            err.exception.name,
+            err.exception.args[0],
         )
 
     def test_error_on_multiple_secondary_config(self):
@@ -232,5 +232,5 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
                 " are you sure that there is no configuration mistake ?"
                 % self.fp3_service_color2.name
             ),
-            err2.exception.name,
+            err2.exception.args[0],
         )

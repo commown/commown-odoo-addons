@@ -80,7 +80,7 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
         with self.assertRaises(UserError) as err:
             self.get_wizard().execute()
         self.assertEqual(
-            err.exception.name, "Cannot find given device. Is it really available?"
+            err.exception.args[0], "Cannot find given device. Is it really available?"
         )
 
     def test_error_no_partner(self):

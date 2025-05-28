@@ -44,7 +44,7 @@ class CrmLeadTC(DeviceAsAServiceTC):
         stage = self.env["crm.stage"].create({"name": "GO [stock: check-has-picking]"})
         with self.assertRaises(UserError) as err:
             lead.stage_id = stage.id
-            self.assertEqual("Lead has no assigned picking.", err.exception.name)
+            self.assertEqual("Lead has no assigned picking.", err.exception.args[0])
 
         move_ids = lead.contract_id.send_devices(lot, {})
         self.assertEqual(move_ids.mapped("product_qty"), [1.0])

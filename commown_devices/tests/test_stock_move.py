@@ -46,7 +46,7 @@ class StockMoveTC(TransactionCase):
         with self.assertRaises(UserError) as error:
             moves.update_lot_contract()
         self.assertEqual(
-            error.exception.name,
+            error.exception.args[0],
             expected_message,
         )
         # Check same error is logged depending on context
@@ -69,7 +69,7 @@ class StockMoveTC(TransactionCase):
             " id: %s) and contract (id: %s)"
         ) % (moves[0].id, moves[0].picking_id.id, moves[0].contract_id.id)
         self.assertEqual(
-            error2.exception.name,
+            error2.exception.args[0],
             expected_message,
         )
 
@@ -111,7 +111,7 @@ class StockMoveTC(TransactionCase):
         )
 
         self.assertEqual(
-            error3.exception.name,
+            error3.exception.args[0],
             expected_error,
         )
         self.assertEqual(expected_log, cm2.output[0])

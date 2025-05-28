@@ -67,7 +67,9 @@ class StockPickingTC(TransactionCase):
 
         with self.assertRaises(UserError) as err:
             picking.action_set_date_done_to_scheduled()
-        self.assertEqual("Transfer must be done to use this action", err.exception.name)
+        self.assertEqual(
+            "Transfer must be done to use this action", err.exception.args[0]
+        )
 
     def test_cron_late_pickings(self):
         lot1 = create_lot_and_quant(self.env, "lot1", self.product, self.orig_location)

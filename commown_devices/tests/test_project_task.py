@@ -315,7 +315,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         with self.assertRaises(UserError) as error:
             wizard.create_picking()
         self.assertEqual(
-            error.exception.name,
+            error.exception.args[0],
             (
                 "Not enough non tracked product (Module) under location(s) Devices to "
                 "check/ diagnose"
@@ -486,11 +486,11 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         with self.assertRaises(UserError) as err1:
             self.task_test_checks.stage_id = diagnostic_stage
-        self.assertEqual(expected_message, err1.exception.name)
+        self.assertEqual(expected_message, err1.exception.args[0])
 
         with self.assertRaises(UserError) as err2:
             self.task_test_checks.stage_id = resiliated_stage
-        self.assertEqual(expected_message, err2.exception.name)
+        self.assertEqual(expected_message, err2.exception.args[0])
 
         self.task_test_checks.contract_id.lot_ids = False
 
@@ -551,19 +551,19 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             self.task_test_checks.stage_id = self.ongoing_stage
         self.assertEqual(
             expected_message % self.task_test_checks.id,
-            err.exception.name,
+            err.exception.args[0],
         )
         with self.assertRaises(UserError) as err2:
             self.task_test_checks2.stage_id = self.ongoing_stage
         self.assertEqual(
             expected_message % self.task_test_checks2.id,
-            err2.exception.name,
+            err2.exception.args[0],
         )
         with self.assertRaises(UserError) as err3:
             self.task_test_checks.stage_id = self.picking_sent_stage
         self.assertEqual(
             expected_message % self.task_test_checks.id,
-            err3.exception.name,
+            err3.exception.args[0],
         )
 
         module = self.nontracked_product.product_variant_id
@@ -633,4 +633,4 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         with self.assertRaises(UserError) as err:
             self.task.action_scrap_device()
-        self.assertEqual(err.exception.name, "Device is already in a scrap location")
+        self.assertEqual(err.exception.args[0], "Device is already in a scrap location")

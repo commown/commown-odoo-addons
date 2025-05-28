@@ -34,7 +34,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
                 self.protective_screen.name,
                 ", ".join(locations.mapped("name")),
             ),
-            err.exception.name,
+            err.exception.args[0],
         )
         self.adjust_stock_notracking(
             self.protective_screen.product_variant_id, self.loc_new_untracked
@@ -156,7 +156,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         # Check error on try to run action_to_customer_picking again
         with self.assertRaises(UserError) as err:
             lead.action_to_customer_picking()
-        self.assertIn("contract has already assigned picking", err.exception.name)
+        self.assertIn("contract has already assigned picking", err.exception.args[0])
 
         # Check the result
         picking = moves.mapped("picking_id")
