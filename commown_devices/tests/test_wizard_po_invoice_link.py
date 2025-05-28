@@ -7,9 +7,9 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
         super().setUpClass()
         supplier_account = cls.env["account.account"].create(
             {
-                "code": "cust_acc",
+                "code": "CUST.ACC",
                 "name": "customer account",
-                "account_type": cls.env.ref("account.data_account_type_payable").id,
+                "account_type": "liability_payable",
                 "reconcile": True,
             }
         )
