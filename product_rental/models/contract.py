@@ -103,6 +103,17 @@ class Contract(models.Model):
             for cline in record.contract_line_ids:
                 cline.date_start = record.date_start
 
+    def _compute_recurring_next_date(self):
+        """Overload to disable the inverse behaviour
+
+        The inverse method is only supposed to be executed when the
+        user inputs a new value for the recurring_next_date field in
+        the web UI. This is why it is disabled here. See also the
+        inverse method's docstring.
+        """
+        _self = self.with_context(_in_compute_recurring_next_date=True)
+        return super(Contract, _self)._compute_recurring_next_date()
+
     def _inverse_recurring_next_date(self):
         """Allow the direct modification of the next recurring date
 
@@ -123,6 +134,9 @@ class Contract(models.Model):
           do nothing
 
         """
+        if self._context.get("_in_compute_recurring_next_date", False):
+            return
+
         force = self._context.get("force_recurring_next_date", False)
 
         for record in self:
