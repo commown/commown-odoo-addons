@@ -293,6 +293,27 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         empl.action_revoke_portal_access()
         self.assertEqual(empl.portal_status, "not_granted")
 
+    def test_public_partner(self):
+        """
+        Checking that the added methods in res.partner don't interfere
+        with partners with the public role.
+        (This is mainly for coverage purposes)
+        """
+        self.env.ref("base.public_user").active = True
+        public_partner = self.env.ref("base.public_partner")
+        self.assertTrue(public_partner.user_ids.has_group("base.group_public"))
+
+        # Checking portal status
+        self.assertEqual(public_partner.portal_status, "not_granted")
+
+        # Checking role-reset
+        pre_reset_groups = public_partner.user_ids.groups_id
+        public_partner._reset_roles()
+        self.assertEqual(
+            pre_reset_groups,
+            public_partner.user_ids.groups_id,
+        )
+
     def test_perm_read_by_company_admin(self):
         admin = self.customer_user_admin
         old_count = self.count_seen_partners(sudo_as=admin)
