@@ -247,7 +247,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             possible_values[name] = self.env[field["relation"]].search(domain.copy())
 
         # Apply view domains:
-        tree = etree.fromstring(created_model.fields_view_get()["arch"])
+        tree = etree.fromstring(created_model.get_view()["arch"])
         for view_field in tree.xpath("//field[@domain]"):
             name = view_field.get("name")
             values["uid"] = self.env.user.id
