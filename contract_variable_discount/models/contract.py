@@ -31,6 +31,21 @@ class ContractTemplateLine(models.Model):
         copy=True,
     )
 
+    def _convert_to_write(self, values):
+        """Do not copy discount_line_ids from template lines to contract lines
+
+        Refer to `_onchange_contract_template_id` which calls this.
+        """
+
+        values = super()._convert_to_write(values)
+
+        # Don't use pop to allow coverage to detect when following if is not fully
+        # covered (both if branch possibilities), in which case present override had
+        # become useless...
+        if "discount_line_ids" in values:
+            del values["discount_line_ids"]
+        return values
+
 
 class ContractLine(models.Model):
     _inherit = "contract.line"
