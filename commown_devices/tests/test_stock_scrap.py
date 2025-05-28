@@ -16,7 +16,6 @@ class StockScrapTC(BaseLotTC):
                 "lot_id": cls.lot.id,
                 "location_id": cls.location_internal_available.id,
                 "product_uom_id": cls.product.uom_id.id,
-                "date_expected": cls.scrap_date,
             }
         )
 

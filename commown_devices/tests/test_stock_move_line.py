@@ -116,7 +116,6 @@ class StockMoveLineTC(TransactionCase):
                 "lot_id": lot.id,
                 "location_id": self.picking2.location_dest_id.id,
                 "product_uom_id": lot.product_id.uom_id.id,
-                "date_expected": self.picking2.date_done,
             }
         )
         scrap.action_validate()
