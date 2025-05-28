@@ -41,11 +41,10 @@ class SaleOrder(models.Model):
                 | so_line.product_id.secondary_storable_variant_ids
             )
             for storable in storables:
-                new_so_line = self.env["sale.order.line"].create(
+                self.env["sale.order.line"].create(
                     {
                         "order_id": self.id,
                         "product_id": storable.id,
                         "product_uom_qty": so_line.product_uom_qty,
                     }
                 )
-                new_so_line.product_id_change()
