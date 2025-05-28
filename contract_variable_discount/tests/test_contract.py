@@ -278,8 +278,6 @@ class ContractTC(TestContractBase):
         self.contract.contract_template_id = template
         self.contract._onchange_contract_template_id()
         self.contract.contract_line_ids.date_start = "2016-02-29"
-        self.contract.contract_line_ids._onchange_date_start()
-        self.contract._compute_date_end()  # Refresh contract start and end
 
         # Check applied discounts
         inv = self.contract.recurring_create_invoice()
