@@ -77,7 +77,7 @@ class ContractLine(models.Model):
             )
 
             for discount in discounts:
-                relname = self.env["account.invoice.line"].discount_relname(discount)
+                relname = self.env["account.move.line"].discount_relname(discount)
                 vals.setdefault(relname, [(6, 0, [])])
                 vals[relname][0][2].append(discount.id)
 

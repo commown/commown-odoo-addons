@@ -49,7 +49,7 @@ class ContractTC(TestContractBase):
             discount_date = fields.Date.from_string(discount_date)
             while self.contract.recurring_next_date <= discount_date:
                 invoice = self.contract.recurring_create_invoice()
-                if invoice.date_invoice == discount_date:
+                if invoice.date == discount_date:
                     actual = invoice.mapped("invoice_line_ids.discount")
                     self.assertEqual(
                         actual,
@@ -205,7 +205,6 @@ class ContractTC(TestContractBase):
         )
         invoice = self.contract.recurring_create_invoice()
         self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [100])
-        invoice.action_invoice_open()
         self.assertEqual(invoice.amount_total, 0)
 
     def _discounts_1(self):
@@ -341,8 +340,8 @@ class ContractTC(TestContractBase):
                 # inv1 is before discount validity date, so _compute_condition_test
                 # is NOT called at all (which is what we want as this call may be
                 # costly in terms of performance)
-                ((self.acct_line, fields.Date.from_string(inv2.date_invoice)), {}),
-                ((self.acct_line, fields.Date.from_string(inv3.date_invoice)), {}),
+                ((self.acct_line, fields.Date.from_string(inv2.date)), {}),
+                ((self.acct_line, fields.Date.from_string(inv3.date)), {}),
             ],
         )
 
