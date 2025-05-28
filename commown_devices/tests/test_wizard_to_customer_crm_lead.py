@@ -1,6 +1,7 @@
 import datetime
 
 from odoo.exceptions import UserError
+from odoo.fields import Command
 
 from .common import BaseToCustomerPickingWizardTC
 
@@ -104,8 +105,11 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         # Check defaults
 
         self.assertEqual(defaults["entity_id"], lead.id)
+        all_products_ids = [
+            cmd[1] for cmd in defaults["all_products"] if cmd[0] == Command.UPDATE
+        ]
         self.assertEqual(
-            sorted(defaults["all_products"][0][2]),
+            sorted(all_products_ids),
             sorted(
                 [
                     self.fp3_plus_storable_color1.id,
