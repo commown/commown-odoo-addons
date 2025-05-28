@@ -8,7 +8,7 @@ from .common import CustomerTeamManagerAbstractTC
 class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
     "Tests related to the customer_team_manager.portal_access_wizard model"
 
-    def test_ok(self):
+    def test_ok_customer_admin(self):
         admin = self.customer_user_admin
         admin.password = "admin"
         admin.login = "admin@test.org"
@@ -20,12 +20,22 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
 
         all_employees = empl1 | empl2 | empl3 | empl4
 
+        # Grant access to one employee
         wizard = self._grant_portal_access(empl1)
         self.assertEqual(
             all_employees.mapped("portal_status"),
             ["never_connected", "not_granted", "not_granted", "not_granted"],
         )
 
+        # Grant access to a customer who has already been granted access.
+        # (Should do nothing particular)
+        wizard = self._grant_portal_access(empl1)
+        self.assertEqual(
+            empl1.portal_status,
+            "never_connected",
+        )
+
+        # Grant access to several employees, both with valid and invalid emails
         wizard = self._grant_portal_access(all_employees, sudo_as=admin)
 
         self.assertEqual(
@@ -33,6 +43,7 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
             ["never_connected"] * 3 + ["not_granted"],
         )
 
+        # Check wizard modal shown info.
         doc = fromstring(wizard.info)
         self.assertEqual(
             set(doc.xpath("//*[@id='grant-access-possible-fraud-warning']//li/text()")),
