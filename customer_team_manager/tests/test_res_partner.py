@@ -199,6 +199,13 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertEqual(empl.portal_status, "not_granted")
         self.assertFalse(empl.user_ids)
 
+    def test_unlink_non_employee(self):
+        """The unlink() override should not affect non-B2B users
+        (ie. not raise a ValidationError)
+        """
+        non_empl = self.create_partner(name="Not Empl", email="not_emp@test.coop")
+        non_empl.unlink()
+
     def test_rule_unlink_not_granted_to_customers(self):
         "Even group_customer_admin members are not granted unlink permission"
 
