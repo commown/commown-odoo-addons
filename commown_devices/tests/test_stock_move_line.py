@@ -60,6 +60,7 @@ class StockMoveLineTC(TransactionCase):
 
         self.picking1.button_validate()
 
+        self.env.flush_all()
         self.env.cache.invalidate()
         self.assertFalse(self.move_line1.show_validate_picking)
 
