@@ -9,12 +9,12 @@ class StockScrap(models.Model):
 
     contract_id = fields.Many2one("contract.contract", string="Contract")
 
-    def action_set_date_done_to_expected(self):
+    def action_set_date_done_to_move_line_date(self):
         for rec in self:
             if not rec.state == "done":
                 raise UserError(_("Scrap must be done to use this action"))
 
-            _force_scrap_date(rec, rec.date_expected)
+            _force_scrap_date(rec, rec.move_id.move_line_ids.date)
 
     def action_validate(self):
         return super(
