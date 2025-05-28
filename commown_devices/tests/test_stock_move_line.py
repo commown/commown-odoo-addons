@@ -143,7 +143,7 @@ class StockMoveLineTC(TransactionCase):
         res = get_origin_record(self.env, po.name)
         self.assertEqual(res, po)
 
-        task = self.env.ref("project.project_task_1")
+        task = self.env.ref("project.project_1_task_1")
         res = get_origin_record(self.env, task.get_name_for_origin())
         self.assertEqual(res, task)
 
