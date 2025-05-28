@@ -54,6 +54,39 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
             ["E4 L"],
         )
 
+    def test_ok_sale_manager(self):
+        sale_manager = self.env.ref("base.user_admin")
+        sale_manager.email = "test@admin.com"
+        sale_manager.login = "admin"
+        sale_manager.password = "admin"
+
+        empl1 = self.create_partner(
+            sudo_as=sale_manager, name="E1 L", email="e1@test.coop"
+        )
+        empl2 = self.create_partner(
+            sudo_as=sale_manager, name="E2 L", email="e2@test.com"
+        )
+
+        all_employees = empl1 | empl2
+        self.assertEqual(
+            all_employees.mapped("portal_status"),
+            2 * ["not_granted"],
+        )
+
+        wizard = self._grant_portal_access(all_employees, sudo_as=sale_manager)
+        self.assertEqual(
+            all_employees.mapped("portal_status"),
+            2 * ["never_connected"],
+        )
+
+        # Check wizard modal shown info.
+        # There shouldn't be the sale manager's domain ('admin.com')
+        doc = fromstring(wizard.info)
+        self.assertEqual(
+            set(doc.xpath("//*[@id='grant-access-possible-fraud-warning']//li/text()")),
+            {"test.coop", "test.com"},
+        )
+
     def test_error_wrong_password(self):
         admin = self.customer_user_admin
         empl = self.create_partner(sudo_as=admin, name="E L", email="e@test.coop")
