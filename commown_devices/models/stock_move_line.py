@@ -3,7 +3,7 @@ from odoo import api, fields, models
 
 def get_origin_record(env, origin):
     """Parse picking and scrap origin field and return the target entity"""
-    if origin.startswith("PO"):
+    if origin.startswith("P"):
         return env["purchase.order"].search([("name", "=", origin)])
     if origin.startswith("Task-"):
         return env["project.task"].browse(int(origin[5:]))
