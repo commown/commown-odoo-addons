@@ -47,5 +47,7 @@ class TeamTC(CustomerTeamManagerAbstractTC):
         """
 
         company = self.customer_company
-        team = self.create_by_form("team", name="T", customer_company=company)
+        team = self.create_by_form(
+            "customer_team_manager.team", name="T", customer_company=company
+        )
         self.assertEqual(team.sudo().customer_company, company)
