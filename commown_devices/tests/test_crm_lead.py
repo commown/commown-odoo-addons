@@ -1,7 +1,7 @@
 from datetime import date
 
 from odoo import fields
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 
 from odoo.addons.product_rental.models.contract import NO_DATE
 
@@ -42,9 +42,8 @@ class CrmLeadTC(DeviceAsAServiceTC):
 
         # Should not be able to put the lead to a "go" column without a picking:
         stage = self.env["crm.stage"].create({"name": "GO [stock: check-has-picking]"})
-        with self.assertRaises(ValidationError):
-            with self.assertRaises(UserError) as err:
-                lead.stage_id = stage.id
+        with self.assertRaises(UserError) as err:
+            lead.stage_id = stage.id
             self.assertEqual("Lead has no assigned picking.", err.exception.name)
 
         move_ids = lead.contract_id.send_devices(lot, {})
