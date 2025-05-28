@@ -146,6 +146,19 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
             "The email of partners having portal access cannot be modified!",
         )
 
+    def test_write_company_name(self):
+        """
+        Customer admins are not allowed to change a company's name,
+        unless to remove it entirely
+        """
+        company_as_admin = self.customer_company.with_user(self.customer_user_admin)
+
+        company_as_admin.write({"company_name": False})
+        self.assertFalse(self.customer_company.company_name)
+
+        with self.assertRaises(AccessError):
+            company_as_admin.write({"company_name": "Company Test"})
+
     def test_write_customer_roles_error(self):
         "No one can remove the admin role of last customer admin of a company"
 
