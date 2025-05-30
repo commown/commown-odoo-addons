@@ -6,19 +6,29 @@ class AccountMoveLineTC(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
 
-        def account(account_type, group, code):
-            return cls.env["account.account"].create(
-                {
-                    "name": "Test %s" % group,
-                    "code": "01010%d" % code,
-                    "account_type": account_type,
-                    "internal_group": group,
-                }
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
+        def find_account(account_type, group):
+            return cls.env["account.account"].search(
+                [
+                    ("account_type", "=", account_type),
+                    ("internal_group", "=", group),
+                    ("company_id", "=", cls.env.company.id),
+                ],
+                limit=1,
             )
 
         # Create accounts so that we do not depend on which l10n module is installed:
-        cls.sales_account = account("expense", "expense", 1)
-        cls.rental_account = account("asset_current", "asset", 2)
+        cls.sales_account = find_account("expense", "expense")
+        cls.rental_account = find_account("asset_current", "asset")
 
         cls.product = cls.env["product.template"].create(
             {
@@ -32,7 +42,7 @@ class AccountMoveLineTC(TransactionCase):
 
         # Otherwise the product expense account is not the one on purchase for sale
         # invoices:
-        cls.env.ref("base.main_company").anglo_saxon_accounting = False
+        cls.env.company.anglo_saxon_accounting = False
 
     def purchase(self, picking_type_ref):
         oline_attrs = {
@@ -55,8 +65,8 @@ class AccountMoveLineTC(TransactionCase):
         invoice = self.env["account.move"].create(
             {
                 "move_type": "in_invoice",
-                "company_id": self.env.ref("base.main_company").id,
-                "currency_id": self.env.ref("base.EUR").id,
+                "company_id": self.env.company.id,
+                "currency_id": self.env.company.currency_id.id,
                 "partner_id": po.partner_id.id,
             }
         )
