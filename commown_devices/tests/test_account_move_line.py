@@ -58,11 +58,12 @@ class AccountMoveLineTC(TransactionCase):
                 "company_id": self.env.ref("base.main_company").id,
                 "currency_id": self.env.ref("base.EUR").id,
                 "partner_id": po.partner_id.id,
-                "purchase_id": po.id,
             }
         )
-        invoice.purchase_order_change()
-        return invoice.invoice_line_ids.mapped("account_id")
+        invoice.purchase_id = po
+        invoice._onchange_purchase_auto_complete()
+        # Filter on line that concerns product
+        return invoice.line_ids.filtered("product_id").mapped("account_id")
 
     def test_purchase_account_rental_product(self):
         po = self.purchase("commown_devices.stock_picking_type_in_rental")
