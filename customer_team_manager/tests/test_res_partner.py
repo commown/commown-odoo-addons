@@ -14,9 +14,20 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
     def test_get_views(self):
         "Essentially check the syntax is correct and actions are filtered out"
 
+        view = self.env.ref("customer_team_manager.view_customer_user_form")
+
+        # Checking the view received from a non-customer-admin
+        non_admin_result = self.env["res.partner"].get_views(
+            [(view.id, "form")], {"toolbar": True}
+        )
+
+        self.assertNotIn(
+            "[commown] Customer users dedicated portal access grant wizard action",
+            non_admin_result["views"]["form"]["toolbar"]["action"],
+        )
+
         # Checking the view received from a customer admin
         model_sudo = self.env["res.partner"].with_user(self.customer_user_admin)
-        view = self.env.ref("customer_team_manager.view_customer_user_form")
         result = model_sudo.get_views(
             [(view.id, "form"), (view.id, "list"), (view.id, "kanban")],
             {"toolbar": True},
