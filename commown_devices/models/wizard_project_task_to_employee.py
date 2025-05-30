@@ -13,7 +13,7 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
     )
 
     lot_id = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         string="Device",
         domain=lambda self: self._domain_lot_id(),
         required=True,

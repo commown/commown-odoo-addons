@@ -9,7 +9,7 @@ from . import test_res_partner
 from . import test_sale_order
 from . import test_stock_picking
 from . import test_stock_location
-from . import test_stock_production_lot
+from . import test_stock_lot
 from . import test_stock_move
 from . import test_stock_move_line
 from . import test_stock_scrap

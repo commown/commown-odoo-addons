@@ -169,7 +169,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
     )
 
     lot_id = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         string="Device",
         domain=lambda self: self._domain_lot_id(),
         required=True,
@@ -218,7 +218,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
             elif self.variant_id not in variants:
                 self.variant_id = False
 
-        lots = self.env["stock.production.lot"].search(self._domain_lot_id())
+        lots = self.env["stock.lot"].search(self._domain_lot_id())
         domain["lot_id"] = [("id", "in", lots.ids)]
         return {"domain": domain}
 
@@ -227,7 +227,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
         if self.variant_id and self.product_tmpl_id != self.variant_id.product_tmpl_id:
             self.product_tmpl_id = self.variant_id.product_tmpl_id
 
-        lots = self.env["stock.production.lot"].search(self._domain_lot_id())
+        lots = self.env["stock.lot"].search(self._domain_lot_id())
         return {"domain": {"lot_id": [("id", "in", lots.ids)]}}
 
     @api.onchange("lot_id")
@@ -253,7 +253,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
     _inherit = "project.task.abstract.picking.wizard"
 
     lot_id = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         string="Device",
         required=True,
     )
@@ -367,7 +367,7 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
 
     def create_picking(self):
         return self.task_id.contract_id.send_devices(
-            self.env["stock.production.lot"],  # Lots
+            self.env["stock.lot"],  # Lots
             {self.variant_id: 1},
             send_nonserial_products_from=self._compute_send_from(),
             origin=self.task_id.get_name_for_origin(),
@@ -389,7 +389,7 @@ class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
 
     def create_picking(self):
         return self.task_id.contract_id.receive_devices(
-            self.env["stock.production.lot"],
+            self.env["stock.lot"],
             {self.variant_id: 1},
             self.env.ref("commown_devices.stock_location_devices_to_check"),
             origin=self.task_id.get_name_for_origin(),

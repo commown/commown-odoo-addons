@@ -1,15 +1,15 @@
 from odoo import _, fields, models
 
 
-class StockProductionLot(models.Model):
-    _inherit = "stock.production.lot"
+class StockLot(models.Model):
+    _inherit = "stock.lot"
 
     contract_id = fields.Many2one("contract.contract", string="Contract")
 
     def name_get(self):
         result = []
         for record in self:
-            _id, name = super(StockProductionLot, record).name_get()[0]
+            _id, name = super(StockLot, record).name_get()[0]
             if record.product_id:
                 name += " (%s)" % record.product_id.display_name
             result.append((record.id, name))

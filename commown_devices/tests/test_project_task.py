@@ -147,11 +147,11 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
 
         # > check values
         self.assertEqual(values.get("storable_product_id"), product1.id)
-        ui_lots = self.env["stock.production.lot"].browse(values["lot_id"])
+        ui_lots = self.env["stock.lot"].browse(values["lot_id"])
         self.assertEqual(ui_lots.mapped("name"), ["fp2"])
 
         # Set lot_id only
-        lot = self.env["stock.production.lot"].search([("name", "=", "cc1")])
+        lot = self.env["stock.lot"].search([("name", "=", "cc1")])
         values, choices = self.get_form(lot_id=lot.id)
 
         # > check values
@@ -194,7 +194,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(lot_names, {"fp4", "fp5"})
 
         # Set lot_id only
-        lot = self.env["stock.production.lot"].search([("name", "=", "cc2")])
+        lot = self.env["stock.lot"].search([("name", "=", "cc2")])
         values, choices = self.get_form(lot_id=lot.id)
 
         # > check values
@@ -579,7 +579,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )[0]
 
         self.task_test_checks.contract_id.send_devices(
-            self.env["stock.production.lot"],
+            self.env["stock.lot"],
             {module: 1},
             origin=self.task_test_checks.get_name_for_origin(),
         )

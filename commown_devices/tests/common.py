@@ -44,7 +44,7 @@ class BaseLotTC(SavepointCase):
             }
         )
         self.product = self.product_tmpl.product_variant_id
-        self.lot = self.env["stock.production.lot"].create(
+        self.lot = self.env["stock.lot"].create(
             {
                 "name": "test-lot",
                 "product_id": self.product.id,
@@ -142,7 +142,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
         if product is None:
             product = self.storable_product.product_variant_id
         grade = self.env.ref("commown_grade.grade_A0")
-        lot = self.env["stock.production.lot"].create(
+        lot = self.env["stock.lot"].create(
             {
                 "name": serial,
                 "product_id": product.id,
@@ -216,7 +216,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
     def send_device(self, serial, contract=None, date=None, location=None):
         contract = contract or self.so.order_line.contract_id
-        lot = self.env["stock.production.lot"].search([("name", "=", serial)])
+        lot = self.env["stock.lot"].search([("name", "=", serial)])
         contract.send_devices(
             lot.ensure_one(), {}, send_lots_from=location, date=date, do_transfer=True
         )
@@ -283,7 +283,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
 def create_lot_and_quant(env, lot_name, product, location):
     # XXX Duplicate of adjust stock
-    lot = env["stock.production.lot"].create(
+    lot = env["stock.lot"].create(
         {
             "name": lot_name,
             "product_id": product.id,

@@ -62,9 +62,7 @@ class ResPartnerLocationTC(HttpCase):
         )
 
     def _new_dev(self, name, product, location):
-        lot = self.env["stock.production.lot"].create(
-            {"name": name, "product_id": product.id}
-        )
+        lot = self.env["stock.lot"].create({"name": name, "product_id": product.id})
 
         inventory = self.env["stock.inventory"].create(
             {

@@ -23,7 +23,7 @@ class PickingToCustomerWizard(models.AbstractModel):
     )
 
     lot_ids = fields.Many2many(
-        "stock.production.lot",
+        "stock.lot",
         string="Tracked Devices",
         required=True,
     )

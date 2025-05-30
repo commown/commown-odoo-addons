@@ -37,7 +37,7 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
 
     lot_id = fields.Many2one(
         string="Device",
-        comodel_name="stock.production.lot",
+        comodel_name="stock.lot",
     )
 
     lot_id_domain = fields.Char(
@@ -82,7 +82,7 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         - those already in charge of the partner (contract.lots_ids)
         - those sent to the partner but not arrived yet.
         """
-        lots = self.env["stock.production.lot"]
+        lots = self.env["stock.lot"]
         contracts = self.env["contract.contract"]
 
         if self.contract_id:

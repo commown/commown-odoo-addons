@@ -24,7 +24,7 @@ class Contract(models.Model):
         string="Stock Move",
     )
 
-    lot_ids = fields.One2many("stock.production.lot", "contract_id", string="Lots")
+    lot_ids = fields.One2many("stock.lot", "contract_id", string="Lots")
 
     lot_nb = fields.Integer("Number of lots", compute="_compute_lot_nb", store=True)
 
