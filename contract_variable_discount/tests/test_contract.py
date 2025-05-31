@@ -156,6 +156,7 @@ class ContractTC(TestContractBase):
 
         self.contract2.date_end = "2015-08-31"
         self.contract.taken_over_contract_id = self.contract2
+        self.contract._compute_commitment_end_date()
         cl12.taken_over_contract_line_id = cl22.id
 
         self.assertEqual(fields.Date.to_string(self.contract.date_start), "2015-09-01")
@@ -182,6 +183,7 @@ class ContractTC(TestContractBase):
         )
 
         self.contract.taken_over_contract_id = False
+        self.contract._compute_commitment_end_date()
         self.assertEqual(old_commitment_end_date, self.contract.commitment_end_date)
 
     def test_discount_compute_0(self):
