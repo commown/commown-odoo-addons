@@ -161,7 +161,7 @@ class PagesTC(HttpCase):
         c5 = self.create_contract(ct, date_end=future_date)
 
         doc = self.get_page("/page/self-troubleshoot-fp2-battery")
-        self.assertEquals(
+        self.assertEqual(
             self._contract_options(doc, value2int), set((c1 | c2 | c4 | c5).ids)
         )
 

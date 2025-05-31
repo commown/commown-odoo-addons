@@ -8,7 +8,7 @@ from .common import RentalFeesTC
 
 class RentalFeesDefinitionTC(RentalFeesTC):
     def test_line_order_and_name_get(self):
-        self.assertEquals(
+        self.assertEqual(
             self.fees_def.line_ids.mapped("display_name"), ["1", "2", "100"]
         )
 
