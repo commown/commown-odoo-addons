@@ -45,11 +45,11 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
 
         demo_user = self.env.ref("base.user_demo")
         task_user = self.env["project.task"].sudo(demo_user).browse(task.id)
-        self.assertEquals(task_user.name, "Commown test")
-        self.assertEquals(task_user.internal_followup, "<p>Coucou</p>")
+        self.assertEqual(task_user.name, "Commown test")
+        self.assertEqual(task_user.internal_followup, "<p>Coucou</p>")
 
         task_portal = self.env["project.task"].sudo(partner.user_ids).browse(task.id)
-        self.assertEquals(task_portal.name, "Commown test")
+        self.assertEqual(task_portal.name, "Commown test")
         with self.assertRaises(AccessError) as err:
             task_portal.internal_followup
         self.assertIn("security restrictions", err.exception.name)
