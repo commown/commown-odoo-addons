@@ -465,7 +465,7 @@ class ProjectTC(SavepointCase):
                 fake_issue_doc(
                     id="i1",
                     rejectReason="Insufficient funds",
-                    rejectReasonCode="AM04",
+                    returnReasonCode="AM04",
                 )
             ]
         )
