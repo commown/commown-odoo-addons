@@ -189,13 +189,13 @@ class ProjectOtherUsersPermissions(ProjectPermissionTC):
             name="Task type 1",
             project_ids=[(6, 0, self.project1.ids)],
         )
-        self.assertEquals(self.project1.ids, task_type1.project_ids.ids)
+        self.assertEqual(self.project1.ids, task_type1.project_ids.ids)
 
         tt1_as_user1 = self.entity_as(task_type1, self.user1)
 
         new_name = "New Name"
         tt1_as_user1.write({"name": new_name})
-        self.assertEquals(task_type1.name, new_name)
+        self.assertEqual(task_type1.name, new_name)
 
         tt1_as_user1.unlink()
 
