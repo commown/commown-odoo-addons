@@ -1,0 +1,17 @@
+<odoo>
+
+  <record id="view_website_form" model="ir.ui.view">
+    <field name="name">website.form (in the commown module)</field>
+    <field name="model">website</field>
+    <field name="inherit_id" ref="website.view_website_form"/>
+    <field name="arch" type="xml">
+
+      <xpath expr="//group[@name='other']/group" position="inside">
+        <field name="product_service_details_url"/>
+      </xpath>
+
+    </field>
+  </record>
+
+
+</odoo>

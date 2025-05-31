@@ -1,9 +1,11 @@
-from odoo import api, models, tools
+from odoo import api, fields, models, tools
 from odoo.http import request
 
 
 class Website(models.Model):
     _inherit = "website"
+
+    product_service_details_url = fields.Char("Service detail URL", translate=True)
 
     @api.multi
     def get_languages(self):
