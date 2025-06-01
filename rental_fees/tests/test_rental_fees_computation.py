@@ -255,7 +255,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         ref = self.env.ref
         action = ref("rental_fees.action_py3o_spreadsheet_fees_rental_computation")
         ods = pyexcel.get_book(file_content=action.render(c4.ids)[0], file_type="ods")
-        self.assertEquals(
+        self.assertEqual(
             ods.sheet_names(),
             [
                 "Global figures",
@@ -286,12 +286,12 @@ class RentalFeesComputationTC(RentalFeesTC):
             "Fees to be invoiced": 310.0,
         }
         _row = _find_row_by_text("Agreement")
-        self.assertEquals(
+        self.assertEqual(
             dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 1)[2:7])), expected
         )
         # - Amount totals
         expected["Agreement"] = "Totals"
-        self.assertEquals(
+        self.assertEqual(
             dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 2)[2:7])), expected
         )
 
@@ -304,18 +304,18 @@ class RentalFeesComputationTC(RentalFeesTC):
             "Nb of devices generating fees": 1,
         }
         _row = _find_row_by_text("Agreement", from_row=_row + 1)
-        self.assertEquals(
+        self.assertEqual(
             dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 1)[2:7])), expected
         )
         # - Devices totals
         expected["Agreement"] = "Totals"
-        self.assertEquals(
+        self.assertEqual(
             dict(zip(s_sum.row_at(_row)[2:7], s_sum.row_at(_row + 2)[2:7])), expected
         )
 
         s_dev = ods.sheet_by_name("Per device revenues")
         product_col = [c for c in s_dev.column[3] if c != "" and type(c) == str]
-        self.assertEquals(product_col, ["Product"] + 3 * ["Fairphone 3"])
+        self.assertEqual(product_col, ["Product"] + 3 * ["Fairphone 3"])
 
     def test_send_report_for_invoicing(self):
         contract = self.env["contract.contract"].of_sale(self.so)[0]

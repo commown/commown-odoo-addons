@@ -60,4 +60,4 @@ class StockScrapTC(BaseLotTC):
 
         # Check association
         self.scrap.action_validate()
-        self.assertEquals(self.scrap.move_id.contract_id, contract)
+        self.assertEqual(self.scrap.move_id.contract_id, contract)

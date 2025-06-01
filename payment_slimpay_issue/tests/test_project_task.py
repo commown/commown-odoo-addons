@@ -465,7 +465,7 @@ class ProjectTC(SavepointCase):
                 fake_issue_doc(
                     id="i1",
                     rejectReason="Insufficient funds",
-                    rejectReasonCode="AM04",
+                    returnReasonCode="AM04",
                 )
             ]
         )
@@ -474,6 +474,26 @@ class ProjectTC(SavepointCase):
         self.assertEqual(len(tasks), 1)
         self.assertIn(
             "Reject reason is AM04: Insufficient funds",
+            "\n".join(tasks.mapped("message_ids.body")),
+        )
+        self.assertIssuesAcknowledged(act, "i1")
+
+    def test_unknown_reason(self):
+        "The unknown reason must be posted in a message but the issue handled normally"
+        act, get = self._execute_cron(
+            [
+                fake_issue_doc(
+                    id="i1",
+                    rejectReason="my unknown reason",
+                    returnReasonCode="DUMMY-CODE",
+                )
+            ]
+        )
+
+        tasks = self._project_tasks()
+        self.assertEqual(len(tasks), 1)
+        self.assertIn(
+            "Reject reason is DUMMY-CODE: Unknown reject error: my unknown reason",
             "\n".join(tasks.mapped("message_ids.body")),
         )
         self.assertIssuesAcknowledged(act, "i1")

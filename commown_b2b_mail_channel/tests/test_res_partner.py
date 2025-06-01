@@ -133,7 +133,7 @@ class ResPartnerTC(SavepointCase):
         )
 
         mail_channel.partner_company = company_2
-        self.assertEquals(mail_channel.partner_company, mail_channel.partner_companies)
+        self.assertEqual(mail_channel.partner_company, mail_channel.partner_companies)
         self.assertIn(
             self.part2,
             mail_channel.mapped("channel_last_seen_partner_ids.partner_id"),

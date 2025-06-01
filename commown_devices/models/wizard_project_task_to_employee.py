@@ -66,11 +66,11 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
             raise UserError(_("Please set the task's partner before using this wizard"))
 
         if not self.env["res.partner"].search(
-                [
-                    ("id", "child_of", self.env.ref("base.main_partner").id),
-                    ("id", "=", self.task_id.partner_id.id),
-                ]
-            ):
+            [
+                ("id", "child_of", self.env.ref("base.main_partner").id),
+                ("id", "=", self.task_id.partner_id.id),
+            ]
+        ):
             raise UserError(_("Please use an employee as a partner"))
 
         # - Device must be available for rent
