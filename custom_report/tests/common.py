@@ -1,6 +1,6 @@
 import lxml.html
 
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.product_rental.tests.common import MockedEmptySessionMixin
 
@@ -13,8 +13,7 @@ def _html_report(report, obj, debug_fpath=None):
     return lxml.html.fromstring(html)
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ReportTC(MockedEmptySessionMixin, TransactionCase):
     "Helper class for report tests"
 
