@@ -269,7 +269,7 @@ class ContractTC(TestContractBase):
             }
         )
         ct_line = template.contract_line_ids
-        self.tdiscount(
+        tdiscount1 = self.tdiscount(
             ct_line, name="Fix discount", amount_value=2.0, amount_type="fix"
         )
         tdiscount2 = self.tdiscount(
@@ -292,7 +292,7 @@ class ContractTC(TestContractBase):
         )
 
         # Add an override for the 5% discount
-        self.cdiscount(
+        cdiscount = self.cdiscount(
             self.contract.contract_line_ids,
             name="10% discount",
             amount_type="percent",
@@ -308,6 +308,9 @@ class ContractTC(TestContractBase):
             ["Fix discount"],
             ["10% discount"],
         )
+        self.assertTrue(inv.invoice_line_ids.is_discount_applied(tdiscount1))
+        self.assertTrue(inv.invoice_line_ids.is_discount_applied(cdiscount))
+        self.assertFalse(inv.invoice_line_ids.is_discount_applied(tdiscount2))
 
     def test_condition_and_description(self):
         from .models import TestConditionDiscountLine
