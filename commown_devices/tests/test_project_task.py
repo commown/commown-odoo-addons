@@ -260,6 +260,25 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             possible_values["location_dest_id"].mapped("id"),
         )
 
+        # Check security controls
+        self.task.lot_id = False
+        with self.assertRaises(UserError) as error:
+            wizard.create_picking()
+        self.assertEqual(
+            error.exception.args[0],
+            "Can't move device: no device set on this task!",
+        )
+
+        self.task.project_id = self.env.ref(
+            "product_rental.contract_termination_project"
+        )
+        with self.assertRaises(UserError) as error2:
+            wizard.create_picking()
+        self.assertEqual(
+            error2.exception.args[0],
+            "This action should not be used in resiliation project",
+        )
+
     def _count_product_at_location(self, product, location):
         return sum(
             self.env["stock.quant"]
@@ -343,6 +362,17 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertNotIn(
             values["present_location_id"],
             possible_values["location_dest_id"].mapped("id"),
+        )
+
+        # Check security controls
+        self.task.project_id = self.env.ref(
+            "product_rental.contract_termination_project"
+        )
+        with self.assertRaises(UserError) as error2:
+            wizard.create_picking()
+        self.assertEqual(
+            error2.exception.args[0],
+            "This action should not be used in resiliation project",
         )
 
     def test_wizard_outward_with_task_only(self):
