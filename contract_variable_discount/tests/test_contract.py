@@ -5,6 +5,7 @@ from odoo_test_helper import FakeModelLoader
 
 from odoo import fields
 from odoo.exceptions import ValidationError
+from odoo.tools.safe_eval import safe_eval
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
@@ -299,6 +300,12 @@ class ContractTC(TestContractBase):
             amount_type="percent",
             amount_value=10.0,
             replace_discount_line_id=tdiscount2.id,
+        )
+
+        # Check replace_discount_line_id_domain compute method
+        self.assertEqual(
+            tdiscount1.search(safe_eval(cdiscount.replace_discount_line_id_domain)),
+            tdiscount1 | tdiscount2,
         )
 
         # Check applied discounts
