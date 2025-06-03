@@ -6,13 +6,14 @@ class IrActionsReport(models.Model):
 
     _inherit = "ir.actions.report"
 
-    def render_qweb_pdf(self, res_ids=None, data=None):
+    def _render_qweb_pdf(self, report_ref, res_ids=None, data=None):
+        rep = self._get_report(report_ref)
         if (
             data
             and data.get("report_type") == "pdf"
-            and self.report_type == "py3o"
-            and self.py3o_filetype == "pdf"
+            and rep.report_type == "py3o"
+            and rep.py3o_filetype == "pdf"
         ):
-            return self.render_py3o(res_ids, data)
+            return self._render_py3o(report_ref, res_ids=res_ids, data=data)
         else:
-            return super().render_qweb_pdf(res_ids=res_ids, data=data)
+            return super()._render_qweb_pdf(report_ref, res_ids=res_ids, data=data)
