@@ -4,6 +4,7 @@ from mock import patch
 from odoo_test_helper import FakeModelLoader
 
 from odoo import fields
+from odoo.exceptions import ValidationError
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
@@ -315,17 +316,17 @@ class ContractTC(TestContractBase):
     def test_condition_and_description(self):
         from .models import TestConditionDiscountLine
 
-        self.set_cdiscounts(
-            self.cdiscount(
-                name="Fix discount after 1 month under condition",
-                condition="test",
-                amount_value=5.0,
-                amount_type="percent",
-                start_reference="date_start",
-                start_value=1,
-                start_unit="months",
-            )
+        cdiscount = self.cdiscount(
+            name="Fix discount after 1 month under condition",
+            condition="test",
+            amount_value=5.0,
+            amount_type="percent",
+            start_reference="date_start",
+            start_value=1,
+            start_unit="months",
         )
+
+        self.set_cdiscounts(cdiscount)
 
         with patch.object(
             TestConditionDiscountLine, "_compute_condition_test", create=True
@@ -369,3 +370,11 @@ class ContractTC(TestContractBase):
         self._check_applied_discounts(
             inv3.invoice_line_ids, "Services from 04/29/2016 to 05/28/2016"
         )
+
+        # Check a clear exception is raised when the condition
+        # computation method is not implemented:
+        del TestConditionDiscountLine._compute_condition_test
+        with self.assertRaises(ValidationError) as err:
+            cline = self.contract.contract_line_ids[0]
+            cdiscount._condition_ok(cline, inv1.date)
+        self.assertIn("invalid discount condition", err.exception.args[0].lower())
