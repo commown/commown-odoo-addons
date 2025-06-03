@@ -9,18 +9,6 @@ from odoo import _, api, fields, models
 _logger = logging.getLogger(__name__)
 
 
-def _format_discount(value):
-    if isinstance(value, str):
-        return value
-    return "%.2f %%" % value
-
-
-def _format_amount(value):
-    if isinstance(value, str):
-        return value
-    return "%.2f €" % value
-
-
 class ContractTemplateLine(models.Model):
     _inherit = "contract.template.line"
 
