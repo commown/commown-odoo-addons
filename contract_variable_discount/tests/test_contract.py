@@ -58,7 +58,7 @@ class ContractTC(TestContractBase):
                         % (actual, [expected_value], discount_date),
                     )
                     break
-            else:
+            else:  # pragma: no cover
                 raise ValueError("Expected inv date %s never reached" % discount_date)
 
     def _discount_date(self, prefix="start", cline=None, **kwargs):
