@@ -25,10 +25,11 @@
     <field name="inherit_id" ref="contract.contract_contract_customer_form_view" />
     <field name="arch" type="xml">
 
-      <!-- Add taken_over_contract_id before date_start -->
-      <field name="date_start" position="before">
-        <field name="taken_over_contract_id" />
-      </field>
+      <xpath expr="//group[@name='commitment']" position="before">
+	<group name="taken_over_contract" string="Contract takeover" colspan="2">
+          <field name="taken_over_contract_id" />
+	</group>
+      </xpath>
 
       <!-- Hide commitment period computation parameters when contract has a taken over contract  -->
 
