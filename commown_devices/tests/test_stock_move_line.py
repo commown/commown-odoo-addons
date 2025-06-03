@@ -174,6 +174,9 @@ class StockMoveLineTC(TransactionCase):
         }
         self.assertEqual(self.move_line1.action_open_parent_origin(), expected_result)
 
+        self.move_line1.picking_id.origin = "Unknown orig"
+        self.assertFalse(self.move_line1.action_open_parent_origin())
+
         self.move_line1.move_id.picking_id = False
         res = self.move_line1.action_open_parent_origin()
         self.assertTrue(res is None)
