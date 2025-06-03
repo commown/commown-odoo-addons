@@ -8,9 +8,10 @@ from .common import ContractSaleWithCouponTC
 
 
 class DiscountLineTC(TestContractBase):
-    def setUp(self):
-        super(DiscountLineTC, self).setUp()
-        self.contract.is_auto_pay = False
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.contract.is_auto_pay = False
 
     def test_no_issue_condition(self):
         self.env["contract.discount.line"].create(
