@@ -10,8 +10,8 @@ from odoo.exceptions import ValidationError
 
 
 class ContractTemplateAbstractDiscountLine(models.AbstractModel):
-    _name = "contract.template.abstract.discount.line"
-    _description = "Contract template variable discount line"
+    _name = "contract.abstract.discount.line"
+    _description = "Contract abstract variable discount line"
 
     name = fields.Char(required=True, translate=True)
 
@@ -217,7 +217,8 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
 class ContractTemplateDiscountLine(models.Model):
     _name = "contract.template.discount.line"
-    _inherit = "contract.template.abstract.discount.line"
+    _description = "Contract template variable discount line"
+    _inherit = "contract.abstract.discount.line"
 
     contract_template_line_id = fields.Many2one(
         comodel_name="contract.template.line",
@@ -228,10 +229,9 @@ class ContractTemplateDiscountLine(models.Model):
 
 
 class ContractDiscountLine(models.Model):
-
     _name = "contract.discount.line"
-    _inherit = "contract.template.abstract.discount.line"
-    _description = "Contract discount line"
+    _inherit = "contract.abstract.discount.line"
+    _description = "Contract variable discount line"
 
     contract_line_id = fields.Many2one(
         comodel_name="contract.line",
