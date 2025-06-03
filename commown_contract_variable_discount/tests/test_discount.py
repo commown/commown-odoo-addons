@@ -91,7 +91,7 @@ class DiscountLineTC(TestContractBase):
 
         for _date, discount in expected:
             inv = self.contract.recurring_create_invoice()
-            self.assertEqual(inv.date_invoice, _date)
+            self.assertEqual(inv.date, _date)
             self.assertEqual(
                 inv.mapped("invoice_line_ids.discount"),
                 [discount],
