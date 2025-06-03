@@ -40,9 +40,7 @@ class StockMoveLine(models.Model):
     @api.depends("move_id.picking_id", "move_id.scrap_ids")
     def _compute_origin(self):
         for rec in self:
-            parent = rec._get_parent()
-            if parent is not None:
-                rec.origin = parent.origin
+            rec.origin = rec._get_parent().origin
 
     def _compute_show_validate_picking(self):
         for rec in self:

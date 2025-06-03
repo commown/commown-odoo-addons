@@ -94,6 +94,12 @@ class StockMoveLineTC(TransactionCase):
         self.move_line2.action_validate_linked_picking()
         self.assertEqual(self.picking2.state, "done")
 
+    def test_compute_origin(self):
+        orig = "TestOrig"
+        self.picking1.origin = orig
+        self.move_line1._compute_origin()
+        self.assertEqual(self.move_line1.origin, orig)
+
     def test_action_open_parent(self):
         # Check result on picking move line
         expected_result = {
