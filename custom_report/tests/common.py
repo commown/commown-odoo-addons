@@ -3,8 +3,8 @@ import lxml.html
 from odoo.tests.common import TransactionCase, tagged
 
 
-def _html_report(report, obj, debug_fpath=None):
-    html = report.render(obj.ids)[0]
+def _html_report(report, report_ref, obj, debug_fpath=None):
+    html = report._render(report_ref, obj.ids)[0]
     if debug_fpath:
         with open(debug_fpath, "wb") as fobj:
             fobj.write(html)
@@ -30,7 +30,9 @@ class ReportTC(TransactionCase):
         cls.report.py3o_filetype = "html"
 
     def html_report(self, entity, debug_fpath=None):
-        return _html_report(self.report, entity, debug_fpath=debug_fpath)
+        return _html_report(
+            self.report, self.report_name, entity, debug_fpath=debug_fpath
+        )
 
     def h1(self, doc):
         return doc.xpath("normalize-space(//h1)")
