@@ -1,4 +1,4 @@
-from odoo import api, models
+from odoo import models
 
 
 class IrActionsReport(models.Model):
@@ -6,7 +6,6 @@ class IrActionsReport(models.Model):
 
     _inherit = "ir.actions.report"
 
-    @api.multi
     def render_qweb_pdf(self, res_ids=None, data=None):
         if (
             data
