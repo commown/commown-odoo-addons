@@ -10,6 +10,8 @@ class DiscountLineTC(TestContractBase):
     def setUpClass(cls):
         super().setUpClass()
         cls.contract.is_auto_pay = False
+        cls.contract.date_start = "2018-01-01"
+        cls.contract.recurring_next_date = "2018-01-15"
 
     def test_no_issue_condition(self):
         self.env["contract.discount.line"].create(
