@@ -157,34 +157,9 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
             if ref_entity.taken_over_contract_line_id:
                 ref_entity = ref_entity.taken_over_contract_line_id
 
-        cfields = ref_entity.fields_get()
-
-        if ref_field not in cfields or cfields[ref_field]["type"] != "date":
-            raise ValidationError(
-                _(
-                    "Incorrect reference '%(ref)s' in discount date of"
-                    " contract %(contract)s line id %(line)d"
-                )
-                % {
-                    "ref": reference,
-                    "contract": contract_line.contract_id.name,
-                    "line": contract_line.id,
-                }
-            )
+        ref_entity.fields_get()
 
         reference_date = getattr(ref_entity, ref_field)
-        if not reference_date:
-            raise ValidationError(
-                _(
-                    "Incorrect reference date value for '%(ref)s' of"
-                    " contract %(contract)s line id %(line)d"
-                )
-                % {
-                    "ref": reference,
-                    "contract": contract_line.contract_id.name,
-                    "line": contract_line.id,
-                }
-            )
 
         unit = getattr(self, "%s_unit" % date_attr_prefix)
         value = getattr(self, "%s_value" % date_attr_prefix)
