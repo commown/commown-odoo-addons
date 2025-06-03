@@ -59,7 +59,7 @@ class ContractTemplateAbstractDiscountLine(models.AbstractModel):
 
         try:
             return self.coupon_campaign_id in order.used_coupons().mapped("campaign_id")
-        except:
+        except Exception:
             import traceback as tb
 
             _logger.exception(tb.format_exc())
