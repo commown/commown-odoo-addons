@@ -131,6 +131,7 @@ class ContractTC(TestContractBase):
     def test_discount_compute_date_contract_with_takeover_ok(self):
         "Start date must be computed correctly with contract taken over too"
 
+        old_date_start = self.contract.date_start
         old_commitment_end_date = self.contract.commitment_end_date
 
         self.contract2.date_start = "2015-06-01"
@@ -183,6 +184,7 @@ class ContractTC(TestContractBase):
         )
 
         self.contract.taken_over_contract_id = False
+        self.contract.date_start = old_date_start
         self.contract._compute_commitment_end_date()
         self.assertEqual(old_commitment_end_date, self.contract.commitment_end_date)
 
