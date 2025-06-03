@@ -8,8 +8,8 @@ from odoo import fields, models
 _logger = logging.getLogger(__name__)
 
 
-class ContractTemplateAbstractDiscountLine(models.AbstractModel):
-    _inherit = "contract.template.abstract.discount.line"
+class ContractAbstractDiscountLine(models.AbstractModel):
+    _inherit = "contract.abstract.discount.line"
 
     condition = fields.Selection(
         selection_add=[
