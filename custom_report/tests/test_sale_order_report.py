@@ -8,10 +8,11 @@ from .common import ReportTC
 class SaleOrderReportTC(ReportTC):
     report_name = "sale.report_saleorder"
 
-    def setUp(self):
-        super().setUp()
-        self.so = self.env.ref("sale.sale_order_1")
-        assert self.so.state == "draft", "Test pre-requisite failure"
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.so = cls.env.ref("sale.sale_order_1")
+        assert cls.so.state == "draft", "Test pre-requisite failure"
 
     def test_title_state_draft(self):
         doc = self.html_report(self.so)

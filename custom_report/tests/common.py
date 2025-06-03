@@ -17,16 +17,17 @@ class ReportTC(TransactionCase):
 
     report_name = None
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
         # Hack: reuse pdf report as an html one, to ease parsing
-        self.report = (
-            self.env["ir.actions.report"]
-            ._get_report_from_name(self.report_name)
+        cls.report = (
+            cls.env["ir.actions.report"]
+            ._get_report_from_name(cls.report_name)
             .ensure_one()
         )
-        self.report.py3o_filetype = "html"
+        cls.report.py3o_filetype = "html"
 
     def html_report(self, entity, debug_fpath=None):
         return _html_report(self.report, entity, debug_fpath=debug_fpath)

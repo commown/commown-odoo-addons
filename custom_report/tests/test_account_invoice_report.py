@@ -14,14 +14,15 @@ def _product_descriptions(invoice_doc):
 class AccountInvoiceReportTC(ReportTC):
     report_name = "account.report_invoice"
 
-    def setUp(self):
-        super().setUp()
-        self.b2c_partner = self.env.ref("base.partner_demo_portal")
-        self.b2b_partner = self.partner = self.env.ref("base.res_partner_address_1")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.b2c_partner = cls.env.ref("base.partner_demo_portal")
+        cls.b2b_partner = cls.partner = cls.env.ref("base.res_partner_address_1")
 
-        deposit_account = self.env.ref("l10n_fr.1_pcg_2751")
+        deposit_account = cls.env.ref("l10n_fr.1_pcg_2751")
 
-        categ_deposit = self.env["product.category"].create(
+        categ_deposit = cls.env["product.category"].create(
             {
                 "name": "Deposits",
                 "property_account_income_categ_id": deposit_account,
@@ -29,7 +30,7 @@ class AccountInvoiceReportTC(ReportTC):
             }
         )
 
-        self.deposit_product = self.env["product.product"].create(
+        cls.deposit_product = cls.env["product.product"].create(
             {
                 "name": "FP2 Premium",
                 "has_recurrent_payment": True,
@@ -39,7 +40,7 @@ class AccountInvoiceReportTC(ReportTC):
             }
         )
 
-        self.equity_product = self.env["product.product"].create(
+        cls.equity_product = cls.env["product.product"].create(
             {
                 "name": "Coop Part",
                 "is_equity": True,
@@ -48,7 +49,7 @@ class AccountInvoiceReportTC(ReportTC):
             }
         )
 
-        self.std_product = self.env["product.product"].create(
+        cls.std_product = cls.env["product.product"].create(
             {
                 "name": "Std product",
                 "type": "service",
