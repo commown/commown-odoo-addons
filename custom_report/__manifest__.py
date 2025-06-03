@@ -5,10 +5,9 @@
     "category": "Custom",
     "summary": "Custom reports",
     "version": "12.0.1.0.6",
-    "description": "This module adds custom reports.",
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "account_usability",  # needed for account_invoice.has_discount (py3o)
         "base_company_extension",  # required for legal_type (py3o)

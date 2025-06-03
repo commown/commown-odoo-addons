@@ -33,7 +33,8 @@ def _i18n_account_invoice():
     _(
         "No discount in case of anticipated payment."
         " Delay penalty of 20% annual rate."
-        " For professionals, fixed-price debt collection compensation in case of payment delay: 40€."
+        " For professionals, fixed-price debt collection compensation "
+        "in case of payment delay: 40€."
     )
     _("Company number / registry / VAT")
 
