@@ -24,11 +24,13 @@ class ContractAbstractDiscountLine(models.AbstractModel):
     )
 
     start_reference = fields.Selection(
-        selection_add=[("contract:commitment_end_date", "Commitment end date")]
+        selection_add=[("contract:commitment_end_date", "Commitment end date")],
+        ondelete={"contract:commitment_end_date": "cascade"},
     )
 
     end_reference = fields.Selection(
-        selection_add=[("contract:commitment_end_date", "Commitment end date")]
+        selection_add=[("contract:commitment_end_date", "Commitment end date")],
+        ondelete={"contract:commitment_end_date": "cascade"},
     )
 
     def is_valid(self, contract_line, date):
