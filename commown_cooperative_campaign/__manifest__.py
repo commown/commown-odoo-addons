@@ -18,6 +18,7 @@
         "security/ir.model.access.csv",
         "data/action_coupon.xml",
         "data/ir_config_parameter.xml",
+        "data/queue_job_function.xml",
         "views/coupon.xml",
         "views/wizard_late_optin.xml",
     ],

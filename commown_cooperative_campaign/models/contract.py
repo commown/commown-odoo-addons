@@ -8,8 +8,6 @@ import requests
 
 from odoo import models
 
-from odoo.addons.queue_job.job import job
-
 _logger = logging.getLogger(__name__)
 
 
@@ -51,7 +49,6 @@ def coop_ws_optout(
 class Contract(models.Model):
     _inherit = "contract.contract"
 
-    @job(default_channel="root")
     def _coop_ws_optout(self, campaign, customer_key, date_end, tz):
         self.ensure_one()
         url = self.env["ir.config_parameter"].get_param(
