@@ -3,14 +3,14 @@ from datetime import date
 import requests_mock
 
 from odoo.exceptions import UserError
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
 def _date(year, month, day):
     return date(year, month, day).isoformat()
 
 
-class CouponTestTC(SavepointCase):
+class CouponTestTC(TransactionCase):
     def setUp(self):
         super().setUp()
         campaign = self.env["coupon.campaign"].create(
