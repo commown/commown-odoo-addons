@@ -1,18 +1,14 @@
-# Copyright (C) 2022 - Commown (https://commown.coop)
+# Copyright (C) 2022 - Commown SCIC (https://commown.coop)
 # @author: Florent Cayré
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
     "name": "Commown Cooperative campaign",
     "category": "Business",
-    "description": (
-        "Use telecommown web services to handle discounts"
-        " from multi-partners cooperative campaigns"
-    ),
     "version": "12.0.1.1.6",
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "external_dependencies": {"python": ["requests", "phonenumbers", "iso8601"]},
     "depends": [
         "commown_contract_variable_discount",

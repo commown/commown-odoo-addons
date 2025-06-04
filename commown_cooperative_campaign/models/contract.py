@@ -13,7 +13,15 @@ from odoo.addons.queue_job.job import job
 _logger = logging.getLogger(__name__)
 
 
-def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
+def coop_ws_optout(
+        base_url,
+        campaign_ref,
+        customer_key,
+        date,
+        tz,
+        hour=9,
+        timeout=12,
+):
     "Query the cooperative web services to cancel a subscription"
 
     dt = datetime(date.year, date.month, date.day, hour=hour)
@@ -30,7 +38,9 @@ def coop_ws_optout(base_url, campaign_ref, customer_key, date, tz, hour=9):
     )
 
     resp = requests.post(
-        url, json={"customer_key": customer_key, "optout_ts": optout_ts}
+        url,
+        json={"customer_key": customer_key, "optout_ts": optout_ts},
+        timeout=timeout,
     )
     resp.raise_for_status()
 

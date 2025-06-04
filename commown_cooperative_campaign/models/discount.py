@@ -22,7 +22,7 @@ def parse_ws_date(str_date):
     return _date.replace(tzinfo=None) - _date.utcoffset()
 
 
-def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
+def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12, timeout=12):
     "Query the cooperative web services to see if a subscription is active"
 
     _logger.info(
@@ -38,7 +38,7 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
         + "/campaigns/%s/subscriptions/important-events"
         % urllib.parse.quote_plus(campaign_ref)
     )
-    resp = requests.get(url, params={"customer_key": customer_key})
+    resp = requests.get(url, params={"customer_key": customer_key}, timeout=timeout)
     resp.raise_for_status()
 
     subscriptions = resp.json()
@@ -54,7 +54,14 @@ def coop_ws_query(base_url, campaign_ref, customer_key, date, hour=12):
 
 
 def coop_ws_optin(
-    base_url, campaign_ref, customer_key, date, tz, hour=9, silent_double_optin=True
+    base_url,
+    campaign_ref,
+    customer_key,
+    date,
+    tz,
+    hour=9,
+    silent_double_optin=True,
+    timeout=12,
 ):
     "Query the cooperative web services to insert a new subscription"
 
@@ -64,7 +71,11 @@ def coop_ws_optin(
     optin_ts = pytz.timezone(tz or "GMT").localize(dt, is_dst=True).isoformat()
 
     url = base_url + "/campaigns/%s/opt-in" % urllib.parse.quote_plus(campaign_ref)
-    resp = requests.post(url, json={"customer_key": customer_key, "optin_ts": optin_ts})
+    resp = requests.post(
+        url,
+        json={"customer_key": customer_key, "optin_ts": optin_ts},
+        timeout=timeout,
+    )
 
     if resp.status_code == 422:
         json = resp.json()

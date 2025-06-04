@@ -3,4 +3,5 @@ coreapi
 hal_codec @ git+https://github.com/fcayre/python-hal-codec.git@unique-link-keys
 iso8601
 phonenumbers
+requests
 requests_toolbelt

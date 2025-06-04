@@ -7,14 +7,14 @@
       <form string="Cooperative campaign late optin">
         <sheet>
           <group>
-            <field name="coupon_id" invisible="1"/>
-            <field name="date"/>
+            <field name="coupon_id" invisible="1" />
+            <field name="date" />
           </group>
         </sheet>
         <footer>
-          <button name="late_optin" string="OK" class="btn-primary" type="object"/>
+          <button name="late_optin" string="OK" class="btn-primary" type="object" />
           or
-          <button string="Cancel" class="btn-default" special="cancel"/>
+          <button string="Cancel" class="btn-default" special="cancel" />
         </footer>
       </form>
     </field>

@@ -17,7 +17,7 @@ MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
 _logger = logging.getLogger(__name__)
 
 
-def coop_ws_important_events(base_url, campaign_ref, customer_key):
+def coop_ws_important_events(base_url, campaign_ref, customer_key, timeout=12):
     "Query the cooperative web services to see if a subscription is active"
 
     _logger.info(
@@ -29,7 +29,7 @@ def coop_ws_important_events(base_url, campaign_ref, customer_key):
         + "/campaigns/%s/subscriptions/important-events"
         % urllib.parse.quote_plus(campaign_ref)
     )
-    resp = requests.get(url, params={"customer_key": customer_key})
+    resp = requests.get(url, params={"customer_key": customer_key}, timeout=timeout)
     resp.raise_for_status()
 
     subscriptions = resp.json()
@@ -76,7 +76,7 @@ def coop_human_readable_important_events(events, dt_format):
     return result
 
 
-def coop_ws_subscriptions(base_url, campaign_ref, customer_key):
+def coop_ws_subscriptions(base_url, campaign_ref, customer_key, timeout=12):
     "Query the cooperative web services to list customer subscriptions"
 
     _logger.debug(
@@ -89,7 +89,7 @@ def coop_ws_subscriptions(base_url, campaign_ref, customer_key):
     url = base_url + "/campaign/%s/subscriptions" % urllib.parse.quote_plus(
         campaign_ref
     )
-    resp = requests.get(url, params={"customer_key": customer_key})
+    resp = requests.get(url, params={"customer_key": customer_key}, timeout=timeout)
     resp.raise_for_status()
 
     subscriptions = resp.json()
@@ -280,6 +280,6 @@ class Campaign(models.Model):
                     phone = phonenumbers.format_number(
                         phone_obj, phonenumbers.PhoneNumberFormat.NATIONAL
                     ).replace(" ", "")
-                    hash = hashlib.sha256()
-                    hash.update((phone + self.cooperative_salt).encode("utf-8"))
-                    return hash.hexdigest()
+                    _hash = hashlib.sha256()
+                    _hash.update((phone + self.cooperative_salt).encode("utf-8"))
+                    return _hash.hexdigest()
