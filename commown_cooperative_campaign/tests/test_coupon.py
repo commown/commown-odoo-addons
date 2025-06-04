@@ -53,7 +53,7 @@ class CouponTestTC(TransactionCase):
                 rm.get(self.paths["subscriptions"], json=subscriptions)
             with self.assertRaises(UserError) as err:
                 self.coupon.action_coop_campaign_optin_status()
-        return err.exception.name.strip()
+        return err.exception.args[0].strip()
 
     def test_action_optin_status_0(self):
         important_events = [{"customer_key": self.key, "events": []}]
@@ -199,6 +199,6 @@ class CouponTestTC(TransactionCase):
                 wizard.late_optin()
 
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "Already opt-in (may not be visible if before the campaign start)",
         )
