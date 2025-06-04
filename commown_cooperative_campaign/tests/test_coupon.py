@@ -11,9 +11,10 @@ def _date(year, month, day):
 
 
 class CouponTestTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        campaign = self.env["coupon.campaign"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        campaign = cls.env["coupon.campaign"].create(
             {
                 "name": "test-campaign",
                 "seller_id": 1,
@@ -21,28 +22,28 @@ class CouponTestTC(TransactionCase):
                 "cooperative_salt": "no matter",
             }
         )
-        so = self.env.ref("sale.portal_sale_order_1")
-        self.coupon = self.env["coupon.coupon"].create(
+        so = cls.env.ref("sale.portal_sale_order_1")
+        cls.coupon = cls.env["coupon.coupon"].create(
             {
                 "code": "TEST",
                 "campaign_id": campaign.id,
                 "used_for_sale_id": so.id,
             }
         )
-        self.coupon.used_for_sale_id.partner_id.update(
+        cls.coupon.used_for_sale_id.partner_id.update(
             {
-                "country_id": self.env.ref("base.fr").id,
+                "country_id": cls.env.ref("base.fr").id,
                 "mobile": "0601020304",
             }
         )
-        self.key = campaign.coop_partner_identifier(so.partner_id)
-        self.paths = {
+        cls.key = campaign.coop_partner_identifier(so.partner_id)
+        cls.paths = {
             "opt-in": "/campaigns/test-campaign/opt-in",
             "important-events": (
                 "/campaigns/test-campaign/subscriptions" "/important-events"
             ),
             "subscriptions": (
-                "/campaign/test-campaign/" "subscriptions?customer_key=%s" % self.key
+                "/campaign/test-campaign/" "subscriptions?customer_key=%s" % cls.key
             ),
         }
 
