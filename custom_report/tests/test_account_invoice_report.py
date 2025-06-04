@@ -86,16 +86,16 @@ class AccountInvoiceReportTC(ReportTC):
     def open_invoice(self, so, is_refund=False, contract=None):
         inv = self.env["account.invoice"].browse(so.action_invoice_create())
         if is_refund:
-            inv.type = "out_refund"
+            inv.move_type = "out_refund"
         if contract:
             cline = contract.contract_line_ids[0]
-            inv.invoice_line_ids.update(
+            inv.line_ids.update(
                 {
                     "contract_line_id": cline.id,
                     "account_analytic_id": cline.analytic_account_id.id,
                 }
             )
-        inv.action_invoice_open()
+        inv.action_post()
         return inv
 
     def test_b2c_deposit(self):
