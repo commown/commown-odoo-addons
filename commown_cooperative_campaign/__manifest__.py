@@ -15,6 +15,7 @@
         "queue_job",
     ],
     "data": [
+        "security/ir.model.access.csv",
         "data/action_coupon.xml",
         "data/ir_config_parameter.xml",
         "views/coupon.xml",
