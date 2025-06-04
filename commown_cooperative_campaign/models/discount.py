@@ -98,8 +98,8 @@ def coop_ws_optin(
     _logger.debug("Got web services response:\n %s", pformat(resp.json()))
 
 
-class ContractTemplateAbstractDiscountLine(models.AbstractModel):
-    _inherit = "contract.template.abstract.discount.line"
+class ContractAbstractDiscountLine(models.AbstractModel):
+    _inherit = "contract.abstract.discount.line"
 
     def compute(self, contract_line, date):
         """Optin before computing the actual value...
