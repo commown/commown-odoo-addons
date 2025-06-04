@@ -14,13 +14,13 @@ _logger = logging.getLogger(__name__)
 
 
 def coop_ws_optout(
-        base_url,
-        campaign_ref,
-        customer_key,
-        date,
-        tz,
-        hour=9,
-        timeout=12,
+    base_url,
+    campaign_ref,
+    customer_key,
+    date,
+    tz,
+    hour=9,
+    timeout=12,
 ):
     "Query the cooperative web services to cancel a subscription"
 
