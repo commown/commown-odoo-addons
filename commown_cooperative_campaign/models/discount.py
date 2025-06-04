@@ -10,7 +10,7 @@ import iso8601
 import pytz
 import requests
 
-from odoo import _, api, models
+from odoo import _, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -101,7 +101,6 @@ def coop_ws_optin(
 class ContractTemplateAbstractDiscountLine(models.AbstractModel):
     _inherit = "contract.template.abstract.discount.line"
 
-    @api.multi
     def compute(self, contract_line, date):
         """Optin before computing the actual value...
 

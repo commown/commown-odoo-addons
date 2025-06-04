@@ -1,6 +1,6 @@
 from datetime import date
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 from .discount import coop_ws_optin
 
@@ -21,7 +21,6 @@ class LateOptinWizard(models.TransientModel):
         required=True,
     )
 
-    @api.multi
     def late_optin(self):
 
         partner, key = self.coupon_id._action_coop_prerequisites()

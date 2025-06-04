@@ -6,7 +6,7 @@ from pprint import pformat
 import pytz
 import requests
 
-from odoo import api, models
+from odoo import models
 
 from odoo.addons.queue_job.job import job
 
@@ -51,7 +51,6 @@ def coop_ws_optout(
 class Contract(models.Model):
     _inherit = "contract.contract"
 
-    @api.multi
     @job(default_channel="root")
     def _coop_ws_optout(self, campaign, customer_key, date_end, tz):
         self.ensure_one()
@@ -60,7 +59,6 @@ class Contract(models.Model):
         )
         coop_ws_optout(url, campaign.name, customer_key, date_end, tz)
 
-    @api.multi
     def write(self, values):
         "opt-out cooperative campaign(s) if any, when the contract ends"
         res = super(Contract, self).write(values)

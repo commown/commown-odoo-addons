@@ -8,7 +8,7 @@ import iso8601
 import phonenumbers
 import requests
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 MOBILE_TYPE = phonenumbers.PhoneNumberType.MOBILE
@@ -170,7 +170,6 @@ class Coupon(models.Model):
             raise UserError(_("Partner (%s) has no valid key.") % partner.name)
         return partner, key
 
-    @api.multi
     def action_coop_campaign_optin_status(self):
         partner, key = self._action_coop_prerequisites()
         campaign = self.campaign_id
@@ -216,7 +215,6 @@ class Coupon(models.Model):
 
         raise UserError("\n--\n".join(response) % ctx)
 
-    @api.multi
     def action_coop_campaign_optin_now(self):
         view = self.env.ref("commown_cooperative_campaign." "wizard_late_optin_form")
         return {
@@ -249,7 +247,6 @@ class Campaign(models.Model):
         help="Salt used to create a cooperative identifier from partner data",
     )
 
-    @api.multi
     def coop_partner_identifier(self, partner):
         """Returns given partner's identifier for current cooperative campaign
 
