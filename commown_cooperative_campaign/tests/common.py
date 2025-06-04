@@ -87,7 +87,7 @@ class CooperativeCampaignTC(ContractSaleWithCouponTC):
                     reqs[0].json(),
                     {
                         "customer_key": self.customer_key,
-                        "optin_ts": ts_after(invoice.date_invoice, 0),
+                        "optin_ts": ts_after(invoice.date, 0),
                     },
                 )
             else:

@@ -94,7 +94,7 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
 
     def test_contract_end(self):
         inv = self.invoice(partial(ts_before, days=7), mock_optin=True)
-        date_end = inv.date_invoice + timedelta(days=10)
+        date_end = inv.date + timedelta(days=10)
         with requests_mock.Mocker() as rm:
             rm.post(
                 "/campaigns/test-campaign/opt-out",
@@ -102,7 +102,7 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
                     "id": 1,
                     "campaign": {},
                     "member": {},
-                    "optin_ts": ts_before(inv.date_invoice, 0),
+                    "optin_ts": ts_before(inv.date, 0),
                     "optout_ts": ts_after(date_end, 0),
                 },
             )

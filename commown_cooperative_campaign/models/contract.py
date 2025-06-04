@@ -91,13 +91,13 @@ class ContractLine(models.Model):
 
         self.ensure_one()
         return (
-            self.env["account.invoice"]
+            self.env["account.move"]
             .search(
                 [
                     ("invoice_line_ids.contract_line_id", "=", self.id),
                     ("state", "!=", "cancel"),
                 ],
-                order="date_invoice desc",
+                order="date desc",
                 limit=1,
             )
             .mapped("invoice_line_ids")

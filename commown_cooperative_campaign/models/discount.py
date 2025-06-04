@@ -124,7 +124,7 @@ class ContractAbstractDiscountLine(models.AbstractModel):
                 identifier = campaign.coop_partner_identifier(partner)
 
                 if identifier:
-                    emitted_invoices = self.env["account.invoice"].search(
+                    emitted_invoices = self.env["account.move"].search(
                         [
                             (
                                 "invoice_line_ids.contract_line_id.contract_id",
