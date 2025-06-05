@@ -17,7 +17,7 @@ class CouponTestTC(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        campaign = cls.env["coupon.campaign"].create(
+        cls.campaign = cls.env["coupon.campaign"].create(
             {
                 "name": "test-campaign",
                 "seller_id": 1,
@@ -29,17 +29,18 @@ class CouponTestTC(TransactionCase):
         cls.coupon = cls.env["coupon.coupon"].create(
             {
                 "code": "TEST",
-                "campaign_id": campaign.id,
+                "campaign_id": cls.campaign.id,
                 "used_for_sale_id": so.id,
             }
         )
-        cls.coupon.used_for_sale_id.partner_id.update(
+        cls.partner = cls.coupon.used_for_sale_id.partner_id
+        cls.partner.update(
             {
                 "country_id": cls.env.ref("base.fr").id,
                 "mobile": "0601020304",
             }
         )
-        cls.key = campaign.coop_partner_identifier(so.partner_id)
+        cls.key = cls.campaign.coop_partner_identifier(so.partner_id)
         cls.paths = {
             "opt-in": "/campaigns/test-campaign/opt-in",
             "important-events": (
@@ -217,6 +218,62 @@ class CouponTestTC(TransactionCase):
                     "Key: %s" % self.key,
                 ]
             ),
+        )
+
+    def test_prerequisites_error_not_cooperative_campaign(self):
+        self.coupon.campaign_id.is_coop_campaign = False
+
+        with self.assertRaises(UserError) as err:
+            self.coupon.action_coop_campaign_optin_status()
+
+        self.assertEqual(err.exception.args[0], "Not a cooperative campaign!")
+
+    def test_prerequisites_error_no_partner_key(self):
+        self.coupon.used_for_sale_id.partner_id.country_id = False
+
+        with self.assertRaises(UserError) as err:
+            self.coupon.action_coop_campaign_optin_status()
+
+        self.assertEqual(
+            err.exception.args[0],
+            "Partner (Joel Willis) has no valid key.",
+        )
+
+    def test_action_optin_now(self):
+        result = self.coupon.action_coop_campaign_optin_now()
+
+        self.assertEqual(result["src_model"], "coupon.coupon")
+        self.assertEqual(result["res_model"], "coupon.late.optin.wizard")
+        self.assertEqual(result["context"].get("default_coupon_id"), self.coupon.id)
+
+    def test_coop_partner_identifier_ok(self):
+        self.assertEqual(
+            self.campaign.coop_partner_identifier(self.partner),
+            "04ca4c637f7445ab54673d8923a95f847a2c97f8a52ed2c8bd2b5381f666bfb7",
+        )
+
+    def test_coop_partner_identifier_error_not_cooperative_campaign(self):
+        self.campaign.is_coop_campaign = False
+        self.assertIsNone(self.campaign.coop_partner_identifier(self.partner))
+
+    def test_coop_partner_identifier_error_no_country(self):
+        self.partner.country_id = False
+        self.assertIsNone(self.campaign.coop_partner_identifier(self.partner))
+
+    def test_coop_partner_identifier_error_no_mobile(self):
+        self.partner.update({"mobile": False, "phone": "0352535455"})
+        self.assertIsNone(self.campaign.coop_partner_identifier(self.partner))
+
+    def test_coop_partner_identifier_error_no_salt(self):
+        self.campaign.cooperative_salt = False
+
+        chan = "odoo.addons.commown_cooperative_campaign.models.coupon"
+        with self.assertLogs(chan, level="ERROR") as cm:
+            self.assertIsNone(self.campaign.coop_partner_identifier(self.partner))
+
+        self.assertEqual(
+            cm.output,
+            [f"ERROR:{chan}:Cooperative campaign {self.campaign.id} has no salt set"],
         )
 
     def test_wizard_late_optin(self):
