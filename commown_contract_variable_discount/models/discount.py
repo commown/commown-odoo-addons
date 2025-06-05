@@ -52,7 +52,9 @@ class ContractAbstractDiscountLine(models.AbstractModel):
 
     def _compute_condition_coupon_from_campaign(self, line, date):
         order = line.sale_order_line_id.order_id
-        if not order:
+
+        # Defensive code: this is not supposed to happen
+        if not order:  # pragma no cover
             _logger.warning(
                 f"Contract line id {line.id} (contract {line.contract_id.name})"
                 f" has no related order line."
