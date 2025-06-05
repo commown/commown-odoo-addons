@@ -209,7 +209,7 @@ class Coupon(models.Model):
         raise UserError("\n--\n".join(response) % ctx)
 
     def action_coop_campaign_optin_now(self):
-        view = self.env.ref("commown_cooperative_campaign." "wizard_late_optin_form")
+        view = self.env.ref("commown_cooperative_campaign.wizard_late_optin_form")
         return {
             "type": "ir.actions.act_window",
             "src_model": "coupon.coupon",
