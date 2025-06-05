@@ -1,6 +1,7 @@
 from datetime import date
 
 import requests_mock
+from freezegun import freeze_time
 
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase
@@ -11,6 +12,8 @@ def _date(year, month, day):
 
 
 class CouponTestTC(TransactionCase):
+    maxDiff = None
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -138,7 +141,7 @@ class CouponTestTC(TransactionCase):
             ),
         )
 
-    def test_action_optin_status_3(self):
+    def _data_with_unsubscription(self):
         important_events = [
             {
                 "customer_key": self.key,
@@ -149,23 +152,69 @@ class CouponTestTC(TransactionCase):
                     },
                     "telecoop": {"optin_ts": _date(2020, 1, 1), "optout_ts": None},
                 },
-                "events": [{"type": "optin", "ts": _date(2020, 1, 1)}],
+                "events": [
+                    {"type": "optin", "ts": _date(2020, 1, 1)},
+                    {"type": "optout", "ts": _date(2020, 3, 1)},
+                ],
             }
         ]
 
+        telecoop = {"login": "telecoop", "id": 1}
+        commown = {"login": "commown", "id": 2}
+        subscriptions = [
+            {
+                "customer_key": self.key,
+                "optin_ts": _date(2019, 12, 25),
+                "optout_ts": _date(2020, 3, 1),
+                "member": commown,
+                "campaign": {"ref": "telecommown", "members": [telecoop, commown]},
+            },
+            {
+                "customer_key": self.key,
+                "optin_ts": _date(2020, 1, 1),
+                "optout_ts": None,
+                "member": telecoop,
+                "campaign": {"ref": "telecommown", "members": [telecoop, commown]},
+            },
+        ]
+
+        return important_events, subscriptions
+
+    def test_action_optin_status_with_future_unsubscription(self):
+        important_events, _subscriptions = self._data_with_unsubscription()
+
+        with freeze_time("2020-02-25"):
+            self.assertEqual(
+                self.optin_status(important_events),  # no http call to subscriptions
+                "\n".join(
+                    [
+                        "Subscription status for Joel Willis is: fully subscribed",
+                        "--",
+                        "Validity: 01/01/2020 00:00:00 >> 03/01/2020 00:00:00",
+                        "--",
+                        "Key: %s" % self.key,
+                        "--",
+                        "Details:",
+                        "- commown: 12/25/2019 00:00:00 > 03/01/2020 00:00:00",
+                        "- telecoop: 01/01/2020 00:00:00",
+                    ]
+                ),
+            )
+
+    def test_action_optin_status_with_passed_unsubscription(self):
+        important_events, subscriptions = self._data_with_unsubscription()
+
         self.assertEqual(
-            self.optin_status(important_events),
+            self.optin_status(important_events, subscriptions),
             "\n".join(
                 [
-                    "Subscription status for Joel Willis is: fully subscribed",
+                    "Subscription status for Joel Willis is: not fully subscribed",
                     "--",
-                    "Validity: 01/01/2020 00:00:00",
+                    "Subscription to commown: 12/25/2019 00:00:00 > 03/01/2020 00:00:00",
+                    "Subscription to telecoop: 01/01/2020 00:00:00",
+                    "No subscription to telecoop.",
                     "--",
                     "Key: %s" % self.key,
-                    "--",
-                    "Details:",
-                    "- commown: 12/25/2019 00:00:00 > 03/01/2020 00:00:00",
-                    "- telecoop: 01/01/2020 00:00:00",
                 ]
             ),
         )
