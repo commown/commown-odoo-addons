@@ -47,33 +47,24 @@ def coop_ws_valid_events(events, date, hour=12):
     return True
 
 
-def coop_human_readable_important_events(events, dt_format):
-    if not events:
-        return _("No important subscription events")
-
-    result = "" if len(events) == 1 else _("%d subscription events:\n")
-
-    for num, event in enumerate(events):
-        if num:
-            result += "\n\n"
-        ctx = {
-            "key": event["customer_key"],
-            "validity": " >> ".join(
-                sorted(format_ws_date(e["ts"], dt_format) for e in event["events"])
-            ),
-            "details": _hr_details(event["details"], dt_format),
-        }
-        result += (
-            _(
-                "Validity: %(validity)s\n"
-                "--\n"
-                "Key: %(key)s\n"
-                "--\n"
-                "Details:\n%(details)s\n"
-            )
-            % ctx
+def coop_human_readable_important_events(event, dt_format):
+    ctx = {
+        "key": event["customer_key"],
+        "validity": " >> ".join(
+            sorted(format_ws_date(e["ts"], dt_format) for e in event["events"])
+        ),
+        "details": _hr_details(event["details"], dt_format),
+    }
+    return (
+        _(
+            "Validity: %(validity)s\n"
+            "--\n"
+            "Key: %(key)s\n"
+            "--\n"
+            "Details:\n%(details)s\n"
         )
-    return result
+        % ctx
+    )
 
 
 def coop_ws_subscriptions(base_url, campaign_ref, customer_key, timeout=12):
@@ -186,6 +177,7 @@ class Coupon(models.Model):
 
         subscriptions = coop_ws_important_events(base_url, campaign.name, key)
 
+        # Important events service called with a key returns at most 1 subscription
         is_valid = subscriptions and coop_ws_valid_events(
             subscriptions[0]["events"], datetime.datetime.today()
         )
@@ -194,7 +186,8 @@ class Coupon(models.Model):
             ctx.update(
                 {
                     "details": coop_human_readable_important_events(
-                        subscriptions, lang.date_format + " " + lang.time_format
+                        subscriptions[0],
+                        lang.date_format + " " + lang.time_format,
                     ),
                     "result": _("fully subscribed"),
                 }
