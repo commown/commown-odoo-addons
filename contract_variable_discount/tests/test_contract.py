@@ -1,0 +1,387 @@
+from datetime import date
+
+from mock import patch
+from odoo_test_helper import FakeModelLoader
+
+from odoo import fields
+from odoo.exceptions import ValidationError
+from odoo.tools.safe_eval import safe_eval
+
+from odoo.addons.contract.tests.test_contract import TestContractBase
+
+
+class ContractTC(TestContractBase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        # Register the test model:
+        cls.loader = FakeModelLoader(cls.env, cls.__module__)
+        cls.loader.backup_registry()
+
+        from .models import TestConditionDiscountLine
+
+        cls.loader.update_registry((TestConditionDiscountLine,))
+
+        # Adjust dates to our test needs (with different contract and line start dates):
+        cls.contract.date_start = "2016-02-10"
+        cls.contract.contract_line_ids.update(
+            {"recurring_next_date": "2016-02-15", "date_start": "2016-02-15"}
+        )
+        cls.contract.recurring_next_date = "2016-02-29"
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.loader.restore_registry()
+        super().tearDownClass()
+
+    def tdiscount(self, ct_line=None, **kwargs):
+        kwargs.setdefault("contract_template_line_id", ct_line.id)
+        return self.env["contract.template.discount.line"].create(kwargs)
+
+    def cdiscount(self, c_line=None, **kwargs):
+        kwargs.setdefault("contract_line_id", (c_line or self.acct_line).id)
+        return self.env["contract.discount.line"].create(kwargs)
+
+    def set_cdiscounts(self, discounts):
+        self.acct_line.specific_discount_line_ids = discounts
+
+    def check_cdiscounts(self, expected_discounts):
+        for discount_date, expected_value in sorted(expected_discounts):
+            discount_date = fields.Date.from_string(discount_date)
+            while self.contract.recurring_next_date <= discount_date:
+                invoice = self.contract.recurring_create_invoice()
+                if invoice.date == discount_date:
+                    actual = invoice.mapped("invoice_line_ids.discount")
+                    self.assertEqual(
+                        actual,
+                        [expected_value],
+                        "Incorrect discount %s (expected: %s) at %s"
+                        % (actual, [expected_value], discount_date),
+                    )
+                    break
+            else:  # pragma: no cover
+                raise ValueError("Expected inv date %s never reached" % discount_date)
+
+    def _discount_date(self, prefix="start", cline=None, **kwargs):
+        force_contract_ref = kwargs.pop("force_contract_ref", False)
+        kwargs.setdefault("name", "Test discount")
+        kwargs.setdefault("amount_value", 1.0)
+        discount = self.cdiscount(**kwargs)
+        cline = cline or self.acct_line
+        return discount._compute_date(
+            cline, prefix, force_contract_ref=force_contract_ref
+        )
+
+    def _check_applied_discounts(self, invl, prefix, ctd_names=(), cd_names=()):
+        ctd_names, cd_names = list(ctd_names), list(cd_names)
+
+        self.assertEqual(len(invl), 1)
+
+        expected = prefix
+        if ctd_names or cd_names:
+            expected += "\n"
+            expected += "\n- ".join(["Applied discounts:"] + ctd_names + cd_names)
+
+        self.assertEqual(invl.name, expected)
+
+        ctd_rel = "applied_discount_template_line_ids.name"
+        cd_rel = "applied_discount_line_ids.name"
+        self.assertEqual(invl.mapped(ctd_rel), ctd_names)
+        self.assertEqual(invl.mapped(cd_rel), cd_names)
+
+    def test_discount_compute_date_contract_line_ok(self):
+        "Start date must be computed correctly"
+
+        self.assertEqual(
+            self._discount_date(start_value=-5, start_unit="days"), date(2016, 2, 10)
+        )
+        self.assertEqual(
+            self._discount_date(
+                start_value=-5,
+                start_unit="days",
+                force_contract_ref=True,
+            ),
+            date(2016, 2, 5),
+        )
+        self.assertEqual(
+            self._discount_date(start_unit="weeks", start_value=3), date(2016, 3, 7)
+        )
+        self.assertEqual(
+            self._discount_date(start_unit="months", start_value=2), date(2016, 4, 15)
+        )
+        self.assertEqual(
+            self._discount_date(start_unit="years", start_value=3), date(2019, 2, 15)
+        )
+        self.assertEqual(
+            self._discount_date(start_type="absolute", start_date="2021-07-17"),
+            date(2021, 7, 17),
+        )
+        self.assertEqual(self._discount_date(prefix="start"), date(2016, 2, 15))
+        self.assertIsNone(self._discount_date(prefix="end"))
+
+    def test_discount_compute_date_contract_ok(self):
+        "Start date must be computed correctly with contract start date reference too"
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10, start_unit="days", start_reference="contract:date_start"
+            ),
+            date(2016, 2, 20),
+        )
+
+    def test_discount_compute_date_contract_with_takeover_ok(self):
+        "Start date must be computed correctly with contract taken over too"
+
+        old_date_start = self.contract.date_start
+        old_commitment_end_date = self.contract.commitment_end_date
+
+        self.contract2.date_start = "2015-06-01"
+
+        cl21 = self.contract2.contract_line_ids[0]
+        cl22 = self.env["contract.line"].create(
+            {
+                "name": "line 2",
+                "date_start": "2015-08-01",
+                "contract_id": self.contract2.id,
+                "product_id": cl21.product_id.id,
+            }
+        )
+
+        cl12 = self.env["contract.line"].create(
+            {
+                "name": "line 2",
+                "date_start": self.contract.date_start,
+                "contract_id": self.contract.id,
+                "product_id": cl22.product_id.id,
+            }
+        )
+
+        self.contract2.date_end = "2015-08-31"
+        self.contract.taken_over_contract_id = self.contract2
+        self.contract._compute_commitment_end_date()
+        cl12.taken_over_contract_line_id = cl22.id
+
+        self.assertEqual(fields.Date.to_string(self.contract.date_start), "2015-09-01")
+        self.assertNotEqual(old_commitment_end_date, self.contract.commitment_end_date)
+        self.assertEqual(
+            self.contract.commitment_end_date, self.contract2.commitment_end_date
+        )
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10, start_unit="days", start_reference="contract:date_start"
+            ),
+            date(2015, 6, 11),
+        )
+
+        self.assertEqual(
+            self._discount_date(
+                start_value=10,
+                start_unit="days",
+                start_reference="date_start",
+                cline=cl12,
+            ),
+            date(2015, 8, 11),
+        )
+
+        self.contract.taken_over_contract_id = False
+        self.contract.date_start = old_date_start
+        self.contract._compute_commitment_end_date()
+        self.assertEqual(old_commitment_end_date, self.contract.commitment_end_date)
+
+    def test_discount_compute_0(self):
+        self.set_cdiscounts(
+            self.cdiscount(
+                name="Fix discount",
+                amount_type="fix",
+                amount_value=2.0,
+            )
+        )
+        invoice = self.contract.recurring_create_invoice()
+        self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [2.0])
+
+    def test_discount_capped_to_100_percent(self):
+        self.set_cdiscounts(
+            self.cdiscount(
+                name="Fix discount",
+                amount_type="fix",
+                amount_value=1e6,
+            )
+        )
+        invoice = self.contract.recurring_create_invoice()
+        self.assertEqual(invoice.mapped("invoice_line_ids.discount"), [100])
+        self.assertEqual(invoice.amount_total, 0)
+
+    def _discounts_1(self):
+        return (
+            self.cdiscount(
+                name="Early adopter discount",
+                amount_type="percent",
+                amount_value=5.0,
+            )
+            | self.cdiscount(
+                name="2 years loyalty",
+                amount_type="percent",
+                amount_value=10.0,
+                start_reference="date_start",
+                start_value=2,
+                start_unit="years",
+                end_type="relative",
+                end_reference="date_start",
+                end_value=3,
+                end_unit="years",
+            )
+            | self.cdiscount(
+                name="More than 3 years loyalty",
+                amount_type="percent",
+                amount_value=20.0,
+                start_reference="date_start",
+                start_value=3,
+                start_unit="years",
+            )
+        )
+
+    def test_discount_compute_1(self):
+        self.set_cdiscounts(self._discounts_1())
+
+        self.check_cdiscounts(
+            [
+                ("2016-02-29", 5.0),
+                ("2018-01-28", 5.0),
+                ("2018-02-28", 15.0),
+                ("2019-01-28", 15.0),
+                ("2019-02-28", 25.0),
+                ("2020-03-28", 25.0),
+            ]
+        )
+
+    def test_discount_override(self):
+        "Discounts on contract template are handled but can be overidden"
+
+        # Add a line with 2 discounts on a new contract template
+        _vals = self.line_template_vals.copy()
+        _vals["recurring_rule_type"] = "monthly"
+        template = self.env["contract.template"].create(
+            {
+                "name": "Test Contract Template",
+                "contract_line_ids": [
+                    (0, 0, _vals),
+                ],
+            }
+        )
+        ct_line = template.contract_line_ids
+        tdiscount1 = self.tdiscount(
+            ct_line, name="Fix discount", amount_value=2.0, amount_type="fix"
+        )
+        tdiscount2 = self.tdiscount(
+            ct_line, name="5% discount", amount_value=5.0, amount_type="percent"
+        )
+
+        # Use this template as the model for self.contract:
+        self.contract.contract_line_ids.update({"is_canceled": True})
+        self.contract.contract_line_ids.unlink()
+        self.contract.contract_template_id = template
+        self.contract._onchange_contract_template_id()
+        self.contract.contract_line_ids.date_start = "2016-02-29"
+
+        # Check applied discounts
+        inv = self.contract.recurring_create_invoice()
+        self._check_applied_discounts(
+            inv.invoice_line_ids,
+            "Services from 02/29/2016 to 03/28/2016",
+            ["Fix discount", "5% discount"],
+        )
+
+        # Add an override for the 5% discount
+        cdiscount = self.cdiscount(
+            self.contract.contract_line_ids,
+            name="10% discount",
+            amount_type="percent",
+            amount_value=10.0,
+            replace_discount_line_id=tdiscount2.id,
+        )
+
+        # Check replace_discount_line_id_domain compute method
+        self.assertEqual(
+            tdiscount1.search(safe_eval(cdiscount.replace_discount_line_id_domain)),
+            tdiscount1 | tdiscount2,
+        )
+
+        # Check applied discounts
+        inv = self.contract.recurring_create_invoice()
+        self._check_applied_discounts(
+            inv.invoice_line_ids,
+            "Services from 03/29/2016 to 04/28/2016",
+            ["Fix discount"],
+            ["10% discount"],
+        )
+        self.assertTrue(inv.invoice_line_ids.is_discount_applied(tdiscount1))
+        self.assertTrue(inv.invoice_line_ids.is_discount_applied(cdiscount))
+        self.assertFalse(inv.invoice_line_ids.is_discount_applied(tdiscount2))
+
+    def test_condition_and_description(self):
+        from .models import TestConditionDiscountLine
+
+        cdiscount = self.cdiscount(
+            name="Fix discount after 1 month under condition",
+            condition="test",
+            amount_value=5.0,
+            amount_type="percent",
+            start_reference="date_start",
+            start_value=1,
+            start_unit="months",
+        )
+
+        self.set_cdiscounts(cdiscount)
+
+        with patch.object(
+            TestConditionDiscountLine, "_compute_condition_test", create=True
+        ) as mock:
+
+            mock.return_value = True
+            inv1 = self.contract.recurring_create_invoice()
+            inv2 = self.contract.recurring_create_invoice()
+
+            mock.return_value = False
+            inv3 = self.contract.recurring_create_invoice()
+
+        self.assertEqual(mock.call_count, 2)
+        self.assertEqual(
+            [tuple(c) for c in mock.call_args_list],
+            [
+                # inv1 is before discount validity date, so _compute_condition_test
+                # is NOT called at all (which is what we want as this call may be
+                # costly in terms of performance)
+                ((self.acct_line, fields.Date.from_string(inv2.date)), {}),
+                ((self.acct_line, fields.Date.from_string(inv3.date)), {}),
+            ],
+        )
+
+        self.assertEqual(inv1.mapped("invoice_line_ids.discount"), [0.0])
+        self.assertEqual(inv2.mapped("invoice_line_ids.discount"), [5.0])
+        self.assertEqual(inv3.mapped("invoice_line_ids.discount"), [0.0])
+
+        self._check_applied_discounts(
+            inv1.invoice_line_ids,
+            "Services from 02/15/2016 to 03/28/2016",
+        )
+
+        self._check_applied_discounts(
+            inv2.invoice_line_ids,
+            "Services from 03/29/2016 to 04/28/2016",
+            [],
+            ["Fix discount after 1 month under condition"],
+        )
+
+        self._check_applied_discounts(
+            inv3.invoice_line_ids, "Services from 04/29/2016 to 05/28/2016"
+        )
+
+        # Check a clear exception is raised when the condition
+        # computation method is not implemented:
+        del TestConditionDiscountLine._compute_condition_test
+        with self.assertRaises(ValidationError) as err:
+            cline = self.contract.contract_line_ids[0]
+            cdiscount._condition_ok(cline, inv1.date)
+        self.assertIn("invalid discount condition", err.exception.args[0].lower())

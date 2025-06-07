@@ -64,21 +64,32 @@
                 />
       </xpath>
 
-      <xpath expr="//field[@name='recurring_next_date']" position="before">
-        <field name="date_start" />
-        <field name="commitment_period_number" />
-        <field name="commitment_period_type" />
+      <xpath expr="//group[@name='main']" position="inside">
+	  <group name="commitment" string="Commitment">
+            <field name="commitment_period_number" />
+            <field name="commitment_period_type" />
+            <field name="commitment_end_date" />
+	  </group>
+	  <group name="start_end" string="Start and end dates" />
       </xpath>
 
-      <xpath expr="//field[@name='date_end']" position="after">
-        <field name="commitment_end_date" />
-        <field
+      <xpath expr="//group[@name='start_end']" position="inside">
+	<field name="date_start" position="move" />
+	<field name="date_end" position="move" />
+      </xpath>
+
+      <xpath expr="//group[@name='recurring_invoices']" position="attributes">
+	<attribute name="string">Recurrence</attribute>
+      </xpath>
+
+      <field name="contract_template_id" position="after">
+	<field
                     name="contractual_documents"
                     widget="many2many_tags"
                     options="{'open': true, 'create': true}"
                     context="{'default_public': True}"
                 />
-      </xpath>
+      </field>
 
     </field>
   </record>

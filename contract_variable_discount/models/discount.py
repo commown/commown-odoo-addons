@@ -1,0 +1,234 @@
+# Copyright (C) 2021 - Commown (https://commown.coop)
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+
+import json
+
+from dateutil.relativedelta import relativedelta
+
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
+
+
+class ContractTemplateAbstractDiscountLine(models.AbstractModel):
+    _name = "contract.abstract.discount.line"
+    _description = "Contract abstract variable discount line"
+
+    name = fields.Char(required=True, translate=True)
+
+    condition = fields.Selection(
+        [],
+        string="Condition of this discount applicability",
+        help="If empty: discount line always apply",
+        required=False,
+    )
+
+    amount_type = fields.Selection(
+        [("fix", "Fixed"), ("percent", "Percentage")],
+        default="percent",
+        required=True,
+    )
+
+    amount_value = fields.Float(
+        help="A positive amount indicates a price discount",
+        required=True,
+    )
+
+    start_type = fields.Selection(
+        [("relative", "Relative"), ("absolute", "Absolute")],
+        default="relative",
+        required=True,
+    )
+
+    start_value = fields.Integer(default=0)
+
+    start_date = fields.Date()
+
+    start_reference = fields.Selection(
+        [
+            ("date_start", "Contract line start date"),
+            ("contract:date_start", "Contract start date"),
+        ],
+        default="date_start",
+        string="Start reference date",
+        help="Date reference used to compute the discount start date",
+        required=True,
+    )
+
+    start_unit = fields.Selection(
+        [
+            ("days", "Days"),
+            ("weeks", "Weeks"),
+            ("months", "Months"),
+            ("years", "Years"),
+        ],
+        help="Units of the discount start difference with the reference date",
+        default="months",
+        required=True,
+    )
+
+    end_type = fields.Selection(
+        [("empty", "Empty"), ("relative", "Relative"), ("absolute", "Absolute")],
+        default="empty",
+        required=True,
+    )
+    end_value = fields.Integer(
+        help="No value means no end for this discount",
+    )
+
+    end_date = fields.Date()
+
+    end_reference = fields.Selection(
+        [
+            ("date_start", "Contract line start date"),
+            ("contract:date_start", "Contract start date"),
+        ],
+        default="date_start",
+        string="End reference date",
+        help="Date reference used to compute the discount end date",
+        required=True,
+    )
+
+    end_unit = fields.Selection(
+        [
+            ("days", "Days"),
+            ("weeks", "Weeks"),
+            ("months", "Months"),
+            ("years", "Years"),
+        ],
+        help="Units of the discount end difference with the reference date",
+        default="months",
+        required=True,
+    )
+
+    def is_valid(self, contract_line, date):
+        return (
+            self._start_date_ok(contract_line, date)
+            and self._end_date_ok(contract_line, date)
+            and self._condition_ok(contract_line, date)  # execute last, may be slow
+        )
+
+    def compute(self, contract_line, date_invoice):
+        "Return the actual discount for given contract line and invoice date"
+
+        self.ensure_one()
+        if self.is_valid(contract_line, date_invoice):
+            return self._compute_amount(contract_line, date_invoice)
+
+    def _compute_amount(self, contract_line, date_invoice):
+        discount = 0.0
+        if self.amount_type == "fix":
+            # Transform amount into a percentage, which discount is!
+            discount = 100.0 * self.amount_value / contract_line.price_unit
+        elif self.amount_type == "percent":
+            # Discount is a percentage, so we can return our value directly:
+            discount = self.amount_value
+        return discount
+
+    def _compute_date(self, contract_line, date_attr_prefix, force_contract_ref=False):
+        """Return the start or end date (depending on `date_attr_prefix`)
+
+        If the date type is 'empty', return None.
+
+        `force_contract_ref` is there for data migration purpose only and should be
+        removed afterwards.
+        """
+
+        assert date_attr_prefix in ("start", "end")
+
+        date_type = getattr(self, "%s_type" % date_attr_prefix)
+        if date_type == "empty":
+            return None
+        elif date_type == "absolute":
+            return getattr(self, "%s_date" % date_attr_prefix)
+
+        reference = getattr(self, "%s_reference" % date_attr_prefix)
+
+        if reference.startswith("contract:") or force_contract_ref:
+            ref_entity = contract_line.contract_id
+            if force_contract_ref:
+                ref_field = reference
+            else:
+                ref_field = reference[len("contract:") :]
+            if ref_entity.taken_over_contract_id:
+                ref_entity = ref_entity.taken_over_contract_id
+        else:
+            ref_entity = contract_line
+            ref_field = reference
+            if ref_entity.taken_over_contract_line_id:
+                ref_entity = ref_entity.taken_over_contract_line_id
+
+        ref_entity.fields_get()
+
+        reference_date = getattr(ref_entity, ref_field)
+
+        unit = getattr(self, "%s_unit" % date_attr_prefix)
+        value = getattr(self, "%s_value" % date_attr_prefix)
+
+        return reference_date + relativedelta(**{unit: value})
+
+    def _start_date_ok(self, contract_line, date_invoice):
+        date_start = self._compute_date(contract_line, "start")
+        return date_start is None or date_start <= date_invoice
+
+    def _end_date_ok(self, contract_line, date_invoice):
+        date_end = self._compute_date(contract_line, "end")
+        return not date_end or date_end > date_invoice
+
+    def _condition_ok(self, contract_line, date_invoice):
+        if not self.condition:
+            return True
+        meth = getattr(self, "_compute_condition_%s" % self.condition, None)
+        if meth is None:
+            raise ValidationError(
+                _("Invalid discount condition %(cond)s in contract %(contract)s")
+                % {"cond": self.condition, "contract": contract_line.contract_id.name}
+            )
+        return meth(contract_line, date_invoice)
+
+
+class ContractTemplateDiscountLine(models.Model):
+    _name = "contract.template.discount.line"
+    _description = "Contract template variable discount line"
+    _inherit = "contract.abstract.discount.line"
+
+    contract_template_line_id = fields.Many2one(
+        comodel_name="contract.template.line",
+        string="Contract template line",
+        required=False,
+        copy=False,
+    )
+
+
+class ContractDiscountLine(models.Model):
+    _name = "contract.discount.line"
+    _inherit = "contract.abstract.discount.line"
+    _description = "Contract variable discount line"
+
+    contract_line_id = fields.Many2one(
+        comodel_name="contract.line",
+        string="Contract line",
+        required=False,
+        copy=False,
+    )
+
+    replace_discount_line_id_domain = fields.Char(
+        compute="_compute_replace_discount_line_id_domain",
+        readonly=True,
+        store=False,
+    )
+
+    @api.depends("contract_line_id.inherited_discount_line_ids")
+    def _compute_replace_discount_line_id_domain(self):
+        for rec in self:
+            ids = rec.contract_line_id.inherited_discount_line_ids.ids
+            rec.replace_discount_line_id_domain = json.dumps([("id", "in", ids)])
+
+    replace_discount_line_id = fields.Many2one(
+        comodel_name="contract.template.discount.line",
+        string="Replace discount line",
+        help=(
+            "If a discount line is added here, it will no more apply"
+            " but be replaced by current line"
+        ),
+        required=False,
+    )
