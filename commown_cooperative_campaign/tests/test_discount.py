@@ -109,6 +109,28 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
 
         trap.perform_enqueued_jobs()
 
+    def test_subscription_not_started(self):
+        "Subscriptions after the invoice date must not be taken into account"
+        with requests_mock.Mocker() as rm:
+            rm.post(
+                "/campaigns/test-campaign/opt-in",
+                status_code=422,
+                json={"detail": "Already opt-in"},
+            )
+
+            event = {
+                "type": "optin",
+                "ts": ts_after(self.contract.recurring_next_date),
+            }
+            rm.get(
+                "/campaigns/test-campaign/subscriptions/important-events",
+                json=[{"events": [event]}],
+            )
+
+            invoice = self.contract.recurring_create_invoice()
+
+        self.assertNotIn("Applied discounts", invoice.invoice_line_ids[0].name)
+
     def test_contract_end(self):
         inv = self.invoice(partial(ts_before, days=7), mock_optin=True)
         date_end = inv.date + timedelta(days=10)
