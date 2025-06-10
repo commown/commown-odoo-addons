@@ -58,7 +58,7 @@ class Contract(models.Model):
 
     def write(self, values):
         "opt-out cooperative campaign(s) if any, when the contract ends"
-        res = super(Contract, self).write(values)
+        res = super().write(values)
         if not values.get("date_end"):
             return res
 

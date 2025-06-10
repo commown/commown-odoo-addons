@@ -23,7 +23,7 @@ def ts_before(date, days=7):
 
 class CooperativeCampaignTC(ContractSaleWithCouponTC):
     def setUp(self):
-        super(CooperativeCampaignTC, self).setUp()
+        super().setUp()
 
         # Force querying the cooperative web service:
         self.campaign.update(
