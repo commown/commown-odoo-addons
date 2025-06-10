@@ -90,8 +90,6 @@ def coop_ws_optin(
                         " if before the campaign start)"
                     )
                 )
-        else:
-            _logger.error("Opt-in error json: %s" % json)
 
     resp.raise_for_status()
 

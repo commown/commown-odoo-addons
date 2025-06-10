@@ -4,6 +4,7 @@ from functools import partial
 import mock
 import requests
 import requests_mock
+from requests.exceptions import HTTPError
 from requests_mock.exceptions import NoMockAddress
 
 from odoo.fields import Date
@@ -61,6 +62,22 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
             invoice = self.contract.recurring_create_invoice()
 
         self.assertEqual(invoice.amount_untaxed, 6.0)
+
+    def test_invoice_422_wrong_detail_message(self):
+        with requests_mock.Mocker() as rm:
+            rm.post(
+                "/campaigns/test-campaign/opt-in",
+                status_code=422,
+                json={"detail": "Unexpected error test message"},
+            )
+            chan = "odoo.addons.commown_cooperative_campaign.models.discount"
+            with self.assertLogs(chan, level="ERROR") as logged:
+                with self.assertRaises(HTTPError) as err:
+                    self.contract.recurring_create_invoice()
+
+        self.assertTrue(err.exception.args[0].startswith("422 Client Error"))
+        msg = "Opt-in error json: {'detail': 'Unexpected error test message'}"
+        self.assertEqual(logged.output[0], "ERROR:%s:%s" % (chan, msg))
 
     @mute_logger("odoo.addons.commown_cooperative_campaign.models.discount")
     def test_invoice_optin_error_any_422(self):
