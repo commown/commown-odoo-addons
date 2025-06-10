@@ -66,8 +66,6 @@ class Contract(models.Model):
             for contract_line in contract.contract_line_ids:
                 for discount_line in contract_line._applicable_discount_lines():
                     campaign = discount_line.coupon_campaign_id
-                    if not campaign.is_coop_campaign:
-                        continue
                     _dl = discount_line.with_context(no_check_coop_ws=True)
                     if _dl.is_valid(contract_line, contract.date_end):
                         partner_id = contract.partner_id
