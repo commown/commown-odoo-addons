@@ -1,0 +1,17 @@
+.field_customer_role_tags {
+    border: 1px solid black;
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+
+.field_customer_role_tags > span {
+    background: inherit;
+    background-clip: text;
+    color: transparent;
+    filter: invert(1) grayscale(1) contrast(10);
+    font-weight: bold;
+}
+
+.field_customer_role_tags > span a {
+    margin-left: 0.3em;
+}

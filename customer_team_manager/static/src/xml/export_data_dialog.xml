@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t
+        t-name="ExportDataDialog"
+        t-inherit="web.ExportDataDialog"
+        t-inherit-mode="extension"
+        owl="1"
+    >
+        <xpath expr="//div[contains(@class,'o_left_panel')]" position="attributes">
+            <attribute name="t-ref">left_panel</attribute>
+        </xpath>
+
+        <xpath
+            expr="//div[contains(@t-attf-class, 'o_right_panel')]"
+            position="attributes"
+        >
+            <attribute name="t-ref">right_panel</attribute>
+        </xpath>
+
+        <xpath expr="//div[contains(@class, 'o_import_compat')]" position="attributes">
+            <attribute name="t-ref">import_compat</attribute>
+        </xpath>
+    </t>
+</templates>

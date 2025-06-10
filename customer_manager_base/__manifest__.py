@@ -18,8 +18,15 @@
     ],
     "data": [
         "security/groups.xml",
+        "security/ir.model.access.csv",
+        "views/manager_menu.xml",
         "security/rules.xml",
         "views/project.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "/customer_manager_base/static/src/js/customer_admin_navbar.esm.js",
+        ],
+    },
     "installable": True,
 }

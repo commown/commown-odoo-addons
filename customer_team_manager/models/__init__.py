@@ -1,0 +1,5 @@
+from . import customer_role
+from . import res_partner
+from . import res_users
+from . import team
+from . import wizard_portal_access
