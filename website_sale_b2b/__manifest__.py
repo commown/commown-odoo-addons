@@ -3,13 +3,9 @@
     "category": "Business",
     "summary": "Adapt website_sale module to mixed B2C/ B2B products",
     "version": "12.0.1.1.22",
-    "description": (
-        "Add a professional products category and display all"
-        " products in it excl. taxes"
-    ),
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "crm",
         "mail",

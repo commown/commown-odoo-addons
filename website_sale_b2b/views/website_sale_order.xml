@@ -13,9 +13,11 @@
 
               <div class="alert alert-success mt-4">
                 <h2 class="alert-heading">Votre demande a été soumise</h2>
-                <hr/>
+                <hr />
                 <p>
-                  Votre demande (référencée <span t-field="order.name"></span>) nous a bien été soumise, merci !
+                  Votre demande (référencée <span
+                                        t-field="order.name"
+                                    />) nous a bien été soumise, merci !
                 </p>
                 <p>
                   Vous allez être recontacté.e dans les prochains jours.

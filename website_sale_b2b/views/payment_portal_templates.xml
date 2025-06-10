@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <template id="payment" inherit_id="website_sale.payment">
@@ -8,7 +8,7 @@
       <t t-set="is_big_b2b" t-value="order.is_big_b2b()" />
       <t t-set="is_authorized_to_order" t-value="env.user.is_authorized_to_order()" />
       <t t-set="can_order" t-value="is_authorized_to_order and not is_big_b2b" />
-      <t t-set="order_id" t-value="order.id"/>
+      <t t-set="order_id" t-value="order.id" />
     </xpath>
 
   </template>
@@ -33,17 +33,17 @@
       <!-- Too big order: post a demand instead -->
       <t t-if="is_big_b2b and is_authorized_to_order">
         <form action="/shop/submit_order" method="post" class="clearfix">
-          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-          <input type="hidden" name="order_id" t-att-value="order_id"/>
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+          <input type="hidden" name="order_id" t-att-value="order_id" />
           <div class="float-left mt-2">
             <a role="button" href="/shop/cart" class="btn btn-secondary">
-              <i class="fa fa-chevron-left"/>
+              <i class="fa fa-chevron-left" />
               <span>Back to shopping cart</span>
             </a>
           </div>
           <div class="float-right mt-2">
             <button type="submit" class="btn btn-primary">
-              <span>Submit my request</span> <i class="fa fa-chevron-right"/>
+              <span>Submit my request</span> <i class="fa fa-chevron-right" />
             </button>
           </div>
         </form>
@@ -59,7 +59,7 @@
         <div class="clearfix">
           <div class="float-left mt-2">
             <a role="button" href="/shop/cart" class="btn btn-secondary">
-              <i class="fa fa-chevron-left"/>
+              <i class="fa fa-chevron-left" />
               <span>Back to shopping cart</span>
             </a>
           </div>
