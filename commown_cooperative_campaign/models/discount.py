@@ -79,7 +79,7 @@ def coop_ws_optin(
 
     if resp.status_code == 422:
         json = resp.json()
-        if json.get("detail", None) == "Already opt-in":
+        if json.get("detail") == "Already opt-in":
             _logger.info("Double opt-in for %s", customer_key)
             if silent_double_optin:
                 return
