@@ -7,6 +7,7 @@ from werkzeug.wrappers import BaseResponse
 from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase, get_db_name
 
+from odoo.addons.commown_devices.tests.common import create_config
 from odoo.addons.product_rental.tests.common import (
     MockedEmptySessionMixin,
     RentalSaleOrderMixin,
@@ -216,11 +217,28 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
         website = self.env.ref("website.default_website")
         website.product_service_details_url = "http://commown.coop/our-services"
 
-        product = self.env.ref("website_sale.product_product_1_product_template")
-        # See product in all languages:
-        product.public_categ_ids |= self.env.ref("commown.categ_de")
+        # Create a product with a storable config
+        storable_product = self.env["product.template"].search(
+            [("type", "=", "product"), ("attribute_line_ids", "!=", False)]
+        )[0]
 
-        product_page = self.get_page(self.portal_client(), product.website_url)
+        rental_product = self._create_rental_product(
+            name="One month rental of %s" % storable_product.name,
+            recurrent_payment_amount=1.0,
+        )
+
+        create_config(
+            rental_product.product_tmpl_id,
+            "primary",
+            storable_product,
+            storable_product.product_variant_id,
+        )
+
+        # See product in all languages:
+        rental_product.website_published = True
+        rental_product.public_categ_ids |= self.env.ref("commown.categ_de")
+
+        product_page = self.get_page(self.portal_client(), rental_product.website_url)
         banner_url = product_page.xpath("//*[@id='services-banner']//a/@href")[0]
         self.assertEqual(banner_url, "http://commown.coop/our-services")
 
