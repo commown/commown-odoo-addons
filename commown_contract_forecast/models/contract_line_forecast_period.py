@@ -16,7 +16,6 @@ class ContractLineForecastPeriod(models.Model):
 
     market = fields.Selection(
         [("B2C", "B2C"), ("B2B", "B2B")],
-        string="Market",
         readonly=True,
         compute="_compute_market_and_product_range",
         store=True,
@@ -24,7 +23,6 @@ class ContractLineForecastPeriod(models.Model):
     )
 
     product_range = fields.Char(
-        string="Product range",
         readonly=True,
         compute="_compute_market_and_product_range",
         store=True,
