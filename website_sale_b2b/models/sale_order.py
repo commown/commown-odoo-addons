@@ -1,10 +1,34 @@
 import logging
+from datetime import datetime
+
+from jinja2.sandbox import SandboxedEnvironment
 
 from odoo import _, api, models
-
-from odoo.addons.mail.models.mail_template import format_amount, mako_template_env
+from odoo.tools.misc import format_amount
 
 _logger = logging.getLogger(__name__)
+
+mako_template_env = SandboxedEnvironment(
+    variable_start_string="${",
+    variable_end_string="}",
+    line_statement_prefix="%",
+    trim_blocks=True,  # do not output newline after blocks
+)
+
+mako_template_env.globals.update(
+    {
+        "str": str,
+        "datetime": datetime,
+        "len": len,
+        "abs": abs,
+        "min": min,
+        "max": max,
+        "sum": sum,
+        "filter": filter,
+        "map": map,
+        "round": round,
+    }
+)
 
 
 class SaleOrder(models.Model):
