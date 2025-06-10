@@ -7,7 +7,6 @@ class ContractLine(models.Model):
 
     _inherit = "contract.line"
 
-    @api.multi
     def _prepare_contract_line_forecast_period(
         self, period_date_start, period_date_end, recurring_next_date
     ):
@@ -48,7 +47,6 @@ class ContractLine(models.Model):
         result.append("specific_discount_line_ids")
         return result
 
-    @api.multi
     def generate_forecast_periods(self, force_sync=False):
         "Don't generate forecasts when creating a contract from sale in product_rental"
         if "contract_descr" not in self.env.context:
