@@ -37,7 +37,6 @@ class PortalWizardUser(models.TransientModel):
         help="Empty means all websites",
     )
 
-    @api.multi
     def _create_user(self):
         user = super(PortalWizardUser, self)._create_user()
         user.website_id = self.website_id

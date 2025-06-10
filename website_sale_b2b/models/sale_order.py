@@ -59,7 +59,6 @@ class SaleOrder(models.Model):
         lead.update({"team_id": team.id, "stage_id": stage.id})
         return lead
 
-    @api.multi
     def action_quotation_send(self):
         result = super().action_quotation_send()
         ref = self.env.ref
@@ -117,7 +116,6 @@ class SaleOrderLine(models.Model):
         if self.product_id.description_sale_is_template:
             self.name = self._render_product_templated_descr()
 
-    @api.multi
     def write(self, vals):
         result = super().write(vals)
         if (

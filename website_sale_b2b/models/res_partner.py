@@ -1,7 +1,7 @@
 import logging
 from collections import defaultdict
 
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -21,7 +21,6 @@ class ResPartner(models.Model):
         help="Website the user can log in. An empty value means all websites."
     )
 
-    @api.multi
     def action_create_intermediate_company(self):
         "Create an intermediate company for selected records (useful for french CAEs)"
 
@@ -60,7 +59,6 @@ class ResPartner(models.Model):
                 for contract in partner_running_contracts:
                     contract._partner_location_changed(old_loc)
 
-    @api.multi
     def rented_quantity(self, product_template=None, product_category=None):
         """Return the number of devices rented by the partner (or its company)
 

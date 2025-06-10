@@ -1,10 +1,9 @@
-from odoo import api, models
+from odoo import models
 
 
 class ProductPublicCategory(models.Model):
     _inherit = "product.public.category"
 
-    @api.multi
     def is_b2b(self):
         self.ensure_one()
         try:

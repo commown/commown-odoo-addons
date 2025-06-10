@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -51,7 +51,6 @@ class Pricelist(models.Model):
                 product.public_categ_ids.ids,
             )
 
-    @api.multi
     def _rented_quantity_infos(self, product, partner):
         choice = self.account_for_rented_quantity
         infos = {"reason": None, "quantity": 0.0}
@@ -75,7 +74,6 @@ class Pricelist(models.Model):
 
         return infos
 
-    @api.multi
     def _compute_price_rule(self, products_qty_partner, date=False, uom_id=False):
         self.ensure_one()
         choice = self.account_for_rented_quantity

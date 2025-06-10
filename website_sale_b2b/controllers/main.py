@@ -112,7 +112,7 @@ class WebsiteSaleB2B(WebsiteSale):
             and mode[1] == "billing"
             and not data.get("vat")
             and data.get("country_id")
-            and data.get("country_id") != str(env.user.company_id.country_id.id)
+            and data.get("country_id") != str(env.company.country_id.id)
         ):
             errors["vat"] = "error"
         return errors, messages

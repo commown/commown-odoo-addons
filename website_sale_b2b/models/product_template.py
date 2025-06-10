@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class ProductTemplate(models.Model):
@@ -23,7 +23,6 @@ class ProductTemplate(models.Model):
         default=False,
     )
 
-    @api.multi
     def is_b2b(self):
         self.ensure_one()
         return self.website_id == self.env.ref("website_sale_b2b.b2b_website")
