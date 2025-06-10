@@ -90,6 +90,8 @@ def coop_ws_optin(
                         " if before the campaign start)"
                     )
                 )
+        else:
+            _logger.error("Opt-in error json: %s" % json)
 
     resp.raise_for_status()
 
@@ -136,24 +138,13 @@ class ContractAbstractDiscountLine(models.AbstractModel):
                         url = self.env["ir.config_parameter"].get_param(
                             "commown_cooperative_campaign.base_url"
                         )
-                        try:
-                            coop_ws_optin(
-                                url, campaign.name, identifier, date, partner.tz
-                            )
-                        except requests.HTTPError as exc:
-                            # Try to handle double-optin nicely
-                            if exc.response.status_code == 422:
-                                json = exc.response.json()
-                                if json.get("detail", None) == "Already opt-in":
-                                    _logger.info(
-                                        "Double opt-in for %s (%d)"
-                                        % (partner.name, partner.id)
-                                    )
-                                else:
-                                    _logger.error("Opt-in error json: %s" % json)
-                                    raise
-                            else:
-                                raise
+                        coop_ws_optin(
+                            url,
+                            campaign.name,
+                            identifier,
+                            date,
+                            partner.tz,
+                        )
 
                 else:
                     _logger.warning(
