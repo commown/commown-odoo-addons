@@ -1,0 +1,48 @@
+<odoo>
+
+  <record id="wizard_abstract_to_customer_form" model="ir.ui.view">
+    <field name="name">[commown] Abstract to customer picking creation form view</field>
+    <field name="model">abstract.to.customer.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Send a device">
+        <sheet>
+          <div id="usage-title" class="h2">
+            <field name="usage" class="oe_inline" />
+          </div>
+          <group>
+            <field name="entity_id" invisible="1" />
+            <field
+                            name="all_products"
+                            widget="many2many_tags"
+                            options="{'no_create_edit': True, 'open': true}"
+                            groups="!stock.group_stock_manager"
+                            readonly="1"
+                            context="{'default_public': True}"
+                        />
+            <field
+                            name="all_products"
+                            widget="many2many_tags"
+                            options="{'no_create_edit': True, 'open': true}"
+                            groups="stock.group_stock_manager"
+                            readonly="0"
+                            context="{'default_public': True}"
+                        />
+            <field name="lot_ids" widget="many2many_tags" />
+            <field
+                            name="prioritize_repackaged"
+                            attrs='{"invisible": [("usage", "=", "customer")]}'
+                        />
+            <field name="products_locations" readonly="1" />
+            <field name="date" />
+          </group>
+        </sheet>
+        <footer>
+          <button name="create_picking" string="OK" class="btn-primary" type="object" />
+          or
+          <button string="Cancel" class="btn-default" special="cancel" />
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>

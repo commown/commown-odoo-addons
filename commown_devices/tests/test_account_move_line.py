@@ -1,0 +1,94 @@
+from odoo.tests.common import TransactionCase
+
+
+class AccountMoveLineTC(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
+        def find_account(account_type, group):
+            return cls.env["account.account"].search(
+                [
+                    ("account_type", "=", account_type),
+                    ("internal_group", "=", group),
+                    ("company_id", "=", cls.env.company.id),
+                ],
+                limit=1,
+            )
+
+        # Create accounts so that we do not depend on which l10n module is installed:
+        cls.sales_account = find_account("expense", "expense")
+        cls.rental_account = find_account("asset_current", "asset")
+
+        cls.product = cls.env["product.template"].create(
+            {
+                "name": "Fairphone 3",
+                "type": "product",
+                "tracking": "serial",
+                "property_account_expense_id": cls.sales_account.id,
+                "property_rental_account_expense_id": cls.rental_account.id,
+            }
+        )
+
+        # Otherwise the product expense account is not the one on purchase for sale
+        # invoices:
+        cls.env.company.anglo_saxon_accounting = False
+
+    def purchase(self, picking_type_ref):
+        oline_attrs = {
+            "name": self.product.name,
+            "date_planned": "2050-01-01",
+            "product_id": self.product.product_variant_id.id,
+            "product_uom": self.product.uom_id.id,
+            "product_qty": 1,
+            "price_unit": 1,
+        }
+        return self.env["purchase.order"].create(
+            {
+                "partner_id": self.env.ref("base.res_partner_1").id,
+                "picking_type_id": self.env.ref(picking_type_ref).id,
+                "order_line": [(0, 0, oline_attrs)],
+            }
+        )
+
+    def invoice_account(self, po):
+        invoice = self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "company_id": self.env.company.id,
+                "currency_id": self.env.company.currency_id.id,
+                "partner_id": po.partner_id.id,
+            }
+        )
+        invoice.purchase_id = po
+        invoice._onchange_purchase_auto_complete()
+        # Filter on line that concerns product
+        return invoice.line_ids.filtered("product_id").mapped("account_id")
+
+    def test_purchase_account_rental_product(self):
+        po = self.purchase("commown_devices.stock_picking_type_in_rental")
+        self.assertEqual(self.invoice_account(po), self.rental_account)
+
+    def test_purchase_account_rental_category(self):
+        acc = self.product.property_rental_account_expense_id
+        self.product.property_rental_account_expense_id = False
+        self.product.categ_id = self.env["product.category"].create(
+            {"property_rental_account_expense_categ_id": acc.id, "name": "tc"}
+        )
+
+        po = self.purchase("commown_devices.stock_picking_type_in_rental")
+        self.assertEqual(self.invoice_account(po), self.rental_account)
+
+    def test_purchase_account_sales(self):
+        po = self.purchase("stock.picking_type_internal")
+        self.assertEqual(self.invoice_account(po), self.sales_account)

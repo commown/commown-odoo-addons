@@ -1,0 +1,7 @@
+<odoo noupdate="1">
+
+  <record id="contract_template_to_employee" model="contract.template">
+    <field name="name">Employee device</field>
+  </record>
+
+</odoo>

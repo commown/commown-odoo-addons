@@ -1,0 +1,100 @@
+<odoo>
+
+  <record
+        id="action_wizard_project_task_hand_over_to_employee"
+        model="ir.actions.act_window"
+    >
+    <field name="name">[commown] Hand over a device to an employee</field>
+    <field name="res_model">project.task.to.employee.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record
+        id="action_wizard_project_task_involved_product_picking"
+        model="ir.actions.server"
+    >
+    <field name="name">[commown] REPAIR: Move involved product</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="state">code</field>
+    <field name="code">action = record.action_move_involved_product()</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record id="action_scrap_task_device" model="ir.actions.server">
+    <field name="name">[commown] Scrap involved device</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">action = record.action_scrap_device()</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record
+        id="action_wizard_project_task_notracking_outward_picking"
+        model="ir.actions.act_window"
+    >
+    <field name="name">[commown] SUPPORT: Send a not tracked product</field>
+    <field name="res_model">project.task.notracking.outward.picking.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record id="action_wizard_project_task_outward_picking" model="ir.actions.act_window">
+    <field name="name">[commown] SUPPORT: Send a device</field>
+    <field name="res_model">project.task.outward.picking.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record
+        id="action_wizard_project_task_notracking_inward_picking"
+        model="ir.actions.act_window"
+    >
+    <field name="name">[commown] SUPPORT: Receive a not tracked product</field>
+    <field name="res_model">project.task.notracking.inward.picking.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record id="action_wizard_project_task_inward_picking" model="ir.actions.act_window">
+    <field name="name">[commown] SUPPORT: Receive a device</field>
+    <field name="res_model">project.task.inward.picking.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record
+        id="action_wizard_project_task_contract_transfer"
+        model="ir.actions.act_window"
+    >
+    <field
+            name="name"
+        >[commown] CONTRACT: Transfer involved device to another contract</field>
+    <field name="res_model">project.task.contract_transfer.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{'default_task_id': active_id}</field>
+    <field name="binding_model_id" ref="project.model_project_task" />
+  </record>
+
+  <record id="project_task_action_to_customer_picking" model="ir.actions.server">
+    <field name="name">[commown] Generate picking (project.task)</field>
+    <field name="model_id" ref="model_project_task" />
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">action = record.action_to_customer_picking()</field>
+    <field name="binding_model_id" ref="model_project_task" />
+  </record>
+
+</odoo>

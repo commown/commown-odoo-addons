@@ -1,0 +1,265 @@
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+
+from .common import ToCustomerPickingMixin, _assigned
+
+CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
+    "commown_devices.diagnostic_stage",
+    "commown_devices.resiliated_stage",
+]
+
+
+class ProjectTaskType(models.Model):
+    _inherit = "project.task.type"
+
+    check_picking_assigned = fields.Boolean(
+        "Check picking assigned when entering stage?",
+        default=False,
+    )
+
+
+class ProjectTask(ToCustomerPickingMixin, models.Model):
+    _inherit = "project.task"
+
+    storable_product_id = fields.Many2one(
+        string="Article",
+        comodel_name="product.product",
+    )
+
+    storable_product_id_domain = fields.Binary(
+        compute="_compute_storable_product_domain",
+        readonly=True,
+        store=False,
+        default=[],
+    )
+
+    lot_id = fields.Many2one(
+        string="Device",
+        comodel_name="stock.lot",
+    )
+
+    lot_id_domain = fields.Binary(
+        compute="_compute_lot_domain",
+        readonly=True,
+        store=False,
+        default=[],
+    )
+
+    device_tracking = fields.Boolean(
+        "Use for device tracking?", related="project_id.device_tracking"
+    )
+
+    show_related_move_lines = fields.Boolean(
+        "Show related move lines", related="project_id.show_related_move_lines"
+    )
+
+    move_line_ids = fields.One2many(
+        "stock.move.line",
+        string="Move Lines",
+        related="contract_id.move_line_ids",
+    )
+
+    def _compute_storable_product_domain(self):
+        domain = [("type", "=", "product")]
+        if self.require_contract:
+            products = self._may_be_related_lots().mapped("product_id")
+            domain = [("id", "in", products.ids)]
+        self.storable_product_id_domain = domain
+
+    def _may_be_related_lots(self):
+        """Return lots that lay be related to current task:
+        - those already in charge of the partner (contract.lots_ids)
+        - those sent to the partner but not arrived yet.
+        """
+        lots = self.env["stock.lot"]
+        contracts = self.env["contract.contract"]
+
+        if self.contract_id:
+            contracts = self.contract_id
+
+        elif self.commercial_partner_id:
+            domain = [
+                ("partner_id.commercial_partner_id", "=", self.commercial_partner_id.id)
+            ]
+            contracts = contracts.search(domain)
+
+        for contract in contracts:
+            lots |= contract.lot_ids
+            lots |= contract.move_line_ids.filtered(
+                lambda ml: _assigned(ml.picking_id)
+            ).mapped("lot_id")
+
+        return lots
+
+    def _compute_lot_domain(self):
+        domain = []
+
+        product = self.storable_product_id
+        if product:
+            domain.append(("product_id", "=", product.id))
+
+        if self.require_contract:
+            lots = self._may_be_related_lots()
+            domain.append(("id", "in", lots.ids or [0]))
+
+        else:
+            qdom = [
+                ("quantity", ">", 0),
+                "|",
+                (
+                    "location_id",
+                    "child_of",
+                    self.env.ref("commown_devices.stock_location_devices_to_check").id,
+                ),
+                (
+                    "location_id",
+                    "child_of",
+                    self.env.ref("commown_devices.stock_location_new_devices").id,
+                ),
+            ]
+            if product:  # optimize the request a bit
+                qdom.append(("lot_id.product_id", "=", product.id))
+            quants = self.env["stock.quant"].search(qdom)
+            domain.append(("id", "in", quants.mapped("lot_id").ids))
+
+        self.lot_id_domain = domain
+
+    def _reset_field_target(self, field_name):
+        """Set `field_name` according to its domain companion field and actual value
+
+        Perform a search of the possible values from `domain` and:
+        - if there is a single possible value, use it to set the field
+        - otherwise, if the actual value isn't one of them, reset the field
+        - otherwise do nothing (and let the actual value)
+        """
+
+        domain = getattr(self, field_name + "_domain")
+        model = self.env[self._fields[field_name].comodel_name]
+        possible_values = model.search(domain)
+        if len(possible_values) == 1:
+            setattr(self, field_name, possible_values)
+        else:
+            value = getattr(self, field_name)
+            if value and value not in possible_values:
+                setattr(self, field_name, False)
+
+    @api.onchange("partner_id")
+    def onchange_partner_id_restrict_storable_product_and_lot_id(self):
+        "If contract_id could not be guessed, restrict product and lot at best"
+        if not self.contract_id:  # otherwise another onchange will do the job
+            return self.onchange_contract_or_product()
+
+    @api.onchange("contract_id", "storable_product_id")
+    def onchange_contract_or_product(self):
+        self._compute_lot_domain()
+        self._compute_storable_product_domain()
+
+        self._reset_field_target("lot_id")
+        self._reset_field_target("storable_product_id")
+
+    @api.onchange("lot_id")
+    def onchange_lot_id(self):
+        if self.lot_id:
+            self.storable_product_id = self.lot_id.product_id
+            if not self.contract_id and self.lot_id.contract_id:
+                self.contract_id = self.lot_id.contract_id
+
+    @api.constrains("stage_id")
+    def onchange_stage_id_prevent_contract_resiliation_with_device(self):
+        check_stage_ids = tuple(
+            self.env.ref(ref).id for ref in CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS
+        )
+        erroneous_task = self.search(
+            [
+                ("id", "in", self.ids),
+                ("stage_id", "in", check_stage_ids),
+            ]
+        ).filtered(lambda t: t.contract_id.lot_ids)
+        if erroneous_task:
+            raise UserError(
+                _(
+                    "These tasks can not be moved forward. There are still device(s) "
+                    "associated with their contract: %s"
+                )
+                % erroneous_task.ids
+            )
+
+    @api.constrains("stage_id")
+    def onchange_stage_id_check_assigned_picking(self):
+        erroneous_task = self.search(
+            [
+                ("id", "in", self.ids),
+                ("stage_id.check_picking_assigned", "=", True),
+            ]
+        ).filtered(
+            lambda task: not any(
+                [
+                    picking["origin"] == task.get_name_for_origin()
+                    and picking.state == "assigned"
+                    and "/" + str(task.contract_id.send_default_location().id) + "/"
+                    in picking.location_id.parent_path
+                    for picking in task.contract_id.move_line_ids.mapped("picking_id")
+                ]
+            )
+        )
+        if erroneous_task:
+            raise UserError(
+                _(
+                    "These tasks can not be moved forward. There are no picking "
+                    "linked to those tasks: %s"
+                )
+                % erroneous_task.ids
+            )
+
+    def action_scrap_device(self):
+        if not self.lot_id:
+            raise UserError(_("Device field is not set"))
+
+        current_loc = (
+            self.env["stock.quant"]
+            .search([("lot_id", "=", self.lot_id.id), ("quantity", ">", 0)])
+            .location_id
+        )
+        if current_loc.scrap_location:
+            raise UserError(_("Device is already in a scrap location"))
+
+        ctx = {
+            "default_product_id": self.lot_id.product_id.id,
+            "default_lot_id": self.lot_id.id,
+            "default_origin": self.get_name_for_origin(),
+            "default_contract_id": self.contract_id.id,
+        }
+
+        if current_loc:
+            ctx["default_location_id"] = current_loc[0].id
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "stock.scrap",
+            "name": _("Scrap device"),
+            "view_mode": "form",
+            "view_type": "form",
+            "context": ctx,
+        }
+
+    def action_move_involved_product(self):
+        """Choose the right picking creation wizard depending
+        on product tracking mode
+        """
+        if self.storable_product_id.tracking == "serial":
+            wizard = "project.task.involved_device_picking.wizard"
+        else:
+            wizard = "project.task.involved_nonserial_product_picking.wizard"
+
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": wizard,
+            "name": _("Move involved product"),
+            "view_mode": "form",
+            "view_type": "form",
+            "target": "new",
+            "context": {"default_task_id": self.id},
+        }
+
+    def get_name_for_origin(self):
+        return "Task-%s" % self.id

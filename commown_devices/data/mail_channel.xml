@@ -1,0 +1,9 @@
+<odoo>
+
+  <record id="late_pickings_with_lots_channel" model="mail.channel">
+    <field name="name">Late pickings channel</field>
+    <field name="channel_type">channel</field>
+    <field name="group_public_id" ref="base.group_user" />
+  </record>
+
+</odoo>
