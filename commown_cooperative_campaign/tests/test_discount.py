@@ -132,6 +132,7 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
         self.assertNotIn("Applied discounts", invoice.invoice_line_ids[0].name)
 
     def test_contract_end(self):
+        "Opt-out service must be called on contract end"
         inv = self.invoice(partial(ts_before, days=7), mock_optin=True)
         date_end = inv.date + timedelta(days=10)
         with requests_mock.Mocker() as rm:
