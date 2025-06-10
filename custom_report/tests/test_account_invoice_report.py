@@ -20,7 +20,21 @@ class AccountInvoiceReportTC(ReportTC):
         cls.b2c_partner = cls.env.ref("base.partner_demo_portal")
         cls.b2b_partner = cls.partner = cls.env.ref("base.res_partner_address_1")
 
-        deposit_account = cls.env.ref("l10n_fr.1_pcg_2751")
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+                coa.try_loading(company=cls.env.company, install_demo=True)
+
+        deposit_account = cls.env["account.account"].search(
+            [
+                ("code", "=", 275100),
+                ("company_id", "=", cls.env.company.id),
+            ]
+        )
 
         categ_deposit = cls.env["product.category"].create(
             {
