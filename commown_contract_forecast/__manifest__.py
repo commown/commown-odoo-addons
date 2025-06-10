@@ -3,11 +3,10 @@
 
 {
     "name": "Commown contract forecast integration",
-    "summary": "Integrate the contract_forecast module into Commown odoo-based management software",
     "version": "12.0.1.1.3",
     "development_status": "Alpha",
     "category": "Accounting/Accounting",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "author": "Commown SCIC",
     "maintainers": ["fcayre"],
     "license": "AGPL-3",
