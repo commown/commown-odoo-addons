@@ -1,0 +1,12 @@
+<odoo noupdate="1">
+
+    <record id="job_function_coop_ws_optout" model="queue.job.function">
+        <field
+            name="model_id"
+            ref="commown_cooperative_campaign.model_contract_contract"
+        />
+        <field name="method">_coop_ws_optout</field>
+        <field name="channel_id" ref="queue_job.channel_root" />
+    </record>
+
+</odoo>

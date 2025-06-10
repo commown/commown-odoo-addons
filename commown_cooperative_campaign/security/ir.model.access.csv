@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+commown_cooperative_campaign.access_coupon_late_optin_wizard,access_coupon_late_optin_wizard,commown_cooperative_campaign.model_coupon_late_optin_wizard,base.group_user,1,0,0,0
