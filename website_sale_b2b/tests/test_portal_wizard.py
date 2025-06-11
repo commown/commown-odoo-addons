@@ -14,18 +14,18 @@ class PortalWizardTC(TransactionCase):
 
         wizard = wizard_model.with_context(active_ids=partner.ids).create({})
         self.assertEqual(len(wizard.user_ids), 1)
-        self.assertEqual(wizard.user_ids[0].website_id, website)
-        self.assertTrue(wizard.user_ids[0].had_user)
+        self.assertEqual(wizard.user_ids.website_id, website)
+        self.assertTrue(wizard.user_ids.had_user)
 
         partner2 = partner.copy({"website_id": False})
         self.assertFalse(partner2.user_ids)
 
         wizard = wizard_model.with_context(active_ids=partner2.ids).create({})
         self.assertEqual(len(wizard.user_ids), 1)
-        self.assertFalse(wizard.user_ids[0].website_id)
-        self.assertFalse(wizard.user_ids[0].had_user)
+        self.assertFalse(wizard.user_ids.website_id)
+        self.assertFalse(wizard.user_ids.had_user)
 
-        wizard.user_ids[0].update({"website_id": website.id})
+        wizard.user_ids.update({"website_id": website.id})
         wizard.user_ids.action_grant_access()
 
         self.assertTrue(partner2.user_ids)
