@@ -11,7 +11,7 @@
       </xpath>
 
       <!-- Add a b2c/b2b checkbox to the login page -->
-      <xpath expr="//div[hasclass('field-password')]" position="after">
+      <xpath expr="//*[@id='password']//ancestor::div" position="after">
         <div
                     t-if="request.website.login_checkbox_message"
                     class="form-group form-check"

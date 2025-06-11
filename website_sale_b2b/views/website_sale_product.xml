@@ -9,9 +9,6 @@
   <!-- Replace description_sale by website_description_sale -->
 
   <template id="product_b2b" inherit_id="website_sale.product">
-    <xpath expr="//hr[@t-if='product.description_sale']" position="attributes">
-      <attribute name="t-if">product.website_description_sale</attribute>
-    </xpath>
     <xpath expr="//p[@t-field='product.description_sale']" position="attributes">
       <attribute name="t-field">product.website_description_sale</attribute>
     </xpath>
@@ -37,14 +34,17 @@
 
   <template
         id="product_configurator_configure_optional_products"
-        inherit_id="sale.product_configurator_configure_optional_products"
+        inherit_id="sale_product_configurator.configure_optional_products"
     >
     <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
       <attribute name="t-field">product.website_description_sale</attribute>
     </xpath>
   </template>
 
-  <template id="optional_product_items" inherit_id="sale.optional_product_items">
+  <template
+        id="optional_product_items"
+        inherit_id="sale_product_configurator.optional_product_items"
+    >
     <xpath expr="//div[@t-field='product.description_sale']" position="attributes">
       <attribute name="t-field">product.website_description_sale</attribute>
     </xpath>

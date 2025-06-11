@@ -6,7 +6,7 @@
     <field name="inherit_id" ref="website.view_website_form" />
     <field name="arch" type="xml">
 
-      <xpath expr="//group[@name='other']/group" position="inside">
+      <xpath expr="//field[@name='custom_code_head']" position="after">
         <field name="login_checkbox_message" />
         <field name="legal_notice_url" />
       </xpath>

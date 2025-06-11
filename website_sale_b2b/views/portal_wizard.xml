@@ -5,7 +5,7 @@
     <field name="model">portal.wizard</field>
     <field name="inherit_id" ref="portal.wizard_view" />
     <field name="arch" type="xml">
-      <xpath expr="//tree//field[@name='in_portal']" position="before">
+      <xpath expr="//tree//field[@name='is_portal']" position="before">
         <field name="had_user" invisible="1" />
         <field name="website_id" attrs="{'readonly': [('had_user', '=', True)]}" />
       </xpath>

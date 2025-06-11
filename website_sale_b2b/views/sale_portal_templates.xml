@@ -6,7 +6,7 @@
     >
 
     <!-- Fix order_id not passed to payment tokens list template -->
-    <xpath expr="//t[@t-call='payment.payment_tokens_list']" position="inside">
+    <xpath expr="//t[@t-call='payment.checkout']" position="inside">
       <t t-set="order_id" t-value="sale_order.id" />
     </xpath>
 
@@ -15,7 +15,7 @@
          access token is used instead. `is_authorized_to_order` is
          considered always True because current user has this token.
     -->
-    <xpath expr="//*[@t-call='payment.payment_tokens_list']" position="inside">
+    <xpath expr="//*[@t-call='payment.checkout']" position="inside">
       <!-- If the order validated and sent by Commown, the user can validate it: -->
       <t
                 t-set="is_big_b2b"

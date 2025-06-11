@@ -4,7 +4,7 @@
   <template id="payment" inherit_id="website_sale.payment">
 
     <!-- Add variables to detect Big B2B -->
-    <xpath expr="//*[@t-call='payment.payment_tokens_list']" position="inside">
+    <xpath expr="//*[@t-call='payment.checkout']" position="inside">
       <t t-set="is_big_b2b" t-value="order.is_big_b2b()" />
       <t t-set="is_authorized_to_order" t-value="env.user.is_authorized_to_order()" />
       <t t-set="can_order" t-value="is_authorized_to_order and not is_big_b2b" />
@@ -22,7 +22,7 @@
        Warning the order is NOT available here (and it has not the same name in both
        templates named above: order in one case, sale_order in the other).
   -->
-  <template id="payment_tokens_list" inherit_id="payment.payment_tokens_list">
+  <template id="payment_tokens_list" inherit_id="payment.checkout">
 
     <xpath expr="//form" position="attributes">
       <attribute name="t-if">can_order</attribute>
