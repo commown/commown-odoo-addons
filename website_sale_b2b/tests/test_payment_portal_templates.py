@@ -25,8 +25,8 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         self.env["payment.token"].create(
             {
                 "partner_id": self.order.partner_id.id,
-                "acquirer_id": self.env.ref("payment.payment_acquirer_stripe").id,
-                "acquirer_ref": "test-ref",
+                "provider_id": self.env.ref("payment.payment_provider_stripe").id,
+                "provider_ref": "test-ref",
                 "verified": True,
             }
         )
@@ -77,7 +77,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
             errors=[],
             partner=self.order.partner_id.id,
             only_services=self.order.only_services,
-            payment_action_id=self.env.ref("payment.action_payment_acquirer").id,
+            payment_action_id=self.env.ref("payment.action_payment_provider").id,
             return_url="/shop/payment/validate",
             bootstrap_formatting=True,
             access_token=self.order.access_token,
@@ -104,7 +104,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
             "report_type": "html",
             "res_company": order_sudo.company_id,
             "pms": payment_token,
-            "acquirers": payment_token.acquirer_id,
+            "acquirers": payment_token.provider_id,
         }
 
         return self.render_view(
