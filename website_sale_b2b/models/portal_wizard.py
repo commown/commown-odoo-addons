@@ -4,26 +4,19 @@ from odoo import api, fields, models
 class PortalWizard(models.TransientModel):
     _inherit = "portal.wizard"
 
-    @api.model
-    def default_get(self, fields_list):
-        result = super(PortalWizard, self).default_get(fields_list)
-        if "user_ids" in fields_list:
-            self._complete_user_changes(result["user_ids"])
-        return result
-
-    def _complete_user_changes(self, user_changes):
-        for user_change in user_changes:
-            if user_change[0] != 0:
-                continue
-            attrs = user_change[2]
-            partner = self.env["res.partner"].browse(attrs["partner_id"])
+    @api.depends("partner_ids")
+    def _compute_user_ids(self):
+        res = super()._compute_user_ids()
+        for portal_wizard_user in self.user_ids:
+            partner = portal_wizard_user.partner_id
             websites = partner.mapped("user_ids.website_id")
-            attrs.update(
+            portal_wizard_user.update(
                 {
                     "had_user": bool(partner.user_ids),
                     "website_id": bool(websites) and websites[0].id,
                 }
             )
+        return res
 
 
 class PortalWizardUser(models.TransientModel):
