@@ -25,8 +25,8 @@ class PortalWizardTC(TransactionCase):
         self.assertFalse(wizard.user_ids[0].website_id)
         self.assertFalse(wizard.user_ids[0].had_user)
 
-        wizard.user_ids[0].update({"website_id": website.id, "in_portal": True})
-        wizard.action_apply()
+        wizard.user_ids[0].update({"website_id": website.id})
+        wizard.user_ids.action_grant_access()
 
         self.assertTrue(partner2.user_ids)
         self.assertEqual(partner2.user_ids[0].website_id, website)
