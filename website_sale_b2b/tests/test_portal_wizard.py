@@ -1,8 +1,7 @@
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 
-@at_install(False)
-@post_install(True)
+@tagged("post_install", "-at_install")
 class PortalWizardTC(TransactionCase):
     def test(self):
         partner = self.env.ref("base.partner_demo_portal")
