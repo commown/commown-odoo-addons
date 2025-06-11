@@ -14,7 +14,7 @@ class PortalWizardTC(TransactionCase):
 
         wizard = wizard_model.with_context(active_ids=partner.ids).create({})
         self.assertEqual(len(wizard.user_ids), 1)
-        self.assertTrue(wizard.user_ids[0].website_id, website)
+        self.assertEqual(wizard.user_ids[0].website_id, website)
         self.assertTrue(wizard.user_ids[0].had_user)
 
         partner2 = partner.copy({"website_id": False})
