@@ -6,6 +6,7 @@ requests-mock
 # https://github.com/OCA/contract/pull/1231 (16.0 port of contract_payment_auto)
 # + use whool for packaging
 git+https://github.com/commown/contract@16.0-imp-contract_payment_auto-packaging#subdirectory=contract_payment_auto
+git+https://github.com/commown/contract@16.0-imp-contract_forecast-factor-out-jobs-creation#subdirectory=contract_forecast
 
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=base_usability
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=base_company_extension
