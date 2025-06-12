@@ -91,3 +91,14 @@ class ContractLineComputeForecastTC(CooperativeCampaignTC):
         self.assertTrue(result.get("view_mode", "").startswith("graph"))
         graph_view = self.env.ref("commown_contract_forecast.forecast_view_graph")
         self.assertIn((graph_view.id, "graph"), result.get("views", []))
+
+    def test_compute_market_and_product_range(self):
+        self.contract.contract_template_id.name = "FPx/B2C/AnyThing"
+
+        with trap_jobs() as trap:
+            self.contract.date_start = fake_today()
+        trap.perform_enqueued_jobs()
+
+        forecasts = self.contract.mapped("contract_line_ids.forecast_period_ids")
+        self.assertEqual(set(forecasts.mapped("market")), {"B2C"})
+        self.assertEqual(set(forecasts.mapped("product_range")), {"FPx"})
