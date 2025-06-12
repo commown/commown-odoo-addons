@@ -26,10 +26,9 @@ class SaleOrderReportTC(ReportTC):
     def test_title_state_sale(self):
         self.so.action_confirm()
         assert self.so.state == "sale", "Pre-requisite failure"
-        assert self.so.date_order != self.so.confirmation_date, "Pre-requisite failure"
 
         doc = self.html_report(self.so)
-        conf_date = self.so.confirmation_date.strftime("%m/%d/%Y")  # US style
+        conf_date = self.so.date_order.strftime("%m/%d/%Y")  # US style
         self.assertEqual(
             self.h1(doc),
             "Order Acknowledgement %s - %s" % (self.so.display_name, conf_date),
