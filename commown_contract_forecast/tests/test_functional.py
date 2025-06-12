@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import tools
 from odoo.modules.module import get_resource_path
-from odoo.tests.common import at_install, post_install
+from odoo.tests.common import tagged
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 from odoo.addons.queue_job.tests.common import trap_jobs
@@ -10,8 +10,7 @@ from odoo.addons.queue_job.tests.common import trap_jobs
 from .common import fake_today
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class CommownContractForecastFunctionalTC(RentalSaleOrderTC):
     def setUp(self):
         super().setUp()
