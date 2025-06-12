@@ -40,7 +40,7 @@ class ContractLineComputeForecastTC(CooperativeCampaignTC):
             end_value=False,  # no end
         )
 
-        self.contract.partner_id.company_id.update(
+        self.contract.company_id.update(
             {
                 "enable_contract_forecast": True,
                 "contract_forecast_rule_type": "monthly",
