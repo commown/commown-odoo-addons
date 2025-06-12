@@ -1,7 +1,5 @@
-import datetime
-
 from odoo import fields, models
-from odoo.tools.safe_eval import safe_eval
+from odoo.tools.safe_eval import datetime, safe_eval
 
 
 class SelfTroubleshootingCategory(models.Model):
