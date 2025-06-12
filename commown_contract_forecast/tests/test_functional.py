@@ -15,6 +15,8 @@ class CommownContractForecastFunctionalTC(RentalSaleOrderTC):
     def setUp(self):
         super().setUp()
 
+        self.env["ir.config_parameter"].sudo().set_param("contract.queue.job", True)
+
         if not self.env["account.journal"].search([("type", "=", "sale")]):
             # When running in a db where the commown module is not installed
             # (=not the in the CI), no dependency module sets up accounting
