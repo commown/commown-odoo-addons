@@ -45,6 +45,7 @@ class ContractLine(models.Model):
     def _get_forecast_update_trigger_fields(self):
         result = super()._get_forecast_update_trigger_fields()
         result.append("specific_discount_line_ids")
+        result.append("last_date_invoiced")
         return result
 
     def generate_forecast_periods(self, force_sync=False):
