@@ -84,3 +84,10 @@ class ContractLineComputeForecastTC(CooperativeCampaignTC):
             clines.mapped("forecast_period_ids").mapped("discount"),
             [80.0] * 2 + [0.0] * 9 + [10.0] * 12 + [20.0] * 12,
         )
+
+    def test_action_show_contract_forecast(self):
+        "The show contract forecast action does not crash"
+        result = self.contract.action_show_contract_forecast()
+        self.assertTrue(result.get("view_mode", "").startswith("graph"))
+        graph_view = self.env.ref("commown_contract_forecast.forecast_view_graph")
+        self.assertIn((graph_view.id, "graph"), result.get("views", []))
