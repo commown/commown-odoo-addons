@@ -107,7 +107,7 @@ class AccountInvoiceReportTC(ReportTC):
             inv.line_ids.update(
                 {
                     "contract_line_id": cline.id,
-                    "account_analytic_id": cline.analytic_account_id.id,
+                    "analytic_distribution": cline.analytic_distribution,
                 }
             )
         inv.action_post()
@@ -157,7 +157,7 @@ class AccountInvoiceReportTC(ReportTC):
                         {
                             "name": "line 1",
                             "product_id": self.std_product.id,
-                            "analytic_account_id": aa.id,
+                            "analytic_distribution": {str(aa.id): 100},
                         },
                     )
                 ],
