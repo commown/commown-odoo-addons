@@ -12,6 +12,6 @@ def fake_today():
     the end of a month.
     """
     base_date = date.today() - relativedelta(days=7)
-    if base_date.day > 27:
-        base_date = date(base_date.year, base_date.month, 27)
+    if base_date.day > 27:  # pragma: no cover
+        base_date = date(base_date.year, base_date.month, 27)  # pragma: no cover
     return base_date
