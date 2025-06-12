@@ -66,3 +66,9 @@ class SaleOrderReportTC(ReportTC):
         self.assertTrue(b"Payment terms: Immediate" in html)
         self.assertTrue(b"good for agreement" in html)
         self.assertTrue(b"12/31/2040" in html)
+
+    def test_order_note(self):
+        self.so.note = "Sale order test note"
+        html = tostring(self.html_report(self.so))
+        self.assertTrue(b"Notes" in html)
+        self.assertTrue(b"Sale order test note" in html)
