@@ -1,7 +1,5 @@
 from dateutil.relativedelta import relativedelta
 
-from odoo import tools
-from odoo.modules.module import get_resource_path
 from odoo.tests.common import tagged
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
@@ -14,24 +12,7 @@ from .common import fake_today
 class CommownContractForecastFunctionalTC(RentalSaleOrderTC):
     def setUp(self):
         super().setUp()
-
         self.env["ir.config_parameter"].sudo().set_param("contract.queue.job", True)
-
-        if not self.env["account.journal"].search([("type", "=", "sale")]):
-            # When running in a db where the commown module is not installed
-            # (=not the in the CI), no dependency module sets up accounting
-            # and invoice generation crashes; following inserts the minimal
-            # data needed to avoid this:
-            tools.convert_file(
-                self.cr,
-                "commown_contract_forecast",
-                get_resource_path("account", "test", "account_minimal_test.xml"),
-                {},
-                "init",
-                False,
-                "test",
-                self.registry._assertion_report,
-            )
 
     def test_contract_life_cycle(self):
         "Forecast computations should be triggered when (and only when) needed"
