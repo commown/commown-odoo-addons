@@ -138,7 +138,11 @@ class AccountInvoiceReportTC(ReportTC):
         cname, partner = "Test Contract", self.b2c_partner
 
         aa = self.env["account.analytic.account"].create(
-            {"name": cname, "partner_id": partner.id}
+            {
+                "name": cname,
+                "partner_id": partner.id,
+                "plan_id": self.env.ref("analytic.analytic_plan_projects").id,
+            }
         )
 
         contract = self.env["contract.contract"].create(
