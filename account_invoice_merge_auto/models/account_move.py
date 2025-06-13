@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 
 
 class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+    _inherit = "account.move"
 
     auto_merge = fields.Boolean(
         default=False,
@@ -26,15 +26,15 @@ class AccountInvoice(models.Model):
                 ("state", "=", "draft"),
                 ("auto_merge", "=", True),
                 "|",
-                ("date_invoice", "=", False),
-                ("date_invoice", "<=", merge_date),
+                ("date", "=", False),
+                ("date", "<=", merge_date),
             ]
         )
 
         # `merge_date` may exceed `invoice_merge_next_date` if
         # current cron task is not executed often enough:
         return invoices.filtered(
-            lambda inv: (inv.date_invoice <= inv.partner_id.invoice_merge_next_date)
+            lambda inv: (inv.date <= inv.partner_id.invoice_merge_next_date)
         )
 
     @api.model
