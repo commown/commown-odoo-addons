@@ -42,8 +42,7 @@ class AccountInvoice(models.Model):
         """Automatically merge invoices based on partner preferences and
         increment the next invoice merge date.
         """
-        if merge_date is None:
-            merge_date = fields.Date.today()
+        merge_date = merge_date or fields.Date.today()
         _logger.debug("Executing _cron_merge_invoices with merge date %s", merge_date)
 
         invoices = self._invoice_merge_candidates(merge_date)
