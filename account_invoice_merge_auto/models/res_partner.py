@@ -39,7 +39,6 @@ class InvoiceMergeAutoPartner(models.Model):
         index=True,
     )
 
-    @api.multi
     def _invoice_merge_increment_next_date(self):
         "Increment invoice merge next date according to recurrence settings"
         for partner in self:
