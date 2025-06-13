@@ -11,10 +11,11 @@ _logger = logging.getLogger(__name__)
 def py3o_extend(report_xml, localcontext):
     def translate(text, localcontext=localcontext, types=("code",)):
         _logger.debug("LOCALCONTEXT: %s", localcontext)
-        if localcontext.get("docs"):
-            lang = localcontext["docs"][0].partner_id.lang
-        else:
-            lang = localcontext["lang"]
+        lang = (
+            localcontext["docs"][0].partner_id.lang
+            if localcontext.get("docs")
+            else localcontext["lang"]
+        )
 
         result = code_translations.get_python_translations("custom_report", lang).get(
             text, False
