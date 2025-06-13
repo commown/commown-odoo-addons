@@ -1,0 +1,19 @@
+# Copyright 2023 Commown SCIC
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
+from odoo import models
+
+
+class Contract(models.Model):
+
+    _inherit = "contract.contract"
+
+    def action_show_contract_forecast(self):
+        result = super().action_show_contract_forecast()
+        result["view_mode"] = "graph,pivot,tree"
+        graph_view = self.env.ref("commown_contract_forecast.forecast_view_graph")
+        result["views"] = [(graph_view.id, "graph"), (None, "pivot"), (None, "tree")]
+        return result
+
+    def action_regenerate_forecast(self):
+        self.mapped("contract_line_ids").generate_forecast_periods(force_sync=True)
