@@ -26,6 +26,7 @@ def _i18n_account_invoice():
     _("Sales contact")
     _("Sub-Total")
     _("Tax")
+    _("Total Taxes")
     _("Total")
     _("Unit Price")
     _("Untaxed Amount")
