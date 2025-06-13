@@ -1,23 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <record id="rental_fees_computation_view_tree" model="ir.ui.view">
     <field name="name">rental.fees.computation.tree</field>
     <field name="model">rental_fees.computation</field>
     <field name="arch" type="xml">
-      <tree
-          string="Rental fees computations"
-          decoration-muted="has_forecast"
-          decoration-it="state != 'done'"
-          >
-        <field name="has_forecast" invisible="True"/>
-        <field name="partner_id"/>
-        <field name="until_date" string="Date"/>
-        <field name="fees" string="Fees until date"/>
-        <field name="fees_definition_ids" widget="many2many_tags" options="{'open': true}"/>
-        <field name="invoice_ids" widget="many2many_tags" options="{'open': true}"/>
-        <field name="state"/>
+      <tree decoration-muted="has_forecast" decoration-it="state != 'done'">
+        <field name="has_forecast" invisible="True" />
+        <field name="partner_id" />
+        <field name="until_date" string="Date" />
+        <field name="fees" string="Fees until date" />
+        <field
+                    name="fees_definition_ids"
+                    widget="many2many_tags"
+                    options="{'open': true}"
+                />
+        <field name="invoice_ids" widget="many2many_tags" options="{'open': true}" />
+        <field name="state" />
       </tree>
     </field>
   </record>
@@ -26,18 +25,18 @@
     <field name="name">rental.fees.computation.detail.tree</field>
     <field name="model">rental_fees.computation.detail</field>
     <field name="arch" type="xml">
-      <tree string="Rental fees computation details">
-        <field name="fees_computation_id"/>
-        <field name="fees" string="Amount" sum="Total"/>
-        <field name="is_forecast"/>
-        <field name="fees_type"/>
-        <field name="lot_id"/>
-        <field name="contract_id"/>
-        <field name="market"/>
-        <field name="from_date"/>
-        <field name="to_date"/>
-        <field name="fees_definition_id"/>
-        <field name="fees_definition_line_id" string="Def line nb"/>
+      <tree>
+        <field name="fees_computation_id" />
+        <field name="fees" string="Amount" sum="Total" />
+        <field name="is_forecast" />
+        <field name="fees_type" />
+        <field name="lot_id" />
+        <field name="contract_id" />
+        <field name="market" />
+        <field name="from_date" />
+        <field name="to_date" />
+        <field name="fees_definition_id" />
+        <field name="fees_definition_line_id" string="Def line nb" />
       </tree>
     </field>
   </record>
@@ -47,9 +46,9 @@
     <field name="model">rental_fees.computation.detail</field>
     <field name="arch" type="xml">
       <graph type="bar" stacked="True">
-        <field name="from_date" interval="month" type="row"/>
-        <field name="product_template_id" type="row"/>
-        <field name="fees" type="measure"/>
+        <field name="from_date" interval="month" type="row" />
+        <field name="product_template_id" type="row" />
+        <field name="fees" type="measure" />
       </graph>
     </field>
   </record>
@@ -59,19 +58,28 @@
     <field name="model">rental_fees.computation</field>
     <field name="arch" type="xml">
       <search string="Rental Fees Computation">
-        <field name="fees_definition_ids"/>
-        <field name="invoice_ids" string="Invoices"/>
-        <field name="partner_id" string="Supplier"/>
+        <field name="fees_definition_ids" />
+        <field name="invoice_ids" string="Invoices" />
+        <field name="partner_id" string="Supplier" />
         <group name="invoices">
-          <filter string="Invoiced" name="invoiced"
-                  domain="[('invoice_ids', '!=', False)]"/>
-          <separator/>
-          <filter string="To invoice" name="to_invoice"
-                  domain="[('invoice_ids', '=', False)]"/>
+          <filter
+                        string="Invoiced"
+                        name="invoiced"
+                        domain="[('invoice_ids', '!=', False)]"
+                    />
+          <separator />
+          <filter
+                        string="To invoice"
+                        name="to_invoice"
+                        domain="[('invoice_ids', '=', False)]"
+                    />
         </group>
         <group expand="0" string="Group By">
-          <filter string="Supplier" name="supplier"
-                  context="{'group_by': 'partner_id'}"/>
+          <filter
+                        string="Supplier"
+                        name="supplier"
+                        context="{'group_by': 'partner_id'}"
+                    />
         </group>
       </search>
     </field>
@@ -82,41 +90,65 @@
     <field name="model">rental_fees.computation.detail</field>
     <field name="arch" type="xml">
       <search string="Rental Fees Computation Details">
-        <field name="lot_id"/>
-        <field name="contract_id"/>
+        <field name="lot_id" />
+        <field name="contract_id" />
         <group name="Forecasting">
-          <filter string="Actual" name="actual"
-                  domain="[('is_forecast', '=', False)]"/>
-          <filter string="Forecast" name="forecast"
-                  domain="[('is_forecast', '=', True)]"/>
+          <filter
+                        string="Actual"
+                        name="actual"
+                        domain="[('is_forecast', '=', False)]"
+                    />
+          <filter
+                        string="Forecast"
+                        name="forecast"
+                        domain="[('is_forecast', '=', True)]"
+                    />
         </group>
-        <separator/>
+        <separator />
         <group name="Market">
-          <filter string="B2B" name="b2b"
-                  domain="[('market', '=', 'B2B')]"/>
-          <filter string="B2C" name="b2c"
-                  domain="[('market', '=', 'B2C')]"/>
+          <filter string="B2B" name="b2b" domain="[('market', '=', 'B2B')]" />
+          <filter string="B2C" name="b2c" domain="[('market', '=', 'B2C')]" />
         </group>
-        <separator/>
+        <separator />
         <group name="Fees type">
-          <filter string="Rental fees" name="rental_fees"
-                  domain="[('fees_type', '=', 'fees')]"/>
-          <filter string="Compensations" name="compensations"
-                  domain="[('fees_type', '!=', 'fees')]"/>
+          <filter
+                        string="Rental fees"
+                        name="rental_fees"
+                        domain="[('fees_type', '=', 'fees')]"
+                    />
+          <filter
+                        string="Compensations"
+                        name="compensations"
+                        domain="[('fees_type', '!=', 'fees')]"
+                    />
         </group>
         <group expand="0" string="Group By">
-          <filter string="Start date" name="from_date"
-                  context="{'group_by': 'from_date'}"/>
-          <filter string="Forecasting" name="is_forecast"
-                  context="{'group_by': 'is_forecast'}"/>
-          <filter string="Product" name="product_template_id"
-                  context="{'group_by': 'product_template_id'}"/>
-          <filter string="Market" name="market"
-                  context="{'group_by': 'market'}"/>
-          <filter string="Fees type" name="fees_type"
-                  context="{'group_by': 'fees_type'}"/>
-          <filter string="Fees definition" name="fees_def"
-                  context="{'group_by': 'fees_definition_id'}"/>
+          <filter
+                        string="Start date"
+                        name="from_date"
+                        context="{'group_by': 'from_date'}"
+                    />
+          <filter
+                        string="Forecasting"
+                        name="is_forecast"
+                        context="{'group_by': 'is_forecast'}"
+                    />
+          <filter
+                        string="Product"
+                        name="product_template_id"
+                        context="{'group_by': 'product_template_id'}"
+                    />
+          <filter string="Market" name="market" context="{'group_by': 'market'}" />
+          <filter
+                        string="Fees type"
+                        name="fees_type"
+                        context="{'group_by': 'fees_type'}"
+                    />
+          <filter
+                        string="Fees definition"
+                        name="fees_def"
+                        context="{'group_by': 'fees_definition_id'}"
+                    />
         </group>
       </search>
     </field>
@@ -128,53 +160,84 @@
     <field name="arch" type="xml">
       <form string="Rental fees computation">
         <header>
-          <button string="Run computation" states="draft" name="action_run" type="object"/>
-          <button string="Reset to draft" states="done" name="action_reset" type="object"/>
-          <button string="Generate invoice" states="done" name="action_invoice" type="object"/>
-          <button string="Send report for invoicing" states="done" name="action_send_report_for_invoicing" type="object"/>
-          <field name="state" widget="statusbar" readonly="1"/>
+          <button
+                        string="Run computation"
+                        states="draft"
+                        name="action_run"
+                        type="object"
+                    />
+          <button
+                        string="Reset to draft"
+                        states="done"
+                        name="action_reset"
+                        type="object"
+                    />
+          <button
+                        string="Generate invoice"
+                        states="done"
+                        name="action_invoice"
+                        type="object"
+                    />
+          <button
+                        string="Send report for invoicing"
+                        states="done"
+                        name="action_send_report_for_invoicing"
+                        type="object"
+                    />
+          <field name="state" widget="statusbar" readonly="1" />
         </header>
         <sheet>
           <div class="oe_button_box" name="button_box">
-            <button type="object" name="button_open_details"
-                    icon="fa-search-plus" string="Details"
-                    attrs="{'invisible':[('state', '!=', 'done')]}">
+            <button
+                            type="object"
+                            name="button_open_details"
+                            icon="fa-search-plus"
+                            string="Details"
+                            attrs="{'invisible':[('state', '!=', 'done')]}"
+                        >
             </button>
-            <button type="object" name="button_open_job"
-                    icon="fa-list-alt" string="Job"
-                    attrs="{'invisible':[('state', '=', 'draft')]}">
+            <button
+                            type="object"
+                            name="button_open_job"
+                            icon="fa-list-alt"
+                            string="Job"
+                            attrs="{'invisible':[('state', '=', 'draft')]}"
+                        >
             </button>
           </div>
           <group name="main">
-            <field name="partner_id" string="Supplier"/>
-            <field name="fees_definition_ids" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-            <field name="until_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+            <field name="partner_id" string="Supplier" />
+            <field
+                            name="fees_definition_ids"
+                            attrs="{'readonly': [('state', '!=', 'draft')]}"
+                        />
+            <field name="until_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
           </group>
           <group name="invoices" attrs="{'invisible': [('state', '!=', 'done')]}">
             <field name="invoice_ids" widget="many2many">
               <tree
-                  decoration-muted="state == 'cancel'"
-                  decoration-it="state == 'draft'"
-                  decoration-warning="state in ('open', 'paid') and type in ('in_invoice', 'out_refund')"
-                  decoration-success="state in ('open', 'paid') and type not in ('in_invoice', 'out_refund')"
-                  >
-                <field name="type"/>
-                <field name="date_invoice"/>
-                <field name="reference"/>
-                <field name="amount_untaxed"/>
-                <field name="amount_total"/>
-                <field name="residual"/>
-                <field name="state"/>
+                                decoration-muted="state == 'cancel'"
+                                decoration-it="state == 'draft'"
+                                decoration-warning="state in ('open', 'paid') and type in ('in_invoice', 'out_refund')"
+                                decoration-success="state in ('open', 'paid') and type not in ('in_invoice', 'out_refund')"
+                            >
+                <field name="type" />
+                <field name="date_invoice" />
+                <field name="reference" />
+                <field name="amount_untaxed" />
+                <field name="amount_total" />
+                <field name="residual" />
+                <field name="state" />
               </tree>
             </field>
           </group>
-          <group name="results" attrs="{'invisible': [('state', '!=', 'done')]}" >
-            <field name="fees" readonly="1"/>
+          <group name="results" attrs="{'invisible': [('state', '!=', 'done')]}">
+            <field name="fees" readonly="1" />
           </group>
         </sheet>
         <div class="oe_chatter">
-          <field name="message_follower_ids" widget="mail_followers"/>
-          <field name="message_ids" widget="mail_thread"/>
+          <field name="message_follower_ids" widget="mail_followers" />
+          <field name="message_ids" widget="mail_thread" />
         </div>
       </form>
     </field>
@@ -187,21 +250,22 @@
     <field name="domain">[("fees_computation_id", "in", active_ids)]</field>
     <field name="context">{"group_by": ["fees_computation_id", "fees_type"]}</field>
     <field name="view_mode">graph,pivot,tree,form</field>
-    <field name="binding_model_id" ref="model_rental_fees_computation"/>
+    <field name="binding_model_id" ref="model_rental_fees_computation" />
   </record>
 
   <record id="rental_fees_computations_action" model="ir.actions.act_window">
     <field name="name">Rental fees computations</field>
     <field name="res_model">rental_fees.computation</field>
     <field name="view_type">form</field>
-    <field name="view_id" ref="rental_fees_computation_view_tree"/>
-    <field name="search_view_id" ref="rental_fees_computation_view_search"/>
+    <field name="view_id" ref="rental_fees_computation_view_tree" />
+    <field name="search_view_id" ref="rental_fees_computation_view_search" />
   </record>
 
-  <menuitem id="menu_rental_fees_computation_menu"
-            action="rental_fees_computations_action"
-            parent="account.menu_finance_payables"
-            sequence="30"
-            />
+  <menuitem
+        id="menu_rental_fees_computation_menu"
+        action="rental_fees_computations_action"
+        parent="account.menu_finance_payables"
+        sequence="30"
+    />
 
 </odoo>

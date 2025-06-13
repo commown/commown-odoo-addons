@@ -1,18 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <record id="rental_fees_definition_view_tree" model="ir.ui.view">
     <field name="name">rental.fees.definition.tree</field>
     <field name="model">rental_fees.definition</field>
     <field name="arch" type="xml">
-      <tree string="Rental fees definitions">
-        <field name="name"/>
-        <field name="partner_id"/>
-        <field name="product_template_id"/>
-        <field name="valid_from"/>
-        <field name="agreed_to_std_price_ratio" widget="percentage"/>
-        <field name="order_ids" widget="many2many_tags" options="{'open': true}"/>
+      <tree>
+        <field name="name" />
+        <field name="partner_id" />
+        <field name="product_template_id" />
+        <field name="valid_from" />
+        <field name="agreed_to_std_price_ratio" widget="percentage" />
+        <field name="order_ids" widget="many2many_tags" options="{'open': true}" />
       </tree>
     </field>
   </record>
@@ -22,14 +21,20 @@
     <field name="model">rental_fees.definition</field>
     <field name="arch" type="xml">
       <search string="Rental Fees">
-        <field name="partner_id" string="Supplier"/>
-        <field name="product_template_id"/>
-        <field name="order_ids"/>
+        <field name="partner_id" string="Supplier" />
+        <field name="product_template_id" />
+        <field name="order_ids" />
         <group expand="0" string="Group By">
-          <filter string="Supplier" name="supplier"
-                  context="{'group_by': 'partner_id'}"/>
-          <filter string="Product" name="product"
-                  context="{'group_by': 'product_template_id'}"/>
+          <filter
+                        string="Supplier"
+                        name="supplier"
+                        context="{'group_by': 'partner_id'}"
+                    />
+          <filter
+                        string="Product"
+                        name="product"
+                        context="{'group_by': 'product_template_id'}"
+                    />
         </group>
       </search>
     </field>
@@ -43,49 +48,53 @@
         <sheet>
           <div class="oe_button_box">
             <button
-                string="Devices"
-                class="oe_stat_button"
-                icon="fa-laptop"
-                type="object"
-                name="button_open_devices"
-                />
+                            string="Devices"
+                            class="oe_stat_button"
+                            icon="fa-laptop"
+                            type="object"
+                            name="button_open_devices"
+                        />
           </div>
           <div class="oe_title">
-            <label for="name" class="oe_edit_only"/>
+            <label for="name" class="oe_edit_only" />
             <h1>
-              <field name="name" class="oe_inline"/>
+              <field name="name" class="oe_inline" />
             </h1>
           </div>
           <group name="main">
-            <field name="partner_id"/>
-            <field name="product_template_id"/>
-            <field name="valid_from"/>
-            <field name="model_invoice_id"/>
-            <field name="agreed_to_std_price_ratio" widget="percentage"/>
+            <field name="partner_id" />
+            <field name="product_template_id" />
+            <field name="valid_from" />
+            <field name="model_invoice_id" />
+            <field name="agreed_to_std_price_ratio" widget="percentage" />
           </group>
           <group name="penalties">
-            <field name="penalty_period_duration"/>
-            <field name="no_rental_duration"/>
+            <field name="penalty_period_duration" />
+            <field name="no_rental_duration" />
             <field name="excluded_devices" context="{'default_fees_definition_id': id}">
               <tree editable="bottom">
-                <field name="device_domain" invisible="1"/>
-                <field name="device" domain="device_domain"/>
-                <field name="reason"/>
-                <field name="with_compensation"/>
+                <field name="device_domain" invisible="1" />
+                <field name="device" domain="device_domain" />
+                <field name="reason" />
+                <field name="with_compensation" />
               </tree>
             </field>
           </group>
           <group name="orders">
-            <field name="order_ids" widget="many2many" domain="[('partner_id', '=', partner_id), ('order_line.product_id.product_tmpl_id', '=', product_template_id), ('exclude_from_fees', '=', False)]"/>
+            <field
+                            name="order_ids"
+                            widget="many2many"
+                            domain="[('partner_id', '=', partner_id), ('order_line.product_id.product_tmpl_id', '=', product_template_id), ('exclude_from_fees', '=', False)]"
+                        />
           </group>
           <group name="lines">
             <field name="line_ids">
               <tree default_order="sequence">
-                <field name="sequence" widget="handle"/>
-                <field name="duration_value"/>
-                <field name="duration_unit"/>
-                <field name="fees_type"/>
-                <field name="monthly_fees"/>
+                <field name="sequence" widget="handle" />
+                <field name="duration_value" />
+                <field name="duration_unit" />
+                <field name="fees_type" />
+                <field name="monthly_fees" />
               </tree>
             </field>
           </group>
@@ -100,15 +109,15 @@
     <field name="arch" type="xml">
       <form string="Rental fees definition line">
         <sheet>
-          <field name="sequence" invisible="1"/>
+          <field name="sequence" invisible="1" />
           <group>
             <group name="duration" string="Duration">
-              <field name="duration_value"/>
-              <field name="duration_unit"/>
+              <field name="duration_value" />
+              <field name="duration_unit" />
             </group>
             <group name="value" string="Fees value">
-              <field name="fees_type"/>
-              <field name="monthly_fees"/>
+              <field name="fees_type" />
+              <field name="monthly_fees" />
             </group>
           </group>
         </sheet>
@@ -120,14 +129,15 @@
     <field name="name">Rental fees definitions</field>
     <field name="res_model">rental_fees.definition</field>
     <field name="view_type">form</field>
-    <field name="view_id" ref="rental_fees_definition_view_tree"/>
-    <field name="search_view_id" ref="rental_fees_definition_view_search"/>
+    <field name="view_id" ref="rental_fees_definition_view_tree" />
+    <field name="search_view_id" ref="rental_fees_definition_view_search" />
   </record>
 
-  <menuitem id="menu_rental_fees_definitions_menu"
-            action="rental_fees_definitions_action"
-            parent="purchase.menu_procurement_management"
-            sequence="30"
-            />
+  <menuitem
+        id="menu_rental_fees_definitions_menu"
+        action="rental_fees_definitions_action"
+        parent="purchase.menu_procurement_management"
+        sequence="30"
+    />
 
 </odoo>

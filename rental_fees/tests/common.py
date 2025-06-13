@@ -116,7 +116,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
 
         # Create the invoice as the web UI would:
         action = po.with_context(create_bill=True).action_view_invoice()
-        created_model = self.env["account.invoice"].with_context(action["context"])
+        created_model = self.env["account.invoice"].with_context(**action["context"])
         fields = created_model.fields_get()
         defaults = created_model.default_get(fields.keys())
         values = defaults.copy()

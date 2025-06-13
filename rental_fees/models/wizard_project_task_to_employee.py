@@ -6,7 +6,7 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
 
     @api.multi
     def execute(self):
-        super().execute()
+        result = super().execute()
         lot = self.lot_id
         fees_def = self.env["rental_fees.definition"].search(
             [
@@ -24,7 +24,8 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
                 )
             else:
                 info = _("Device %(serial)s excluded from fees in def id %(def_id)d")
-                context = {"lang": fees_def.partner_id.lang}  # Use fees partner lang
+                # Use fees partner lang:
+                context = {"lang": fees_def.partner_id.lang}  # noqa
                 reason = _("Device used by employee %s")
                 self.env["rental_fees.excluded_device"].create(
                     {
@@ -42,3 +43,4 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
             self.env.user.notify_info(
                 "Device %s is not subject to fees as of now." % lot.name
             )
+        return result

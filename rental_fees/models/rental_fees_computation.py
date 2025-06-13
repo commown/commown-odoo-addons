@@ -58,7 +58,6 @@ class RentalFeesComputation(models.Model):
             ("running", "Running"),
             ("done", "Done"),
         ],
-        "State",
         default="draft",
         index=True,
         readonly=True,
@@ -79,7 +78,6 @@ class RentalFeesComputation(models.Model):
     )
 
     fees = fields.Float(
-        string="Fees",
         copy=False,
     )
 
@@ -301,8 +299,8 @@ class RentalFeesComputation(models.Model):
         which the amount of the fees is uniform.
         """
         if not fees_def.line_ids:
-            msg = _("Fees definition %s (id %d) has no line.")
-            raise UserError(msg % (fees_def.name, fees_def.id))
+            msg = _("Fees definition %(def)s (id %(id)d) has no line.")
+            raise UserError(msg % {"def": fees_def.name, "id": fees_def.id})
 
         result = []
         line_iter = iter(fees_def.line_ids)
@@ -716,7 +714,7 @@ class RentalFeesComputation(models.Model):
                     scrapped_devices,
                     excluded_devices,
                 )
-            except:
+            except Exception:
                 _logger.error(
                     "An error occurred while computing fees for device %s",
                     device.name,
@@ -841,7 +839,6 @@ class RentalFeesComputationDetail(models.Model):
 
     market = fields.Selection(
         [("B2C", "B2C"), ("B2B", "B2B")],
-        string="Market",
         readonly=True,
         compute="_compute_market",
         store=True,

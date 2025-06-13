@@ -184,10 +184,10 @@ class RentalFeesDefinition(models.Model):
             if overrides:
                 raise models.ValidationError(
                     _(
-                        "At least one other fees def, %s (id %d), has the same"
+                        "At least one other fees def, %(def)s (id %(id)d), has the same"
                         " partner, product & order"
                     )
-                    % (overrides[0].name, overrides[0].id)
+                    % {"def": overrides[0].name, "id": overrides[0].id}
                 )
 
     def devices_delivery(self):
@@ -319,9 +319,10 @@ class RentalFeesDefinition(models.Model):
                         self.env.user.notify_danger(msg % new_po.name, sticky=True)
 
             if new_pos:
-                msg = _("Adding new POs to fees def '%s': %s")
+                msg = _("Adding new POs to fees def '%(def)s': %(pos)s")
                 self.env.user.notify_success(
-                    msg % (fees_def.name, ", ".join(new_pos.mapped("name"))),
+                    msg
+                    % {"def": fees_def.name, "pos": ", ".join(new_pos.mapped("name"))},
                     sticky=True,
                 )
                 fees_def.order_ids |= new_pos
@@ -469,7 +470,7 @@ class RentalFeesDefinitionLine(models.Model):
                     "def_id": self.fees_definition_id.id,
                     "period": "\n- ".join("%s: %s" % (k, v) for k, v in period.items()),
                 }
-            )
+            ) from err
         paid_invoice_lines = self.env["account.invoice.line"].search(
             [
                 ("contract_line_id", "=", cline.id),
@@ -525,7 +526,6 @@ class RentalFeesExcludedDevice(models.Model):
 
     device = fields.Many2one(
         "stock.production.lot",
-        string="Device",
         help="The device to be excluded",
         required=True,
     )

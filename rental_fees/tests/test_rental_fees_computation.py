@@ -245,7 +245,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         with self.env.cr.savepoint():
             self.fees_def.model_invoice_id = False
             with self.assertRaises(UserError) as err:
-                c5 = self.compute("2021-05-30", invoice=True)
+                self.compute("2021-05-30", invoice=True)
         self.assertEqual(
             "Please set the invoice model on all fees definitions.",
             err.exception.name,
