@@ -1,7 +1,7 @@
 from odoo import _
 
 
-def _i18n_account_invoice():
+def _i18n_account_invoice():  # pragma: no cover
     "Manually mark account_invoice.odt report strings to be translated"
     _("Amount")
     _("Base")
@@ -40,7 +40,7 @@ def _i18n_account_invoice():
     _("Company number / registry / VAT")
 
 
-def _i18n_sale_order():
+def _i18n_sale_order():  # pragma: no cover
     "Manually mark sale_order.odt report strings to be translated"
     _("Order Acknowledgement")
     _("Customer Number:")
