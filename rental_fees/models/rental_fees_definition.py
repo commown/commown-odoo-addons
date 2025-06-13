@@ -506,7 +506,7 @@ class RentalFeesDefinitionLine(models.Model):
                     self.monthly_fees,
                     monetary=True,
                 ),
-                "currency": self.env.user.company_id.currency_id.symbol,
+                "currency": self.env.company.currency_id.symbol,
             }
 
 

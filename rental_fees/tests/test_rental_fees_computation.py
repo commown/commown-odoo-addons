@@ -79,7 +79,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             {
                 "name": "Test Journal",
                 "code": "TJ",
-                "company_id": self.env.user.company_id.id,
+                "company_id": self.env.company.id,
                 "type": "bank",
                 "update_posted": True,
             }
@@ -115,7 +115,7 @@ class RentalFeesComputationTC(RentalFeesTC):
     def pay_supplier_invoice(self, supplier_invoice):
         self.env["account.payment"].create(
             {
-                "company_id": self.env.user.company_id.id,
+                "company_id": self.env.company.id,
                 "partner_id": supplier_invoice.partner_id.id,
                 "partner_type": "supplier",
                 "state": "draft",
@@ -150,7 +150,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         invoice.action_invoice_open()
         payment = self.env["account.payment"].create(
             {
-                "company_id": self.env.user.company_id.id,
+                "company_id": self.env.company.id,
                 "partner_id": invoice.partner_id.id,
                 "partner_type": "customer",
                 "state": "draft",
