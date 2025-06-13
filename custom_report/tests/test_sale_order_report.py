@@ -14,6 +14,21 @@ class SaleOrderReportTC(ReportTC):
         cls.so = cls.env.ref("sale.sale_order_1")
         assert cls.so.state == "draft", "Test pre-requisite failure"
 
+    def test_sale_order_actions(self):
+        view = self.env.ref("sale.view_order_form")
+        result = self.env["sale.order"].get_views(
+            [(view.id, "form")], {"toolbar": True}
+        )
+
+        print_actions = sorted(
+            [a["name"] for a in result["views"]["form"]["toolbar"].get("print", [])]
+        )
+
+        self.assertIn(
+            "[commown] Print sale order",
+            print_actions,
+        )
+
     def test_title_state_draft(self):
         doc = self.html_report(self.so)
 

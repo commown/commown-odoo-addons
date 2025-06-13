@@ -115,6 +115,25 @@ class AccountInvoiceReportTC(ReportTC):
         inv.action_post()
         return inv
 
+    def test_account_move_actions(self):
+        view = self.env.ref("account.view_move_form")
+        result = self.env["account.move"].get_views(
+            [(view.id, "form")], {"toolbar": True}
+        )
+
+        print_actions = sorted(
+            [a["name"] for a in result["views"]["form"]["toolbar"].get("print", [])]
+        )
+
+        self.assertIn(
+            "[commown] Print invoice",
+            print_actions,
+        )
+        self.assertIn(
+            "[commown] Print invoice duplicata",
+            print_actions,
+        )
+
     def test_b2c_deposit(self):
         inv = self.open_invoice(self.sale(self.b2c_partner, [self.deposit_product]))
         doc = self.html_report(inv)
