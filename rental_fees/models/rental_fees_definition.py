@@ -133,7 +133,6 @@ class RentalFeesDefinition(models.Model):
     # Computed on computation's state change
     last_non_draft_computation_date = fields.Date(default=False)
 
-    @api.multi
     def write(self, vals):
         "Deny changing an important field (like partner_id or product_template_id)"
 
@@ -253,7 +252,6 @@ class RentalFeesDefinition(models.Model):
             "standard": mean_price_unit / self.agreed_to_std_price_ratio,
         }
 
-    @api.multi
     def button_open_devices(self):
         self.ensure_one()
         return {
@@ -396,7 +394,6 @@ class RentalFeesDefinitionLine(models.Model):
             result.append((record.id, str(record.sequence)))
         return result
 
-    @api.multi
     def compute_end_date(self, origin_date):
         self.ensure_one()
         if self.duration_value:
@@ -404,7 +401,6 @@ class RentalFeesDefinitionLine(models.Model):
                 **{self.duration_unit: self.duration_value}
             )
 
-    @api.multi
     def compute_monthly_fees(self, period):
         """Return a (from_date, to_date, amount) list of monthly fees for the period
 

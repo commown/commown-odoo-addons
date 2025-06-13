@@ -476,7 +476,6 @@ class RentalFeesComputation(models.Model):
 
         return result
 
-    @api.multi
     def button_open_details(self):
         self.ensure_one()
         return {
@@ -487,7 +486,6 @@ class RentalFeesComputation(models.Model):
             "res_model": "rental_fees.computation.detail",
         }
 
-    @api.multi
     def button_open_job(self):
         self.ensure_one()
         domain = [("func_string", "=", "rental_fees.computation(%s,)._run()" % self.id)]
@@ -501,7 +499,6 @@ class RentalFeesComputation(models.Model):
                 "res_id": job.id,
             }
 
-    @api.multi
     def action_invoice(self):
         """Generate a draft invoice based on the invoice model of the fees def
 
@@ -556,7 +553,6 @@ class RentalFeesComputation(models.Model):
         inv._onchange_invoice_line_ids()
         self.invoice_ids |= inv
 
-    @api.multi
     def action_send_report_for_invoicing(self):
         "Get or generate supplier invoice and report, send then it through the invoice"
 
@@ -584,7 +580,6 @@ class RentalFeesComputation(models.Model):
         _inv = inv.with_context(default_attachment_ids=[(4, report.id)])
         _inv.message_post_with_template(mail.id)
 
-    @api.multi
     def action_reset(self):
         "Reset a done computation into a draft and remove its details"
         self.ensure_one()
@@ -601,7 +596,6 @@ class RentalFeesComputation(models.Model):
         self.update({"state": "draft", "fees": 0.0, "invoice_ids": [(5,)]})
         self.sudo().detail_ids.unlink()
 
-    @api.multi
     def action_run(self):
         "Run current computation(s)"
         for record in self:

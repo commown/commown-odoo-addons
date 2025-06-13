@@ -1,10 +1,9 @@
-from odoo import _, api, models
+from odoo import _, models
 
 
 class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
     _inherit = "project.task.to.employee.wizard"
 
-    @api.multi
     def execute(self):
         result = super().execute()
         lot = self.lot_id

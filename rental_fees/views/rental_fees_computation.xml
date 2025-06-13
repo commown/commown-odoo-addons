@@ -256,7 +256,6 @@
   <record id="rental_fees_computations_action" model="ir.actions.act_window">
     <field name="name">Rental fees computations</field>
     <field name="res_model">rental_fees.computation</field>
-    <field name="view_type">form</field>
     <field name="view_id" ref="rental_fees_computation_view_tree" />
     <field name="search_view_id" ref="rental_fees_computation_view_search" />
   </record>
