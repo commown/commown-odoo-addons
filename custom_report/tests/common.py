@@ -5,7 +5,7 @@ from odoo.tests.common import TransactionCase, tagged
 
 def _html_report(report, report_ref, obj, debug_fpath=None):
     html = report._render(report_ref, obj.ids)[0]
-    if debug_fpath:
+    if debug_fpath:  # pragma: no cover
         with open(debug_fpath, "wb") as fobj:
             fobj.write(html)
     return lxml.html.fromstring(html)
