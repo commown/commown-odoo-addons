@@ -1,5 +1,7 @@
 import re
 
+from lxml.etree import tostring
+
 from .common import ReportTC
 
 
@@ -234,3 +236,12 @@ class AccountInvoiceReportTC(ReportTC):
         self.assertEqual(
             _product_descriptions(doc2), [self.std_product.name]
         )  # 1 product line only
+
+    def test_invoice_payment_terms(self):
+        ref = self.env.ref
+        inv = self.open_invoice(self.sale(self.b2c_partner, self.std_product))
+
+        inv.invoice_payment_term_id = ref("account.account_payment_term_immediate").id
+        html = tostring(self.html_report(inv))
+        self.assertTrue(b"Payment conditions" in html)
+        self.assertTrue(b"Payment terms: Immediate" in html)
