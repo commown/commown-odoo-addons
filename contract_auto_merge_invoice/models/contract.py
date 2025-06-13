@@ -1,6 +1,6 @@
 from datetime import date
 
-from odoo import api, models
+from odoo import models
 
 
 def _order_by_recurrence(cline):
@@ -13,7 +13,6 @@ def _order_by_recurrence(cline):
 class Contract(models.Model):
     _inherit = "contract.contract"
 
-    @api.multi
     def _prepare_invoice(self, *args, **kwargs):
         """Override invoice creation to setup payment at partner's chosen date
         - add auto_merge=True
