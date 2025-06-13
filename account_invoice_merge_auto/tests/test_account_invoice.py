@@ -1,3 +1,5 @@
+import unittest
+
 from odoo import fields
 from odoo.tests import tagged
 
@@ -6,6 +8,20 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 @tagged("post_install", "-at_install")
 class AccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
+    "Invoice related test cases"
+
+    @classmethod
+    def setUpClass(cls):
+        "Try default chart template or request a visible one and try again"
+        try:
+            super().setUpClass()
+        except unittest.SkipTest:
+            coa = cls.env["account.chart.template"].search(
+                [("visible", "=", True)], limit=1
+            )
+            chart_template_ref = coa.get_external_id()[coa.id]
+            super().setUpClass(chart_template_ref)
+
     def _partner_invoices(self, partner):
         return self.env["account.move"].search(
             [("partner_id", "=", partner.id), ("move_type", "=", "out_invoice")]
