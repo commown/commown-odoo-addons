@@ -100,7 +100,7 @@ class AccountInvoiceReportTC(ReportTC):
         so.action_confirm()
         return so
 
-    def open_invoice(self, so, is_refund=False, contract=None):
+    def open_invoice(self, so, is_refund=False, contract=None, post_invoice=True):
         inv = so._create_invoices()
         if is_refund:
             inv.move_type = "out_refund"
@@ -112,8 +112,25 @@ class AccountInvoiceReportTC(ReportTC):
                     "analytic_distribution": cline.analytic_distribution,
                 }
             )
-        inv.action_post()
+        if post_invoice:
+            inv.action_post()
         return inv
+
+    def apply_tax(self, inv_line, amount):
+        # Pass an invoice line and a tax amount (in percentage)
+        tax = self.env["account.tax"].search(
+            [
+                ("amount", "=", amount),
+                ("company_id", "=", self.env.company.id),
+            ],
+            limit=1,
+        )
+
+        inv_line.write(
+            {
+                "tax_ids": [(6, 0, tax.ids)],
+            }
+        )
 
     def test_account_move_actions(self):
         view = self.env.ref("account.view_move_form")
@@ -255,6 +272,62 @@ class AccountInvoiceReportTC(ReportTC):
         self.assertEqual(
             _product_descriptions(doc2), [self.std_product.name]
         )  # 1 product line only
+
+    def test_invoice_0_percent_taxes(self):
+        # Print invoice report with 0% tax
+        inv = self.open_invoice(
+            self.sale(self.b2c_partner, self.std_product), post_invoice=False
+        )
+        self.apply_tax(inv.invoice_line_ids, 0.0)
+
+        tax_data = inv.tax_totals["groups_by_subtotal"].get(
+            inv.tax_totals["subtotals_order"][0], {}
+        )
+
+        html_0_tax = tostring(self.html_report(inv))
+        # Invoice tax table check
+        self.assertTrue(b"TVA 0%" in html_0_tax)
+        self.assertIn(
+            bytes(str(tax_data[0].get("tax_group_base_amount")), "utf-8"),
+            html_0_tax,
+        )
+        self.assertIn(
+            bytes(str(tax_data[0].get("tax_group_amount")), "utf-8"),
+            html_0_tax,
+        )
+
+        # Invoice total recap check
+        self.assertFalse(b"Total Taxes" in html_0_tax)
+
+    def test_invoice_10_percent_tax(self):
+        # Print invoice report with 10% tax
+        inv = self.open_invoice(
+            self.sale(self.b2c_partner, self.std_product), post_invoice=False
+        )
+        self.apply_tax(inv.invoice_line_ids, 10.0)
+
+        tax_data = inv.tax_totals["groups_by_subtotal"].get(
+            inv.tax_totals["subtotals_order"][0], [{}]
+        )
+
+        html_10_tax = tostring(self.html_report(inv))
+        # Invoice tax table check
+        self.assertTrue(b"TVA 10%" in html_10_tax)
+        self.assertIn(
+            bytes(str(tax_data[0].get("tax_group_base_amount")), "utf-8"),
+            html_10_tax,
+        )
+        self.assertIn(
+            bytes(str(tax_data[0].get("tax_group_amount")), "utf-8"),
+            html_10_tax,
+        )
+
+        # Invoice total recap check
+        self.assertTrue(b"Total Taxes" in html_10_tax)
+        self.assertIn(
+            bytes(str(inv.amount_tax), "utf-8"),
+            html_10_tax,
+        )
 
     def test_invoice_payment_terms(self):
         ref = self.env.ref
