@@ -23,13 +23,12 @@ class Contract(models.Model):
         """
         vals = super(Contract, self)._prepare_invoice(*args, **kwargs)
         vals["auto_merge"] = True
-
         for contract in self:
             if not contract.partner_id.invoice_merge_next_date:
                 cline = contract.contract_line_ids.sorted(key=_order_by_recurrence)[0]
                 contract.partner_id.update(
                     {
-                        "invoice_merge_next_date": vals["date_invoice"],
+                        "invoice_merge_next_date": vals["invoice_date"],
                         "invoice_merge_recurring_rule_type": cline.recurring_rule_type,
                         "invoice_merge_recurring_interval": cline.recurring_interval,
                     }
