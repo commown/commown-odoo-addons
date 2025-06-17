@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 19:33+0000\n"
-"PO-Revision-Date: 2025-03-20 19:33+0000\n"
+"POT-Creation-Date: 2025-06-10 13:10+0000\n"
+"PO-Revision-Date: 2025-06-10 13:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -150,6 +150,11 @@ msgstr ""
 #: code:addons/commown/models/sale_order.py:28
 #, python-format
 msgid "<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.product_price_b2b
+msgid "<span>Nous vous invitons vivement à lire le détail des services inclus dans le prix</span>"
 msgstr ""
 
 #. module: commown
@@ -851,6 +856,11 @@ msgid "See product details"
 msgstr ""
 
 #. module: commown
+#: model:ir.model.fields,field_description:commown.field_website__product_service_details_url
+msgid "Service detail URL"
+msgstr ""
+
+#. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
 msgid "Set partner invoice merge preferences"
 msgstr ""
@@ -971,6 +981,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown.slimpay_acquirer_button
 msgid "Valider et payer \n"
 "            <span class=\"fa fa-long-arrow-right\"/>"
+msgstr ""
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.product_price_b2b
+msgid "Voir les services"
 msgstr ""
 
 #. module: commown

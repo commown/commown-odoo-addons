@@ -1,3 +1,38 @@
+/* Product page: use sticky carousel to circumvent blank vertical space below it */
+#o-carousel-product {
+  position: sticky;
+  top: 20px;
+}
+
+/* Product page: banner to services description */
+#services-banner {
+  font-size: 1rem;
+  line-height: 1.25rem;
+  padding: 1em;
+  border-radius: 0.3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#services-banner > div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+#services-banner > div > span {
+  margin-left: 0.75em;
+}
+
+#services-banner > div > svg {
+  flex-shrink: 0;
+}
+
+#services-banner > a {
+  width: min-content;
+}
+
 /* Hide payment methods */
 #payment_method h3, #payment_method .card {
   display: none;

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 19:33+0000\n"
-"PO-Revision-Date: 2025-03-20 21:12+0100\n"
+"POT-Creation-Date: 2025-06-10 13:10+0000\n"
+"PO-Revision-Date: 2025-06-10 15:17+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -15,7 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"X-Generator: Poedit 2.4.2\n"
 
 #. module: commown
 #: model:mail.template,body_html:commown.mail_template_issue_reminder
@@ -282,8 +281,8 @@ msgid ""
 "            <span class=\"d-none d-sm-inline\">Send invoices to this "
 "contact</span>"
 msgstr ""
-"<i title=\"Send invoices to this contact\" class=\"far fa-envelope\"/>\n"
-"            <span class=\"d-none d-sm-inline\">Send invoices to this contact</span>"
+"<i title=\"Senden Sie Rechnungen an diesen Kontakt\" class=\"far fa-envelope\"/>\n"
+"            <span class=\"d-none d-sm-inline\">Senden Sie Rechnungen an diesen Kontakt</span>"
 
 #. module: commown
 #: code:addons/commown/models/sale_order.py:28
@@ -291,7 +290,16 @@ msgstr ""
 msgid ""
 "<p><b>Sale number:</b> {sale_name}</p><p><b>Sale date:</b> {date.year}-{date."
 "month}-{date.day}</p><p><b>Product:</b> {product_name}</p>"
-msgstr "<p><b>Verkaufsnummer:</b> {sale_name}</p><p><b>Verkaufsdatum:</b> {date.year}-{date.month}-{date.day}</p><p><b>Produkt:</b> {product_name}</p>"
+msgstr ""
+"<p><b>Verkaufsnummer:</b> {sale_name}</p><p><b>Verkaufsdatum:</b> {date."
+"year}-{date.month}-{date.day}</p><p><b>Produkt:</b> {product_name}</p>"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.product_price_b2b
+msgid ""
+"<span>Nous vous invitons vivement à lire le détail des services inclus dans "
+"le prix</span>"
+msgstr "<span>Wir laden Sie herzlich dazu ein, die Details der im Preis enthaltenen Dienstleistungen zu lesen.</span>"
 
 #. module: commown
 #: model:ir.model,name:commown.model_coupon_campaign
@@ -414,7 +422,7 @@ msgstr "Unternehmensrekord"
 #. module: commown
 #: model:ir.model,name:commown.model_res_partner
 msgid "Contact"
-msgstr "Contakt"
+msgstr "Kontakt"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
@@ -569,7 +577,9 @@ msgstr "Vorname"
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_details
 msgid "For legal reasons, please never use someone else's account."
-msgstr "Aus rechtlichen Gründen sollten Sie niemals das Konto einer anderen Person verwenden."
+msgstr ""
+"Aus rechtlichen Gründen sollten Sie niemals das Konto einer anderen Person "
+"verwenden."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
@@ -712,7 +722,9 @@ msgstr "Nachname"
 msgid ""
 "Le mandat de paiement est paramétrable sur le partenaire parent et\n"
 "            synchronisé automatiquement ici."
-msgstr "Die Zahlungsanweisung ist auf dem übergeordneten Partner einstellbar und wird hier automatisch synchronisiert."
+msgstr ""
+"Die Zahlungsanweisung ist auf dem übergeordneten Partner einstellbar und "
+"wird hier automatisch synchronisiert."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.short_cart_summary
@@ -738,7 +750,9 @@ msgstr "Lead/Möglichkeit"
 msgid ""
 "Les préférences de paiement sont paramétrables sur le partenaire parent et\n"
 "            synchronisées automatiquement ici."
-msgstr "Die Zahlungspräferenzen sind beim übergeordneten Partner einstellbar und werden hier automatisch synchronisiert."
+msgstr ""
+"Die Zahlungspräferenzen sind beim übergeordneten Partner einstellbar und "
+"werden hier automatisch synchronisiert."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.footer_custom
@@ -928,7 +942,9 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown.portal_layout
 msgid ""
 "Pour contacter l'équipe parcourez la section \"Vos besoins d'assistance\"."
-msgstr "Um das Team zu kontaktieren, gehen Sie bitte zum Abschnitt Higher-level payment tokens „Ihr Bedarf an Unterstützung“."
+msgstr ""
+"Um das Team zu kontaktieren, gehen Sie bitte zum Abschnitt Higher-level "
+"payment tokens „Ihr Bedarf an Unterstützung“."
 
 #. module: commown
 #: model:product.template,description_sale:commown.sepa_mandate
@@ -1027,6 +1043,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
 msgid "See product details"
 msgstr "Siehe Details zum Produkt"
+
+#. module: commown
+#: model:ir.model.fields,field_description:commown.field_website__product_service_details_url
+msgid "Service detail URL"
+msgstr "URL der Dienstleistung"
 
 #. module: commown
 #: selection:payment_token_uniquify.obsolescence_action,technical_name:0
@@ -1139,7 +1160,10 @@ msgstr ""
 msgid ""
 "This is the payment token that will be used to automatically reconcile debts "
 "for this partner, if there is not one already set on the analytic account."
-msgstr "Dies ist das Zahlungs-Token, das für den automatischen Abgleich von Schulden für diesen Partner verwendet wird, wenn es nicht bereits im analytischen Konto eingestellt ist."
+msgstr ""
+"Dies ist das Zahlungs-Token, das für den automatischen Abgleich von Schulden "
+"für diesen Partner verwendet wird, wenn es nicht bereits im analytischen "
+"Konto eingestellt ist."
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_invoices
@@ -1189,6 +1213,11 @@ msgid ""
 msgstr ""
 "Bestätigen und bezahlen \n"
 "            <span class=\"fa fa-long-arrow-right\"/>"
+
+#. module: commown
+#: model_terms:ir.ui.view,arch_db:commown.product_price_b2b
+msgid "Voir les services"
+msgstr "Dienstleistungen ansehen"
 
 #. module: commown
 #: model_terms:product.template,website_description:commown.sepa_mandate
@@ -1385,33 +1414,3 @@ msgstr "mass.reconcile.simple.partner_commown"
 #: model:ir.model,name:commown.model_account_mass_reconcile_method
 msgid "reconcile method for account_mass_reconcile"
 msgstr "Ausgleichsverfahren für account_mass_reconcile"
-
-#~ msgid ""
-#~ "Pour contacter l'équipe parcourez la section \"Auto-dépannage\" à gauche."
-#~ msgstr ""
-#~ "Um das Team zu kontaktieren, klicken Sie auf den Abschnitt \"Selbsthilfe"
-#~ "\" auf der linken Seite."
-
-#~ msgid "Support groups"
-#~ msgstr "Hilfsgruppen"
-
-#~ msgid ""
-#~ "Valider et payer\n"
-#~ "              <span class=\"fa fa-long-arrow-right\"/>"
-#~ msgstr ""
-#~ "Bestätigen und bezahlen\n"
-#~ "              <span class=\"fa fa-long-arrow-right\"/>"
-
-#~ msgid ""
-#~ "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
-#~ "partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
-#~ msgstr ""
-#~ "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
-#~ "partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
-
-#~ msgid ""
-#~ "mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id."
-#~ "mobile or object.partner_id.phone).split()).replace('+', '')}"
-#~ msgstr ""
-#~ "mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id."
-#~ "mobile or object.partner_id.phone).split()).replace('+', '')}"
