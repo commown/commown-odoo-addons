@@ -10,4 +10,4 @@ class ContractTC(TestContractBase):
 
         self.assertEqual(partner.invoice_merge_recurring_rule_type, "monthly")
         self.assertEqual(partner.invoice_merge_recurring_interval, 1)
-        self.assertEqual(partner.invoice_merge_next_date, invoice.date_invoice)
+        self.assertEqual(partner.invoice_merge_next_date, invoice.date)
