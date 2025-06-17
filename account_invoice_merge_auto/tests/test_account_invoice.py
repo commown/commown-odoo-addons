@@ -1,37 +1,53 @@
 from odoo import fields
-from odoo.tests.common import at_install, post_install
+from odoo.tests import tagged
 
-from .common import AutoMergeInvoiceTC
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
-@at_install(False)
-@post_install(True)
-class AccountInvoiceMergeAutoTC(AutoMergeInvoiceTC):
+@tagged("post_install", "-at_install")
+class AccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
     def _partner_invoices(self, partner):
-        return self.env["account.invoice"].search(
-            [
-                ("partner_id", "=", partner.id),
-            ]
+        return self.env["account.move"].search(
+            [("partner_id", "=", partner.id), ("move_type", "=", "out_invoice")]
         )
 
-    def test_cron(self):
-        inv_1 = self.create_invoice(self.partner_1, "2019-05-01", 5)
-        inv_2 = self.create_invoice(self.partner_1, "2019-05-04", 10)
-        inv_3 = self.create_invoice(self.partner_1, "2019-05-16", 20)
-        old_invoices = self._partner_invoices(self.partner_1)
+    def create_invoice(self, partner, date, price):
+        inv = self.init_invoice(
+            "out_invoice",
+            partner=partner,
+            invoice_date=date,
+            products=self.product_a,
+            amounts=[price],
+        )
+        inv.auto_merge = True
+        return inv
 
-        self.env["account.invoice"]._cron_invoice_merge("2019-05-17")
+    def test_cron(self):
+        self.partner_a.update(
+            {
+                "invoice_merge_next_date": "2019-05-15",
+                "invoice_merge_recurring_rule_type": "monthly",
+                "invoice_merge_recurring_interval": 1,
+            }
+        )
+
+        inv_1 = self.create_invoice(self.partner_a, "2019-05-01", 5)
+        inv_2 = self.create_invoice(self.partner_a, "2019-05-04", 10)
+        inv_3 = self.create_invoice(self.partner_a, "2019-05-16", 20)
+        old_invoices = self._partner_invoices(self.partner_a)
+
+        self.env["account.move"]._cron_invoice_merge("2019-05-17")
 
         self.assertEqual(inv_1.state, "cancel")
         self.assertEqual(inv_2.state, "cancel")
-        self.assertEqual(inv_3.state, "draft")
+        self.assertEqual(inv_3.state, "draft")  # after invoice_merge_next_date!
 
-        other_inv = self._partner_invoices(self.partner_1) - old_invoices
+        other_inv = self._partner_invoices(self.partner_a) - old_invoices
         self.assertEqual(len(other_inv), 1)
-        self.assertEqual(other_inv.amount_total, 15)
+        self.assertEqual(other_inv.amount_untaxed, 2015)
         self.assertEqual(other_inv.state, "draft")
-        self.assertEqual(other_inv.date_invoice, fields.Date.from_string("2019-05-17"))
+        self.assertEqual(other_inv.date, fields.Date.from_string("2019-05-17"))
         self.assertEqual(
-            self.partner_1.invoice_merge_next_date,
+            self.partner_a.invoice_merge_next_date,
             fields.Date.from_string("2019-06-15"),
         )
