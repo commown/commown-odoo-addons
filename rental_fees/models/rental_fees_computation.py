@@ -799,7 +799,7 @@ class RentalFeesComputationDetail(models.Model):
     compensation_reason = fields.Char()
 
     lot_id = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         string="Device",
         required=True,
     )

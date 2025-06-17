@@ -17,7 +17,7 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, RentalFeesTC):
         return super().create_po_and_picking(*args, **kwargs)
 
     def get_wizard(self, **kwargs):
-        lot = self.env["stock.production.lot"].search([("name", "=", "N/S 1")])
+        lot = self.env["stock.lot"].search([("name", "=", "N/S 1")])
         kwargs.setdefault("lot_id", lot.id)
         return super().get_wizard(**kwargs)
 
@@ -46,7 +46,7 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, RentalFeesTC):
     def test_give_already_excluded_from_fees_device_to_employee(self):
         "User giving a fees-excluded device to an employee is informed"
 
-        lot = self.env["stock.production.lot"].search([("name", "=", "N/S 1")])
+        lot = self.env["stock.lot"].search([("name", "=", "N/S 1")])
         self.env["rental_fees.excluded_device"].create(
             {"fees_definition_id": self.fees_def.id, "device": lot.id, "reason": "test"}
         )

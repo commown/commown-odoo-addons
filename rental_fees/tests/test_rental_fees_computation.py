@@ -522,7 +522,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertFalse(comp.details("no_rental_compensation").mapped("fees"))
 
     def repackage_lot(self, lot_name, date):
-        lot = self.env["stock.production.lot"].search([("name", "=", lot_name)])
+        lot = self.env["stock.lot"].search([("name", "=", lot_name)])
         orig = self.env.ref("commown_devices.stock_location_devices_to_check")
         dest = self.repackaged_fp_loc
         moves = internal_picking(lot, {}, None, orig, dest, False, date)

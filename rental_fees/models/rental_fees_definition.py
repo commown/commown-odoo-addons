@@ -259,7 +259,7 @@ class RentalFeesDefinition(models.Model):
             "domain": [("id", "in", [d.id for d in self.devices_delivery()])],
             "type": "ir.actions.act_window",
             "view_mode": "tree,form",
-            "res_model": "stock.production.lot",
+            "res_model": "stock.lot",
         }
 
     def action_update_with_new_pos(self):
@@ -521,7 +521,7 @@ class RentalFeesExcludedDevice(models.Model):
     )
 
     device = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         help="The device to be excluded",
         required=True,
     )
