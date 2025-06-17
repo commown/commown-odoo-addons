@@ -99,7 +99,7 @@ class AccountInvoiceReportTC(ReportTC):
         return so
 
     def open_invoice(self, so, is_refund=False, contract=None):
-        inv = self.env["account.invoice"].browse(so.action_invoice_create())
+        inv = so._create_invoices()
         if is_refund:
             inv.move_type = "out_refund"
         if contract:
