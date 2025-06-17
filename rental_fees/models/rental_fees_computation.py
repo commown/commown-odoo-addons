@@ -7,8 +7,6 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date
 
-from odoo.addons.queue_job.job import job
-
 _one_day = relativedelta(days=1)
 _logger = logging.getLogger(__name__)
 
@@ -674,7 +672,6 @@ class RentalFeesComputation(models.Model):
                     period["is_forecast"],
                 )
 
-    @job(default_channel="root")
     def _run(self):
         self.ensure_one()
 
