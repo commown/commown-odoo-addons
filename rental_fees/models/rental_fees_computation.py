@@ -90,7 +90,7 @@ class RentalFeesComputation(models.Model):
     )
 
     invoice_ids = fields.One2many(
-        comodel_name="account.invoice",
+        comodel_name="account.move",
         string="Invoice",
         inverse_name="fees_computation_id",
         help=(
@@ -459,8 +459,8 @@ class RentalFeesComputation(models.Model):
 
             fees = sum(fees_by_type.values())
             fees_def_invl = fees_def.invoice_line_ids.filtered(
-                lambda invl: invl.invoice_id.state != "cancel"
-                and invl.invoice_id.date_invoice < self.until_date
+                lambda invl: invl.move_id.state != "cancel"
+                and invl.move_id.invoice_date < self.until_date
             )
             invoiced = sum((fees_def_invl - self_invl).mapped("price_subtotal"))
             result["by_fees_def"][fees_def] = dict(
@@ -545,12 +545,11 @@ class RentalFeesComputation(models.Model):
             }
 
             if inv is None:
-                inv = fees_def.model_invoice_id.copy({"date_invoice": self.until_date})
+                inv = fees_def.model_invoice_id.copy({"invoice_date": self.until_date})
                 inv.invoice_line_ids[0].update(inv_line_data)
             else:
                 inv.invoice_line_ids[0].copy(inv_line_data)
 
-        inv._onchange_invoice_line_ids()
         self.invoice_ids |= inv
 
     def action_send_report_for_invoicing(self):

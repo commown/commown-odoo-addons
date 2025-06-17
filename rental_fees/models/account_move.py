@@ -1,8 +1,8 @@
 from odoo import fields, models
 
 
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+class AccountMove(models.Model):
+    _inherit = "account.move"
 
     fees_computation_id = fields.Many2one(
         "rental_fees.computation",

@@ -107,7 +107,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         )
 
         # Also check the error case (no invoice found for device)
-        self.po.invoice_ids.action_invoice_cancel()
+        self.po.invoice_ids.button_cancel()
 
         with self.assertRaises(UserError) as err:
             self.fees_def.prices(device)

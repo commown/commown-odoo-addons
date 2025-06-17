@@ -217,16 +217,16 @@
             <field name="invoice_ids" widget="many2many">
               <tree
                                 decoration-muted="state == 'cancel'"
-                                decoration-it="state == 'draft'"
-                                decoration-warning="state in ('open', 'paid') and type in ('in_invoice', 'out_refund')"
-                                decoration-success="state in ('open', 'paid') and type not in ('in_invoice', 'out_refund')"
+                                decoration-it="state == 'posted'"
+                                decoration-warning="state == 'paid' and move_type in ('in_invoice', 'out_refund')"
+                                decoration-success="state == 'paid' and move_type not in ('in_invoice', 'out_refund')"
                             >
-                <field name="type" />
-                <field name="date_invoice" />
-                <field name="reference" />
+                <field name="move_type" />
+                <field name="invoice_date" />
+                <field name="name" />
                 <field name="amount_untaxed" />
                 <field name="amount_total" />
-                <field name="residual" />
+                <field name="amount_residual" />
                 <field name="state" />
               </tree>
             </field>

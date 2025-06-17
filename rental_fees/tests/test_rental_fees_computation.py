@@ -52,9 +52,9 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-        inv_model = self.env["account.invoice"].create(
+        inv_model = self.env["account.move"].create(
             {
-                "type": "in_invoice",
+                "move_type": "in_invoice",
                 "partner_id": self.po.partner_id.id,
                 "account_id": supplier_account.id,
                 "invoice_line_ids": [
@@ -66,7 +66,7 @@ class RentalFeesComputationTC(RentalFeesTC):
                             "name": "Rental fees until ##DATE##",
                             "price_unit": 0.0,
                             "account_id": expenses_account.id,
-                            "invoice_line_tax_ids": [(6, 0, tax.ids)],
+                            "tax_ids": [(6, 0, tax.ids)],
                         },
                     )
                 ],
@@ -160,14 +160,14 @@ class RentalFeesComputationTC(RentalFeesTC):
                 "amount": invoice.residual,
                 "currency_id": invoice.currency_id.id,
                 "invoice_ids": [(6, 0, [invoice.id])],
-                "payment_date": invoice.date_invoice,
+                "payment_date": invoice.date,
             }
         )
         payment.post()
         self.assertEqual(invoice.state, "paid")
 
     def create_invoices_until(self, contract, until_date, pay=True):
-        invoices = self.env["account.invoice"]
+        invoices = self.env["account.move"]
         until_date = fields.Date.from_string(until_date)
         while contract.recurring_next_date <= until_date:
             inv = contract._recurring_create_invoice()
@@ -195,34 +195,30 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(c1.fees, 0.0)
         self.assertIn("01/31/2021", c1.invoice_ids.invoice_line_ids[0].name)
         self.assertEqual(c1.invoice_ids.amount_total, 0.0)
-        c1.invoice_ids.action_invoice_open()
 
         c2 = self.compute("2021-02-28", invoice=True)
         self.assertEqual(c2.fees, 2.5)
         self.assertIn("02/28/2021", c2.invoice_ids.invoice_line_ids[0].name)
         self.assertEqual(c2.invoice_ids.amount_total, 2.75)
         self.assertEqual(c2.invoice_ids.amount_tax, 0.25)
-        c2.invoice_ids.action_invoice_open()
 
         c3 = self.compute("2021-03-31", invoice=True)
         self.assertEqual(c3.fees, 7.5)
         self.assertIn("03/31/2021", c3.invoice_ids.invoice_line_ids[0].name)
         self.assertEqual(c3.invoice_ids.amount_total, 5.5)
         self.assertEqual(c3.invoice_ids.amount_tax, 0.5)
-        c3.invoice_ids.action_invoice_open()
 
         c4 = self.compute("2021-04-30", invoice=True)
         self.assertEqual(c4.fees, 317.5)
         self.assertIn("04/30/2021", c4.invoice_ids.invoice_line_ids[0].name)
         self.assertEqual(c4.invoice_ids.amount_total, 341.0)
         self.assertEqual(c4.invoice_ids.amount_tax, 31.0)
-        c4.invoice_ids.action_invoice_open()
         compensations = c4.compensation_details()
         self.assertEqual(compensations.mapped("fees"), [300.0])
 
         # Paying an invoice, even after another one was emitted must work
         self.pay_supplier_invoice(c2.invoice_ids)
-        self.assertEqual(c2.invoice_ids.state, "paid")
+        self.assertEqual(c2.invoice_ids.payment_state, "paid")
 
         # Adding an invoice while a later computation exists must raise
         with self.assertRaises(ValidationError) as err:
@@ -354,7 +350,7 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         self.assertEqual(len(invoices_info), 1)
         self.assertEqual(list(invoices_info.values())[0], invoices.ids)
-        merged_inv = self.env["account.invoice"].browse(list(invoices_info))
+        merged_inv = self.env["account.move"].browse(list(invoices_info))
         self.pay_customer_invoice(merged_inv)
 
         c3 = self.compute(computation_date)

@@ -34,7 +34,7 @@ class RentalFeesDefinition(models.Model):
     )
 
     model_invoice_id = fields.Many2one(
-        "account.invoice",
+        "account.move",
         string="Invoice model",
         help=(
             "Invoice to be used as a model to generate future fees invoices."
@@ -46,7 +46,7 @@ class RentalFeesDefinition(models.Model):
         domain=(
             "["
             ' ("partner_id.commercial_partner_id", "=", partner_id),'
-            ' ("type", "=", "in_invoice"),'
+            ' ("move_type", "=", "in_invoice"),'
             "]"
         ),
     )
@@ -110,7 +110,7 @@ class RentalFeesDefinition(models.Model):
     )
 
     invoice_line_ids = fields.One2many(
-        comodel_name="account.invoice.line",
+        comodel_name="account.move.line",
         string="Invoice lines",
         inverse_name="fees_definition_id",
         help=("The invoice lines related to present fees definition."),
@@ -235,7 +235,7 @@ class RentalFeesDefinition(models.Model):
         # concerning this device's product
         inv_lines = po_line.mapped("invoice_lines").filtered(
             lambda il: (
-                il.invoice_id.state != "cancel" and il.product_id == device.product_id
+                il.move_id.state != "cancel" and il.product_id == device.product_id
             )
         )
         if not inv_lines:
@@ -467,31 +467,31 @@ class RentalFeesDefinitionLine(models.Model):
                     "period": "\n- ".join("%s: %s" % (k, v) for k, v in period.items()),
                 }
             ) from err
-        paid_invoice_lines = self.env["account.invoice.line"].search(
+        paid_invoice_lines = self.env["account.move.line"].search(
             [
                 ("contract_line_id", "=", cline.id),
-                ("date_invoice", ">=", period["from_date"]),
-                ("date_invoice", "<", period["to_date"]),
-                ("state", "=", "paid"),
+                ("move_id.invoice_date", ">=", period["from_date"]),
+                ("move_id.invoice_date", "<", period["to_date"]),
+                ("move_id.payment_state", "=", "paid"),
             ]
         )
 
         analytic_accounts = period["contract"].mapped(
             "contract_line_ids.analytic_account_id"
         )
-        merged_invoice_lines = self.env["account.invoice.line"].search(
+        merged_invoice_lines = self.env["account.move.line"].search(
             [
                 ("invoice_type", "=", "out_invoice"),
-                ("date_invoice", ">=", period["from_date"]),
-                ("date_invoice", "<", period["to_date"]),
-                ("state", "=", "paid"),
+                ("move_id.invoice_date", ">=", period["from_date"]),
+                ("move_id.invoice_date", "<", period["to_date"]),
+                ("move_id.payment_state", "=", "paid"),
                 ("contract_line_id", "=", False),
                 ("account_analytic_id", "in", analytic_accounts.ids),
             ]
         )
 
         return [
-            (il.date_invoice, il.price_subtotal)
+            (il.move_id.invoice_date, il.price_subtotal)
             for il in (paid_invoice_lines + merged_invoice_lines)
         ]
 
