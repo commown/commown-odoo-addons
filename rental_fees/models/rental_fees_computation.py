@@ -83,7 +83,6 @@ class RentalFeesComputation(models.Model):
         comodel_name="rental_fees.computation.detail",
         string="Computed fees details",
         inverse_name="fees_computation_id",
-        ondelete="cascade",
         copy=False,
     )
 
@@ -778,6 +777,7 @@ class RentalFeesComputationDetail(models.Model):
         "rental_fees.computation",
         string="Computation",
         required=True,
+        ondelete="cascade",
     )
 
     fees = fields.Float(
