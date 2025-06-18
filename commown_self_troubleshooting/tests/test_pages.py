@@ -29,13 +29,11 @@ class PagesTC(HttpCase):
         self.user = self.env.ref("base.demo_user0")
         self.dbname = self.env.cr.dbname
         self._login()
-        with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            self.product_id = (
-                env["product.product"]
-                .create({"name": "Test service product", "type": "service"})
-                .id
-            )
+        self.product_id = (
+            self.env["product.product"]
+            .create({"name": "Test service product", "type": "service"})
+            .id
+        )
 
     def _create_ct(self, name):
         with self.registry.cursor() as test_cursor:
