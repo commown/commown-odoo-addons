@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from lxml import html
 from mock import patch
 from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
 from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase
@@ -24,7 +24,7 @@ class PagesTC(HttpCase):
     def setUp(self):
         super(PagesTC, self).setUp()
         self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
-        self.test_client = Client(wsgi_server.application, BaseResponse)
+        self.test_client = Client(wsgi_server.application, Response)
         self.password = b"portal"
         self.user = self.env.ref("base.demo_user0")
         self.dbname = self.env.cr.dbname
