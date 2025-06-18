@@ -76,6 +76,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         render_values = dict(
             order=self.order,
             website_sale_order=self.order,
+            main_object=self.order,
             errors=[],
             partner=self.order.partner_id.id,
             only_services=self.order.only_services,
@@ -98,6 +99,8 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         payment_token = self.order.partner_id.payment_token_ids[0]
         render_values = {
             "sale_order": self.order,
+            "object": self.order,
+            "main_object": self.order,
             "token": "no matter",
             "return_url": "/shop/payment/validate",
             "bootstrap_formatting": True,
