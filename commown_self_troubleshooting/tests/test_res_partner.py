@@ -51,7 +51,7 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
 
         contract = cls.env["contract.contract"].of_sale(so).ensure_one()
 
-        contract.contract_line_ids.update(
+        contract.update(
             {
                 "date_start": date_start or datetime.date.today(),
             }
