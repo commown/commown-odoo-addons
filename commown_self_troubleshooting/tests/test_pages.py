@@ -93,7 +93,6 @@ class PagesTC(HttpCase):
         with self.registry.cursor() as test_cursor:
             env = self.env(test_cursor)
             contract = env["contract.contract"].create(attrs)
-            contract._compute_date_end()  # compute start date
             return contract
 
     def _ts_page_urls(self, *args):
