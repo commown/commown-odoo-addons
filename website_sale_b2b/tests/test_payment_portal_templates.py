@@ -179,7 +179,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         self.assertPayAndConfirmSubmitButton(html_doc, True)
 
     def test_render_order_template_big_b2b_not_authorized_sent(self):
-        """Even if not authorized, the user as received a link with the order's access
+        """Even if not authorized, the user has received a link with the order's access
         token, so it may be unauthenticated but should be able to validate the order.
         In this case, the Pay & Confirm button must thus be present.
         """
