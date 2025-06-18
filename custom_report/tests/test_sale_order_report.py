@@ -29,6 +29,44 @@ class SaleOrderReportTC(ReportTC):
             print_actions,
         )
 
+    def test_render_qweb_pdf(self):
+        """This test serves to check if the _render_qweb_pdf method
+        overload doesn't crash, and returns a valid pdf
+        for both qweb-pdf and py3o reports.
+        """
+        report_model = self.env["ir.actions.report"].with_context(
+            force_report_rendering=True
+        )
+
+        # Base behavior: a QWeb-PDF report is passed.
+        qweb_report_name = "sale.report_saleorder_pro_forma"
+        self.assertEqual(
+            report_model._get_report(qweb_report_name).report_type,
+            "qweb-pdf",
+        )
+
+        _, filetype1 = report_model._render_qweb_pdf(
+            qweb_report_name,
+            res_ids=self.so.ids,
+            data={"report_type": "pdf"},
+        )
+        self.assertEqual(filetype1, "pdf")
+
+        # Alt. behavior: a Py3O report is passed
+        # ('sale.report_saleorder').
+        self.report.py3o_filetype = "pdf"
+        self.assertEqual(
+            report_model._get_report(self.report_name).report_type,
+            "py3o",
+        )
+
+        _, filetype2 = report_model._render_qweb_pdf(
+            self.report_name,
+            res_ids=self.so.ids,
+            data={"report_type": "pdf"},
+        )
+        self.assertEqual(filetype2, "pdf")
+
     def test_title_state_draft(self):
         doc = self.html_report(self.so)
 
