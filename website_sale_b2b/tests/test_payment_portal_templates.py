@@ -47,6 +47,8 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         """
 
         user = self.order.partner_id.user_ids[0]
+        # Force env user to user
+        self.env.user = user
         failed = "Prerequisite failed"
 
         if not authorized:
