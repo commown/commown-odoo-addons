@@ -2,6 +2,8 @@ mock
 odfpy
 odoo-test-helper
 requests-mock
+pyexcel-odsr
+pyexcel
 
 # https://github.com/OCA/contract/pull/1231 (16.0 port of contract_payment_auto)
 # + use whool for packaging
