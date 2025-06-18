@@ -22,6 +22,7 @@ class ProductTemplate(models.Model):
         string="Expense Account (rental)",
         help="Expense account to be used when the product is to be rented, not sold",
         domain=[("deprecated", "=", False)],
+        copy=True,
     )
 
 
