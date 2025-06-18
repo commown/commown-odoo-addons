@@ -12,14 +12,12 @@ def _add_attr(product, attr_name, value_prices):
     product.update({"attribute_line_ids": [(0, 0, attr_lines)]})
 
     for attr_value in attr_values:
-        product.env["product.template.attribute.value"].create(
-            {
-                "product_tmpl_id": product.id,
-                "price_extra": value_prices[attr_value.name],
-                "attribute_id": attr.id,
-                "product_attribute_value_id": attr_value.id,
-            }
-        )
+        product.env["product.template.attribute.value"].search(
+            [
+                ("product_attribute_value_id", "=", attr_value.id),
+                ("product_tmpl_id", "=", product.id),
+            ]
+        ).price_extra = value_prices[attr_value.name]
 
 
 class PricelistTC(RentedQuantityTC):
