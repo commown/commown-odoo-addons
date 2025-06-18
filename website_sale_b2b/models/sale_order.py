@@ -129,7 +129,7 @@ class SaleOrderLine(models.Model):
 
     def _render_product_templated_descr(self):
         self.ensure_one()
-        descr = self.get_sale_order_line_multiline_description_sale(self.product_id)
+        descr = self._get_sale_order_line_multiline_description_sale()
         return mako_template_env.from_string(descr).render(
             {"record": self.with_context(lang=self.order_partner_id.lang)}
         )
