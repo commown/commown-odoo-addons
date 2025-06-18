@@ -13,30 +13,31 @@ def _set_date(entity, value, attr_name):
 
 
 class RentalFeesTC(DeviceAsAServiceTC):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        p1 = self.storable_product.product_variant_id
-        p2 = self.storable_product.copy({"name": "Other product"}).product_variant_id
+        p1 = cls.storable_product.product_variant_id
+        p2 = cls.storable_product.copy({"name": "Other product"}).product_variant_id
         serials = {p1: ("N/S 1", "N/S 2", "N/S 3"), p2: ("N/S 4", "N/S 5")}
         prices = {p1: 200.0, p2: 300.0}
-        self.po = self.create_po_and_picking(serials, prices)
+        cls.po = cls.create_po_and_picking(serials, prices)
 
-        self.fees_def = self.env["rental_fees.definition"].create(
+        cls.fees_def = cls.env["rental_fees.definition"].create(
             {
                 "name": "Test fees_def",
-                "partner_id": self.po.partner_id.id,
+                "partner_id": cls.po.partner_id.id,
                 "valid_from": date(2000, 1, 1),
-                "product_template_id": self.storable_product.id,
-                "order_ids": [(6, 0, self.po.ids)],
+                "product_template_id": cls.storable_product.id,
+                "order_ids": [(6, 0, cls.po.ids)],
                 "agreed_to_std_price_ratio": 0.4,
                 "penalty_period_duration": 1,
                 "no_rental_duration": 6,
             }
         )
-        self.env["rental_fees.definition_line"].create(
+        cls.env["rental_fees.definition_line"].create(
             {
-                "fees_definition_id": self.fees_def.id,
+                "fees_definition_id": cls.fees_def.id,
                 "sequence": 1,
                 "duration_value": 2,
                 "duration_unit": "months",
@@ -44,9 +45,9 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 "monthly_fees": 0.1,
             }
         )
-        self.env["rental_fees.definition_line"].create(
+        cls.env["rental_fees.definition_line"].create(
             {
-                "fees_definition_id": self.fees_def.id,
+                "fees_definition_id": cls.fees_def.id,
                 "sequence": 2,
                 "duration_value": 3,
                 "duration_unit": "months",
@@ -54,9 +55,9 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 "monthly_fees": 0.5,
             }
         )
-        self.env["rental_fees.definition_line"].create(
+        cls.env["rental_fees.definition_line"].create(
             {
-                "fees_definition_id": self.fees_def.id,
+                "fees_definition_id": cls.fees_def.id,
                 "sequence": 100,
                 "duration_value": False,
                 "duration_unit": "months",
@@ -65,8 +66,9 @@ class RentalFeesTC(DeviceAsAServiceTC):
             }
         )
 
+    @classmethod
     def create_po_and_picking(
-        self,
+        cls,
         serials_by_product,
         prices=None,
         partner=None,
@@ -77,14 +79,14 @@ class RentalFeesTC(DeviceAsAServiceTC):
             {<product.template>: [strings]}
         """
         prices = prices or {product: 200.0 for product in set(serials_by_product)}
-        partner = partner or self.env.ref("base.res_partner_1")
+        partner = partner or cls.env.ref("base.res_partner_1")
 
-        rental_in = self.env.ref("commown_devices.stock_picking_type_in_rental")
-        po = self.env["purchase.order"].create(
+        rental_in = cls.env.ref("commown_devices.stock_picking_type_in_rental")
+        po = cls.env["purchase.order"].create(
             {"partner_id": partner.id, "picking_type_id": rental_in.id},
         )
         for product, serials in serials_by_product.items():
-            po.order_line |= self.env["purchase.order.line"].create(
+            po.order_line |= cls.env["purchase.order.line"].create(
                 {
                     "name": product.name,
                     "product_id": product.id,
@@ -97,7 +99,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
             )
         po.button_confirm()
 
-        dest = self.location_fp3_new
+        dest = cls.location_fp3_new
         for product, serials in serials_by_product.items():
             move_lines = po.picking_ids.move_line_ids.filtered(
                 lambda ml: ml.product_id == product
@@ -109,21 +111,21 @@ class RentalFeesTC(DeviceAsAServiceTC):
 
         po.picking_ids.button_validate()
 
-        for move in po.picking_ids.move_lines:
+        for move in po.picking_ids.move_ids:
             _set_date(move, po.date_planned, "date")
             for ml in move.move_line_ids:
                 _set_date(ml, po.date_planned, "date")
 
         # Create the invoice as the web UI would:
         action = po.with_context(create_bill=True).action_view_invoice()
-        created_model = self.env["account.move"].with_context(**action["context"])
+        created_model = cls.env["account.move"].with_context(**action["context"])
         fields = created_model.fields_get()
         defaults = created_model.default_get(fields.keys())
         values = defaults.copy()
         result = created_model.onchange(values, [], created_model._onchange_spec())
         values.update(result["value"])
-        values = self.env["account.move"]._convert_to_write(values)
-        self.env["account.move"].create(values)
+        values = cls.env["account.move"]._convert_to_write(values)
+        cls.env["account.move"].create(values)
 
         return po
 

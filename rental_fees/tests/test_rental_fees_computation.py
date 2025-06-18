@@ -16,16 +16,15 @@ from .common import RentalFeesTC
 class RentalFeesComputationTC(RentalFeesTC):
     maxDiff = None
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        ref = self.env.ref
-
-        fees_product = self.env["product.template"].create(
+        fees_product = cls.env["product.template"].create(
             {"name": "fees", "type": "service", "list_price": 0.0}
         )
 
-        supplier_account = self.env["account.account"].create(
+        supplier_account = cls.env["account.account"].create(
             {
                 "code": "cust_acc",
                 "name": "customer account",
@@ -34,7 +33,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-        expenses_account = self.env["account.account"].create(
+        expenses_account = cls.env["account.account"].create(
             {
                 "code": "rev_exp",
                 "name": "expences account",
@@ -42,7 +41,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-        tax = self.env["account.tax"].create(
+        tax = cls.env["account.tax"].create(
             {
                 "amount": 10.0,
                 "amount_type": "percent",
@@ -52,10 +51,10 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-        inv_model = self.env["account.move"].create(
+        inv_model = cls.env["account.move"].create(
             {
                 "move_type": "in_invoice",
-                "partner_id": self.po.partner_id.id,
+                "partner_id": cls.po.partner_id.id,
                 "account_id": supplier_account.id,
                 "invoice_line_ids": [
                     (
@@ -73,20 +72,20 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
-        self.fees_def.model_invoice_id = inv_model.id
+        cls.fees_def.model_invoice_id = inv_model.id
 
-        self.expenses_journal = self.env["account.journal"].create(
+        cls.expenses_journal = cls.env["account.journal"].create(
             {
                 "name": "Test Journal",
                 "code": "TJ",
-                "company_id": self.env.company.id,
+                "company_id": cls.env.company.id,
                 "type": "bank",
                 "update_posted": True,
             }
         )
 
-        repack_loc = self.env.ref("commown_devices.stock_location_repackaged_devices")
-        self.repackaged_fp_loc = self.env["stock.location"].create(
+        repack_loc = cls.env.ref("commown_devices.stock_location_repackaged_devices")
+        cls.repackaged_fp_loc = cls.env["stock.location"].create(
             {"name": "Repackaged FP", "location_id": repack_loc.id},
         )
 

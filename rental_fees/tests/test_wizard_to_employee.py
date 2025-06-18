@@ -6,14 +6,15 @@ from .common import RentalFeesTC
 
 
 class WizardToEmployeeTC(BaseWizardToEmployeeMixin, RentalFeesTC):
-    def create_po_and_picking(self, *args, **kwargs):
+    @classmethod
+    def create_po_and_picking(cls, *args, **kwargs):
         "Override to set default receipt picking destination to available for rent"
-        rent_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
-        loc = self.env["stock.location"].create(
+        rent_loc = cls.env.ref("commown_devices.stock_location_available_for_rent")
+        loc = cls.env["stock.location"].create(
             {"name": "Test loc", "usage": "internal", "location_id": rent_loc.id},
         )
 
-        self.env.ref("stock.picking_type_in").default_location_dest_id = loc.id
+        cls.env.ref("stock.picking_type_in").default_location_dest_id = loc.id
         return super().create_po_and_picking(*args, **kwargs)
 
     def get_wizard(self, **kwargs):
