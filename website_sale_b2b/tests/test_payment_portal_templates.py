@@ -95,16 +95,15 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
     def render_order(self, big_b2b, authorized, sent):
         self.setup_preconditions(big_b2b, authorized, sent)
 
-        order_sudo = self.order.sudo()
         payment_token = self.order.partner_id.payment_token_ids[0]
         render_values = {
-            "sale_order": order_sudo,
+            "sale_order": self.order,
             "token": "no matter",
             "return_url": "/shop/payment/validate",
             "bootstrap_formatting": True,
-            "partner_id": order_sudo.partner_id.id,
+            "partner_id": self.order.partner_id.id,
             "report_type": "html",
-            "res_company": order_sudo.company_id,
+            "res_company": self.order.company_id,
             "pms": payment_token,
             "acquirers": payment_token.provider_id,
         }
