@@ -11,6 +11,7 @@
                         t-set="title"
                     >Commown - Besoin d'assistance - Smartphone : Mon écran (ou sa protection) est fissuré</t>
 
+        <t t-call-assets="web.assets_frontend" />
         <script type="text/javascript">
           var screwdriver_codename = "<t t-esc='screwdriver_codename' />";
           if(screwdriver_codename.length == 0) {

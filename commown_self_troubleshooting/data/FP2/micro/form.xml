@@ -12,6 +12,7 @@
                         t-set="title"
                     >Commown - Besoin d'assistance - Fairphone 2 : mon interlocuteur ne m'entend pas</t>
 
+            <t t-call-assets="web.assets_frontend" />
             <script type="text/javascript">
               $(document).ready(function() {
 

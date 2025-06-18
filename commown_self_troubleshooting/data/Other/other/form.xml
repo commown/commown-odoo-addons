@@ -10,6 +10,7 @@
         <t t-call="portal.portal_layout">
           <t t-set="title">Commown - Demandes spéciales</t>
 
+          <t t-call-assets="web.assets_frontend" />
           <script type="text/javascript">
             $(document).ready(function() {setUpWizard($('#smartwizard'))});
           </script>

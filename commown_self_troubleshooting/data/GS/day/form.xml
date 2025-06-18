@@ -12,6 +12,7 @@
                         t-set="title"
                     >Commown - Besoin d'assistance - Casque DAY : Problème de son </t>
             <t t-set="head">
+              <t t-call-assets="web.assets_frontend" />
               <script type="text/javascript">
                 $(document).ready(function() {
 

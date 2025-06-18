@@ -9,6 +9,7 @@
 
       <t t-name="website.self-troubleshoot-generic-issue">
         <t t-call="portal.portal_layout">
+          <t t-call-assets="web.assets_frontend" />
           <t t-set="title">Commown - Demande d'assistance</t>
 
           <script type="text/javascript">

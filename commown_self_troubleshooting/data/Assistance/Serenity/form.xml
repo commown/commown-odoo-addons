@@ -9,6 +9,7 @@
 
       <t t-name="website.self-troubleshoot-serenity">
         <t t-call="portal.portal_layout">
+          <t t-call-assets="web.assets_frontend" />
           <t t-set="title">Commown - Besoin d'assistance - Option Sérénité</t>
 
           <script type="text/javascript">
