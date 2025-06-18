@@ -124,7 +124,7 @@ class PricelistItem(models.Model):
         default=False,
     )
 
-    def _compute_price(self, price, price_uom, product, quantity=1.0, partner=False):
+    def _compute_price(self, product, quantity, uom, date, currency=None):
         "Override to handle the percentage-extra-excluded case"
 
         if (
@@ -134,12 +134,9 @@ class PricelistItem(models.Model):
         ):
             base_product = product.product_tmpl_id.product_variant_id
             wo_extra_price = base_product.price_compute(self.base)[base_product.id]
+            price = product.price_compute(self.base)[product.id]
             reduced_wo_extra_price = super(PricelistItem, self)._compute_price(
-                wo_extra_price,
-                price_uom,
-                product,
-                quantity,
-                partner,
+                base_product, quantity, uom, date, currency=currency
             )
             extra_price = price - wo_extra_price
             result_price = reduced_wo_extra_price + extra_price
@@ -153,9 +150,5 @@ class PricelistItem(models.Model):
 
         else:
             return super(PricelistItem, self)._compute_price(
-                price,
-                price_uom,
-                product,
-                quantity,
-                partner,
+                product, quantity, uom, date, currency=currency
             )
