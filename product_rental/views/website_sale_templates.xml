@@ -28,7 +28,7 @@
       </b>
       <t t-else="">
         <span
-                    t-if="product.product_variant_count > 1 and combination_info['price']"
+                    t-if="product.product_variant_count > 1 and product._get_combination_info()['price']"
                 >From</span>
         <t>$0</t>
       </t>
