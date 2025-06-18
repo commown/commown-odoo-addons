@@ -55,7 +55,7 @@ class PagesTC(HttpCase):
         response = self.test_client.post(
             "/web/login/", data=data, environ_base=self.werkzeug_environ
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 303)
         self.assertIn("/my/home", str(response.data))
 
     def get_page(self, path, data=None):
