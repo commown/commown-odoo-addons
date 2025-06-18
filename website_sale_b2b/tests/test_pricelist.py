@@ -68,7 +68,7 @@ class PricelistTC(RentedQuantityTC):
         _add_attr(self.fp_premium, "Service", {"Basic": 0.0, "Premium": 3.0})
 
         variants = {
-            tuple(p.attribute_value_ids.mapped("name")): p
+            tuple(p.product_template_attribute_value_ids.mapped("name")): p
             for p in self.fp_premium.product_variant_ids
         }
 
