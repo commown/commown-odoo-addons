@@ -125,6 +125,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
 
     def assertSubmitButton(self, html_doc, true_false, text):
         buttons = html_doc.xpath("//button[@type='submit']")
+        buttons.extend(html_doc.xpath("//a[@role='button']"))
         found = any(text in clean_text(button) for button in buttons)
         err_msg = "Submit button entitled '%s'" % text
         err_msg += " found" if found else " not found"
@@ -148,7 +149,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         self.assertWarning(html_doc, true_false, warning, "Unauthorized message")
 
     def assertPayAndConfirmSubmitButton(self, html_doc, true_false):
-        self.assertSubmitButton(html_doc, true_false, "Pay & Confirm")
+        self.assertSubmitButton(html_doc, true_false, "Accept & Pay")
 
     def test_render_payment_template_big_b2b_authorized(self):
         html_doc = self.render_payment(big_b2b=True, authorized=True, sent=True)
