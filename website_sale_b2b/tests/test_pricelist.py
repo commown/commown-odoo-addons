@@ -39,10 +39,9 @@ class PricelistTC(RentedQuantityTC):
             }
         )
 
-    def unit_price(self, quantity, product, partner=None, pricelist=None):
-        partner = partner or self.so.partner_id
+    def unit_price(self, quantity, product, pricelist=None):
         pricelist = pricelist or self.pricelist
-        return pricelist.get_products_price(product, (quantity,), partner)[product.id]
+        return pricelist._get_products_price(product, quantity)[product.id]
 
     def test_account_for_rented_quantity(self):
 
