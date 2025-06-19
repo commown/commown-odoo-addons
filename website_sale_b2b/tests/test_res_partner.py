@@ -30,7 +30,7 @@ class ResPartnerTC(RentedQuantityTC):
             (c1 | c2 | c3).action_create_intermediate_company()
 
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "Partners not suitable for intermediate company creation:"
             "\n- c1 (id %d)\n- c3 (id %d)" % (c1.id, c3.id),
         )
