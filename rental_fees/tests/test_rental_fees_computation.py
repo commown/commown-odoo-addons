@@ -65,6 +65,23 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
 
+        cls.env["account.payment.method"].create(
+            {
+                "name": "Electronic In",
+                "code": "electronic",
+                "payment_type": "inbound",
+            }
+        )
+
+        cls.customer_journal = cls.env["account.journal"].create(
+            {
+                "name": "Customer journal",
+                "code": "RC",
+                "company_id": cls.env.company.id,
+                "type": "bank",
+            }
+        )
+
         repack_loc = cls.env.ref("commown_devices.stock_location_repackaged_devices")
         cls.repackaged_fp_loc = cls.env["stock.location"].create(
             {"name": "Repackaged FP", "location_id": repack_loc.id},
@@ -92,23 +109,19 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         return computation
 
+    def pay_invoice(self, invoice, journal):
+        if invoice.state == "draft":
+            invoice.action_post()
+        register_payment = (
+            self.env["account.payment.register"]
+            .with_context(active_model="account.move", active_ids=invoice.ids)
+            .create({"journal_id": self.customer_journal.id})
+        )
+        register_payment._create_payments()
+        self.assertEqual(invoice.payment_state, "paid")
+
     def pay_supplier_invoice(self, supplier_invoice):
-        self.env["account.payment"].create(
-            {
-                "company_id": self.env.company.id,
-                "partner_id": supplier_invoice.partner_id.id,
-                "partner_type": "supplier",
-                "state": "draft",
-                "payment_type": "outbound",
-                "journal_id": self.expenses_journal.id,
-                "payment_method_id": self.env.ref(
-                    "account.account_payment_method_manual_out"
-                ).id,
-                "amount": supplier_invoice.amount_total,
-                "currency_id": supplier_invoice.currency_id.id,
-                "invoice_ids": [(6, 0, [supplier_invoice.id])],
-            }
-        ).post()
+        self.pay_invoice(supplier_invoice, self.expenses_journal)
 
     def test_open_job(self):
         comp = self.compute("2021-01-31", sync=False)
@@ -124,27 +137,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(comp, self.env[action2["res_model"]].browse(action2["res_id"]))
 
     def pay_customer_invoice(self, invoice):
-        journal = self.env["account.journal"].search([("type", "=", "sale")], limit=1)
-        apm = self.env.ref("account.account_payment_method_manual_in")
-
-        invoice.action_invoice_open()
-        payment = self.env["account.payment"].create(
-            {
-                "company_id": self.env.company.id,
-                "partner_id": invoice.partner_id.id,
-                "partner_type": "customer",
-                "state": "draft",
-                "payment_type": "inbound",
-                "journal_id": journal.id,
-                "payment_method_id": apm.id,
-                "amount": invoice.residual,
-                "currency_id": invoice.currency_id.id,
-                "invoice_ids": [(6, 0, [invoice.id])],
-                "payment_date": invoice.date,
-            }
-        )
-        payment.post()
-        self.assertEqual(invoice.state, "paid")
+        self.pay_invoice(invoice, self.customer_journal)
 
     def create_invoices_until(self, contract, until_date, pay=True):
         invoices = self.env["account.move"]
