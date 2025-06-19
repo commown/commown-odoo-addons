@@ -132,7 +132,7 @@
       <field name="requires_contract" eval="True" />
       <field
             name="contract_domain"
-        >[("contract_template_id.name", "like", "SHIFT/%")]</field>
+        >[("contract_template_id.name", "like", "SHIF/%")]</field>
     </record>
 
     <record id="gs-day-ts-item" model="commown_self_troubleshooting.item">
