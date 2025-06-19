@@ -17,6 +17,18 @@ class RentalFeesTC(DeviceAsAServiceTC):
     def setUpClass(cls):
         super().setUpClass()
 
+        # Add a rental account to the rental product to make it invoiceable:
+        rental_account = cls.env["account.account"].search(
+            [
+                ("account_type", "=", "asset_current"),
+                ("internal_group", "=", "asset"),
+                ("company_id", "=", cls.env.company.id),
+            ],
+            limit=1,
+        )
+        cls.storable_product.property_rental_account_expense_id = rental_account.id
+
+
         p1 = cls.storable_product.product_variant_id
         p2 = cls.storable_product.copy({"name": "Other product"}).product_variant_id
         serials = {p1: ("N/S 1", "N/S 2", "N/S 3"), p2: ("N/S 4", "N/S 5")}
