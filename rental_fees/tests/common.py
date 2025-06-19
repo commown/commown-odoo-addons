@@ -129,16 +129,7 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 _set_date(ml, po.date_planned, "date")
 
         # Create the invoice as the web UI would:
-        action = po.with_context(create_bill=True).action_view_invoice()
-        created_model = cls.env["account.move"].with_context(**action["context"])
-        fields = created_model.fields_get()
-        defaults = created_model.default_get(fields.keys())
-        values = defaults.copy()
-        result = created_model.onchange(values, [], created_model._onchange_spec())
-        values.update(result["value"])
-        values = cls.env["account.move"]._convert_to_write(values)
-        cls.env["account.move"].create(values)
-
+        po.action_create_invoice()
         return po
 
     def current_quant(self, device):
