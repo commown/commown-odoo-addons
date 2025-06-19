@@ -16,16 +16,17 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
        is then 'sent'.
     """
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.order = self.env.ref("sale.portal_sale_order_1")
-        self.order.require_signature = False
+        cls.order = cls.env.ref("sale.portal_sale_order_1")
+        cls.order.require_signature = False
 
-        self.env["payment.token"].create(
+        cls.env["payment.token"].create(
             {
-                "partner_id": self.order.partner_id.id,
-                "provider_id": self.env.ref("payment.payment_provider_stripe").id,
+                "partner_id": cls.order.partner_id.id,
+                "provider_id": cls.env.ref("payment.payment_provider_stripe").id,
                 "provider_ref": "test-ref",
                 "verified": True,
             }
@@ -33,10 +34,10 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
 
         # Necessary (but not sufficient) to make is_big_b2b True.
         # A last criterion is needed that can be set using the force_big_b2b method.
-        b2b_website = self.env.ref("website_sale_b2b.b2b_website")
-        self.order.partner_id.user_ids.update({"website_id": b2b_website.id})
-        product = self.order.order_line[0].product_id
-        ct = self.env.ref("product_rental.contract_tmpl_basic")
+        b2b_website = cls.env.ref("website_sale_b2b.b2b_website")
+        cls.order.partner_id.user_ids.update({"website_id": b2b_website.id})
+        product = cls.order.order_line[0].product_id
+        ct = cls.env.ref("product_rental.contract_tmpl_basic")
         product.property_contract_template_id = ct.id
 
     def setup_preconditions(self, big_b2b, authorized, sent):

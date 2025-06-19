@@ -21,18 +21,19 @@ def _add_attr(product, attr_name, value_prices):
 
 
 class PricelistTC(RentedQuantityTC):
-    def setUp(self):
-        super().setUp()
-        self.pricelist = self.env["product.pricelist"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.pricelist = cls.env["product.pricelist"].create(
             {"name": "test", "account_for_rented_quantity": "product-category"}
         )
-        self.pricelist.account_for_rented_quantity_category_ids |= self.cat_fp
+        cls.pricelist.account_for_rented_quantity_category_ids |= cls.cat_fp
 
-        self.env["product.pricelist.item"].create(
+        cls.env["product.pricelist.item"].create(
             {
-                "pricelist_id": self.pricelist.id,
+                "pricelist_id": cls.pricelist.id,
                 "applied_on": "1_product",
-                "product_tmpl_id": self.fp_premium.id,
+                "product_tmpl_id": cls.fp_premium.id,
                 "compute_price": "percentage",
                 "percent_price": 20.0,
                 "min_quantity": 10,

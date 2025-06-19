@@ -2,9 +2,10 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
 class SaleOrderLineTC(RentalSaleOrderTC):
-    def setUp(self):
-        super().setUp()
-        self.so = self.create_sale_order()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.so = cls.create_sale_order()
 
     def test_description_sale(self):
         so_line = self.so.order_line.filtered("product_id.has_recurrent_payment")[0]
