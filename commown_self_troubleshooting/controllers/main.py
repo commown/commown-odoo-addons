@@ -14,7 +14,14 @@ class SelfHelp(http.Controller):
         return request.env.ref("commown_self_troubleshooting." + suffix)
 
     def _description(self, **post):
-        return self.ref(post["issue-description-template"]).render(post)
+        """
+        The post dict contains all values used in the description
+        (more_info, the address, etc), so we pass it in the template render.
+        """
+        return request.env["ir.qweb"]._render(
+            "commown_self_troubleshooting.%s" % post["issue-description-template"],
+            post,
+        )
 
     def _tag_ids(self, **post):
         ids = [self.ref(t).id for t in self.action_tags.get(post["action"], ())]
