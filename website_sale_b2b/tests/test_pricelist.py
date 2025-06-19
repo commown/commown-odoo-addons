@@ -46,18 +46,21 @@ class PricelistTC(RentedQuantityTC):
     def test_account_for_rented_quantity(self):
 
         partner = self.so.partner_id
+        self.pricelist = self.pricelist.with_context(
+            force_pricelist_partner_id=partner.id
+        )
         # Check test prerequisite:
         self.assertEqual(partner.rented_quantity(product_template=self.fp_premium), 1)
         self.assertEqual(partner.rented_quantity(product_template=self.fp2), 1)
 
         self.assertEqual(
             {self.fp_premium.id: 60.0},
-            self.pricelist.get_products_price(self.fp_premium, (7,), partner),
+            self.pricelist._get_products_price(self.fp_premium, 7),
         )
 
         self.assertEqual(
             {self.fp_premium.id: 48.0},
-            self.pricelist.get_products_price(self.fp_premium, (8,), partner),
+            self.pricelist._get_products_price(self.fp_premium, 8),
         )
 
     def test_no_extra_reduction(self):

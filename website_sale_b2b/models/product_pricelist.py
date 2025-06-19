@@ -74,7 +74,7 @@ class Pricelist(models.Model):
 
         return infos
 
-    def _compute_price_rule(self, products_qty_partner, date=False, uom_id=False):
+    def _compute_price_rule(self, products, qty, uom=None, date=False, **kwargs):
         self.ensure_one()
         choice = self.account_for_rented_quantity
 
@@ -83,35 +83,41 @@ class Pricelist(models.Model):
             _logger.debug(
                 "Called _compute_price_rule with choice %s. Input data: %s",
                 choice,
-                products_qty_partner,
+                (products, qty),
             )
 
-            new_products_qty_partner = []
-
+            result = {}
             partner_model = self.env["res.partner"]
 
-            for product, qty, partner in products_qty_partner:
-                if isinstance(partner, int):
-                    partner = partner_model.browse(partner) or self.env.user.partner_id
-                partner = partner.commercial_partner_id
-                rental_infos = self._rented_quantity_infos(product, partner)
-                added_qty = rental_infos["quantity"]
-                _logger.debug("Rented quantity infos: %s", rental_infos)
-                new_products_qty_partner.append((product, qty + added_qty, partner))
-
-            products_qty_partner = new_products_qty_partner
-            _logger.debug(
-                "  > calling base _compute_price_rule with data: %s",
-                products_qty_partner,
+            # Used by tests
+            forced_partner_id = self.env.context.get(
+                "force_pricelist_partner_id", False
+            )
+            partner = (
+                partner_model.browse(forced_partner_id) or self.env.user.partner_id
             )
 
-        result = super(Pricelist, self)._compute_price_rule(
-            products_qty_partner,
-            date=date,
-            uom_id=uom_id,
-        )
+            partner = partner.commercial_partner_id
+            for product in products:
+                rental_infos = self._rented_quantity_infos(product, partner)
+                _logger.debug("Rented quantity infos: %s", rental_infos)
+                product_qty = qty + rental_infos["quantity"]
 
-        _logger.debug("  > base _compute_price_rule result: %s", result)
+                _logger.debug(
+                    "  > calling base _compute_price_rule with data: %s",
+                    (product, product_qty),
+                )
+
+                result |= super(Pricelist, self)._compute_price_rule(
+                    product, product_qty, date=date, uom=uom, **kwargs
+                )
+
+            _logger.debug("  > base _compute_price_rule result: %s", result)
+
+        else:
+            result = super(Pricelist, self)._compute_price_rule(
+                products, qty, date=date, uom=uom, **kwargs
+            )
 
         return result
 
