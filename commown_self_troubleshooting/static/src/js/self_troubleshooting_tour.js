@@ -262,7 +262,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
                 content:
                     "Select no on the presence of screen protection on this device",
                 trigger: "input[id=has_protection_no]",
-                run: "text Non",
+                run: "click",
             },
             {
                 content: "Check step 2 nav link is disabled",
@@ -276,7 +276,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
             {
                 content: "Select I just need a screen protection on my device",
                 trigger: "input[id=replace_screen_no_step_2]",
-                run: "text J'ai juste besoin d'une vitre de protection",
+                run: "click",
             },
             {
                 content: "Check step 4 nav link is disabled",
@@ -310,7 +310,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
                 content:
                     "Select yes on the presence of screen protection on this device",
                 trigger: "input[id=has_protection_yes]",
-                run: "text Non",
+                run: "click",
             },
             {
                 content: "Check step 2 nav link is not disabled",
@@ -324,7 +324,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
             {
                 content: "Select my display needs to be replaced",
                 trigger: "input[id=replace_screen_yes_step2]",
-                run: "text Mon écran doit être remplacé",
+                run: "click",
             },
             {
                 content: "Check step 4 nav link is not disabled",
@@ -362,7 +362,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
                 content:
                     "Select yes on the presence of screen protection on this device",
                 trigger: "input[id=has_protection_yes]",
-                run: "text Non",
+                run: "click",
             },
             {
                 content: "Check step 2 nav link is not disabled",
@@ -376,7 +376,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
             {
                 content: "Select my display needs to be replaced",
                 trigger: "input[id=replace_screen_yes_step2]",
-                run: "text Mon écran doit être remplacé",
+                run: "click",
             },
             {
                 content: "Check step 4 nav link is not disabled",
@@ -426,7 +426,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
                 content:
                     "Select yes on the presence of screen protection on this device",
                 trigger: "input[id=has_protection_yes]",
-                run: "text Non",
+                run: "click",
             },
             {
                 content: "Check step 2 nav link is not disabled",
@@ -440,7 +440,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
             {
                 content: "Select my display needs to be replaced",
                 trigger: "input[id=replace_screen_yes_step2]",
-                run: "text Mon écran doit être remplacé",
+                run: "click",
             },
             {
                 content: "Check step 4 nav link is not disabled",
@@ -459,7 +459,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
             {
                 content: "Select I need a screwdriver",
                 trigger: "input[id=screwdriver-yes]",
-                run: "text Je souhaite avoir un tournevis d'appoint",
+                run: "click",
             },
             commonSteps.gotoNextStep,
             commonSteps.checkInputNamesMatchesUser,
@@ -484,7 +484,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
                 content:
                     "Select yes on the presence of screen protection on this device",
                 trigger: "input[id=has_protection_yes]",
-                run: "text Non",
+                run: "click",
             },
             {
                 content: "Check step 2 nav link is not disabled",
@@ -498,7 +498,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
             {
                 content: "Select my display needs to be replaced",
                 trigger: "input[id=replace_screen_yes_step2]",
-                run: "text Mon écran doit être remplacé",
+                run: "click",
             },
             {
                 content: "Check step 4 nav link is disabled",
@@ -528,7 +528,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
         {
             content: "Select yes on the presence of screen protection on this device",
             trigger: "input[id=has_protection_yes]",
-            run: "text Non",
+            run: "click",
         },
         {
             content: "Check step 2 nav link is not disabled",
@@ -548,7 +548,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
         {
             content: "Select my display needs to be replaced",
             trigger: "input[id=replace_screen_yes_step2]",
-            run: "text Mon écran doit être remplacé",
+            run: "click",
         },
         {
             content: "Check step 4 nav link is not disabled",
@@ -681,13 +681,13 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
         {
             content: "Select i don't hear option",
             trigger: "input[id=cable_sound-no]",
-            run: "text Non",
+            run: "click",
         },
         commonSteps.gotoNextStep,
         {
             content: "Select i don't hear in two speakers option",
             trigger: "input[id=connection_solved-no]",
-            run: "text Non",
+            run: "click",
         },
         commonSteps.gotoNextStep,
         commonSteps.checkInputNamesMatchesUser,
