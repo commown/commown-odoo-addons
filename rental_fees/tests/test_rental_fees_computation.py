@@ -24,23 +24,6 @@ class RentalFeesComputationTC(RentalFeesTC):
             {"name": "fees", "type": "service", "list_price": 0.0}
         )
 
-        supplier_account = cls.env["account.account"].create(
-            {
-                "code": "cust_acc",
-                "name": "customer account",
-                "user_type_id": ref("account.data_account_type_payable").id,
-                "reconcile": True,
-            }
-        )
-
-        expenses_account = cls.env["account.account"].create(
-            {
-                "code": "rev_exp",
-                "name": "expences account",
-                "user_type_id": ref("account.data_account_type_expenses").id,
-            }
-        )
-
         tax = cls.env["account.tax"].create(
             {
                 "amount": 10.0,
@@ -55,7 +38,6 @@ class RentalFeesComputationTC(RentalFeesTC):
             {
                 "move_type": "in_invoice",
                 "partner_id": cls.po.partner_id.id,
-                "account_id": supplier_account.id,
                 "invoice_line_ids": [
                     (
                         0,
@@ -64,7 +46,6 @@ class RentalFeesComputationTC(RentalFeesTC):
                             "product_id": fees_product.product_variant_id.id,
                             "name": "Rental fees until ##DATE##",
                             "price_unit": 0.0,
-                            "account_id": expenses_account.id,
                             "tax_ids": [(6, 0, tax.ids)],
                         },
                     )
