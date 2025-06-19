@@ -1,7 +1,7 @@
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 
-class ResUsersTC(SavepointCase):
+class ResUsersTC(TransactionCase):
     "Test the user methods implemented in current module"
 
     def setUp(self):
