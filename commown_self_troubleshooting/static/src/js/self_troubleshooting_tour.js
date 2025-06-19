@@ -1,4 +1,4 @@
-odoo.define("commown_self_troubleshooting.tour_fp2_battery", function (require) {
+odoo.define("commown_self_troubleshooting.test_tours", function (require) {
     "use strict";
 
     var tour = require("web_tour.tour");
