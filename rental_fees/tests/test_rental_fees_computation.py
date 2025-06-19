@@ -61,7 +61,6 @@ class RentalFeesComputationTC(RentalFeesTC):
                 "code": "TJ",
                 "company_id": cls.env.company.id,
                 "type": "bank",
-                "update_posted": True,
             }
         )
 
