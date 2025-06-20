@@ -46,7 +46,7 @@ function setUpWizard($container) {
             $.each(wizard.steps, function (stepIndex, step) {
                 wizard.toggleStep(stepIndex, state.stepStates[stepIndex]);
             });
-            wizard.goToStep(state.currentStep);
+            wizard.goToStep(state.currentStep, true);
         }
 
         var previousState = null;
@@ -113,17 +113,17 @@ function setUpWizard($container) {
         selected: 0,
         autoAdjustHeight: false,
         keyNavigation: false,
-        enableURLhash: false,
-        toolbarSettings: {
-            toolbarPosition: "both",
+        enableUrlHash: false,
+        toolbar: {
+            position: "both",
         },
         transition: {
             animation: "fade",
         },
         theme: "arrows",
         lang: buttonI18n[$("html").attr("lang").split("-")[0]],
-        anchorSettings: {
-            removeDoneStepOnNavigateBack: true,
+        anchor: {
+            unDoneOnBackNavigation: true,
         },
     });
 
@@ -164,7 +164,12 @@ function setUpWizard($container) {
      */
     const wizard = $container.data("smartWizard");
     wizard.toggleStep = function (number, enabled) {
-        $container.smartWizard("stepState", [number], enabled ? "enable" : "disable");
+        $container.smartWizard(
+            enabled ? "unsetState" : "setState",
+            [number],
+            "disable"
+        );
+        $container.smartWizard("unsetState", [number], "done");
         if (requiredFields[number] !== undefined) {
             requiredFields[number].attr("required", enabled ? "required" : null);
         }
