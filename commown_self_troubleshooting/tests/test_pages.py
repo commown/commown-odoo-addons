@@ -183,7 +183,7 @@ class PagesTC(HttpCase):
                         return_value=contract,
                     ):
                         doc = self.get_page(page_url)
-                except:  # noqa: E722,B001
+                except:  # noqa: E722,B001 # pragma: no cover
                     self.fail("Error loading %s:\n%s" % (page_url, tb.format_exc()))
 
                 self.assertEqual(
