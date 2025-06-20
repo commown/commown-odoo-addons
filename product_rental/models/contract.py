@@ -289,14 +289,17 @@ class Contract(models.Model):
 
     def action_show_analytic_lines(self):
         self.ensure_one()
-        account = self.group_id.filtered(lambda acc: acc.name == self.name)
-        if account:
+        accounts = self.env["account.analytic.account"]
+        for cline in self.contract_line_ids:
+            aa_ids = tuple(int(k) for k in cline.analytic_distribution.keys())
+            accounts |= accounts.browse(aa_ids)
+        if accounts:
             return {
                 "name": _("Cost/Revenue"),
                 "type": "ir.actions.act_window",
                 "res_model": "account.analytic.line",
                 "view_mode": "tree,form,graph,pivot",
-                "domain": "[('account_id', '=', %d)]" % account.id,
+                "domain": "[('account_id', 'in', %s)]" % str(accounts.ids),
                 "target": "current",
             }
         else:
