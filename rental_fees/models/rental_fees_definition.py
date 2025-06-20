@@ -1,3 +1,4 @@
+import itertools
 import json
 
 from dateutil.relativedelta import relativedelta
@@ -476,19 +477,24 @@ class RentalFeesDefinitionLine(models.Model):
             ]
         )
 
-        analytic_accounts = period["contract"].mapped(
-            "contract_line_ids.analytic_account_id"
+        aas = period["contract"].contract_line_ids.mapped("analytic_distribution")
+        aa_ids = list(itertools.chain.from_iterable(aa.keys() for aa in aas))
+
+        self.env.cr.execute(
+            """ SELECT ML.id
+                FROM account_move_line ML
+                JOIN account_move M ON (ML.move_id = M.id)
+                WHERE M.move_type = 'out_invoice'
+                  AND M.payment_state = 'paid'
+                  AND M.invoice_date >= %s
+                  AND M.invoice_date < %s
+                  AND ML.contract_line_id IS NULL
+                  AND ML.analytic_distribution ?| array[%s]
+            """,
+            [period["from_date"], period["to_date"], aa_ids],
         )
-        merged_invoice_lines = self.env["account.move.line"].search(
-            [
-                ("invoice_type", "=", "out_invoice"),
-                ("move_id.invoice_date", ">=", period["from_date"]),
-                ("move_id.invoice_date", "<", period["to_date"]),
-                ("move_id.payment_state", "=", "paid"),
-                ("contract_line_id", "=", False),
-                ("account_analytic_id", "in", analytic_accounts.ids),
-            ]
-        )
+        invl_ids = [row[0] for row in self.env.cr.fetchall()]
+        merged_invoice_lines = self.env["account.move.line"].browse(invl_ids)
 
         return [
             (il.move_id.invoice_date, il.price_subtotal)
