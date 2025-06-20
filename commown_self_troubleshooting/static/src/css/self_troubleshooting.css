@@ -4,3 +4,16 @@
 .contact-human .toolbar {
     visibility: hidden;
 }
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group > label {
+    margin-bottom: 0.5rem;
+}
+
+.logo-row {
+    display: flex;
+    align-items: center !important;
+}

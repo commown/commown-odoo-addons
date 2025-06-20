@@ -130,20 +130,20 @@
                                         role="tabpanel"
                                         aria-labelledby="step-1"
                                     >
-                      <div class="clearfix">
+                      <div class="clearfix logo-row">
                         <img
                                                 class="pull-left"
                                                 src="/commown_self_troubleshooting/static/images/FP2/camera/fp2_camera_front.jpg"
                                                 alt="Photo du module caméra frontale du Fairphone 2"
                                             />
                         <h2>Modèle de la caméra</h2>
-                        <p>Allez voir <a
-                                                    target="_blank"
-                                                    href="https://wiki.commown.coop/Reconnaître-la-version-de-votre-caméra"
-                                                >cette
-                      page de notre wiki</a> et répondez à la question
-                        ci-dessous :</p>
                       </div>
+                      <p>Allez voir <a
+                                                target="_blank"
+                                                href="https://wiki.commown.coop/Reconnaître-la-version-de-votre-caméra"
+                                            >cette
+                    page de notre wiki</a> et répondez à la question
+                      ci-dessous :</p>
                       <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
                           <label for="camera_model">Modèle de caméra :</label>

@@ -20,7 +20,7 @@
 
     <template id="step-contract-choice">
       <div id="step-0" class="tab-pane" role="tabpanel" aria-labelledby="step-0">
-        <div class="row align-items-center">
+        <div class="logo-row align-items-center">
           <img
                     src="/commown_self_troubleshooting/static/images/logo_commown.png"
                     alt="Logo de commown"
@@ -36,14 +36,11 @@
           <a
                     target="_blank"
                     href="https://forum.commown.coop/t/trouver-le-numero-de-serie-de-son-ordinateur/2677"
-                >ici pour les ordinateurs  <i
-                        class="fas fa-external-link-alt"
-                    /></a>, et
+                >ici pour les ordinateurs  <i class="fa fa-external-link-alt" /></a>, et
           <a
                     target="_blank"
                     href="https://forum.commown.coop/t/trouver-le-numero-imei-de-son-smartphone/2678"
-                >là pour les téléphones <i class="fas fa-external-link-alt" /></a>.<br
-                />
+                >là pour les téléphones <i class="fa fa-external-link-alt" /></a>.<br />
           <br />
           Si vous ne trouvez pas le bon numéro, pas de panique,
           sélectionnez ici le 1er contrat de la liste et précisez-nous
@@ -114,7 +111,7 @@
                         t-esc="screwdriver_size"
                     /> (voir
             <a target="_blank" t-attf-href="{{ screwdriver_store_link }}">ici <i
-                            class="fas fa-external-link-alt"
+                            class="fa fa-external-link-alt"
                         /></a>
           )</t>.
           Nous pouvons vous en prêter un à nous renvoyer ensuite avec le module en panne.
@@ -167,7 +164,7 @@
           <p>
             Vous retrouverez cette information dans votre commande
             <a target="_blank" href="/my/orders">ici <i
-                            class="fas fa-external-link-alt"
+                            class="fa fa-external-link-alt"
                         /></a>
             .
           </p>
@@ -252,7 +249,7 @@
             t-attf-aria-labelledby="step-{{ step }}"
         >
         <h2>
-          <i class="fas fa-shipping-fast" />
+          <i class="fa fa-shipping-fast" />
           Informations d'expédition
         </h2>
         <p t-if="header" t-raw="header" />
@@ -268,7 +265,7 @@
 
           <div class="form-group">
             <label for="name">
-              <i class="fas fa-id-card" aria-hidden="true" />
+              <i class="fa fa-id-card" aria-hidden="true" />
               Nom complet
             </label>
             <input
@@ -284,7 +281,7 @@
 
           <div class="form-group">
             <label for="street">
-              <i class="fas fa-home" />
+              <i class="fa fa-home" />
               Rue - 1ère ligne
             </label>
             <input
@@ -301,7 +298,7 @@
 
           <div class="form-group">
             <label for="street2">
-              <i class="fas fa-home" />
+              <i class="fa fa-home" />
               Rue - 2ème ligne (si nécessaire)
             </label>
             <input
@@ -314,10 +311,10 @@
             <div class="help-block with-errors" />
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col form-group">
               <label for="zipcode">
-                <i class="fas fa-map-marker-alt" />
+                <i class="fa fa-map-marker-alt" />
                 C. Postal
               </label>
               <input
@@ -332,7 +329,7 @@
             </div>
             <div class="col form-group">
               <label for="city">
-                <i class="fas fa-map-marker-alt" />
+                <i class="fa fa-map-marker-alt" />
                 Ville
               </label>
               <input
@@ -347,7 +344,7 @@
             </div>
             <div class="col form-group">
               <label for="country">
-                <i class="fas fa-map-marker-alt" />
+                <i class="fa fa-map-marker-alt" />
                 Pays
               </label>
               <select
@@ -370,10 +367,10 @@
             </div>
           </div>
 
-          <div class="form-row">
+          <div class="row">
             <div class="col form-group">
               <label for="phone">
-                <i class="fas fa-phone-alt" />
+                <i class="fa fa-phone-alt" />
                 N° de mobile
               </label>
               <input
@@ -389,7 +386,7 @@
             </div>
             <div class="col form-group">
               <label for="email">
-                <i class="fas fa-envelope" />
+                <i class="fa fa-envelope" />
                 Adresse email
               </label>
               <input
@@ -494,7 +491,7 @@
             t-attf-aria-labelledby="step-{{ step }}"
         >
         <h2>
-          <i class="fas fa-hands-helping" />
+          <i class="fa fa-hands-helping" />
           Contacter un humain
         </h2>
         <p>Vous pouvez ici
@@ -569,7 +566,7 @@
             t-attf-aria-labelledby="step-{{ step }}"
         >
         <h2>
-          <i class="fas fa-check-double" />
+          <i class="fa fa-check-double" />
           Confirmation de votre demande
         </h2>
         <p>En appuyant sur le bouton ci-dessous vous confirmerez votre
@@ -579,7 +576,7 @@
           Une demande d'assistance va être créée automatiquement lorsque vous aurez soumis ce formulaire.
           Vous pourrez y accéder à tout moment depuis
           <a href=" /my/tasks" target="_blank">votre espace personnel <i
-                        class="fas fa-external-link-alt"
+                        class="fa fa-external-link-alt"
                     /></a>, via la section
           <i
                 >Mes interactions avec Commown</i> pour en suivre l'avancement et en consulter l'historique.
