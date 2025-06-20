@@ -26,7 +26,8 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
 
     def assert_contract_lines_attributes_equal(self, contract, value_dict):
         for attr, value in value_dict.items():
-            self.assertEqual(contract.contract_line_ids.mapped(attr), value)
+            err_msg = "Incorrect value %r for contract line field %r" % (value, attr)
+            self.assertEqual(contract.contract_line_ids.mapped(attr), value, err_msg)
 
     def assert_rounded_equals(self, actual, expected, figures=2):
         self.assertEqual(round(actual, figures), expected)
@@ -44,6 +45,15 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             }
         )
         return tax
+
+    def check_contract_lines_analytic_distribution(self, contract):
+        for cline in contract.contract_line_ids:
+            distribution = cline.analytic_distribution
+            self.assertEqual(list(distribution.values()), [100.0])
+            aa = self.env["account.analytic.account"].browse(
+                int(list(distribution.keys())[0])
+            )
+            self.assertEqual(aa.exists().name, contract.name)
 
     def test_rental_contract_creation_without_fpos(self):
         """Contracts generated from rental sales have specific characteristics
@@ -71,10 +81,9 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                 "price_unit": [25.0, 1.5],
                 "quantity": [1, 1],
                 "sale_order_line_id.product_id.name": ["Fairphone Premium", "headset"],
-                "contract_id.group_id.name": [c1.name],
-                "contract_id.group_id.partner_id": c1.partner_id,
             },
         )
+        self.check_contract_lines_analytic_distribution(c1)
 
         self.assert_rounded_equals(i2.amount_total, 87.90)
         self.assert_rounded_equals(i2.amount_untaxed, 73.25)
@@ -96,10 +105,9 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                     "keyboard",
                     "keyboard deluxe",
                 ],
-                "contract_id.group_id.name": [c2.name],
-                "contract_id.group_id.partner_id": c2.partner_id,
             },
         )
+        self.check_contract_lines_analytic_distribution(c2)
 
         self.assert_rounded_equals(i3.amount_total, 75.0)
         self.assert_rounded_equals(i3.amount_untaxed, 62.5)
@@ -111,10 +119,9 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                 "price_unit": [60.0, 15.0],
                 "quantity": [1, 1],
                 "sale_order_line_id.product_id.name": ["PC", "screen"],
-                "contract_id.group_id.name": [c3.name],
-                "contract_id.group_id.partner_id": c3.partner_id,
             },
         )
+        self.check_contract_lines_analytic_distribution(c3)
 
         self.assert_rounded_equals(i4.amount_total, 16.0)
         self.assert_rounded_equals(i4.amount_untaxed, 13.33)
@@ -129,10 +136,9 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                     "GS Headset",
                     "serenity level services",
                 ],
-                "contract_id.group_id.name": [c4.name],
-                "contract_id.group_id.partner_id": c4.partner_id,
             },
         )
+        self.check_contract_lines_analytic_distribution(c4)
 
         self.assert_rounded_equals(i5.amount_total, 50.0)
         self.assert_rounded_equals(i5.amount_untaxed, 41.67)
@@ -144,10 +150,9 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                 "price_unit": [20.0, 15.0],
                 "quantity": [1, 2],
                 "sale_order_line_id.product_id.name": ["FP2", "screen"],
-                "contract_id.group_id.name": [c5.name],
-                "contract_id.group_id.partner_id": c5.partner_id,
             },
         )
+        self.check_contract_lines_analytic_distribution(c5)
 
     def test_rental_contract_creation_with_fpos(self):
         partner = self.env.ref("base.res_partner_3")
