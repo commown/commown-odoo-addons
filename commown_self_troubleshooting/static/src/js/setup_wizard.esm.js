@@ -112,7 +112,9 @@ function setUpWizard($container) {
     $container.smartWizard({
         selected: 0,
         autoAdjustHeight: false,
-        keyNavigation: false,
+        keyboard: {
+            keyNavigation: false,
+        },
         enableUrlHash: false,
         toolbar: {
             position: "both",
