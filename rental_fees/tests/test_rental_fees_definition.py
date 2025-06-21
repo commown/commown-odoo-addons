@@ -18,7 +18,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             self.fees_def.partner_id = self.env.ref("base.res_partner_4").id
 
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             (
                 "Fees definition purchase orders partners must all be"
                 " the same as the fees definition's partner"
@@ -31,7 +31,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             self.po.partner_id = self.env.ref("base.res_partner_4").id
 
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             (
                 "Purchase order's partner and its fees definition"
                 " must have the same partner"
@@ -45,7 +45,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             self.fees_def.order_ids |= po2
 
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "Cannot add an excluded-from-fees PO to a fees definition",
         )
 
@@ -67,7 +67,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             fees_def2.order_ids |= self.po
 
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             (
                 "At least one other fees def, %s (id %d), has the same partner,"
                 " product & order" % (self.fees_def.name, self.fees_def.id)
@@ -112,7 +112,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         with self.assertRaises(UserError) as err:
             self.fees_def.prices(device)
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "No price for device N/S 1: its PO line has no invoice, see %s"
             % self.po.name,
         )

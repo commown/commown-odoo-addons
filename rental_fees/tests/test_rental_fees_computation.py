@@ -198,7 +198,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(
             "Operation not allowed: there are later fees computations with"
             " invoices which amount would become invalid.",
-            err.exception.name,
+            err.exception.args[0],
         )
 
         # Same with the action_invoice method
@@ -206,7 +206,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             c2.action_invoice()
         self.assertEqual(
             "There is a later invoice for the same fees definition",
-            err.exception.name,
+            err.exception.args[0],
         )
 
         # Invoicing requires a model: check this too
@@ -216,7 +216,7 @@ class RentalFeesComputationTC(RentalFeesTC):
                 self.compute("2021-05-30", invoice=True)
         self.assertEqual(
             "Please set the invoice model on all fees definitions.",
-            err.exception.name,
+            err.exception.args[0],
         )
 
         # Generate an ods report
@@ -450,12 +450,12 @@ class RentalFeesComputationTC(RentalFeesTC):
         with self.assertRaises(ValidationError) as err:
             pt_ref = "product.product_product_1_product_template"
             self.fees_def.product_template_id = self.env.ref(pt_ref).id
-        self.assertIn(expected_msg, err.exception.name)
+        self.assertIn(expected_msg, err.exception.args[0])
 
         with self.assertRaises(ValidationError) as err:
             partner_ref = "base.res_partner_1"
             self.fees_def.partner_id = self.env.ref(partner_ref).id
-        self.assertIn(expected_msg, err.exception.name)
+        self.assertIn(expected_msg, err.exception.args[0])
 
     def test_compute_no_rental_compensation_zero_1(self):
         "No rental conditions check: A first rental is required"
@@ -706,7 +706,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             compute.split_periods_wrt_fees_def(fees_def, [])
 
         self.assertEqual(
-            exc.exception.name,
+            exc.exception.args[0],
             "Fees definition error_fees_def (id %d) has no line." % fees_def.id,
         )
 
@@ -732,6 +732,6 @@ class RentalFeesComputationTC(RentalFeesTC):
         with self.assertRaises(UserError) as err:
             comp.action_invoice()
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "Please use the same invoice model on all fees definition.",
         )
