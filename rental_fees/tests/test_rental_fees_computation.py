@@ -469,7 +469,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.send_device("N/S 1", contract, "2021-02-01")
         contract.date_start = "2021-02-01"
         self.receive_device("N/S 1", contract, "2021-07-02")
-        contract.end_date = "2021-07-02"
+        contract.date_end = "2021-07-02"
 
         comp = self.compute("2022-02-01")
         self.assertFalse(comp.details("no_rental_compensation").mapped("fees"))
@@ -480,7 +480,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.send_device("N/S 1", contract1, "2021-02-01")
         contract1.date_start = "2021-02-01"
         self.receive_device("N/S 1", contract1, "2021-03-15")
-        contract1.end_date = "2021-03-15"
+        contract1.date_end = "2021-03-15"
 
         self.repackage_lot("N/S 1", "2021-03-16")
 
@@ -488,7 +488,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.send_device("N/S 1", contract2, "2021-09-14")
         contract2.date_start = "2021-09-14"
         self.receive_device("N/S 1", contract2, "2021-09-14")
-        contract2.end_date = "2021-09-14"
+        contract2.date_end = "2021-09-14"
 
         comp = self.compute("2021-10-01")
         self.assertFalse(comp.details("no_rental_compensation").mapped("fees"))
@@ -509,7 +509,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         while contract1.recurring_next_date <= date(2021, 4, 1):
             contract1._recurring_create_invoice()
         self.receive_device("N/S 1", contract1, "2021-04-01")
-        contract1.end_date = "2021-04-01"
+        contract1.date_end = "2021-04-01"
 
         self.repackage_lot("N/S 1", "2021-04-02")
 
@@ -533,7 +533,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         while contract.recurring_next_date <= date(2021, 4, 1):
             contract._recurring_create_invoice()
         self.receive_device("N/S 1", contract, "2021-04-01")
-        contract.end_date = "2021-04-01"
+        contract.date_end = "2021-04-01"
 
         self.scrap_device(device, date(2021, 12, 1))  # after no rental limit!
 
