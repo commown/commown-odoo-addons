@@ -28,7 +28,6 @@ class RentalFeesTC(DeviceAsAServiceTC):
         )
         cls.storable_product.property_rental_account_expense_id = rental_account.id
 
-
         p1 = cls.storable_product.product_variant_id
         p2 = cls.storable_product.copy({"name": "Other product"}).product_variant_id
         serials = {p1: ("N/S 1", "N/S 2", "N/S 3"), p2: ("N/S 4", "N/S 5")}
@@ -141,7 +140,11 @@ class RentalFeesTC(DeviceAsAServiceTC):
 
     def scrap_device(self, device, date):
         "Simulate device scrapping at given (enforced) date"
-        scrap_loc = self.env.ref("stock.stock_location_scrapped")
+        scrap_loc = (
+            self.env.ref("stock.stock_location_locations_virtual").child_ids.filtered(
+                "scrap_location"
+            )
+        )[0]
         scrap = self.env["stock.scrap"].create(
             {
                 "lot_id": device.id,
