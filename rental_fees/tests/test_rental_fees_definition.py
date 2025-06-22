@@ -153,7 +153,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         assert len(newer_partial_po.picking_ids.move_line_ids) > 1
         mol0 = newer_partial_po.picking_ids.move_line_ids[0]
         mol0.update({"lot_name": "test-serial", "qty_done": 1})
-        newer_partial_po.picking_ids.action_done()
+        newer_partial_po.picking_ids.button_validate()
 
         self.get_notifications("info")
         prev_danger = self.get_notifications("danger")

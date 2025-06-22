@@ -152,11 +152,11 @@ class RentalFeesTC(DeviceAsAServiceTC):
                 "product_uom_id": device.product_id.uom_id.id,
                 "location_id": self.current_quant(device).location_id.id,
                 "scrap_location_id": scrap_loc.id,
-                "date_expected": date,
             }
         )
         scrap.do_scrap()
         datet = datetime.combine(date, datetime.min.time())
+        _set_date(scrap, datet, "date_done")
         _set_date(scrap.move_id, datet, "date")
         quant = self.current_quant(device)
         _set_date(quant, datet, "in_date")
