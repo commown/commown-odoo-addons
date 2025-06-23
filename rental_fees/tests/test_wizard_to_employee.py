@@ -23,9 +23,9 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, RentalFeesTC):
         return super().get_wizard(**kwargs)
 
     def get_infos(self, old_infos=None):
-        name = json.dumps(self.env.user.notify_info_channel_name)
+        name = self.env.user.notify_info_channel_name
         objs = self.env["bus.bus"].search([("channel", "=", name)], order="id")
-        msgs = [json.loads(m)["message"] for m in objs.mapped("message")]
+        msgs = [json.loads(m)["payload"][0]["message"] for m in objs.mapped("message")]
         return msgs[len(old_infos or ()) :]
 
     def test_give_concerned_by_fees_device_to_employee(self):

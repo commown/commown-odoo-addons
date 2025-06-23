@@ -139,7 +139,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
     def assertNewNotifs(self, msg_level, prev_notifs, *messages):
         new_notifs = self.get_notifications(msg_level) - prev_notifs
         self.assertEqual(
-            {json.loads(nf.message)["message"] for nf in new_notifs},
+            {json.loads(nf.message)["payload"][0]["message"] for nf in new_notifs},
             set(messages),
         )
 
