@@ -220,9 +220,12 @@ class RentalFeesComputationTC(RentalFeesTC):
         )
 
         # Generate an ods report
-        ref = self.env.ref
-        action = ref("rental_fees.action_py3o_spreadsheet_fees_rental_computation")
-        ods = pyexcel.get_book(file_content=action.render(c4.ids)[0], file_type="ods")
+        file_content, file_type = self.env["ir.actions.report"]._render_py3o(
+            "rental_fees.action_py3o_spreadsheet_fees_rental_computation", c4.ids
+        )
+        self.assertEqual(file_type, "ods")
+
+        ods = pyexcel.get_book(file_content=file_content, file_type=file_type)
         self.assertEqual(
             ods.sheet_names(),
             [

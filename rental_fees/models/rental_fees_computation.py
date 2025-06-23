@@ -552,9 +552,7 @@ class RentalFeesComputation(models.Model):
     def action_send_report_for_invoicing(self):
         "Get or generate supplier invoice and report, send then it through the invoice"
 
-        report_action = self.env.ref(
-            "rental_fees.action_py3o_spreadsheet_fees_rental_computation"
-        )
+        report_ref = "rental_fees.action_py3o_spreadsheet_fees_rental_computation"
 
         def _draft_invoices():
             return self.invoice_ids.filtered(lambda invoice: invoice.state == "draft")
@@ -564,12 +562,12 @@ class RentalFeesComputation(models.Model):
             return _draft_invoices()
 
         def _create_report():
-            report_action.render(self.ids)
-            return report_action.retrieve_attachment(self)
+            self.env["ir.actions.report"]._render(report_ref, self.ids)
+            return self.env.ref(report_ref).retrieve_attachment(self)
 
         # Get or create invoice and report
         inv = _draft_invoices() or _create_invoice()
-        report = report_action.retrieve_attachment(self) or _create_report()
+        report = self.env.ref(report_ref).retrieve_attachment(self) or _create_report()
 
         # Send report from invoice
         mail = self.env.ref("rental_fees.send_report_mail_template")
