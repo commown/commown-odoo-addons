@@ -462,7 +462,7 @@ class RentalFeesDefinitionLine(models.Model):
             raise RuntimeError(
                 msg
                 % {
-                    "err": err.name,
+                    "err": err.args[0],
                     "def_name": self.fees_definition_id.name,
                     "def_id": self.fees_definition_id.id,
                     "period": "\n- ".join("%s: %s" % (k, v) for k, v in period.items()),
