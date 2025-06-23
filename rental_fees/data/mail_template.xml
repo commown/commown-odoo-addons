@@ -4,23 +4,23 @@
       <field name="name">[commown] Send fees report through the invoice</field>
       <field
             name="subject"
-        >[${object.company_id.name}] Fees to be invoices as of ${format_date(object.fees_computation_id.until_date)}</field>
+        >[{{ object.company_id.name }}] Fees to be invoices as of {{ format_date(object.fees_computation_id.until_date) }}</field>
       <field name="partner_to">${object.partner_id.id}</field>
       <field name="model_id" ref="account.model_account_move" />
       <field name="auto_delete" eval="True" />
-      <field name="lang">${object.partner_id.lang}</field>
+      <field name="lang">{{ object.partner_id.lang }}</field>
       <field
             name="body_html"
         ><![CDATA[
-<p>Hello dear ${object.partner_id.name} team,</p>
+<p>Hello dear <t t-out="object.partner_id.name"/> team,</p>
 
 <br/>
 
 <p>Please find attached the fees report dated
-${format_date(object.fees_computation_id.until_date)}<p>
+<t t-out="format_date(object.fees_computation_id.until_date)"/><p>
 
-<p>Please return the corresponding invoice amouting to
-${format_amount(object.amount_total, object.currency_id)} by simply attaching it in
+<p>Please return the corresponding invoice amounting to
+<t t-out="format_amount(object.amount_total, object.currency_id)"/> by simply attaching it in
 reply to this email without changing its subject.</p>
 
 <br><br>
