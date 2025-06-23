@@ -1,0 +1,8 @@
+<odoo>
+
+    <record id="big_b2b_min_qty" model="ir.config_parameter">
+      <field name="key">website_sale_b2b.big_b2b_min_qty</field>
+      <field name="value">9</field>
+    </record>
+
+</odoo>
