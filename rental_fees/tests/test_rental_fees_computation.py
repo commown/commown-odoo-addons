@@ -784,3 +784,18 @@ class RentalFeesComputationTC(RentalFeesTC):
             err.exception.args[0],
             "Please use the same invoice model on all fees definition.",
         )
+
+    def test_compute_with_fix_fees(self):
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.create_invoices_until(contract, "2021-03-01")
+
+        fees_line = self.fees_def.line_ids[0]
+        fees_line.update({"fees_type": "fix", "monthly_fees": 0.4})
+
+        comp = self.compute("2021-03-01")
+
+        self.assertEqual(comp.fees, 0.8)  # 2 monthly invoices
+        cur_symbol = self.env.company.currency_id.symbol
+        self.assertEqual(fees_line.format_fees_amount(), "0.40 %s (fixed)" % cur_symbol)
