@@ -11,6 +11,10 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             self.fees_def.line_ids.mapped("display_name"), ["1", "2", "100"]
         )
 
+    def test_partner_coherency_0(self):
+        self.fees_def._check_partner_coherency()
+        self.po._check_partner_coherency()
+
     def test_partner_coherency_1(self):
         "Check fees partner is coherent with its orders' - update fees def"
         with self.assertRaises(ValidationError) as err:
