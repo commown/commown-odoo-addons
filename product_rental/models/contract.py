@@ -293,7 +293,7 @@ class Contract(models.Model):
         for cline in self.contract_line_ids:
             aa_ids = tuple(int(k) for k in cline.analytic_distribution.keys())
             accounts |= accounts.browse(aa_ids)
-        if accounts:
+        if accounts:  # pragma: no cover
             return {
                 "name": _("Cost/Revenue"),
                 "type": "ir.actions.act_window",

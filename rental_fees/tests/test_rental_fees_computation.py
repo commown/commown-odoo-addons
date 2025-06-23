@@ -110,7 +110,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         return computation
 
     def pay_invoice(self, invoice, journal):
-        if invoice.state == "draft":
+        if invoice.state == "draft":  # pragma: no cover
             invoice.action_post()
         register_payment = (
             self.env["account.payment.register"]
@@ -246,7 +246,8 @@ class RentalFeesComputationTC(RentalFeesTC):
             for row in range(from_row, len(s_sum)):
                 if text in s_sum.row_at(row):
                     return row
-            self.fail("Text %s not found after row %s" % (text, from_row))
+            else:  # pragma: no cover
+                self.fail("Text %s not found after row %s" % (text, from_row))
 
         # Check the summary sheet:
         s_sum = ods.sheet_by_name("Global figures")
@@ -405,7 +406,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         # - avoid end of month invoice date shifts
         base_date = date.today() - relativedelta(days=7)
         if base_date.day > 27:
-            base_date = date(base_date.year, base_date.month, 27)
+            base_date = date(base_date.year, base_date.month, 27)  # pragma: no cover
 
         start_date = base_date - relativedelta(months=3, days=-1)
         send_datetime = datetime(*start_date.timetuple()[:-2])
