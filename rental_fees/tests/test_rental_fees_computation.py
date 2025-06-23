@@ -315,6 +315,46 @@ class RentalFeesComputationTC(RentalFeesTC):
             ["application/vnd.oasis.opendocument.spreadsheet"],
         )
 
+    def test_action_reset_ok_and_error1(self):
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.create_invoices_until(contract, "2021-03-01")
+
+        comp = self.compute("2022-03-01")
+
+        self.assertTrue(comp.fees)
+
+        comp.action_reset()
+        self.assertFalse(comp.detail_ids)
+        self.assertEqual(comp.state, "draft")
+        self.assertFalse(comp.fees)
+
+        with self.assertRaises(UserError) as err:
+            comp.action_reset()
+        self.assertEqual(
+            err.exception.args[0],
+            "Cannot reset fees computation if not in the 'done' state",
+        )
+
+    def test_action_reset_error2(self):
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        self.send_device("N/S 1", contract, "2021-02-01")
+        contract.date_start = "2021-02-01"
+        self.create_invoices_until(contract, "2021-03-01")
+
+        comp = self.compute("2022-03-01")
+
+        self.assertTrue(comp.fees)
+        comp.action_send_report_for_invoicing()
+
+        with self.assertRaises(UserError) as err:
+            comp.action_reset()
+        self.assertEqual(
+            err.exception.args[0],
+            "Cannot reset fees computation with a non-canceled invoice",
+        )
+
     def test_merged_invoices(self):
         contract1 = self.env["contract.contract"].of_sale(self.so)[0]
         self.send_device("N/S 1", contract=contract1, date="2021-02-15")
