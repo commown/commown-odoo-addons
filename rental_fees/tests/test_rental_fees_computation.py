@@ -299,13 +299,13 @@ class RentalFeesComputationTC(RentalFeesTC):
 
         self.assertEqual(comp.mapped("invoice_ids.state"), ["draft"])
         inv = comp.invoice_ids
+        msg = inv.message_ids.filtered(lambda m: m.message_type == "notification")[0]
         self.assertEqual(
-            inv.message_ids[0].subject,
-            "[YourCompany] Fees to be invoices as of 03/01/2022",
+            msg.subject,
+            "[%s] Fees to be invoices as of 03/01/2022" % self.env.company.name,
         )
-        atts = inv.message_ids[0].attachment_ids
         self.assertEqual(
-            atts.mapped("mimetype"),
+            msg.attachment_ids.mapped("mimetype"),
             ["application/vnd.oasis.opendocument.spreadsheet"],
         )
 
