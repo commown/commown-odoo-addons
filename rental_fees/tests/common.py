@@ -1,3 +1,4 @@
+import json
 from datetime import date, datetime
 
 from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
@@ -168,3 +169,20 @@ class RentalFeesTC(DeviceAsAServiceTC):
         contract.receive_devices(lot_id, {}, loc, date=date, do_transfer=True)
         if auto_grade:
             lot_id.grade_id = self.env["commown_grade.grade"].search([], limit=1)
+
+    def get_notifications(self, msg_level):
+        name = getattr(self.env.user, "notify_%s_channel_name" % msg_level)
+        return (
+            self.env["bus.bus"]
+            .search([("channel", "=", name)], order="id")
+            .filtered(
+                lambda nf: json.loads(nf.message)["payload"][0]["type"] == msg_level
+            )
+        )
+
+    def assertNewNotifs(self, msg_level, prev_notifs, *messages):
+        new_notifs = self.get_notifications(msg_level) - prev_notifs
+        self.assertEqual(
+            {json.loads(nf.message)["payload"][0]["message"] for nf in new_notifs},
+            set(messages),
+        )

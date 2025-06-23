@@ -1,5 +1,3 @@
-import json
-
 from odoo.addons.commown_devices.tests.common import BaseWizardToEmployeeMixin
 
 from .common import RentalFeesTC
@@ -22,26 +20,19 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, RentalFeesTC):
         kwargs.setdefault("lot_id", lot.id)
         return super().get_wizard(**kwargs)
 
-    def get_infos(self, old_infos=None):
-        name = self.env.user.notify_info_channel_name
-        objs = self.env["bus.bus"].search([("channel", "=", name)], order="id")
-        msgs = [json.loads(m)["payload"][0]["message"] for m in objs.mapped("message")]
-        return msgs[len(old_infos or ()) :]
-
     def test_give_concerned_by_fees_device_to_employee(self):
         "Device given to an employee must be excluded from fees if concerned"
 
         self.assertNotIn("N/S 1", self.fees_def.excluded_devices.mapped("device.name"))
 
-        old_infos = self.get_infos()
+        old_infos = self.get_notifications("info")
         self.get_wizard().execute()
-        new_infos = self.get_infos(old_infos)
 
         self.assertIn("N/S 1", self.fees_def.excluded_devices.mapped("device.name"))
-
-        self.assertEqual(
-            new_infos,
-            ["Device N/S 1 excluded from fees in def id %d" % self.fees_def.id],
+        self.assertNewNotifs(
+            "info",
+            old_infos,
+            "Device N/S 1 excluded from fees in def id %d" % self.fees_def.id,
         )
 
     def test_give_already_excluded_from_fees_device_to_employee(self):
@@ -52,16 +43,14 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, RentalFeesTC):
             {"fees_definition_id": self.fees_def.id, "device": lot.id, "reason": "test"}
         )
 
-        old_infos = self.get_infos()
+        old_infos = self.get_notifications("info")
         self.get_wizard().execute()
-        new_infos = self.get_infos(old_infos)
 
-        self.assertEqual(
-            new_infos,
-            [
-                "Device N/S 1 was already excluded from fees (in fees def id %d)"
-                % self.fees_def.id
-            ],
+        self.assertNewNotifs(
+            "info",
+            old_infos,
+            "Device N/S 1 was already excluded from fees (in fees def id %d)"
+            % self.fees_def.id,
         )
 
     def test_give_not_concerned_by_fees_device_to_employee(self):
@@ -69,8 +58,11 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, RentalFeesTC):
 
         self.fees_def.order_ids = False
 
-        old_infos = self.get_infos()
+        old_infos = self.get_notifications("info")
         self.get_wizard().execute()
-        new_infos = self.get_infos(old_infos)
 
-        self.assertEqual(new_infos, ["Device N/S 1 is not subject to fees as of now."])
+        self.assertNewNotifs(
+            "info",
+            old_infos,
+            "Device N/S 1 is not subject to fees as of now.",
+        )

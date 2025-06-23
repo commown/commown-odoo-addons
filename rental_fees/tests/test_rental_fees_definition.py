@@ -1,4 +1,3 @@
-import json
 from datetime import date, timedelta
 
 from odoo.exceptions import UserError, ValidationError
@@ -130,23 +129,6 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         self.assertDictEqual(
             self.fees_def.scrapped_devices(date(2021, 8, 1)),
             {device: {"date": date(2021, 3, 15)}},
-        )
-
-    def get_notifications(self, msg_level):
-        name = getattr(self.env.user, "notify_%s_channel_name" % msg_level)
-        return (
-            self.env["bus.bus"]
-            .search([("channel", "=", name)], order="id")
-            .filtered(
-                lambda nf: json.loads(nf.message)["payload"][0]["type"] == msg_level
-            )
-        )
-
-    def assertNewNotifs(self, msg_level, prev_notifs, *messages):
-        new_notifs = self.get_notifications(msg_level) - prev_notifs
-        self.assertEqual(
-            {json.loads(nf.message)["payload"][0]["message"] for nf in new_notifs},
-            set(messages),
         )
 
     def test_action_update_with_new_pos(self):
