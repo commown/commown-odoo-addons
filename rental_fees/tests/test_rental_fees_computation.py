@@ -93,6 +93,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             {
                 "fees_definition_ids": [(6, 0, fees_def.ids)],
                 "until_date": until_date,
+                "partner_id": self.env.ref("base.res_partner_1").id,
             }
         )
         if run:
@@ -125,6 +126,7 @@ class RentalFeesComputationTC(RentalFeesTC):
     def test_open_job(self):
         comp = self.compute("2021-01-31", sync=False)
 
+        self.assertEqual(comp.display_name, "Wood Corner (01/31/2021)")
         self.assertEqual(comp.state, "running")
 
         action1 = comp.button_open_job()
