@@ -318,6 +318,7 @@ class RentalFeesComputationTC(RentalFeesTC):
 
     def test_action_reset_ok_and_error1(self):
         contract = self.env["contract.contract"].of_sale(self.so)[0]
+        contract.contract_template_id.name = "FP/B2B/TEST"
         self.send_device("N/S 1", contract, "2021-02-01")
         contract.date_start = "2021-02-01"
         self.create_invoices_until(contract, "2021-03-01")
@@ -325,6 +326,7 @@ class RentalFeesComputationTC(RentalFeesTC):
         comp = self.compute("2022-03-01")
 
         self.assertTrue(comp.fees)
+        self.assertEqual(set(comp.detail_ids.mapped("market")), {"B2B"})
 
         comp.action_reset()
         self.assertFalse(comp.detail_ids)
