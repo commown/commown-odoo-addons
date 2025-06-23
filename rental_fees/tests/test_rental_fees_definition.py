@@ -1,3 +1,4 @@
+import json
 from datetime import date, timedelta
 
 from odoo.exceptions import UserError, ValidationError
@@ -182,4 +183,16 @@ class RentalFeesDefinitionTC(RentalFeesTC):
             "warning",
             prev_warning,
             "No fees definition needs updating.",
+        )
+
+    def test_excluded_device_domain(self):
+        device_domain = (
+            self.env["rental_fees.excluded_device"]
+            .with_context(default_fees_definition_id=self.fees_def.id)
+            .default_get(["device_domain"])
+        )["device_domain"]
+
+        self.assertEqual(
+            set(self.env["stock.lot"].search(json.loads(device_domain)).ids),
+            {d.id for d in self.fees_def.devices_delivery()},
         )
