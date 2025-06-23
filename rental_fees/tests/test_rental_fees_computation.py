@@ -176,6 +176,10 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.assertEqual(c2.invoice_ids.amount_total, 2.75)
         self.assertEqual(c2.invoice_ids.amount_tax, 0.25)
 
+        action = c2.button_open_details()
+        details = self.env[action["res_model"]].search(action["domain"])
+        self.assertEqual(details, c2.detail_ids)
+
         c3 = self.compute("2021-03-31", invoice=True)
         self.assertEqual(c3.fees, 7.5)
         self.assertIn("03/31/2021", c3.invoice_ids.invoice_line_ids[0].name)
