@@ -96,9 +96,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         )
 
     def test_prices(self):
-        for device in self.fees_def.devices_delivery():
-            if device.name == "N/S 1":
-                break
+        device = self.env["stock.lot"].search([("name", "=", "N/S 1")]).ensure_one()
 
         self.assertEqual(
             self.fees_def.prices(device),
@@ -117,9 +115,7 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         )
 
     def test_scrapped_devices(self):
-        for device in self.fees_def.devices_delivery():
-            if device.name == "N/S 1":
-                break
+        device = self.env["stock.lot"].search([("name", "=", "N/S 1")]).ensure_one()
         self.scrap_device(device, date(2021, 3, 15))
 
         self.assertFalse(
