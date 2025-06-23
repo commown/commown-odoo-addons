@@ -133,8 +133,14 @@ class RentalFeesDefinitionTC(RentalFeesTC):
         )
 
     def get_notifications(self, msg_level):
-        name = json.dumps(getattr(self.env.user, "notify_%s_channel_name" % msg_level))
-        return self.env["bus.bus"].search([("channel", "=", name)], order="id")
+        name = getattr(self.env.user, "notify_%s_channel_name" % msg_level)
+        return (
+            self.env["bus.bus"]
+            .search([("channel", "=", name)], order="id")
+            .filtered(
+                lambda nf: json.loads(nf.message)["payload"][0]["type"] == msg_level
+            )
+        )
 
     def assertNewNotifs(self, msg_level, prev_notifs, *messages):
         new_notifs = self.get_notifications(msg_level) - prev_notifs
