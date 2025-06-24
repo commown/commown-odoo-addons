@@ -2,7 +2,7 @@
     "name": "Urban mine",
     "category": "Business",
     "summary": "Urban mine offer: people sell their device to the company",
-    "version": "12.0.1.1.4",
+    "version": "16.0.1.0.0",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",

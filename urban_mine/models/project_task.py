@@ -12,7 +12,7 @@ class ProjectTask(models.Model):
 
     def urban_mine_send_mail(self, email_xmlid, coupon_campaign_xmlid, *attachments):
         if self.user_id and self.env.user != self.user_id:
-            self = self.sudo(self.user_id)
+            self = self.with_user(self.user_id)
 
         def ref(name):
             return self.env.ref("urban_mine.%s" % name)

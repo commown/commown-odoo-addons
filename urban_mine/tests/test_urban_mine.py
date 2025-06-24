@@ -53,7 +53,7 @@ class TestRegistration(TransactionCase):
         return [
             m
             for m in task.message_ids
-            if list(m.subtype_id.get_xml_id().values()) == ["mail.mt_comment"]
+            if list(m.subtype_id.get_external_id().values()) == ["mail.mt_comment"]
         ][0]
 
     def check_coupon_message(self, task, campaign):
