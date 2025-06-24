@@ -4,7 +4,7 @@
   <record id="report_autoinvoice" model="ir.actions.report">
     <field name="name">[commown] Imprimer auto-facture</field>
     <field name="type">ir.actions.report</field>
-    <field name="model">account.invoice</field>
+    <field name="model">account.move</field>
     <field name="report_type">py3o</field>
     <field name="report_name">urban_mine.report_autoinvoice</field>
     <field name="module">urban_mine</field>

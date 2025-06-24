@@ -76,28 +76,24 @@ class ProjectTask(models.Model):
 
         price = product.standard_price  # purchase at the urban mine product price!
 
-        invoice = self.env["account.invoice"].create(
+        invoice = self.env["account.move"].create(
             {
-                "type": "in_invoice",
-                "company_id": ref("base.main_company").id,
+                "move_type": "in_invoice",
+                "company_id": self.env.company.id,
                 "currency_id": ref("base.EUR").id,
-                "reference": self.urban_mine_name(),
-                "account_id": self.partner_id.property_account_payable_id.id,
-                "payment_term_id": payment_term.id,
-                "invoice_line_ids": [
+                "payment_reference": self.urban_mine_name(),
+                "invoice_payment_term_id": payment_term.id,
+                "line_ids": [
                     (
                         0,
                         0,
                         {
                             "product_id": product.id,
                             "name": description,
-                            "account_id": product.property_account_expense_id.id,
                             "analytic_tag_ids": [(6, 0, tags.ids)] if tags else False,
                             "price_unit": price,
-                            "invoice_line_tax_ids": [
-                                (6, 0, product.supplier_taxes_id.ids)
-                            ],
-                            "uom_id": ref("uom.product_uom_unit").id,
+                            "tax_ids": [(6, 0, product.supplier_taxes_id.ids)],
+                            "product_uom_id": ref("uom.product_uom_unit").id,
                         },
                     )
                 ],
@@ -106,9 +102,9 @@ class ProjectTask(models.Model):
         )
 
         po = self.urban_mine_create_po(price, invoice)
-        invoice.origin = po.name
+        invoice.invoice_origin = po.name
 
-        invoice.action_invoice_open()
+        invoice.action_post()
 
         self.env["ir.actions.report"]._get_report_from_name(
             report_name

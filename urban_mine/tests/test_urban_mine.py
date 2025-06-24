@@ -133,18 +133,18 @@ class TestRegistration(TransactionCase):
         task.update({"stage_id": self.env.ref("urban_mine.stage4")})
 
         # Check results
-        invoice = self.env["account.invoice"].search(
-            [("reference", "=", task.urban_mine_name())]
+        invoice = self.env["account.move"].search(
+            [("payment_reference", "=", task.urban_mine_name())]
         )
         self.assertEqual(len(invoice), 1)
-        self.assertEqual(invoice.state, "open")
+        self.assertEqual(invoice.state, "posted")
         self.assertEqual(
-            invoice.payment_term_id,
+            invoice.invoice_payment_term_id,
             self.env.ref("account.account_payment_term_15days"),
         )
         self.assertEqual(
             self.env.ref("urban_mine.product").product_variant_id,
-            invoice.mapped("invoice_line_ids.product_id"),
+            invoice.mapped("line_ids.product_id"),
         )
         self.assertEqual(
             invoice.amount_untaxed,
@@ -163,7 +163,7 @@ class TestRegistration(TransactionCase):
             [("partner_ref", "=", task.urban_mine_name())]
         )
         self.assertEqual(len(po), 1)
-        self.assertEqual(po.partner_ref, invoice.reference)
+        self.assertEqual(po.partner_ref, invoice.payment_reference)
         self.assertEqual(po.partner_id, self.partner)
         self.assertEqual(po.state, "purchase")
         self.assertEqual(po.invoice_ids, invoice)
@@ -171,4 +171,4 @@ class TestRegistration(TransactionCase):
             po.picking_type_id,
             self.env.ref("urban_mine.picking_type_receive_to_diagnose"),
         )
-        self.assertEqual(invoice.origin, po.name)
+        self.assertEqual(invoice.invoice_origin, po.name)
