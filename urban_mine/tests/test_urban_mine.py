@@ -97,7 +97,7 @@ class TestRegistration(TransactionCase):
         with self.assertRaises(UserError) as err:
             task.update({"stage_id": self.env.ref("urban_mine.stage6")})
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "Please fill-in the storable product field of the task!",
         )
 
