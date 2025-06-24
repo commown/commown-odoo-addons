@@ -65,10 +65,8 @@ class ContractFromSale(RentalSaleOrderTC):
         self.assertEqual(action["type"], "ir.actions.act_window")
         self.assertEqual(action["res_model"], "account.analytic.line")
         self.assertEqual(
-            action["domain"], "[('account_id', '=', %d)]" % expected_account.id
+            action["domain"], "[('account_id', 'in', [%d])]" % expected_account.id
         )
-        self.contract.group_id = False
-        self.assertFalse(self.contract.action_show_analytic_lines())
 
     def test_main_rental_service_standard(self):
         service = self.contract.get_main_rental_service()

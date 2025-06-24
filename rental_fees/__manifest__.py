@@ -1,0 +1,27 @@
+{
+    "name": "rental_fees",
+    "category": "Business",
+    "version": "16.0.1.0.0",
+    "author": "Commown SCIC",
+    "license": "AGPL-3",
+    "website": "https://github.com/commown/commown-odoo-addons",
+    "depends": [
+        "commown_devices",
+        "commown_contract_forecast",
+        "purchase",
+        "queue_job",
+        "report_py3o",
+        "contract_auto_merge_invoice",
+        "web_notify",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "data/actions.xml",
+        "data/mail_template.xml",
+        "data/queue_job_function.xml",
+        "views/purchase_order.xml",
+        "views/rental_fees_computation.xml",
+        "views/rental_fees_definition.xml",
+        "views/rental_fees_report.xml",
+    ],
+}

@@ -1,0 +1,188 @@
+import json
+from datetime import date, datetime
+
+from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
+
+
+def _set_date(entity, value, attr_name):
+    setattr(entity.sudo(), attr_name, value)
+    sql = "UPDATE %s SET %s=%%s WHERE id=%%s" % (
+        entity._name.replace(".", "_"),
+        attr_name,
+    )
+    entity.env.cr.execute(sql, (str(value), entity.id))
+
+
+class RentalFeesTC(DeviceAsAServiceTC):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        # Add a rental account to the rental product to make it invoiceable:
+        rental_account = cls.env["account.account"].search(
+            [
+                ("account_type", "=", "asset_current"),
+                ("internal_group", "=", "asset"),
+                ("company_id", "=", cls.env.company.id),
+            ],
+            limit=1,
+        )
+        cls.storable_product.property_rental_account_expense_id = rental_account.id
+
+        p1 = cls.storable_product.product_variant_id
+        p2 = cls.storable_product.copy({"name": "Other product"}).product_variant_id
+        serials = {p1: ("N/S 1", "N/S 2", "N/S 3"), p2: ("N/S 4", "N/S 5")}
+        prices = {p1: 200.0, p2: 300.0}
+        cls.po = cls.create_po_and_picking(serials, prices)
+
+        cls.fees_def = cls.env["rental_fees.definition"].create(
+            {
+                "name": "Test fees_def",
+                "partner_id": cls.po.partner_id.id,
+                "valid_from": date(2000, 1, 1),
+                "product_template_id": cls.storable_product.id,
+                "order_ids": [(6, 0, cls.po.ids)],
+                "agreed_to_std_price_ratio": 0.4,
+                "penalty_period_duration": 1,
+                "no_rental_duration": 6,
+            }
+        )
+        cls.env["rental_fees.definition_line"].create(
+            {
+                "fees_definition_id": cls.fees_def.id,
+                "sequence": 1,
+                "duration_value": 2,
+                "duration_unit": "months",
+                "fees_type": "proportional",
+                "monthly_fees": 0.1,
+            }
+        )
+        cls.env["rental_fees.definition_line"].create(
+            {
+                "fees_definition_id": cls.fees_def.id,
+                "sequence": 2,
+                "duration_value": 3,
+                "duration_unit": "months",
+                "fees_type": "proportional",
+                "monthly_fees": 0.5,
+            }
+        )
+        cls.env["rental_fees.definition_line"].create(
+            {
+                "fees_definition_id": cls.fees_def.id,
+                "sequence": 100,
+                "duration_value": False,
+                "duration_unit": "months",
+                "fees_type": "proportional",
+                "monthly_fees": 0.05,
+            }
+        )
+
+    @classmethod
+    def create_po_and_picking(
+        cls,
+        serials_by_product,
+        prices=None,
+        partner=None,
+    ):
+        """Return a purchase order with a 'done' picking, generating given serials
+
+        Given `serials_by_product` must be a dict of the form::
+            {<product.template>: [strings]}
+        """
+        prices = prices or {product: 200.0 for product in set(serials_by_product)}
+        partner = partner or cls.env.ref("base.res_partner_1")
+
+        rental_in = cls.env.ref("commown_devices.stock_picking_type_in_rental")
+        po = cls.env["purchase.order"].create(
+            {"partner_id": partner.id, "picking_type_id": rental_in.id},
+        )
+        for product, serials in serials_by_product.items():
+            po.order_line |= cls.env["purchase.order.line"].create(
+                {
+                    "name": product.name,
+                    "product_id": product.id,
+                    "product_qty": len(serials),
+                    "product_uom": product.uom_id.id,
+                    "price_unit": prices[product],
+                    "date_planned": date(2021, 1, 1),
+                    "order_id": po.id,
+                }
+            )
+        po.button_confirm()
+
+        dest = cls.location_fp3_new
+        for product, serials in serials_by_product.items():
+            move_lines = po.picking_ids.move_line_ids.filtered(
+                lambda ml: ml.product_id == product
+            )
+            for lot_name, move_line in zip(serials, move_lines):
+                move_line.update(
+                    {"lot_name": lot_name, "qty_done": 1, "location_dest_id": dest.id}
+                )
+
+        po.picking_ids.button_validate()
+
+        for move in po.picking_ids.move_ids:
+            _set_date(move, po.date_planned, "date")
+            for ml in move.move_line_ids:
+                _set_date(ml, po.date_planned, "date")
+
+        # Create the invoice as the web UI would:
+        po.action_create_invoice()
+        return po
+
+    def current_quant(self, device):
+        return (
+            self.env["stock.quant"]
+            .search([("lot_id", "=", device.id), ("quantity", ">", 0.0)])
+            .ensure_one()
+        )
+
+    def scrap_device(self, device, date):
+        "Simulate device scrapping at given (enforced) date"
+        scrap_loc = (
+            self.env.ref("stock.stock_location_locations_virtual").child_ids.filtered(
+                "scrap_location"
+            )
+        )[0]
+        scrap = self.env["stock.scrap"].create(
+            {
+                "lot_id": device.id,
+                "product_id": device.product_id.id,
+                "product_uom_id": device.product_id.uom_id.id,
+                "location_id": self.current_quant(device).location_id.id,
+                "scrap_location_id": scrap_loc.id,
+            }
+        )
+        scrap.do_scrap()
+        datet = datetime.combine(date, datetime.min.time())
+        _set_date(scrap, datet, "date_done")
+        _set_date(scrap.move_id, datet, "date")
+        quant = self.current_quant(device)
+        _set_date(quant, datet, "in_date")
+        return scrap
+
+    def receive_device(self, serial, contract, date, auto_grade=True):
+        lot_id = self.env["stock.lot"].search([("name", "=", serial)]).ensure_one()
+        loc = self.env.ref("commown_devices.stock_location_devices_to_check")
+        contract.receive_devices(lot_id, {}, loc, date=date, do_transfer=True)
+        if auto_grade:
+            lot_id.grade_id = self.env["commown_grade.grade"].search([], limit=1)
+
+    def get_notifications(self, msg_level):
+        name = getattr(self.env.user, "notify_%s_channel_name" % msg_level)
+        return (
+            self.env["bus.bus"]
+            .search([("channel", "=", name)], order="id")
+            .filtered(
+                lambda nf: json.loads(nf.message)["payload"][0]["type"] == msg_level
+            )
+        )
+
+    def assertNewNotifs(self, msg_level, prev_notifs, *messages):
+        new_notifs = self.get_notifications(msg_level) - prev_notifs
+        self.assertEqual(
+            {json.loads(nf.message)["payload"][0]["message"] for nf in new_notifs},
+            set(messages),
+        )

@@ -162,7 +162,7 @@ class ProductRentalSaleOrder(models.Model):
 
         return contract_descrs
 
-    def _add_analytic_account(self, contract):
+    def _add_analytic_distribution(self, contract):
         """Create an analytic account with the same name and partner as the
         given contract and attach it to the contract.
         """
@@ -175,7 +175,7 @@ class ProductRentalSaleOrder(models.Model):
                 "plan_id": company.analytic_plan_id.id,
             }
         )
-        contract.group_id = aa
+        contract.contract_line_ids.update({"analytic_distribution": {aa.id: 100}})
 
     def action_create_contract(self):
         contracts = self.env["contract.contract"]
@@ -197,7 +197,7 @@ class ProductRentalSaleOrder(models.Model):
             contract._onchange_contract_type()
             contract._compute_date_end()
 
-            self._add_analytic_account(contract)
+            self._add_analytic_distribution(contract)
 
             contracts |= contract
 
