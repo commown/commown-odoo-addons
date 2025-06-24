@@ -13,9 +13,8 @@
         "project",
         "purchase",
         "report_py3o",
+        "website",
         "website_sale_coupon",
-        "website_form_builder",
-        "website_form_recaptcha",
     ],
     "external_dependencies": {},
     "data": [
