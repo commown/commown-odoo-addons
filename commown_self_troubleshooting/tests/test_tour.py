@@ -26,7 +26,8 @@ def chrome_suppress_origin():
         ChromeBrowser._open_websocket = old_open_websocket
 
 
-class RunTourMixin:
+@odoo.tests.tagged("post_install", "-at_install")
+class RunTourTC(HttpCase):
     def _run_tour(self, name):
         js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name
         js_ready = "odoo.__DEBUG__.services['web_tour.tour'].tours.%s.ready" % name
@@ -34,8 +35,7 @@ class RunTourMixin:
             self.browser_js("/my", js, js_ready, login="portal")
 
 
-@odoo.tests.tagged("post_install", "-at_install")
-class TestPageTC(RunTourMixin, HttpCase):
+class TestPageTC(RunTourTC):
     "Base class to ease tour test writting"
 
     contract_name = None  # Override me!
@@ -140,7 +140,7 @@ class TestPageContractManagement(TestPageTC):
         self._run_tour("commown_self_troubleshooting_tour_termination_commitment_pay")
 
 
-class TestPageRealContractTC(RunTourMixin, DeviceAsAServiceTC, odoo.tests.HttpCase):
+class TestPageRealContractTC(RunTourTC, DeviceAsAServiceTC):
     def test_theft_and_loss(self):
         lot = self.adjust_stock(serial="S/N-001")
         contract = self.env["contract.contract"].of_sale(self.so)[0]
