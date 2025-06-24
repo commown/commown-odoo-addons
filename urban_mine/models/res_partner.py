@@ -9,7 +9,6 @@ class UrbanMinePartner(models.Model):
     )
 
     @api.model
-    @api.returns("self", lambda value: value.id)
     def create(self, vals):
         result = super().create(vals)
 
