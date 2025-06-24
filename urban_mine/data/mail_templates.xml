@@ -7,16 +7,16 @@
       <field name="reply_to">contact@commown.coop</field>
       <field
             name="subject"
-        >${object.company_id.name} - Accusé Réception offre de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
-      <field name="partner_to">${object.partner_id.id}</field>
+        >{{object.company_id.name}} - Accusé Réception offre de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
       <field name="model_id" ref="project.model_project_task" />
       <field name="auto_delete" eval="True" />
-      <field name="lang">${object.partner_id.lang}</field>
+      <field name="lang">{{object.partner_id.lang}}</field>
       <field
             name="body_html"
         ><![CDATA[
 <div>
-  <p>Bonjour ${object.partner_id.firstname},</p>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
   <br>
   <p>Votre proposition de reprise du Fairphone 3 ou 3+ dont vous êtes actuellement propriétaire a bien été prise en compte ; nous vous remercions au nom de la Coopérative pour l'intérêt que vous portez à notre projet circulaire "Deuxième Vie".&nbsp; :)</p>
 
@@ -121,16 +121,16 @@
       <field name="reply_to">contact@commown.coop</field>
       <field
             name="subject"
-        >${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
-      <field name="partner_to">${object.partner_id.id}</field>
+        >{{object.company_id.name}} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
       <field name="model_id" ref="project.model_project_task" />
       <field name="auto_delete" eval="True" />
-      <field name="lang">${object.partner_id.lang}</field>
+      <field name="lang">{{object.partner_id.lang}}</field>
       <field
             name="body_html"
         ><![CDATA[
 <div>
-  <p>Bonjour ${object.partner_id.firstname},</p>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
 
   <br>
 
@@ -180,16 +180,16 @@
       <field name="reply_to">contact@commown.coop</field>
       <field
             name="subject"
-        >${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
-      <field name="partner_to">${object.partner_id.id}</field>
+        >{{object.company_id.name}} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
       <field name="model_id" ref="project.model_project_task" />
       <field name="auto_delete" eval="True" />
-      <field name="lang">${object.partner_id.lang}</field>
+      <field name="lang">{{object.partner_id.lang}}</field>
       <field
             name="body_html"
         ><![CDATA[
 <div>
-  <p>Bonjour ${object.partner_id.firstname},</p>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
 
   <br>
 
@@ -221,7 +221,7 @@
   sur toute la gamme d'appareils proposés sur le <a href="https://commown.coop/"
   target="_blank">site web de Commown</a> et pour toute nouvelle location souscrite
   (non-nominatif et valable pour un seul appareil par coupon dans les 12 prochains
-  mois) : <b>${object.env.context.get("coupon", "COUPON À FOURNIR")}</b>
+  mois) : <b><t t-out="object.env.context.get('coupon', 'COUPON À FOURNIR')"/></b>
   </p>
 
   <br>
@@ -253,16 +253,16 @@
       <field name="reply_to">contact@commown.coop</field>
       <field
             name="subject"
-        >${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
-      <field name="partner_to">${object.partner_id.id}</field>
+        >{{object.company_id.name}} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
       <field name="model_id" ref="project.model_project_task" />
       <field name="auto_delete" eval="True" />
-      <field name="lang">${object.partner_id.lang}</field>
+      <field name="lang">{{object.partner_id.lang}}</field>
       <field
             name="body_html"
         ><![CDATA[
 <div>
-  <p>Bonjour ${object.partner_id.firstname},</p>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
 
   <br>
 
@@ -276,8 +276,8 @@
   valeur de <b>120€</b>, à valoir sur toute la gamme d'appareils proposés sur le <a
   href="https://commown.coop/" target="_blank">site web de Commown</a> <i>(ce code
   non-nominatif est valable indéfiniment pour toute <u>nouvelle future</u> souscription,
-  et pour un seul appareil par coupon)</i>) : <b>${object.env.context.get("coupon",
-  "COUPON À FOURNIR")}</b>
+  et pour un seul appareil par coupon)</i>) : <b><t t-out="object.env.context.get('coupon',
+  'COUPON À FOURNIR')"/></b>
   </p>
 
   <br>
