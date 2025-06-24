@@ -1,0 +1,161 @@
+import unittest
+from contextlib import contextmanager
+
+import websocket
+
+import odoo.tests
+from odoo.tests.common import ChromeBrowser, HttpCase
+
+from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
+
+
+@contextmanager
+def chrome_suppress_origin():
+    old_open_websocket = ChromeBrowser._open_websocket
+
+    def new_open_websocket(self):
+        self.ws = websocket.create_connection(self.ws_url, suppress_origin=True)
+        if self.ws.getstatus() != 101:  # pragma: no cover
+            raise unittest.SkipTest("Cannot connect to chrome dev tools")
+        self.ws.settimeout(0.01)
+
+    ChromeBrowser._open_websocket = new_open_websocket
+    try:
+        yield
+    finally:
+        ChromeBrowser._open_websocket = old_open_websocket
+
+
+@odoo.tests.tagged("post_install", "-at_install")
+class RunTourTC(HttpCase):
+    def _run_tour(self, name):
+        js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name
+        js_ready = "odoo.__DEBUG__.services['web_tour.tour'].tours.%s.ready" % name
+        with chrome_suppress_origin():
+            self.browser_js("/my", js, js_ready, login="portal")
+
+
+class TestTourWithContractTC(RunTourTC):
+    "Base class to ease tour test writting"
+
+    contract_name = None  # Override me!
+
+    @classmethod
+    def create_contract(cls, name, product, user, date_start="2020-01-01"):
+        partner = user.partner_id
+        ct = cls.env["contract.template"].create({"name": name})
+        cline_attrs = {
+            "name": "Line 1",
+            "specific_price": 1.0,
+            "quantity": 1.0,
+            "recurring_rule_type": "monthly",
+            "recurring_interval": 1,
+            "product_id": product.id,
+            "date_start": date_start,
+        }
+
+        contract = cls.env["contract.contract"].create(
+            {
+                "name": "SO0000 Test Contract",
+                "partner_id": partner.id,
+                "contract_template_id": ct.id,
+                "contract_line_ids": [(0, 0, cline_attrs)],
+            }
+        )
+        contract.message_subscribe(partner_ids=user.partner_id.ids)
+        return contract
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        user_portal = cls.env.ref("base.demo_user0")
+        product = cls.env["product.product"].create(
+            {"name": "Test service product", "type": "service"}
+        )
+        if cls.contract_name:
+            cls.contract = cls.create_contract(
+                cls.contract_name,
+                product,
+                user_portal,
+            )
+
+
+class TestPageFP2(TestTourWithContractTC):
+    contract_name = "FP2/B2C"
+
+    def test_fp2_battery_inf_80(self):
+        self._run_tour("commown_self_troubleshooting_tour_fp2_battery_inf_80")
+
+    def test_fp2_battery_sup_80(self):
+        self._run_tour("commown_self_troubleshooting_tour_fp2_battery_sup_80")
+
+    def test_fp2_battery_contact_human(self):
+        self._run_tour("commown_self_troubleshooting_tour_fp2_battery_contact_human")
+
+
+class TestPageSmartphone(TestTourWithContractTC):
+    # This contract name only works because of the faulty template matching
+    # in the data/troubleshooting.xml records - this should be fixed next.
+    contract_name = "FP3/B2C-FP5/B2C-CC/B2C"
+
+    def test_smartphone_need_screen_protection(self):
+        self._run_tour("commown_self_troubleshooting_smartphone_need_screen_protection")
+
+    def test_smartphone_need_display_with_protection(self):
+        self._run_tour(
+            "commown_self_troubleshooting_smartphone_need_display_with_protection"
+        )
+
+    def test_smartphone_need_display_option_commown_manipulates(self):
+        self._run_tour(
+            "commown_self_troubleshooting_smartphone_need_display_option_commown_manipulates"
+        )
+
+    def test_smartphone_need_display_and_tool(self):
+        self._run_tour("commown_self_troubleshooting_smartphone_need_display_and_tool")
+
+    def test_smartphone_need_new_screen_for_a_non_repairable_phone(self):
+        self._run_tour(
+            "commown_self_troubleshooting_need_new_screen_for_a_non_repairable_phone"
+        )
+
+    def test_need_new_fairphone(self):
+        self._run_tour("commown_self_troubleshooting_need_new_fairphone")
+
+
+class TestPageContractManagement(TestTourWithContractTC):
+    contract_name = "NO/MATTER"
+
+    def test_termination_no_commitment(self):
+        self._run_tour("commown_self_troubleshooting_tour_termination_no_commitment")
+
+    def test_termination_with_commitment_transfer(self):
+        self.contract.commitment_period_number = 240
+        self._run_tour(
+            "commown_self_troubleshooting_tour_termination_commitment_transfer"
+        )
+
+    def test_termination_with_commitment_pay(self):
+        self.contract.commitment_period_number = 240
+        self._run_tour("commown_self_troubleshooting_tour_termination_commitment_pay")
+
+
+class TestPageRealContractTC(RunTourTC, DeviceAsAServiceTC):
+    def test_theft_and_loss(self):
+        lot = self.adjust_stock(serial="S/N-001")
+        contract = self.env["contract.contract"].of_sale(self.so)[0]
+        contract.send_devices(lot, {}, date="2023-09-01", do_transfer=True)
+        contract.date_start = "2023-09-01"
+        self._run_tour("commown_self_troubleshooting_tour_theft_and_loss")
+
+
+class TestPageGSDay(TestTourWithContractTC):
+    contract_name = "GS/B2C"
+
+    def test_gs_day_audio(self):
+        self._run_tour("commown_self_troubleshooting_tour_gs_day_audio")
+
+
+class TestPageCommercialRequest(TestTourWithContractTC):
+    def test_commercial_request(self):
+        self._run_tour("commown_self_troubleshooting_commercial_request")

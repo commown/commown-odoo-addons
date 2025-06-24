@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="issue-description-gs" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-gs</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-gs</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-gs">
+        <t t-if="action=='ship'">
+          <p>
+            Il ressort que
+            <t t-if="connection_solved=='no'">le casque doit être changé.</t>
+            <t t-if="branchement_solved=='no'">le casque doit être changé.</t>
+            <t t-if="cable_sound=='yes'">le câble doit être changé.</t>
+
+            <t t-call="commown_self_troubleshooting.display-shipping-information" />
+          </p>
+        </t>
+
+        <p t-elif="action=='inform'">
+          Il ressort que
+          <t
+                        t-if="connection_solved=='yes'"
+                    >le problème provenait d'un mauvais branchement des connecteurs USB-C et j'ai donc pu résoudre le problème.</t>
+          <t
+                        t-if="branchement_solved=='yes'"
+                    > le problème provenait d'un mauvais branchement du câble jack et j'ai donc pu résoudre le problème.</t>
+        </p>
+
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
+
+      </t>
+    </field>
+  </record>
+
+</odoo>

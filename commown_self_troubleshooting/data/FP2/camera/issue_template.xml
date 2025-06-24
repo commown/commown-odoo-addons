@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="issue-description-fp2-camera" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-fp2-camera</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-fp2-camera</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-fp2-camera">
+        <t
+                    t-set="old_or_new"
+                    t-value="camera_model == u'new' and u'nouveau' or u'ancien'"
+                />
+          <t t-if="action=='ship'">
+            <p>
+              Il ressort que la
+              caméra (<t t-esc="old_or_new" /> modèle) de mon FP2 doit être
+              changée.
+            </p>
+            <p t-if="screwdriver=='yes'">
+              J'ai également besoin d'un prêt de tournevis.
+            </p>
+            <t t-call="commown_self_troubleshooting.display-shipping-information" />
+          </t>
+
+          <p t-elif="action=='inform'">
+            je vous informe que j'ai revissé la caméra (<t
+                        t-esc="old_or_new"
+                    /> modèle) de mon FP2 et que cela a résolu mon problème.
+          </p>
+
+          <p t-if="more_info">
+            J'ai porté à votre connaissance les informations complémentaires suivantes :
+          </p>
+
+          <t t-call="commown_self_troubleshooting.more_customer_info" />
+
+        </t>
+    </field>
+  </record>
+
+</odoo>

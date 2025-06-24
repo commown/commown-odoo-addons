@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="issue-description-smartphone-screen" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-smartphone-screen</field>
+    <field name="type">qweb</field>
+    <field
+            name="key"
+        >commown_self_troubleshooting.issue-description-smartphone-screen</field>
+    <field name="arch" type="xml">
+      <t t-name="commown_self_troubleshooting.issue-description-smartphone-screen">
+        <p>Bonjour,</p>
+        <t t-if="action=='ship'">
+          <t t-if="replace_screen=='no'">
+            <p>Il ressort qu'une vitre de protection doit m'être envoyée.</p>
+          </t>
+          <t t-else="">
+            <t t-if="type_contrat=='me'">
+              <p>Il ressort qu'un écran muni d'une protection doit m'être envoyé.</p>
+              <p t-if="screwdriver=='yes'">
+                J'ai également besoin d'un prêt de tournevis.
+              </p>
+            </t>
+            <t t-else="">
+              <p
+                            >L'écran de mon appareil est cassé - il ressort qu'un nouvel appareil doit m'être envoyé.</p>
+            </t>
+          </t>
+          <t t-call="commown_self_troubleshooting.display-shipping-information" />
+        </t>
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
+      </t>
+    </field>
+  </record>
+
+</odoo>

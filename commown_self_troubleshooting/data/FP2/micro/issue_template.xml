@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="issue-description-fp2-micro" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-fp2-micro</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-fp2-micro</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-fp2-micro">
+        <p t-if="action=='ship'">
+          Après avoir effectué un auto-dépannage, il ressort que le module micro de mon FP2 doit être changé.
+        </p>
+        <p t-if="screwdriver=='yes'">
+          J'ai également besoin d'un prêt de tournevis.
+        </p>
+        <br />
+        <p t-if="action=='wait-simcard'">
+          je vous informe que je vais tester avec une autre carte SIM.
+        </p>
+
+        <p t-if="mute_solved=='yes'">
+          je vous informe que mon problème était lié à l'activation de la fonction "Couper micro" de mon FP2 et que j'ai pu le résoudre.
+        </p>
+        <t t-if="action=='ship' or action=='wait-simcard'">
+          <t t-call="commown_self_troubleshooting.display-shipping-information" />
+        </t>
+
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
+
+      </t>
+    </field>
+  </record>
+
+</odoo>

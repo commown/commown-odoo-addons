@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="issue-description-generic-issue" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-generic-issue</field>
+    <field name="type">qweb</field>
+    <field
+            name="key"
+        >commown_self_troubleshooting.issue-description-generic-issue</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-generic-issue">
+        <t t-if="generic_issue_type=='course'">
+            <p>Je souhaite effectuer mon heure de formation Linux.</p>
+        </t>
+        <t t-if="action=='ship' or action=='confirm-bug' or action=='confirm-linux'">
+          <t t-if="generic_issue_type=='bug'">
+            <p>
+              Je rencontre un incident / bug
+            </p>
+          </t>
+            <t t-if="generic_issue_type=='upgrade'">
+              <p>
+                Je souhaite un matériel supplémentaire
+              </p>
+            </t>
+            <t t-elif="generic_issue_type=='broken'">
+              <p>
+                Je rencontre une casse avec mon appareil
+              </p>
+            </t>
+          <t t-call="commown_self_troubleshooting.display-shipping-information" />
+        </t>
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
+
+      </t>
+
+    </field>
+  </record>
+
+</odoo>

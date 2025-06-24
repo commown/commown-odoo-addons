@@ -1,0 +1,14 @@
+<odoo>
+
+  <record id="issue-description-commercial" model="ir.ui.view">
+    <field name="name">self-troubleshoot-issue-description-commercial</field>
+    <field name="type">qweb</field>
+    <field name="key">commown_self_troubleshooting.issue-description-commercial</field>
+    <field name="arch" type="xml">
+      <t t-name="self-troubleshoot-issue-description-commercial">
+        <t t-call="commown_self_troubleshooting.more_customer_info" />
+      </t>
+    </field>
+  </record>
+
+</odoo>

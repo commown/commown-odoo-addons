@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="support_project" model="project.project">
+      <field name="name">Support</field>
+    </record>
+
+    <record id="stage_callback" model="project.task.type">
+      <field name="name">Callback</field>
+    </record>
+
+    <record id="stage_pending" model="project.task.type">
+      <field name="name">Pending</field>
+    </record>
+
+    <record id="stage_received" model="project.task.type">
+      <field name="name">Received</field>
+    </record>
+
+    <record id="stage_solved" model="project.task.type">
+      <field name="name">Solved</field>
+    </record>
+
+    <record id="stage_long_term_followup" model="project.task.type">
+      <field name="name">Long term followup</field>
+    </record>
+
+    <record id="commercial_project" model="project.project">
+      <field name="name">Commercial</field>
+    </record>
+
+</odoo>
