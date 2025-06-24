@@ -86,7 +86,7 @@ class RentalFeesComputationTC(RentalFeesTC):
             {"name": "Repackaged FP", "location_id": repack_loc.id},
         )
 
-    def compute(self, until_date, fees_def=None, run=True, invoice=False, sync=True):
+    def compute(self, until_date, fees_def=None, run=True, invoice=False):
         fees_def = fees_def or self.fees_def
 
         computation = self.env["rental_fees.computation"].create(
@@ -97,12 +97,9 @@ class RentalFeesComputationTC(RentalFeesTC):
             }
         )
         if run:
-            if sync:
-                with trap_jobs() as trap:
-                    computation.action_run()
-                trap.perform_enqueued_jobs()
-            else:
+            with trap_jobs() as trap:
                 computation.action_run()
+            trap.perform_enqueued_jobs()
 
         if invoice:
             computation.action_invoice()
@@ -124,7 +121,11 @@ class RentalFeesComputationTC(RentalFeesTC):
         self.pay_invoice(supplier_invoice, self.expenses_journal)
 
     def test_open_job(self):
-        comp = self.compute("2021-01-31", sync=False)
+        comp = self.compute("2021-01-31", run=False)
+
+        self.assertFalse(comp.button_open_job())
+
+        comp.action_run()
 
         self.assertEqual(comp.display_name, "Wood Corner (01/31/2021)")
         self.assertEqual(comp.state, "running")
