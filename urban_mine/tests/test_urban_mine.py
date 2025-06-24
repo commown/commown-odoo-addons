@@ -3,13 +3,12 @@ from pathlib import Path
 from unittest import mock
 
 from odoo.exceptions import UserError
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 HERE = (Path(__file__) / "..").resolve()
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class TestRegistration(TransactionCase):
     def setUp(self):
         super().setUp()
