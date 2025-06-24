@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <odoo>
 
   <record id="report_autoinvoice" model="ir.actions.report">
@@ -11,8 +11,12 @@
     <field name="py3o_filetype">pdf</field>
     <field name="py3o_template_fallback">report_autoinvoice.odt</field>
     <field name="attachment_use">True</field>
-    <field name="attachment">"Facture%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
-    <field name="print_report_name">"Facture%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
+    <field
+            name="attachment"
+        >"Facture%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
+    <field
+            name="print_report_name"
+        >"Facture%s_%s.pdf" % ((object.state == "cancel" and "_annulee") or (object.state == "draft" and "_brouillon") or "", object.display_name.strip().replace('/', ''))</field>
     <field name="binding_type">report</field>
   </record>
 

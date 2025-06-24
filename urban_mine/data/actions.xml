@@ -1,15 +1,19 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <odoo>
 
   <!-- Urban mine validation handling: send a label by email -->
 
   <record id="action_registration_validated" model="base.automation">
     <field name="name">[commown] Urban mine was validated</field>
-    <field name="model_id" ref="project.model_project_task"/>
+    <field name="model_id" ref="project.model_project_task" />
     <field name="sequence">1</field>
     <field name="trigger">on_write</field>
-    <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[urban-mine: send-label]')]</field>
-    <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: send-label]')]</field>
+    <field
+            name="filter_pre_domain"
+        >[(u'stage_id', u'not ilike', u'[urban-mine: send-label]')]</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[urban-mine: send-label]')]</field>
     <field name="state">code</field>
     <field name="code">
 label = record.parcel_labels("urban-mine", force_single=True)
@@ -22,13 +26,19 @@ record.urban_mine_send_mail("email_template_with_label", None, label)
 
   <record id="action_registration_payment" model="base.automation">
     <field name="name">[commown] Urban mine device payment to be done</field>
-    <field name="model_id" ref="project.model_project_task"/>
+    <field name="model_id" ref="project.model_project_task" />
     <field name="sequence">1</field>
     <field name="trigger">on_write</field>
-    <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[urban-mine: payment]')]</field>
-    <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: payment]')]</field>
+    <field
+            name="filter_pre_domain"
+        >[(u'stage_id', u'not ilike', u'[urban-mine: payment]')]</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[urban-mine: payment]')]</field>
     <field name="state">code</field>
-    <field name="code"><![CDATA[
+    <field
+            name="code"
+        ><![CDATA[
 inv = record.urban_mine_build_autoinvoice(
     env["account.analytic.tag"].search([("name", "in", ["EXPL"])]),
     env.ref("account.account_payment_term_15days"),
@@ -43,13 +53,19 @@ record.urban_mine_send_mail("email_template_with_auto_invoice", "campaign_paymen
 
   <record id="action_registration_coupon_only" model="base.automation">
     <field name="name">[commown] Urban mine only a coupon to be sent</field>
-    <field name="model_id" ref="project.model_project_task"/>
+    <field name="model_id" ref="project.model_project_task" />
     <field name="sequence">1</field>
     <field name="trigger">on_write</field>
-    <field name="filter_pre_domain">[(u'stage_id', u'not ilike', u'[urban-mine: coupon-only]')]</field>
-    <field name="filter_domain">[(u'stage_id', u'ilike', u'[urban-mine: coupon-only]')]</field>
+    <field
+            name="filter_pre_domain"
+        >[(u'stage_id', u'not ilike', u'[urban-mine: coupon-only]')]</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[urban-mine: coupon-only]')]</field>
     <field name="state">code</field>
-    <field name="code"><![CDATA[
+    <field
+            name="code"
+        ><![CDATA[
 record.urban_mine_create_po()
 record.urban_mine_send_mail("email_template_with_coupon_only", "campaign_coupon_only")
 ]]>

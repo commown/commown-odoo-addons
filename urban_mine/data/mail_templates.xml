@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-
-  <data noupdate="1">
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
 
     <record id="email_template_with_label" model="mail.template">
       <field name="name">[commown] AR Offre de Reprise</field>
       <field name="email_from">contact@commown.coop</field>
       <field name="reply_to">contact@commown.coop</field>
-      <field name="subject">${object.company_id.name} - Accusé Réception offre de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
+      <field
+            name="subject"
+        >${object.company_id.name} - Accusé Réception offre de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
       <field name="partner_to">${object.partner_id.id}</field>
-      <field name="model_id" ref="project.model_project_task"/>
-      <field name="auto_delete" eval="True"/>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
       <field name="lang">${object.partner_id.lang}</field>
-      <field name="body_html"><![CDATA[
+      <field
+            name="body_html"
+        ><![CDATA[
 <div>
   <p>Bonjour ${object.partner_id.firstname},</p>
   <br>
@@ -112,15 +114,21 @@
     </record>
 
     <record id="email_template_make_your_choice" model="mail.template">
-      <field name="name">[commown] Bon pour accord Offre de Reprise (choix à faire)</field>
+      <field
+            name="name"
+        >[commown] Bon pour accord Offre de Reprise (choix à faire)</field>
       <field name="email_from">contact@commown.coop</field>
       <field name="reply_to">contact@commown.coop</field>
-      <field name="subject">${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
+      <field
+            name="subject"
+        >${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
       <field name="partner_to">${object.partner_id.id}</field>
-      <field name="model_id" ref="project.model_project_task"/>
-      <field name="auto_delete" eval="True"/>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
       <field name="lang">${object.partner_id.lang}</field>
-      <field name="body_html"><![CDATA[
+      <field
+            name="body_html"
+        ><![CDATA[
 <div>
   <p>Bonjour ${object.partner_id.firstname},</p>
 
@@ -170,12 +178,16 @@
       <field name="name">[commown] Bon pour accord Offre de Reprise (choix 60€)</field>
       <field name="email_from">contact@commown.coop</field>
       <field name="reply_to">contact@commown.coop</field>
-      <field name="subject">${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
+      <field
+            name="subject"
+        >${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
       <field name="partner_to">${object.partner_id.id}</field>
-      <field name="model_id" ref="project.model_project_task"/>
-      <field name="auto_delete" eval="True"/>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
       <field name="lang">${object.partner_id.lang}</field>
-      <field name="body_html"><![CDATA[
+      <field
+            name="body_html"
+        ><![CDATA[
 <div>
   <p>Bonjour ${object.partner_id.firstname},</p>
 
@@ -239,12 +251,16 @@
       <field name="name">[commown] Bon pour accord Offre de Reprise (Bon 120€)</field>
       <field name="email_from">contact@commown.coop</field>
       <field name="reply_to">contact@commown.coop</field>
-      <field name="subject">${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
+      <field
+            name="subject"
+        >${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}</field>
       <field name="partner_to">${object.partner_id.id}</field>
-      <field name="model_id" ref="project.model_project_task"/>
-      <field name="auto_delete" eval="True"/>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
       <field name="lang">${object.partner_id.lang}</field>
-      <field name="body_html"><![CDATA[
+      <field
+            name="body_html"
+        ><![CDATA[
 <div>
   <p>Bonjour ${object.partner_id.firstname},</p>
 
@@ -288,7 +304,5 @@
 </div>
 ]]></field>
     </record>
-
-  </data>
 
 </odoo>

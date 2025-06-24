@@ -3,10 +3,9 @@
     "category": "Business",
     "summary": "Urban mine offer: people sell their device to the company",
     "version": "12.0.1.1.4",
-    "description": "Urban mine offer: people sell their device to the company",
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "commown_devices",
         "commown_shipping",

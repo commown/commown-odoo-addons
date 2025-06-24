@@ -1,7 +1,6 @@
 from base64 import b64decode
 from pathlib import Path
-
-import mock
+from unittest import mock
 
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase, at_install, post_install
@@ -13,7 +12,7 @@ HERE = (Path(__file__) / "..").resolve()
 @post_install(True)
 class TestRegistration(TransactionCase):
     def setUp(self):
-        super(TestRegistration, self).setUp()
+        super().setUp()
         self.fp3 = (
             self.env["product.template"]
             .create({"name": "FP3", "purchase_ok": True})

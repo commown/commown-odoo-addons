@@ -14,12 +14,13 @@ class ProjectTask(models.Model):
         if self.user_id and self.env.user != self.user_id:
             self = self.sudo(self.user_id)
 
-        ref = lambda name: self.env.ref("urban_mine.%s" % name)
+        def ref(name):
+            return self.env.ref("urban_mine.%s" % name)
 
         if coupon_campaign_xmlid:
             campaign = ref(coupon_campaign_xmlid)
             coupon = self.env["coupon.coupon"].create({"campaign_id": campaign.id})
-            self = self.with_context({"coupon": coupon.code})
+            self = self.with_context(coupon=coupon.code)
 
         self.message_post_with_template(
             ref(email_xmlid).id,
@@ -70,7 +71,6 @@ class ProjectTask(models.Model):
         description,
         report_name="urban_mine.report_autoinvoice",
     ):
-
         ref = self.env.ref
         product = ref("urban_mine.product").product_variant_id
 
