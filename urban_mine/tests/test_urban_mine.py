@@ -27,7 +27,7 @@ class TestRegistration(TransactionCase):
                 "zip": "67000",
                 "city": "Strasbourg",
                 "country_id": cls.env.ref("base.fr").id,
-                "supplier": True,
+                "supplier_rank": 1,
                 "from_urban_mine": True,
             }
         )
