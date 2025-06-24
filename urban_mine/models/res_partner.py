@@ -8,21 +8,21 @@ class UrbanMinePartner(models.Model):
         "From urban mine registration", website_form_blacklisted=False
     )
 
-    @api.model
-    def create(self, vals):
-        result = super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        partners = super().create(vals_list)
 
-        if vals.get("from_urban_mine", False):
+        for partner in partners:
+            if partner.from_urban_mine:
+                task = self.env["project.task"].create(
+                    {
+                        "name": partner.name + " - " + partner.city,
+                        "partner_id": partner.id,
+                        "project_id": self.env.ref("urban_mine.project").id,
+                        "stage_id": self.env.ref("urban_mine.stage1").id,
+                    }
+                )
 
-            task = self.env["project.task"].create(
-                {
-                    "name": result.name + " - " + result.city,
-                    "partner_id": result.id,
-                    "project_id": self.env.ref("urban_mine.project").id,
-                    "stage_id": self.env.ref("urban_mine.stage1").id,
-                }
-            )
+                task.name = task.urban_mine_name() + " " + task.name
 
-            task.name = task.urban_mine_name() + " " + task.name
-
-        return result
+        return partners
