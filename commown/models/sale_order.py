@@ -6,6 +6,10 @@ from odoo import _, api, models
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    def _cart_accessories(self):
+        # Override to sort accessories by name instead of randomly
+        return sorted(super()._cart_accessories(), key=lambda p: p.name)
+
     @api.multi
     def _prepare_invoice(self):
         """We do not want the sale order note to be copied to the invoice
