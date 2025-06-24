@@ -10,27 +10,28 @@ HERE = (Path(__file__) / "..").resolve()
 
 @tagged("-at_install", "post_install")
 class TestRegistration(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.fp3 = (
-            self.env["product.template"]
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.fp3 = (
+            cls.env["product.template"]
             .create({"name": "FP3", "purchase_ok": True})
             .product_variant_id
         )
-        self.project = self.env.ref("urban_mine.project")
-        self.partner = self.env["res.partner"].create(
+        cls.project = cls.env.ref("urban_mine.project")
+        cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Elie A",
                 "email": "elie@commown.fr",
                 "street": "2 rue de Rome",
                 "zip": "67000",
                 "city": "Strasbourg",
-                "country_id": self.env.ref("base.fr").id,
+                "country_id": cls.env.ref("base.fr").id,
                 "supplier": True,
                 "from_urban_mine": True,
             }
         )
-        self.env["commown.parcel.type"].create(
+        cls.env["commown.parcel.type"].create(
             {
                 "name": "test parcel",
                 "technical_name": "return-0,75-ins300",
