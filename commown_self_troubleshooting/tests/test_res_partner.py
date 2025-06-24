@@ -15,13 +15,15 @@ def _normalize_all_data(data):
 class TroubleshootingDataTC(RentalSaleOrderTC):
     maxDiff = None
 
-    def setUp(self):
-        super().setUp()
-        self.partner = self.env.ref("base.res_partner_address_15")
-        self.contract_fp2 = self._rental_contract("FP2")
-        self.contract_serenity = self._rental_contract("FP4", "Option Sérénité")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.partner = cls.env.ref("base.res_partner_address_15")
+        cls.contract_fp2 = cls._rental_contract("FP2")
+        cls.contract_serenity = cls._rental_contract("FP4", "Option Sérénité")
 
-    def _rental_contract(self, base_name, extended_product_name="", date_start=None):
+    @classmethod
+    def _rental_contract(cls, base_name, extended_product_name="", date_start=None):
         """Create and return a rental contract starting at `date_start`
         (defaults to today)
 
@@ -30,24 +32,24 @@ class TroubleshootingDataTC(RentalSaleOrderTC):
         The product name may be completed with given extended_product_name to
         simulate a variant name (useful for the Sérénité option).
         """
-        contract_tmpl = self._create_rental_contract_tmpl(
+        contract_tmpl = cls._create_rental_contract_tmpl(
             1,
             name=base_name + "/B2C",
-            contract_line_ids=[self._contract_line(1, "HaaS 1 month")],
+            contract_line_ids=[cls._contract_line(1, "HaaS 1 month")],
         )
-        product = self._create_rental_product(
+        product = cls._create_rental_product(
             name=(base_name + " " + extended_product_name).strip(),
             property_contract_template_id=contract_tmpl,
         )
-        so = self.env["sale.order"].create(
+        so = cls.env["sale.order"].create(
             {
-                "partner_id": self.partner.id,
-                "order_line": [self._oline(product)],
+                "partner_id": cls.partner.id,
+                "order_line": [cls._oline(product)],
             }
         )
         so.action_confirm()
 
-        contract = self.env["contract.contract"].of_sale(so).ensure_one()
+        contract = cls.env["contract.contract"].of_sale(so).ensure_one()
 
         contract.contract_line_ids.update(
             {

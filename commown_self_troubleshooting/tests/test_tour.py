@@ -40,9 +40,10 @@ class TestPageTC(RunTourMixin, odoo.tests.HttpCase):
 
     contract_name = None  # Override me!
 
-    def create_contract(self, name, product, user, date_start="2020-01-01"):
+    @classmethod
+    def create_contract(cls, name, product, user, date_start="2020-01-01"):
         partner = user.partner_id
-        ct = self.env["contract.template"].create({"name": name})
+        ct = cls.env["contract.template"].create({"name": name})
         cline_attrs = {
             "name": "Line 1",
             "specific_price": 1.0,
@@ -53,7 +54,7 @@ class TestPageTC(RunTourMixin, odoo.tests.HttpCase):
             "date_start": date_start,
         }
 
-        contract = self.env["contract.contract"].create(
+        contract = cls.env["contract.contract"].create(
             {
                 "name": "SO0000 Test Contract",
                 "partner_id": partner.id,
@@ -64,15 +65,16 @@ class TestPageTC(RunTourMixin, odoo.tests.HttpCase):
         contract.message_subscribe(partner_ids=user.partner_id.ids)
         return contract
 
-    def setUp(self):
-        super().setUp()
-        user_portal = self.env.ref("base.demo_user0")
-        product = self.env["product.product"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        user_portal = cls.env.ref("base.demo_user0")
+        product = cls.env["product.product"].create(
             {"name": "Test service product", "type": "service"}
         )
-        if self.contract_name:
-            self.contract = self.create_contract(
-                self.contract_name,
+        if cls.contract_name:
+            cls.contract = cls.create_contract(
+                cls.contract_name,
                 product,
                 user_portal,
             )
