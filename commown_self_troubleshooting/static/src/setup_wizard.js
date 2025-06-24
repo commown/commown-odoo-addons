@@ -107,7 +107,9 @@ function setUpWizard($container) {
   $container.smartWizard({
     selected: 0,
     autoAdjustHeight: false,
-    keyNavigation: false,
+    keyboardSettings: {
+      keyNavigation: false,
+    },
     enableURLhash: false,
     toolbarSettings: {
       toolbarPosition: 'both',
