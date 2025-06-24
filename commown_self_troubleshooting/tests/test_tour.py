@@ -35,7 +35,7 @@ class RunTourTC(HttpCase):
             self.browser_js("/my", js, js_ready, login="portal")
 
 
-class TestPageTC(RunTourTC):
+class TestTourWithContractTC(RunTourTC):
     "Base class to ease tour test writting"
 
     contract_name = None  # Override me!
@@ -80,7 +80,7 @@ class TestPageTC(RunTourTC):
             )
 
 
-class TestPageFP2(TestPageTC):
+class TestPageFP2(TestTourWithContractTC):
     contract_name = "FP2/B2C"
 
     def test_fp2_battery_inf_80(self):
@@ -93,7 +93,7 @@ class TestPageFP2(TestPageTC):
         self._run_tour("commown_self_troubleshooting_tour_fp2_battery_contact_human")
 
 
-class TestPageSmartphone(TestPageTC):
+class TestPageSmartphone(TestTourWithContractTC):
     # This contract name only works because of the faulty template matching
     # in the data/troubleshooting.xml records - this should be fixed next.
     contract_name = "FP3/B2C-FP5/B2C-CC/B2C"
@@ -123,7 +123,7 @@ class TestPageSmartphone(TestPageTC):
         self._run_tour("commown_self_troubleshooting_need_new_fairphone")
 
 
-class TestPageContractManagement(TestPageTC):
+class TestPageContractManagement(TestTourWithContractTC):
     contract_name = "NO/MATTER"
 
     def test_termination_no_commitment(self):
@@ -149,7 +149,7 @@ class TestPageRealContractTC(RunTourTC, DeviceAsAServiceTC):
         self._run_tour("commown_self_troubleshooting_tour_theft_and_loss")
 
 
-class TestPageGSDay(TestPageTC):
+class TestPageGSDay(TestTourWithContractTC):
     contract_name = "GS/B2C"
 
     def test_gs_day_audio(self):
