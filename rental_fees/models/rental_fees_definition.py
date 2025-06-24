@@ -420,7 +420,8 @@ class RentalFeesDefinitionLine(models.Model):
             for from_date, to_date in month_intervals(period):
                 result.append((from_date, to_date, self.monthly_fees))
 
-        elif self.fees_type == "proportional":
+        else:
+            assert self.fees_type == "proportional"
             if period["is_forecast"]:
                 forecasts = self.env["contract.line.forecast.period"].search(
                     [
@@ -505,7 +506,8 @@ class RentalFeesDefinitionLine(models.Model):
         if self.fees_type == "proportional":
             return "%.02f %%" % (100 * self.monthly_fees)
 
-        elif self.fees_type == "fix":
+        else:
+            assert self.fees_type == "fix"
             return _("%(fixed_amount)s %(currency)s (fixed)") % {
                 "fixed_amount": misc.formatLang(
                     self.env,
