@@ -13,7 +13,6 @@
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "account",
-        "base_company_extension",
         "contacts",
         "report_py3o",
         "web_ir_actions_act_multi",
