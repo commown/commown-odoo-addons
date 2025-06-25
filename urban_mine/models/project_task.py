@@ -81,6 +81,7 @@ class ProjectTask(models.Model):
                 "move_type": "in_invoice",
                 "company_id": self.env.company.id,
                 "currency_id": ref("base.EUR").id,
+                "invoice_date": date.today(),
                 "payment_reference": self.urban_mine_name(),
                 "invoice_payment_term_id": payment_term.id,
                 "line_ids": [
