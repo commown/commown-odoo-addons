@@ -13,6 +13,26 @@ class TestRegistration(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company.
+            # (This is for the test_task_ok_payment test)
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
+            cls.env.ref("urban_mine.product").property_account_expense_id = cls.env[
+                "account.account"
+            ].search(
+                [
+                    ("code", "=", "606800"),
+                    ("company_id", "=", cls.env.company.id),
+                ]
+            )
+
         cls.fp3 = (
             cls.env["product.template"]
             .create({"name": "FP3", "purchase_ok": True})
