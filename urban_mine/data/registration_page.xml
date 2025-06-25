@@ -37,7 +37,7 @@
                                         action="/website/form/"
                                         method="post"
                                         enctype="multipart/form-data"
-                                        class="o_mark_required"
+                                        class="o_mark_required s_website_form_no_recaptcha"
                                         data-mark="*"
                                         data-model_name="res.partner"
                                         tc-textcontent="true"
@@ -363,8 +363,7 @@
                           </label>
                         </div>
                       </div>
-                      <div class="form-group o_website_form_recaptcha">
-                      </div>
+                      <t t-call="website_recaptcha_v2.recaptcha_widget" />
                       <div
                                                 class="mb-0 py-2 col-12 s_website_form_submit text-start s_website_form_no_submit_label"
                                                 data-name="Submit Button"

@@ -16,10 +16,10 @@
         "report_py3o",
         "website",
         "website_sale_coupon",
+        "website_recaptcha_v2",
     ],
     "external_dependencies": {},
     "data": [
-        "data/assets.xml",
         "data/mail_templates.xml",
         "data/model.xml",
         "data/parcel_type.xml",
