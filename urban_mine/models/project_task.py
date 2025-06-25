@@ -107,9 +107,7 @@ class ProjectTask(models.Model):
 
         invoice.action_post()
 
-        self.env["ir.actions.report"]._get_report_from_name(
-            report_name
-        ).ensure_one().render(invoice.ids)
+        self.env["ir.actions.report"]._render(report_name, res_ids=invoice.ids)
 
         return self.env["ir.attachment"].search(
             [
