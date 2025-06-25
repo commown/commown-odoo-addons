@@ -11,8 +11,8 @@ class ProjectTask(models.Model):
         return "COMMOWN-MU-%d" % self.id
 
     def urban_mine_send_mail(self, email_xmlid, coupon_campaign_xmlid, *attachments):
-        if self.user_id and self.env.user != self.user_id:
-            self = self.with_user(self.user_id)
+        if self.user_ids and self.env.user not in self.user_ids:
+            self = self.with_user(self.user_ids[0])
 
         def ref(name):
             return self.env.ref("urban_mine.%s" % name)
