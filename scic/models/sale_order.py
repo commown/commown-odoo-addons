@@ -18,12 +18,12 @@ class SCICSaleOrder(models.Model):
         they do when they buy an equity, is the spirit of the French
         Financial Markets Authority (AMF) rules.
         """
-        result = super(SCICSaleOrder, self)._cart_update(
+        result = super()._cart_update(
             product_id=product_id,
             line_id=line_id,
             add_qty=add_qty,
             set_qty=set_qty,
-            **kwargs
+            **kwargs,
         )
         product = self.env["product.product"].browse(product_id)
         if product.product_tmpl_id.is_crowd_equity() and result["quantity"] > 1:

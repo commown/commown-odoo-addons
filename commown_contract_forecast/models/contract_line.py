@@ -4,7 +4,6 @@ from odoo.addons.queue_job.job import identity_exact
 
 
 class ContractLine(models.Model):
-
     _inherit = "contract.line"
 
     def _prepare_contract_line_forecast_period(

@@ -1,8 +1,8 @@
 import traceback as tb
 from datetime import date, timedelta
+from unittest.mock import patch
 
 from lxml import html
-from mock import patch
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -22,7 +22,7 @@ def ts_link_urls(doc):
 
 class PagesTC(HttpCase):
     def setUp(self):
-        super(PagesTC, self).setUp()
+        super().setUp()
         self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
         self.test_client = Client(http.root, Response)
         self.password = b"portal"
@@ -175,7 +175,6 @@ class PagesTC(HttpCase):
             contract = self.env(test_cursor)["contract.contract"].browse(cid)
 
             for page_url in sorted(self._ts_page_urls("")):
-
                 try:
                     with patch.object(
                         ResPartner,

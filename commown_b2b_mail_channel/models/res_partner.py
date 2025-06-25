@@ -43,7 +43,6 @@ class ResPartner(models.Model):
         if self.mail_channel_id and self.mail_channel_id.id != new_chan_id:
             self.mail_channel_id.remove_partners_but_employees()
         if new_chan_id and not self.disable_channel_subscription:
-
             new_chan = self.env["mail.channel"].browse(new_chan_id)
             new_chan.remove_partners_but_employees()
 

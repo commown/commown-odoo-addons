@@ -214,7 +214,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(lot_names, {"cc2", "cc3"})
 
     def test_wizard_involved_device(self):
-
         self.task.contract_id = self.c1
         self.task.lot_id = self.task.contract_id.lot_ids[0]
         self.task.storable_product_id = self.task.lot_id.product_id.id
@@ -391,7 +390,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
 
     def test_wizard_outward_with_product_tmpl(self):
-
         values, possible_values = self.prepare_ui(
             "project.task.outward.picking.wizard",
             self.task,
@@ -412,7 +410,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(sorted(possible_values["lot_id"].mapped("name")), ["fp4"])
 
     def test_wizard_outward_with_product_variant(self):
-
         variant = self.storable_product.product_variant_ids[0]
         values, possible_values = self.prepare_ui(
             "project.task.outward.picking.wizard",
@@ -454,7 +451,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertEqual(picking.date_done, date)
 
     def test_ui_wizard_inward(self):
-
         self.task.contract_id = self.c1
 
         values, possible_values = self.prepare_ui(
@@ -572,7 +568,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         )
 
     def test_change_stage_check(self):
-
         expected_message = (
             "These tasks can not be moved forward. There are no picking linked to"
             " those tasks: [%s]"

@@ -21,7 +21,7 @@ class CommonFunctionsTC(TransactionCase):
 
     @classmethod
     def setUpClass(cls, *args, **kwargs):
-        super(CommonFunctionsTC, cls).setUpClass(*args, **kwargs)
+        super().setUpClass(*args, **kwargs)
 
         cls.loc_1 = create_stock_location(cls, "Loc-1")
         cls.loc_1_1 = create_stock_location(cls, "Loc-1-1", cls.loc_1)

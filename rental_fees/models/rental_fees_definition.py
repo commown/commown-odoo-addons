@@ -274,7 +274,6 @@ class RentalFeesDefinition(models.Model):
         update_done = False
 
         for fees_def in self:
-
             _pt = fees_def.product_template_id
 
             next_fees_def = self.env["rental_fees.definition"].search(

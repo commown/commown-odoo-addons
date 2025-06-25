@@ -236,11 +236,12 @@ class RentalFeesComputation(models.Model):
                     )
 
             elif current_period:
-                assert (
-                    move_line.location_id in customer_locations
-                ), "Device %s should be moving to a customer at %s" % (
-                    move_line.lot_id.name,
-                    move_date,
+                assert move_line.location_id in customer_locations, (
+                    "Device %s should be moving to a customer at %s"
+                    % (
+                        move_line.lot_id.name,
+                        move_date,
+                    )
                 )
                 current_period["to_date"] = move_date
                 result.append(current_period.copy())
@@ -307,7 +308,6 @@ class RentalFeesComputation(models.Model):
 
         for p_num, period in enumerate(periods):
             while True:
-
                 from_date = (
                     max(result[-1]["to_date"], period["from_date"])
                     if result
@@ -517,7 +517,6 @@ class RentalFeesComputation(models.Model):
             raise UserError(_("Please set the invoice model on all fees definitions."))
 
         for fees_def, amounts in amounts_by_def.items():
-
             if self._has_later_invoiced_computation():
                 raise UserError(
                     _("There is a later invoice for the same fees definition")
@@ -688,7 +687,6 @@ class RentalFeesComputation(models.Model):
             )
 
     def _run_for_fees_def(self, fees_def):
-
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
         excluded_devices = {ed.device: ed.reason for ed in fees_def.excluded_devices}
 

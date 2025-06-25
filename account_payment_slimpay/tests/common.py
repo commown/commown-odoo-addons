@@ -1,4 +1,4 @@
-from mock import patch
+from unittest.mock import patch
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
 
@@ -13,7 +13,7 @@ def _get_from_doc_mock(doc, method_name):
     }[method_name]
 
 
-class MockedSlimpayMixin(object):
+class MockedSlimpayMixin:
     def setup_mocks(self):
         self._patchers = []
         # Mock SlimpayClient

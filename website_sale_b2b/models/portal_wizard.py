@@ -31,6 +31,6 @@ class PortalWizardUser(models.TransientModel):
     )
 
     def _create_user(self):
-        user = super(PortalWizardUser, self)._create_user()
+        user = super()._create_user()
         user.website_id = self.website_id
         return user

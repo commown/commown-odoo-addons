@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from datetime import datetime, timedelta
+from unittest import mock
 
-import mock
 import requests
 import requests_mock
 
@@ -23,9 +23,8 @@ def fake_issue_doc(
     currency="EUR",
     payment_ref=None,
     subscriber_ref=None,
-    **kwargs
+    **kwargs,
 ):
-
     kwargs.setdefault("id", "fake_issue")
     payment_url = "https://api.slimpay.net/alps#get-payment"
     subscriber_url = "https://api.slimpay.net/alps#get-subscriber"
@@ -248,7 +247,6 @@ class ProjectTC(TransactionCase):
         )
 
     def _execute_cron(self, slimpay_issues):
-
         with requests_mock.Mocker() as mocker:
             self._mock_slimpay_base(mocker)
             self._mock_slimpay_issues(mocker, slimpay_issues)
@@ -629,7 +627,6 @@ class ProjectTC(TransactionCase):
         )
 
     def test_functional_1_trial_with_extra_bank_fees(self):
-
         fee_invoices_before = self._slimpay_supplier_invoices()
 
         mocker = self._execute_cron(

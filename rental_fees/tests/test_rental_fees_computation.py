@@ -607,7 +607,7 @@ class RentalFeesComputationTC(RentalFeesTC):
                 "fees_definition_id": self.fees_def.id,
                 "device": device.id,
             },
-            **excluded_device_attrs
+            **excluded_device_attrs,
         )
         self.env["rental_fees.excluded_device"].create(attrs)
 

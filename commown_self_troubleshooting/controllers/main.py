@@ -7,7 +7,6 @@ _logger = logging.getLogger(__name__)
 
 
 class SelfHelp(http.Controller):
-
     action_tags = {"inform": ["tag-inform-only"]}
 
     def ref(self, suffix):

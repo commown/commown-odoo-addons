@@ -5,7 +5,7 @@ from .common import BaseShippingTC, pdf_page_num
 
 class ProjectTaskTC(BaseShippingTC):
     def setUp(self):
-        super(ProjectTaskTC, self).setUp()
+        super().setUp()
         self.task = self.env.ref("project.project_1_task_1")
         self.task.project_id.shipping_account_id = self.shipping_account.id
 
@@ -19,7 +19,6 @@ class ProjectTaskTC(BaseShippingTC):
 
     @requests_mock.Mocker()
     def test_print_parcel_actions(self, mocker):
-
         self.mock_colissimo_ok(mocker)
 
         orig_task = self.task.with_context(mail_notrack=True)

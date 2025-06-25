@@ -91,7 +91,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         return self.render_view(
             "website_sale_b2b.payment",
             sudo_as=self.order.partner_id.user_ids,
-            **render_values
+            **render_values,
         )
 
     def render_order(self, big_b2b, authorized, sent):
@@ -115,7 +115,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
         return self.render_view(
             "sale.sale_order_portal_template",
             sudo_as=self.order.partner_id.user_ids,
-            **render_values
+            **render_values,
         )
 
     def assertWarning(self, html_doc, true_false, warning, err_msg):

@@ -22,7 +22,6 @@ class LateOptinWizard(models.TransientModel):
     )
 
     def late_optin(self):
-
         partner, key = self.coupon_id._action_coop_prerequisites()
         campaign = self.coupon_id.campaign_id
 

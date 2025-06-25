@@ -1,5 +1,6 @@
+from unittest.mock import patch
+
 import requests_mock
-from mock import patch
 
 from odoo.tests.common import TransactionCase, tagged
 
@@ -168,8 +169,7 @@ class SlimpayUtilsTC(TransactionCase):
         _url = "https://api.slimpay.net"
         root_doc = {
             "_links": {
-                _url
-                + "/alps#search-mandates": {
+                _url + "/alps#search-mandates": {
                     "href": _url + "/mandates{?creditorReference,subscriberReference}",
                     "templated": True,
                 },

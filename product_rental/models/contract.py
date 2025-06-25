@@ -90,7 +90,7 @@ class Contract(models.Model):
         line which generated it.
         """
 
-        new_lines = super(Contract, self)._convert_contract_lines(contract)
+        new_lines = super()._convert_contract_lines(contract)
         for contract_line, contract_template_line in zip(
             new_lines, contract.contract_line_ids
         ):

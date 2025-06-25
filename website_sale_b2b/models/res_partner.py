@@ -32,7 +32,6 @@ class ResPartner(models.Model):
             )
 
         for record in self:
-
             # Get partner location BEFORE changing its parent
             old_locs = record.get_customer_locations(limit=None)
 
@@ -45,7 +44,6 @@ class ResPartner(models.Model):
             record.parent_id = new_company.id
 
             for old_loc in old_locs:
-
                 # Move partner's contract stock to its new location
                 partner_running_contracts = record.env["contract.contract"].search(
                     [

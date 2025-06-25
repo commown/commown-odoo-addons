@@ -1,7 +1,7 @@
 import json
+from unittest.mock import patch
 
 from coreapi.exceptions import ErrorMessage
-from mock import patch
 from odoo_test_helper import FakeModelLoader
 
 from odoo.tests.common import TransactionCase, tagged

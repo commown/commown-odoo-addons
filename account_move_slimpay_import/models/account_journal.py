@@ -68,7 +68,7 @@ class SlimpayParser(FileParser):
     def __init__(self, journal, ftype="csv", **kwargs):
         self.env = journal.env
         self.expected_balance = None
-        super(SlimpayParser, self).__init__(
+        super().__init__(
             journal, ftype=ftype, extra_fields=self.conversion_dict, **kwargs
         )
 

@@ -1,6 +1,6 @@
 from datetime import date
+from unittest.mock import patch
 
-from mock import patch
 from odoo_test_helper import FakeModelLoader
 
 from odoo import fields
@@ -338,7 +338,6 @@ class ContractTC(TestContractBase):
         with patch.object(
             TestConditionDiscountLine, "_compute_condition_test", create=True
         ) as mock:
-
             mock.return_value = True
             inv1 = self.contract.recurring_create_invoice()
             inv2 = self.contract.recurring_create_invoice()

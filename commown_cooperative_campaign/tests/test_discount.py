@@ -1,7 +1,7 @@
 from datetime import timedelta
 from functools import partial
+from unittest import mock
 
-import mock
 import requests
 import requests_mock
 from requests.exceptions import HTTPError

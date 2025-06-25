@@ -12,7 +12,7 @@ class ProductTemplate(models.Model):
     )
 
     def _create_variant_ids(self):
-        res = super(ProductTemplate, self)._create_variant_ids()
+        res = super()._create_variant_ids()
         self.product_variant_ids._set_storable_variants()
         return res
 

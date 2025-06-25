@@ -276,7 +276,10 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
                     1, "1 year of ##PRODUCT##", tax, specific_price=0.0
                 ),
                 self._contract_line(
-                    2, "1 month of ##ACCESSORY##", tax, quantity=12  # Important!
+                    2,
+                    "1 month of ##ACCESSORY##",
+                    tax,
+                    quantity=12,  # Important!
                 ),
             ],
         )
@@ -420,7 +423,7 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
 
 class SaleOrderAttachmentsTC(RentalSaleOrderTC):
     def setUp(self):
-        super(SaleOrderAttachmentsTC, self).setUp()
+        super().setUp()
         self.partner = self.env.ref("base.res_partner_3")
         self.env["res.lang"].load_lang("fr_FR")
         self.so = self.create_sale_order(self.partner)

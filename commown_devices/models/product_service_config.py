@@ -57,12 +57,12 @@ class ProductServiceStorableConfig(models.Model):
         return res
 
     def write(self, values):
-        res = super(ProductServiceStorableConfig, self).write(values)
+        res = super().write(values)
         self.mapped("service_tmpl_id.product_variant_ids")._set_storable_variants()
         return res
 
     def unlink(self):
         affected_variants = self.mapped("service_tmpl_id.product_variant_ids")
-        res = super(ProductServiceStorableConfig, self).unlink()
+        res = super().unlink()
         affected_variants._set_storable_variants()
         return res
