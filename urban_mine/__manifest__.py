@@ -27,9 +27,9 @@
         "data/product.xml",
         "data/project.xml",
         "data/coupon.xml",
-        "data/report.xml",
         "data/registration_page.xml",
         "data/actions.xml",
+        "report/report.xml",
     ],
     "installable": True,
 }
