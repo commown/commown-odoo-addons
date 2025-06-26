@@ -21,8 +21,6 @@ class TestShareholderRegisterTC(TransactionCase):
                 )
             coa.try_loading(company=cls.env.company, install_demo=False)
 
-        cls.env.company.nominal_share_amount = 20
-
         cls.partner_1 = cls.env["res.partner"].create({"name": "Partner 1"})
         cls.partner_2 = cls.env["res.partner"].create({"name": "Partner 2"})
         cls.partner_3 = cls.env["res.partner"].create({"name": "Partner 3"})

@@ -28,6 +28,7 @@
         "views/shareholder_tags_update.xml",
     ],
     "demo": [
+        "demo/res_company.xml",
         "demo/commown_shareholder_register_college.xml",
     ],
     "installable": True,
