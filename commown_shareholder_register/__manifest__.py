@@ -27,5 +27,8 @@
         "views/shareholder_college.xml",
         "views/shareholder_tags_update.xml",
     ],
+    "demo": [
+        "demo/commown_shareholder_register_college.xml",
+    ],
     "installable": True,
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="college_A" model="commown_shareholder_register.college">
+      <field name="name">A</field>
+      <field name="rank">80</field>
+    </record>
+
+    <record id="college_B" model="commown_shareholder_register.college">
+      <field name="name">B</field>
+      <field name="rank">30</field>
+    </record>
+
+    <record id="college_D" model="commown_shareholder_register.college">
+      <field name="name">D</field>
+      <field name="rank">40</field>
+    </record>
+
+</odoo>

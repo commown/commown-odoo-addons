@@ -34,9 +34,9 @@ class TestShareholderRegisterTC(TransactionCase):
         )
         cls.account_balancing = cls._create_account("XXXXXXXX", "Balancing journal")
 
-        cls.college_A = cls._create_college("A", 80)
-        cls.college_B = cls._create_college("B", 30)
-        cls.college_D = cls._create_college("D", 40)
+        cls.college_A = cls.env.ref("commown_shareholder_register.college_A")
+        cls.college_B = cls.env.ref("commown_shareholder_register.college_B")
+        cls.college_D = cls.env.ref("commown_shareholder_register.college_D")
 
         cls.cat_porteur = cls._create_category(
             "Porteur",
@@ -67,16 +67,6 @@ class TestShareholderRegisterTC(TransactionCase):
             }
         )
         return account
-
-    @classmethod
-    def _create_college(cls, name, rank):
-        college = cls.env["commown_shareholder_register.college"].create(
-            {
-                "name": name,
-                "rank": rank,
-            }
-        )
-        return college
 
     @classmethod
     def _create_category(cls, name, account, college, min_share_number):
