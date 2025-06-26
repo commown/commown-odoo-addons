@@ -1,10 +1,9 @@
 /** @odoo-module */
 
+import {onMounted, useRef} from "@odoo/owl";
 import {ExportDataDialog} from "@web/views/view_dialogs/export_data_dialog";
 import {patch} from "@web/core/utils/patch";
 import {session} from "@web/session";
-
-import {onMounted, useRef} from "@odoo/owl";
 
 patch(ExportDataDialog.prototype, "customer_admin", {
     /**
