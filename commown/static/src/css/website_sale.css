@@ -1,67 +1,68 @@
 /* Product page: use sticky carousel to circumvent blank vertical space below it */
 #o-carousel-product {
-  position: sticky;
-  top: 20px;
+    position: sticky;
+    top: 20px;
 }
 
 /* Product page: banner to services description */
 #services-banner {
-  font-size: 1rem;
-  line-height: 1.25rem;
-  padding: 1em;
-  border-radius: 0.3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    padding: 1em;
+    border-radius: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #services-banner > div {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5em;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5em;
 }
 
 #services-banner > div > span {
-  margin-left: 0.75em;
+    margin-left: 0.75em;
 }
 
 #services-banner > div > svg {
-  flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 #services-banner > a {
-  width: min-content;
+    width: min-content;
 }
 
 /* Hide payment methods */
-#payment_method h3, #payment_method .card {
-  display: none;
+#payment_method h3,
+#payment_method .card {
+    display: none;
 }
 
 /* Attribute value related hacks */
 
 .attribute-show {
-  display: none;
+    display: none;
 }
 
 .attribute-value-match.attribute-show {
-  display: block;
+    display: block;
 }
 
 /* Language-related hacks */
 
 .lang {
-  display: none;
+    display: none;
 }
 
 body.editor_enable .lang {
-  display: unset;
+    display: unset;
 }
 
 html[lang="de-DE"] .lang.de {
-  display: unset;
+    display: unset;
 }
 
 html[lang="fr-FR"] .lang.fr {
-  display: unset;
+    display: unset;
 }

@@ -1,6 +1,5 @@
 from datetime import date
-
-import mock
+from unittest import mock
 
 from odoo.tests.common import at_install, post_install
 
@@ -12,7 +11,7 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 @post_install(True)
 class CrmLeadTC(RentalSaleOrderTC):
     def setUp(self):
-        super(CrmLeadTC, self).setUp()
+        super().setUp()
         self.so = self.create_sale_order()
         self.so.team_id.default_perform_actions_on_delivery = True
         self.so.mapped("order_line.product_id").update(

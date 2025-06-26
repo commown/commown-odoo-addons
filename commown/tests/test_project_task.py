@@ -1,6 +1,5 @@
 from contextlib import contextmanager
-
-import mock
+from unittest import mock
 
 from odoo.exceptions import AccessError
 from odoo.tests.common import TransactionCase, at_install, post_install
@@ -51,7 +50,7 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
         task_portal = self.env["project.task"].sudo(partner.user_ids).browse(task.id)
         self.assertEqual(task_portal.name, "Commown test")
         with self.assertRaises(AccessError) as err:
-            task_portal.internal_followup
+            task_portal.internal_followup  # pylint: disable=pointless-statement
         self.assertIn("security restrictions", err.exception.name)
         self.assertIn("internal_followup", err.exception.name)
 
@@ -60,7 +59,7 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
 @post_install(True)
 class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
     def setUp(self):
-        super(ProjectTaskActionTC, self).setUp()
+        super().setUp()
 
         self.project = self.env.ref("commown_self_troubleshooting.support_project")
 
@@ -246,7 +245,6 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertEqual(self.task.stage_id, self.stage_reminder)
 
     def test_move_customer_long_waiting_task_to_reminder(self):
-
         self.task.update({"stage_id": self.stage_wait.id})
         self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
 
@@ -256,7 +254,6 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertEqual(self.task.stage_id, self.stage_reminder)
 
     def test_move_long_waiting_manual_followup_to_pending(self):
-
         self.task.update({"stage_id": self.stage_manual.id})
         self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
 
@@ -276,7 +273,6 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertEqual(self.task.stage_id, self.stage_pending)
 
     def test_move_sending_pieces_ongoing_to_pending(self):
-
         self.task.update({"stage_id": self.stage_sending_pieces.id})
         self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
 
@@ -288,7 +284,6 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         )
 
     def test_move_waiting_pieces_to_pending(self):
-
         self.task.update({"stage_id": self.stage_waiting_pieces_return.id})
         self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
 

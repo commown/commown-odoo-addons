@@ -1,7 +1,7 @@
 import os
+from unittest.mock import patch
 from urllib.parse import urlparse
 
-from mock import patch
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 

@@ -1,4 +1,4 @@
-from odoo import api, models
+from odoo import _, api, models
 from odoo.exceptions import UserError
 
 
@@ -34,14 +34,13 @@ class UtmCommownUtilsMixin(models.AbstractModel):
         for field, entities in self._related_entities_by_field():
             if entities:
                 raise UserError(
-                    "Cannot remove: %d '%s' point to '%s'"
-                    % (
-                        len(entities),
-                        field.model_id.name,
-                        ",".join(entities.mapped(field.name + ".name")),
-                    )
+                    _("Cannot remove: %(nb_ent)d '%(field)s' point to '%(ent_names)s'")
+                    % {
+                        "nb_ent": len(entities),
+                        "field": field.model_id.name,
+                        "ent_names": ",".join(entities.mapped(field.name + ".name")),
+                    }
                 )
-                break
         else:
             self.sudo().unlink()
 

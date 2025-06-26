@@ -35,7 +35,7 @@ _PAYMENT_FIELDS = _PAYMENT_PREF_FIELDS | {"payment_token_id"}
 _SYNC_CTX = "partner_payment_fields_sync"
 
 
-class FileTooBig(Exception):
+class FileTooBig(Exception):  # noqa: B903
     def __init__(self, field, msg):
         self.field = field
         self.msg = msg
@@ -180,7 +180,7 @@ class CommownPartner(models.Model):
     @api.returns("self", lambda value: value.id)
     def create(self, vals):
         self._apply_bin_field_size_policy(vals)
-        result = super(CommownPartner, self).create(vals)
+        result = super().create(vals)
 
         if result.type == "invoice" and result.parent_id:
             result.parent_id._copy_payment_fields_to_invoice_children()
@@ -210,7 +210,7 @@ class CommownPartner(models.Model):
         if "parent_id" in vals:
             old_recv_acc = self.property_account_receivable_id
 
-        result = super(CommownPartner, self).write(vals)
+        result = super().write(vals)
 
         if _PAYMENT_FIELDS.intersection(vals):
             # Sync payment fields to invoice childs:
@@ -293,7 +293,7 @@ class CommownPartner(models.Model):
     def reset_payment_token(self):
         "Force the reset on payment preferences on payment token reset"
         super().reset_payment_token()
-        self.update({f: False for f in _PAYMENT_PREF_FIELDS})
+        return self.update({f: False for f in _PAYMENT_PREF_FIELDS})
 
     @api.multi
     def action_set_as_invoice_recipient(self):
@@ -321,9 +321,9 @@ class CommownPartner(models.Model):
         )
         invoices.update({"partner_id": self.id})
 
-        msg = _("Modified %d contracts and %d invoices") % (
-            len(contracts),
-            len(invoices),
-        )
+        msg = _("Modified %(cs)d contracts and %(invs)d invoices") % {
+            "cs": len(contracts),
+            "invs": len(invoices),
+        }
         self.env.user.notify_success(message=msg, title=_("Information"), sticky=True)
         return True

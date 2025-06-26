@@ -1,6 +1,5 @@
 from datetime import datetime
-
-from mock import patch
+from unittest.mock import patch
 
 from odoo.tests.common import at_install, post_install
 
@@ -22,7 +21,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         request_mock.configure_mock(session={})
         self.fake_session = request_mock.session
 
-        super(PaymentTC, self).setUp()
+        super().setUp()
         self.so = self.create_sale_order()
 
         self.setup_mocks()

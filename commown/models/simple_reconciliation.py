@@ -98,7 +98,7 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
         )
 
     def _base_columns(self):
-        cols = super(CommownMassReconcileSimplePartner, self)._base_columns()
+        cols = super()._base_columns()
         cols.append("account_move_line.date_maturity")
         cols.append("res_partner.commercial_partner_id")
         return cols

@@ -1,23 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <data>
-
-    <!-- XXX used anyhow ? -->
-    <record model="ir.ui.view" id="res_partner_risk_form">
-      <field name="name">commown.lead.res.partner</field>
-      <field name="model">res.partner</field>
-      <field name="arch" type="xml">
-        <form string="Lead Partner">
-          <group>
-            <field name="name"/>
-            <field name="street"/>
-            <field name="city"/>
-          </group>
-        </form>
-      </field>
-    </record>
-
-  </data>
+  <!-- XXX used anyhow ? -->
+  <record model="ir.ui.view" id="res_partner_risk_form">
+    <field name="name">commown.lead.res.partner</field>
+    <field name="model">res.partner</field>
+    <field name="arch" type="xml">
+      <form string="Lead Partner">
+        <group>
+          <field name="name" />
+          <field name="street" />
+          <field name="city" />
+        </group>
+      </form>
+    </field>
+  </record>
 
 </odoo>

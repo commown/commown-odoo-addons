@@ -20,9 +20,7 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
 
     @classmethod
     def _add_user_to_role(cls, user, role):
-        line_id = cls.env["res.user.role.line"].create(
-            {"role_id": role.id, "user_id": user.id}
-        )
+        cls.env["res.user.role.line"].create({"role_id": role.id, "user_id": user.id})
 
     @classmethod
     def _copy_user_role_to_origin(cls, user):
@@ -48,7 +46,7 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
 
     @classmethod
     def setUpClass(cls):
-        super(UserUnsubscribeChannelTC, cls).setUpClass()
+        super().setUpClass()
 
         cls.test_user_1 = cls.env["res.users"].create(
             {
@@ -76,11 +74,6 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
             cls.test_user_1,
         )
 
-        role_ids = [
-            cls.subscribed_role1.id,
-            cls.subscribed_role2.id,
-            cls.nonsubscribed_role.id,
-        ]
         subscribed_group_ids = [
             cls.subscribed_group1.id,
             cls.subscribed_group2.id,
@@ -95,7 +88,6 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
         cls.test_mail_channel._subscribe_users()
 
     def test_unsubscribe_users(self):
-
         self.assertIn(
             self.test_user_1.partner_id.id,
             self.test_mail_channel.channel_last_seen_partner_ids.mapped(

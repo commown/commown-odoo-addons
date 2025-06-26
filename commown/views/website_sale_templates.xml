@@ -1,40 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-  <template id="orders_followup_products_links"
-            inherit_id="website_sale.sale_order_portal_content_inherit_website_sale">
+  <template
+        id="orders_followup_products_links"
+        inherit_id="website_sale.sale_order_portal_content_inherit_website_sale"
+    >
 
     <!-- Change link text to the product display name instead of the order
          line name which contains the whole product description, and
          move the latter to a fly-over icon -->
-    <xpath expr="//td[@id='product_name']/a/*[@t-field='line.name']" position="attributes">
+    <xpath
+            expr="//td[@id='product_name']/a/*[@t-field='line.name']"
+            position="attributes"
+        >
       <attribute name="t-field">line.product_id.display_name</attribute>
     </xpath>
-    <xpath expr="//td[@id='product_name']/t/*[@t-field='line.name']" position="attributes">
+    <xpath
+            expr="//td[@id='product_name']/t/*[@t-field='line.name']"
+            position="attributes"
+        >
       <attribute name="t-field">line.product_id.display_name</attribute>
     </xpath>
 
     <xpath expr="//td[@id='product_name']" position="inside">
       <t t-if="line.product_id.has_recurrent_payment">
-        <t t-set="first_cline" t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"/>
+        <t
+                    t-set="first_cline"
+                    t-value="env['contract.line'].sudo().search([('sale_order_line_id', '=', line.id)], limit=1)"
+                />
         <div t-if="first_cline" class="rent m-4 p-4 bg-light">
 
           <p class="mb-0">Loyer unitaire :
-            <span t-esc="first_cline.price_unit * first_cline.quantity"
-                  t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"/>
-            / <span t-field="first_cline.recurring_rule_type"/>
+            <span
+                            t-esc="first_cline.price_unit * first_cline.quantity"
+                            t-options="{'widget': 'monetary', 'display_currency': line.order_id.pricelist_id.currency_id}"
+                        />
+            / <span t-field="first_cline.recurring_rule_type" />
           </p>
 
-          <t t-set="contracts" t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"/>
+          <t
+                        t-set="contracts"
+                        t-value="env['contract.contract'].sudo().search([('contract_line_ids.sale_order_line_id', '=', line.id)])"
+                    />
 
           <p t-if="contracts" class="mb-0">Fin des périodes d'engagement :</p>
           <ul class="contract-list">
             <t t-foreach="contracts" t-as="contract">
-              <li>Contrat <span t-field="contract.name"/> :
-              <span t-if="contract.date_start &lt; datetime.date(2030, 1, 1)"
-                    class="commitment-end-date"
-                    t-field="contract.commitment_end_date"
-                    t-options="{'widget': 'date'}"/>
+              <li>Contrat <span t-field="contract.name" /> :
+              <span
+                                    t-if="contract.date_start &lt; datetime.date(2030, 1, 1)"
+                                    class="commitment-end-date"
+                                    t-field="contract.commitment_end_date"
+                                    t-options="{'widget': 'date'}"
+                                />
               <span t-else="">Location non démarrée</span>
               </li>
             </t>
@@ -44,32 +62,43 @@
       </t>
 
       <p>
-        <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
-                t-attf-data-target="#myModal{{line.id}}">
+        <button
+                    type="button"
+                    class="btn btn-info btn-sm"
+                    data-toggle="modal"
+                    t-attf-data-target="#myModal{{line.id}}"
+                >
           See product details
         </button>
       </p>
 
       <!-- Modal -->
-      <div class="modal fade" t-attf-id="myModal{{line.id}}"
-           tabindex="-1" role="dialog">
+      <div
+                class="modal fade"
+                t-attf-id="myModal{{line.id}}"
+                tabindex="-1"
+                role="dialog"
+            >
         <div class="modal-dialog" role="document" style="width:80%">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"
-                      aria-label="Close">
+              <button
+                                type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                            >
                 <span aria-hidden="true">x</span>
               </button>
               <h4 class="modal-title">
-                <t t-esc="line.product_id.name"/>
+                <t t-esc="line.product_id.name" />
               </h4>
             </div>
             <div class="modal-body">
-              <t t-raw="line.product_id.product_tmpl_id.website_description"/>
+              <t t-raw="line.product_id.product_tmpl_id.website_description" />
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default"
-                      data-dismiss="modal">
+              <button type="button" class="btn btn-default" data-dismiss="modal">
                 Fermer
               </button>
             </div>
@@ -78,8 +107,10 @@
       </div>
 
       <!-- Display order line description sale converted to HTML -->
-      <p class="mx-4 p-4 bg-light"
-         t-raw="env['ir.qweb.field.text'].value_to_html(line.name, None)"/>
+      <p
+                class="mx-4 p-4 bg-light"
+                t-raw="env['ir.qweb.field.text'].value_to_html(line.name, None)"
+            />
 
     </xpath>
 
@@ -89,8 +120,7 @@
 
     <!-- Add attribute-value dependent show/ hide html functions -->
     <xpath expr="div[@id='product_recurrent_payment_amount']" position="inside">
-      <script type="text/javascript"
-              src="/commown/static/src/js/website_sale.js"></script>
+      <script type="text/javascript" src="/commown/static/src/js/website_sale.js" />
       <!-- Example usage
            <p class="bg-danger js-attribute-1-6 js-attribute-1-6-93 js-attribute-1-6-94 attribute-show" style="padding: 15px">
            <b>Important :</b> Avant de valider, veuillez lire les spécificités de l’offre en bas de cette page.
@@ -99,45 +129,81 @@
     </xpath>
 
     <xpath expr="div[@id='product_recurrent_payment_amount']" position="after">
-      <div t-if="product.sudo().storable_config_ids" id="services-banner" class="alert bg-warning">
+      <div
+                t-if="product.sudo().storable_config_ids"
+                id="services-banner"
+                class="alert bg-warning"
+            >
         <div>
-	  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"></path></svg>
-	  <span>Nous vous invitons vivement à lire le détail des services inclus dans le prix</span>
+	  <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 256 256"
+                        fill="currentColor"
+                    ><path
+                            d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z"
+                        /></svg>
+	  <span
+                    >Nous vous invitons vivement à lire le détail des services inclus dans le prix</span>
         </div>
-        <a t-attf-href="{{ service_detail_url }}" target="_blank" class="btn btn-secondary btn-lg">Voir les services</a>
+        <a
+                    t-attf-href="{{ service_detail_url }}"
+                    target="_blank"
+                    class="btn btn-secondary btn-lg"
+                >Voir les services</a>
       </div>
     </xpath>
 
   </template>
 
-  <template id="assets_frontend"
-            inherit_id="website.assets_frontend">
+  <template id="assets_frontend" inherit_id="website.assets_frontend">
     <xpath expr="." position="inside">
-      <link href="/commown/static/src/css/website_sale.css"
-            rel="stylesheet" type="text/css"/>
+      <link
+                href="/commown/static/src/css/website_sale.css"
+                rel="stylesheet"
+                type="text/css"
+            />
     </xpath>
   </template>
 
-  <template id="products_add_to_cart_group_sales"
-            inherit_id="website_sale_cart_selectable.products_add_to_cart">
-    <xpath expr="//t[@t-if='len(product.product_variant_ids) == 1'] and product.website_btn_addtocart_published" position="attributes">
-      <attribute name="t-if">len(product.product_variant_ids) == 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
+  <template
+        id="products_add_to_cart_group_sales"
+        inherit_id="website_sale_cart_selectable.products_add_to_cart"
+    >
+    <xpath
+            expr="//t[@t-if='len(product.product_variant_ids) == 1'] and product.website_btn_addtocart_published"
+            position="attributes"
+        >
+      <attribute
+                name="t-if"
+            >len(product.product_variant_ids) == 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
     </xpath>
-    <xpath expr="//t[@t-if='len(product.product_variant_ids) &gt; 1'] and product.website_btn_addtocart_published" position="attributes">
-      <attribute name="t-if">len(product.product_variant_ids) &gt; 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
+    <xpath
+            expr="//t[@t-if='len(product.product_variant_ids) &gt; 1'] and product.website_btn_addtocart_published"
+            position="attributes"
+        >
+      <attribute
+                name="t-if"
+            >len(product.product_variant_ids) &gt; 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
     </xpath>
   </template>
 
   <template id="product_group_sales" inherit_id="website_sale_cart_selectable.product">
     <xpath expr="//a[@id='add_to_cart']" position="attributes">
-      <attribute name="t-if">product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids</attribute>
+      <attribute
+                name="t-if"
+            >product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids</attribute>
     </xpath>
   </template>
 
   <!-- Language related hacks START -->
 
   <template id="products_categories" inherit_id="website_sale.products_categories">
-    <xpath expr="//t[@t-call='website_sale.categories_recursive']" position="attributes">
+    <xpath
+            expr="//t[@t-call='website_sale.categories_recursive']"
+            position="attributes"
+        >
       <attribute name="t-if">c != env.ref('commown.categ_de')</attribute>
     </xpath>
   </template>
@@ -145,37 +211,51 @@
   <template id="product" inherit_id="website_sale_b2b.product_b2b">
 
     <!-- Not lang related: hide stupid odoo hardcoded message like "30-day money-back guarantee" blah blah -->
-    <xpath expr="(//div[@id='product_details']//hr)[last()]" position="replace"></xpath>
-    <xpath expr="(//div[@id='product_details']//p)[last()]" position="replace"></xpath>
+    <xpath expr="(//div[@id='product_details']//hr)[last()]" position="replace" />
+    <xpath expr="(//div[@id='product_details']//p)[last()]" position="replace" />
 
     <!-- Display availability warning for service products -->
     <xpath expr="//a[@id='add_to_cart']" position="after">
-      <t t-set="availability_class" t-value="product.type == 'service' and {'warning': 'warning', 'block': 'danger'}.get(product.sale_line_warn, '') or ''" />
-      <div t-if="availability_class" t-attf-class="alert alert-{{ availability_class }}">
-        <span class="fa fa-warning"/>
-        <span t-field="product.sale_line_warn_msg"/>
+      <t
+                t-set="availability_class"
+                t-value="product.type == 'service' and {'warning': 'warning', 'block': 'danger'}.get(product.sale_line_warn, '') or ''"
+            />
+      <div
+                t-if="availability_class"
+                t-attf-class="alert alert-{{ availability_class }}"
+            >
+        <span class="fa fa-warning" />
+        <span t-field="product.sale_line_warn_msg" />
       </div>
     </xpath>
 
     <!-- End not lang related -->
 
     <xpath expr="//t[@t-call='website.layout']/*[1]" position="before">
-      <t t-set="display_product"
-         t-value="request.env.user.has_group('website.group_website_publisher') or request.lang == 'fr_FR' or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"/>
+      <t
+                t-set="display_product"
+                t-value="request.env.user.has_group('website.group_website_publisher') or request.lang == 'fr_FR' or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"
+            />
     </xpath>
     <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
       <attribute name="t-if">display_product</attribute>
     </xpath>
 
     <xpath expr="//hr[@t-if='product.website_description_sale']" position="attributes">
-      <attribute name="t-if">product.website_description_sale and display_product</attribute>
+      <attribute
+                name="t-if"
+            >product.website_description_sale and display_product</attribute>
     </xpath>
-    <xpath expr="//p[@t-field='product.website_description_sale']" position="attributes">
+    <xpath
+            expr="//p[@t-field='product.website_description_sale']"
+            position="attributes"
+        >
       <attribute name="t-if">display_product</attribute>
     </xpath>
 
     <xpath expr="//div[@id='product_details']" position="inside">
-      <div t-if="not display_product"><b>Product is not available for the moment</b></div>
+      <div t-if="not display_product"><b
+                >Product is not available for the moment</b></div>
     </xpath>
     <xpath expr="//div[@t-field='product.website_description']" position="attributes">
       <attribute name="t-if">display_product</attribute>
@@ -198,11 +278,17 @@
   </template>
 
   <!-- Add a link to view product details from the options pop-up -->
-  <template id="optional_product_items"
-            inherit_id="website_sale_b2b.optional_product_items">
+  <template
+        id="optional_product_items"
+        inherit_id="website_sale_b2b.optional_product_items"
+    >
     <xpath expr="//div[@t-field='product.website_description_sale']" position="before">
-      <a class="d-block" target="_blank" t-att-href="'/shop/product/%s' % slug(product)">
-        See details in a new window <i class="fa fa-external-link"></i>
+      <a
+                class="d-block"
+                target="_blank"
+                t-att-href="'/shop/product/%s' % slug(product)"
+            >
+        See details in a new window <i class="fa fa-external-link" />
       </a>
     </xpath>
   </template>

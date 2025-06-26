@@ -15,7 +15,7 @@ class res_users(models.Model):
         if self._context.get("import_file", False):
             _logger.info("Reset password is disabled while importing users")
             self = self.with_context(no_reset_password=True)
-        return super(res_users, self).create(vals)
+        return super().create(vals)
 
     def _filter_private_channel_removed_group(self, channel):
         removed_roles = self._origin.role_ids.filtered(lambda r: r not in self.role_ids)
@@ -27,7 +27,7 @@ class res_users(models.Model):
 
     @api.onchange("role_line_ids")  # inverse
     def unsubscribe_from_mail_channel(self):
-        removed_roles = self._origin.role_ids.filtered(lambda r: r not in self.role_ids)
+        self._origin.role_ids.filtered(lambda role: role not in self.role_ids)
         mail_channel_ids = (
             self.env["mail.channel"]
             .search([("public", "=", "private")])

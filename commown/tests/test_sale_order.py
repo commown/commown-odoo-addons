@@ -7,7 +7,7 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 @post_install(True)
 class SaleOrderTC(RentalSaleOrderTC):
     def setUp(self):
-        super(SaleOrderTC, self).setUp()
+        super().setUp()
         partner = self.env.ref("base.partner_demo_portal")
         self.user = partner.user_ids
         self.so = self.create_sale_order(partner)

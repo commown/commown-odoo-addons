@@ -34,10 +34,9 @@ class ResPartnerResetPasswordTC(
     RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase
 ):
     def setUp(self):
-        super(ResPartnerResetPasswordTC, self).setUp()
+        super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")
         self.partner.signup_prepare()
-        self.env.cr.commit()
 
     def get_page(self, test_client, path, **data):
         "Return an lxml doc obtained from the html at given url path"

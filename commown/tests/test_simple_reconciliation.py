@@ -62,7 +62,7 @@ class SimpleReconciliationTC(SavepointCase):
             {"name": "My move", "journal_id": journal.id}
         )
         aml = self.env["account.move.line"].with_context(check_move_validity=False)
-        for num, line in enumerate(lines):
+        for line in lines:
             line["move_id"] = self.move.id
             aml.create(line)
 
@@ -70,7 +70,7 @@ class SimpleReconciliationTC(SavepointCase):
         amr = self.env["account.mass.reconcile"].create(
             {"name": "Test with method %s" % method, "account": self.account.id}
         )
-        meth = self.env["account.mass.reconcile.method"].create(
+        self.env["account.mass.reconcile.method"].create(
             {
                 "name": method,
                 "write_off": 0.0,

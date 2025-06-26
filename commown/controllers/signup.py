@@ -8,7 +8,6 @@ _logger = logging.getLogger(__name__)
 
 
 class CommownAuthSignup(AuthSignupHome):
-
     _commown_signup_auth_keys = ("firstname", "lastname")
 
     def do_signup(self, qcontext):

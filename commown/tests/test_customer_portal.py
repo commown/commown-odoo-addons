@@ -21,7 +21,6 @@ class CustomerPortalMixin(RentalSaleOrderMixin, MockedEmptySessionMixin):
         super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")
         self.partner.signup_prepare()
-        self.env.cr.commit()
         self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
         self.headers = {}
 
@@ -100,7 +99,6 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
             self.assertTrue(partner.id_card1)
 
     def test_invoices(self):
-
         test_client = self.portal_client()
 
         # Test without any invoice and check resulting page
@@ -143,7 +141,6 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
         )
 
     def test_order_page(self):
-
         test_client = self.portal_client()
 
         with self.registry.cursor() as test_cursor:
@@ -191,7 +188,6 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
         self.assertFalse(doc.xpath("//div[@id='sale_order_communication']"))
 
     def test_task_page(self):
-
         test_client = self.portal_client()
 
         with self.registry.cursor() as test_cursor:

@@ -1,4 +1,4 @@
-from mock import patch
+from unittest.mock import patch
 
 from odoo.tests.common import at_install, post_install
 

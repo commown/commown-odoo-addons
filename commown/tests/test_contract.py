@@ -1,5 +1,6 @@
+from unittest.mock import patch
+
 from dateutil.relativedelta import relativedelta
-from mock import patch
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
@@ -7,7 +8,7 @@ from odoo.addons.contract.tests.test_contract import TestContractBase
 class ContractPaymentTC(TestContractBase):
     @classmethod
     def setUpClass(cls):
-        super(ContractPaymentTC, cls).setUpClass()
+        super().setUpClass()
         slimpay = (
             cls.env["payment.acquirer"]
             .search([("provider", "=", "slimpay")])
@@ -25,7 +26,7 @@ class ContractPaymentTC(TestContractBase):
         cls.contract.partner_id.payment_token_id = payment_token
 
     def setUp(self):
-        super(ContractPaymentTC, self).setUp()
+        super().setUp()
         client_patcher = patch(
             "odoo.addons.account_payment_slimpay.models." "slimpay_utils.get_client"
         )

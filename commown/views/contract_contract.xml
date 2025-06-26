@@ -1,24 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <!-- Set higher priority to the customer form view so that it becomes the default -->
   <record id="contract.contract_contract_customer_form_view" model="ir.ui.view">
-    <field name="priority" eval="5"/>
+    <field name="priority" eval="5" />
   </record>
 
-  <record id="contract_contract_form_view"
-          model="ir.ui.view">
+  <record id="contract_contract_form_view" model="ir.ui.view">
     <field name="name">Commown contract</field>
     <field name="model">contract.contract</field>
-    <field name="inherit_id"
-           ref="contract_payment_auto.contract_contract_form_view"/>
+    <field name="inherit_id" ref="contract_payment_auto.contract_contract_form_view" />
     <field name="arch" type="xml">
       <xpath expr="//group[@name='group_auto_pay']" position="after">
-        <group name="group_transaction"
-               attrs="{'invisible': [('is_auto_pay', '=', False)]}"
-               >
+        <group
+                    name="group_transaction"
+                    attrs="{'invisible': [('is_auto_pay', '=', False)]}"
+                >
           <group>
-            <field name="transaction_label"/>
+            <field name="transaction_label" />
           </group>
         </group>
       </xpath>
@@ -33,26 +32,33 @@
       <xpath expr="//field[@name='name']" position="attributes">
         <attribute name="name">display_name</attribute>
       </xpath>
-      <xpath expr="//field[@name='payment_mode_id']" position="replace"></xpath>
+      <xpath expr="//field[@name='payment_mode_id']" position="replace" />
     </field>
   </record>
 
-  <record id="contract_contract_customer_form_view"
-          model="ir.ui.view">
+  <record id="contract_contract_customer_form_view" model="ir.ui.view">
     <field name="name">Contract form (in commown)</field>
     <field name="model">contract.contract</field>
-    <field name="inherit_id" ref="commown_contractual_issue.contract_contract_customer_form_view"/>
+    <field
+            name="inherit_id"
+            ref="commown_contractual_issue.contract_contract_customer_form_view"
+        />
     <field name="arch" type="xml">
       <xpath expr="//field[@name='issue_ids']" position="after">
         <field name="payment_issue_ids" readonly="1">
             <tree default_order="create_date">
-              <field name="name"/>
-              <field name="invoice_id"/>
-              <field name="stage_id"/>
-              <field name="invoice_unpaid_count"/>
-              <field name="invoice_next_payment_date"/>
-              <field name="create_date" invisible="1"/>
-              <button name="get_formview_action" string="Ouvrir" type="object" class="btn-secondary"/>
+              <field name="name" />
+              <field name="invoice_id" />
+              <field name="stage_id" />
+              <field name="invoice_unpaid_count" />
+              <field name="invoice_next_payment_date" />
+              <field name="create_date" invisible="1" />
+              <button
+                            name="get_formview_action"
+                            string="Ouvrir"
+                            type="object"
+                            class="btn-secondary"
+                        />
             </tree>
           </field>
       </xpath>

@@ -3,10 +3,9 @@
     "category": "Business",
     "summary": "Commown SCIC business application",
     "version": "12.0.1.3.39",
-    "description": "Commown SCIC business applications",
     "author": "Commown SCIC",
     "license": "AGPL-3",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "account_loan",
         "base_user_role",

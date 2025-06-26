@@ -18,7 +18,7 @@ class SaleOrder(models.Model):
         attribute) however, so we do not remove it from the report but
         rather suppress the sale > invoice copy.
         """
-        invoice_vals = super(SaleOrder, self)._prepare_invoice()
+        invoice_vals = super()._prepare_invoice()
         invoice_vals.pop("comment", None)
         return invoice_vals
 
@@ -65,7 +65,7 @@ class SaleOrder(models.Model):
         self.ensure_one()
         self.partner_id._create_receivable_account()
         self._create_investment_followup_task()
-        return super(SaleOrder, self).action_confirm()
+        return super().action_confirm()
 
     def _followup_entity_title_prefix(self, contract=None, secondary_index=None):
         title = super()._followup_entity_title_prefix(

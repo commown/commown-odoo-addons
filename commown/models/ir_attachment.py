@@ -14,6 +14,8 @@ from odoo.addons.document.models.ir_attachment import FTYPES
 
 FTYPES.append("pdf")
 
+_logger = logging.getLogger(__name__)
+
 
 class IrAttachment(models.Model):
     _inherit = "ir.attachment"
@@ -40,6 +42,10 @@ class IrAttachment(models.Model):
                     # update for docs badly converted by pdfminer:
                     buf = buf.replace("\0", " ")
 
-            except Exception:
-                pass
+            except Exception as exc:
+                _logger.warning(
+                    "Error indexing attachment id %(att_id)d: %(exc)s",
+                    {"att_id": self.ids, "exc": str(exc)},
+                )
+
         return buf

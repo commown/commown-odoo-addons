@@ -16,4 +16,4 @@ class IrHttp(models.AbstractModel):
                 _build_url_w_params(redirect.url_to, request.params), code=redirect.type
             )
 
-        return super(IrHttp, cls)._handle_exception(exc)
+        return super()._handle_exception(exc)

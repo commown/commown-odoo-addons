@@ -1,4 +1,4 @@
-odoo.define('commown.website_sale', function(require) {
+odoo.define("commown.website_sale", function () {
     "use strict";
 
     function toggleValueMatchClass(widget) {
@@ -10,28 +10,25 @@ odoo.define('commown.website_sale', function(require) {
         // <p class="js-attribute-1-6 js-attribute-1-6-94 attribute-show">
         //   Content only visible when value of attribute 6 of product 1 is 94
         // </p>
-        var matchValue = 'js-' + widget.name + '-' + widget.value;
-        $('.js-' + widget.name).each(function(index, el) {
+        var matchValue = "js-" + widget.name + "-" + widget.value;
+        $(".js-" + widget.name).each(function (index, el) {
             var $el = $(el);
-            $el.toggleClass('attribute-value-match', $el.hasClass(matchValue));
+            $el.toggleClass("attribute-value-match", $el.hasClass(matchValue));
         });
     }
 
-    $('.oe_website_sale').each(function() {
-
+    $(".oe_website_sale").each(function () {
         var oe_website_sale = this;
 
-        console.debug('Setting up automatic css change on variant choice');
+        console.debug("Setting up automatic css change on variant choice");
 
-        var widgetSelector = 'input.js_variant_change,select.js_variant_change';
+        var widgetSelector = "input.js_variant_change,select.js_variant_change";
 
-        $(widgetSelector, oe_website_sale).each(function(index, el) {
+        $(widgetSelector, oe_website_sale).each(function (index, el) {
             toggleValueMatchClass(el);
         });
-        $(oe_website_sale).on('change', widgetSelector, function (ev) {
+        $(oe_website_sale).on("change", widgetSelector, function (ev) {
             toggleValueMatchClass(ev.target);
         });
-
     });
-
 });

@@ -9,16 +9,11 @@ class AccountInvoice(models.Model):
         """Do not consider user_id as a key to merge invoices as we don't use
         the user_id and it is not significant for the matter of auto payment.
         """
-        key_cols = super(AccountInvoice, self)._get_invoice_key_cols()
-        try:
-            key_cols.remove("user_id")
-        except ValueError:
-            pass
-        return key_cols
+        key_cols = super()._get_invoice_key_cols()
+        return [key_col for key_col in key_cols if key_col != "user_id"]
 
     @api.multi
     def _multiply_investments(self, multiplier=10):
-
         product_ids = (
             self.env["product.template"]
             .with_context(active_test=False)
@@ -33,15 +28,14 @@ class AccountInvoice(models.Model):
 
         for invoice in self:
             has_invests = any(
-                l
-                for l in invoice.invoice_line_ids
-                if l.product_id.product_tmpl_id.id in product_ids
+                line
+                for line in invoice.invoice_line_ids
+                if line.product_id.product_tmpl_id.id in product_ids
             )
 
             if invoice.residual != 0 or not has_invests:
                 continue
 
-            invoice.payment_move_line_ids
             invoice.payment_move_line_ids.remove_move_reconcile()
             self.env.cache.invalidate()
 

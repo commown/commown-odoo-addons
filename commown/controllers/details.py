@@ -3,14 +3,14 @@ from base64 import b64encode
 
 from odoo import http
 
-from odoo.addons.commown.models.res_partner import FileTooBig
 from odoo.addons.portal.controllers.portal import CustomerPortal
+
+from ..models.res_partner import FileTooBig
 
 _logger = logging.getLogger(__name__)
 
 
 class CustomerPortal(CustomerPortal):
-
     MANDATORY_BILLING_FIELDS = [
         "firstname",
         "lastname",
@@ -32,7 +32,7 @@ class CustomerPortal(CustomerPortal):
 
     def details_form_validate(self, data):
         """Add Slimpay validation of submitted partner data"""
-        error, error_message = super(CustomerPortal, self).details_form_validate(data)
+        error, error_message = super().details_form_validate(data)
         partner_model = http.request.env["res.partner"]
         values = {key: data[key] for key in self.MANDATORY_BILLING_FIELDS}
         values.update(
@@ -63,4 +63,4 @@ class CustomerPortal(CustomerPortal):
                         post[field] = False
                     else:
                         post[field] = b64encode(post[field].read())
-        return super(CustomerPortal, self).account(redirect=redirect, **post)
+        return super().account(redirect=redirect, **post)
