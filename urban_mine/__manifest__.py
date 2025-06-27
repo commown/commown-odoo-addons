@@ -31,5 +31,8 @@
         "data/actions.xml",
         "report/report.xml",
     ],
+    "demo": [
+        "demo/hcaptcha_demo.xml",
+    ],
     "installable": True,
 }
