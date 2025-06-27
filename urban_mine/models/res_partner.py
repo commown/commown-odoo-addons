@@ -4,9 +4,7 @@ from odoo import api, fields, models
 class UrbanMinePartner(models.Model):
     _inherit = "res.partner"
 
-    from_urban_mine = fields.Boolean(
-        "From urban mine registration", website_form_blacklisted=False
-    )
+    from_urban_mine = fields.Boolean("From urban mine registration")
 
     @api.model_create_multi
     def create(self, vals_list):
