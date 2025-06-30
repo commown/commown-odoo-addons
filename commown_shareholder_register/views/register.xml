@@ -37,7 +37,7 @@
     <menuitem
         id="shareholders_reporting_menu"
         parent="account.menu_finance"
-        name="Shareholders Reporting"
+        name="Shareholders"
         sequence="15"
     />
 

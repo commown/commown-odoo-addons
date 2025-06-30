@@ -2,23 +2,23 @@
 <odoo noupdate="1">
 
     <record id="shareholder_tag" model="res.partner.category">
-      <field name="name">Sociétariat</field>
+      <field name="name">Shareholders</field>
     </record>
 
     <record id="shareholder_tag_col_A" model="res.partner.category">
-      <field name="name">Collège A</field>
+      <field name="name">College A</field>
     </record>
 
     <record id="shareholder_tag_col_B" model="res.partner.category">
-      <field name="name">Collège B</field>
+      <field name="name">College B</field>
     </record>
 
     <record id="shareholder_tag_col_C" model="res.partner.category">
-      <field name="name">Collège C</field>
+      <field name="name">College C</field>
     </record>
 
     <record id="shareholder_tag_col_D" model="res.partner.category">
-      <field name="name">Collège D</field>
+      <field name="name">College D</field>
     </record>
 
 </odoo>

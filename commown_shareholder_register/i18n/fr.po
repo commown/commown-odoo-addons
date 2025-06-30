@@ -16,12 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_shareholder_register
+#: model:ir.actions.report,print_report_name:commown_shareholder_register.action_py3o_spreadsheet
+msgid "\"Registre_%s.ods\" % object.date.strftime(\"%Y-%m-%d\")"
+msgstr ""
+
+#. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__account_id
 msgid "Account"
 msgstr "Compte"
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.category:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_category_account_id_uniq
 msgid "Account already used!"
 msgstr "Compte déjà utilisé"
 
@@ -32,7 +37,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.category:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_category_name_uniq
 msgid "Category already exists!"
 msgstr "La categorie existe déjà"
 
@@ -42,15 +47,36 @@ msgid "College"
 msgstr "Collège"
 
 #. module: commown_shareholder_register
-#: code:addons/commown_shareholder_register/models/shareholder_college.py:24
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_college.py:0
 #, python-format
 msgid "College %s"
 msgstr "Collège %s"
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.college:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_college_name_uniq
 msgid "College already exists!"
 msgstr "Le collège existe déjà"
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_A
+msgid "College A"
+msgstr "Collège A"
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_B
+msgid "College B"
+msgstr "Collège B"
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_C
+msgid "College C"
+msgstr "Collège C"
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_D
+msgid "College D"
+msgstr "Collège D"
 
 #. module: commown_shareholder_register
 #: model:ir.model,name:commown_shareholder_register.model_res_company
@@ -82,11 +108,6 @@ msgstr "Date"
 #: model:ir.model.fields,help:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__date
 msgid "Date of the register"
 msgstr "Date d'extraction du registre"
-
-#. module: commown_shareholder_register
-#: model:ir.model.fields,help:commown_shareholder_register.field_commown_shareholder_register_register__date
-msgid "Shareholder moves at this date will be included."
-msgstr "Les mouvements de sociétariat à cette date seront inclus"
 
 #. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__display_name
@@ -160,7 +181,7 @@ msgid "Rank"
 msgstr "Rang"
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.college:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_college_rank_uniq
 msgid "Rank must be unique"
 msgstr "Le rang doit être unique"
 
@@ -204,13 +225,15 @@ msgid "Shareholder college"
 msgstr "Collège de sociétaires"
 
 #. module: commown_shareholder_register
-#: model:ir.ui.menu,name:commown_shareholder_register.shareholders_update_contact_menu
-msgid "Shareholders"
-msgstr "Sociétariat"
+#: model:ir.model.fields,help:commown_shareholder_register.field_commown_shareholder_register_register__date
+msgid "Shareholder moves at this date will be included."
+msgstr "Les mouvements de sociétariat à cette date seront inclus"
 
 #. module: commown_shareholder_register
 #: model:ir.ui.menu,name:commown_shareholder_register.shareholders_reporting_menu
-msgid "Shareholders Reporting"
+#: model:ir.ui.menu,name:commown_shareholder_register.shareholders_update_contact_menu
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag
+msgid "Shareholders"
 msgstr "Sociétariat"
 
 #. module: commown_shareholder_register
@@ -219,16 +242,20 @@ msgid "Tagging"
 msgstr "Étiquetage"
 
 #. module: commown_shareholder_register
-#: code:addons/commown_shareholder_register/models/shareholder_register.py:79
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_register.py:0
+#, python-format
+msgid ""
+"The partner %(part_name)s has not enough shares for college %(college_name)s"
+msgstr ""
+"Le partenaire %(part_name)s n'a pas assez de parts pour être dans le collège %(college_name)s"
+
+#. module: commown_shareholder_register
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_register.py:0
 #, python-format
 msgid "The partner %s has a negative share number"
 msgstr "Le partenaire %s a un nombre de parts négatif"
-
-#. module: commown_shareholder_register
-#: code:addons/commown_shareholder_register/models/shareholder_register.py:83
-#, python-format
-msgid "The partner %s has not enough shares for college %s"
-msgstr "Le partenaire %s n'a pas assez de parts pour être dans le collège %s"
 
 #. module: commown_shareholder_register
 #: model_terms:ir.ui.view,arch_db:commown_shareholder_register.update_shareholder_form
@@ -255,4 +282,3 @@ msgstr "Classe permettant de mettre à jour les étiquettes des sociétaires"
 #: model:ir.actions.report,name:commown_shareholder_register.action_py3o_spreadsheet
 msgid "[commown] Export to spreadsheet"
 msgstr "[commown] Exporter au format ODS (feuille de calcul Libreoffice)"
-
