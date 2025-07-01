@@ -9,7 +9,7 @@
       <field name="interval_type">days</field>
       <field name="numbercall">-1</field>
       <field name="doall" eval="False" />
-      <field name="model_id" ref="payment.model_payment_acquirer" />
+      <field name="model_id" ref="payment.model_payment_provider" />
       <field name="code">model._slimpay_dump_all_mandates()</field>
     </record>
 
