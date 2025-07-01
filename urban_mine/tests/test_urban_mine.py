@@ -103,6 +103,10 @@ class TestRegistration(TransactionCase):
 
     def test_task_ok_coupon_only(self):
         task = self.get_tasks(self.partner.id)
+        # The line beneath changes the assigned user from the env. user.
+        # (For coverage purposes)
+        task.user_ids = self.env["res.users"].browse(2)
+
         task.storable_product_id = self.fp3.id
         task.update({"stage_id": self.env.ref("urban_mine.stage6")})
         self.check_coupon_message(task, "campaign_coupon_only")
