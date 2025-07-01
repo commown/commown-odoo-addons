@@ -18,7 +18,7 @@ def mandate_doc_ref(provider, mandate_doc):
 
 
 def get_partner(provider, mandate_doc):
-    client = provider.slimpay_client
+    client = provider.slimpay_client()
     subscriber_url = mandate_doc[client.method_name("get-subscriber")].url
     pid = subscriber_url.rsplit("/", 1)[-1]
     partner_model = provider.env["res.partner"]
@@ -41,7 +41,7 @@ def mandate_doc_to_repr(provider, mandate_doc):
     is suitable for creating a copy using the `create-mandates` HAPI call.
     """
     partner = get_partner(provider, mandate_doc)
-    bank_account_doc = provider.slimpay_client.action(
+    bank_account_doc = provider.slimpay_client().action(
         "GET", "get-bank-account", doc=mandate_doc
     )
     if partner:
@@ -64,7 +64,7 @@ def get_all_mandates_repr(provider, transformer_func, **params):
     optional search criteria `params` and return them after applying
     the given transformer function.
     """
-    client = provider.slimpay_client
+    client = provider.slimpay_client()
     params["creditorReference"] = provider.slimpay_creditor
     _logger.debug("Fetching first mandates...")
     doc = client.action("GET", "search-mandates", params=params)
@@ -151,7 +151,7 @@ def replace_mandate(provider, mandate_repr):
     mandate_repr["signatory"]["bankAccount"].pop("bic", None)
 
     mandate_repr["creditor"] = {"reference": provider.slimpay_creditor}
-    new_mandate_doc = provider.slimpay_client.action(
+    new_mandate_doc = provider.slimpay_client().action(
         "POST", "create-mandates", params=mandate_repr
     )
     set_mandate(provider, partner, new_mandate_doc["id"])
