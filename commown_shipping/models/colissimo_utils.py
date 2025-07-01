@@ -164,7 +164,6 @@ def shipping_data(
 
 
 def parse_multipart(http_resp):
-
     multipart_data = decoder.MultipartDecoder.from_response(http_resp)
 
     meta_data, label_data = None, None

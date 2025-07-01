@@ -31,11 +31,8 @@ class CrmLead(models.Model):
         return super()._attachment_from_label(name, meta_data, label_data)
 
     def parcel_labels(self, parcel_name=None, force_single=False):
-
         if parcel_name is not None:
-            return super(CrmLead, self).parcel_labels(
-                parcel_name, force_single=force_single
-            )
+            return super().parcel_labels(parcel_name, force_single=force_single)
         else:
             return self._print_parcel_labels(
                 self._default_shipping_parcel_type(), force_single=force_single

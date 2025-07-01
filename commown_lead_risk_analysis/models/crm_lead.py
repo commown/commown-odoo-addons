@@ -120,7 +120,6 @@ class CommownCrmLead(models.Model):
             )
 
         for record in self:
-
             # Possible when changing the partner of the lead in the UI (onchange):
             if not record.partner_id:
                 record.orders_description = ""

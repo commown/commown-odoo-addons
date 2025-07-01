@@ -1,4 +1,4 @@
-from mock import patch
+from unittest.mock import patch
 
 from odoo.service import security
 from odoo.tests.common import HttpCase, tagged

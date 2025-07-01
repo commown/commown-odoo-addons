@@ -4,7 +4,6 @@ from odoo.tests.common import TransactionCase
 class TestCreateMultipleCoupons(TransactionCase):
     @classmethod
     def setUpClass(cls):
-
         super().setUpClass()
 
         cls.partner_test_campaign = cls.env["res.partner"].create(

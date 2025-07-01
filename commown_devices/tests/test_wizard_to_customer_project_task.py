@@ -29,7 +29,6 @@ class WizardProjectTaskToCustomerPickingTC(BaseToCustomerPickingWizardTC):
             cls.adjust_stock(_pt, serial=serial, location=for_sale_stock)
 
     def test_picking(self):
-
         defaults, possibilities = self.prepare_wizard(self.task, "entity_id")
         date = datetime.datetime(2020, 1, 10, 16, 2, 34)
 

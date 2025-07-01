@@ -155,7 +155,6 @@ class ContractAbstractDiscountLine(models.AbstractModel):
         return super().compute(contract_line, date)
 
     def _compute_condition_coupon_from_campaign(self, contract_line, date):
-
         result = super()._compute_condition_coupon_from_campaign(contract_line, date)
 
         if (
@@ -163,7 +162,6 @@ class ContractAbstractDiscountLine(models.AbstractModel):
             and not self._context.get("no_check_coop_ws")
             and self.coupon_campaign_id.is_coop_campaign
         ):
-
             # bypass_coop_campaigns is a mecanism to force a result
             # for a cooperative campaign discount to avoid the http call
             # This is useful for forecasts and the like.

@@ -97,7 +97,7 @@ def subscriber_from_partner(partner):
     return {"reference": partner.id, "signatory": data}
 
 
-class SlimpayClient(object):
+class SlimpayClient:
     def __init__(self, api_url, creditor, app_id, app_secret):
         self.api_url = api_url
         self.creditor = creditor

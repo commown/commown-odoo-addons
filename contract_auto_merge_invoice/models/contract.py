@@ -21,7 +21,7 @@ class Contract(models.Model):
         Note that if contract is_auto_pay is True, this has no effect
         on its invoices.
         """
-        vals = super(Contract, self)._prepare_invoice(*args, **kwargs)
+        vals = super()._prepare_invoice(*args, **kwargs)
         vals["auto_merge"] = True
         for contract in self:
             if not contract.partner_id.invoice_merge_next_date:

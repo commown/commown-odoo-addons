@@ -1,0 +1,42 @@
+
+target-version = "py310"
+fix = true
+
+[lint]
+extend-select = [
+    "B",
+    "C90",
+    "E501",  # line too long (default 88)
+    "I",  # isort
+    "UP",  # pyupgrade
+]
+extend-safe-fixes = ["UP008"]
+exclude = ["setup/*"]
+
+ignore = [
+    "B018",  # Found useless attribute access. Either assign it to a variable or remove it
+    "B023",  # Function definition does not bind loop variable
+    "B026",  # Star-arg unpacking after a keyword argument is strongly discouraged
+    "B905",  # `zip()` without an explicit `strict=` parameter
+    "E501",  # Line too long (95 > 88)
+    "E721",  # Do not compare types, use `isinstance()`
+    "E741",  # Ambiguous variable name
+    "UP031",  # Use format specifiers instead of percent format"
+]
+
+[format]
+exclude = ["setup/*"]
+
+[per-file-ignores]
+"__init__.py" = ["F401", "I001"]  # ignore unused and unsorted imports in __init__.py
+"__manifest__.py" = ["B018"]  # useless expression
+
+[isort]
+section-order = ["future", "standard-library", "third-party", "odoo", "odoo-addons", "first-party", "local-folder"]
+
+[isort.sections]
+"odoo" = ["odoo"]
+"odoo-addons" = ["odoo.addons"]
+
+[mccabe]
+max-complexity = 16

@@ -47,7 +47,7 @@ class WebsiteSaleB2B(WebsiteSale):
                     [variant.id, visible_attribute_ids, variant.price, lst_price]
                 )
         else:
-            res = super(WebsiteSaleB2B, self).get_attribute_value_ids(product)
+            res = super().get_attribute_value_ids(product)
         return res
 
     @http.route(
@@ -85,7 +85,6 @@ class WebsiteSaleB2B(WebsiteSale):
 
         env = request.env
         if request.website == env.ref("website_sale_b2b.b2b_website"):
-
             partner = env.user.partner_id.commercial_partner_id
 
             plist = request.website.get_current_pricelist()

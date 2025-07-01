@@ -5,7 +5,6 @@ from odoo import models
 
 
 class Contract(models.Model):
-
     _inherit = "contract.contract"
 
     def action_show_contract_forecast(self):

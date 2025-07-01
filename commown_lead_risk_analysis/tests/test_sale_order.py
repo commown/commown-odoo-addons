@@ -3,7 +3,7 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 class SaleOrderTC(RentalSaleOrderTC):
     def setUp(self):
-        super(SaleOrderTC, self).setUp()
+        super().setUp()
         partner = self.env.ref("base.partner_demo_portal")
         tax = self.get_default_tax()
 
@@ -82,7 +82,6 @@ class SaleOrderTC(RentalSaleOrderTC):
         )
 
     def test_create_risk_analysis_leads_with_contracts(self):
-
         old_leads = self.env["crm.lead"].search([])
         self.so.action_confirm()
         new_leads = self.env["crm.lead"].search([]) - old_leads
@@ -147,7 +146,6 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertEqual(len(leads3), 2)
 
     def test_create_project_tasks_with_contracts(self):
-
         my_project = self.env["project.project"].create({"name": "my project"})
         self.product1.followup_sales_project_id = my_project
         self.product1.property_contract_template_id.stock_ownership = "customer"

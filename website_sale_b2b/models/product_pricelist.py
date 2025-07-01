@@ -79,7 +79,6 @@ class Pricelist(models.Model):
         choice = self.account_for_rented_quantity
 
         if choice not in ("no", False):
-
             _logger.debug(
                 "Called _compute_price_rule with choice %s. Input data: %s",
                 choice,
@@ -108,14 +107,14 @@ class Pricelist(models.Model):
                     (product, product_qty),
                 )
 
-                result |= super(Pricelist, self)._compute_price_rule(
+                result |= super()._compute_price_rule(
                     product, product_qty, date=date, uom=uom, **kwargs
                 )
 
             _logger.debug("  > base _compute_price_rule result: %s", result)
 
         else:
-            result = super(Pricelist, self)._compute_price_rule(
+            result = super()._compute_price_rule(
                 products, qty, date=date, uom=uom, **kwargs
             )
 
@@ -141,7 +140,7 @@ class PricelistItem(models.Model):
             base_product = product.product_tmpl_id.product_variant_id
             wo_extra_price = base_product.price_compute(self.base)[base_product.id]
             price = product.price_compute(self.base)[product.id]
-            reduced_wo_extra_price = super(PricelistItem, self)._compute_price(
+            reduced_wo_extra_price = super()._compute_price(
                 base_product, quantity, uom, date, currency=currency
             )
             extra_price = price - wo_extra_price
@@ -155,6 +154,6 @@ class PricelistItem(models.Model):
             return result_price
 
         else:
-            return super(PricelistItem, self)._compute_price(
+            return super()._compute_price(
                 product, quantity, uom, date, currency=currency
             )

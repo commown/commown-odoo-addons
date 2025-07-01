@@ -2,7 +2,6 @@ from odoo import api, fields, models
 
 
 class ContractLineForecastPeriod(models.Model):
-
     _inherit = "contract.line.forecast.period"
 
     contract_template_id = fields.Many2one(

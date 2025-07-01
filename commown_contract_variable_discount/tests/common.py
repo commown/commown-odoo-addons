@@ -3,7 +3,7 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 class ContractSaleWithCouponTC(RentalSaleOrderTC):
     def setUp(self):
-        super(ContractSaleWithCouponTC, self).setUp()
+        super().setUp()
         partner = self.env.ref("base.res_partner_3")
 
         self.campaign = self.env["coupon.campaign"].create(

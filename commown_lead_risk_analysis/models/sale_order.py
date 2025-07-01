@@ -15,7 +15,7 @@ class SaleOrder(models.Model):
     }
 
     def action_confirm(self):
-        result = super(SaleOrder, self).action_confirm()
+        result = super().action_confirm()
         for record in self:
             record._create_followup_entities()
         return result
@@ -129,7 +129,6 @@ class SaleOrder(models.Model):
 
             contracts = managed_by_contract.get(product, [])
             for _num in range(int(so_line.product_uom_qty)):
-
                 if contracts:
                     contract = contracts.pop()
                     prefix = self._followup_entity_title_prefix(contract=contract)

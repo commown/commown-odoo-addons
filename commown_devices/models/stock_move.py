@@ -49,7 +49,6 @@ class StockMove(models.Model):
 
             contract = rec.contract_id
             if contract and lots:
-
                 if len(lots.mapped("contract_id")) > 1:
                     msg = _("More than one contract on move %s lots")
                     _logger.warning(msg, rec.id)

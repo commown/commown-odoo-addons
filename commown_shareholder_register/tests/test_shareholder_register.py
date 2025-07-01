@@ -27,7 +27,6 @@ class TestShareholderRegister(TestShareholderRegisterTC):
         return reg
 
     def test_get_shareholders(self):
-
         result = self.register(2018, 7, 24).get_shareholders()
         # Check total balance
         self.assertEqual(result["total"]["balance"], 2300)

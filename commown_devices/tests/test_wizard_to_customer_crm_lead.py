@@ -18,7 +18,6 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         cls.adjust_stock(cls.fp3_plus_storable_color1, serial="test-fp3+-2")
 
     def test_find_nonserial_product_orig_location(self):
-
         lead = self.lead
 
         loc_repackaged_modules = self.env.ref(
@@ -87,7 +86,6 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         )
 
     def test_ui(self):
-
         lead = self.lead
 
         self.adjust_stock_notracking(
@@ -126,7 +124,6 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         )
 
     def test_picking(self):
-
         # Prepare test data
         lead = self.lead
 

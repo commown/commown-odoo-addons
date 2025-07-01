@@ -45,7 +45,6 @@ class PricelistTC(RentedQuantityTC):
         return pricelist._get_products_price(product, quantity)[product.id]
 
     def test_account_for_rented_quantity(self):
-
         partner = self.so.partner_id
         self.pricelist = self.pricelist.with_context(
             force_pricelist_partner_id=partner.id

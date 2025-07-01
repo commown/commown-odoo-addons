@@ -5,7 +5,8 @@ import re
 import sys
 from base64 import b64encode
 from datetime import datetime
-from subprocess import CalledProcessError, run as _run
+from subprocess import CalledProcessError
+from subprocess import run as _run
 from tempfile import gettempdir, mktemp
 
 from odoo import fields, models
@@ -133,7 +134,7 @@ class CommownShippingMixin(models.AbstractModel):
             entity_ref = str(self.id)
             parent = self._shipping_parent()
             parent_ref = _ref_from_name(parent.name) or str(parent.id)
-            return "{}-{}".format(parent_ref, entity_ref)
+            return f"{parent_ref}-{entity_ref}"
 
     def _delivery_typed_partner(self):
         "If current partner has a delivery-typed address return it else return None"
@@ -246,7 +247,6 @@ class CommownShippingMixin(models.AbstractModel):
                     _logger.error("Could not remove tmp label file %r", p)
 
     def parcel_labels(self, parcel_name, force_single=False):
-
         parcel = (
             self.env["commown.parcel.type"]
             .search([("technical_name", "=", parcel_name)])

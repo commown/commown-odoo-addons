@@ -98,7 +98,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             )
 
     def write(self, values):
-        res = super(CommownTrackDeliveryMixin, self).write(values)
+        res = super().write(values)
         if values.get("delivery_date", False):
             self.delivery_perform_actions()
         return res

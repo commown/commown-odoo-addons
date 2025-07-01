@@ -102,7 +102,6 @@ class ProjectTask(models.Model):
 
     @api.model
     def _slimpay_payment_issue_cron(self, custom_issue_params=None):
-
         """Regular cron task entry point, that fetches the issues of each
         website-published Slimpay acquirer, handle them in odoo and then
         sets their status to "processed" at Slimpay.

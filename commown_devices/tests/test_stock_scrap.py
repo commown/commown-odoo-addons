@@ -20,7 +20,6 @@ class StockScrapTC(BaseLotTC):
         )
 
     def test_force_scrap_date(self):
-
         # Check prerequisite
         self.assertNotEqual(self.scrap.move_id.date, self.scrap_date)
         self.assertNotEqual(self.scrap.move_id.move_line_ids.date, self.scrap_date)

@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
+from unittest.mock import patch
 
 import requests_mock
-from mock import patch
 
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests.common import TransactionCase
@@ -234,7 +234,7 @@ class CrmLeadShippingTC(BaseShippingTC):
 
 class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
     def setUp(self):
-        super(CrmLeadDeliveryTC, self).setUp()
+        super().setUp()
         team = self.env.ref("sales_team.salesteam_website_sales")
         team.update(
             {
@@ -290,7 +290,6 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         self.assertIsNone(self.lead.delivery_email_template())
 
     def test_actions_on_delivery_send_email_team_template(self):
-
         self.assertTrue(self.lead.send_email_on_delivery)
 
         # Simulate delivery
@@ -313,7 +312,6 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         self.check_mail_delivered("Product delivered", "EMPTY_CODE")
 
     def test_actions_on_delivery_send_email_custom_template(self):
-
         self.assertTrue(self.lead.send_email_on_delivery)
 
         self.lead.on_delivery_email_template_id = (
@@ -359,7 +357,7 @@ def _status(code, label="test label", _date=None):
 
 class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
     def setUp(self):
-        super(CrmLeadDeliveryTrackingTC, self).setUp()
+        super().setUp()
 
         account = self.env.ref(
             "commown_shipping.shipping-account-colissimo-std-account"

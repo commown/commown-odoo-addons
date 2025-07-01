@@ -1,9 +1,9 @@
 from odoo import fields, models
 
+# pylint: disable=consider-merging-classes-inherited
 
-class TestPaymentProvider(
-    models.Model
-):  # pylint: disable=consider-merging-classes-inherited
+
+class TestPaymentProvider(models.Model):
     _inherit = "payment.provider"
     _description = "Test payment.provider model"
 
@@ -12,9 +12,7 @@ class TestPaymentProvider(
     )
 
 
-class TestPaymentTransaction(
-    models.Model
-):  # pylint: disable=consider-merging-classes-inherited
+class TestPaymentTransaction(models.Model):
     _inherit = "payment.transaction"
     _description = "Test payment.transaction model"
 

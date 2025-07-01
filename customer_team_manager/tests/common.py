@@ -7,7 +7,7 @@ class CustomerTeamManagerAbstractTC(TransactionCase):
 
     @classmethod
     def setUpClass(cls):
-        super(CustomerTeamManagerAbstractTC, cls).setUpClass()
+        super().setUpClass()
 
         ref = cls.env.ref
         group_sale_manager = ref("sales_team.group_sale_manager")

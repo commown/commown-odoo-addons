@@ -1,8 +1,8 @@
 from datetime import datetime
 from json import dumps as json_dumps
+from unittest.mock import patch
 
 import lxml.html
-from mock import patch
 
 import odoo.http
 from odoo.tests.common import HttpCase, tagged

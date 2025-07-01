@@ -175,7 +175,6 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
 
     @classmethod
     def adjust_stock_notracking(cls, product, location, qty=1.0, date="2000-01-01"):
-
         quant = cls.env["stock.quant"].create(
             {
                 "product_id": product.id,
@@ -321,6 +320,7 @@ class BaseWizardToEmployeeMixin:
 
 class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
     "Base class to write identical tests for picking to customer from leads and tasks"
+
     confirm_sale = False
 
     @classmethod
