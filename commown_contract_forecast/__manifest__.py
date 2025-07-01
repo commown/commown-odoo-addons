@@ -3,7 +3,7 @@
 
 {
     "name": "Commown contract forecast integration",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Accounting/Accounting",
     "website": "https://github.com/commown/commown-odoo-addons",
