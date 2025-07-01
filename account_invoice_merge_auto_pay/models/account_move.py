@@ -11,8 +11,8 @@ from odoo.addons.queue_job.job import identity_exact
 _logger = logging.getLogger(__name__)
 
 
-class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+class AccountMove(models.Model):
+    _inherit = "account.move"
 
     auto_merge = fields.Boolean(
         # Override label and help only
@@ -67,7 +67,7 @@ class AccountInvoice(models.Model):
         if not token:
             raise ValidationError(
                 _("No payment token for invoice id %(id)s (%(num)s)")
-                % {"id": self.id, "num": self.number}
+                % {"id": self.id, "num": self.name}
             )
         data["payment_token_id"] = token.id
 
@@ -82,13 +82,10 @@ class AccountInvoice(models.Model):
           (for instance because they were unique for the merge key)
         """
 
-        invoices, merge_infos = super(AccountInvoice, self)._cron_invoice_merge(
-            merge_date
-        )
-
+        invoices, merge_infos = super()._cron_invoice_merge(merge_date)
         for new_inv_id in merge_infos:
-            new_inv = self.env["account.invoice"].browse(new_inv_id)
-            if new_inv.type == "out_invoice":
+            new_inv = self.env["account.move"].browse(new_inv_id)
+            if new_inv.move_type == "out_invoice":
                 _logger.info(
                     "Automatically paying merged invoice %s (from %s)",
                     new_inv.id,
@@ -102,7 +99,7 @@ class AccountInvoice(models.Model):
             inv_id for inv_ids in list(merge_infos.values()) for inv_id in inv_ids
         }
         for inv in invoices:
-            if inv.type == "out_invoice" and inv.id not in merged_invoice_ids:
+            if inv.move_type == "out_invoice" and inv.id not in merged_invoice_ids:
                 _logger.info("Automatically paying non-merged inv %s", inv.id)
                 inv.with_delay(
                     identity_key=identity_exact
