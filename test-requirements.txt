@@ -14,3 +14,5 @@ git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirect
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=base_usability
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=base_company_extension
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=sale_usability
+
+git+https://github.com/Honeyxilia/website@16.0-imp-captcha-whool-packaging#subdirectory=website_recaptcha_v2
