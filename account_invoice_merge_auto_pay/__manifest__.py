@@ -15,5 +15,9 @@
         "contract_payment_auto",
         "queue_job",
     ],
+    "data": [
+        "data/queue_job_channel.xml",
+        "data/queue_job_function.xml",
+    ],
     "installable": True,
 }

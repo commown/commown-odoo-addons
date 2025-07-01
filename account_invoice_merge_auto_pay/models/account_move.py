@@ -7,7 +7,7 @@ import logging
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
-from odoo.addons.queue_job.job import identity_exact, job
+from odoo.addons.queue_job.job import identity_exact
 
 _logger = logging.getLogger(__name__)
 
@@ -30,7 +30,6 @@ class AccountInvoice(models.Model):
                 )
 
     @api.model
-    @job(default_channel="root.account_invoice_merge_auto_pay_queued")
     def _invoice_merge_auto_pay_invoice_job(self):
         """Open the invoice and post a payment"""
         self.ensure_one()

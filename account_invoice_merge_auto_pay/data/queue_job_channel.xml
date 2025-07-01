@@ -1,0 +1,8 @@
+<odoo noupdate="1">
+
+  <record id="invoice_merge_auto_pay" model="queue.job.channel">
+    <field name="name">INVOICE_MERGE_AUTO_PAY</field>
+    <field name="parent_id" ref="queue_job.channel_root" />
+  </record>
+
+</odoo>
