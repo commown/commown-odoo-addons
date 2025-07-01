@@ -111,6 +111,10 @@ class SlimpayTransaction(models.Model):
         """Perform a payment through a server to server call using a previously
         signed mandate.
         """
+        super()._send_payment_request()
+        if self.provider_code != "slimpay":
+            return
+
         _logger.debug("Starting auto Slimpay Transaction TR%s...", self.id)
         client = self.provider_id.slimpay_client()
         mandate_ref = client.action(
