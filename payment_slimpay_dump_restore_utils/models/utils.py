@@ -201,7 +201,7 @@ def restore_all_missing_mandates(
     acquirer,
     mandates_fpath="/tmp/mandates.json",
     filter_func=filter_has_contract,
-    **params
+    **params,
 ):
     "Restore all mandates from production to preproduction environment"
 
@@ -239,7 +239,7 @@ def restore_all_missing_mandates(
             try:
                 replace_mandate(acquirer, mandate_repr)
             except MissingError:
-                print(
+                _logger.error(
                     "Partner not found when trying to replace mandate for %s"
                     % mandate_repr["signatory"]["email"]
                 )
