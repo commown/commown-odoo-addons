@@ -2,12 +2,13 @@
 # @author: Florent Cayré
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import models, api, fields, _
+import logging
+
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
-from odoo.addons.queue_job.job import job
-from odoo.addons.queue_job.job import identity_exact
-import logging
+from odoo.addons.queue_job.job import identity_exact, job
+
 _logger = logging.getLogger(__name__)
 
 
@@ -25,16 +26,17 @@ class AccountInvoice(models.Model):
         for inv in self:
             if inv.auto_merge and not inv.payment_mode_id:
                 raise models.ValidationError(
-                    _("Payment mode is needed to auto pay an invoice"))
+                    _("Payment mode is needed to auto pay an invoice")
+                )
 
     @api.model
-    @job(default_channel='root.account_invoice_merge_auto_pay_queued')
+    @job(default_channel="root.account_invoice_merge_auto_pay_queued")
     def _invoice_merge_auto_pay_invoice_job(self):
-        """ Open the invoice and post a payment
-        """
+        """Open the invoice and post a payment"""
         self.ensure_one()
         _logger.info(
-            "_invoice_merge_auto_pay_invoice_job executed for invoice %d", self.id)
+            "_invoice_merge_auto_pay_invoice_job executed for invoice %d", self.id
+        )
         self.exists().action_invoice_open()
         if self.state != "paid":  # Avoid crash if, e.g. amount == 0
             payment = self._invoice_merge_payment()
@@ -45,53 +47,62 @@ class AccountInvoice(models.Model):
 
     @api.model
     def _invoice_merge_payment(self):
-        """ Use given invoice"s payment mode and its partner payment token to
+        """Use given invoice"s payment mode and its partner payment token to
         create and return a payment
         """
         self.ensure_one()
         # Use payment register wizard to get basic payment creation values:
         pay_mode = self.payment_mode_id
-        register_env = self.env['account.register.payments'].with_context(
-            active_ids=self.ids, active_model=self._name)
-        register_payment = register_env.create({
-            "journal_id": pay_mode.fixed_journal_id.id,
-            "payment_method_id": pay_mode.payment_method_id.id,
-        })
+        register_env = self.env["account.register.payments"].with_context(
+            active_ids=self.ids, active_model=self._name
+        )
+        register_payment = register_env.create(
+            {
+                "journal_id": pay_mode.fixed_journal_id.id,
+                "payment_method_id": pay_mode.payment_method_id.id,
+            }
+        )
         data = register_payment.get_payments_vals()[0]
 
         # Add partner token
         token = self.partner_id.payment_token_id
         if not token:
-            raise ValidationError(_("No payment token for invoice id %s (%s)")
-                                  % (self.id, self.number))
+            raise ValidationError(
+                _("No payment token for invoice id %(id)s (%(num)s)")
+                % {"id": self.id, "num": self.number}
+            )
         data["payment_token_id"] = token.id
 
-        return self.env['account.payment'].create(data)
+        return self.env["account.payment"].create(data)
 
     @api.model
     def _cron_invoice_merge(self, merge_date=None):
-        """ Automatically pay invoices that were either:
+        """Automatically pay invoices that were either:
 
         - the result invoice of a merge
         - or a candidate for a merge but were not merged
           (for instance because they were unique for the merge key)
         """
 
-        invoices, merge_infos = super(
-            AccountInvoice, self)._cron_invoice_merge(merge_date)
+        invoices, merge_infos = super(AccountInvoice, self)._cron_invoice_merge(
+            merge_date
+        )
 
         for new_inv_id in merge_infos:
             new_inv = self.env["account.invoice"].browse(new_inv_id)
             if new_inv.type == "out_invoice":
                 _logger.info(
                     "Automatically paying merged invoice %s (from %s)",
-                    new_inv.id, merge_infos[new_inv.id])
+                    new_inv.id,
+                    merge_infos[new_inv.id],
+                )
                 new_inv.with_delay(
                     identity_key=identity_exact
                 )._invoice_merge_auto_pay_invoice_job()
 
-        merged_invoice_ids = set(inv_id for inv_ids in list(merge_infos.values())
-                                 for inv_id in inv_ids)
+        merged_invoice_ids = {
+            inv_id for inv_ids in list(merge_infos.values()) for inv_id in inv_ids
+        }
         for inv in invoices:
             if inv.type == "out_invoice" and inv.id not in merged_invoice_ids:
                 _logger.info("Automatically paying non-merged inv %s", inv.id)
