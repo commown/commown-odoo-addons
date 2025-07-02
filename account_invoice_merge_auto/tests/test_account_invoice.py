@@ -7,7 +7,7 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
 @tagged("post_install", "-at_install")
-class AccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
+class AbstractAccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
     "Invoice related test cases"
 
     @classmethod
@@ -37,6 +37,10 @@ class AccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
         )
         inv.auto_merge = True
         return inv
+
+
+class AccountInvoiceMergeAutoTC(AbstractAccountInvoiceMergeAutoTC):
+    "Concrete class to test invoice methods"
 
     def test_cron(self):
         self.partner_a.update(
