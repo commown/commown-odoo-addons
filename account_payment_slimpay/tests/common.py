@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
 
 
 def _get_from_doc_mock(doc, method_name):
