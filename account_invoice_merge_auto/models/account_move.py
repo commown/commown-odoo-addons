@@ -34,7 +34,7 @@ class AccountInvoice(models.Model):
         # `merge_date` may exceed `invoice_merge_next_date` if
         # current cron task is not executed often enough:
         return invoices.filtered(
-            lambda inv: (inv.date <= inv.partner_id.invoice_merge_next_date)
+            lambda inv: (inv.invoice_date <= inv.partner_id.invoice_merge_next_date)
         )
 
     @api.model
