@@ -42,6 +42,21 @@ class AbstractAccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
 class AccountInvoiceMergeAutoTC(AbstractAccountInvoiceMergeAutoTC):
     "Concrete class to test invoice methods"
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if cls.env["ir.module.module"].search(  # pragma: no cover
+            [
+                ("name", "=", "account_invoice_merge_auto_pay"),
+                ("state", "=", "installed"),
+            ]
+        ):
+            from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
+                inject_payment_data,
+            )
+
+            inject_payment_data(cls)
+
     def test_cron(self):
         self.partner_a.update(
             {
