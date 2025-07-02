@@ -9,6 +9,8 @@ from odoo.addons.account_invoice_merge_auto.tests.test_account_invoice import (
 from odoo.addons.payment.models.payment_transaction import PaymentTransaction
 from odoo.addons.queue_job.tests.common import trap_jobs
 
+from .common import inject_payment_data
+
 
 def fake_do_tx_ok(self, *args, **kwargs):
     self.update({"state": "done", "provider_reference": "test-%d" % self.id})
@@ -20,77 +22,7 @@ class AccountMoveTC(AbstractAccountInvoiceMergeAutoTC):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-
-        electronic_in = cls.env["account.payment.method"].create(
-            {
-                "name": "Electronic In",
-                "code": "electronic",
-                "payment_type": "inbound",
-            }
-        )
-
-        electronic_out = cls.env["account.payment.method"].create(
-            {
-                "name": "Electronic Out",
-                "code": "electronic",
-                "payment_type": "outbound",
-            }
-        )
-
-        cls.customer_journal = cls.env["account.journal"].create(
-            {
-                "name": "Customer journal",
-                "code": "RC",
-                "company_id": cls.env.company.id,
-                "type": "bank",
-            }
-        )
-
-        payment_mode_out = cls.env["account.payment.mode"].create(
-            {
-                "name": "Electronic outbound to customer journal",
-                "payment_method_id": electronic_out.id,
-                "payment_type": "outbound",
-                "bank_account_link": "fixed",
-                "fixed_journal_id": cls.customer_journal.id,
-            }
-        )
-
-        cls.payment_mode = cls.env["account.payment.mode"].create(
-            {
-                "name": "Electronic inbound to customer journal",
-                "payment_method_id": electronic_in.id,
-                "payment_type": "inbound",
-                "bank_account_link": "fixed",
-                "fixed_journal_id": cls.customer_journal.id,
-                "refund_payment_mode_id": payment_mode_out.id,
-            }
-        )
-
-        provider = cls.env.ref("payment.payment_provider_stripe")
-        provider.sudo().state = "enabled"
-
-        token = (
-            cls.env["payment.token"]
-            .sudo()
-            .create(
-                {
-                    "payment_details": "test payment token",
-                    "partner_id": cls.partner_a.id,
-                    "provider_id": provider.id,
-                    "provider_ref": "test ref",
-                }
-            )
-        )
-        cls.partner_a.update(
-            {
-                "customer_payment_mode_id": cls.payment_mode.id,
-                "payment_token_id": token.id,
-                "invoice_merge_next_date": "2019-05-15",
-                "invoice_merge_recurring_rule_type": "monthly",
-                "invoice_merge_recurring_interval": 1,
-            }
-        )
+        inject_payment_data(cls)
 
     def _merge_and_pay(self, date="2019-05-16", expect_merge=True, expect_pay=True):
         with trap_jobs() as trap:
