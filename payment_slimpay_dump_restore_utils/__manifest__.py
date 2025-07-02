@@ -11,6 +11,7 @@
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "account_payment_slimpay",
+        "contract_payment_auto",
     ],
     "data": [
         "data/cron.xml",
