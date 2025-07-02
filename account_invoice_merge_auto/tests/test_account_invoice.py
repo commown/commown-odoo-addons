@@ -27,9 +27,9 @@ class AbstractAccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
             [("partner_id", "=", partner.id), ("move_type", "=", "out_invoice")]
         )
 
-    def create_invoice(self, partner, date, price):
+    def create_invoice(self, partner, date, price, move_type="out_invoice"):
         inv = self.init_invoice(
-            "out_invoice",
+            move_type,
             partner=partner,
             invoice_date=date,
             products=self.product_a,
