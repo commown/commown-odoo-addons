@@ -1,68 +1,168 @@
-from mock import patch
+from unittest.mock import patch
 
 from odoo import fields
 from odoo.exceptions import ValidationError
-from odoo.tests.common import at_install, post_install
 
-from odoo.addons.payment.models.payment_acquirer import PaymentTransaction
+from odoo.addons.account_invoice_merge_auto.tests.test_account_invoice import (
+    AbstractAccountInvoiceMergeAutoTC,
+)
+from odoo.addons.payment.models.payment_transaction import PaymentTransaction
+from odoo.addons.queue_job.tests.common import trap_jobs
 
-from .common import AutoPayInvoiceTC, fake_do_tx_ok
+
+def fake_do_tx_ok(self, *args, **kwargs):
+    self.update({"state": "done", "provider_reference": "test-%d" % self.id})
 
 
-@at_install(False)
-@post_install(True)
-class ResPartnerTC(AutoPayInvoiceTC):
-    def test_no_payment_mode(self):
-        with self.assertRaises(ValidationError) as err:
-            self.create_invoice(
-                self.partner_1,
-                "2019-05-09",
-                # Useless but explicit is better than implicit:
-                payment_mode_id=False,
+class AccountMoveTC(AbstractAccountInvoiceMergeAutoTC):
+    "Test class for this module's account move methods"
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        electronic_in = cls.env["account.payment.method"].create(
+            {
+                "name": "Electronic In",
+                "code": "electronic",
+                "payment_type": "inbound",
+            }
+        )
+
+        electronic_out = cls.env["account.payment.method"].create(
+            {
+                "name": "Electronic Out",
+                "code": "electronic",
+                "payment_type": "outbound",
+            }
+        )
+
+        cls.customer_journal = cls.env["account.journal"].create(
+            {
+                "name": "Customer journal",
+                "code": "RC",
+                "company_id": cls.env.company.id,
+                "type": "bank",
+            }
+        )
+
+        payment_mode_out = cls.env["account.payment.mode"].create(
+            {
+                "name": "Electronic outbound to customer journal",
+                "payment_method_id": electronic_out.id,
+                "payment_type": "outbound",
+                "bank_account_link": "fixed",
+                "fixed_journal_id": cls.customer_journal.id,
+            }
+        )
+
+        cls.payment_mode = cls.env["account.payment.mode"].create(
+            {
+                "name": "Electronic inbound to customer journal",
+                "payment_method_id": electronic_in.id,
+                "payment_type": "inbound",
+                "bank_account_link": "fixed",
+                "fixed_journal_id": cls.customer_journal.id,
+                "refund_payment_mode_id": payment_mode_out.id,
+            }
+        )
+
+        provider = cls.env.ref("payment.payment_provider_stripe")
+        provider.sudo().state = "enabled"
+
+        token = (
+            cls.env["payment.token"]
+            .sudo()
+            .create(
+                {
+                    "payment_details": "test payment token",
+                    "partner_id": cls.partner_a.id,
+                    "provider_id": provider.id,
+                    "provider_ref": "test ref",
+                }
             )
-        self.assertEqual(
-            "Payment mode is needed to auto pay an invoice", err.exception.name
+        )
+        cls.partner_a.update(
+            {
+                "customer_payment_mode_id": cls.payment_mode.id,
+                "payment_token_id": token.id,
+                "invoice_merge_next_date": "2019-05-15",
+                "invoice_merge_recurring_rule_type": "monthly",
+                "invoice_merge_recurring_interval": 1,
+            }
         )
 
-    def test_no_more_payment_mode(self):
-        inv = self.create_invoice(
-            self.partner_1, "2019-05-10", payment_mode_id=self.payment_mode.id
-        )
-        with self.assertRaises(ValidationError) as err:
-            inv.update({"payment_mode_id": False})
-        self.assertEqual(
-            "Payment mode is needed to auto pay an invoice", err.exception.name
-        )
+    def _merge_and_pay(self, date="2019-05-16", expect_merge=True, expect_pay=True):
+        with trap_jobs() as trap:
+            invs, merge_infos = self.env["account.move"]._cron_invoice_merge(date)
+
+        if expect_merge:
+            merged_inv = self.env["account.move"].browse(list(merge_infos.keys())[0])
+            self.assertEqual(len(merge_infos), 1)
+        else:
+            self.assertEqual(len(merge_infos), 0)
+            self.assertEqual(len(invs), 1)
+            merged_inv = invs
+
+        func = merged_inv._invoice_merge_auto_pay_invoice_job
+        if not expect_pay:
+            trap.assert_jobs_count(0, func)
+        else:
+            trap.assert_jobs_count(1, func)
+
+            with patch.object(
+                PaymentTransaction,
+                "_send_payment_request",
+                side_effect=fake_do_tx_ok,
+                autospec=True,
+            ):
+                trap.perform_enqueued_jobs()
+
+        return merged_inv
+
+    def create_default_invoices(self, **params):
+        return [
+            self.create_invoice(self.partner_a, date, 1.0, **params)
+            for date in ("2019-05-09", "2019-05-10")
+        ]
 
     def test_do_not_pay_refund(self):
         "Do not pay refunds, but do not prevent their merge"
-        with patch.object(PaymentTransaction, "s2s_do_transaction") as autopay:
-            new_inv = self._multiple_invoice_merge_test(type="out_refund")
-        autopay.assert_not_called()
-        self.assertEqual(new_inv.state, "draft")
+
+        self.create_default_invoices(move_type="out_refund")
+        new_inv = self._merge_and_pay(expect_pay=False)
+        self.assertEqual(new_inv.payment_state, "not_paid")
 
     def test_auto_pay_merged_invoices(self):
-        with patch.object(PaymentTransaction, "s2s_do_transaction", fake_do_tx_ok):
-            new_inv = self._multiple_invoice_merge_test()
-        self.assertEqual(new_inv.state, "paid")
+        invoices = self.create_default_invoices()
+
+        new_inv = self._merge_and_pay()
+
+        self.assertEqual(new_inv.invoice_date, fields.Date.from_string("2019-05-16"))
+        self.assertTrue(all(inv.state == "cancel" for inv in invoices))
+        self.assertEqual(
+            self.partner_a.invoice_merge_next_date,
+            fields.Date.from_string("2019-06-15"),
+        )
+        self.assertEqual(new_inv.payment_state, "paid")
 
     def test_auto_pay_single_invoices(self):
-        inv = self.create_invoice(
-            self.partner_1, "2019-05-10", payment_mode_id=self.payment_mode.id
-        )
-        with patch.object(PaymentTransaction, "s2s_do_transaction", fake_do_tx_ok):
-            _invs, merge_infos = inv._cron_invoice_merge("2019-05-16")
-        self.assertFalse(merge_infos)
-        self.assertEqual(inv.state, "paid")
-        self.assertEqual(inv.date_invoice, fields.Date.from_string("2019-05-10"))
+        inv = self.create_invoice(self.partner_a, "2019-05-10", 1.0)
+
+        self._merge_and_pay(expect_merge=False)
+
+        self.assertEqual(inv.payment_state, "paid")
+        self.assertEqual(inv.invoice_date, fields.Date.from_string("2019-05-10"))
         self.assertEqual(
-            self.partner_1.invoice_merge_next_date,
+            self.partner_a.invoice_merge_next_date,
             fields.Date.from_string("2019-06-15"),
         )
 
     def test_auto_pay_no_token_error(self):
-        self.partner_1.payment_token_id = False
+        self.partner_a.payment_token_id = False
+        self.create_default_invoices()
+
         with self.assertRaises(ValidationError) as err:
-            with patch.object(PaymentTransaction, "s2s_do_transaction", fake_do_tx_ok):
-                self._multiple_invoice_merge_test()
-        self.assertIn("No payment token", err.exception.name)
+            self._merge_and_pay()
+
+        self.assertIn("No payment token", err.exception.args[0])
