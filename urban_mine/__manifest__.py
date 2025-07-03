@@ -7,6 +7,7 @@
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
+        "account_analytic_tag",
         "commown_devices",
         "commown_shipping",
         "l10n_fr",
