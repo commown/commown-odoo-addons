@@ -1,0 +1,1 @@
+Urban mine offer: people sell their device to the company

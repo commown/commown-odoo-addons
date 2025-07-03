@@ -1,0 +1,103 @@
+<?xml version="1.0" ?>
+<odoo noupdate="1">
+
+    <record id="project" model="project.project">
+      <field name="name">Mine urbaine</field>
+      <field
+            name="shipping_account_id"
+            ref="commown_shipping.shipping-account-colissimo-std-account"
+        />
+      <field name="device_tracking" eval="True" />
+    </record>
+
+    <record id="stage1" model="project.task.type">
+      <field name="name">Demande à vérifier</field>
+      <field name="description">Vérifier qu'il ne s'agit pas d'un spam</field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="sequence">10</field>
+    </record>
+
+    <record id="stage2" model="project.task.type">
+      <field name="name">En attente de l’appareil [urban-mine: send-label]</field>
+      <field
+            name="description"
+        >Une étiquette d'expédition a été générée et envoyée par mail au partenaire lors du passage dans cette colonne : on attend désormais son appareil..</field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="sequence">20</field>
+    </record>
+
+    <record id="stage3" model="project.task.type">
+      <field name="name">Vérification appareil à faire</field>
+      <field name="description">
+Glisser l'appareil dans cette colonne à réception physique du colis, en attente de vérifier l'appareil.
+
+Les 2 points importants à vérifier sont :
+- qu'il y a bien tous les éléments
+- que les watermarks sont clean
+
+Si ces 2 points sont OK, l'équipe DIAG/RECO peut :
+- remplir le champ Article (Fairphone 3 ou Fairphone 3 PLUS)
+- indiquer le numéro de série de l'appareil dans la description du ticket pour création ultérieure dans Odoo ; attention aux fautes de frappe !
+- passer la carte dans la colonne "Reprise éligible".
+      </field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="sequence">30</field>
+    </record>
+
+    <record id="stage4" model="project.task.type">
+      <field name="name">OK - CASH [urban-mine: payment]</field>
+      <field
+            name="description"
+        >Un email de Bon pour accord contenant une auto-facture et un coupon a été envoyé lors du passage dans cette colonne.</field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="sequence">40</field>
+    </record>
+
+    <record id="stage5" model="project.task.type">
+      <field name="name">CASH - à virer</field>
+      <field
+            name="description"
+        >Ici on met les cartes pour lesquelles il faut faire un virement.</field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="sequence">50</field>
+    </record>
+
+    <record id="stage6" model="project.task.type">
+      <field name="name">OK Code réduc [urban-mine: coupon-only]</field>
+      <field
+            name="description"
+        >Vérifier ici que les chèques sont bien parvenus au client.</field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="sequence">60</field>
+    </record>
+
+    <record id="stage7" model="project.task.type">
+      <field name="name">OK - Choix à préciser</field>
+      <field
+            name="description"
+        >Ici on met les cartes lorsque le Fairphone est éligible au programme MAIS que le client ne nous a pas précisé son choix pour la compensation (Cash ou bon de réduc). Un mail auto pour lui demander ce qu'il souhaite faire part automatiquement quand on dépose une carte ici.</field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="mail_template_id" ref="email_template_make_your_choice" />
+      <field name="sequence">35</field>
+    </record>
+
+
+    <record id="stage8" model="project.task.type">
+      <field name="name">Entrée en stock + Diag / Reco</field>
+      <field name="description">
+Ici, il faut effectuer l'entrée en stock de l'appareil et changer de projet la tâche :
+
+- copier le N/S depuis la description et naviguer vers le partenaire > Achat > Ligne de l'achat > Reçu > Ligne de mouvement > Bouton ≡ et coller le N/S puis le bouton Confirmer et enfin Valider le transfert
+- revenir sur la tâche depuis le chemin de fer, faire F5 et insérer le numéro de série dans le champ Appareil (sans F5 il n'apparaît pas dans la liste des propositions)
+- changer le projet de la tâche et sauvegarder
+      </field>
+      <field name="project_ids" eval="[(4, ref('project'))]" />
+      <field name="sequence">80</field>
+    </record>
+
+Ici, il faut effectuer l'entrée en stock de l'appareil et changer de projet la tâche :
+- copier le N/S depuis la description et naviguer vers le partenaire > Achat > Reçu > Ligne de mouvement > Bouton ≡ et coller le N/S puis le bouton Confirmer et enfin Valider le transfert
+- revenir sur la tâche, faire F5 et insérer le numéro de série dans le champ Appareil
+- changer le projet de la tâche et sauvegarder
+
+</odoo>

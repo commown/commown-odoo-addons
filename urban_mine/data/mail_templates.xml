@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="email_template_with_label" model="mail.template">
+      <field name="name">[commown] AR Offre de Reprise</field>
+      <field name="email_from">contact@commown.coop</field>
+      <field name="reply_to">contact@commown.coop</field>
+      <field
+            name="subject"
+        >{{object.company_id.name}} - Accusé Réception offre de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
+      <field name="lang">{{object.partner_id.lang}}</field>
+      <field
+            name="body_html"
+        ><![CDATA[
+<div>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
+  <br>
+  <p>Votre proposition de reprise du Fairphone 3 ou 3+ dont vous êtes actuellement propriétaire a bien été prise en compte ; nous vous remercions au nom de la Coopérative pour l'intérêt que vous portez à notre projet circulaire "Deuxième Vie".&nbsp; :)</p>
+
+  <br>
+
+  <p><b>Ce mail explique vos prochaines actions nécessaires pour finaliser la vente :</b></p>
+
+  <p><b>1/ Expédition de l'appareil :</b></p>
+
+  <p>Nous vous demandons de bien vouloir emballer soigneusement l'appareil en suivant
+  les recommandations expliquées <a
+  href="https://forum.commown.coop/t/emballer-son-appareil-pour-une-expedition/2434"
+  target="_blank">ici</a>.
+  </p>
+
+  <p>NB : si vous avez des accessoires et/ou des pièces détachées, quel que soit leur
+  état nous vous invitons à les joindre au colis.</p>
+
+  <p>Il vous suffira ensuite de simplement coller l'étiquette de retour ci-jointe sur le
+  colis et de le déposer à votre Bureau de Poste préféré ( ! le colis doit faire moins
+  de 750 grammes ! ), et de faire signer la preuve de dépôt.</p>
+
+  <p>Si vous avez une boite aux lettres normalisée, nous vous encourageons à utiliser le
+  ramassage à domicile, c'est simple et ça vous évite de vous déplacer :-) (cf. <a
+  href="https://www.laposte.fr/expedition-bal/formulaire"
+  target="_blank">https://www.laposte.fr/expedition-bal/formulaire</a>)
+  </p>
+
+  <br>
+
+  <p>La preuve de dépôt fait foi en cas de contestation, nous vous recommandons de la
+  conserver soigneusement.  </p>
+
+  <br>
+
+  <p><b>2/ Réception et vérification de l'appareil :</b></p>
+
+  <p>Lorsque nous réceptionnons le colis, celui-ci est vérifié dans les 3 à 5 jours
+  ouvrés.</p>
+
+  <p>NB : pour que la vente soit définitivement acceptée par Commown, <b>il est
+  indispensable que le Fairphone n'ait pas été exposé à l'eau ou l'humidité</b> (nous en
+  ferons systématiquement la vérification à l'aide des watermarks présentes dans
+  l'appareil, donc même en cas de doute ça ne sert à rien de nous l'envoyer), et que le
+  colis contienne <b>l'ensemble des modules</b> composant le Fairphone (montés ou
+  démontés), ceci quel que soit leur état.</p>
+
+  <p><i>Si le colis n'est pas complet ou si l'appareil présente une quelconque trace de
+  corrosion nous nous réservons le droit de ne pas donner suite à notre proposition
+  d'achat et nous ré-expédierons le colis en retour (à vos frais) si vous en faites la
+  demande.</span></i></p>
+
+  <br>
+
+  <p><b>3/ Règlement du prix de l'appareil :</b></p>
+
+  <p>En nous soumettant cette proposition vous acceptez* :</p>
+
+  <p>- soit de recevoir la somme de <b>60€</b> par virement. Si vous optez pour cette
+  option il vous suffit de nous envoyer votre RIB par retour de mail (une fois l'achat
+  définitivement validé par Commown, vous acceptez* de mandater Commown pour établir la
+  facture de vente correspondante en votre nom et pour votre compte, et vous recevrez un
+  mail de confirmation récapitulant tous ces éléments).</p>
+
+  <p>- soit de recevoir <b style="font-weight:bold;">Code de Réduction</b> d'une valeur
+  de <b>120€</b>, à valoir sur toute la gamme d'appareils proposés sur le <a
+  href="https://commown.coop" target="_blank">site web de Commown</a> <i>(ce code est
+  transmissible et valable indéfiniment pour toute <u>nouvelle future</u> souscription,
+  et pour un seul appareil par coupon)</i>.
+  </p>
+
+  <br>
+
+  <p>En vous remerciant encore pour votre engagement pour une électronique plus
+  responsable,</p>
+  <p>Coopérativement,</p>
+
+  <p>--</p>
+  <div class="moz-signature">
+    <div>L'équipe Commown
+      <br><br>
+      <a href="https://commown.coop">
+        <img src="https://shop.commown.coop/web/image/673" alt="Logo de Commown" border="0">
+      </a>
+      <br><br><br>
+      <p>* si l'une ou plusieurs des conditions ou dispositions
+        présentées dans ce mail ne vous convenait pas vous êtes
+        libre de renoncer à la vente, pour cela il vous suffit de nous
+        prévenir par simple retour de mail et de ne pas nous expédier
+        l'appareil.</p>
+    </div>
+  </div>
+</div>
+]]></field>
+    </record>
+
+    <record id="email_template_make_your_choice" model="mail.template">
+      <field
+            name="name"
+        >[commown] Bon pour accord Offre de Reprise (choix à faire)</field>
+      <field name="email_from">contact@commown.coop</field>
+      <field name="reply_to">contact@commown.coop</field>
+      <field
+            name="subject"
+        >{{object.company_id.name}} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
+      <field name="lang">{{object.partner_id.lang}}</field>
+      <field
+            name="body_html"
+        ><![CDATA[
+<div>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
+
+  <br>
+
+  <p>Nous avons bien reçu votre Fairphone et celui-ci correspond bien aux conditions d'achats convenues dans la cadre de l'offre de reprise "Deuxième Vie".</p>
+
+  <br>
+
+  <p>Nous vous invitons à nous confirmer par simple retour de mail votre mode de compensation souhaité, à savoir :</p>
+
+  <p>- soit recevoir la somme de <b>60€</b> par virement. Si vous optez pour cette
+  option il vous suffit de nous envoyer votre RIB par retour de mail (vous acceptez de
+  mandater Commown pour établir la facture de vente correspondante en votre nom et pour
+  votre compte, et vous recevrez un mail de confirmation récapitulant tous ces
+  éléments).
+  </p>
+
+  <p>- soit recevoir un <b>Code de Réduction</b> d'une valeur de <b>120€</b>, à valoir
+  sur toute la gamme d'appareils proposés sur le <a href="https://commown.coop"
+  target="_blank">site web de Commown</a> <i>(ce code est transmissible et valable
+  indéfiniment pour toute <u>nouvelle future</u> souscription, et pour un seul appareil
+  par coupon).</i>
+  </p>
+
+  <br>
+
+  <p>Dans l'attente de votre retour,</p>
+
+  <p>--</p>
+  <div class="moz-signature">
+    <div>L'équipe Commown
+
+      <br><br>
+
+      <a href="https://commown.coop" target="_blank">
+        <img src="https://shop.commown.fr/web/image/673" alt="Logo de Commown" border="0">
+      </a>
+
+    </div>
+  </div>
+</div>
+]]></field>
+    </record>
+
+    <record id="email_template_with_auto_invoice" model="mail.template">
+      <field name="name">[commown] Bon pour accord Offre de Reprise (choix 60€)</field>
+      <field name="email_from">contact@commown.coop</field>
+      <field name="reply_to">contact@commown.coop</field>
+      <field
+            name="subject"
+        >{{object.company_id.name}} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
+      <field name="lang">{{object.partner_id.lang}}</field>
+      <field
+            name="body_html"
+        ><![CDATA[
+<div>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
+
+  <br>
+
+  <p>Nous avons bien reçu votre Fairphone et celui-ci correspond bien aux conditions
+  d'achats convenues dans la cadre de l'offre de reprise "Deuxième Vie".
+  </p>
+
+  <br>
+
+  <p>Nous avons bien noté votre choix pour la compensation et <b>ce mail fait donc
+  office de Bon Pour Accord pour le rachat de votre appareil au tarif de
+  60€&nbsp;TTC.</b></p>
+
+  <p>Comme vous avez accepté de mandater Commown pour établir la facture de vente
+  correspondante en votre nom et pour votre compte nous vous prions donc de <b>trouver
+  ci-joint l'Auto-Facture correspondant à la vente de l'appareil à
+  COMMOWN.</b>
+  </p>
+
+  <p>Comme convenu le règlement s'effectuera par virement à l'aide du RIB transmis (ou
+  que nous vous invitons à nous transmettre si vous ne l'avez pas encore fait), celui-ci
+  sera effectif sur votre compte sous 5 à 15 jours ouvrés.
+  </p>
+
+  <br>
+
+  <p>Pour vous remercier de ce geste engagé, en bonus nous vous prions également de
+  trouver ci-après un <b>Coupon de Réduction</b> équivalent à une mensualité, à valoir
+  sur toute la gamme d'appareils proposés sur le <a href="https://commown.coop/"
+  target="_blank">site web de Commown</a> et pour toute nouvelle location souscrite
+  (non-nominatif et valable pour un seul appareil par coupon dans les 12 prochains
+  mois) : <b><t t-out="object.env.context.get('coupon', 'COUPON À FOURNIR')"/></b>
+  </p>
+
+  <br>
+
+  <p>En vous remerciant encore pour votre engagement pour une électronique plus
+  responsable,</p>
+
+  <p>Coopérativement,</p>
+
+  <p>--</p>
+  <div class="moz-signature">
+    <div>L'équipe Commown
+
+      <br><br>
+
+      <a href="https://commown.coop" target="_blank">
+        <img src="https://shop.commown.fr/web/image/673" alt="Logo de Commown" border="0">
+      </a>
+
+    </div>
+  </div>
+</div>
+]]></field>
+    </record>
+
+    <record id="email_template_with_coupon_only" model="mail.template">
+      <field name="name">[commown] Bon pour accord Offre de Reprise (Bon 120€)</field>
+      <field name="email_from">contact@commown.coop</field>
+      <field name="reply_to">contact@commown.coop</field>
+      <field
+            name="subject"
+        >{{object.company_id.name}} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-{{object.id}}</field>
+      <field name="partner_to">{{object.partner_id.id}}</field>
+      <field name="model_id" ref="project.model_project_task" />
+      <field name="auto_delete" eval="True" />
+      <field name="lang">{{object.partner_id.lang}}</field>
+      <field
+            name="body_html"
+        ><![CDATA[
+<div>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
+
+  <br>
+
+  <p>Nous avons bien reçu votre Fairphone et celui-ci correspond bien aux conditions
+  d'achats convenues dans la cadre de l'offre de reprise "Deuxième Vie".
+  </p>
+
+  <br>
+
+  <p>Nous avons bien noté votre choix de recevoir un <b>Code de Réduction</b> d'une
+  valeur de <b>120€</b>, à valoir sur toute la gamme d'appareils proposés sur le <a
+  href="https://commown.coop/" target="_blank">site web de Commown</a> <i>(ce code
+  non-nominatif est valable indéfiniment pour toute <u>nouvelle future</u> souscription,
+  et pour un seul appareil par coupon)</i>) : <b><t t-out="object.env.context.get('coupon',
+  'COUPON À FOURNIR')"/></b>
+  </p>
+
+  <br>
+
+  <p>En vous remerciant encore pour votre engagement pour une électronique plus
+  responsable,</p>
+
+
+  <p>Coopérativement,</p>
+
+  <p>--</p>
+
+  <div class="moz-signature">
+    <div>L'équipe Commown
+
+      <br><br>
+
+      <a href="https://commown.coop" target="_blank">
+        <img src="https://shop.commown.fr/web/image/673" alt="Logo de Commown" border="0">
+      </a>
+
+    </div>
+  </div>
+</div>
+]]></field>
+    </record>
+
+</odoo>

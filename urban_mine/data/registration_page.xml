@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="registration" model="ir.ui.view">
+    <field name="name">mine-urbaine</field>
+    <field name="type">qweb</field>
+    <field name="key">website.mine-urbaine</field>
+    <field name="website_id" ref="website.default_website" />
+    <field name="arch" type="xml">
+      <t t-name="website-mine-urbaine">
+        <t t-call="website.layout">
+          <div id="wrap" class="oe_structure oe_empty">
+            <section class="s_title">
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h1
+                                            class="text-center"
+                                        >Revendez votre appareil à la coopérative</h1>
+                    <h3
+                                            class="text-center text-muted"
+                                        >en remplissant le formulaire suivant :</h3>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="container readable o_colored_level">
+              <section
+                                class="s_website_form pt16 pb16 o_colored_level"
+                                data-vcss="001"
+                                data-snippet="s_website_form"
+                                data-name="Form"
+                            >
+                <div class="o_container_small">
+                  <form
+                                        accept-charset="utf-8"
+                                        action="/website/form/"
+                                        method="post"
+                                        enctype="multipart/form-data"
+                                        class="o_mark_required s_website_form_no_recaptcha"
+                                        data-mark="*"
+                                        data-model_name="res.partner"
+                                        tc-textcontent="true"
+                                        data-tc-id="w-0.7807644330482054"
+                                    >
+                    <div class="s_website_form_rows row s_col_no_bgcolor">
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required"
+                                                data-type="char"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="firstname"
+                                                >
+                          <span class="s_website_form_label_content">Prénom</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="text"
+                                                    class="form-control s_website_form_input"
+                                                    name="firstname"
+                                                    required="1"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required"
+                                                data-type="char"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="lastname"
+                                                >
+                          <span class="s_website_form_label_content">Nom</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="text"
+                                                    class="form-control s_website_form_input"
+                                                    name="lastname"
+                                                    required="1"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required"
+                                                data-type="email"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="email"
+                                                >
+                          <span class="s_website_form_label_content">Courriel</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="email"
+                                                    class="form-control s_website_form_input"
+                                                    name="email"
+                                                    required="1"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12"
+                                                data-type="tel"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="phone"
+                                                >
+                          <span
+                                                        class="s_website_form_label_content"
+                                                    >N° de téléphone</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="tel"
+                                                    class="form-control s_website_form_input"
+                                                    name="phone"
+                                                    required="1"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required"
+                                                data-type="char"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="street"
+                                                >
+                          <span class="s_website_form_label_content">Rue 1</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="text"
+                                                    class="form-control s_website_form_input"
+                                                    name="street"
+                                                    required="1"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12"
+                                                data-type="char"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="street2"
+                                                >
+                          <span class="s_website_form_label_content">Rue 2</span>
+                        </label>
+                        <input
+                                                    type="text"
+                                                    class="form-control s_website_form_input"
+                                                    name="street2"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required"
+                                                data-type="char"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="zip"
+                                                >
+                          <span class="s_website_form_label_content">Code Postal</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="text"
+                                                    class="form-control s_website_form_input"
+                                                    name="zip"
+                                                    required="1"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required"
+                                                data-type="char"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="city"
+                                                >
+                          <span class="s_website_form_label_content">Ville</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="text"
+                                                    class="form-control s_website_form_input"
+                                                    name="city"
+                                                    required="1"
+                                                />
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required"
+                                                data-type="many2one"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="country_id"
+                                                >
+                          <span class="s_website_form_label_content">Pays</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <select
+                                                    class="form-select s_website_form_input"
+                                                    name="country_id"
+                                                    required="1"
+                                                >
+                          <option style="display:none" />
+                          <option value="12">Austria</option>
+                          <option value="20">Belgium</option>
+                          <option value="75">France</option>
+                          <option value="57">Germany</option>
+                        </select>
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_custom"
+                                                data-type="date"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="Date approximative d'achat"
+                                                >
+                          <span
+                                                        class="s_website_form_label_content"
+                                                    >Date approximative d'achat</span>
+                        </label>
+                        <div
+                                                    class="s_website_form_date input-group date s_website_form_datepicker_initialized"
+                                                    id="datepicker6140478746362329"
+                                                    data-target-input="nearest"
+                                                >
+                          <input
+                                                        type="text"
+                                                        class="form-control datetimepicker-input s_website_form_input"
+                                                        data-target="#datepicker6140478746362329"
+                                                        name="Date approximative d'achat"
+                                                        id="od8ugahdlrz7"
+                                                    />
+                          <div
+                                                        class="input-group-text"
+                                                        data-target="#datepicker6140478746362329"
+                                                        data-toggle="datetimepicker"
+                                                    >
+                            <i
+                                                            class="fa fa-calendar"
+                                                            tc-textcontent="true"
+                                                            data-tc-id="w-0.3252391735796375"
+                                                        />
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_custom"
+                                                data-type="text"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="Autres informations"
+                                                >
+                          <span
+                                                        class="s_website_form_label_content"
+                                                    >Autres informations</span>
+                        </label>
+                        <textarea
+                                                    class="form-control s_website_form_input"
+                                                    name="Autres informations"
+                                                    rows="3"
+                                                    tc-textcontent="true"
+                                                    data-tc-id="0.35858659867503484"
+                                                />
+                        <div
+                                                    class="s_website_form_field_description small form-text text-muted"
+                                                    tc-textcontent="true"
+                                                    data-tc-id="w-0.8476788038763501"
+                                                >Indiquez ici toute information utile pour notre gestion de votre appareil : pannes connues, changement de module déjà effectué, etc.</div>
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required s_website_form_field_hidden"
+                                                data-type="integer"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <label
+                                                    class="s_website_form_label "
+                                                    style="width: 200px"
+                                                    for="supplier_rank"
+                                                >
+                          <span
+                                                        class="s_website_form_label_content"
+                                                    >Supplier Rank</span>
+                          <span class="s_website_form_mark"> *</span>
+                        </label>
+                        <input
+                                                    type="number"
+                                                    class="form-control s_website_form_input"
+                                                    name="supplier_rank"
+                                                    step="1"
+                                                    required="1"
+                                                    value="1"
+                                                />
+                        <div
+                                                    class="s_website_form_field_description small form-text text-muted"
+                                                    tc-textcontent="true"
+                                                    data-tc-id="w-0.40505361212763447"
+                                                >Insérer une valeur supérieure à 1 si ce contact est un fournisseur. Si elle est à zéro, les acheteurs ne le verront pas lors de la saisie d'un ordre d'achat.</div>
+                      </div>
+                      <div
+                                                class="s_website_form_field mb-3 col-12 s_website_form_required s_website_form_field_hidden"
+                                                data-type="boolean"
+                                                data-name="Field"
+                                                data-translated-name="Field"
+                                            >
+                        <div class="form-check">
+                          <input
+                                                        type="checkbox"
+                                                        value="Yes"
+                                                        class="s_website_form_input form-check-input"
+                                                        name="from_urban_mine"
+                                                        required="1"
+                                                        checked="checked"
+                                                    />
+                          <label
+                                                        class="s_website_form_label "
+                                                        style="width: 200px"
+                                                        for="from_urban_mine"
+                                                    >
+                            <span
+                                                            class="s_website_form_label_content"
+                                                        >From urban mine registration</span>
+                            <span class="s_website_form_mark"> *</span>
+                          </label>
+                        </div>
+                      </div>
+                      <t t-call="website_recaptcha_v2.recaptcha_widget" />
+                      <div
+                                                class="mb-0 py-2 col-12 s_website_form_submit text-start s_website_form_no_submit_label"
+                                                data-name="Submit Button"
+                                            >
+                        <div style="width: 200px;" class="s_website_form_label" />
+                        <a
+                                                    href="#"
+                                                    role="button"
+                                                    class="btn btn-primary btn-lg s_website_form_send"
+                                                    tc-textcontent="true"
+                                                    data-tc-id="w-0.07333338259577638"
+                                                >Valider</a>
+                        <span id="s_website_form_result" />
+                        <br />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </section>
+            </section>
+          </div>
+        </t>
+      </t>
+    </field>
+  </record>
+
+  <record id="registration_page" model="website.page">
+    <field name="name">mine-urbaine</field>
+    <field name="url">/mine-urbaine</field>
+    <field name="view_id" ref="registration" />
+    <field name="is_published" eval="True" />
+    <field name="website_id" ref="website.default_website" />
+    <field name="website_indexed" eval="False" />
+  </record>
+
+</odoo>

@@ -1,0 +1,19 @@
+<odoo>
+    <record id="website.default_website" model="website">
+        <field name="recaptcha_v2_html_class">h-captcha</field>
+        <field name="recaptcha_v2_resp_attr">h-captcha-response</field>
+        <field name="recaptcha_v2_api_url">https://js.hcaptcha.com/1/api.js</field>
+        <field
+            name="recaptcha_v2_verify_url"
+        >https://api.hcaptcha.com/siteverify</field>
+
+        <!--
+            hCaptcha test keys from https://docs.hcaptcha.com/#integration-testing-test-keys
+        -->
+        <field name="recaptcha_v2_site_key">10000000-ffff-ffff-ffff-000000000001</field>
+        <field
+            name="recaptcha_v2_secret_key"
+        >0x0000000000000000000000000000000000000000</field>
+    </record>
+
+</odoo>
