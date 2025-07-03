@@ -32,6 +32,7 @@
         "report/report.xml",
     ],
     "demo": [
+        "demo/account_analytic_tag.xml",
         "demo/hcaptcha_demo.xml",
     ],
     "installable": True,

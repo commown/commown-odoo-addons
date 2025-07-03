@@ -150,6 +150,10 @@ class TestRegistration(TransactionCase):
             invoice.amount_untaxed,
             self.env.ref("urban_mine.product").standard_price,
         )
+        self.assertEqual(
+            invoice.line_ids.mapped("analytic_tag_ids.name"),
+            ["EXPL"],
+        )
         attachments = self.env["ir.attachment"].search(
             [
                 ("res_model", "=", invoice._name),
