@@ -4,7 +4,7 @@
 {
     "name": "Contract variable discount for Commown",
     "category": "Contract Management",
-    "version": "16.0.1.0.5",
+    "version": "16.0.1.0.6",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
