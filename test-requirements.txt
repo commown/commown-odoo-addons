@@ -16,3 +16,5 @@ git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirect
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=sale_usability
 
 git+https://github.com/Honeyxilia/website@16.0-imp-captcha-whool-packaging#subdirectory=website_recaptcha_v2
+
+git+https://github.com/commown/account-invoicing@16.0-mig-account_invoice_merge_payment-whool#subdirectory=account_invoice_merge_payment

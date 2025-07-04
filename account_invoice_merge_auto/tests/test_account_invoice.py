@@ -7,7 +7,7 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
 @tagged("post_install", "-at_install")
-class AccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
+class AbstractAccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
     "Invoice related test cases"
 
     @classmethod
@@ -27,9 +27,9 @@ class AccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
             [("partner_id", "=", partner.id), ("move_type", "=", "out_invoice")]
         )
 
-    def create_invoice(self, partner, date, price):
+    def create_invoice(self, partner, date, price, move_type="out_invoice"):
         inv = self.init_invoice(
-            "out_invoice",
+            move_type,
             partner=partner,
             invoice_date=date,
             products=self.product_a,
@@ -37,6 +37,25 @@ class AccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
         )
         inv.auto_merge = True
         return inv
+
+
+class AccountInvoiceMergeAutoTC(AbstractAccountInvoiceMergeAutoTC):
+    "Concrete class to test invoice methods"
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if cls.env["ir.module.module"].search(  # pragma: no cover
+            [
+                ("name", "=", "account_invoice_merge_auto_pay"),
+                ("state", "=", "installed"),
+            ]
+        ):
+            from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
+                inject_payment_data,
+            )
+
+            inject_payment_data(cls)
 
     def test_cron(self):
         self.partner_a.update(
