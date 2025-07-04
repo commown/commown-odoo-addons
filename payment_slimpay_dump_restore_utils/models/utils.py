@@ -93,41 +93,6 @@ def set_mandate(provider, partner, mandate_id):
     )
 
 
-def set_contract_for_invoice_merge_autopay(contract):
-    """Update contract and related partner so that the merge invoice
-    mecanism is used instead of contract_payment_auto module's
-    mecanism to pay all the partner's draft invoices at once using a
-    merged invoice if necessary.
-    """
-    assert contract.is_auto_pay
-    contract.is_auto_pay = False
-    partner = contract.partner_id
-
-    if partner.invoice_merge_reference_date:
-        next_date = max(
-            partner.invoice_merge_reference_date, contract.recurring_next_date
-        )
-        if next_date != contract.recurring_next_date:
-            _logger.debug(
-                "%s %s -> %s (%s)",
-                contract.name,
-                contract.recurring_next_date,
-                next_date,
-                partner.name,
-            )
-    else:
-        next_date = contract.recurring_next_date
-
-    partner.update(
-        {
-            "invoice_merge_reference_date": next_date,
-            "invoice_merge_recurring_rule_type": "monthly",
-            "invoice_merge_recurring_interval": 1,
-            "invoice_merge_next_date": next_date,
-        }
-    )
-
-
 def replace_mandate(provider, mandate_repr):
     """Replace partner's mandate by a new one described by `mandate_repr`
     in the context of given `provider`.
