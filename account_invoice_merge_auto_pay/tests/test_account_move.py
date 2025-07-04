@@ -90,6 +90,18 @@ class AccountMoveTC(AbstractAccountInvoiceMergeAutoTC):
             fields.Date.from_string("2019-06-15"),
         )
 
+    def test_invoice_auto_merge_payment_mode_constraint(self):
+        inv = self.create_invoice(self.partner_a, "2019-05-10", 1.0)
+        self.assertTrue(inv.auto_merge)  # Test pre-requisite
+
+        with self.assertRaises(ValidationError) as err:
+            inv.payment_mode_id = False
+
+        self.assertEqual(
+            err.exception.args[0],
+            "Payment mode is needed to auto pay an invoice",
+        )
+
     def test_auto_pay_no_token_error(self):
         self.partner_a.payment_token_id = False
         self.create_default_invoices()
