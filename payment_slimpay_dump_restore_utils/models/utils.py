@@ -57,6 +57,7 @@ def mandate_doc_to_repr(provider, mandate_doc):
             "subscriber": {"reference": partner.id},
             "signatory": signatory,
         }
+    return {}
 
 
 def get_all_mandates_repr(provider, transformer_func, **params):
