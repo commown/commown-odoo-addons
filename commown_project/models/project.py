@@ -27,13 +27,17 @@ class Project(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        if not self.env.user.has_group("project.group_project_manager"):
+        if not (
+            self.env.su or self.env.user.has_group("project.group_project_manager")
+        ):
             for vals in vals_list:
                 vals["privacy_visibility"] = "followers"
         return super().create(vals_list)
 
     def write(self, vals):
-        if not self.env.user.has_group("project.group_project_manager"):
+        if not (
+            self.env.su or self.env.user.has_group("project.group_project_manager")
+        ):
             if "privacy_visibility" in vals:
                 raise AccessError(
                     _("Need to be a project manager to change a project's visibility.")
