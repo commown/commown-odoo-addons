@@ -117,6 +117,28 @@ class SlimpayDumpProviderUtilsTC(PaymentSlimpayDumpUtilsCommonTC):
             },
         }
 
+        # First case: Refresh with no mandates.
+        # (Mostly for coverage purposes)
+        json.dump([], open(self.dump_file.name, "w"))
+
+        with requests_mock.Mocker() as rm1:
+            self._mock_slimpay_root_doc(rm1)
+            self._mock_get_bank_account(rm1)
+            self._mock_search_mandates(rm1, pagination=False)
+            self.env["payment.provider"]._slimpay_dump_all_mandates(
+                mandates_fpath=self.dump_file.name
+            )
+
+            self.assertEqual(
+                1, self.nb_func_call(rm1.request_history, "/search-mandates")
+            )
+
+        with open(self.dump_file.name) as f:
+            mandates = json.load(f)
+            self.assertEqual(len(mandates), 1)
+            self.assertEqual(mandates, [admin_partner_mandate])
+
+        # Second case: Refresh with an already existing mandate
         init_mandate = self.basic_mandate("TEST-REFRESH", admin_partner.id)
         init_mandate["dateSigned"] = "2024-01-01T23:59:59.000+0000"
         json.dump([init_mandate], open(self.dump_file.name, "w"))
