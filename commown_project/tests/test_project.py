@@ -26,10 +26,10 @@ class ProjectPermissionTC(SavepointCase):
 
     def create_project(self, as_user, **kwargs):
         kwargs.setdefault("user_id", as_user.id)
-        return self.env["project.project"].sudo(as_user.id).create(kwargs)
+        return self.env["project.project"].with_user(as_user.id).create(kwargs)
 
     def create_task(self, as_user, **kwargs):
-        return self.env["project.task"].sudo(as_user.id).create(kwargs)
+        return self.env["project.task"].with_user(as_user.id).create(kwargs)
 
     def create_task_type(self, as_user, **kwargs):
         legends = {
@@ -38,7 +38,9 @@ class ProjectPermissionTC(SavepointCase):
             "legend_done": "done",
         }
         return (
-            self.env["project.task.type"].sudo(as_user.id).create({**legends, **kwargs})
+            self.env["project.task.type"]
+            .with_user(as_user.id)
+            .create({**legends, **kwargs})
         )
 
     def is_follower(self, user, project):
@@ -46,19 +48,19 @@ class ProjectPermissionTC(SavepointCase):
         return user.partner_id in followers.mapped("partner_id")
 
     def entity_as(self, entity, user):
-        return self.env[entity._name].sudo(user.id).browse(entity.id)
+        return self.env[entity._name].with_user(user.id).browse(entity.id)
 
     def seen_projects(self, as_user):
-        return self.env["project.project"].sudo(as_user.id).search([])
+        return self.env["project.project"].with_user(as_user.id).search([])
 
     def seen_tasks(self, as_user):
-        return self.env["project.task"].sudo(as_user.id).search([])
+        return self.env["project.task"].with_user(as_user.id).search([])
 
     def add_follower(self, entity, partner):
         as_user = entity.env.user
         return (
             self.env["mail.followers"]
-            .sudo(as_user.id)
+            .with_user(as_user.id)
             .create(
                 {
                     "partner_id": partner.id,
