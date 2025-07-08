@@ -25,11 +25,12 @@ class Project(models.Model):
             {"is_manager": self.env.user.has_group("project.group_project_manager")}
         )
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         if not self.env.user.has_group("project.group_project_manager"):
-            vals["privacy_visibility"] = "followers"
-        return super().create(vals)
+            for vals in vals_list:
+                vals["privacy_visibility"] = "followers"
+        return super().create(vals_list)
 
     def write(self, vals):
         if not self.env.user.has_group("project.group_project_manager"):
