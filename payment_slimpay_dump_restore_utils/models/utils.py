@@ -226,5 +226,3 @@ def restore_all_missing_mandates(
         else:
             set_mandate(provider, partner, known_mandate_refs[ref])
             _logger.debug("Pre-existing mandate %s assigned to %s", ref, partner.name)
-
-    provider.env.cr.commit()
