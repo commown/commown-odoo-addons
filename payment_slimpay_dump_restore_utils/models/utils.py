@@ -204,13 +204,13 @@ def restore_all_missing_mandates(
         if ref not in known_mandate_refs:
             try:
                 replace_mandate(provider, mandate_repr)
-            except MissingError:
+            except MissingError:  # pragma: no cover
                 _logger.error(
                     "Partner not found when trying to replace mandate for %s"
                     % mandate_repr["signatory"]["email"]
                 )
                 continue
-            except Exception:
+            except Exception:  # pragma: no cover
                 import traceback as tb
 
                 _logger.error(
