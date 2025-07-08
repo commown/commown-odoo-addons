@@ -7,7 +7,7 @@
     <field name="arch" type="xml">
 
       <!-- Activate Project Edition button depending on the permission to write -->
-      <xpath expr="//kanban/field[@name='name']" position="before">
+      <xpath expr="//kanban/field[@name='display_name']" position="before">
         <field name="can_write" invisible="1" />
       </xpath>
       <xpath
