@@ -199,6 +199,6 @@ class ProjectOtherUsersPermissions(ProjectPermissionTC):
                 project_ids=[(6, 0, self.project1.ids)],
             )
         self.assertIn(
-            "Sorry, you are not allowed to create this kind of document.",
+            "You are not allowed to create 'Task Stage'",
             err.exception.name,
         )
