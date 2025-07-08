@@ -26,7 +26,6 @@ class Project(models.Model):
         )
 
     @api.model
-    @api.returns("self", lambda value: value.id)
     def create(self, vals):
         if not self.env.user.has_group("project.group_project_manager"):
             vals["privacy_visibility"] = "followers"
