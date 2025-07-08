@@ -34,7 +34,6 @@ class Project(models.Model):
 
     @api.multi
     def write(self, vals):
-
         if not self.env.user.has_group("project.group_project_manager"):
             if "privacy_visibility" in vals:
                 raise AccessError(
