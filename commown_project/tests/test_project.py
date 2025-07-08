@@ -57,18 +57,7 @@ class ProjectPermissionTC(TransactionCase):
         return self.env["project.task"].with_user(as_user.id).search([])
 
     def add_follower(self, entity, partner):
-        as_user = entity.env.user
-        return (
-            self.env["mail.followers"]
-            .with_user(as_user.id)
-            .create(
-                {
-                    "partner_id": partner.id,
-                    "res_id": entity.id,
-                    "res_model": entity._name,
-                }
-            )
-        )
+        return entity.message_subscribe(partner_ids=partner.ids)
 
 
 class ProjectOwnUserPermissionTC(ProjectPermissionTC):
