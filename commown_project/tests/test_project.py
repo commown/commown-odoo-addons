@@ -94,7 +94,7 @@ class ProjectOwnUserPermissionTC(ProjectPermissionTC):
         with self.assertRaises(AccessError) as err:
             project.privacy_visibility = "portal"
         self.assertEqual(
-            err.exception.name,
+            err.exception.args[0],
             "Need to be a project manager to change a project's visibility.",
         )
 
@@ -165,7 +165,7 @@ class ProjectOtherUsersPermissions(ProjectPermissionTC):
         # User2 cannot change project's user_id however:
         with self.assertRaises(AccessError) as err:
             p1_as_user2.user_id = self.user2.id
-        self.assertIn("need to be a project manager", err.exception.name.lower())
+        self.assertIn("need to be a project manager", err.exception.args[0].lower())
 
         # .. and can remove the project:
         p1_as_user2.unlink()
@@ -200,5 +200,5 @@ class ProjectOtherUsersPermissions(ProjectPermissionTC):
             )
         self.assertIn(
             "You are not allowed to create 'Task Stage'",
-            err.exception.name,
+            err.exception.args[0],
         )
