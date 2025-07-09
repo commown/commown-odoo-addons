@@ -7,7 +7,7 @@
     "version": "12.0.1.0.0",
     "author": "Commown SCIC, Akretion, Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "website": "https://github.com/OCA/project",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "project",
     ],
