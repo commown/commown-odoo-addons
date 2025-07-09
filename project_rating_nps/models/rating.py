@@ -25,7 +25,6 @@ class Rating(models.Model):
 class RatingMixin(models.AbstractModel):
     _inherit = "rating.mixin"
 
-    @api.multi
     def rating_apply(self, rate, token=None, feedback=None, subtype=None):
         """Overloading of the `rating` module's method to avoid the hard-coded
         path to this module's images.
