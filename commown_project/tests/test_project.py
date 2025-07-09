@@ -1,9 +1,9 @@
 from odoo.exceptions import AccessError
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests.common import TransactionCase, tagged
 
 
 @tagged("post_install", "-at_install")
-class ProjectPermissionTC(SavepointCase):
+class ProjectPermissionTC(TransactionCase):
     "Base class for project permissions"
 
     def setUp(self):
