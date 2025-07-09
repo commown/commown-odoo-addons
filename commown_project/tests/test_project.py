@@ -85,6 +85,15 @@ class ProjectOwnUserPermissionTC(ProjectPermissionTC):
         # can_write compute field is OK:
         self.assertTrue(project.can_write)
 
+        # Despite having created the project,
+        # user1 doesn't have managerial authority on the project...
+        self.assertFalse(project.with_user(self.user1).is_manager)
+
+        # ...while the project manager does.
+        # (We need to empty the cache to force a recomputation)
+        project.invalidate_recordset()
+        self.assertTrue(project.with_user(self.project_manager).is_manager)
+
         # Add follower OK and gives read access
         self.add_follower(project, self.user2.partner_id)
         self.assertTrue(self.is_follower(self.user2, project))
