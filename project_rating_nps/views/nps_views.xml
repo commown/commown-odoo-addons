@@ -64,6 +64,7 @@
         <field name="net_promoter_score" invisible="1" />
       </field>
 
+      <!-- Hide standard rating -->
       <xpath
                 expr="//div[hasclass('o_kanban_primary_left')]//div[@groups='project.group_project_rating']/b"
                 position="attributes"
@@ -75,11 +76,13 @@
         <attribute name="invisible">1</attribute>
       </field>
 
-      <xpath
-                expr="//div[hasclass('o_kanban_primary_left')]//div[@groups='project.group_project_rating']/b"
-                position="after"
-            >
-        <b class="me-1">
+      <!-- Show NPS -->
+      <xpath expr="//div[hasclass('oe_kanban_bottom_right')]/*" position="before">
+        <div
+                    t-if="record.rating_active.raw_value and record.rating_count.raw_value &gt; 0"
+                    t-attf-title="Net Promoter Score: {{ record.net_promoter_score.value }}"
+                    groups="project.group_project_rating"
+                >
           <t t-set="nps_names" t-value="['detractor', 'passive', 'promoter']" />
           <t
                         t-set="nps_index"
@@ -87,11 +90,10 @@
                     />
           <img
                         t-attf-src="project_rating_nps/static/src/img/{{ nps_names[nps_index] }}.png"
-                        t-att-alt="record.net_promoter_score.value"
-                        style="width: 32px;"
+                        t-attf-alt="nps_names[nps_index]"
+                        style="width: 20px; margin-right: 5px"
                     />
-        </b>
-        <field name="net_promoter_score" />
+        </div>
       </xpath>
     </field>
   </record>
