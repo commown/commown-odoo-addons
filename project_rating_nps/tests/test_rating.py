@@ -54,14 +54,21 @@ class TestRating(RatingTestMixin, TransactionCase):
     def test_apply_rating_1(self):
         "Check rating_apply override works and uses present module images"
 
-        self.task.rating_apply(
-            self.rating.rating, self.rating.access_token, feedback="test feedback"
-        )
+        token = self.rating.access_token
 
-        msg = self.task.message_ids.filtered(lambda m: "test feedback" in m.body)
+        self.task.rating_apply(self.rating.rating, token, feedback="test feedback")
 
-        rate = self.rating.rating
-        self.assertIn("/project_rating_nps/static/src/img/rate_%d.png" % rate, msg.body)
+        msg = self.rating.message_id
+
+        self.assertTrue(msg)
+        self.assertIn(msg, self.task.message_ids)
+        self.assertIn("/project_rating_nps/static/src/img/rate_8.png", msg.body)
+        self.assertIn("test feedback", msg.body)
+
+        self.task.rating_apply(9, token, feedback="test updated feedback")
+        self.assertEqual(self.rating.rating, 9.0)
+        self.assertIn("test updated feedback", msg.body)
+        self.assertIn("/project_rating_nps/static/src/img/rate_9.png", msg.body)
 
     def test_apply_rating_2(self):
         "Check task kanban state changes with the rating when configured to"
