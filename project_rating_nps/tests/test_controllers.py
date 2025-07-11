@@ -3,9 +3,9 @@
 
 from lxml import html
 from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
-from odoo.service import wsgi_server
+from odoo import http
 from odoo.tests.common import HttpCase
 
 from .common import RatingTestMixin
@@ -15,7 +15,7 @@ class TestControllers(RatingTestMixin, HttpCase):
     def test_open_rating(self):
         "Check rating_apply override works and uses present module images"
 
-        test_client = Client(wsgi_server.application, BaseResponse)
+        test_client = Client(http.root, Response)
         werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
 
         response = test_client.get(
