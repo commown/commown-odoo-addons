@@ -1,20 +1,24 @@
 <odoo noupdate="1">
 
     <record id="nps_rating_request_email" model="mail.template">
-      <field name="name">Task: Rating Request</field>
+      <field name="name">Project: Task NPS Rating Request</field>
       <field name="model_id" ref="project.model_project_task" />
       <field
             name="subject"
-        >${object.project_id.company_id.name}: Satisfaction Survey</field>
+        >{{ object.project_id.company_id.name }}: Satisfaction Survey</field>
       <field
             name="email_from"
-        >${('"%s" &lt;%s&gt;' % (object.rating_get_rated_partner_id().name, object.rating_get_rated_partner_id().email) if object.rating_get_rated_partner_id().email else '') | safe}</field>
-      <field name="partner_to">${object.rating_get_partner_id().id}</field>
+        >{{  (object._rating_get_operator().email_formatted if object._rating_get_operator() else user.email_formatted) }}</field>
+      <field name="partner_to">{{ object._rating_get_partner().id }}</field>
+      <field
+            name="description"
+        >Set this template on a project stage to request feedback from your customers. Enable the"customer ratings" feature on the project</field>
+      <field name="lang">{{ object._rating_get_partner().lang }}</field>
       <field name="auto_delete" eval="True" />
       <field name="body_html" type="html">
 <div>
-  % set access_token = object.rating_get_access_token()
-  % set partner = object.rating_get_partner_id()
+    <t t-set="access_token" t-value="object._rating_get_access_token()" />
+    <t t-set="partner" t-value="object._rating_get_partner()" />
   <table
                     border="0"
                     cellpadding="0"
@@ -24,14 +28,22 @@
                 >
     <tbody>
       <tr><td valign="top" style="font-size: 13px;">
-        Hello ${partner.name},<br />
-        Please take a moment to rate our services related to the task "<strong
-                                >${object.name}</strong>"
-        % if object.rating_get_rated_partner_id().name:
-        assigned to <strong>${object.rating_get_rated_partner_id().name}</strong>.<br />
-        % else:
-        .<br />
-        % endif
+        <t t-if="partner.name">
+          Hello <t t-out="partner.name or ''">Brandon Freeman</t>,<br /><br />
+        </t>
+        <t t-else="">
+          Hello,<br /><br />
+        </t>
+        Please take a moment to rate our services related to the task
+	"<strong t-out="object.name or ''">Planning and budget</strong>"
+        <t t-if="object._rating_get_operator().name">
+          assigned to <strong
+                                        t-out="object._rating_get_operator().name or ''"
+                                    >Mitchell Admin</strong>.<br />
+        </t>
+        <t t-else="">
+          .<br />
+        </t>
       </td></tr>
       <tr><td style="text-align: center;">
         <table
@@ -47,10 +59,10 @@
             <span style="text-color: #888888">(click on one of these smileys)</span>
           </td></tr>
           <tr><td style="font-size: 13px;">
-            <table style="width:100%;text-align:center;">
+            <table style="width:100%;text-align:center;margin-top:2rem;">
               <tr>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/0">
+                  <a t-attf-href="/rate/{{ access_token }}/0">
                     <img
                                                                 alt="0/10"
                                                                 src="/project_rating_nps/static/src/img/rate_0.png"
@@ -58,7 +70,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/1">
+                  <a t-attf-href="/rate/{{ access_token }}/1">
                     <img
                                                                 alt="1/10"
                                                                 src="/project_rating_nps/static/src/img/rate_1.png"
@@ -66,7 +78,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/2">
+                  <a t-attf-href="/rate/{{ access_token }}/2">
                     <img
                                                                 alt="2/10"
                                                                 src="/project_rating_nps/static/src/img/rate_2.png"
@@ -74,7 +86,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/3">
+                  <a t-attf-href="/rate/{{ access_token }}/3">
                     <img
                                                                 alt="3/10"
                                                                 src="/project_rating_nps/static/src/img/rate_3.png"
@@ -82,7 +94,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/4">
+                  <a t-attf-href="/rate/{{ access_token }}/4">
                     <img
                                                                 alt="4/10"
                                                                 src="/project_rating_nps/static/src/img/rate_4.png"
@@ -90,7 +102,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/5">
+                  <a t-attf-href="/rate/{{ access_token }}/5">
                     <img
                                                                 alt="5/10"
                                                                 src="/project_rating_nps/static/src/img/rate_5.png"
@@ -98,7 +110,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/6">
+                  <a t-attf-href="/rate/{{ access_token }}/6">
                     <img
                                                                 alt="6/10"
                                                                 src="/project_rating_nps/static/src/img/rate_6.png"
@@ -106,7 +118,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/7">
+                  <a t-attf-href="/rate/{{ access_token }}/7">
                     <img
                                                                 alt="7/10"
                                                                 src="/project_rating_nps/static/src/img/rate_7.png"
@@ -114,7 +126,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/8">
+                  <a t-attf-href="/rate/{{ access_token }}/8">
                     <img
                                                                 alt="8/10"
                                                                 src="/project_rating_nps/static/src/img/rate_8.png"
@@ -122,7 +134,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/9">
+                  <a t-attf-href="/rate/{{ access_token }}/9">
                     <img
                                                                 alt="9/10"
                                                                 src="/project_rating_nps/static/src/img/rate_9.png"
@@ -130,7 +142,7 @@
                   </a>
                 </td>
                 <td style="padding:10px 10px;">
-                  <a href="/rating/${access_token}/10">
+                  <a t-attf-href="/rate/{{ access_token }}/10">
                     <img
                                                                 alt="10/10"
                                                                 src="/project_rating_nps/static/src/img/rate_10.png"
@@ -144,24 +156,27 @@
       </td></tr>
       <tr><td valign="top" style="font-size: 13px;">
         We appreciate your feedback. It helps us to improve continuously.
-        % if object.project_id.rating_status == 'stage':
+        <t t-if="object.project_id.rating_status == 'stage'">
+        <br /><br /><span
+                                        style="margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;"
+                                    >This customer survey has been sent because your task has been moved to the stage <b
+                                            t-out="object.stage_id.name or ''"
+                                        >In progress</b></span>
+        </t>
+            <t t-if="object.project_id.rating_status == 'periodic'">
         <br /><span
-                                    style="margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;"
-                                >This customer survey has been sent because your task has been moved to the stage <b
-                                    >${object.stage_id.name}</b></span>
-        % endif
-        % if object.project_id.rating_status == 'periodic':
-        <br /><span
-                                    style="margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;"
-                                >This customer survey is sent <b
-                                    >${object.project_id.rating_status_period}</b> as long as the task is in the <b
-                                    >${object.stage_id.name}</b> stage.</span>
-        % endif
+                                        style="margin: 0px 0px 0px 0px; font-size: 12px; opacity: 0.5; color: #454748;"
+                                    >This customer survey is sent <b
+                                            t-out="object.project_id.rating_status_period or ''"
+                                        >Weekly</b> as long as the task is in the <b
+                                            t-out="object.stage_id.name or ''"
+                                        >In progress</b> stage.</span>
+        </t>
       </td></tr>
     </tbody>
   </table>
 </div>
       </field>
-    </record>
+  </record>
 
 </odoo>
