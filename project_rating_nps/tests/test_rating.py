@@ -1,12 +1,12 @@
 # Copyright 2020-today Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from .common import RatingTestMixin
 
 
-class TestRating(RatingTestMixin, SavepointCase):
+class TestRating(RatingTestMixin, TransactionCase):
     def test_apply_rating_1(self):
         "Check rating_apply override works and uses present module images"
 
