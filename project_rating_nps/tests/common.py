@@ -1,25 +1,25 @@
 class RatingTestMixin:
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        env = self.env
-        partner = env.ref("base.partner_demo")
+        partner = cls.env.ref("base.partner_demo")
 
-        project = env["project.project"].create(
+        project = cls.env["project.project"].create(
             {
                 "name": "Test project",
                 "rating_status": "stage",
             }
         )
 
-        stage = self.env["project.task.type"].create(
+        stage = cls.env["project.task.type"].create(
             {
                 "name": "Test stage",
                 "project_ids": [(6, 0, project.ids)],
             }
         )
 
-        self.task = env["project.task"].create(
+        cls.task = cls.env["project.task"].create(
             {
                 "name": "test task",
                 "project_id": project.id,
@@ -28,11 +28,11 @@ class RatingTestMixin:
             }
         )
 
-        self.rating = env["rating.rating"].create(
+        cls.rating = cls.env["rating.rating"].create(
             {
-                "res_model_id": env["ir.model"]._get("project.task").id,
-                "res_id": self.task.id,
-                "parent_res_model_id": env["ir.model"]._get("project.project").id,
+                "res_model_id": cls.env["ir.model"]._get("project.task").id,
+                "res_id": cls.task.id,
+                "parent_res_model_id": cls.env["ir.model"]._get("project.project").id,
                 "parent_res_id": project.id,
                 "rated_partner_id": partner.id,
                 "partner_id": partner.id,
