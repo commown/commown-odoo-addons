@@ -26,7 +26,7 @@ class TestProject(SavepointCase):
         self.assertEqual(self.project.net_promoter_score, False)
 
         for num, task in enumerate(self.project.task_ids):
-            token = task.rating_get_access_token()
+            token = task._rating_get_access_token()
             rating = self.env["rating.rating"].search(
                 [
                     ("access_token", "=", token),
