@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
 
 
 def _get_from_doc_mock(doc, method_name):
@@ -18,9 +18,7 @@ class MockedSlimpayMixin:
         self._patchers = []
         # Mock SlimpayClient
         self._start_patcher(
-            patch(
-                "odoo.addons.account_payment_slimpay.models." "slimpay_utils.get_client"
-            )
+            patch("odoo.addons.account_payment_slimpay.models.slimpay_utils.get_client")
         )
         # Mock its "get" and "get_from_doc" methods (to ease their config)
         self.fake_get = self._start_patcher(patch.object(SlimpayClient, "get"))
