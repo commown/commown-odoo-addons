@@ -31,6 +31,7 @@ class RatingTestMixin:
         cls.rating = cls.env["rating.rating"].create(
             {
                 "res_model_id": cls.env["ir.model"]._get("project.task").id,
+                "res_model": "project.task",
                 "res_id": cls.task.id,
                 "parent_res_model_id": cls.env["ir.model"]._get("project.project").id,
                 "parent_res_id": project.id,
