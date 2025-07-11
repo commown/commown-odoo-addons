@@ -7,6 +7,13 @@ from .common import RatingTestMixin
 
 
 class TestRating(RatingTestMixin, TransactionCase):
+    def test_apply_rating_error_1(self):
+        with self.assertRaises(ValueError) as err:
+            self.task.rating_apply(
+                12, self.rating.access_token, feedback="test feedback"
+            )
+        self.assertIn("incorrect rating", err.exception.args[0].lower())
+
     def test_apply_rating_1(self):
         "Check rating_apply override works and uses present module images"
 
