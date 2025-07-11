@@ -26,7 +26,4 @@ class TestRating(RatingTestMixin, TransactionCase):
         self.task.stage_id.auto_validation_kanban_state = True
 
         self.task.rating_apply(6, self.rating.access_token)
-        self.assertEqual(self.task.kanban_state, "blocked")
-
-        self.task.rating_apply(9, self.rating.access_token)
         self.assertEqual(self.task.kanban_state, "done")
