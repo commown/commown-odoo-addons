@@ -31,6 +31,31 @@ class Rating(models.Model):
         group_operator="avg",
     )
 
+    rating_text = fields.Selection(
+        # We can no longer replace the selection values entirely since 15.0,
+        # so we only add new values, old ones should no longer be used anyway.
+        selection_add=[
+            ("detractor", "Detractor"),
+            ("neutral", "Neutral"),
+            ("promoter", "Promoter"),
+        ],
+        string="Rating",
+        store=True,
+        compute="_compute_rating_text",
+        readonly=True,
+    )
+
+    @api.depends("rating")
+    def _compute_rating_text(self):
+        for rating in self:
+            if rating.rating >= 9:
+                value = "promoter"
+            elif rating.rating <= 6:
+                value = "detractor"
+            else:
+                value = "neutral"
+            rating.rating_text = value
+
     @api.depends("rating")
     def _compute_net_promoter_score(self):
         for record in self:
