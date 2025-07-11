@@ -2,7 +2,10 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import base64
+import datetime
 import logging
+
+import markupsafe
 
 from odoo import _, api, fields, models, tools
 from odoo.modules.module import get_resource_path
@@ -102,43 +105,57 @@ class Rating(models.Model):
 class RatingMixin(models.AbstractModel):
     _inherit = "rating.mixin"
 
-    def rating_apply(self, rate, token=None, feedback=None, subtype=None):
-        """Overloading of the `rating` module's method to avoid the hard-coded
-        path to this module's images.
+    def rating_apply(
+        self,
+        rate,
+        token=None,
+        rating=None,
+        feedback=None,
+        subtype_xmlid=None,
+        notify_delay_send=False,
+    ):
+        """Overloading of the `rating` module's method to avoid the
+        hard-coded rate value errors.
         """
-        Rating, rating = self.env["rating.rating"], None
+        _check_rate(rate)
         if token:
             rating = self.env["rating.rating"].search(
                 [("access_token", "=", token)], limit=1
             )
-        else:
-            rating = Rating.search(
-                [("res_model", "=", self._name), ("res_id", "=", self.ids[0])], limit=1
+        if not rating:
+            raise ValueError(_("Invalid token or rating."))
+
+        rating.write({"rating": rate, "feedback": feedback, "consumed": True})
+        if isinstance(self, self.env.registry["mail.thread"]):
+            if subtype_xmlid is None:
+                subtype_id = self._rating_apply_get_default_subtype_id()
+            else:
+                subtype_id = self.env["ir.model.data"]._xmlid_to_res_id(subtype_xmlid)
+            feedback = tools.plaintext2html(feedback or "")
+
+            scheduled_datetime = (
+                fields.Datetime.now() + datetime.timedelta(hours=2)
+                if notify_delay_send
+                else None
             )
-        if rating:
-            rating.write({"rating": rate, "feedback": feedback, "consumed": True})
-            if hasattr(self, "message_post"):
-                feedback = tools.plaintext2html(feedback or "")
-                body = (
-                    "<img src='/project_rating_nps/static/src"
-                    "/img/rate_%d.png' style='width:20px;height:20px;"
-                    "float:left;margin-right: 5px;'/>%s"
+            rating_body = markupsafe.Markup(
+                "<img src='%s' alt=':%s/5' style='width:18px;height:18px;float:left;margin-right: 5px;'/>%s"
+            ) % (rating.rating_image_url, rate, feedback)
+
+            if rating.message_id:
+                self._message_update_content(
+                    rating.message_id,
+                    rating_body,
+                    scheduled_date=scheduled_datetime,
+                    strict=False,
                 )
-                # None will set the default author in mail_thread.py
-                author_id = rating.partner_id and rating.partner_id.id or None
+            else:
                 self.message_post(
-                    body=body % (rate, feedback),
-                    subtype=subtype or "mail.mt_comment",
-                    author_id=author_id,
+                    author_id=rating.partner_id.id
+                    or None,  # None will set the default author in mail_thread.py
+                    body=rating_body,
+                    rating_id=rating.id,
+                    scheduled_date=scheduled_datetime,
+                    subtype_id=subtype_id,
                 )
-            if (
-                hasattr(self, "stage_id")
-                and self.stage_id
-                and hasattr(self.stage_id, "auto_validation_kanban_state")
-                and self.stage_id.auto_validation_kanban_state
-            ):
-                if rating.rating >= 9:
-                    self.write({"kanban_state": "done"})
-                if rating.rating <= 6:
-                    self.write({"kanban_state": "blocked"})
         return rating
