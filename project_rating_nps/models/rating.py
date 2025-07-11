@@ -1,7 +1,13 @@
 # Copyright 2020-today Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+import base64
+import logging
+
 from odoo import _, api, fields, models, tools
+from odoo.modules.module import get_resource_path
+
+_logger = logging.getLogger(__name__)
 
 
 def _check_rate(rate):
@@ -62,6 +68,35 @@ class Rating(models.Model):
             record.net_promoter_score = (
                 (record.rating >= 9 and 100) or (record.rating <= 6 and -100) or 0
             )
+
+    def _get_rating_image_filename(self):
+        self.ensure_one()
+        return "rate_%s.png" % int(self.rating)
+
+    @api.depends("rating")
+    def _compute_rating_image(self):
+        self.rating_image_url = False
+        self.rating_image = False
+        for rating in self:
+            try:
+                image_path = get_resource_path(
+                    "project_rating_nps",
+                    "static/src/img",
+                    rating._get_rating_image_filename(),
+                )
+                rating.rating_image_url = (
+                    "/project_rating_nps/static/src/img/%s"
+                    % rating._get_rating_image_filename()
+                )
+                if image_path:
+                    with open(image_path, "rb") as fobj:
+                        rating.rating_image = base64.b64encode(fobj.read())
+            except OSError as exc:
+                _logger.error(
+                    "Could not load rating image for rating id %d: got '%s'",
+                    rating.id,
+                    exc,
+                )
 
 
 class RatingMixin(models.AbstractModel):
