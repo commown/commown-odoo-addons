@@ -3,43 +3,56 @@
 
 from odoo import http
 from odoo.http import request
+from odoo.tools.misc import get_lang
 
 from odoo.addons.rating.controllers.main import Rating
+
+from ..models.rating import _check_rate
 
 
 class NetPromoterScoreRating(Rating):
     @http.route()
-    def open_rating(self, token, rate, **kwargs):
-        """Override rating module's controller
+    def action_open_rating(self, token, rate, **kwargs):
+        "Override to allow all NPS rates and set NPS rate names (no other change)."
 
-        to allow all NPS rates and set NPS rate names.
-        """
+        _check_rate(rate)
+        rating_sudo, _record_sudo = self._get_rating_and_record(token)
 
-        assert rate in set(range(11)), "Incorrect rating"
-        rating = (
-            request.env["rating.rating"]
-            .sudo()
-            .search(
-                [
-                    ("access_token", "=", token),
-                ]
-            )
-        )
-        if not rating:
-            return request.not_found()
-
-        rating.sudo().write({"rating": rate, "consumed": True})
-
-        rate_name = rate >= 9 and "promoter" or rate >= 7 and "passive" or "detractor"
-        lang = rating.partner_id.lang or "en_US"
+        lang = rating_sudo.partner_id.lang or get_lang(request.env).code
         view_model = request.env["ir.ui.view"].with_context(lang=lang)
 
-        return view_model.render_template(
+        return view_model._render_template(
             "project_rating_nps.rating_external_page_submit",
             {
-                "rating": rating,
+                "rating": rating_sudo,
                 "token": token,
-                "rate_name": rate_name,
+                "rate_names": {rate: str(rate) for rate in range(11)},
                 "rate": rate,
+            },
+        )
+
+    @http.route()
+    def action_submit_rating(self, token, rate=0, **kwargs):
+        "Override to allow all NPS rates and set NPS rate names (no other change)."
+
+        rating, record_sudo = self._get_rating_and_record(token)
+        if request.httprequest.method == "POST":
+            rate = int(rate)
+            _check_rate(rate)
+            record_sudo.rating_apply(
+                rate,
+                rating=rating,
+                feedback=kwargs.get("feedback"),
+                subtype_xmlid=None,  # force default subtype choice
+            )
+
+        lang = rating.partner_id.lang or get_lang(request.env).code
+        view_model = request.env["ir.ui.view"].with_context(lang=lang)
+
+        return view_model._render_template(
+            "rating.rating_external_page_view",
+            {
+                "web_base_url": rating.get_base_url(),
+                "rating": rating,
             },
         )

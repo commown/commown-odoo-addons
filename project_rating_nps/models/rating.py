@@ -1,7 +1,16 @@
 # Copyright 2020-today Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models, tools
+from odoo import _, api, fields, models, tools
+
+
+def _check_rate(rate):
+    possible_values = set(range(11))
+    if rate not in possible_values:
+        raise ValueError(
+            _("Incorrect rating: should be in %(rates)s (received %(rate)d)"),
+            (", ".join(str(value) for value in possible_values), rate),
+        )
 
 
 class Rating(models.Model):
