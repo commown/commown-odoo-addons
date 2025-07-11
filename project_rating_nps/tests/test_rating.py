@@ -1,6 +1,8 @@
 # Copyright 2020-today Commown SCIC (https://commown.coop)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from unittest.mock import patch
+
 from odoo.tests.common import TransactionCase
 
 from .common import RatingTestMixin
@@ -23,6 +25,26 @@ class TestRating(RatingTestMixin, TransactionCase):
 
         self.rating.rating = 3
         self.assertEqual(self.rating.rating_text, "detractor")
+
+    def test_compute_rating_image_ok(self):
+        self.assertTrue(self.rating.rating_image_url)
+        self.assertTrue(self.rating.rating_image)
+
+    def test_compute_rating_image_error_no_raise(self):
+        "An OSError while computing the rating image should not crash the rate save"
+
+        # The method should not crash on OSError, so we simulate a file not found:
+        with patch("base64.b64encode", side_effect=OSError("read error")):
+            chan = "odoo.addons.project_rating_nps.models.rating"
+            with self.assertLogs(chan, level="ERROR") as cm:
+                self.rating._compute_rating_image()
+        expected_message = (
+            "Could not load rating image for rating id %d: got 'read error'"
+            % self.rating.id
+        )
+        self.assertEqual("ERROR:%s:%s" % (chan, expected_message), cm.output[0])
+        self.assertTrue(self.rating.rating_image_url)
+        self.assertFalse(self.rating.rating_image)
 
     def test_apply_rating_1(self):
         "Check rating_apply override works and uses present module images"
