@@ -14,6 +14,16 @@ class TestRating(RatingTestMixin, TransactionCase):
             )
         self.assertIn("incorrect rating", err.exception.args[0].lower())
 
+    def test_compute_rating_text(self):
+        self.rating.rating = 8
+        self.assertEqual(self.rating.rating_text, "neutral")
+
+        self.rating.rating = 9
+        self.assertEqual(self.rating.rating_text, "promoter")
+
+        self.rating.rating = 3
+        self.assertEqual(self.rating.rating_text, "detractor")
+
     def test_apply_rating_1(self):
         "Check rating_apply override works and uses present module images"
 
