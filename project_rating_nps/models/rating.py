@@ -16,6 +16,14 @@ def _check_rate(rate):
 class Rating(models.Model):
     _inherit = "rating.rating"
 
+    _sql_constraints = [
+        (
+            "rating_range",
+            "check(rating >= 0 and rating <= 10)",
+            "Rating should be between 0 and 10",
+        ),
+    ]
+
     net_promoter_score = fields.Integer(
         compute="_compute_net_promoter_score",
         string="NPS",
