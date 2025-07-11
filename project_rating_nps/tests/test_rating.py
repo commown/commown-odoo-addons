@@ -16,6 +16,11 @@ class TestRating(RatingTestMixin, TransactionCase):
             )
         self.assertIn("incorrect rating", err.exception.args[0].lower())
 
+    def test_apply_rating_error_2(self):
+        with self.assertRaises(ValueError) as err:
+            self.task.rating_apply(6, "invalid token")
+        self.assertEqual("Invalid token or rating.", err.exception.args[0])
+
     def test_compute_rating_text(self):
         self.rating.rating = 8
         self.assertEqual(self.rating.rating_text, "neutral")
