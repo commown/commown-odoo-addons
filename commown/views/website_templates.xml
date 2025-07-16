@@ -1,7 +1,10 @@
 <odoo>
 
   <template id="footer_custom" inherit_id="website.footer_custom" name="Commown Footer">
-    <xpath expr="//div[@id='footer']" position="replace">
+    <xpath expr="//div[@id='footer']" position="attributes">
+      <attribute name="invisible">1</attribute>
+    </xpath>
+    <xpath expr="div[@id='footer']" position="after">
       <link href="/commown/static/src/css/icons.css" rel="stylesheet" type="text/css" />
       <div id="footer" class="container hidden-print">
         <div class="row">
