@@ -19,6 +19,12 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
                 "Set partner invoice merge preferences",
             ),
         ],
+        ondelete={
+            "copy_invoice_partner": "cascade",
+            "reattribute_contracts": "cascade",
+            "reattribute_draft_contract_invoices": "cascade",
+            "set_partner_invoice_merge_prefs": "cascade",
+        },
     )
 
     @api.model
