@@ -11,8 +11,6 @@ from . import payment_provider
 from . import payment_transaction
 from . import payment_token_obsolescence_action
 from . import product_template
-from . import project_project
-from . import project_task
 from . import project_task_type
 from . import res_partner
 from . import res_users

@@ -1,0 +1,27 @@
+# Copyright 2025 Commown SCIC
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0)
+
+{
+    "name": "Commown Support",
+    "summary": "Features related to Commown's tech support",
+    "version": "16.0.1.0.0",
+    "development_status": "Beta",
+    "category": "Uncategorized",
+    "website": "https://github.com/commown/commown-odoo-addons",
+    "author": "Commown SCIC",
+    "maintainers": ["fcayre", "Honeyxilia"],
+    "license": "AGPL-3",
+    "data": [
+        "data/mail_templates.xml",
+        "data/ir_actions_server.xml",
+        "data/base_automation.xml",
+        "views/project_project.xml",
+        "views/project_task.xml",
+    ],
+    "depends": [
+        "base_automation",
+        "commown_contractual_issue",
+        "commown_self_troubleshooting",
+        "commown_project",
+    ],
+}

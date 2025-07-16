@@ -11,7 +11,7 @@ from odoo.addons.queue_job.tests.common import trap_jobs
 class NoSMSAssertMixin:
     @contextmanager
     def assertNoSMSLogged(self):
-        chan = "odoo.addons.commown.models.project_task"
+        chan = "odoo.addons.commown_support.models.project_task"
         with self.assertLogs(chan, level="WARNING") as logged:
             yield
         self.assertEqual(len(logged.output), 1)
@@ -118,11 +118,13 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         "Unset all commown actions' last_run date"
         action_refs = (
             self.env["ir.model.data"]
-            .search([("module", "=", "commown"), ("model", "=", "base.automation")])
+            .search(
+                [("module", "=", "commown_support"), ("model", "=", "base.automation")]
+            )
             .mapped("name")
         )
         for ref in action_refs:
-            self.env.ref("commown.%s" % ref).last_run = False
+            self.env.ref("commown_support.%s" % ref).last_run = False
 
     def assertIsReminderEmail(self, message):
         self.assertEqual(message.subtype_id, self.env.ref("mail.mt_comment"))
@@ -157,7 +159,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertIsReminderEmail(self.task.message_ids[1])
 
         # Check job for sms has been posted
-        template = self.env.ref("commown.sms_template_issue_reminder")
+        template = self.env.ref("commown_support.sms_template_issue_reminder")
         country_code = self.task.partner_id.country_id.code
         partner_mobile = normalize_phone(
             self.task.partner_id.get_mobile_phone(),
