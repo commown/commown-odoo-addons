@@ -97,7 +97,11 @@
     </xpath>
 
     <!-- Replace name by firstname + lastname -->
-    <xpath expr="//form//input[@name='name']/ancestor::div[1]" position="replace">
+    <xpath expr="//form//input[@name='name']/ancestor::div[1]" position="attributes">
+      <attribute field="invisible">1</attribute>
+    </xpath>
+
+    <xpath expr="//form//input[@name='name']/ancestor::div[1]" position="after">
       <div
                 t-attf-class="form-group #{error.get('firstname') and 'o_has_error' or ''} col-xl-6"
             >
@@ -259,36 +263,42 @@
   <!-- Customize portal section titles -->
 
   <template id="portal_my_home_sale" inherit_id="sale.portal_my_home_sale">
-    <xpath expr="//t[@t-if='quotation_count']//t[@t-set='title']" position="replace">
+    <xpath expr="//t[@t-if='quotation_count']" position="inside">
       <t t-set="title">My quotations</t>
     </xpath>
-    <xpath expr="//t[@t-if='order_count']//t[@t-set='title']" position="replace">
+    <xpath expr="//t[@t-if='order_count']" position="inside">
       <t t-set="title">My orders</t>
     </xpath>
   </template>
 
   <template id="portal_my_home_invoice" inherit_id="account.portal_my_home_invoice">
-    <xpath expr="//t[@t-if='invoice_count']//t[@t-set='title']" position="replace">
+    <xpath expr="//t[@t-if='invoice_count']" position="inside">
       <t t-set="title">My receipts, invoices and payments</t>
     </xpath>
   </template>
 
   <!-- Hide contracts on portal -->
   <template id="portal_my_home_contract" inherit_id="contract.portal_my_home_contract">
-    <xpath expr="//t[@t-if='contract_count']" position="replace" />
+    <xpath expr="//t[@t-if='contract_count']" position="attributes">
+      <attribute name="invisible">1</attribute>
+    </xpath>
   </template>
 
   <template id="portal_my_contracts" inherit_id="contract.portal_my_contracts">
-    <xpath expr="//t[@t-if='contracts']" position="replace" />
+    <xpath expr="//t[@t-if='contracts']" position="attributes">
+      <attribute name="invisible">1</attribute>
+    </xpath>
   </template>
 
   <template id="portal_contract_page" inherit_id="contract.portal_contract_page">
-    <xpath expr="//t[@t-call='portal.portal_record_layout']" position="replace" />
+    <xpath expr="//t[@t-call='portal.portal_record_layout']" position="attributes">
+      <attribute name="invisible">1</attribute>
+    </xpath>
   </template>
   <!-- End Hide contracts on portal -->
 
   <template id="portal_my_home" inherit_id="project.portal_my_home">
-    <xpath expr="//t[@t-if='task_count']//t[@t-set='title']" position="replace">
+    <xpath expr="//t[@t-if='task_count']" position="inside">
       <t t-set="title">My interactions with Commown team</t>
     </xpath>
   </template>
