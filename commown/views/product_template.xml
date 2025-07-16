@@ -1,40 +1,36 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-  <data>
+  <record model="ir.ui.view" id="product_template_form_view">
+    <field name="name">product.template.product.website.form</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="website_sale_b2b.product_template_form_view" />
+    <field name="arch" type="xml">
 
-    <record model="ir.ui.view" id="product_template_form_view">
-      <field name="name">product.template.product.website.form</field>
-      <field name="model">product.template</field>
-      <field name="inherit_id" ref="website_sale_b2b.product_template_form_view" />
-      <field name="arch" type="xml">
-
-        <field name="website_description_sale" position="before">
-          <field
-                        name="is_deposit"
-                        attrs="{'invisible':[('has_recurrent_payment','=',False)]}"
-                    />
-        </field>
-
-        <xpath expr="//page[@name='website']" position="inside">
-            <group name="website">
-              <field name="is_user_lang_fr" invisible="1" />
-              <field
-                            name="website_description"
-                            attrs="{'readonly': [('is_user_lang_fr', '=', False)]}"
-                        />
-            </group>
-        </xpath>
-
-        <field name="is_published" position="attributes">
-          <attribute
-                        name="attrs"
-                    >{'invisible': ['|', ('sale_ok','=',False), ('is_user_lang_fr', '=', False)]}</attribute>
-        </field>
-
+      <field name="website_description_sale" position="before">
+        <field
+                    name="is_deposit"
+                    attrs="{'invisible':[('has_recurrent_payment','=',False)]}"
+                />
       </field>
-    </record>
-  </data>
+
+      <xpath expr="//page[@name='website']" position="inside">
+        <group name="website">
+          <field name="is_user_lang_fr" invisible="1" />
+          <field
+                        name="website_description"
+                        attrs="{'readonly': [('is_user_lang_fr', '=', False)]}"
+                    />
+        </group>
+      </xpath>
+
+      <field name="is_published" position="attributes">
+        <attribute
+                    name="attrs"
+                >{'invisible': ['|', ('sale_ok','=',False), ('is_user_lang_fr', '=', False)]}</attribute>
+      </field>
+
+    </field>
+  </record>
 
   <record id="product_template_view_tree" model="ir.ui.view">
     <field name="name">product.template.view.tree (in module product_rental)</field>
