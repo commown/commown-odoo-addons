@@ -49,6 +49,7 @@
         "mass_mailing_list_dynamic",
         "mass_mailing_partner",
         "portal",
+        "project_task_add_very_high",
         "sale_management",
         "web_m2x_options",
         "web_notify",
