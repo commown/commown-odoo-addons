@@ -210,10 +210,6 @@
 
   <template id="product" inherit_id="website_sale_b2b.product_b2b">
 
-    <!-- Not lang related: hide stupid odoo hardcoded message like "30-day money-back guarantee" blah blah -->
-    <xpath expr="(//div[@id='product_details']//hr)[last()]" position="replace" />
-    <xpath expr="(//div[@id='product_details']//p)[last()]" position="replace" />
-
     <!-- Display availability warning for service products -->
     <xpath expr="//a[@id='add_to_cart']" position="after">
       <t
