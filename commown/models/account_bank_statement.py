@@ -1,10 +1,9 @@
-from odoo import api, models
+from odoo import models
 
 
 class AccountBankStatement(models.Model):
     _inherit = "account.bank.statement"
 
-    @api.multi
     def reconciliation_widget_preprocess(self):
         "Override to order statement lines by date instead of by id."
         result = super().reconciliation_widget_preprocess()

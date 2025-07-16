@@ -12,7 +12,6 @@ class AccountInvoice(models.Model):
         key_cols = super()._get_invoice_key_cols()
         return [key_col for key_col in key_cols if key_col != "user_id"]
 
-    @api.multi
     def _multiply_investments(self, multiplier=10):
         product_ids = (
             self.env["product.template"]

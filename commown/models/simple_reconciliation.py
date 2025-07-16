@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, models
+from odoo import models
 
 _logger = logging.getLogger(__name__)
 
@@ -12,7 +12,6 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
     default_max_reconcile_days_gap = 7
     default_max_reconcile_lines = 100
 
-    @api.multi
     def rec_auto_lines_simple(self, lines):
         """Same reconcile method as mass.reconcile.simple.partner but with a
         control of the maturity date gap between them: if the date difference
@@ -89,7 +88,6 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
             count += 1
         return res
 
-    @api.multi
     def _simple_order(self, *args, **kwargs):
         return (
             "ORDER BY"

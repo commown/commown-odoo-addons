@@ -63,7 +63,6 @@ class Contract(models.Model):
         label = label.replace("#INV#", invoice.number)
         return label
 
-    @api.multi
     def _pay_invoice(self, invoice):
         """Insert custom payment transaction label into the context
         before executing the standard payment process."""

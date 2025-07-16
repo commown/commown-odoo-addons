@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class CommownAccountMoveLine(models.Model):
@@ -6,6 +6,5 @@ class CommownAccountMoveLine(models.Model):
 
     full_reconcile_id = fields.Many2one(index=True)
 
-    @api.multi
     def step_workflow(self):
         return True
