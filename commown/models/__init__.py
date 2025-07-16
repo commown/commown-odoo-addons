@@ -13,7 +13,6 @@ from . import product_template
 from . import project_project
 from . import project_task
 from . import project_task_type
-from . import reconciliation_widget
 from . import res_partner
 from . import res_users
 from . import sale_order
