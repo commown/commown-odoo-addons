@@ -10,12 +10,6 @@ _logger = logging.getLogger(__name__)
 class ProjectTask(models.Model):
     _inherit = "project.task"
 
-    priority = fields.Selection(
-        selection_add=[
-            ("2", "High"),
-        ],
-    )
-
     show_internal_followup = fields.Boolean(
         "Show internal follow-up", related="project_id.show_internal_followup"
     )
