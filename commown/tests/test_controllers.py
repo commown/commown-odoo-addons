@@ -41,7 +41,7 @@ class TestSlimpayPaymentControllerTC(SlimpayControllersTC):
         os.environ.update(
             {
                 "SERVER_ENV_CONFIG": (
-                    "[payment_acquirer.Slimpay]\n"
+                    "[payment_provider.Slimpay]\n"
                     "slimpay_api_url=https://api.preprod.slimpay.com\n"
                     "slimpay_creditor=democreditor\n"
                     "slimpay_app_id=democreditor01\n"
@@ -56,14 +56,14 @@ class TestSlimpayPaymentControllerTC(SlimpayControllersTC):
     def test_slimpay_portal_sale_ok_with_token(self):
         ref = self.env.ref
         partner = ref("base.partner_demo_portal")
-        acquirer = ref("account_payment_slimpay.payment_acquirer_slimpay")
+        provider = ref("account_payment_slimpay.payment_provider_slimpay")
 
         token = self.env["payment.token"].create(
             {
                 "name": "Test token",
                 "partner_id": partner.id,
-                "acquirer_id": acquirer.id,
-                "acquirer_ref": "test slimpay ref",
+                "provider_id": provider.id,
+                "provider_ref": "test slimpay ref",
             }
         )
         partner.payment_token_id = token.id

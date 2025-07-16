@@ -40,8 +40,8 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
                 "name": "Test Token",
                 "partner_id": partner.id,
                 "active": True,
-                "acquirer_id": self.slimpay.id,
-                "acquirer_ref": "mandate_old",
+                "provider_id": self.slimpay.id,
+                "provider_ref": "mandate_old",
             }
         )
         partner.payment_token_id = old_token.id
@@ -49,7 +49,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         # Simulate a website sale:
         tx = self.so._create_payment_transaction(
             {
-                "acquirer_id": self.slimpay.id,
+                "provider_id": self.slimpay.id,
                 "type": "form",
                 "amount": self.so.amount_total,
                 "currency_id": self.so.pricelist_id.currency_id.id,

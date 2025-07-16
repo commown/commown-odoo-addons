@@ -8,13 +8,13 @@ from odoo.addons.server_environment.models import server_env_mixin
 
 @contextmanager
 def fake_slimpay_server_env_config(config=None):
-    "Fake a server env config for slimpay acquirer using env variables"
+    "Fake a server env config for slimpay provider using env variables"
 
     # Default config if not given
     if config is None:
         config = "\n".join(
             [
-                "[payment_acquirer.Slimpay]",
+                "[payment_provider.Slimpay]",
                 "slimpay_api_url=https://example.com",
                 "slimpay_creditor=creditor",
                 "slimpay_app_id=slimpay_app_id",

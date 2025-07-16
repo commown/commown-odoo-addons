@@ -9,17 +9,13 @@ class ContractPaymentTC(TestContractBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        slimpay = (
-            cls.env["payment.acquirer"]
-            .search([("provider", "=", "slimpay")])
-            .ensure_one()
-        )
+        slimpay = cls.ref("account_payment_slimpay.payment_provider_slimpay")
         payment_token = cls.env["payment.token"].create(
             {
                 "name": "Test Slimpay Token",
                 "partner_id": cls.contract.partner_id.id,
-                "acquirer_id": slimpay.id,
-                "acquirer_ref": "Slimpay mandate ref",
+                "provider_id": slimpay.id,
+                "provider_ref": "Slimpay mandate ref",
             }
         )
         cls.contract.is_auto_pay = True
@@ -28,7 +24,7 @@ class ContractPaymentTC(TestContractBase):
     def setUp(self):
         super().setUp()
         client_patcher = patch(
-            "odoo.addons.account_payment_slimpay.models." "slimpay_utils.get_client"
+            "odoo.addons.account_payment_slimpay.models.slimpay_utils.get_client"
         )
         client_patcher.start()
         self.addCleanup(client_patcher.stop)

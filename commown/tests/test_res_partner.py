@@ -167,13 +167,13 @@ class ResPartnerSimpleTC(SavepointCase):
         self.assertEqual(ref_account.code, "411100")  # unchanged!
 
     def _new_token(self, name, partner):
-        acquirer = self.env.ref("account_payment_slimpay.payment_acquirer_slimpay")
+        provider = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
         return self.env["payment.token"].create(
             {
                 "name": name,
-                "acquirer_id": acquirer.id,
+                "provider_id": provider.id,
                 "partner_id": partner.id,
-                "acquirer_ref": name,
+                "provider_ref": name,
             }
         )
 
