@@ -6,7 +6,6 @@ from . import test_customer_portal
 from . import test_ir_http
 from . import test_payment
 from . import test_payment_token
-from . import test_project_task
 from . import test_res_partner
 from . import test_res_users
 from . import test_sale_order
