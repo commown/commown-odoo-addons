@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
   <template id="address" inherit_id="website_sale.address">
@@ -64,27 +63,15 @@
     </xpath>
 
     <!-- Add zip as required: remove label-optional class from input -->
-    <xpath expr="//form//input[@name='zip']/ancestor::div[1]" position="replace">
-      <div
-                t-attf-class="form-group #{error.get('zip') and 'o_has_error' or ''} col-md-4 div_zip"
-            >
-        <label class="col-form-label" for="zip">Zip Code</label>
-        <input
-                    type="text"
-                    name="zip"
-                    t-attf-class="form-control #{error.get('zip') and 'is-invalid' or ''}"
-                    t-att-value="'zip' in checkout and checkout['zip']"
-                />
-      </div>
+    <xpath expr="//form//label[@for='zip']" position="attributes">
+      <attribute name="class" separator=" " remove="label-optional" />
     </xpath>
 
     <!-- * add in field_required hidden input for the controller -->
-    <xpath expr="//form//input[@name='field_required']" position="replace">
-      <input
-                type="hidden"
-                name="field_required"
-                t-att-value="'firstname,lastname,street,phone,zip,city,country_id' + (',company_name' if edit_company_infos else '')"
-            />
+    <xpath expr="//form//input[@name='field_required']" position="attributes">
+      <attribute
+                name="t-att-value"
+            >'firstname,lastname,street,phone,zip,city,country_id' + (',company_name' if edit_company_infos else '')</attribute>
     </xpath>
 
   </template>
