@@ -4,7 +4,10 @@
   <template id="sale_order_portal_content" inherit_id="sale.sale_order_portal_content">
 
     <!-- Replace the terms section by the documents sent by email -->
-    <xpath expr="//section[@id='terms']" position="replace">
+    <xpath expr="//section[@id='terms']" position="attributes">
+      <attribute name="invisible">1</attribute>
+    </xpath>
+    <xpath expr="//section[@id='terms']" position="after">
 
       <t t-set="by_contract_docs" t-value="sale_order.contractual_documents()" />
       <section t-if="by_contract_docs" id="sent_docs" class="mt-5">
@@ -42,11 +45,13 @@
   <template id="orders_followup" inherit_id="sale.sale_order_portal_template">
 
     <!-- Remove sidebar -->
-    <xpath expr="//t[@t-call='portal.portal_record_sidebar']" position="replace">
+    <xpath expr="//t[@t-call='portal.portal_record_sidebar']" position="attributes">
+      <attribute name="invisible">1</attribute>
     </xpath>
 
     <!-- Remove communication section -->
-    <xpath expr="//div[@id='sale_order_communication']" position="replace">
+    <xpath expr="//div[@id='sale_order_communication']" position="attributes">
+      <attribute name="invisible">1</attribute>
     </xpath>
 
   </template>
