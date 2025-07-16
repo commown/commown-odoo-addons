@@ -8,6 +8,7 @@
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "account_loan",
+        "attachment_indexation",
         "base_user_role",
         "survey",
         # Commown modules
