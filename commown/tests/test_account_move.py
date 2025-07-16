@@ -66,7 +66,7 @@ class AccountInvoiceTC(AutoPayInvoiceTC):
             }
         )
 
-        equity_invoice_line = self.env["account.invoice.line"].create(
+        equity_invoice_line = self.env["account.move.line"].create(
             {
                 "name": "Test investment invoice line",
                 "account_id": account.id,
@@ -75,7 +75,7 @@ class AccountInvoiceTC(AutoPayInvoiceTC):
                 "price_unit": 60,
             }
         )
-        not_equity_invoice_line = self.env["account.invoice.line"].create(
+        not_equity_invoice_line = self.env["account.move.line"].create(
             {
                 "name": "Test not investment invoice line",
                 "account_id": account.id,
@@ -85,20 +85,20 @@ class AccountInvoiceTC(AutoPayInvoiceTC):
             }
         )
 
-        equity_invoice = self.env["account.invoice"].create(
+        equity_invoice = self.env["account.move"].create(
             {
                 "partner_id": self.partner_1.id,
             }
         )
-        not_equity_invoice = self.env["account.invoice"].create(
+        not_equity_invoice = self.env["account.move"].create(
             {
                 "partner_id": self.partner_1.id,
             }
         )
-        equity_invoice.invoice_line_ids |= equity_invoice_line
+        equity_invoice.line_ids |= equity_invoice_line
         equity_invoice.stage = "paid"
 
-        not_equity_invoice.invoice_line_ids |= not_equity_invoice_line
+        not_equity_invoice.line_ids |= not_equity_invoice_line
         not_equity_invoice.stage = "paid"
 
         equity_old_price = equity_invoice_line.price_unit
@@ -110,7 +110,7 @@ class AccountInvoiceTC(AutoPayInvoiceTC):
         not_equity_invoice._multiply_investments(multiplier)
 
         self.assertEqual(
-            equity_invoice.invoice_line_ids.price_unit,
+            equity_invoice.line_ids.price_unit,
             equity_old_price * multiplier,
         )
         self.assertEqual(
@@ -118,6 +118,6 @@ class AccountInvoiceTC(AutoPayInvoiceTC):
             self.env.ref("commown.investment_payment_term"),
         )
         self.assertEqual(
-            not_equity_invoice.invoice_line_ids.price_unit,
+            not_equity_invoice.line_ids.price_unit,
             not_equity_old_price,
         )

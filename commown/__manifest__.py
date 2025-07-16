@@ -69,7 +69,6 @@
         "data/project_project.xml",
         "data/payment_button.xml",
         "security/ir.model.access.csv",
-        "views/account_invoice.xml",
         "views/account_move.xml",
         "views/actions_account_invoice.xml",
         "views/actions_crm_lead.xml",

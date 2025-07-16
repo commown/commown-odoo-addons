@@ -308,12 +308,12 @@ class CommownPartner(models.Model):
         )
         contracts.update({"invoice_partner_id": self.id})
 
-        invoices = self.env["account.invoice"].search(
+        invoices = self.env["account.move"].search(
             [
                 ("type", "=", "out_invoice"),
                 ("state", "=", "draft"),
                 ("partner_id", "=", self.parent_id.id),
-                ("invoice_line_ids.contract_line_id", "!=", False),
+                ("line_ids.contract_line_id", "!=", False),
             ]
         )
         invoices.update({"partner_id": self.id})
