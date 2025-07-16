@@ -6,25 +6,25 @@
     <field name="reply_to">contact@commown.fr</field>
     <field
             name="subject"
-        >[${object.company_id.name}] Facture (Ref ${object.number or 'n/a'})</field>
-    <field name="partner_to">${object.partner_id.id}</field>
+        >[{{object.company_id.name}}] Facture (Ref {{object.number or 'n/a'}})</field>
+    <field name="partner_to">{{object.partner_id.id}}</field>
     <field name="model_id" ref="account.model_account_move" />
     <field name="auto_delete" eval="True" />
     <field name="report_template" ref="account.account_invoices" />
     <field
             name="report_name"
-        >Commown_Facture_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>
-    <field name="lang">${object.partner_id.lang}</field>
+        >Commown_Facture_{{(object.number or '').replace('/','_')}}_{{object.state == 'draft' and 'draft' or ''}}</field>
+    <field name="lang">{{object.partner_id.lang}}</field>
     <field
             name="body_html"
         ><![CDATA[
-<p>Bonjour ${object.partner_id.firstname},</p>
+<p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
 <br/>
-<p>Votre facture <strong>${object.number}</strong>
-% if object.origin:
-(référence : ${object.origin} )
-% endif
-d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</strong> est disponible dans votre espace Commown.</p>
+<p>Votre facture <strong><t t-out="object.number" /></strong>
+<t t-if="object.origin" >
+(référence : <t t-out="object.origin" /> )
+</t>
+d'un montant de <strong><t t-out="object.amount_total" /> <t t-out="object.currency_id.symbol" /></strong> est disponible dans votre espace Commown.</p>
 
 <br><br>
 <div>
@@ -35,11 +35,12 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
 
 <br><br>
 
-% if object.state=='paid':
+<t t-if="object.state=='paid'">
     <p>Cette facture est déjà payée.</p>
-% else:
+</t>
+<t t-else="">
     <p>Veuillez effectuer le paiement dès que possible.</p>
-% endif
+</t>
 
 <p>Merci,</p>
 
@@ -61,7 +62,7 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
             name="body_html"
         ><![CDATA[
 <div>
-  <p>Bonjour ${object.partner_id.firstname},</p>
+  <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
   <br>
   <p>Pas de nouvelles, bonnes nouvelles&nbsp;?&nbsp;&nbsp;;-)</p>
   <p>
@@ -94,7 +95,7 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
     <field name="name">[commown] SAV : relance SMS</field>
     <field
             name="subject"
-        ><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
+        ><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=<t t-out="''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')" />]]></field>
     <field name="email_from">contact@commown.coop</field>
     <field name="email_to">mail2sms@envoyersmspro.com</field>
     <field name="model_id" ref="project.model_project_task" />
@@ -111,7 +112,7 @@ d'un montant de <strong>${object.amount_total} ${object.currency_id.symbol}</str
     <field name="name">[commown] SMS relance doc</field>
     <field
             name="subject"
-        ><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=${''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}]]></field>
+        ><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=<t t-out="''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')" />]]></field>
     <field name="email_from">contact@commown.coop</field>
     <field name="email_to">mail2sms@envoyersmspro.com</field>
     <field name="model_id" ref="crm.model_crm_lead" />
