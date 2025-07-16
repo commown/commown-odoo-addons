@@ -43,11 +43,13 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
         )
 
         demo_user = self.env.ref("base.user_demo")
-        task_user = self.env["project.task"].sudo(demo_user).browse(task.id)
+        task_user = self.env["project.task"].with_user(demo_user).browse(task.id)
         self.assertEqual(task_user.name, "Commown test")
         self.assertEqual(task_user.internal_followup, "<p>Coucou</p>")
 
-        task_portal = self.env["project.task"].sudo(partner.user_ids).browse(task.id)
+        task_portal = (
+            self.env["project.task"].with_user(partner.user_ids).browse(task.id)
+        )
         self.assertEqual(task_portal.name, "Commown test")
         with self.assertRaises(AccessError) as err:
             task_portal.internal_followup  # pylint: disable=pointless-statement

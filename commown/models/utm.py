@@ -1,4 +1,4 @@
-from odoo import _, api, models
+from odoo import _, models
 from odoo.exceptions import UserError
 
 
@@ -15,7 +15,6 @@ class UtmCommownUtilsMixin(models.AbstractModel):
                 continue
             yield field, self.env[model].search([(field.name, "in", self.ids)])
 
-    @api.multi
     def action_merge(self):
         "Merge current sources, making related entities point to the first one"
         keep_id = self.ids[0]
@@ -26,7 +25,6 @@ class UtmCommownUtilsMixin(models.AbstractModel):
 
         to_remove.sudo().unlink()
 
-    @api.multi
     def action_remove(self):
         """Remove current sources if they are not related to any entity
         and raise a user error otherwise.

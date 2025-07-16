@@ -177,7 +177,6 @@ class CommownPartner(models.Model):
         self._create_property_account("receivable")
 
     @api.model
-    @api.returns("self", lambda value: value.id)
     def create(self, vals):
         self._apply_bin_field_size_policy(vals)
         result = super().create(vals)
@@ -202,7 +201,6 @@ class CommownPartner(models.Model):
             _logger.debug(_msg, self.name, self.id, p_inv.name, p_inv.id)
             p_inv.update({f: self[f] for f in _PAYMENT_FIELDS})
 
-    @api.multi
     def write(self, vals):
         self._apply_bin_field_size_policy(vals)
 
@@ -295,7 +293,6 @@ class CommownPartner(models.Model):
         super().reset_payment_token()
         return self.update({f: False for f in _PAYMENT_PREF_FIELDS})
 
-    @api.multi
     def action_set_as_invoice_recipient(self):
         self.ensure_one()
 

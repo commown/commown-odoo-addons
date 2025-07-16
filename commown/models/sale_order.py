@@ -1,6 +1,6 @@
 import html
 
-from odoo import _, api, models
+from odoo import _, models
 
 
 class SaleOrder(models.Model):
@@ -10,7 +10,6 @@ class SaleOrder(models.Model):
         # Override to sort accessories by name instead of randomly
         return sorted(super()._cart_accessories(), key=lambda p: p.name)
 
-    @api.multi
     def _prepare_invoice(self):
         """We do not want the sale order note to be copied to the invoice
         comment (pre-sale notes do generally not apply to invoices).
@@ -60,7 +59,6 @@ class SaleOrder(models.Model):
                 }
             )
 
-    @api.multi
     def action_confirm(self):
         self.ensure_one()
         self.partner_id._create_receivable_account()

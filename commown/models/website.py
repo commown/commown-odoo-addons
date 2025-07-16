@@ -1,4 +1,4 @@
-from odoo import api, fields, models, tools
+from odoo import fields, models, tools
 from odoo.http import request
 
 
@@ -7,7 +7,6 @@ class Website(models.Model):
 
     product_service_details_url = fields.Char("Service detail URL", translate=True)
 
-    @api.multi
     def get_languages(self):
         self.ensure_one()
         if not request.env.user.has_group("website.group_website_publisher"):
