@@ -1,0 +1,101 @@
+<odoo>
+
+  <!-- Replace image URL in the kanban view -->
+  <record id="rating_rating_view_kanban" model="ir.ui.view">
+    <field name="model">rating.rating</field>
+    <field name="inherit_id" ref="rating.rating_rating_view_kanban" />
+    <field name="arch" type="xml">
+      <field name="rating_image" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </field>
+      <field name="rating_image" position="after">
+        <img
+                    t-attf-src="/project_rating_nps/static/src/img/rate_with_icon_#{record.rating.raw_value}.png"
+                    t-attf-alt="NPS value: {record.rating.raw_value}"
+                />
+      </field>
+    </field>
+  </record>
+
+  <!-- Replace existing filters by "Promoters", "Passives", "Detractors" -->
+  <record id="rating_rating_view_search" model="ir.ui.view">
+    <field name="model">rating.rating</field>
+    <field name="inherit_id" ref="rating.rating_rating_view_search" />
+    <field name="arch" type="xml">
+      <xpath expr="//filter[@name='rating_happy']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//filter[@name='rating_happy']" position="after">
+        <filter
+                    string="Promoters"
+                    name="rating_promoters"
+                    domain="[('rating', 'in', [9, 10])]"
+                />
+      </xpath>
+      <xpath expr="//filter[@name='rating_okay']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//filter[@name='rating_okay']" position="after">
+        <filter
+                    string="Passives"
+                    name="rating_passives"
+                    domain="[('rating', 'in', [8, 7])]"
+                />
+      </xpath>
+      <xpath expr="//filter[@name='rating_unhappy']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//filter[@name='rating_unhappy']" position="after">
+        <filter
+                    string="Detractors"
+                    name="rating_detractors"
+                    domain="[('rating', '&lt;=', 6)]"
+                />
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Replace happy ratings display on project dashboard by NPS -->
+  <record id="view_project_kanban" model="ir.ui.view">
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="project.view_project_kanban" />
+    <field name="arch" type="xml">
+      <field name="partner_id" position="after">
+        <field name="net_promoter_score" invisible="1" />
+      </field>
+
+      <!-- Hide standard rating -->
+      <xpath
+                expr="//div[hasclass('o_kanban_primary_left')]//div[@groups='project.group_project_rating']/b"
+                position="attributes"
+            >
+        <attribute name="invisible">1</attribute>
+      </xpath>
+
+      <field name="rating_avg_percentage" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </field>
+
+      <!-- Show NPS -->
+      <xpath expr="//div[hasclass('oe_kanban_bottom_right')]/*" position="before">
+        <div
+                    t-if="record.rating_active.raw_value and record.rating_count.raw_value &gt; 0"
+                    t-attf-title="Net Promoter Score: {{ record.net_promoter_score.value }}"
+                    groups="project.group_project_rating"
+                >
+          <t t-set="nps_names" t-value="['detractor', 'passive', 'promoter']" />
+          <t
+                        t-set="nps_index"
+                        t-value="1 + Math.sign(record.net_promoter_score.raw_value)"
+                    />
+          <img
+                        t-attf-src="project_rating_nps/static/src/img/{{ nps_names[nps_index] }}.png"
+                        t-attf-alt="nps_names[nps_index]"
+                        style="width: 20px; margin-right: 5px"
+                    />
+        </div>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
