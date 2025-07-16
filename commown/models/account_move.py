@@ -2,7 +2,7 @@ from odoo import _, api, models
 
 
 class AccountInvoice(models.Model):
-    _inherit = "account.invoice"
+    _inherit = "account.move"
 
     @api.model
     def _get_invoice_key_cols(self):
