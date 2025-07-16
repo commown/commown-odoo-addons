@@ -2,7 +2,7 @@
 
   <record id="mass_reconcile" model="account.mass.reconcile">
     <field name="name">Lettrage Slimpay</field>
-    <field name="account" ref="l10n_fr.1_pcg_5113" />
+    <field name="account" search="[('code','=', '511300')]" />
   </record>
 
   <record
