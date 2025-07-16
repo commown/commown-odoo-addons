@@ -43,7 +43,7 @@
         "bi_sql_editor",
         "contract_queue_job",
         "contract_variable_quantity",
-        "crm_phone",
+        "phone_validation",
         "mail_debrand",
         "mass_mailing_list_dynamic",
         "mass_mailing_partner",
