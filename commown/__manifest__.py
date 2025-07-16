@@ -79,7 +79,6 @@
         "views/contract_contract.xml",
         "views/contract_template.xml",
         "views/crm_lead.xml",
-        "views/debrand_notification.xml",
         "views/ir_attachment.xml",
         "views/payment_portal_templates.xml",
         "views/product_template.xml",
