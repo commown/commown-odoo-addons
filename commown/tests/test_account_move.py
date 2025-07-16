@@ -6,7 +6,7 @@ from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
     AutoPayInvoiceTC,
     fake_do_tx_ok,
 )
-from odoo.addons.payment.models.payment_acquirer import PaymentTransaction
+from odoo.addons.payment.models.payment_provider import PaymentTransaction
 
 
 @at_install(False)

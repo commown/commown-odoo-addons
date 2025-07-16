@@ -53,8 +53,8 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         )
 
     def test_action_reattribute_contracts(self):
-        # Configure acquirer with invoice partner copy and contract reattribution
-        # then trigger obsolescence:
+        # Configure payment provider with invoice partner copy and
+        # contract reattribution then trigger obsolescence:
         self.company_s1_w1.copy({"type": "invoice", "parent_id": self.company_s1_w1.id})
         new_token = self._trigger_obsolescence(
             "copy_invoice_partner",
@@ -81,8 +81,8 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         # Generate draft invoices (contract isauto_pay is False)
         inv = self.contract1._recurring_create_invoice()
 
-        # Configure acquirer with invoice partner copy and draft invoices reattribution
-        # then trigger obsolescence:
+        # Configure payment provider with invoice partner copy and
+        # draft invoices reattribution then trigger obsolescence:
         self.company_s1_w1.copy({"type": "invoice", "parent_id": self.company_s1_w1.id})
         new_token = self._trigger_obsolescence(
             "copy_invoice_partner",
@@ -103,7 +103,8 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-28"))
         self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-19"))
 
-        # Configure acquirer with invoice merge prefs set and trigger obsolescence:
+        # Configure payment provider with invoice merge prefs set and
+        # trigger obsolescence:
         with freeze_time("2018-02-10"):
             new_token = self._trigger_obsolescence("set_partner_invoice_merge_prefs")
 
@@ -117,8 +118,9 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         self.company_s1_w1.update(_payment_prefs(2, "monthly", "2018-02-28"))
         self.company_s1_w2.update(_payment_prefs(1, "yearly", "2018-02-19"))
 
-        # Configure acquirer with invoice merge prefs setting, preset the new
-        # partner's payment preferences and trigger obsolescence
+        # Configure payment providre with invoice merge prefs setting,
+        # preset the new partner's payment preferences and trigger
+        # obsolescence
         with freeze_time("2018-05-01"):
             new_token = self._trigger_obsolescence(
                 "set_partner_invoice_merge_prefs",

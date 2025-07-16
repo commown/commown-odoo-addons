@@ -96,7 +96,7 @@
 if not record.payment_token_id:
     raise Warning("Partner has no token!")
 
-record.payment_token_id.acquirer_id.run_obsolete_token_actions(record.payment_token_id)
+record.payment_token_id.provider_id.run_obsolete_token_actions(record.payment_token_id)
 ]]>
     </field>
   </record>
