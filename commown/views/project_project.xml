@@ -6,7 +6,7 @@
     <field name="model">project.project</field>
     <field name="inherit_id" ref="commown_contractual_issue.edit_project" />
     <field name="arch" type="xml">
-      <xpath expr="//group[@name='misc']" position="inside">
+      <xpath expr="//group[@name='extra_settings']" position="before">
         <group string="Internal Followup">
             <field name="show_internal_followup" />
         </group>
