@@ -35,6 +35,7 @@
         "website_sale_affiliate_product_restriction",
         "website_sale_b2b",
         "website_sale_coupon",
+        "commown_website_sale_coupon",
         # OCA modules
         "account_payment_sale",
         "account_mass_reconcile",
@@ -57,7 +58,6 @@
     ],
     "external_dependencies": {
         "python": ["magic", "pdfminer"],
-        "bin": ["rsvg-convert"],
     },
     "data": [
         "data/account_payment_term.xml",
