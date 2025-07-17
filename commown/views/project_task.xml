@@ -47,13 +47,26 @@
   </record>
 
   <!-- Edit task list on portal -->
-  <template id="portal_my_tasks" inherit_id="project.portal_my_tasks">
+  <template id="portal_tasks_list" inherit_id="project.portal_tasks_list">
+
+    <!-- Prefer portal stage name over administrative stage name -->
+    <xpath
+            expr="//tbody//span[@t-field='tasks[0].sudo().stage_id.name']"
+            position="attributes"
+        >
+      <attribute name="t-field" />
+      <attribute
+                name="t-esc"
+            >tasks[0].sudo().stage_id.portal_displayed_name or tasks[0].sudo().stage_id.name</attribute>
+    </xpath>
+
+    <!-- Prefer portal stage name over administrative stage name -->
     <xpath expr="//tbody//span[@t-esc='task.stage_id.name']" position="attributes">
-      <!-- Prefer portal stage name over administrative stage name -->
       <attribute
                 name="t-esc"
             >task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
     </xpath>
+
   </template>
 
   <!-- Edit task page on portal -->
@@ -67,9 +80,9 @@
             >task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
     </xpath>
 
-    <xpath expr="//*[@t-field='task.user_id']" position="attributes">
+    <xpath expr="//t[@t-foreach='task.user_ids']//a" position="attributes">
       <!-- Do not expose our support people name and email -->
-      <attribute name="t-options">{"widget": "contact", "fields": ["name"]}</attribute>
+      <attribute name="invisible">1</attribute>
     </xpath>
 
   </template>
