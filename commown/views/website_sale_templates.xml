@@ -157,30 +157,19 @@
 
   </template>
 
-  <template
-        id="products_add_to_cart_group_sales"
-        inherit_id="website_sale_cart_selectable.products_add_to_cart"
-    >
-    <xpath
-            expr="//t[@t-if='len(product.product_variant_ids) == 1'] and product.website_btn_addtocart_published"
-            position="attributes"
-        >
+  <template id="products_item" inherit_id="website_sale_cart_selectable.products_item">
+    <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="attributes">
       <attribute
                 name="t-if"
-            >len(product.product_variant_ids) == 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
-    </xpath>
-    <xpath
-            expr="//t[@t-if='len(product.product_variant_ids) &gt; 1'] and product.website_btn_addtocart_published"
-            position="attributes"
-        >
-      <attribute
-                name="t-if"
-            >len(product.product_variant_ids) &gt; 1 and (product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids)</attribute>
+            >product.website_btn_addtocart_published or env.user.has_group('sales_team.group_sale_manager')</attribute>
     </xpath>
   </template>
 
-  <template id="product_group_sales" inherit_id="website_sale_cart_selectable.product">
-    <xpath expr="//a[@id='add_to_cart']" position="attributes">
+  <template id="product" inherit_id="website_sale_cart_selectable.product">
+    <xpath
+            expr="//t[@t-if='product.website_btn_addtocart_published']"
+            position="attributes"
+        >
       <attribute
                 name="t-if"
             >product.website_btn_addtocart_published or env.ref('sales_team.group_sale_manager').id in env.user.groups_id.ids</attribute>
