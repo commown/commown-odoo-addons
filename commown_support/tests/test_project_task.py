@@ -58,6 +58,11 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
 
 @tagged("-at_install", "post_install")
 class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
+    def flush_tracking(self):
+        """Force the creation of tracking values."""
+        self.env.flush_all()
+        self.cr.precommit.run()
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -148,7 +153,10 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         fr = self.env.ref("base.fr")
         self.task.partner_id.update({"country_id": fr.id, "phone": "+33747397654"})
         with trap_jobs() as trap:
+            self.flush_tracking()  # Making sure a tracking discard will not impact next flush
+
             self.task.update({"stage_id": self.stage_reminder.id})
+            self.flush_tracking()
         trap.assert_jobs_count(1, only=self.task.send_sms_from_template)
 
         # Check email message
@@ -190,7 +198,10 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self._send_partner_email()
         message_num = len(self.task.message_ids)
         with self.assertNoSMSLogged():
+            self.flush_tracking()  # Making sure a tracking discard will not impact next flush
+
             self.task.update({"stage_id": self.stage_reminder.id})
+            self.flush_tracking()
 
         # 2 expected messages: email, stage change (in reverse order)
         self.assertEqual(len(self.task.message_ids), message_num + 2)
