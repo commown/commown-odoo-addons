@@ -91,6 +91,11 @@
         "static/src/xml/account_reconciliation.xml",
         "static/src/xml/menu.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "/commown/static/src/css/website_sale.css",
+        ],
+    },
     "installable": True,
     "application": True,
 }
