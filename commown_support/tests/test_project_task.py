@@ -108,7 +108,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
                 "project_id": self.project.id,
                 "stage_id": self.stage_pending.id,
                 "partner_id": self.partner.id,
-                "user_id": self.env.ref("base.user_demo").id,
+                "user_ids": self.env.ref("base.user_demo").ids,
             }
         )
 
