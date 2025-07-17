@@ -52,7 +52,7 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
         self.assertEqual(task_portal.name, "Commown test")
         with self.assertRaises(AccessError) as err:
             task_portal.internal_followup  # pylint: disable=pointless-statement
-        self.assertIn("security restrictions", err.exception.name)
+        self.assertIn("not have enough rights to access", err.exception.name)
         self.assertIn("internal_followup", err.exception.name)
 
 
