@@ -125,6 +125,6 @@ class Campaign(models.Model):
 
         return {
             "type": "ir.actions.act_url",
-            "url": attachment.website_url + "&download=1",
+            "url": attachment.local_url + "&download=1",
             "target": "new",
         }

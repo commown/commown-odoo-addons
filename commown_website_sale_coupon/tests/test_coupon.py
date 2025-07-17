@@ -11,7 +11,7 @@ class CouponTC(SavepointCase):
             [("res_model", "=", campaign._name), ("res_id", "=", campaign.id)],
         )
 
-        self.assertEqual(action["url"], att.website_url + "&download=1")
+        self.assertEqual(action["url"], att.local_url + "&download=1")
         self.assertEqual(att.mimetype, "application/pdf")
         coupon_codes = campaign.coupon_ids.mapped("code")
         self.assertTrue(all(code in att.index_content for code in coupon_codes))
