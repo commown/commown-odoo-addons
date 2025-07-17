@@ -11,7 +11,7 @@
             name="code"
         ><![CDATA[
 if record.user_ids:
-    record = record.sudo(record.user_ids[0])
+    record = record.with_user(record.user_ids[0])
 email_template = env.ref('commown_support.mail_template_issue_reminder').id
 record.message_post_with_template(email_template)
 ]]>
@@ -66,7 +66,7 @@ for orig, dest in next_stage_marker.items():
     <field
             name="name"
         >[commown] Move waiting issues into pending on user email arrival</field>
-    <field name="model_id" ref="calendar.model_mail_message" />
+    <field name="model_id" ref="mail.model_mail_message" />
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field
