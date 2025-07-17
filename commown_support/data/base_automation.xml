@@ -145,7 +145,7 @@
        creation when concerning a project.task -->
   <record id="mail_message_arrival_concerning_issue" model="base.automation">
     <field name="name">[commown] A email concerning an issue just arrived</field>
-    <field name="model_id" ref="calendar.model_mail_message" />
+    <field name="model_id" ref="mail.model_mail_message" />
     <field name="sequence">1</field>
     <field name="trigger">on_create</field>
     <field name="filter_domain">[(u'model', u'=', u'project.task')]</field>
