@@ -4,7 +4,6 @@ from . import account_move_line
 from . import account_partial_reconcile
 from . import contract
 from . import crm_lead
-from . import coupon
 from . import ir_http
 from . import mass_reconcile
 from . import payment_provider

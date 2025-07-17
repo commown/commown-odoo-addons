@@ -42,39 +42,6 @@ class SaleOrderTC(RentalSaleOrderTC):
             )
         return team
 
-    def test_add_followup_card_name_with_coupon(self):
-        """Followup card name must indicate sale coupons were used if any"""
-
-        # Simulate the usage of a coupon in the sale:
-        campaign = self.env["coupon.campaign"].create(
-            {
-                "name": "Test campaign 40% reduction",  # % used deliberately here
-                "seller_id": self.env.ref("base.res_partner_1").id,
-            }
-        )
-        self.env["coupon.coupon"].create(
-            {
-                "reserved_for_sale_id": self.so.id,
-                "campaign_id": campaign.id,
-            }
-        )
-
-        # Trigger the automatic action
-        self.so.action_confirm()
-
-        # Check effects
-        partner = self.so.partner_id
-        leads = self.env["crm.lead"].search(
-            [
-                ("partner_id", "=", partner.id),
-                ("name", "ilike", "%" + self.so.name + "%"),
-            ]
-        )
-        self.assertEqual(len(leads), 3)
-        self.assertTrue(
-            all("COUPON: %s" % campaign.name in name for name in leads.mapped("name"))
-        )
-
     def test_add_receivable_account(self):
         "Buying a product must add the buyer a dedicated receivable account"
 
