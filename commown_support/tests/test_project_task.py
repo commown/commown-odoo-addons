@@ -58,57 +58,58 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
 
 @tagged("-at_install", "post_install")
 class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.project = self.env.ref("commown_support.support_project")
+        cls.project = cls.env.ref("commown_support.support_project")
 
         # Adapt defined stages to our needs: use expected name
         # conventions and remove email model as they are buggy for
         # issues (their template model is task instead, which leads to
         # crashes)
-        self.stage_pending = self.env["project.task.type"].create(
+        cls.stage_pending = cls.env["project.task.type"].create(
             {"name": "Working on it [after-sale: pending]", "mail_template_id": False}
         )
-        self.stage_pending.project_ids |= self.project
-        self.stage_wait = self.stage_pending.copy(
+        cls.stage_pending.project_ids |= cls.project
+        cls.stage_wait = cls.stage_pending.copy(
             {"name": "Wait [after-sale: waiting-customer]", "mail_template_id": False}
         )
-        self.stage_reminder = self.stage_pending.copy(
+        cls.stage_reminder = cls.stage_pending.copy(
             {
                 "name": "Remind email [after-sale: reminder-email]",
                 "mail_template_id": False,
             }
         )
-        self.stage_end_ok = self.stage_pending.copy(
+        cls.stage_end_ok = cls.stage_pending.copy(
             {"name": "Solved [after-sale: end-ok]", "mail_template_id": False}
         )
-        self.stage_manual = self.stage_pending.copy(
+        cls.stage_manual = cls.stage_pending.copy(
             {"name": "Solved [after-sale: manual]", "mail_template_id": False}
         )
-        self.stage_sending_pieces = self.stage_pending.copy(
+        cls.stage_sending_pieces = cls.stage_pending.copy(
             {
                 "name": "Sending Pieces [after-sale: sending-pieces-ongoing]",
                 "mail_template_id": False,
             }
         )
-        self.stage_waiting_pieces_return = self.stage_pending.copy(
+        cls.stage_waiting_pieces_return = cls.stage_pending.copy(
             {
                 "name": "Waiting Pieces [after-sale: waiting-pieces-return]",
                 "mail_template_id": False,
             }
         )
 
-        self.partner = self.env.ref("base.partner_demo_portal")
-        self.partner.update({"firstname": "Flo", "phone": "+33747397654"})
+        cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.partner.update({"firstname": "Flo", "phone": "+33747397654"})
 
-        self.task = self.env["project.task"].create(
+        cls.task = cls.env["project.task"].create(
             {
                 "name": "Commown test",
-                "project_id": self.project.id,
-                "stage_id": self.stage_pending.id,
-                "partner_id": self.partner.id,
-                "user_ids": self.env.ref("base.user_demo").ids,
+                "project_id": cls.project.id,
+                "stage_id": cls.stage_pending.id,
+                "partner_id": cls.partner.id,
+                "user_ids": cls.env.ref("base.user_demo").ids,
             }
         )
 
