@@ -12,4 +12,3 @@ from . import test_sale_order
 from . import test_coupon
 from . import test_utm_source
 from . import test_simple_reconciliation
-from . import test_wizard_portal_access
