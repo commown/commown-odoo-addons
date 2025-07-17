@@ -1,8 +1,8 @@
-from odoo.tests.common import SavepointCase, tagged
+from odoo.tests.common import TransactionCase, tagged
 
 
 @tagged("post_install", "-at_install")
-class CouponTC(SavepointCase):
+class CouponTC(TransactionCase):
     def test_action_in_views(self):
         "Check the coupon file generating action is present in views"
         view = self.env.ref("website_sale_coupon.coupon_campaign_form")
