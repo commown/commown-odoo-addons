@@ -84,7 +84,6 @@
         "views/project_project.xml",
         "views/project_task.xml",
         "views/res_partner.xml",
-        "views/survey.xml",
         "views/website.xml",
         "views/website_portal_templates.xml",
         "views/website_sale_templates.xml",
