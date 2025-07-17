@@ -117,7 +117,6 @@ class Campaign(models.Model):
                 "res_id": self.id,
                 "mimetype": mime,
                 "datas": b64encode(data),
-                "datas_fname": name,
                 "name": name,
                 "public": False,
                 "type": "binary",
