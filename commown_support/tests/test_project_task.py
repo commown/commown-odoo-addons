@@ -142,7 +142,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertIn("ignorez ce SMS", message.body)
 
     def assertIsStageChangeMessage(self, message):
-        self.assertEqual(message.subtype_id, self.env.ref("project.mt_task_new"))
+        self.assertEqual(message.subtype_id, self.env.ref("project.mt_task_stage"))
 
     def test_send_reminders(self):
         """A reminder mail to followers and SMS to partner must be sent
