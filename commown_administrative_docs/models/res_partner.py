@@ -91,10 +91,11 @@ class CommownPartner(models.Model):
                         field, _("File too big (limit is %dMo)") % self.max_doc_size_Mo
                     )
 
-    @api.model
-    def create(self, vals):
-        self._apply_bin_field_size_policy(vals)
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            self._apply_bin_field_size_policy(vals)
+        return super().create(vals_list)
 
     def write(self, vals):
         self._apply_bin_field_size_policy(vals)
