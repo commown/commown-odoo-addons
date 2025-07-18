@@ -19,4 +19,7 @@
     "external_dependencies": {
         "bin": ["rsvg-convert"],
     },
+    "data": [
+        "data/actions.xml",
+    ],
 }
