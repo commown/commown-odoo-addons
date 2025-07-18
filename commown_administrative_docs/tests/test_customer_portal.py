@@ -58,8 +58,8 @@ class CustomerPortalMixin(RentalSaleOrderMixin):
             environ_base=self.werkzeug_environ,
             headers=self.headers,
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("/my/account", str(response.data))
+        self.assertEqual(response.status_code, 303)
+        self.assertIn("/my/account", response.location)
         return test_client
 
 
@@ -87,7 +87,7 @@ class AdministrativeDocsCustomerPortalTC(CustomerPortalMixin, HttpCase):
                 "/my/account", data=account_form, environ_base=self.werkzeug_environ
             )
 
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 303)
         self.assertIn("/my/home", response.data.decode("utf-8"))
 
         with self.registry.cursor() as test_cursor:
