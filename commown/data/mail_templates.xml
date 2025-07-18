@@ -52,21 +52,4 @@ d'un montant de <strong><t t-out="object.amount_total" /> <t t-out="object.curre
 ]]></field>
   </record>
 
-  <record id="sms_template_lead_doc_reminder" model="mail.template">
-    <field name="name">[commown] SMS relance doc</field>
-    <field
-            name="subject"
-        ><![CDATA[mail2smsid=xxx&sendername=Commown&recipients=<t t-out="''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')" />]]></field>
-    <field name="email_from">contact@commown.coop</field>
-    <field name="email_to">mail2sms@envoyersmspro.com</field>
-    <field name="model_id" ref="crm.model_crm_lead" />
-    <field name="lang">False</field>
-    <field name="auto_delete">True</field>
-    <field
-            name="body_html"
-        ><![CDATA[
-Rappel finalisation de votre commande : Pensez à mettre vos documents en ligne svp !
-]]></field>
-  </record>
-
 </odoo>
