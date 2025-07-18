@@ -15,6 +15,7 @@
         "commown_administrative_docs",
         "account_invoice_merge_auto_pay",
         "account_move_slimpay_import",
+        "commown_b2b_mail_channel",
         "commown_contract_forecast",
         "commown_shipping",
         "commown_ergonomy_asset",
