@@ -59,7 +59,7 @@
         "website_sale_cart_selectable",
     ],
     "external_dependencies": {
-        "python": ["magic", "pdfminer"],
+        "python": ["magic"],
     },
     "data": [
         "data/account_mass_reconcile.xml",
