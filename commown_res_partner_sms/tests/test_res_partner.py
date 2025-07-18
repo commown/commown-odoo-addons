@@ -39,6 +39,6 @@ class ResPartnerSmsTC(TransactionCase):
         self.assertFalse(partner.get_mobile_phone())
 
         partner.country_id = False
-        self.env["res.company"]._company_default_get().country_id = False
+        self.env.company.country_id = False
         with self.assertRaises(UserError):
             partner.get_mobile_phone()
