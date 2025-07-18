@@ -1,9 +1,8 @@
 from odoo.exceptions import UserError
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests import TransactionCase, tagged
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class UtmSourceTC(TransactionCase):
     def test_action_merge(self):
         ref = self.env.ref

@@ -1,7 +1,7 @@
 from datetime import datetime
 from unittest.mock import patch
 
-from odoo.tests.common import at_install, post_install
+from odoo.tests import tagged
 
 from odoo.addons.account_payment_slimpay.tests.common import MockedSlimpayMixin
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
@@ -9,8 +9,7 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 from .common import fake_slimpay_server_env_config
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
     def setUp(self):
         request_patcher = patch(

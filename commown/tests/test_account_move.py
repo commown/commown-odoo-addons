@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from odoo.tests.common import at_install, post_install
+from odoo.tests import tagged
 
 from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
     AutoPayInvoiceTC,
@@ -9,8 +9,7 @@ from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
 from odoo.addons.payment.models.payment_provider import PaymentTransaction
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class AccountInvoiceTC(AutoPayInvoiceTC):
     def test_user_id_ignored_in_invoice_merge(self):
         inv_1 = self.create_invoice(

@@ -1,14 +1,13 @@
 from datetime import date
 from unittest import mock
 
-from odoo.tests.common import at_install, post_install
+from odoo.tests import tagged
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class CrmLeadTC(RentalSaleOrderTC):
     def setUp(self):
         super().setUp()

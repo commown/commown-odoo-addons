@@ -1,10 +1,9 @@
-from odoo.tests.common import at_install, post_install
+from odoo.tests import tagged
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class SaleOrderTC(RentalSaleOrderTC):
     def setUp(self):
         super().setUp()
