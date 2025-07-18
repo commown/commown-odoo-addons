@@ -8,15 +8,12 @@ from odoo.service import wsgi_server
 from odoo.tests.common import HttpCase, get_db_name
 
 from odoo.addons.commown_devices.tests.common import create_config
-from odoo.addons.product_rental.tests.common import (
-    MockedEmptySessionMixin,
-    RentalSaleOrderMixin,
-)
+from odoo.addons.product_rental.tests.common import RentalSaleOrderMixin
 
 HERE = (Path(__file__) / "..").resolve()
 
 
-class CustomerPortalMixin(RentalSaleOrderMixin, MockedEmptySessionMixin):
+class CustomerPortalMixin(RentalSaleOrderMixin):
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")

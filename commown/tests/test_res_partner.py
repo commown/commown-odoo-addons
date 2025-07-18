@@ -5,10 +5,7 @@ from lxml import html
 
 from odoo.tests.common import HOST, PORT, HttpCase, SavepointCase, get_db_name
 
-from odoo.addons.product_rental.tests.common import (
-    MockedEmptySessionMixin,
-    RentalSaleOrderMixin,
-)
+from odoo.addons.product_rental.tests.common import RentalSaleOrderMixin
 
 from .common import ContractRelatedPaymentTokenUniquifyTC
 
@@ -30,9 +27,7 @@ _pay_prefs2 = {
 }
 
 
-class ResPartnerResetPasswordTC(
-    RentalSaleOrderMixin, MockedEmptySessionMixin, HttpCase
-):
+class ResPartnerResetPasswordTC(RentalSaleOrderMixin, HttpCase):
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")
