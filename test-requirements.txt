@@ -18,3 +18,10 @@ git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirect
 git+https://github.com/Honeyxilia/website@16.0-imp-captcha-whool-packaging#subdirectory=website_recaptcha_v2
 
 git+https://github.com/commown/account-invoicing@16.0-mig-account_invoice_merge_payment-whool#subdirectory=account_invoice_merge_payment
+
+git+https://github.com/commown/sale-workflow@16.0-mig-sale_product_email#subdirectory=sale_product_email
+
+git+https://github.com/commown/e-commerce@16.0-mig-website_sale_affiliate_portal#subdirectory=website_sale_affiliate_portal
+git+https://github.com/commown/e-commerce@16.0-mig-website_sale_affiliate_product_restriction#subdirectory=website_sale_affiliate_product_restriction
+git+https://github.com/commown/e-commerce@16.0-mig-website_sale_cart_selectable#subdirectory=website_sale_cart_selectable
+git+https://github.com/commown/e-commerce@16.0-mig-website_sale_affiliate-whoop-packaging#subdirectory=website_sale_affiliate
