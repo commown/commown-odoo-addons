@@ -1,100 +1,10 @@
-from pathlib import Path
+from odoo.tests.common import HttpCase
 
-from lxml import html
-from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
-
-from odoo.service import wsgi_server
-from odoo.tests.common import HttpCase, get_db_name
-
+from odoo.addons.commown_administrative_docs.tests import CustomerPortalMixin
 from odoo.addons.commown_devices.tests.common import create_config
-from odoo.addons.product_rental.tests.common import RentalSaleOrderMixin
-
-HERE = (Path(__file__) / "..").resolve()
-
-
-class CustomerPortalMixin(RentalSaleOrderMixin):
-    def setUp(self):
-        super().setUp()
-        self.partner = self.env.ref("base.partner_demo_portal")
-        self.partner.signup_prepare()
-        self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
-        self.headers = {}
-
-    def get_page(self, test_client, path, **data):
-        "Return an lxml doc obtained from the html at given url path"
-        response = test_client.get(
-            path,
-            query_string=data,
-            follow_redirects=True,
-            headers=self.headers,
-        )
-        self.assertEqual(response.status_code, 200, " - ".join((path, response.status)))
-        return html.fromstring(response.data)
-
-    def get_form(self, test_client, path, **data):
-        "Get given page and return a name: value dict of its inputs and selects"
-        page = self.get_page(test_client, path, **data)
-        form = {n.get("name"): n.get("value") for n in page.xpath("//input")}
-        for select in page.xpath("//select"):
-            form[select.get("name")] = select.xpath("string(option[@selected]/@value)")
-        return form
-
-    def portal_client(self):
-        user = self.partner.user_ids.ensure_one()
-        test_client = Client(wsgi_server.application, BaseResponse)
-
-        login_form = self.get_form(test_client, "/web/login/", db=get_db_name())
-        login_form.update(
-            {
-                "login": user.login,
-                "password": "portal",
-                "redirect": "/my/account",
-            }
-        )
-        response = test_client.post(
-            "/web/login/",
-            data=login_form,
-            environ_base=self.werkzeug_environ,
-            headers=self.headers,
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("/my/account", str(response.data))
-        return test_client
 
 
 class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
-    def test_documents(self):
-        """Portal users must be able to post their documents
-        ... and see the upload state on their home page
-        """
-
-        test_client = self.portal_client()
-
-        # Post id_card1
-        account_form = self.get_form(test_client, "/my/account")
-
-        with open(HERE / "smallest.pdf", "rb") as fobj:
-            account_form.update(
-                {
-                    "redirect": "/my/home",
-                    "id_card1": (fobj, "card1.pdf"),
-                    "id_card2": "",
-                    "proof_of_address": "",
-                }
-            )
-            response = test_client.post(
-                "/my/account", data=account_form, environ_base=self.werkzeug_environ
-            )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertIn("/my/home", response.data.decode("utf-8"))
-
-        with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            partner = env["res.partner"].browse(self.partner.id)
-            self.assertTrue(partner.id_card1)
-
     def test_invoices(self):
         test_client = self.portal_client()
 
