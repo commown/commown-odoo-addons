@@ -11,10 +11,7 @@ class ResPartner(models.Model):
         """Return normalized mobile phone of partner if exists, return False if not.
         Raise an error if a country cannot be foud"""
 
-        country = (
-            self.country_id.code
-            or self.env["res.company"]._company_default_get().country_id.code
-        )
+        country = self.country_id.code or self.env.company.country_id.code
 
         if not country:
             raise UserError(
