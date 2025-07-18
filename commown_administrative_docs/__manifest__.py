@@ -17,6 +17,9 @@
         "portal",
         "website_sale_b2b",
     ],
+    "external_dependencies": {
+        "python": ["magic"],
+    },
     "data": [
         "data/mail_templates.xml",
         "data/actions_crm_lead.xml",
