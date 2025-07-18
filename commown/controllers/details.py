@@ -1,13 +1,6 @@
-import logging
-from base64 import b64encode
-
 from odoo import http
 
 from odoo.addons.portal.controllers.portal import CustomerPortal
-
-from ..models.res_partner import FileTooBig
-
-_logger = logging.getLogger(__name__)
 
 
 class CustomerPortal(CustomerPortal):
@@ -42,25 +35,7 @@ class CustomerPortal(CustomerPortal):
         for attribute, message in partner_model.slimpay_checks(values).items():
             error[attribute] = "error"
             error_message.append(message)
-        try:
-            partner_model._apply_bin_field_size_policy(values)
-        except FileTooBig as exc:
-            error[exc.field] = "error"
-            error_message.append(exc.msg)
 
         partner_model.validate_street_lines(data, error, error_message)
 
         return error, error_message
-
-    @http.route()
-    def account(self, redirect=None, **post):
-        if post:
-            partner = http.request.env.user.partner_id
-            _logger.debug("details posted: %s", post)
-            for field in partner.auto_widget_binary_fields:
-                if post.get(field):
-                    if not post[field].filename:
-                        post[field] = False
-                    else:
-                        post[field] = b64encode(post[field].read())
-        return super().account(redirect=redirect, **post)

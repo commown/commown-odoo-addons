@@ -1,0 +1,26 @@
+# Copyright 2025 Commown SCIC
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl-3.0)
+
+{
+    "name": "Commown - Handle Administrative Documents",
+    "summary": "Handle download and consultation of administrative documents for portal and internal users. ",
+    "version": "16.0.1.0.0",
+    "development_status": "Beta",
+    "category": "Uncategorized",
+    "website": "https://github.com/commown/commown-odoo-addons",
+    "author": "Commown SCIC",
+    "maintainers": ["fcayre", "Honeyxilia"],
+    "license": "AGPL-3",
+    "depends": [
+        "crm",
+        "product_rental",
+        "portal",
+        "website_sale_b2b",
+    ],
+    "data": [
+        "data/mail_templates.xml",
+        "data/actions_crm_lead.xml",
+        "views/res_partner.xml",
+        "views/website_portal_templates.xml",
+    ],
+}

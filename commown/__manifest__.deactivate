@@ -12,6 +12,7 @@
         "base_user_role",
         "survey",
         # Commown modules
+        "commown_administrative_docs",
         "account_invoice_merge_auto_pay",
         "account_move_slimpay_import",
         "commown_contract_forecast",
@@ -71,7 +72,6 @@
         "security/ir.model.access.csv",
         "views/account_move.xml",
         "views/actions_account_invoice.xml",
-        "views/actions_crm_lead.xml",
         "views/actions_utm.xml",
         "views/address_template.xml",
         "views/auth_signup.xml",
