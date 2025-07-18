@@ -14,4 +14,7 @@
     "depends": [
         "base",
     ],
+    "data": [
+        "data/account_payment_term.xml",
+    ],
 }

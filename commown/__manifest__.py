@@ -17,6 +17,7 @@
         "commown_contract_forecast",
         "commown_shipping",
         "commown_ergonomy_asset",
+        "commown_investment_sale",
         "commown_lead_risk_analysis",
         "contract_auto_merge_invoice",
         "website_sale_payment_slimpay",
@@ -59,7 +60,6 @@
         "python": ["magic", "pdfminer"],
     },
     "data": [
-        "data/account_payment_term.xml",
         "data/account_mass_reconcile.xml",
         "data/mail_templates.xml",
         "data/obsolescence_action.xml",
