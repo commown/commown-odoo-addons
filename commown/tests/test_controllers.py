@@ -8,7 +8,7 @@ from werkzeug.wrappers import BaseResponse
 from odoo.service import wsgi_server
 from odoo.tests import HttpCase, tagged
 
-from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
+from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
 from odoo.addons.server_environment import server_env
 from odoo.addons.server_environment.models import server_env_mixin
 from odoo.addons.website_sale_payment_slimpay.tests.common import SlimpayControllersTC
