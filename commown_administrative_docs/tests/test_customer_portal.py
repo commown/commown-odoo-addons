@@ -13,12 +13,13 @@ HERE = (Path(__file__) / "..").resolve()
 
 
 class CustomerPortalMixin(RentalSaleOrderMixin):
-    def setUp(self):
-        super().setUp()
-        self.partner = self.env.ref("base.partner_demo_portal")
-        self.partner.signup_prepare()
-        self.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
-        self.headers = {}
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.partner.signup_prepare()
+        cls.werkzeug_environ = {"REMOTE_ADDR": "127.0.0.1"}
+        cls.headers = {}
 
     def get_page(self, test_client, path, **data):
         "Return an lxml doc obtained from the html at given url path"
