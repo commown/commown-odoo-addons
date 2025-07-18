@@ -3,11 +3,13 @@ from urllib.parse import urlencode
 
 from lxml import html
 
-from odoo.tests.common import HOST, PORT, HttpCase, SavepointCase, get_db_name
+from odoo.tests.common import HttpCase, SavepointCase, get_db_name
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderMixin
 
 from .common import ContractRelatedPaymentTokenUniquifyTC
+
+HOST, PORT = "localhost", 8069  # XXX temporary
 
 
 def _csrf_token(page):
