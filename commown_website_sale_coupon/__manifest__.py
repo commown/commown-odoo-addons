@@ -18,6 +18,7 @@
     ],
     "external_dependencies": {
         "bin": ["rsvg-convert"],
+        "python": ["pdfminer.six"],
     },
     "data": [
         "data/actions.xml",
