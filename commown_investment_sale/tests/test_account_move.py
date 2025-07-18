@@ -1,11 +1,55 @@
-from odoo.tests import tagged, TransactionCase
+from odoo.fields import Command
+from odoo.tests import TransactionCase, tagged
 
 
 @tagged("-at_install", "post_install")
 class AccountInvoiceTC(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.account = cls.env["account.account"].search(
+            [("account_type", "=", "equity")], limit=1
+        )
+        cls.journal = cls.env["account.journal"].create(
+            {
+                "name": "My journal",
+                "code": "RC",
+                "company_id": cls.env.company.id,
+                "type": "bank",
+            }
+        )
+
+    def _create_and_pay_invoice(self, product):
+        invoice = self.env["account.move"].create(
+            {
+                "partner_id": self.partner.id,
+                "move_type": "out_invoice",
+                "line_ids": [
+                    Command.create(
+                        {
+                            "name": "Test investment invoice line",
+                            "account_id": self.account.id,
+                            "product_id": product.id,
+                            "quantity": 1,
+                            "price_unit": 60,
+                        },
+                    ),
+                ],
+            }
+        )
+
+        invoice.action_post()
+        register_payment = (
+            self.env["account.payment.register"]
+            .with_context(active_model="account.move", active_ids=invoice.ids)
+            .create({"journal_id": self.journal.id})
+        )
+        register_payment._create_payments()
+        self.assertEqual(invoice.payment_state, "paid")
+        return invoice
 
     def test_multiply_investments(self):
-        account = self.env["account.account"].search([("code", "=like", "2751%")])
         equity = self.env["product.product"].create(
             {
                 "name": "Investment test product",
@@ -22,43 +66,11 @@ class AccountInvoiceTC(TransactionCase):
             }
         )
 
-        equity_invoice_line = self.env["account.move.line"].create(
-            {
-                "name": "Test investment invoice line",
-                "account_id": account.id,
-                "product_id": equity.id,
-                "quantity": 1,
-                "price_unit": 60,
-            }
-        )
-        not_equity_invoice_line = self.env["account.move.line"].create(
-            {
-                "name": "Test not investment invoice line",
-                "account_id": account.id,
-                "product_id": not_equity.id,
-                "quantity": 1,
-                "price_unit": 60,
-            }
-        )
+        equity_invoice = self._create_and_pay_invoice(equity)
+        not_equity_invoice = self._create_and_pay_invoice(not_equity)
 
-        equity_invoice = self.env["account.move"].create(
-            {
-                "partner_id": self.partner_1.id,
-            }
-        )
-        not_equity_invoice = self.env["account.move"].create(
-            {
-                "partner_id": self.partner_1.id,
-            }
-        )
-        equity_invoice.line_ids |= equity_invoice_line
-        equity_invoice.stage = "paid"
-
-        not_equity_invoice.line_ids |= not_equity_invoice_line
-        not_equity_invoice.stage = "paid"
-
-        equity_old_price = equity_invoice_line.price_unit
-        not_equity_old_price = not_equity_invoice_line.price_unit
+        equity_old_price = equity_invoice.line_ids[0].price_unit
+        not_equity_old_price = not_equity_invoice.line_ids[0].price_unit
 
         multiplier = 10
 
@@ -66,14 +78,14 @@ class AccountInvoiceTC(TransactionCase):
         not_equity_invoice._multiply_investments(multiplier)
 
         self.assertEqual(
-            equity_invoice.line_ids.price_unit,
+            equity_invoice.invoice_line_ids.price_unit,
             equity_old_price * multiplier,
         )
         self.assertEqual(
-            equity_invoice.payment_term_id,
-            self.env.ref("commown.investment_payment_term"),
+            equity_invoice.invoice_payment_term_id,
+            self.env.ref("commown_investment_sale.investment_payment_term"),
         )
         self.assertEqual(
-            not_equity_invoice.line_ids.price_unit,
+            not_equity_invoice.invoice_line_ids.price_unit,
             not_equity_old_price,
         )
