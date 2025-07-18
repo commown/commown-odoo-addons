@@ -178,7 +178,10 @@
 
   <!-- Language related hacks START -->
 
-  <template id="products_categories" inherit_id="website_sale.products_categories">
+  <template
+        id="products_categories_list"
+        inherit_id="website_sale.products_categories_list"
+    >
     <xpath
             expr="//t[@t-call='website_sale.categories_recursive']"
             position="attributes"
@@ -216,11 +219,6 @@
       <attribute name="t-if">display_product</attribute>
     </xpath>
 
-    <xpath expr="//hr[@t-if='product.website_description_sale']" position="attributes">
-      <attribute
-                name="t-if"
-            >product.website_description_sale and display_product</attribute>
-    </xpath>
     <xpath
             expr="//p[@t-field='product.website_description_sale']"
             position="attributes"
