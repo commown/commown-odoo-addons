@@ -2,10 +2,10 @@
 coreapi
 hal_codec @ git+https://github.com/fcayre/python-hal-codec.git@unique-link-keys
 iso8601
-magic
 pdfminer
 phonenumbers
 py3o.formats
 py3o.template
+python-magic
 requests
 requests_toolbelt
