@@ -6,7 +6,7 @@ from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
 from odoo.service import wsgi_server
-from odoo.tests.common import HttpCase, at_install, post_install
+from odoo.tests import HttpCase, tagged
 
 from odoo.addons.account_payment_slimpay.models.payment import SlimpayClient
 from odoo.addons.server_environment import server_env
@@ -14,8 +14,7 @@ from odoo.addons.server_environment.models import server_env_mixin
 from odoo.addons.website_sale_payment_slimpay.tests.common import SlimpayControllersTC
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ControllerTC(HttpCase):
     def setUp(self):
         super().setUp()
