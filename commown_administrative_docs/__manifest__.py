@@ -16,6 +16,9 @@
         "product_rental",
         "website_sale_b2b",
     ],
+    "external_dependencies": {
+        "python": ["magic"],
+    },
     "data": [
         "data/actions_crm_lead.xml",
         "data/mail_template.xml",
