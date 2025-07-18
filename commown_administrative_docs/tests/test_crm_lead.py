@@ -23,7 +23,7 @@ class CrmLeadTC(RentalSaleOrderTC):
         )
         with mock.patch(
             "odoo.addons.commown_res_partner_sms.models."
-            "mail_thread.MailThread.message_post_send_sms_html"
+            "mail_thread.MailThread.send_sms_from_template"
         ) as post_message:
             lead._action_send_sms_doc_reminder()
             post_message.assert_called_once_with(
