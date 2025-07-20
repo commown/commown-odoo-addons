@@ -7,10 +7,19 @@ class AccountInvoiceTC(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
         cls.partner = cls.env.ref("base.partner_demo_portal")
-        cls.account = cls.env["account.account"].search(
-            [("account_type", "=", "equity")], limit=1
-        )
+
         cls.journal = cls.env["account.journal"].create(
             {
                 "name": "My journal",
@@ -29,7 +38,6 @@ class AccountInvoiceTC(TransactionCase):
                     Command.create(
                         {
                             "name": "Test investment invoice line",
-                            "account_id": self.account.id,
                             "product_id": product.id,
                             "quantity": 1,
                             "price_unit": 60,
