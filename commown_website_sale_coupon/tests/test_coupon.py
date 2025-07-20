@@ -32,4 +32,12 @@ class CouponTC(TransactionCase):
         self.assertEqual(action["url"], att.local_url + "&download=1")
         self.assertEqual(att.mimetype, "application/pdf")
         coupon_codes = campaign.coupon_ids.mapped("code")
-        self.assertTrue(all(code in att.index_content for code in coupon_codes))
+        try:
+            import pdfminer
+        except ImportError:  # pragma: no cover
+            self.fail("pdfminer is not installed")
+        self.assertTrue(
+            all(code in att.index_content for code in coupon_codes),
+            "Could not find one of %s in %r\npdfminer version is %r"
+            % (coupon_codes, att.index_content, pdfminer.__version__),
+        )
