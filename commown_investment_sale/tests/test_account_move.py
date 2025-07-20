@@ -7,10 +7,10 @@ class AccountInvoiceTC(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+
+        cls.env.company = cls.env.companies.filtered("chart_template_id")[0]
         cls.partner = cls.env.ref("base.partner_demo_portal")
-        cls.account = cls.env["account.account"].search(
-            [("account_type", "=", "equity")], limit=1
-        )
+
         cls.journal = cls.env["account.journal"].create(
             {
                 "name": "My journal",
@@ -29,7 +29,6 @@ class AccountInvoiceTC(TransactionCase):
                     Command.create(
                         {
                             "name": "Test investment invoice line",
-                            "account_id": self.account.id,
                             "product_id": product.id,
                             "quantity": 1,
                             "price_unit": 60,
