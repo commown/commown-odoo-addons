@@ -290,7 +290,7 @@ for orig, dest in next_stage_marker.items():
     <field
             name="name"
         >[commown] Move waiting issues into pending on user email arrival</field>
-    <field name="model_id" ref="calendar.model_mail_message" />
+    <field name="model_id" ref="mail.model_mail_message" />
     <field name="sequence">5</field>
     <field name="state">code</field>
     <field
@@ -314,7 +314,7 @@ if record.model == 'project.task' and record.message_type in ('email', 'comment'
        creation when concerning a project.task -->
   <record id="mail_message_arrival_concerning_issue" model="base.automation">
     <field name="name">[commown] A email concerning an issue just arrived</field>
-    <field name="model_id" ref="calendar.model_mail_message" />
+    <field name="model_id" ref="mail.model_mail_message" />
     <field name="sequence">1</field>
     <field name="trigger">on_create</field>
     <field name="filter_domain">[(u'model', u'=', u'project.task')]</field>
