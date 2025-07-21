@@ -137,10 +137,6 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         )
         self.assertEqual(message.author_id, self.env.ref("base.user_demo").partner_id)
 
-    def assertIsReminderSMS(self, message):
-        self.assertEqual(message.subtype_id, self.env.ref("mail.mt_note"))
-        self.assertIn("ignorez ce SMS", message.body)
-
     def assertIsStageChangeMessage(self, message):
         self.assertEqual(message.subtype_id, self.env.ref("project.mt_task_stage"))
 
