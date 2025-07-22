@@ -5,35 +5,28 @@ class AccountInvoice(models.Model):
     _inherit = "account.move"
 
     def _multiply_investments(self, multiplier=10):
-        product_ids = (
-            self.env["product.template"]
-            .with_context(active_test=False)
-            .search(
-                [
-                    ("is_equity", "=", True),
-                    ("equity_type", "=", "invest"),
-                ]
-            )
-            .ids
+        "Multiply by `multiplier` the unit price of investment product invoice lines"
+
+        pt_model = self.env["product.template"].with_context(active_test=False)
+        invest_products = pt_model.search(
+            [("is_equity", "=", True), ("equity_type", "=", "invest")]
         )
 
+        pay_term = self.env.ref("commown_investment_sale.investment_payment_term")
+
         for invoice in self:
-            has_invests = any(
-                line
-                for line in invoice.invoice_line_ids
-                if line.product_id.product_tmpl_id.id in product_ids
+            if invoice.amount_residual != 0:
+                continue
+
+            invest_lines = invoice.invoice_line_ids.filtered(
+                lambda l: l.product_id.product_tmpl_id.id in invest_products.ids
             )
 
-            if invoice.amount_residual != 0 or not has_invests:
+            if not invest_lines:
                 continue
 
             invoice.button_draft()
-
-            pay_term = self.env.ref("commown_investment_sale.investment_payment_term")
             invoice.write({"invoice_payment_term_id": pay_term.id})
-
-            for line in invoice.invoice_line_ids:
-                if line.product_id.product_tmpl_id.id in product_ids:
-                    line.update({"price_unit": line.price_unit * multiplier})
-
+            for line in invest_lines:
+                line.update({"price_unit": line.price_unit * multiplier})
             invoice.action_post()

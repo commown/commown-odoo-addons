@@ -67,7 +67,9 @@ class AccountInvoiceTC(TransactionCase):
         )
 
         with_equity_inv = self._create_and_pay_invoice(equity, not_equity)
+        self.assertEqual(with_equity_inv.amount_untaxed, 120.0)  # 2 products *60
         without_equity_inv = self._create_and_pay_invoice(not_equity)
+        self.assertEqual(without_equity_inv.amount_untaxed, 60.0)
 
         equity_old_price = with_equity_inv.line_ids[0].price_unit
         not_equity_old_price = without_equity_inv.line_ids[0].price_unit
@@ -81,11 +83,14 @@ class AccountInvoiceTC(TransactionCase):
             lambda l: l.product_id == equity
         )
         self.assertEqual(equity_inv_line.price_unit, equity_old_price * multiplier)
+        self.assertEqual(with_equity_inv.amount_untaxed, 660.0)  # only 1 line is *10
         self.assertEqual(
             with_equity_inv.invoice_payment_term_id,
             self.env.ref("commown_investment_sale.investment_payment_term"),
         )
+
         self.assertEqual(
             without_equity_inv.invoice_line_ids.price_unit,
             not_equity_old_price,
         )
+        self.assertEqual(without_equity_inv.amount_untaxed, 60.0)
