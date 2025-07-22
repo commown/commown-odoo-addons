@@ -2,26 +2,28 @@ from odoo.addons.payment_token_uniquify.tests.common import PaymentTokenUniquify
 
 
 class ContractRelatedPaymentTokenUniquifyTC(PaymentTokenUniquifyTC):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """Setup test data: two partners of self.company_s1 have a token
         and a contract using it:
 
           * first token is the main one of the contract's partner
           * second token is directly linked to the contract
         """
-        super().setUp()
+        super().setUpClass()
 
-        token1 = self.new_payment_token(self.company_s1_w1)
-        self.contract1 = self.new_contract(self.company_s1_w1)
-        self.company_s1_w1.payment_token_id = token1.id
+        token1 = cls.new_payment_token(cls.company_s1_w1)
+        cls.contract1 = cls.new_contract(cls.company_s1_w1)
+        cls.company_s1_w1.payment_token_id = token1.id
 
-        token2 = self.new_payment_token(self.company_s1_w2, set_as_partner_token=False)
-        self.contract2 = self.new_contract(self.company_s1_w2)
-        self.contract2.payment_token_id = token2.id
+        token2 = cls.new_payment_token(cls.company_s1_w2, set_as_partner_token=False)
+        cls.contract2 = cls.new_contract(cls.company_s1_w2)
+        cls.contract2.payment_token_id = token2.id
 
-    def new_contract(self, partner):
-        product = self.env.ref("product.product_product_1")
-        return self.env["contract.contract"].create(
+    @classmethod
+    def new_contract(cls, partner):
+        product = cls.env.ref("product.product_product_1")
+        return cls.env["contract.contract"].create(
             {
                 "name": "Test Contract",
                 "partner_id": partner.id,
