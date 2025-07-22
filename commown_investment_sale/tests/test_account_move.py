@@ -20,7 +20,7 @@ class AccountInvoiceTC(TransactionCase):
             }
         )
 
-    def _create_and_pay_invoice(self, product):
+    def _create_and_pay_invoice(self, *products):
         invoice = self.env["account.move"].create(
             {
                 "partner_id": self.partner.id,
@@ -33,7 +33,8 @@ class AccountInvoiceTC(TransactionCase):
                             "quantity": 1,
                             "price_unit": 60,
                         },
-                    ),
+                    )
+                    for product in products
                 ],
             }
         )
@@ -65,26 +66,26 @@ class AccountInvoiceTC(TransactionCase):
             }
         )
 
-        equity_invoice = self._create_and_pay_invoice(equity)
-        not_equity_invoice = self._create_and_pay_invoice(not_equity)
+        with_equity_inv = self._create_and_pay_invoice(equity, not_equity)
+        without_equity_inv = self._create_and_pay_invoice(not_equity)
 
-        equity_old_price = equity_invoice.line_ids[0].price_unit
-        not_equity_old_price = not_equity_invoice.line_ids[0].price_unit
+        equity_old_price = with_equity_inv.line_ids[0].price_unit
+        not_equity_old_price = without_equity_inv.line_ids[0].price_unit
 
         multiplier = 10
 
-        equity_invoice._multiply_investments(multiplier)
-        not_equity_invoice._multiply_investments(multiplier)
+        with_equity_inv._multiply_investments(multiplier)
+        without_equity_inv._multiply_investments(multiplier)
 
-        self.assertEqual(
-            equity_invoice.invoice_line_ids.price_unit,
-            equity_old_price * multiplier,
+        equity_inv_line = with_equity_inv.invoice_line_ids.filtered(
+            lambda l: l.product_id == equity
         )
+        self.assertEqual(equity_inv_line.price_unit, equity_old_price * multiplier)
         self.assertEqual(
-            equity_invoice.invoice_payment_term_id,
+            with_equity_inv.invoice_payment_term_id,
             self.env.ref("commown_investment_sale.investment_payment_term"),
         )
         self.assertEqual(
-            not_equity_invoice.invoice_line_ids.price_unit,
+            without_equity_inv.invoice_line_ids.price_unit,
             not_equity_old_price,
         )
