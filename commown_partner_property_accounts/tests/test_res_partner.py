@@ -74,11 +74,17 @@ class ResPartnerSimpleTC(TransactionCase):
         )
 
         # Test prerequisite:
-        ref_account = self.env.ref("l10n_fr.1_fr_pcg_recv")
+        ref_account = self.env["ir.property"]._get(
+            "property_account_receivable_id",
+            "res.partner",
+        )
+        ref_account.ensure_one()
+        ref_account_old_code = ref_account.code
+
         self.assertEqual(partner.property_account_receivable_id, ref_account)
 
         partner.create_company()
 
         company = partner.parent_id
         self.assertEqual(company.property_account_receivable_id, ref_account)
-        self.assertEqual(ref_account.code, "411100")  # unchanged!
+        self.assertEqual(ref_account.code, ref_account_old_code)  # unchanged!

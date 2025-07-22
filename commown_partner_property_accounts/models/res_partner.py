@@ -1,17 +1,15 @@
-from odoo import api, models
+from odoo import Command, api, models
 
 _PROPERTY_ACCOUNT_DATA = {
     "payable": {
         "account_type": "account.data_account_type_payable",
         "field_name": "property_account_payable_id",
         "code_template": "401-F-%d",
-        "ref_account": "l10n_fr.1_fr_pcg_pay",
     },
     "receivable": {
         "account_type": "account.data_account_type_receivable",
         "field_name": "property_account_receivable_id",
         "code_template": "411-C-%d",
-        "ref_account": "l10n_fr.1_fr_pcg_recv",
     },
 }
 
@@ -27,23 +25,21 @@ class CommownPartner(models.Model):
         """
         assert property_name in ("payable", "receivable")
 
-        tva = self.env.ref("l10n_fr.1_tva_normale")
-        tag = self.env.ref("account.account_tag_operating")
-
         data = _PROPERTY_ACCOUNT_DATA[property_name]
+        ref_account = self.env["ir.property"]._get(data["field_name"], "res.partner")
 
         for partner in self:
             partner = partner.commercial_partner_id
 
             account = getattr(partner, data["field_name"])
-            if not account or account == self.env.ref(data["ref_account"]):
+            if not account or account == ref_account:
                 new_account = self.env["account.account"].create(
                     {
                         "code": data["code_template"] % partner.id,
                         "name": partner.name,
-                        "tag_ids": [(6, 0, tag.ids)],
+                        "tag_ids": [Command.set(ref_account.tag_ids.ids)],
                         "user_type_id": self.env.ref(data["account_type"]).id,
-                        "tax_ids": [(6, 0, tva.ids)],
+                        "tax_ids": [Command.set(ref_account.tax_ids.ids)],
                         "reconcile": True,
                     }
                 )
@@ -95,7 +91,9 @@ class CommownPartner(models.Model):
 
         if old_recv_acc:
             data = _PROPERTY_ACCOUNT_DATA["receivable"]
-            ref_account = self.env.ref(data["ref_account"])
+            ref_account = self.env["ir.property"]._get(
+                data["field_name"], "res.partner"
+            )
             if (
                 old_recv_acc != ref_account
                 and self.parent_id.property_account_receivable_id == ref_account
