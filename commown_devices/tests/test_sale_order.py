@@ -8,6 +8,12 @@ from .common import add_attributes_to_product, create_config
 class SaleOrderTC(TransactionCase):
     "Test class for sale order methods"
 
+    def setUp(self):
+        super().setUp()
+        # Use a company with a chart of account as commown_partner_property_accounts
+        # needs it to create the partner's property account on sale confirmation:
+        self.env.company = self.env.companies.filtered("chart_template_id")[0]
+
     def create_sale_order(self, product):
         oline = {
             "name": product.name,

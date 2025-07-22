@@ -120,6 +120,10 @@ class CouponSchemaTC(CouponTestMixin, TransactionCase):
         self.assertEqual(coupon.used_for_sale_id, so)
 
     def test_confirm_sale_order(self):
+        # Use a company with a chart of account as commown_partner_property_accounts
+        # needs it to create the partner's property account on sale confirmation:
+        self.env.company = self.env.companies.filtered("chart_template_id")[0]
+
         so = self.sale_order()
 
         coupon = self._create_coupon(code="TEST_USE")

@@ -9,6 +9,10 @@ class SaleOrderTC(TransactionCase):
         cls.so = cls.env.ref("sale.portal_sale_order_1")
         cls.user = cls.so.partner_id.user_ids
 
+    def setUp(self):
+        super().setUp()
+        self.env.company = self.env.companies.filtered("chart_template_id")[0]
+
     def test_add_receivable_account(self):
         "Buying a product must add the buyer a dedicated receivable account"
 

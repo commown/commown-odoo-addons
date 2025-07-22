@@ -3,6 +3,10 @@ from odoo.tests import TransactionCase, tagged
 
 @tagged("-at_install", "post_install")
 class ResPartnerSimpleTC(TransactionCase):
+    def setUp(self):
+        super().setUp()
+        self.env.company = self.env.companies.filtered("chart_template_id")[0]
+
     def test_create_supplier(self):
         p1 = self.env["res.partner"].create({"name": "p1", "supplier_rank": 1})
 
