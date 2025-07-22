@@ -12,6 +12,11 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "account_payment_partner",
+        "contract_auto_merge_invoice",
+        "payment_token_uniquify",
+    ],
+    "data": [
+        "data/obsolescence_action.xml",
     ],
 }
