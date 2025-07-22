@@ -61,12 +61,12 @@ class CommownPartner(models.Model):
             )
         self._create_property_account("receivable")
 
-    @api.model
-    def create(self, vals):
-        result = super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        result = super().create(vals_list)
 
-        if result.supplier:
-            result._create_payable_account()
+        for partner in result.filtered("supplier"):
+            partner._create_payable_account()
 
         return result
 
