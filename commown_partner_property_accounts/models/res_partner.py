@@ -65,7 +65,7 @@ class CommownPartner(models.Model):
     def create(self, vals_list):
         result = super().create(vals_list)
 
-        for partner in result.filtered("supplier"):
+        for partner in result.filtered("supplier_rank"):
             partner._create_payable_account()
 
         return result
@@ -86,7 +86,7 @@ class CommownPartner(models.Model):
 
         result = super().write(vals)
 
-        if "supplier" in vals and vals["supplier"]:
+        if "supplier_rank" in vals and vals["supplier_rank"]:
             self._create_payable_account()
 
         if old_recv_acc:
