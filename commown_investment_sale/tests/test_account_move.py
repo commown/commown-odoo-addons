@@ -94,3 +94,8 @@ class AccountInvoiceTC(TransactionCase):
             not_equity_old_price,
         )
         self.assertEqual(without_equity_inv.amount_untaxed, 60.0)
+
+        # Double call should not touch the invoice prices and amounts:
+        with_equity_inv._multiply_investments(multiplier)
+        self.assertEqual(equity_inv_line.price_unit, equity_old_price * multiplier)
+        self.assertEqual(with_equity_inv.amount_untaxed, 660.0)
