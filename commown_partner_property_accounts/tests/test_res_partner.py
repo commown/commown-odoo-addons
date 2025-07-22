@@ -4,23 +4,23 @@ from odoo.tests import TransactionCase, tagged
 @tagged("-at_install", "post_install")
 class ResPartnerSimpleTC(TransactionCase):
     def test_create_supplier(self):
-        p1 = self.env["res.partner"].create({"name": "p1", "supplier": True})
+        p1 = self.env["res.partner"].create({"name": "p1", "supplier_rank": 1})
 
         expected = "401.F.%d" % p1.id
         self.assertEqual(p1.property_account_payable_id.code, expected)
 
     def test_update_to_supplier(self):
-        p1 = self.env["res.partner"].create({"name": "p1", "supplier": False})
+        p1 = self.env["res.partner"].create({"name": "p1", "supplier_rank": 0})
 
         expected = "401.F.%d" % p1.id
         self.assertNotEqual(p1.property_account_payable_id.code, expected)
 
-        p1.supplier = True
+        p1.supplier_rank = 1
         self.assertEqual(p1.property_account_payable_id.code, expected)
 
     def test_create_supplier_add_child(self):
         p1 = self.env["res.partner"].create(
-            {"name": "p1", "supplier": True, "is_company": True}
+            {"name": "p1", "supplier_rank": 1, "is_company": True}
         )
         p2 = self.env["res.partner"].create({"name": "p2", "parent_id": p1.id})
 
@@ -33,7 +33,7 @@ class ResPartnerSimpleTC(TransactionCase):
         p2 = self.env["res.partner"].create({"name": "p2", "parent_id": p1.id})
         p3 = self.env["res.partner"].create({"name": "p3", "parent_id": p1.id})
 
-        p3.supplier = True
+        p3.supplier_rank = 1
 
         expected = "401.F.%d" % p1.id
         self.assertEqual(p1.property_account_payable_id.code, expected)
@@ -42,7 +42,7 @@ class ResPartnerSimpleTC(TransactionCase):
 
     def test_create_company_set_receivable_account(self):
         partner = self.env["res.partner"].create(
-            {"name": "Test partner", "customer": True, "company_name": "Test company"},
+            {"name": "Test P", "customer_rank": 1, "company_name": "Test company"},
         )
 
         partner._create_receivable_account()
@@ -56,7 +56,7 @@ class ResPartnerSimpleTC(TransactionCase):
 
     def test_create_company_with_custom_receivable_account(self):
         partner = self.env["res.partner"].create(
-            {"name": "Test partner", "customer": True, "company_name": "Test company"},
+            {"name": "Test P", "customer_rank": 1, "company_name": "Test company"},
         )
 
         partner._create_receivable_account()
@@ -70,7 +70,7 @@ class ResPartnerSimpleTC(TransactionCase):
 
     def test_create_company_without_custom_receivable_account(self):
         partner = self.env["res.partner"].create(
-            {"name": "Test partner", "customer": True, "company_name": "Test company"},
+            {"name": "Test P", "customer_rank": 1, "company_name": "Test company"},
         )
 
         # Test prerequisite:
