@@ -4,12 +4,12 @@ _PROPERTY_ACCOUNT_DATA = {
     "payable": {
         "account_type": "liability_payable",
         "field_name": "property_account_payable_id",
-        "code_template": "401-F-%d",
+        "code_template": "401.F.%d",
     },
     "receivable": {
         "account_type": "asset_receivable",
         "field_name": "property_account_receivable_id",
-        "code_template": "411-C-%d",
+        "code_template": "411.C.%d",
     },
 }
 
