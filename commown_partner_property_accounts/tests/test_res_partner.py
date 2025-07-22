@@ -1,7 +1,8 @@
-from odoo.tests.common import SavepointCase
+from odoo.tests import TransactionCase, tagged
 
 
-class ResPartnerSimpleTC(SavepointCase):
+@tagged("-at_install", "post_install")
+class ResPartnerSimpleTC(TransactionCase):
     def test_create_supplier(self):
         p1 = self.env["res.partner"].create({"name": "p1", "supplier": True})
 
