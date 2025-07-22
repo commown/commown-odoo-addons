@@ -2,12 +2,12 @@ from odoo import Command, api, models
 
 _PROPERTY_ACCOUNT_DATA = {
     "payable": {
-        "account_type": "account.data_account_type_payable",
+        "account_type": "liability_payable",
         "field_name": "property_account_payable_id",
         "code_template": "401-F-%d",
     },
     "receivable": {
-        "account_type": "account.data_account_type_receivable",
+        "account_type": "asset_receivable",
         "field_name": "property_account_receivable_id",
         "code_template": "411-C-%d",
     },
@@ -38,7 +38,7 @@ class CommownPartner(models.Model):
                         "code": data["code_template"] % partner.id,
                         "name": partner.name,
                         "tag_ids": [Command.set(ref_account.tag_ids.ids)],
-                        "user_type_id": self.env.ref(data["account_type"]).id,
+                        "account_type": data["account_type"],
                         "tax_ids": [Command.set(ref_account.tax_ids.ids)],
                         "reconcile": True,
                     }
