@@ -20,7 +20,7 @@ class ResPartnerSimpleTC(TransactionCase):
         provider = self.env.ref("payment.payment_provider_stripe")
         return self.env["payment.token"].create(
             {
-                "name": name,
+                "payment_details": name,
                 "provider_id": provider.id,
                 "partner_id": partner.id,
                 "provider_ref": name,
