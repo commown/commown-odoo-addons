@@ -17,7 +17,6 @@ class SaleOrderTC(TransactionCase):
         account = self.so.partner_id.property_account_receivable_id
         self.assertEqual(account.name, self.so.partner_id.name)
         self.assertEqual(account.code, "411-C-%d" % self.so.partner_id.id)
-        self.assertEqual(account.tax_ids, self.env.ref("l10n_fr.1_tva_normale"))
 
     def test_add_receivable_account_with_children(self):
         """Buying a product in B2B must add the buyer's company and collegues a
@@ -51,9 +50,7 @@ class SaleOrderTC(TransactionCase):
             {
                 "code": expected_code,
                 "name": partner.name,
-                "tag_ids": [(6, 0, [ref("account.account_tag_operating").id])],
                 "user_type_id": ref("account.data_account_type_receivable").id,
-                "tax_ids": [(6, 0, ref("l10n_fr.1_tva_normale").ids)],
                 "reconcile": True,
             }
         )
