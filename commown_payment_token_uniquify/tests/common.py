@@ -1,3 +1,4 @@
+from odoo.addons.account_invoice_merge_auto_pay.tests.common import inject_payment_data
 from odoo.addons.payment_token_uniquify.tests.common import PaymentTokenUniquifyTC
 
 
@@ -11,6 +12,7 @@ class ContractRelatedPaymentTokenUniquifyTC(PaymentTokenUniquifyTC):
           * second token is directly linked to the contract
         """
         super().setUpClass()
+        inject_payment_data(cls, cls.company_s1_w1)
 
         token1 = cls.new_payment_token(cls.company_s1_w1)
         cls.contract1 = cls.new_contract(cls.company_s1_w1)
