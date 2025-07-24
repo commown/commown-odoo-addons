@@ -51,14 +51,14 @@ class ResPartner(models.Model):
         super().reset_payment_token()
         return self.update({f: False for f in _PAYMENT_PREF_FIELDS})
 
-    @api.model
-    def create(self, vals):
-        result = super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super().create(vals_list)
 
-        if result.type == "invoice" and result.parent_id:
-            result.parent_id._copy_payment_fields_to_invoice_children()
+        for rec in res.filtered(lambda rec: rec.type == "invoice" and rec.parent_id):
+            rec.parent_id._copy_payment_fields_to_invoice_children()
 
-        return result
+        return res
 
     def _copy_payment_fields_to_invoice_children(self):
         self.ensure_one()
