@@ -1,4 +1,4 @@
-def inject_payment_data(cls):
+def inject_payment_data(cls, partner):
     electronic_in = cls.env["account.payment.method"].create(
         {
             "name": "Electronic In",
@@ -54,13 +54,13 @@ def inject_payment_data(cls):
         .create(
             {
                 "payment_details": "test payment token",
-                "partner_id": cls.partner_a.id,
+                "partner_id": partner.id,
                 "provider_id": provider.id,
                 "provider_ref": "test ref",
             }
         )
     )
-    cls.partner_a.update(
+    partner.update(
         {
             "customer_payment_mode_id": cls.payment_mode.id,
             "payment_token_id": token.id,
