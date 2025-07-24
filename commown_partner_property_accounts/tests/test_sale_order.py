@@ -16,7 +16,7 @@ class SaleOrderTC(TransactionCase):
 
         account = self.so.partner_id.property_account_receivable_id
         self.assertEqual(account.name, self.so.partner_id.name)
-        self.assertEqual(account.code, "411-C-%d" % self.so.partner_id.id)
+        self.assertEqual(account.code, "411.C.%d" % self.so.partner_id.id)
 
     def test_add_receivable_account_with_children(self):
         """Buying a product in B2B must add the buyer's company and collegues a
@@ -32,7 +32,7 @@ class SaleOrderTC(TransactionCase):
         self.so.action_confirm()
 
         account = self.so.partner_id.property_account_receivable_id
-        self.assertEqual(account.code, "411-C-%d" % company.id)
+        self.assertEqual(account.code, "411.C.%d" % company.id)
         self.assertEqual(account, company.property_account_receivable_id)
         self.assertEqual(account, collegue.property_account_receivable_id)
 
@@ -42,7 +42,7 @@ class SaleOrderTC(TransactionCase):
         the same name)"""
 
         partner = self.so.partner_id
-        expected_code = "411-C-%s" % partner.id
+        expected_code = "411.C.%s" % partner.id
         self.assertNotEqual(partner.property_account_receivable_id.code, expected_code)
 
         ref = self.env.ref
