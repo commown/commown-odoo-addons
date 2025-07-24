@@ -103,7 +103,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
                 max_date_partner = partner
 
         # If no partner has an invoice merge date, return for the sake of robustness:
-        if max_date is None:
+        if max_date is None:  # pragma: no cover
             return
 
         # Use the more recently used invoice merge preferences with a date in the future
