@@ -1,9 +1,10 @@
 from odoo.exceptions import UserError
-from odoo.tests.common import TransactionCase
+from odoo.tests import TransactionCase, tagged
 
 from .common import add_attributes_to_product, create_config
 
 
+@tagged("-at_install", "post_install")
 class SaleOrderTC(TransactionCase):
     "Test class for sale order methods"
 
