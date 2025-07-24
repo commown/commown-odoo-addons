@@ -17,7 +17,7 @@ _pay_prefs2 = {
 
 class ResPartnerSimpleTC(TransactionCase):
     def _new_token(self, name, partner):
-        provider = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
+        provider = self.env.ref("payment.payment_provider_stripe")
         return self.env["payment.token"].create(
             {
                 "name": name,
