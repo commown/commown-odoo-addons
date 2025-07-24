@@ -1,6 +1,6 @@
 import html
 
-from odoo import _, models
+from odoo import Command, _, models
 
 
 class SaleOrder(models.Model):
@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
                 {
                     "project_id": project.id,
                     "name": line.order_partner_id.name,
-                    "user_id": project.user_id.id,
+                    "user_ids": [Command.set(project.user_id.ids)],
                     "partner_id": line.order_partner_id.id,
                     "stage_id": stage.id,
                     "description": "\n".join(description),
