@@ -1,6 +1,6 @@
 import datetime
 
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 _pay_prefs1 = {
     "invoice_merge_next_date": datetime.date(2020, 1, 1),
@@ -15,7 +15,7 @@ _pay_prefs2 = {
 }
 
 
-class ResPartnerSimpleTC(SavepointCase):
+class ResPartnerSimpleTC(TransactionCase):
     def _new_token(self, name, partner):
         provider = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
         return self.env["payment.token"].create(
