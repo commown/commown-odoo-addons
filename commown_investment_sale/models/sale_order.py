@@ -32,14 +32,15 @@ class SaleOrder(models.Model):
 
         if description:
             ref = self.env.ref
-            project = ref("commown.investment_followup_project")
+            project = ref("commown_investment_sale.investment_followup_project")
+            stage = ref("commown_investment_sale.investment_followup_start_stage")
             self.env["project.task"].create(
                 {
                     "project_id": project.id,
                     "name": line.order_partner_id.name,
                     "user_id": project.user_id.id,
                     "partner_id": line.order_partner_id.id,
-                    "stage_id": ref("commown.investment_followup_start_stage").id,
+                    "stage_id": stage.id,
                     "description": "\n".join(description),
                 }
             )

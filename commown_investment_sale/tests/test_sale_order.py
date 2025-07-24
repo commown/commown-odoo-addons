@@ -22,7 +22,7 @@ class SaleOrderTC(RentalSaleOrderTC):
         )
         self.so.update({"order_line": [self._oline(equity)]})
 
-        project = self.env.ref("commown.investment_followup_project")
+        project = self.env.ref("commown_investment_sale.investment_followup_project")
         self.assertFalse(project.task_count)
 
         self.so.action_confirm()
