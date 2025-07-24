@@ -45,12 +45,11 @@ class SaleOrderTC(TransactionCase):
         expected_code = "411.C.%s" % partner.id
         self.assertNotEqual(partner.property_account_receivable_id.code, expected_code)
 
-        ref = self.env.ref
         account = self.env["account.account"].create(
             {
                 "code": expected_code,
                 "name": partner.name,
-                "user_type_id": ref("account.data_account_type_receivable").id,
+                "account_type": "asset_receivable",
                 "reconcile": True,
             }
         )
