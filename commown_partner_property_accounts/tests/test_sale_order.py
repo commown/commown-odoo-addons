@@ -5,11 +5,12 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 @tagged("-at_install", "post_install")
 class SaleOrderTC(RentalSaleOrderTC):
-    def setUp(self):
-        super().setUp()
-        partner = self.env.ref("base.partner_demo_portal")
-        self.user = partner.user_ids
-        self.so = self.create_sale_order(partner)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        partner = cls.env.ref("base.partner_demo_portal")
+        cls.user = partner.user_ids
+        cls.so = cls.create_sale_order(partner)
 
     def test_add_receivable_account(self):
         "Buying a product must add the buyer a dedicated receivable account"
