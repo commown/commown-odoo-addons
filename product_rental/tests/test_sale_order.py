@@ -419,6 +419,7 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
             ]
         )
         self.assertEqual(inv.state, "posted")
+        self.assertEqual(inv.payment_state, "paid")
 
 
 class SaleOrderAttachmentsTC(RentalSaleOrderTC):

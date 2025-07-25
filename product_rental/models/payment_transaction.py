@@ -12,18 +12,20 @@ class PaymentTransaction(models.Model):
                 "invoice_line_ids.contract_line_id.contract_id"
             ):
                 if contract.payment_mode_id:
-                    payment = self.env["account.payment"].create(
-                        {
-                            "company_id": contract.company_id.id,
-                            "partner_id": contract.partner_id.id,
-                            "partner_type": "customer",
-                            "state": "draft",
-                            "payment_type": "inbound",
-                            "journal_id": contract.payment_mode_id.fixed_journal_id.id,
-                            "payment_method_id": contract.payment_mode_id.payment_method_id.id,
-                            "amount": self.amount,
-                            "payment_transaction_id": self.id,
-                            "move_id": invoice.id,
-                        }
+                    token = (
+                        contract.payment_token_id
+                        or contract.partner_id.payment_token_id
                     )
-                    payment.post()
+                    register_payment = (
+                        self.env["account.payment.register"]
+                        .with_context(
+                            active_ids=invoice.ids, active_model=invoice._name
+                        )
+                        .create(
+                            {
+                                "journal_id": contract.payment_mode_id.fixed_journal_id.id,
+                                "payment_token_id": token.id,
+                            }
+                        )
+                    )
+                    register_payment._create_payments()
