@@ -1,16 +1,13 @@
-from odoo.tests import tagged
-
-from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
+from odoo.tests import TransactionCase, tagged
 
 
 @tagged("-at_install", "post_install")
-class SaleOrderTC(RentalSaleOrderTC):
+class SaleOrderTC(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        partner = cls.env.ref("base.partner_demo_portal")
-        cls.user = partner.user_ids
-        cls.so = cls.create_sale_order(partner)
+        cls.so = cls.env.ref("sale.portal_sale_order_1")
+        cls.user = cls.so.partner_id.user_ids
 
     def test_add_receivable_account(self):
         "Buying a product must add the buyer a dedicated receivable account"
