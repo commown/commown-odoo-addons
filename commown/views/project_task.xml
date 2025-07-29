@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+
+  <record model="ir.ui.view" id="view_task_form2">
+    <field name="name">project.task.form</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="commown_contractual_issue.view_task_form2" />
+    <field name="arch" type="xml">
+      <!-- Add internal follow-up in it's own page-->
+      <xpath expr="//notebook" position="inside">
+        <page
+                    name="internal_followup"
+                    string="Internal Followup"
+                    attrs="{'invisible': [('show_internal_followup', '=', False)]}"
+                >
+            <field name="internal_followup" type="html" />
+            <field name="show_internal_followup" invisible="1" />
+        </page>
+    </xpath>
+    </field>
+  </record>
+
+  <!--Add internal follow-up to quick search-->
+  <record id="project_task_inherit_search" model="ir.ui.view">
+    <field name="name">project.task.search.expand</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_search_form" />
+    <field name="arch" type="xml">
+      <xpath expr="//search" position="inside">
+        <field name="internal_followup" />
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Edit task type form -->
+  <record model="ir.ui.view" id="task_type_edit">
+    <field name="name">project.task.type.form</field>
+    <field name="model">project.task.type</field>
+    <field name="inherit_id" ref="project.task_type_edit" />
+    <field name="arch" type="xml">
+      <!-- Insert displayed status below name -->
+      <xpath expr="//field[@name='name']" position="after">
+        <field name="portal_displayed_name" />
+      </xpath>
+    </field>
+  </record>
+
+  <!-- Edit task list on portal -->
+  <template id="portal_tasks_list" inherit_id="project.portal_tasks_list">
+
+    <!-- Prefer portal stage name over administrative stage name -->
+    <xpath
+            expr="//tbody//span[@t-field='tasks[0].sudo().stage_id.name']"
+            position="attributes"
+        >
+      <attribute name="t-field" />
+      <attribute
+                name="t-esc"
+            >tasks[0].sudo().stage_id.portal_displayed_name or tasks[0].sudo().stage_id.name</attribute>
+    </xpath>
+
+    <!-- Prefer portal stage name over administrative stage name -->
+    <xpath expr="//tbody//span[@t-esc='task.stage_id.name']" position="attributes">
+      <attribute
+                name="t-esc"
+            >task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
+    </xpath>
+
+  </template>
+
+  <!-- Edit task page on portal -->
+  <template id="portal_my_task" inherit_id="project.portal_my_task">
+
+    <xpath expr="//span[@t-field='task.stage_id.name']" position="attributes">
+      <!-- Prefer portal stage name over administrative stage name -->
+      <attribute name="t-field" />
+      <attribute
+                name="t-esc"
+            >task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
+    </xpath>
+
+    <xpath expr="//t[@t-foreach='task.user_ids']//a" position="attributes">
+      <!-- Do not expose our support people name and email -->
+      <attribute name="invisible">1</attribute>
+    </xpath>
+
+  </template>
+
+  <!-- Server action that sends the reminder email
+       to the followers of given issue -->
+  <record id="action_send_issue_reminder_email" model="ir.actions.server">
+    <field name="name">[commown] Send a reminder email concerning an issue</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field
+            name="code"
+        ><![CDATA[
+if record.user_id:
+    record = record.sudo(record.user_id)
+email_template = env.ref('commown.mail_template_issue_reminder').id
+record.message_post_with_template(email_template)
+]]>
+    </field>
+  </record>
+
+  <!-- Server action that sends a SMS reminder to the followers of given issue -->
+  <record id="action_send_issue_reminder_sms" model="ir.actions.server">
+    <field name="name">[commown] Send a reminder SMS concerning an issue</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">10</field>
+    <field name="state">code</field>
+    <field name="code">record.send_sms_reminder()</field>
+  </record>
+
+  <!-- Automatic action to execute reminder email and SMS send action
+       when an issue is put in the dedicated stage -->
+  <record id="issue_put_in_reminder_email_stage" model="base.automation">
+    <field name="name">[commown] Issue was put in the reminder email stage</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">1</field>
+    <field name="state">multi</field>
+    <field name="trigger">on_write</field>
+    <field
+            name="filter_pre_domain"
+        >[(u'stage_id', u'not ilike', u'[after-sale: reminder-email]')]</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[after-sale: reminder-email]')]</field>
+    <field
+            name="child_ids"
+            eval="[(6,0,[ref('commown.action_send_issue_reminder_email'), ref('commown.action_send_issue_reminder_sms')])]"
+        />
+  </record>
+
+  <!-- Server action that moves an issue waiting for too long in
+       its current stage to the next one -->
+  <record id="action_move_issue_to_stop_waiting_stage" model="ir.actions.server">
+    <field
+            name="name"
+        >[commown] Move issue waiting for too long to the next stage</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field
+            name="code"
+        ><![CDATA[
+next_stage_marker = {
+    'waiting-customer': 'reminder-email',
+    'reminder-email': 'end-ok',
+    'manual': 'pending',
+    'sending-pieces-ongoing': 'pending',
+    'waiting-pieces-return': 'pending',
+}
+for orig, dest in next_stage_marker.items():
+    if '[after-sale: %s]' % orig in (record.stage_id.name or ''):
+        stage = env['project.task.type'].search([
+            ('project_ids', '=', record.project_id.id),
+            ('name', 'like', '[after-sale: %s]' % dest),
+            ])
+        if len(stage) == 1:
+            record.update({'stage_id': stage.id})
+            break
+]]>
+    </field>
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       delay after the reminder email was sent is large enough -->
+  <record id="issue_reminder_delay_expired" model="base.automation">
+    <field name="name">[commown] Delay after issue reminder email expired</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[after-sale: reminder-email]')]</field>
+    <field
+            name="trg_date_id"
+            search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"
+        />
+    <field name="trg_date_range">10</field>
+    <field name="trg_date_range_type">day</field>
+    <field
+            name="action_server_id"
+            eval="ref('action_move_issue_to_stop_waiting_stage')"
+        />
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       time spent in the "waiting-customer" stage was too long -->
+  <record id="issue_waiting_customer_for_too_long" model="base.automation">
+    <field
+            name="name"
+        >[commown] Time spent waiting for the customer was too long</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[after-sale: waiting-customer]')]</field>
+    <field
+            name="trg_date_id"
+            search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"
+        />
+    <field name="trg_date_range">5</field>
+    <field name="trg_date_range_type">day</field>
+    <field
+            name="action_server_id"
+            eval="ref('action_move_issue_to_stop_waiting_stage')"
+        />
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       time spent in the "manual" stage was too long -->
+  <record id="manual_issue_waiting_for_too_long" model="base.automation">
+    <field
+            name="name"
+        >[commown] Time spent in the manual followup stage was too long</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[after-sale: manual]')]</field>
+    <field
+            name="trg_date_id"
+            search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"
+        />
+    <field name="trg_date_range">10</field>
+    <field name="trg_date_range_type">day</field>
+    <field
+            name="action_server_id"
+            eval="ref('action_move_issue_to_stop_waiting_stage')"
+        />
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       time spent in the "sending pieces" stage was too long -->
+  <record id="sending_pieces_issue_waiting_for_too_long" model="base.automation">
+    <field
+            name="name"
+        >[commown] Time spent in the sending pieces followup stage was too long</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[after-sale: sending-pieces-ongoing]')]</field>
+    <field
+            name="trg_date_id"
+            search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"
+        />
+    <field name="trg_date_range">3</field>
+    <field name="trg_date_range_type">day</field>
+    <field
+            name="action_server_id"
+            eval="ref('action_move_issue_to_stop_waiting_stage')"
+        />
+  </record>
+
+  <!-- Automatic action based on time, triggered when the
+       delay in the "waiting pieces return" has expired -->
+  <record id="issue_waiting_return_delay" model="base.automation">
+    <field
+            name="name"
+        >[commown] Delay waiting for the customer to return the hardware back expired</field>
+    <field name="model_id" ref="project.model_project_task" />
+    <field name="sequence">1</field>
+    <field name="trigger">on_time</field>
+    <field
+            name="filter_domain"
+        >[(u'stage_id', u'ilike', u'[after-sale: waiting-pieces-return]')]</field>
+    <field
+            name="trg_date_id"
+            search="[('model', '=', 'project.task'), ('name', '=', 'date_last_stage_update')]"
+        />
+    <field name="trg_date_range">15</field>
+    <field name="trg_date_range_type">day</field>
+    <field
+            name="action_server_id"
+            eval="ref('action_move_issue_to_stop_waiting_stage')"
+        />
+  </record>
+
+  <!-- Server action that moves a sleeping issue to
+       the "pending" stage when a customer message arrives -->
+  <record id="action_awaken_issue_on_partner_message_arrival" model="ir.actions.server">
+    <field
+            name="name"
+        >[commown] Move waiting issues into pending on user email arrival</field>
+    <field name="model_id" ref="mail.model_mail_message" />
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field
+            name="code"
+        ><![CDATA[
+if record.model == 'project.task' and record.message_type in ('email', 'comment'):
+    task = env[record.model].browse(record.res_id).sudo()
+    if task.project_id == env.ref('commown_self_troubleshooting.support_project'):
+        employees = env.ref('base.group_user')
+        if employees not in record.author_id.mapped('user_ids.groups_id'):
+            stage = env['project.task.type'].search([
+                ('project_ids', '=', task.project_id.id),
+                ('name', 'like', '[after-sale: pending]'),
+                ])
+            task.update({'stage_id': stage.id})
+]]>
+    </field>
+  </record>
+
+  <!-- Automatic action that run on mail.message
+       creation when concerning a project.task -->
+  <record id="mail_message_arrival_concerning_issue" model="base.automation">
+    <field name="name">[commown] A email concerning an issue just arrived</field>
+    <field name="model_id" ref="mail.model_mail_message" />
+    <field name="sequence">1</field>
+    <field name="trigger">on_create</field>
+    <field name="filter_domain">[(u'model', u'=', u'project.task')]</field>
+    <field
+            name="action_server_id"
+            eval="ref('action_awaken_issue_on_partner_message_arrival')"
+        />
+  </record>
+
+</odoo>

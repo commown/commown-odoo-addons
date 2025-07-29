@@ -1,0 +1,7 @@
+<odoo noupdate="1">
+
+  <record id="sepa_mandate" model="product.template">
+    <field name="name">SEPA Mandate</field>
+  </record>
+
+</odoo>

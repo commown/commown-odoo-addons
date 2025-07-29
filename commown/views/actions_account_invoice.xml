@@ -1,0 +1,13 @@
+<odoo>
+
+  <record id="fix_invoice_investment_line_price" model="ir.actions.server">
+    <field name="name">[commown] Multiply by 10 investments' line amount</field>
+    <field name="model_id" ref="account.model_account_move" />
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">
+records._multiply_investments(10)
+    </field>
+  </record>
+
+</odoo>

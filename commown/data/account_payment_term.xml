@@ -1,0 +1,7 @@
+<odoo noupdate="1">
+
+  <record id="investment_payment_term" model="account.payment.term">
+    <field name="name">Paiement immédiat 10% prélèvement auto + Solde virement</field>
+  </record>
+
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <template id="address_on_payment" inherit_id="website_sale.address_on_payment">
+
+    <!-- Add UI elements to emphasize the user needs to check its delivery address -->
+    <xpath expr="//div[@id='shipping_and_billing']/*[1]" position="before">
+      <h3 class="card-title">Adresse de livraison</h3>
+      <h4 class="card-subtitle mb-3 text-danger">Merci de vérifier vos adresses</h4>
+    </xpath>
+
+  </template>
+
+  <template id="payment" inherit_id="website_sale.payment">
+
+    <xpath expr="//div[@id='payment_method']/h3" position="attributes">
+      <attribute name="invisible">1</attribute>
+    </xpath>
+
+    <xpath expr="//div[@id='payment_method']/h3" position="before">
+      <div t-if="can_order" class="alert alert-warning" role="alert">
+        En cliquant sur "Accepter et payer", je reconnais avoir pris connaissance des
+        <a
+                    target="_blank"
+                    t-att-href="env.user.website_id.legal_notice_url"
+                >conditions de services et informations légales</a>
+        et je les accepte.
+      </div>
+    </xpath>
+
+    <xpath expr="//div[@id='payment_method']" position="inside">
+      <div t-if="can_order" class="float-right col-4 pr-0 mt-1 text-right">
+        Vous serez redirigé·e vers un formulaire de signature de mandat
+        SEPA (Slimpay), sauf si vous êtes déjà client.
+      </div>
+    </xpath>
+
+  </template>
+
+</odoo>

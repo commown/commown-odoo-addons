@@ -1,0 +1,7 @@
+<odoo noupdate="1">
+
+  <record id="categ_de" model="product.public.category">
+    <field name="name">Alle produkte</field>
+  </record>
+
+</odoo>
