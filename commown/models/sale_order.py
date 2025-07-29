@@ -64,12 +64,3 @@ class SaleOrder(models.Model):
         self.partner_id._create_receivable_account()
         self._create_investment_followup_task()
         return super().action_confirm()
-
-    def _followup_entity_title_prefix(self, contract=None, secondary_index=None):
-        title = super()._followup_entity_title_prefix(
-            contract=contract, secondary_index=secondary_index
-        )
-        coupons = self.used_coupons()
-        if coupons:
-            title += " - COUPON: " + ", ".join(coupons.mapped("campaign_id.name"))
-        return title

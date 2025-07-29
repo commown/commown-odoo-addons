@@ -117,7 +117,6 @@ class Campaign(models.Model):
                 "res_id": self.id,
                 "mimetype": mime,
                 "datas": b64encode(data),
-                "datas_fname": name,
                 "name": name,
                 "public": False,
                 "type": "binary",
@@ -126,6 +125,6 @@ class Campaign(models.Model):
 
         return {
             "type": "ir.actions.act_url",
-            "url": attachment.website_url + "&download=1",
+            "url": attachment.local_url + "&download=1",
             "target": "new",
         }
