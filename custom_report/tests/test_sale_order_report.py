@@ -77,6 +77,10 @@ class SaleOrderReportTC(ReportTC):
         )
 
     def test_title_state_sale(self):
+        # Use a company with a chart of account as commown_partner_property_accounts
+        # needs it to create the partner's property account on sale confirmation:
+        self.env.company = self.env.companies.filtered("chart_template_id")[0]
+
         self.so.action_confirm()
         assert self.so.state == "sale", "Pre-requisite failure"
 

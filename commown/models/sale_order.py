@@ -61,6 +61,5 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         self.ensure_one()
-        self.partner_id._create_receivable_account()
         self._create_investment_followup_task()
         return super().action_confirm()
