@@ -4,7 +4,7 @@
 {
     "name": "Commown investment sale",
     "summary": "Module to manage the online investments in Commown shares.",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Sales",
     "website": "https://github.com/commown/commown-odoo-addons",
