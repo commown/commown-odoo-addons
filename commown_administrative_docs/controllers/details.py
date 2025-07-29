@@ -10,14 +10,12 @@ from ..models.res_partner import FileTooBig
 _logger = logging.getLogger(__name__)
 
 
-class CustomerPortal(CustomerPortal):
-    OPTIONAL_BILLING_FIELDS = [
-        "street2",
+class AdminDocsCustomerPortal(CustomerPortal):
+    OPTIONAL_BILLING_FIELDS = CustomerPortal.OPTIONAL_BILLING_FIELDS + [
         "id_card1",
         "id_card2",
         "proof_of_address",
         "company_record",
-        "state_id",
     ]
 
     def details_form_validate(self, data):

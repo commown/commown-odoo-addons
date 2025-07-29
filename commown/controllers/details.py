@@ -2,30 +2,25 @@ import logging
 
 from odoo import http
 
-from odoo.addons.commown_administrative_docs.controllers.details import CustomerPortal
+from odoo.addons.commown_administrative_docs.controllers import details
 
 _logger = logging.getLogger(__name__)
 
 
-class CustomerPortal(CustomerPortal):
+class CommownCustomerPortal(details.AdminDocsCustomerPortal):
     MANDATORY_BILLING_FIELDS = [
-        "firstname",
-        "lastname",
-        "phone",
-        "email",
-        "street",
-        "zipcode",
-        "city",
-        "country_id",
-    ]
-    OPTIONAL_BILLING_FIELDS = [
-        "street2",
-        "id_card1",
-        "id_card2",
-        "proof_of_address",
-        "company_record",
-        "state_id",
-    ]
+        field
+        for field in details.AdminDocsCustomerPortal.MANDATORY_BILLING_FIELDS
+        if field != "name"
+    ] + ["firstname", "lastname", "zipcode"]
+
+    OPTIONAL_BILLING_FIELDS = (
+        details.AdminDocsCustomerPortal.OPTIONAL_BILLING_FIELDS
+        + [
+            "street2",
+            "state_id",
+        ]
+    )
 
     def details_form_validate(self, data):
         """Add Slimpay validation of submitted partner data"""
