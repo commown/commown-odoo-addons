@@ -3,7 +3,7 @@
   <record model="ir.ui.view" id="view_partner_form">
     <field name="name">res.partner.form</field>
     <field name="model">res.partner</field>
-    <field name="inherit_id" ref="contract_payment_auto.view_partner_form" />
+    <field name="inherit_id" ref="base.view_partner_form" />
     <field name="arch" type="xml">
 
       <xpath expr="//notebook/page[1]" position="before">
