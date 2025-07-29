@@ -12,6 +12,14 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "crm",
+        "product_rental",
+        "website_sale_b2b",
+    ],
+    "data": [
+        "data/actions_crm_lead.xml",
+        "data/mail_template.xml",
+        "views/res_partner.xml",
+        "views/website_portal_templates.xml",
     ],
 }
