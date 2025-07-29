@@ -22,4 +22,9 @@
         "views/res_partner.xml",
         "views/website_portal_templates.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "/commown_administrative_docs/static/src/js/delete_doc_button.js",
+        ]
+    },
 }
