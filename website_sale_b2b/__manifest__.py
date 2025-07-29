@@ -2,7 +2,7 @@
     "name": "Website sale B2B",
     "category": "Business",
     "summary": "Adapt website_sale module to mixed B2C/ B2B products",
-    "version": "16.0.1.0.2",
+    "version": "16.0.1.0.3",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
