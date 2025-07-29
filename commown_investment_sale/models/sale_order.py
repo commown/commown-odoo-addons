@@ -13,19 +13,18 @@ class SaleOrder(models.Model):
             .ids
         )
 
-        line_tmpl = _(
-            "<p><b>Sale number:</b> {sale_name}</p>"
-            "<p><b>Sale date:</b> {date.year}-{date.month}-{date.day}</p>"
-            "<p><b>Product:</b> {product_name}</p>"
-        )
-
         description = []
         for line in self.order_line:
             if line.product_id.product_tmpl_id.id in product_tmpl_ids:
                 description.append(
-                    line_tmpl.format(
+                    _(
+                        "<p><b>Sale number:</b> %(sale_name)s</p>"
+                        "<p><b>Sale date:</b> %(year)d-%(month)d-%(day)d</p>"
+                        "<p><b>Product:</b> %(product_name)s</p>",
                         sale_name=html.escape(self.name),
-                        date=self.date_order,
+                        year=self.date_order.year,
+                        month=self.date_order.month,
+                        day=self.date_order.day,
                         product_name=html.escape(line.product_id.display_name),
                     )
                 )
