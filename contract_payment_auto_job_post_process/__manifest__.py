@@ -12,6 +12,7 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "contract_payment_auto",
+        "contract_queue_job",
     ],
 }
