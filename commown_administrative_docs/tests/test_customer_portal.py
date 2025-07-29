@@ -35,10 +35,8 @@ class CustomerPortalMixin(RentalSaleOrderMixin):
     def get_form(self, test_client, path, **data):
         "Get given page and return a name: value dict of its inputs and selects"
         page = self.get_page(test_client, path, **data)
-        form = {n.get("name"): n.get("value") for n in page.xpath("//input")}
-        for select in page.xpath("//select"):
-            form[select.get("name")] = select.xpath("string(option[@selected]/@value)")
-        return form
+        self.assertEqual(len(page.forms), 1)
+        return dict(page.forms[0].form_values())
 
     def portal_client(self):
         user = self.partner.user_ids.ensure_one()
