@@ -77,7 +77,6 @@ class AdministrativeDocsCustomerPortalTC(CustomerPortalMixin, HttpCase):
         with open(HERE / "smallest.pdf", "rb") as fobj:
             account_form.update(
                 {
-                    "redirect": "/my/home",
                     "id_card1": (fobj, "card1.pdf"),
                     "id_card2": "",
                     "proof_of_address": "",
