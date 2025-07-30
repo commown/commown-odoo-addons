@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from unittest import mock
 
 from odoo.exceptions import AccessError
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 from odoo.addons.queue_job.tests.common import trap_jobs
@@ -18,8 +18,7 @@ class NoSMSAssertMixin:
         self.assertIn("No SMS reminder sent", logged.output[0])
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
     def test_followup_view(self):
         project = self.env.ref("commown_support.support_project")
@@ -57,8 +56,7 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
         self.assertIn("internal_followup", err.exception.name)
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
     def setUp(self):
         super().setUp()
