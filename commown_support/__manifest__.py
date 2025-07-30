@@ -14,15 +14,19 @@
     "depends": [
         # Odoo modules
         "base_automation",
+        # OCA modules
+        "partner_firstname",
+        "queue_job",
         # Commown modules
         "commown_contractual_issue",
-        "commown_self_troubleshooting",
         "commown_project",
+        "commown_res_partner_sms",
     ],
     "data": [
         "data/mail_templates.xml",
         "data/ir_actions_server.xml",
         "data/base_automation.xml",
+        "data/project.xml",
         "views/project_project.xml",
         "views/project_task.xml",
     ],

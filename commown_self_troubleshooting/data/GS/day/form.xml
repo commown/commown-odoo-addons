@@ -85,7 +85,7 @@
                 <input
                                 type="hidden"
                                 name="project_ref"
-                                value="commown_self_troubleshooting.support_project"
+                                value="commown_support.support_project"
                             />
                 <input
                                 type="hidden"

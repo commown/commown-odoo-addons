@@ -22,7 +22,7 @@ class NoSMSAssertMixin:
 @post_install(True)
 class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
     def test_followup_view(self):
-        project = self.env.ref("commown_self_troubleshooting.support_project")
+        project = self.env.ref("commown_support.support_project")
         project.show_internal_followup = True
 
         partner = self.env.ref("base.partner_demo_portal")
@@ -63,7 +63,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
     def setUp(self):
         super().setUp()
 
-        self.project = self.env.ref("commown_self_troubleshooting.support_project")
+        self.project = self.env.ref("commown_support.support_project")
 
         # Adapt defined stages to our needs: use expected name
         # conventions and remove email model as they are buggy for
