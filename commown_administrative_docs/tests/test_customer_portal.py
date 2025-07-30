@@ -66,7 +66,8 @@ class AdministrativeDocsCustomerPortalTC(CustomerPortalMixin, HttpCase):
         """Portal users must be able to post their documents
         ... and see the upload state on their home page
         """
-
+        # Pre-requisite
+        self.assertFalse(self.partner.id_card1)
         test_client = self.portal_client()
 
         # Post id_card1
@@ -88,7 +89,5 @@ class AdministrativeDocsCustomerPortalTC(CustomerPortalMixin, HttpCase):
         self.assertEqual(response.status_code, 303)
         self.assertIn("/my/home", response.data.decode("utf-8"))
 
-        with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            partner = env["res.partner"].browse(self.partner.id)
-            self.assertTrue(partner.id_card1)
+        self.partner.invalidate_recordset()
+        self.assertTrue(self.partner.id_card1)
