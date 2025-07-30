@@ -39,7 +39,7 @@ class AdminDocsCustomerPortal(CustomerPortal):
             _logger.debug("details posted: %s", post)
             for field in partner.auto_widget_binary_fields:
                 if post.get(field):
-                    if not post[field].filename:
+                    if not getattr(post[field], "filename", False):
                         post[field] = False
                     else:
                         post[field] = b64encode(post[field].read())
