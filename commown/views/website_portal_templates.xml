@@ -101,7 +101,7 @@
     <xpath expr="//input[@name='company_name']/ancestor::div[1]" position="attributes">
       <attribute
                 name="t-if"
-            >env.user.website_id == env.ref('website_sale_b2b.b2b_website')</attribute>
+            >env.user.website_id == env.ref('website_b2b.b2b_website')</attribute>
     </xpath>
     <xpath expr="//input[@name='company_name']" position="attributes">
       <attribute name="disabled">1</attribute>
@@ -110,7 +110,7 @@
     <xpath expr="//input[@name='vat']/ancestor::div[1]" position="attributes">
       <attribute
                 name="t-if"
-            >env.user.website_id == env.ref('website_sale_b2b.b2b_website')</attribute>
+            >env.user.website_id == env.ref('website_b2b.b2b_website')</attribute>
     </xpath>
     <xpath expr="//input[@name='vat']" position="attributes">
       <attribute name="disabled">1</attribute>

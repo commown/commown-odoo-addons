@@ -153,7 +153,7 @@ class CustomerPortalB2BTC(CustomerPortalMixin, HttpCase):
 
         with self.registry.cursor() as test_cursor:
             partner = self._partner(test_cursor)
-            partner.website_id = partner.env.ref("website_sale_b2b.b2b_website").id
+            partner.website_id = partner.env.ref("website_b2b.b2b_website").id
             partner.website_id.update(
                 {"domain": self.headers["Host"], "login_checkbox_message": "I'm a pro"}
             )

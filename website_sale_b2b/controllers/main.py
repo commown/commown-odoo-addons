@@ -84,7 +84,7 @@ class WebsiteSaleB2B(WebsiteSale):
         rental_infos = {"reason": None, "quantity": 0.0}
 
         env = request.env
-        if request.website == env.ref("website_sale_b2b.b2b_website"):
+        if request.website == env.ref("website_b2b.b2b_website"):
             partner = env.user.partner_id.commercial_partner_id
 
             plist = request.website.get_current_pricelist()
@@ -107,7 +107,7 @@ class WebsiteSaleB2B(WebsiteSale):
         errors, messages = super().checkout_form_validate(mode, all_form_values, data)
         env = http.request.env
         if (
-            http.request.website == env.ref("website_sale_b2b.b2b_website")
+            http.request.website == env.ref("website_b2b.b2b_website")
             and mode[1] == "billing"
             and not data.get("vat")
             and data.get("country_id")

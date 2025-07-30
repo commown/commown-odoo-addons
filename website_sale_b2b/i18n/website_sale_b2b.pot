@@ -279,7 +279,7 @@ msgid "If set, the sale order line descriptions with this article are interprete
 msgstr ""
 
 #. module: website_sale_b2b
-#: model:website,login_checkbox_message:website_sale_b2b.b2b_website
+#: model:website,login_checkbox_message:website_b2b.b2b_website
 msgid "Je représente une entreprise, association, collectivité..."
 msgstr ""
 
@@ -341,7 +341,7 @@ msgid "Product Template"
 msgstr ""
 
 #. module: website_sale_b2b
-#: model:website,name:website_sale_b2b.b2b_website
+#: model:website,name:website_b2b.b2b_website
 msgid "Products for professionals"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgid "excl. taxes"
 msgstr ""
 
 #. module: website_sale_b2b
-#: model:website,legal_notice_url:website_sale_b2b.b2b_website
+#: model:website,legal_notice_url:website_b2b.b2b_website
 msgid "https://commown.coop/mentions-legales/#12-pour-les-professionnels"
 msgstr ""
 

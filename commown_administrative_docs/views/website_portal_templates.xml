@@ -6,7 +6,7 @@
       <div class="mt-2">
         <t
                     t-set="is_b2b"
-                    t-value="user_id.website_id == env.ref('website_sale_b2b.b2b_website')"
+                    t-value="user_id.website_id == env.ref('website_b2b.b2b_website')"
                 />
         <t
                     t-set="no_card"
@@ -47,7 +47,7 @@
 
       <t
                 t-set="is_b2b"
-                t-value="user_id.website_id == env.ref('website_sale_b2b.b2b_website')"
+                t-value="user_id.website_id == env.ref('website_b2b.b2b_website')"
             />
       <t
                 t-foreach="['id_card1', 'id_card2', 'company_record' if is_b2b else 'proof_of_address']"

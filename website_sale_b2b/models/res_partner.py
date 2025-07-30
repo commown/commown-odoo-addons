@@ -17,10 +17,6 @@ def _all_children(entities):
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    website_id = fields.Many2one(
-        help="Website the user can log in. An empty value means all websites."
-    )
-
     def action_create_intermediate_company(self):
         "Create an intermediate company for selected records (useful for french CAEs)"
 

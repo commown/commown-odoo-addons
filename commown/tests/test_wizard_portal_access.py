@@ -12,5 +12,5 @@ class WizardPortalAccessCustomerTeamManagerTC(CustomerTeamManagerAbstractTC):
         )
         self._grant_portal_access(empl)
 
-        b2b_website = self.env.ref("website_sale_b2b.b2b_website")
+        b2b_website = self.env.ref("website_b2b.b2b_website")
         self.assertEqual(empl.user_ids.website_id, b2b_website)

@@ -14,7 +14,8 @@
     "depends": [
         "crm",
         "product_rental",
-        "website_sale_b2b",
+        "commown_res_partner_sms",
+        "website_b2b",
     ],
     "external_dependencies": {
         "python": ["magic"],
