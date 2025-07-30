@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import PropertyMock, patch
 
 from lxml import html
 from werkzeug.test import Client
@@ -91,3 +92,30 @@ class AdministrativeDocsCustomerPortalTC(CustomerPortalMixin, HttpCase):
 
         self.partner.invalidate_recordset()
         self.assertTrue(self.partner.id_card1)
+
+    def test_document_too_big(self):
+        # Post id_card1
+        test_client = self.portal_client()
+        account_form = self.get_form(test_client, "/my/account")
+
+        # We patch the max doc size value to be 0, for the provided file to be considered too big.
+        with patch(
+            "odoo.addons.commown_administrative_docs.models."
+            "res_partner.CommownPartner.max_doc_size_Mo",
+            new_callable=PropertyMock,
+            return_value=0,
+        ):
+            with open(HERE / "smallest.pdf", "rb") as fobj:
+                account_form.update(
+                    {
+                        "id_card1": (fobj, "card1.pdf"),
+                        "id_card2": "",
+                        "proof_of_address": "",
+                    }
+                )
+                response = test_client.post(
+                    "/my/account", data=account_form, environ_base=self.werkzeug_environ
+                )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("File too big", response.data.decode("utf-8"))
