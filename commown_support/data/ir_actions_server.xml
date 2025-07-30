@@ -11,7 +11,7 @@
             name="code"
         ><![CDATA[
 if record.user_ids:
-    record = record.sudo(record.user_ids[0])
+    record = record.with_user(record.user_ids[0])
 email_template = env.ref('commown_support.mail_template_issue_reminder').id
 record.message_post_with_template(email_template)
 ]]>
