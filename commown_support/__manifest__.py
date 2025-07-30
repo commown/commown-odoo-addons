@@ -12,6 +12,18 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        # Odoo modules
+        "base_automation",
+        # Commown modules
+        "commown_contractual_issue",
+        "commown_self_troubleshooting",
+        "commown_project",
+    ],
+    "data": [
+        "data/mail_templates.xml",
+        "data/ir_actions_server.xml",
+        "data/base_automation.xml",
+        "views/project_project.xml",
+        "views/project_task.xml",
     ],
 }

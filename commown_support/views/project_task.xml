@@ -1,0 +1,34 @@
+<odoo>
+
+  <record model="ir.ui.view" id="view_task_form2">
+    <field name="name">project.task.form</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="commown_contractual_issue.view_task_form2" />
+    <field name="arch" type="xml">
+      <!-- Add internal follow-up in it's own page-->
+      <xpath expr="//notebook" position="inside">
+        <page
+                    name="internal_followup"
+                    string="Internal Followup"
+                    attrs="{'invisible': [('show_internal_followup', '=', False)]}"
+                >
+            <field name="internal_followup" type="html" />
+            <field name="show_internal_followup" invisible="1" />
+        </page>
+    </xpath>
+    </field>
+  </record>
+
+  <!--Add internal follow-up to quick search-->
+  <record id="project_task_inherit_search" model="ir.ui.view">
+    <field name="name">project.task.search.expand</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_search_form" />
+    <field name="arch" type="xml">
+      <xpath expr="//search" position="inside">
+        <field name="internal_followup" />
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
