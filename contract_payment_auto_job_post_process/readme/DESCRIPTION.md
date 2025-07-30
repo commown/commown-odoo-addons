@@ -1,0 +1,1 @@
+This module with automatically pay contract invoices in jobs (like when you install both contract_payment_auto and contract_queue_job), and adds post-processing of the created transaction in each job.

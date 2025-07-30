@@ -359,67 +359,6 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         self.assertEqual(inv.amount_total, 30.0)
         self.assertEqual(inv.amount_tax, 5.0)
 
-    def test_automatic_payment(self):
-        so = self.create_sale_order()
-        so.action_confirm()
-
-        provider = self.env.ref("payment.payment_provider_transfer")
-
-        token = self.env["payment.token"].create(
-            {
-                "payment_details": "Test Token",
-                "partner_id": so.partner_id.id,
-                "active": True,
-                "provider_id": provider.id,
-                "provider_ref": "my_ref",
-            }
-        )
-
-        customer_journal = self.env["account.journal"].create(
-            {
-                "name": "Customer journal",
-                "code": "RC",
-                "company_id": self.env.company.id,
-                "type": "bank",
-            }
-        )
-
-        pay_meth = customer_journal.inbound_payment_method_line_ids.mapped(
-            "payment_method_id"
-        )
-
-        pay_mode = self.env["account.payment.mode"].create(
-            {
-                "name": "Automatic contract payment",
-                "payment_method_id": pay_meth.id,
-                "payment_type": "inbound",
-                "bank_account_link": "fixed",
-                "fixed_journal_id": customer_journal.id,
-            }
-        )
-
-        contract = self.env["contract.contract"].of_sale(so)[0]
-        contract.update(
-            {
-                "is_auto_pay": True,
-                "payment_token_id": token.id,
-                "payment_mode_id": pay_mode.id,
-            }
-        )
-
-        contract.with_context(test_target_state="done").recurring_create_invoice()
-
-        # Do not use _recurring_create_invoice return value here as
-        # contract_queue_job (installed in the CI) returns an empty invoice set
-        # (see https://github.com/OCA/contract/blob/12.0/contract_queue_job
-        #  /models/contract_contract.py#L21)
-        inv = self.env["account.move"].search(
-            [
-                ("line_ids.contract_line_id.contract_id", "=", contract.id),
-            ]
-        )
-        self.assertEqual(inv.state, "posted")
-
 
 class SaleOrderAttachmentsTC(RentalSaleOrderTC):
     def setUp(self):
