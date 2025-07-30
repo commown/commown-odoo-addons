@@ -1,4 +1,4 @@
-from base64 import b64decode
+from base64 import b64decode, b64encode
 
 import magic
 
@@ -82,10 +82,8 @@ class CommownPartner(models.Model):
                     )
                 value = b64decode(b64value)
                 if magic.from_buffer(value, mime=True).startswith("image"):
-                    vals[field] = tools.image_resize_image(
-                        b64value, avoid_if_small=True, size=self.max_doc_image_size
-                    )
-                    value = b64decode(vals[field])
+                    value = tools.image_process(value, size=self.max_doc_image_size)
+                    vals[field] = b64encode(value)
                 if len(value) > 1024 * 1024 * self.max_doc_size_Mo:
                     raise FileTooBig(
                         field, _("File too big (limit is %dMo)") % self.max_doc_size_Mo
