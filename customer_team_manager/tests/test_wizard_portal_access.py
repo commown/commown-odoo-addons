@@ -13,6 +13,8 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
         admin.password = "admin"
         admin.login = "admin@test.org"
 
+        b2b_website = self.env.ref("website_b2b.b2b_website")
+
         empl1 = self.create_partner(sudo_as=admin, name="E1 L", email="e1@test.coop")
         empl2 = self.create_partner(sudo_as=admin, name="E2 L", email="e2@test.coop")
         empl3 = self.create_partner(sudo_as=admin, name="E3 L", email="e3@test.com")
@@ -26,6 +28,10 @@ class WizardGrantEmployeePortalAccessTC(CustomerTeamManagerAbstractTC):
             all_employees.mapped("portal_status"),
             ["never_connected", "not_granted", "not_granted", "not_granted"],
         )
+
+        # Granting portal access should force the users' website to the B2B website.
+        self.assertEqual(empl1.website_id, b2b_website)
+        self.assertFalse((empl2 | empl3 | empl4).mapped("website_id"))
 
         # Grant access to a customer who has already been granted access.
         # (Should do nothing particular)
