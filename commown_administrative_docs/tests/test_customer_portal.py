@@ -75,10 +75,14 @@ class AdministrativeDocsCustomerPortalTC(CustomerPortalMixin, HttpCase):
         account_form = self.get_form(test_client, "/my/account")
 
         with open(HERE / "smallest.pdf", "rb") as fobj:
+            # The id_card1 is the field write we intend to succeed.
+            # The id_card2 value is a deliberate invalid value,
+            # which should be replaced by a False in the controller.
+            # (This is for coverage purposes)
             account_form.update(
                 {
                     "id_card1": (fobj, "card1.pdf"),
-                    "id_card2": "",
+                    "id_card2": 1,
                     "proof_of_address": "",
                 }
             )
@@ -91,6 +95,7 @@ class AdministrativeDocsCustomerPortalTC(CustomerPortalMixin, HttpCase):
 
         self.partner.invalidate_recordset()
         self.assertTrue(self.partner.id_card1)
+        self.assertFalse(self.partner.id_card2)
 
     def test_document_too_big(self):
         # Post id_card1
