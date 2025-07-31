@@ -4,14 +4,12 @@ from lxml import html
 
 from odoo.tests.common import HttpCase, get_db_name
 
-from odoo.addons.product_rental.tests.common import RentalSaleOrderMixin
-
 
 def _csrf_token(page):
     return page.xpath("string(//input[@name='csrf_token']/@value)")
 
 
-class ResPartnerResetPasswordTC(RentalSaleOrderMixin, HttpCase):
+class ResPartnerResetPasswordTC(HttpCase):
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.partner_demo_portal")
