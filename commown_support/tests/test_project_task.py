@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from unittest import mock
 
 from odoo.exceptions import AccessError
-from odoo.tests.common import TransactionCase, at_install, post_install
+from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
 from odoo.addons.queue_job.tests.common import trap_jobs
@@ -11,18 +11,17 @@ from odoo.addons.queue_job.tests.common import trap_jobs
 class NoSMSAssertMixin:
     @contextmanager
     def assertNoSMSLogged(self):
-        chan = "odoo.addons.commown.models.project_task"
+        chan = "odoo.addons.commown_support.models.project_task"
         with self.assertLogs(chan, level="WARNING") as logged:
             yield
         self.assertEqual(len(logged.output), 1)
         self.assertIn("No SMS reminder sent", logged.output[0])
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
     def test_followup_view(self):
-        project = self.env.ref("commown_self_troubleshooting.support_project")
+        project = self.env.ref("commown_support.support_project")
         project.show_internal_followup = True
 
         partner = self.env.ref("base.partner_demo_portal")
@@ -53,64 +52,69 @@ class ProjectTaskModelTC(NoSMSAssertMixin, TransactionCase):
         self.assertEqual(task_portal.name, "Commown test")
         with self.assertRaises(AccessError) as err:
             task_portal.internal_followup  # pylint: disable=pointless-statement
-        self.assertIn("security restrictions", err.exception.name)
-        self.assertIn("internal_followup", err.exception.name)
+        self.assertIn("not have enough rights to access", err.exception.args[0])
+        self.assertIn("internal_followup", err.exception.args[0])
 
 
-@at_install(False)
-@post_install(True)
+@tagged("-at_install", "post_install")
 class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
-    def setUp(self):
-        super().setUp()
+    def flush_tracking(self):
+        """Force the creation of tracking values."""
+        self.env.flush_all()
+        self.cr.precommit.run()
 
-        self.project = self.env.ref("commown_self_troubleshooting.support_project")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        cls.project = cls.env.ref("commown_support.support_project")
 
         # Adapt defined stages to our needs: use expected name
         # conventions and remove email model as they are buggy for
         # issues (their template model is task instead, which leads to
         # crashes)
-        self.stage_pending = self.env["project.task.type"].create(
+        cls.stage_pending = cls.env["project.task.type"].create(
             {"name": "Working on it [after-sale: pending]", "mail_template_id": False}
         )
-        self.stage_pending.project_ids |= self.project
-        self.stage_wait = self.stage_pending.copy(
+        cls.stage_pending.project_ids |= cls.project
+        cls.stage_wait = cls.stage_pending.copy(
             {"name": "Wait [after-sale: waiting-customer]", "mail_template_id": False}
         )
-        self.stage_reminder = self.stage_pending.copy(
+        cls.stage_reminder = cls.stage_pending.copy(
             {
                 "name": "Remind email [after-sale: reminder-email]",
                 "mail_template_id": False,
             }
         )
-        self.stage_end_ok = self.stage_pending.copy(
+        cls.stage_end_ok = cls.stage_pending.copy(
             {"name": "Solved [after-sale: end-ok]", "mail_template_id": False}
         )
-        self.stage_manual = self.stage_pending.copy(
+        cls.stage_manual = cls.stage_pending.copy(
             {"name": "Solved [after-sale: manual]", "mail_template_id": False}
         )
-        self.stage_sending_pieces = self.stage_pending.copy(
+        cls.stage_sending_pieces = cls.stage_pending.copy(
             {
                 "name": "Sending Pieces [after-sale: sending-pieces-ongoing]",
                 "mail_template_id": False,
             }
         )
-        self.stage_waiting_pieces_return = self.stage_pending.copy(
+        cls.stage_waiting_pieces_return = cls.stage_pending.copy(
             {
                 "name": "Waiting Pieces [after-sale: waiting-pieces-return]",
                 "mail_template_id": False,
             }
         )
 
-        self.partner = self.env.ref("base.partner_demo_portal")
-        self.partner.update({"firstname": "Flo", "phone": "+33747397654"})
+        cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.partner.update({"firstname": "Flo", "phone": "+33747397654"})
 
-        self.task = self.env["project.task"].create(
+        cls.task = cls.env["project.task"].create(
             {
                 "name": "Commown test",
-                "project_id": self.project.id,
-                "stage_id": self.stage_pending.id,
-                "partner_id": self.partner.id,
-                "user_id": self.env.ref("base.user_demo").id,
+                "project_id": cls.project.id,
+                "stage_id": cls.stage_pending.id,
+                "partner_id": cls.partner.id,
+                "user_ids": cls.env.ref("base.user_demo").ids,
             }
         )
 
@@ -118,11 +122,13 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         "Unset all commown actions' last_run date"
         action_refs = (
             self.env["ir.model.data"]
-            .search([("module", "=", "commown"), ("model", "=", "base.automation")])
+            .search(
+                [("module", "=", "commown_support"), ("model", "=", "base.automation")]
+            )
             .mapped("name")
         )
         for ref in action_refs:
-            self.env.ref("commown.%s" % ref).last_run = False
+            self.env.ref("commown_support.%s" % ref).last_run = False
 
     def assertIsReminderEmail(self, message):
         self.assertEqual(message.subtype_id, self.env.ref("mail.mt_comment"))
@@ -131,12 +137,8 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         )
         self.assertEqual(message.author_id, self.env.ref("base.user_demo").partner_id)
 
-    def assertIsReminderSMS(self, message):
-        self.assertEqual(message.subtype_id, self.env.ref("mail.mt_note"))
-        self.assertIn("ignorez ce SMS", message.body)
-
     def assertIsStageChangeMessage(self, message):
-        self.assertEqual(message.subtype_id, self.env.ref("project.mt_task_new"))
+        self.assertEqual(message.subtype_id, self.env.ref("project.mt_task_stage"))
 
     def test_send_reminders(self):
         """A reminder mail to followers and SMS to partner must be sent
@@ -147,8 +149,11 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         fr = self.env.ref("base.fr")
         self.task.partner_id.update({"country_id": fr.id, "phone": "+33747397654"})
         with trap_jobs() as trap:
+            self.flush_tracking()  # Making sure a tracking discard will not impact next flush
+
             self.task.update({"stage_id": self.stage_reminder.id})
-        trap.assert_jobs_count(1, only=self.task.message_post_send_sms_html)
+            self.flush_tracking()
+        trap.assert_jobs_count(1, only=self.task.send_sms_from_template)
 
         # Check email message
         # 2 expected messages: email, stage change (in reverse order)
@@ -157,7 +162,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertIsReminderEmail(self.task.message_ids[1])
 
         # Check job for sms has been posted
-        template = self.env.ref("commown.sms_template_issue_reminder")
+        template = self.env.ref("commown_support.sms_template_issue_reminder")
         country_code = self.task.partner_id.country_id.code
         partner_mobile = normalize_phone(
             self.task.partner_id.get_mobile_phone(),
@@ -165,7 +170,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         )
         with mock.patch(
             "odoo.addons.commown_res_partner_sms.models."
-            "mail_thread.MailThread.message_post_send_sms_html"
+            "mail_thread.MailThread.send_sms_from_template"
         ) as post_message:
             trap.perform_enqueued_jobs()
             post_message.assert_called_once_with(
@@ -189,7 +194,10 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self._send_partner_email()
         message_num = len(self.task.message_ids)
         with self.assertNoSMSLogged():
+            self.flush_tracking()  # Making sure a tracking discard will not impact next flush
+
             self.task.update({"stage_id": self.stage_reminder.id})
+            self.flush_tracking()
 
         # 2 expected messages: email, stage change (in reverse order)
         self.assertEqual(len(self.task.message_ids), message_num + 2)

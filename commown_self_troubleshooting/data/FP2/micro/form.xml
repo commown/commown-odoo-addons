@@ -42,7 +42,7 @@
             <t t-set="issue_description_template">issue-description-fp2-micro</t>
             <t
                         t-set="stage_long_term_followup"
-                        t-value="env.ref('commown_self_troubleshooting.stage_long_term_followup').id"
+                        t-value="env.ref('commown_support.stage_long_term_followup').id"
                     />
             <!-- Fin des variables à modifier -->
 
@@ -77,7 +77,7 @@
                 <input
                                 type="hidden"
                                 name="project_ref"
-                                value="commown_self_troubleshooting.support_project"
+                                value="commown_support.support_project"
                             />
                 <input
                                 type="hidden"
@@ -283,7 +283,7 @@
                           <input
                                                     type="hidden"
                                                     name="stage_ref"
-                                                    value="commown_self_troubleshooting.stage_long_term_followup"
+                                                    value="commown_support.stage_long_term_followup"
                                                 />
                           <button
                                                     type="submit"

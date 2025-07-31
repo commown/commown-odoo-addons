@@ -12,7 +12,7 @@
     "external_dependencies": {},
     "depends": [
         "base_fontawesome",
-        "project",
+        "commown_support",
         "commown_devices",
         "product_rental",
         "web",
@@ -48,7 +48,6 @@
         "data/Other/other/form.xml",
         "data/Other/other/issue_template.xml",
         "data/common_steps.xml",
-        "data/project.xml",
         "data/tags.xml",
         "data/troubleshooting.xml",
         "security/res_groups.xml",

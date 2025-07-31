@@ -469,7 +469,7 @@
             <input
                         type="hidden"
                         name="stage_ref"
-                        value="commown_self_troubleshooting.stage_solved"
+                        value="commown_support.stage_solved"
                     />
             <button
                         type="submit"
@@ -544,7 +544,7 @@
             <input
                         type="hidden"
                         name="stage_ref"
-                        value="commown_self_troubleshooting.stage_received"
+                        value="commown_support.stage_received"
                     />
             <button
                         type="submit"
@@ -606,7 +606,7 @@
             <input
                         type="hidden"
                         name="stage_ref"
-                        value="commown_self_troubleshooting.stage_received"
+                        value="commown_support.stage_received"
                     />
             <input type="hidden" name="priority" id="priority" value="1" />
             <button

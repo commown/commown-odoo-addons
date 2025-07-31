@@ -488,7 +488,7 @@ msgid "Après avoir effectué un auto-dépannage, il ressort que le module micro
 msgstr ""
 
 #. module: commown_self_troubleshooting
-#: model:project.project,label_tasks:commown_self_troubleshooting.support_project
+#: model:project.project,label_tasks:commown_support.support_project
 msgid "Assistances"
 msgstr ""
 

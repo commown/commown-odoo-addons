@@ -33,8 +33,8 @@ class ProjectTask(models.Model):
 
         if phone and self.has_no_partner_message():
             # Send the SMS
-            template = self.env.ref("commown.sms_template_issue_reminder")
-            self.with_delay().message_post_send_sms_html(
+            template = self.env.ref("commown_support.sms_template_issue_reminder")
+            self.with_delay().send_sms_from_template(
                 template, self, numbers=[phone], log_error=True
             )
 

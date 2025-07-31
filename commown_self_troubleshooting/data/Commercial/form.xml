@@ -101,7 +101,7 @@
                         <input
                                                     type="hidden"
                                                     name="project_ref"
-                                                    value="commown_self_troubleshooting.commercial_project"
+                                                    value="commown_support.commercial_project"
                                                 />
                         <button
                                                     type="submit"
