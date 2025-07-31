@@ -6,8 +6,6 @@ from odoo.tests.common import HttpCase, get_db_name
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderMixin
 
-HOST, PORT = "localhost", 8069  # XXX temporary
-
 
 def _csrf_token(page):
     return page.xpath("string(//input[@name='csrf_token']/@value)")
@@ -54,7 +52,7 @@ class ResPartnerResetPasswordTC(RentalSaleOrderMixin, HttpCase):
             "confirm_password": "dummy_pass",
             "csrf_token": _csrf_token(doc),
         }
-        url = "http://%s:%s/web/reset_password?token=%s" % (HOST, PORT, token)
+        url = self.base_url() + "/web/reset_password?token=%s" % token
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         res = self.opener.post(url, data=urlencode(data), headers=headers)
         self.assertEqual(200, res.status_code)
