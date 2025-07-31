@@ -12,6 +12,9 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "utm",
+    ],
+    "data": [
+        "data/actions.xml",
     ],
 }
