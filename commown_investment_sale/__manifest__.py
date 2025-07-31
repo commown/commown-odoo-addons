@@ -16,6 +16,7 @@
         "scic",
     ],
     "data": [
+        "data/actions.xml",
         "data/account_payment_term.xml",
         "data/project_project.xml",
     ],
