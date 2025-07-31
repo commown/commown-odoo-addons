@@ -24,10 +24,8 @@ class ResPartnerResetPasswordTC(HttpCase):
     def get_form(self, test_client, path, **data):
         "Get given page and return a name: value dict of its inputs and selects"
         page = self.get_page(test_client, path, **data)
-        form = {n.get("name"): n.get("value") for n in page.xpath("//input")}
-        for select in page.xpath("//select"):
-            form[select.get("name")] = select.xpath("string(option[@selected]/@value)")
-        return form
+        self.assertEqual(len(page.forms), 1)
+        return dict(page.forms[0].form_values())
 
     def test_reset_password(self):
         token = self.partner.signup_token
