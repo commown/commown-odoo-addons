@@ -20,6 +20,7 @@
         "commown_ergonomy_asset",
         "commown_investment_sale",
         "commown_lead_risk_analysis",
+        "commown_mass_reconcile",
         "website_sale_payment_slimpay",
         "commown_contract_variable_discount",
         "commown_self_troubleshooting",
@@ -40,7 +41,6 @@
         "utm_utils_merge_and_remove_actions",
         # OCA modules
         "account_payment_sale",
-        "account_mass_reconcile",
         "auth_admin_passkey",
         "auth_signup",
         "bi_sql_editor",
@@ -61,7 +61,6 @@
         "python": ["magic"],
     },
     "data": [
-        "data/account_mass_reconcile.xml",
         "data/mail_templates.xml",
         "data/product.xml",
         "data/product_public_category.xml",

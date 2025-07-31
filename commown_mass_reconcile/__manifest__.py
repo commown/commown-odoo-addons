@@ -12,6 +12,9 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "account_mass_reconcile",
+    ],
+    "data": [
+        "data/account_mass_reconcile.xml",
     ],
 }
