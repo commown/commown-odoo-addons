@@ -32,7 +32,4 @@ class UtmSourceTC(TransactionCase):
         with self.assertRaises(UserError):
             self.source1.action_remove()
 
-        try:
-            self.source2.action_remove()
-        except Exception as exc:
-            self.fail("Source removal raised '%s' unexpectedly" % exc)
+        self.source2.action_remove()
