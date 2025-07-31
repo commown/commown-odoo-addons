@@ -17,6 +17,15 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
     def check_payment_prefs(self, partner, expected_prefs):
         self.assertEqual({f: partner[f] for f in expected_prefs}, expected_prefs)
 
+    def _trigger_obsolescence(self, *_action_refs, **new_partner_kwargs):
+        action_refs = tuple(
+            action_ref
+            if "." in action_ref
+            else "commown_payment_token_uniquify.obsolescence_action_" + action_ref
+            for action_ref in _action_refs
+        )
+        return super()._trigger_obsolescence(*action_refs, **new_partner_kwargs)
+
     def test_copy_invoice_partner(self):
         old_inv_partner = self.company_s1_w1.copy(
             {"type": "invoice", "parent_id": self.company_s1_w1.id}

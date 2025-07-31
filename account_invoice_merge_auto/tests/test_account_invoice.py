@@ -55,7 +55,7 @@ class AccountInvoiceMergeAutoTC(AbstractAccountInvoiceMergeAutoTC):
                 inject_payment_data,
             )
 
-            inject_payment_data(cls)
+            inject_payment_data(cls, cls.partner_a)
 
     def test_cron(self):
         self.partner_a.update(

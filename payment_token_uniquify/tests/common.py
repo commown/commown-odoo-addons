@@ -11,6 +11,10 @@ class PaymentTokenUniquifyTC(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
 
+        # Current company must have a chart of account as some tests
+        # will use invoices and payments:
+        cls.env.company = cls.env.companies.filtered("chart_template_id")[0]
+
         # A hierarchy of companies:
         cls.company = cls.new_company()
 

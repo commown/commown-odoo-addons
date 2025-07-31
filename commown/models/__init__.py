@@ -8,7 +8,6 @@ from . import ir_http
 from . import mass_reconcile
 from . import payment_provider
 from . import payment_transaction
-from . import payment_token_obsolescence_action
 from . import product_template
 from . import project_project
 from . import project_task

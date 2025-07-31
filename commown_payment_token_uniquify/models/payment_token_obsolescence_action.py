@@ -78,7 +78,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         p_inv_id = new_token.partner_id.address_get(["invoice"])["invoice"]
         self.env["account.move"].search(
             [
-                ("type", "=", "out_invoice"),
+                ("move_type", "=", "out_invoice"),
                 ("state", "=", "draft"),
                 ("partner_id.payment_token_id", "in", obsolete_tokens.ids),
                 ("invoice_line_ids.contract_line_id", "!=", False),
@@ -103,7 +103,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
                 max_date_partner = partner
 
         # If no partner has an invoice merge date, return for the sake of robustness:
-        if max_date is None:
+        if max_date is None:  # pragma: no cover
             return
 
         # Use the more recently used invoice merge preferences with a date in the future

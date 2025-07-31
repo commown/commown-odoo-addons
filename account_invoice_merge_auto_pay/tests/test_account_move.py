@@ -22,7 +22,7 @@ class AccountMoveTC(AbstractAccountInvoiceMergeAutoTC):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        inject_payment_data(cls)
+        inject_payment_data(cls, cls.partner_a)
 
     def _merge_and_pay(self, date="2019-05-16", expect_merge=True, expect_pay=True):
         with trap_jobs() as trap:
