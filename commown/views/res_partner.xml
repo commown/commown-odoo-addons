@@ -10,24 +10,6 @@
         <attribute name="autofocus" />
       </xpath>
 
-      <xpath expr="//notebook/page[1]" position="before">
-        <page
-                    name="partner_documents"
-                    string="Documents"
-                    autofocus="autofocus"
-                    attrs="{'invisible': [('is_company', '=', True)]}"
-                >
-          <group name="id_card1">
-            <field name="id_card1" widget="binary" class="oe_inline" />
-            <field name="id_card2" widget="binary" class="oe_inline" />
-          </group>
-          <group name="proof_of_address">
-            <field name="proof_of_address" widget="binary" class="oe_inline" />
-            <field name="company_record" widget="binary" class="oe_inline" />
-          </group>
-        </page>
-      </xpath>
-
       <field name="payment_token_id" position="before">
         <p colspan="2" attrs="{'invisible': [('type', '!=', 'invoice')]}">
           Le mandat de paiement est paramétrable sur le partenaire parent et
