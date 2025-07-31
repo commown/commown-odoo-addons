@@ -41,7 +41,7 @@ class SaleOrder(models.Model):
         (human) contact. In such a case, an opportunity is created instead of a
         validated sale.
         """
-        b2b_website = self.env.ref("website_sale_b2b.b2b_website")
+        b2b_website = self.env.ref("website_b2b.b2b_website")
         min_qty = float(
             self.env["ir.config_parameter"]
             .sudo()
@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
         ref = self.env.ref
         if result["context"][
             "default_use_template"
-        ] and self.partner_id.website_id == ref("website_sale_b2b.b2b_website"):
+        ] and self.partner_id.website_id == ref("website_b2b.b2b_website"):
             b2b_template = ref("website_sale_b2b.email_template_edi_sale")
             result["context"]["default_template_id"] = b2b_template.id
         return result

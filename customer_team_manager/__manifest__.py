@@ -13,7 +13,6 @@
     "depends": [
         # native modules
         "account",
-        "portal",
         "sale",
         # OCA modules
         "base_fontawesome",
@@ -22,6 +21,7 @@
         # Commown modules
         "server_actions_auth",
         "customer_manager_base",
+        "website_b2b",
     ],
     "data": [
         "security/ir.model.access.csv",

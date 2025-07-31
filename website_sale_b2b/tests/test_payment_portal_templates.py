@@ -34,7 +34,7 @@ class PortalPaymentTemplatesTC(WebsiteBaseTC):
 
         # Necessary (but not sufficient) to make is_big_b2b True.
         # A last criterion is needed that can be set using the force_big_b2b method.
-        b2b_website = cls.env.ref("website_sale_b2b.b2b_website")
+        b2b_website = cls.env.ref("website_b2b.b2b_website")
         cls.order.partner_id.user_ids.update({"website_id": b2b_website.id})
         product = cls.order.order_line[0].product_id
         ct = cls.env.ref("product_rental.contract_tmpl_basic")

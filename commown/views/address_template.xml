@@ -20,7 +20,7 @@
     <xpath expr="//div[@id='div_phone']" position="after">
       <t
                 t-set="display_company_infos"
-                t-value="env.user.website_id == env.ref('website_sale_b2b.b2b_website') and mode[1] == 'billing'"
+                t-value="env.user.website_id == env.ref('website_b2b.b2b_website') and mode[1] == 'billing'"
             />
 
       <!-- ... but disable them if set by ourselves in the backoffice -->

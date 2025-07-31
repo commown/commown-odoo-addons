@@ -14,7 +14,7 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         pt.update(
             {
                 "description_sale_is_template": True,
-                "website_id": self.env.ref("website_sale_b2b.b2b_website").id,
+                "website_id": self.env.ref("website_b2b.b2b_website").id,
             }
         )
         prefix = so_line.product_id.display_name + "\n"
@@ -34,7 +34,7 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         self.assertEqual(so_line.name, prefix + "12 month(s)")
 
     def test_action_quotation_send(self):
-        self.so.partner_id.website_id = self.env.ref("website_sale_b2b.b2b_website").id
+        self.so.partner_id.website_id = self.env.ref("website_b2b.b2b_website").id
         action = self.so.action_quotation_send()
         self.assertEqual(
             action["context"]["default_template_id"],
@@ -42,7 +42,7 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         )
 
     def _add_partner_to_b2b_portal(self, partner):
-        b2b_website = self.env.ref("website_sale_b2b.b2b_website")
+        b2b_website = self.env.ref("website_b2b.b2b_website")
         wiz = self.env["portal.wizard"].with_context(active_ids=[partner.id]).create({})
         wiz.user_ids.update({"website_id": b2b_website.id})
         wiz.user_ids.filtered(

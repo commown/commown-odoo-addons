@@ -77,6 +77,7 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
         )
 
         # action_grant_access() requires only one user at a time (self.ensure_one())
+        non_portal_users.write({"website_id": self.env.ref("website_b2b.b2b_website")})
         for user in non_portal_users:
             user.action_grant_access()
 

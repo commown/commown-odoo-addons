@@ -25,4 +25,4 @@ class ProductTemplate(models.Model):
 
     def is_b2b(self):
         self.ensure_one()
-        return self.website_id == self.env.ref("website_sale_b2b.b2b_website")
+        return self.website_id == self.env.ref("website_b2b.b2b_website")
