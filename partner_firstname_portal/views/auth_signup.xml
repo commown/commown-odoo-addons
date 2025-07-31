@@ -3,7 +3,7 @@
   <template id="signup_field" inherit_id="auth_signup.fields">
 
     <xpath expr="//div//input[@name='name']/ancestor::div[1]" position="attributes">
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
 
     <xpath expr="//div//input[@name='name']/ancestor::div[1]" position="after">

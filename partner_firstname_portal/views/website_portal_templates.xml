@@ -3,7 +3,7 @@
   <template id="portal_my_details_fields" inherit_id="portal.portal_my_details_fields">
     <!-- Replace name by firstname + lastname -->
     <xpath expr="//input[@name='name']/ancestor::div[1]" position="attributes">
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
 
     <xpath expr="//input[@name='name']/ancestor::div[1]" position="after">
