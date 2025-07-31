@@ -14,4 +14,7 @@
     "depends": [
         "account_mass_reconcile",
     ],
+    "data": [
+        "security/ir.model.access.csv",
+    ],
 }
