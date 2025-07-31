@@ -14,7 +14,4 @@
     "depends": [
         "account_mass_reconcile",
     ],
-    "data": [
-        "data/account_mass_reconcile.xml",
-    ],
 }
