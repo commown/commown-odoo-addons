@@ -4,7 +4,7 @@
 {
     "name": "Website B2B",
     "summary": "Create a separate website for B2B users",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
