@@ -10,10 +10,10 @@ class UtmMergeRemoveUtilsMixin(models.AbstractModel):
         fields = self.env["ir.model.fields"].search([("relation", "=", self._name)])
 
         for field in fields:
-            model = field.model_id.model
-            if model == "utm.mixin":
+            model = self.env[field.model_id.model]
+            if model._abstract:
                 continue
-            yield field, self.env[model].search([(field.name, "in", self.ids)])
+            yield field, model.search([(field.name, "in", self.ids)])
 
     def action_merge(self):
         "Merge current sources, making related entities point to the first one"
