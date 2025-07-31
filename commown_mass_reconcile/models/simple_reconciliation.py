@@ -8,6 +8,8 @@ _logger = logging.getLogger(__name__)
 class CommownMassReconcileSimplePartner(models.TransientModel):
     _name = "mass.reconcile.simple.partner_commown"
     _inherit = "mass.reconcile.simple"
+    _description = "Custom method similar to mass.reconcile.simple.partner"
+
     _key_field = "partner_id"
     default_max_reconcile_days_gap = 7
     default_max_reconcile_lines = 100
