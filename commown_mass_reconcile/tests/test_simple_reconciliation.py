@@ -20,67 +20,49 @@ class SimpleReconciliationTC(TestAccountReconciliationCommon):
 
         cls.inv1 = cls.create_invoice(
             **{
-                "name": "Test aml 1",
                 "partner_id": partner1.id,
-                "account_id": cls.account.id,
-                "date_maturity": date(2018, 1, 1),
-                "credit": 2,
-                "debit": 0,
+                "date_invoice": date(2018, 1, 1),
+                "invoice_amount": 2,
             }
         )
 
         cls.inv2 = cls.create_invoice(
             **{
-                "name": "Test aml 2",
                 "partner_id": partner2.id,
-                "account_id": cls.account.id,
-                "date_maturity": date(2018, 1, 10),
-                "credit": 2,
-                "debit": 0,
+                "date_invoice": date(2018, 1, 10),
+                "invoice_amount": 2,
             }
         )
 
         cls.payment1 = cls.create_payment(
             **{
-                "name": "Test aml 3",
                 "partner_id": partner2.commercial_partner_id.id,
                 "account_id": cls.account.id,
-                "date_maturity": date(2018, 1, 11),
-                "credit": 0,
-                "debit": 2,
+                "date": date(2018, 1, 11),
+                "amount": 2,
             }
         )
 
         cls.payment2 = cls.create_payment(
             **{
-                "name": "Test aml 4",
                 "partner_id": partner1.commercial_partner_id.id,
                 "account_id": cls.account.id,
-                "date_maturity": date(2018, 1, 21),
-                "credit": 0,
-                "debit": 2,
+                "date": date(2018, 1, 21),
+                "amount": 2,
             },
         )
 
         cls.inv3 = cls.create_invoice(
             **{
-                "name": "Test aml 5",
                 "partner_id": partner3.id,
-                "account_id": cls.account.id,
-                "date_maturity": date(2018, 5, 1),
-                "credit": 2,
-                "debit": 0,
+                "date_invoice": date(2018, 5, 1),
+                "invoice_amount": 2,
             }
         )
 
     @classmethod
     def create_invoice(cls, **params):
-        "Temporary function to ease test refactoring review: invoice move creation"
-        params["date_invoice"] = params.pop("date_maturity")
-        params["invoice_amount"] = params.pop("credit")
-        del params["name"]
-        del params["debit"]
-        del params["account_id"]
+        "Helper that eases invoice move creation"
         invoice = cls._create_invoice(cls, **params)
         invoice.invoice_date_due = invoice.invoice_date
         invoice.action_post()
@@ -88,10 +70,7 @@ class SimpleReconciliationTC(TestAccountReconciliationCommon):
 
     @classmethod
     def create_payment(cls, **params):
-        "Temporary function to ease test refactoring review: payment move creation"
-        params["date"] = params.pop("date_maturity")
-        params["amount"] = params.pop("debit")
-        del params["credit"]
+        "Helper that eases payment move creation"
         params.update(
             {
                 "partner_type": "customer",
