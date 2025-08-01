@@ -16,8 +16,7 @@
         "web_notify",
         # OCA module
         "base_fontawesome",
-        # Commown module
-        "commown_payment_token_uniquify",
+        "contract_payment_auto",
     ],
     "data": [
         "views/res_partner.xml",
