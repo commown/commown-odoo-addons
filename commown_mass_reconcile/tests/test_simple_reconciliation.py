@@ -1,9 +1,12 @@
 from datetime import date
 
-from odoo.tests.common import SavepointCase
+from odoo.tests import tagged
+
+from odoo.addons.account.tests.common import TestAccountReconciliationCommon
 
 
-class SimpleReconciliationTC(SavepointCase):
+@tagged("-at_install", "post_install")
+class SimpleReconciliationTC(TestAccountReconciliationCommon):
     def setUp(self):
         super().setUp()
 
