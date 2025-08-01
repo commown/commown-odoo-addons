@@ -1,3 +1,4 @@
+import unittest
 from datetime import date
 
 from odoo.tests import tagged
@@ -9,7 +10,15 @@ from odoo.addons.account.tests.common import TestAccountReconciliationCommon
 class SimpleReconciliationTC(TestAccountReconciliationCommon):
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
+        # Try default chart template or request a visible one and try again
+        try:
+            super().setUpClass()
+        except unittest.SkipTest:
+            coa = cls.env["account.chart.template"].search(
+                [("visible", "=", True)], limit=1
+            )
+            chart_template_ref = coa.get_external_id()[coa.id]
+            super().setUpClass(chart_template_ref)
 
         partner1 = cls.env.ref("base.res_partner_address_15")
         partner2 = cls.env.ref("base.res_partner_address_28")
