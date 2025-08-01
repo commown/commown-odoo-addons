@@ -19,45 +19,35 @@ class SimpleReconciliationTC(TestAccountReconciliationCommon):
         cls.account = cls.account_rcv
 
         cls.inv1 = cls.create_invoice(
-            **{
-                "partner_id": partner1.id,
-                "date_invoice": date(2018, 1, 1),
-                "invoice_amount": 2,
-            }
+            partner_id=partner1.id,
+            date_invoice=date(2018, 1, 1),
+            invoice_amount=2,
         )
 
         cls.inv2 = cls.create_invoice(
-            **{
-                "partner_id": partner2.id,
-                "date_invoice": date(2018, 1, 10),
-                "invoice_amount": 2,
-            }
+            partner_id=partner2.id,
+            date_invoice=date(2018, 1, 10),
+            invoice_amount=2,
         )
 
         cls.payment1 = cls.create_payment(
-            **{
-                "partner_id": partner2.commercial_partner_id.id,
-                "account_id": cls.account.id,
-                "date": date(2018, 1, 11),
-                "amount": 2,
-            }
+            partner_id=partner2.commercial_partner_id.id,
+            account_id=cls.account.id,
+            date=date(2018, 1, 11),
+            amount=2,
         )
 
         cls.payment2 = cls.create_payment(
-            **{
-                "partner_id": partner1.commercial_partner_id.id,
-                "account_id": cls.account.id,
-                "date": date(2018, 1, 21),
-                "amount": 2,
-            },
+            partner_id=partner1.commercial_partner_id.id,
+            account_id=cls.account.id,
+            date=date(2018, 1, 21),
+            amount=2,
         )
 
         cls.inv3 = cls.create_invoice(
-            **{
-                "partner_id": partner3.id,
-                "date_invoice": date(2018, 5, 1),
-                "invoice_amount": 2,
-            }
+            partner_id=partner3.id,
+            date_invoice=date(2018, 5, 1),
+            invoice_amount=2,
         )
 
     @classmethod
