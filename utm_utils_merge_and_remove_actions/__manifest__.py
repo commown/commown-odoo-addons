@@ -4,7 +4,7 @@
 {
     "name": "UTM Utilitaries - Merge and remove actions",
     "summary": "This module adds utilitary methods and actions to merge/remove UTM sources or campaigns.",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
