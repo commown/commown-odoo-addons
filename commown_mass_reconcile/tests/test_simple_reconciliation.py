@@ -7,84 +7,87 @@ from odoo.addons.account.tests.common import TestAccountReconciliationCommon
 
 @tagged("-at_install", "post_install")
 class SimpleReconciliationTC(TestAccountReconciliationCommon):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        partner1 = self.env.ref("base.res_partner_address_15")
-        partner2 = self.env.ref("base.res_partner_address_28")
-        self.assertEqual(partner1.commercial_partner_id, partner2.commercial_partner_id)
-        partner3 = self.env.ref("base.partner_demo_portal")
+        partner1 = cls.env.ref("base.res_partner_address_15")
+        partner2 = cls.env.ref("base.res_partner_address_28")
+        assert partner1.commercial_partner_id == partner2.commercial_partner_id
+        partner3 = cls.env.ref("base.partner_demo_portal")
 
-        self.account = self.account_rcv
+        cls.account = cls.account_rcv
 
-        self.inv1 = self.create_invoice(
+        cls.inv1 = cls.create_invoice(
             **{
                 "name": "Test aml 1",
                 "partner_id": partner1.id,
-                "account_id": self.account.id,
+                "account_id": cls.account.id,
                 "date_maturity": date(2018, 1, 1),
                 "credit": 2,
                 "debit": 0,
             }
         )
 
-        self.inv2 = self.create_invoice(
+        cls.inv2 = cls.create_invoice(
             **{
                 "name": "Test aml 2",
                 "partner_id": partner2.id,
-                "account_id": self.account.id,
+                "account_id": cls.account.id,
                 "date_maturity": date(2018, 1, 10),
                 "credit": 2,
                 "debit": 0,
             }
         )
 
-        self.payment1 = self.create_payment(
+        cls.payment1 = cls.create_payment(
             **{
                 "name": "Test aml 3",
                 "partner_id": partner2.commercial_partner_id.id,
-                "account_id": self.account.id,
+                "account_id": cls.account.id,
                 "date_maturity": date(2018, 1, 11),
                 "credit": 0,
                 "debit": 2,
             }
         )
 
-        self.payment2 = self.create_payment(
+        cls.payment2 = cls.create_payment(
             **{
                 "name": "Test aml 4",
                 "partner_id": partner1.commercial_partner_id.id,
-                "account_id": self.account.id,
+                "account_id": cls.account.id,
                 "date_maturity": date(2018, 1, 21),
                 "credit": 0,
                 "debit": 2,
             },
         )
 
-        self.inv3 = self.create_invoice(
+        cls.inv3 = cls.create_invoice(
             **{
                 "name": "Test aml 5",
                 "partner_id": partner3.id,
-                "account_id": self.account.id,
+                "account_id": cls.account.id,
                 "date_maturity": date(2018, 5, 1),
                 "credit": 2,
                 "debit": 0,
             }
         )
 
-    def create_invoice(self, **params):
+    @classmethod
+    def create_invoice(cls, **params):
         "Temporary function to ease test refactoring review: invoice move creation"
         params["date_invoice"] = params.pop("date_maturity")
         params["invoice_amount"] = params.pop("credit")
         del params["name"]
         del params["debit"]
         del params["account_id"]
-        invoice = self._create_invoice(**params)
+        invoice = cls._create_invoice(cls, **params)
         invoice.invoice_date_due = invoice.invoice_date
         invoice.action_post()
         return invoice
 
-    def create_payment(self, **params):
+    @classmethod
+    def create_payment(cls, **params):
         "Temporary function to ease test refactoring review: payment move creation"
         params["date"] = params.pop("date_maturity")
         params["amount"] = params.pop("debit")
@@ -94,10 +97,10 @@ class SimpleReconciliationTC(TestAccountReconciliationCommon):
                 "partner_type": "customer",
                 "payment_type": "inbound",
                 "destination_account_id": params.pop("account_id"),
-                "journal_id": self.company_data["default_journal_bank"].id,
+                "journal_id": cls.company_data["default_journal_bank"].id,
             }
         )
-        payment = self.env["account.payment"].create(params)
+        payment = cls.env["account.payment"].create(params)
         payment.action_post()
         return payment
 
