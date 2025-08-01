@@ -22,7 +22,7 @@
                     type="object"
                 >
           <i title="Send invoices to this contact" class="far fa-envelope" />
-          <span class="d-none d-sm-inline">Send invoices to this contact</span>
+          <span class="d-none d-sm-inline"> Send invoices to this contact</span>
         </button>
       </xpath>
     </field>
