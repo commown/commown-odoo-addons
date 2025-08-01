@@ -27,9 +27,11 @@ class UtmSourceTC(TransactionCase):
         self.env["utm.source"].browse((self.source1.id, self.source2.id)).action_merge()
 
         self.assertEqual(self.dummy_rec.source_id, self.source1)
+        self.assertFalse(self.source2.exists())
 
     def test_action_remove(self):
         with self.assertRaises(UserError):
             self.source1.action_remove()
 
         self.source2.action_remove()
+        self.assertFalse(self.source2.exists())
