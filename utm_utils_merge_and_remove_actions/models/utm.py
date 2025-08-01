@@ -2,18 +2,18 @@ from odoo import _, models
 from odoo.exceptions import UserError
 
 
-class UtmCommownUtilsMixin(models.AbstractModel):
-    _name = "utm.commown_utils.mixin"
+class UtmMergeRemoveUtilsMixin(models.AbstractModel):
+    _name = "utm.merge_remove.mixin"
     _description = "Mixin for utm classes, to easily merge/ safely remove them"
 
     def _related_entities_by_field(self):
         fields = self.env["ir.model.fields"].search([("relation", "=", self._name)])
 
         for field in fields:
-            model = field.model_id.model
-            if model == "utm.mixin":
+            model = self.env[field.model_id.model]
+            if model._abstract:
                 continue
-            yield field, self.env[model].search([(field.name, "in", self.ids)])
+            yield field, model.search([(field.name, "in", self.ids)])
 
     def action_merge(self):
         "Merge current sources, making related entities point to the first one"
@@ -45,9 +45,9 @@ class UtmCommownUtilsMixin(models.AbstractModel):
 
 class UtmSource(models.Model):
     _name = "utm.source"
-    _inherit = ["utm.source", "utm.commown_utils.mixin"]
+    _inherit = ["utm.source", "utm.merge_remove.mixin"]
 
 
 class UtmCampaign(models.Model):
     _name = "utm.campaign"
-    _inherit = ["utm.campaign", "utm.commown_utils.mixin"]
+    _inherit = ["utm.campaign", "utm.merge_remove.mixin"]

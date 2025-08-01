@@ -8,5 +8,4 @@ from . import test_payment
 from . import test_res_partner
 from . import test_res_users
 from . import test_sale_order
-from . import test_utm_source
 from . import test_simple_reconciliation

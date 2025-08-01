@@ -37,6 +37,7 @@
         "website_sale_b2b",
         "website_sale_coupon",
         "commown_website_sale_coupon",
+        "utm_utils_merge_and_remove_actions",
         # OCA modules
         "account_payment_sale",
         "account_mass_reconcile",
@@ -67,7 +68,6 @@
         "data/payment_button.xml",
         "security/ir.model.access.csv",
         "views/account_move.xml",
-        "views/actions_utm.xml",
         "views/address_template.xml",
         "views/auth_signup.xml",
         "views/contract_contract.xml",
