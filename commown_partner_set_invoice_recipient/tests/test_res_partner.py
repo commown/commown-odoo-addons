@@ -9,9 +9,25 @@ class ResPartnerInvoiceActionTC(TransactionCase):
         a company with a contract, and two partners linked to that company
         """
         super().setUpClass()
+        cls.env.company = cls.env.companies.filtered("chart_template_id")[0]
         cls.company = cls.env["res.partner"].create(
             {"name": "Company", "is_company": True}
         )
+
+        # If that module is installed, then the auto_merge might crash if
+        # the environnement company has no payment mode.
+        # As such, we add this situationnal import which creates relevant data.
+        if cls.env["ir.module.module"].search(
+            [
+                ("name", "=", "account_invoice_merge_auto_pay"),
+                ("state", "=", "installed"),
+            ]
+        ):
+            from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
+                inject_payment_data,
+            )
+
+            inject_payment_data(cls, cls.company)
 
         cls.company_worker = cls.env["res.partner"].create(
             {
