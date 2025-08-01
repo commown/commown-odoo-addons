@@ -7,8 +7,8 @@ from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 _logger = logging.getLogger(__name__)
 
 
-class CommownAuthSignup(AuthSignupHome):
-    _commown_signup_auth_keys = ("firstname", "lastname")
+class FirstnameAuthSignup(AuthSignupHome):
+    _firstname_signup_auth_keys = ("firstname", "lastname")
 
     def _prepare_signup_values(self, qcontext):
         """
@@ -21,7 +21,7 @@ class CommownAuthSignup(AuthSignupHome):
 
         """
         qcontext.update(
-            {key: request.params.get(key) for key in self._commown_signup_auth_keys}
+            {key: request.params.get(key) for key in self._firstname_signup_auth_keys}
         )
 
         if qcontext.get("name") is None:
