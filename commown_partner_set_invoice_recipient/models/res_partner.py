@@ -30,7 +30,7 @@ class CommownPartner(models.Model):
 
         invoices = self.env["account.move"].search(
             [
-                ("type", "=", "out_invoice"),
+                ("move_type", "=", "out_invoice"),
                 ("state", "=", "draft"),
                 ("partner_id", "=", self.parent_id.id),
                 ("line_ids.contract_line_id", "!=", False),
