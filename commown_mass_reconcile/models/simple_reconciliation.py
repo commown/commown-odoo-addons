@@ -8,6 +8,8 @@ _logger = logging.getLogger(__name__)
 class CommownMassReconcileSimplePartner(models.TransientModel):
     _name = "mass.reconcile.simple.partner_commown"
     _inherit = "mass.reconcile.simple"
+    _description = "Custom method similar to mass.reconcile.simple.partner"
+
     _key_field = "partner_id"
     default_max_reconcile_days_gap = 7
     default_max_reconcile_lines = 100
@@ -30,7 +32,7 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
         _logger.info("max_reconcile_lines is %s", max_reconcile_lines)
 
         if self._key_field is None:
-            raise ValueError("_key_field has to be defined")
+            raise ValueError("_key_field has to be defined")  # pragma: no cover
         count = 0
         success_count = 0
         res = []
@@ -38,7 +40,9 @@ class CommownMassReconcileSimplePartner(models.TransientModel):
         while count < len(lines) and success_count < max_reconcile_lines:
             date_1 = lines[count]["date_maturity"]
             if count and not count % 10:
-                _logger.info("Reconcile progress: %s/%s", count, len(lines))
+                _logger.info(
+                    "Reconcile progress: %s/%s", count, len(lines)
+                )  # pragma: no cover
             cur_commercial_partner = lines[count]["commercial_partner_id"]
             for i in range(count + 1, len(lines)):
                 # Use commercial_partner_id to avoid non-reconciliations due to move
