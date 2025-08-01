@@ -12,6 +12,14 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        # Odoo modules
+        "web_notify",
+        # OCA module
+        "base_fontawesome",
+        # Commown module
+        "commown_payment_token_uniquify",
+    ],
+    "data": [
+        "views/res_partner.xml",
     ],
 }

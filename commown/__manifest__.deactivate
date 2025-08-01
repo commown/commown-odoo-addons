@@ -27,6 +27,7 @@
         "payment_slimpay_issue",
         "commown_res_partner_sms",
         "commown_payment_token_uniquify",
+        "commown_partner_set_invoice_recipient",
         "product_rental",
         "project_rating_nps",
         "sale_product_email",

@@ -1,0 +1,31 @@
+<odoo>
+
+  <record model="ir.ui.view" id="view_partner_form">
+    <field name="name">res.partner.form</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="contract_payment_auto.view_partner_form" />
+    <field name="arch" type="xml">
+
+
+      <xpath expr="//field[@name='child_ids']//field[@name='name']" position="before">
+        <field name="parent_payment_token_id" invisible="1" />
+      </xpath>
+
+      <xpath
+                expr="//field[@name='child_ids']//div[hasclass('oe_kanban_details')]"
+                position="inside"
+            >
+        <button
+                    attrs="{'invisible': ['|', '|', ('type', '!=', 'invoice'), ('email', '=', False), ('parent_payment_token_id', '=', False)]}"
+                    class="btn btn-secondary"
+                    name="action_set_as_invoice_recipient"
+                    type="object"
+                >
+          <i title="Send invoices to this contact" class="far fa-envelope" />
+          <span class="d-none d-sm-inline">Send invoices to this contact</span>
+        </button>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
