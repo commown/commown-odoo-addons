@@ -8,11 +8,9 @@ _logger = logging.getLogger(__name__)
 
 
 class CommownCustomerPortal(details.AdminDocsCustomerPortal):
-    MANDATORY_BILLING_FIELDS = [
-        field
-        for field in details.AdminDocsCustomerPortal.MANDATORY_BILLING_FIELDS
-        if field != "name"
-    ] + ["firstname", "lastname", "zipcode"]
+    MANDATORY_BILLING_FIELDS = (
+        details.AdminDocsCustomerPortal.MANDATORY_BILLING_FIELDS + ["zipcode"]
+    )
 
     OPTIONAL_BILLING_FIELDS = (
         details.AdminDocsCustomerPortal.OPTIONAL_BILLING_FIELDS
