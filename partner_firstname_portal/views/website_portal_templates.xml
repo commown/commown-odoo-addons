@@ -1,0 +1,34 @@
+<odoo>
+
+  <template id="portal_my_details_fields" inherit_id="portal.portal_my_details_fields">
+    <!-- Replace name by firstname + lastname -->
+    <xpath expr="//input[@name='name']/ancestor::div[1]" position="attributes">
+      <attribute name="invisible">1</attribute>
+    </xpath>
+
+    <xpath expr="//input[@name='name']/ancestor::div[1]" position="after">
+      <div
+                t-attf-class="mb-3 #{error.get('firstname') and 'o_has_error' or ''} col-xl-6"
+            >
+        <label class="col-form-label" for="firstname">First name</label>
+        <input
+                    type="text"
+                    name="firstname"
+                    t-attf-class="form-control #{error.get('firstname') and 'is-invalid' or ''}"
+                    t-att-value="firstname or partner.firstname"
+                />
+      </div>
+      <div t-attf-class="mb3 #{error.get('lastname') and 'o_has_error' or ''} col-xl-6">
+        <label class="col-form-label" for="lastname">Last name</label>
+        <input
+                    type="text"
+                    name="lastname"
+                    t-attf-class="form-control #{error.get('lastname') and 'is-invalid' or ''}"
+                    t-att-value="lastname or partner.lastname"
+                />
+      </div>
+    </xpath>
+
+  </template>
+
+</odoo>
