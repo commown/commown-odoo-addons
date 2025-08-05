@@ -12,7 +12,7 @@ class ContractPaymentTC(TestContractBase):
         slimpay = cls.env.ref("account_payment_slimpay.payment_provider_slimpay")
         payment_token = cls.env["payment.token"].create(
             {
-                "name": "Test Slimpay Token",
+                "payment_details": "Test Slimpay Token",
                 "partner_id": cls.contract.partner_id.id,
                 "provider_id": slimpay.id,
                 "provider_ref": "Slimpay mandate ref",
