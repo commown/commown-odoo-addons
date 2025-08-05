@@ -65,3 +65,22 @@ class ContractPaymentTC(TestContractBase):
             label = pay.call_args[0][-1]
             expected_label = "Invoice 01/15/2018 - 02/13/2018 (%s)" % invoice.name
             self.assertEqual(label, expected_label)
+
+    def test_no_contract_label(self):
+        """
+        Contracts w/out transaction_label should not interfere
+        with the base behavior.
+        (Mainly for coverage purposes)
+        """
+        self.contract.write({"transaction_label": False})
+        payment_transaction_label = "Test label"
+        with patch(
+            "odoo.addons.account_payment_slimpay.models."
+            "slimpay_utils.SlimpayClient.create_payment"
+        ) as pay:
+            self.contract.with_context(
+                payment_transaction_label=payment_transaction_label
+            ).recurring_create_invoice()
+
+        label = pay.call_args[0][-1]
+        self.assertEqual(label, payment_transaction_label)
