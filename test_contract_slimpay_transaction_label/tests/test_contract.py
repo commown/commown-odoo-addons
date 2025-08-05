@@ -11,6 +11,12 @@ class ContractPaymentTC(TestContractBase):
         super().setUpClass()
         slimpay = cls.env.ref("account_payment_slimpay.payment_provider_slimpay")
         slimpay.state = "test"
+        if cls.env["ir.module.module"].search(
+            [("name", "=", "account_payment"), ("state", "=", "installed")]
+        ):  # pragma: no cover
+            slimpay.journal_id.inbound_payment_method_line_ids.write(
+                {"payment_provider_id": slimpay.id}
+            )
         payment_token = cls.env["payment.token"].create(
             {
                 "payment_details": "Test Slimpay Token",
