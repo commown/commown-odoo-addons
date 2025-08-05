@@ -9,7 +9,7 @@ class ContractPaymentTC(TestContractBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        slimpay = cls.ref("account_payment_slimpay.payment_provider_slimpay")
+        slimpay = cls.env.ref("account_payment_slimpay.payment_provider_slimpay")
         payment_token = cls.env["payment.token"].create(
             {
                 "name": "Test Slimpay Token",
