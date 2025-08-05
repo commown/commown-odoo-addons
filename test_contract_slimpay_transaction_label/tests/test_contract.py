@@ -43,6 +43,7 @@ class ContractPaymentTC(TestContractBase):
         # Make this the last invoice of the contract
         # (see project task #15112: crash on last invoice generation)
         for cline in self.contract.contract_line_ids:
+            cline.date_start = cline.recurring_next_date
             cline.date_end = cline.next_period_date_end - relativedelta(days=1)
 
         self.contract.write(
