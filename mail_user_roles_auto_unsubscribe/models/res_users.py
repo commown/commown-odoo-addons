@@ -25,7 +25,7 @@ class res_users(models.Model):
         if mail_channel_ids:
             self.env["mail.channel.member"].search(
                 [
-                    ("partner_id", "=", self.partner_id.id),
+                    ("partner_id", "=", self._origin.partner_id.id),
                     ("channel_id", "in", mail_channel_ids),
                 ]
             ).unlink()
