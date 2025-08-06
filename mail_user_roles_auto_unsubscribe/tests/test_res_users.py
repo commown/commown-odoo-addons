@@ -1,7 +1,7 @@
-from odoo.tests import common
+from odoo.tests import TransactionCase
 
 
-class UserUnsubscribeChannelTC(common.SavepointCase):
+class UserUnsubscribeChannelTC(TransactionCase):
     @classmethod
     def _create_group(cls, name):
         return cls.env["res.groups"].create({"name": name})
