@@ -18,10 +18,6 @@ class UserUnsubscribeChannelTC(TransactionCase):
         )
         return role
 
-    @classmethod
-    def _add_user_to_role(cls, user, role):
-        cls.env["res.user.role.line"].create({"role_id": role.id, "user_id": user.id})
-
     def find_role_rec_index(self, role_rec, records):
         """
         This helper serves to find the index of the role_rec
