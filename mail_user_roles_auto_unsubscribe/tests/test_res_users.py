@@ -1,4 +1,4 @@
-from odoo.tests import TransactionCase
+from odoo.tests import Form, TransactionCase
 
 
 class UserUnsubscribeChannelTC(TransactionCase):
@@ -22,27 +22,19 @@ class UserUnsubscribeChannelTC(TransactionCase):
     def _add_user_to_role(cls, user, role):
         cls.env["res.user.role.line"].create({"role_id": role.id, "user_id": user.id})
 
-    @classmethod
-    def _copy_user_role_to_origin(cls, user):
-        roles_to_add = user.role_ids.filtered(
-            lambda r: r.id not in user._origin.role_ids.mapped("id")
-        )
-        roles_to_remove = user._origin.role_ids.filtered(
-            lambda r: r.id not in user.role_ids.mapped("id")
-        )
-        for role in roles_to_add:
-            cls.env["res.users.role.line"].create(
-                {
-                    "role_id": role.id,
-                    "user_id": user._origin.id,
-                }
-            )
-
-        cls.env["res.users.role.line"].search(
+    def find_role_rec_index(self, role_rec, records):
+        """
+        This helper serves to find the index of the role_rec
+        in the O2MProxy._record list of dicts.
+        """
+        role_line = self.env["res.users.role.line"].search(
             [
-                ("user_id.id", "=", cls.test_user_1._origin.id),
+                ("role_id.id", "=", role_rec.id),
+                ("user_id.id", "=", self.test_user_1.id),
             ]
-        ).filtered(lambda rl: rl.role_id.id in roles_to_remove.mapped("id")).unlink()
+        )
+
+        return records.index([r for r in records if r["id"] == role_line.id][0])
 
     @classmethod
     def setUpClass(cls):
@@ -87,40 +79,30 @@ class UserUnsubscribeChannelTC(TransactionCase):
         cls.test_mail_channel._subscribe_users_automatically()
 
     def test_unsubscribe_users(self):
-        self.assertIn(
-            self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
-        )
-        # Emulate _origin we get from onchange call
-        self.test_user_1._origin = self.test_user_1.copy({"login": "test2"})
-        self._copy_user_role_to_origin(self.test_user_1)
-
-        self.test_user_1.unsubscribe_from_mail_channel()
+        user_form_view_xid = "base_user_role.view_res_users_form_inherit"
         self.assertIn(
             self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
         )
 
-        self._copy_user_role_to_origin(self.test_user_1)
-        self.env["res.users.role.line"].search(
-            [
-                ("role_id.id", "=", self.subscribed_role1.id),
-                ("user_id.id", "=", self.test_user_1.id),
-            ]
-        ).unlink()
+        # Removing self.subscribed_role1 through the form view,
+        # triggering the `unsubscribe_from_mail_channel` onchange method
+        with Form(self.test_user_1, user_form_view_xid) as f:
+            records = f.role_line_ids._records
+            f.role_line_ids.remove(
+                self.find_role_rec_index(self.subscribed_role1, records)
+            )
 
-        self.test_user_1.unsubscribe_from_mail_channel()
         self.assertIn(
             self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
         )
 
-        self._copy_user_role_to_origin(self.test_user_1)
-        self.env["res.users.role.line"].search(
-            [
-                ("role_id.id", "=", self.subscribed_role2.id),
-                ("user_id.id", "=", self.test_user_1.id),
-            ]
-        ).unlink()
-
-        self.test_user_1.unsubscribe_from_mail_channel()
+        # Removing self.subscribed_role2 through the form view,
+        # triggering the `unsubscribe_from_mail_channel` onchange method
+        with Form(self.test_user_1, user_form_view_xid) as f:
+            records = f.role_line_ids._records
+            f.role_line_ids.remove(
+                self.find_role_rec_index(self.subscribed_role2, records)
+            )
 
         self.assertNotIn(
             self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
