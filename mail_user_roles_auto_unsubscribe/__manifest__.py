@@ -12,6 +12,7 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "base_user_role",
+        "mail",
     ],
 }
