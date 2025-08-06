@@ -84,7 +84,7 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
                 "group_ids": [(6, 0, subscribed_group_ids)],
             }
         )
-        cls.test_mail_channel._subscribe_users()
+        cls.test_mail_channel._subscribe_users_automatically()
 
     def test_unsubscribe_users(self):
         self.assertIn(
