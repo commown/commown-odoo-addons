@@ -17,7 +17,7 @@ class res_users(models.Model):
         self._origin.role_ids.filtered(lambda role: role not in self.role_ids)
         mail_channel_ids = (
             self.env["mail.channel"]
-            .search([("public", "=", "private")])
+            .search([])
             .filtered(self._filter_private_channel_removed_group)
             .mapped("id")
         )

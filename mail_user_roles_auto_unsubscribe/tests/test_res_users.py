@@ -81,7 +81,6 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
         cls.test_mail_channel = cls.env["mail.channel"].create(
             {
                 "name": "Mail channel test",
-                "public": "private",
                 "group_ids": [(6, 0, subscribed_group_ids)],
             }
         )
@@ -89,10 +88,7 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
 
     def test_unsubscribe_users(self):
         self.assertIn(
-            self.test_user_1.partner_id.id,
-            self.test_mail_channel.channel_last_seen_partner_ids.mapped(
-                "partner_id.id"
-            ),
+            self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
         )
         # Emulate _origin we get from onchange call
         self.test_user_1._origin = self.test_user_1.copy({"login": "test2"})
@@ -100,10 +96,7 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
 
         self.test_user_1.unsubscribe_from_mail_channel()
         self.assertIn(
-            self.test_user_1.partner_id.id,
-            self.test_mail_channel.channel_last_seen_partner_ids.mapped(
-                "partner_id.id"
-            ),
+            self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
         )
 
         self._copy_user_role_to_origin(self.test_user_1)
@@ -116,10 +109,7 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
 
         self.test_user_1.unsubscribe_from_mail_channel()
         self.assertIn(
-            self.test_user_1.partner_id.id,
-            self.test_mail_channel.channel_last_seen_partner_ids.mapped(
-                "partner_id.id"
-            ),
+            self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
         )
 
         self._copy_user_role_to_origin(self.test_user_1)
@@ -133,8 +123,5 @@ class UserUnsubscribeChannelTC(common.SavepointCase):
         self.test_user_1.unsubscribe_from_mail_channel()
 
         self.assertNotIn(
-            self.test_user_1.partner_id.id,
-            self.test_mail_channel.channel_last_seen_partner_ids.mapped(
-                "partner_id.id"
-            ),
+            self.test_user_1.partner_id, self.test_mail_channel.channel_partner_ids
         )
