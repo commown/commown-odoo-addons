@@ -1,8 +1,8 @@
 from odoo import api, models
 
 
-class Contract(models.Model):
-    _inherit = "contract.contract"
+class Contract(models.AbstractModel):
+    _inherit = "contract.abstract.contract"
 
     @api.model
     def _default_invoice_mail_template_id(self):
