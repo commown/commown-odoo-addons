@@ -7,12 +7,13 @@ from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 @tagged("-at_install", "post_install")
 class CrmLeadTC(RentalSaleOrderTC):
-    def setUp(self):
-        super().setUp()
-        self.so = self.create_sale_order()
-        self.so.team_id.default_perform_actions_on_delivery = True
-        self.so.mapped("order_line.product_id").update(
-            {"followup_sales_team_id": self.so.team_id.id}
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.so = cls.create_sale_order()
+        cls.so.team_id.default_perform_actions_on_delivery = True
+        cls.so.mapped("order_line.product_id").update(
+            {"followup_sales_team_id": cls.so.team_id.id}
         )
 
     def test_default_action_on_delivery_with_contract(self):
