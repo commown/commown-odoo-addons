@@ -44,5 +44,5 @@ class CrmLeadTC(RentalSaleOrderTC):
 
     def _create_ra_leads(self):
         "Confirm the sale and return all its just-created risk-analysis leads"
-        self.so.action_confirm()
+        self.so.with_context(default_team_id=self.so.team_id.id).action_confirm()
         return self.env["crm.lead"].search([("so_line_id.order_id", "=", self.so.id)])
