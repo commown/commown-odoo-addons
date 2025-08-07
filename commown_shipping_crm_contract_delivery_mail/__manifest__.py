@@ -12,6 +12,7 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "commown_lead_risk_analysis",
+        "commown_shipping",
     ],
 }

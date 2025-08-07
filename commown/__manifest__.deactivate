@@ -18,6 +18,7 @@
         "commown_administrative_docs",
         "commown_contract_forecast",
         "commown_shipping",
+        "commown_shipping_crm_contract_delivery_mail",
         "commown_ergonomy_asset",
         "commown_investment_sale",
         "commown_lead_risk_analysis",
