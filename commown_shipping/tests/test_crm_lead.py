@@ -289,6 +289,23 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         self.lead.team_id.delivery_tracking = False
         self.assertIsNone(self.lead.delivery_email_template())
 
+    def test_default_send_email_on_delivery_value(self):
+        """
+        The default value of send_email_on_delivery should match
+        the lead's team default_perform_actions_on_delivery value,
+        both from the record itself, and from the context value default_team_id.
+        """
+        team = self.lead.team_id
+        crm_model = self.env["crm.lead"].with_context(default_team_id=team.id)
+
+        team.default_perform_actions_on_delivery = True
+        self.assertTrue(crm_model._default_send_email_on_delivery())
+        self.assertTrue(self.lead._default_send_email_on_delivery())
+
+        team.default_perform_actions_on_delivery = False
+        self.assertFalse(crm_model._default_send_email_on_delivery())
+        self.assertFalse(self.lead._default_send_email_on_delivery())
+
     def test_actions_on_delivery_send_email_team_template(self):
         self.lead.send_email_on_delivery = True
 
