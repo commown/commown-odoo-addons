@@ -11,7 +11,5 @@
     "author": "Commown SCIC",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
-    "depends": [
-        "base",
-    ],
+    "depends": ["contract_payment_auto"],
 }
