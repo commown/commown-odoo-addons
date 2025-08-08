@@ -109,13 +109,6 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
             ["name"],
         )
 
-    def test_no_company_infos_on_account(self):
-        account_page = self.get_page(self.portal_client(), "/my/account")
-
-        labels = account_page.xpath("//label/@for")
-        self.assertNotIn("company_name", labels)
-        self.assertNotIn("vat", labels)
-
     def test_product(self):
         website = self.env.ref("website.default_website")
         website.product_service_details_url = "http://commown.coop/our-services"
@@ -161,17 +154,6 @@ class CustomerPortalB2BTC(CustomerPortalMixin, HttpCase):
     def _partner(self, test_cursor):
         env = self.env(test_cursor)
         return env["res.partner"].browse(self.partner.id)
-
-    def test_company_infos_on_account(self):
-        account_page = self.get_page(self.portal_client(), "/my/account")
-
-        labels = account_page.xpath("//label/@for")
-        self.assertIn("company_name", labels)
-        self.assertIn("vat", labels)
-
-        inputs = [i.get("name") for i in account_page.xpath("//input[not(@disabled)]")]
-        self.assertNotIn("company_name", inputs)
-        self.assertNotIn("vat", inputs)
 
     def test_company_infos_on_shop_address(self):
         "company infos are editable on /shop/address no partner company is set"

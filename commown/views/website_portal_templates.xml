@@ -68,26 +68,6 @@
 
   <template id="portal_my_details_fields" inherit_id="portal.portal_my_details_fields">
 
-    <!-- Fields company name and VAT: on the B2B website, show them, but disabled:
-         once checked and set by us, customers should not edit them on the portal -->
-    <xpath expr="//input[@name='company_name']/ancestor::div[1]" position="attributes">
-      <attribute
-                name="t-if"
-            >env.user.website_id == env.ref('website_b2b.b2b_website')</attribute>
-    </xpath>
-    <xpath expr="//input[@name='company_name']" position="attributes">
-      <attribute name="disabled">1</attribute>
-    </xpath>
-
-    <xpath expr="//input[@name='vat']/ancestor::div[1]" position="attributes">
-      <attribute
-                name="t-if"
-            >env.user.website_id == env.ref('website_b2b.b2b_website')</attribute>
-    </xpath>
-    <xpath expr="//input[@name='vat']" position="attributes">
-      <attribute name="disabled">1</attribute>
-    </xpath>
-
     <!-- Add maxlength to the street field -->
     <xpath expr="//input[@name='street']" position="attributes">
       <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
