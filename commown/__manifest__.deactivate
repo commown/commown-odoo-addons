@@ -40,6 +40,7 @@
         "website_sale_affiliate_portal",
         "website_sale_affiliate_product_restriction",
         "website_sale_b2b",
+        "website_sale_commown_shipping",
         "website_sale_coupon",
         "commown_website_sale_coupon",
         "utm_utils_merge_and_remove_actions",
