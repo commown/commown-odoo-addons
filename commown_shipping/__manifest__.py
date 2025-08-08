@@ -36,6 +36,7 @@
         "views/product.xml",
         "views/project_project.xml",
         "views/project_task.xml",
+        "views/website_portal_templates.xml",
         "views/wizard_print_label.xml",
         "security/ir.model.access.csv",
     ],

@@ -12,14 +12,6 @@ class CommownCustomerPortal(details.AdminDocsCustomerPortal):
         details.AdminDocsCustomerPortal.MANDATORY_BILLING_FIELDS + ["zipcode"]
     )
 
-    OPTIONAL_BILLING_FIELDS = (
-        details.AdminDocsCustomerPortal.OPTIONAL_BILLING_FIELDS
-        + [
-            "street2",
-            "state_id",
-        ]
-    )
-
     def details_form_validate(self, data):
         """Add Slimpay validation of submitted partner data"""
         error, error_message = super().details_form_validate(data)
@@ -32,7 +24,5 @@ class CommownCustomerPortal(details.AdminDocsCustomerPortal):
         for attribute, message in partner_model.slimpay_checks(values).items():
             error[attribute] = "error"
             error_message.append(message)
-
-        partner_model.validate_street_lines(data, error, error_message)
 
         return error, error_message

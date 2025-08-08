@@ -1,0 +1,24 @@
+<odoo>
+
+  <template id="portal_my_details_fields" inherit_id="portal.portal_my_details_fields">
+
+    <!-- Add maxlength to the street field -->
+    <xpath expr="//input[@name='street']" position="attributes">
+      <attribute name="t-att-maxlength">env['res.partner'].MAX_ADDRESS_SIZE</attribute>
+    </xpath>
+
+    <!-- Add street2 -->
+    <xpath expr="//input[@name='street']/ancestor::div[1]" position="after">
+      <div t-attf-class="mb-3 #{error.get('street2') and 'o_has_error' or ''} col-xl-6">
+        <label class="col-form-label" for="street2">Street 2</label>
+        <input
+                    type="text"
+                    name="street2"
+                    t-att-maxlength="env['res.partner'].MAX_ADDRESS_SIZE"
+                    t-attf-class="form-control #{error.get('street2') and 'is-invalid' or ''}"
+                    t-att-value="street2 or partner.street2"
+                />
+      </div>
+    </xpath>
+  </template>
+</odoo>
