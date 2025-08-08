@@ -14,6 +14,7 @@
     "depends": [
         "commown_shipping",
         "website_sale",
+        "website_sale_partner_firstname",
     ],
     "data": [
         "views/address_template.xml",

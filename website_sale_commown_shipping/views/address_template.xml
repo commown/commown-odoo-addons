@@ -16,11 +16,6 @@
       <attribute name="t-if">True</attribute>
     </xpath>
 
-    <!-- * add in field_required hidden input for the controller -->
-    <xpath expr="//form//input[@name='field_required']" position="attributes">
-      <attribute name="t-att-value">'firstname,lastname,phone'</attribute>
-    </xpath>
-
   </template>
 
 </odoo>
