@@ -12,6 +12,11 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "commown_shipping",
+        "website_sale",
+    ],
+    "data": [
+        "views/address_template.xml",
+        "views/payment_template.xml",
     ],
 }
