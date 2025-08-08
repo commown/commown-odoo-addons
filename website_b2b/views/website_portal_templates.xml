@@ -22,6 +22,12 @@
       <attribute name="disabled">1</attribute>
     </xpath>
 
+    <xpath expr="//div[@t-if='not partner_can_edit_vat']" position="attributes">
+      <attribute
+                name="t-if"
+            >env.user.website_id == env.ref('website_b2b.b2b_website')</attribute>
+    </xpath>
+
   </template>
 
 </odoo>
