@@ -165,14 +165,14 @@
   <template id="portal_my_home" inherit_id="project.portal_my_home">
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Projects')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Tasks')]/ancestor::t[1]"
             position="attributes"
         >
       <attribute name="invisible">1</attribute>
     </xpath>
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Projects')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Tasks')]/ancestor::t[1]"
             position="after"
         >
       <t t-set="title">My interactions with Commown team</t>
