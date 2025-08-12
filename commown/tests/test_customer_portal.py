@@ -7,6 +7,19 @@ from odoo.addons.commown_devices.tests.common import create_config
 
 
 class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
     def test_invoices(self):
         test_client = self.portal_client()
 
@@ -99,15 +112,12 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
     def test_task_page(self):
         test_client = self.portal_client()
 
-        with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            task = env.ref("project.project_1_task_1")
-            # Test pre-condition
-            self.assertIn(self.partner, task.mapped("message_follower_ids.partner_id"))
+        task = self.env.ref("project.project_1_task_1")
+        task.user_ids += self.env.ref("base.user_demo")
 
         doc = self.get_page(test_client, "/my/task/%d" % task.id)
         self.assertEqual(
-            doc.xpath("//*[text()='Assigned to']/.." "//span[@itemprop]/@itemprop"),
+            doc.xpath("//*[text()='Assignees']/..//span[@itemprop]/@itemprop"),
             ["name"],
         )
 
