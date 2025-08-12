@@ -65,9 +65,6 @@
         "web_notify",
         "website_sale_cart_selectable",
     ],
-    "external_dependencies": {
-        "python": ["magic"],
-    },
     "data": [
         "data/mail_templates.xml",
         "data/product.xml",
@@ -75,7 +72,6 @@
         "data/payment_button.xml",
         "security/ir.model.access.csv",
         "views/account_move.xml",
-        "views/address_template.xml",
         "views/contract_contract.xml",
         "views/crm_lead.xml",
         "views/ir_attachment.xml",
