@@ -1,6 +1,8 @@
 from odoo.tests.common import HttpCase
 
-from odoo.addons.commown_administrative_docs.tests import CustomerPortalMixin
+from odoo.addons.commown_administrative_docs.tests.test_customer_portal import (
+    CustomerPortalMixin,
+)
 from odoo.addons.commown_devices.tests.common import create_config
 
 
