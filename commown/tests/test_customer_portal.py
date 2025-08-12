@@ -101,7 +101,7 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
 
         with self.registry.cursor() as test_cursor:
             env = self.env(test_cursor)
-            task = env.ref("project.project_task_1")
+            task = env.ref("project.project_1_task_1")
             # Test pre-condition
             self.assertIn(self.partner, task.mapped("message_follower_ids.partner_id"))
 
