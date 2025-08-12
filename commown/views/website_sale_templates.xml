@@ -212,7 +212,7 @@
     <xpath expr="//t[@t-call='website.layout']/*[1]" position="before">
       <t
                 t-set="display_product"
-                t-value="request.env.user.has_group('website.group_website_publisher') or request.lang == 'fr_FR' or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"
+                t-value="request.env.user.has_group('website.group_website_publisher') or request.lang == env.ref('base.fr') or env.ref('commown.categ_de') in product.mapped('public_categ_ids')"
             />
     </xpath>
     <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
