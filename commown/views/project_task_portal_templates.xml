@@ -5,7 +5,7 @@
 
     <xpath expr="//t[@t-foreach='task.user_ids']//a" position="attributes">
       <!-- Do not expose our support people name and email -->
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
 
   </template>

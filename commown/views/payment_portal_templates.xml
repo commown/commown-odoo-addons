@@ -4,7 +4,7 @@
   <template id="payment" inherit_id="website_sale.payment">
 
     <xpath expr="//div[@id='payment_method']/h3" position="attributes">
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
 
     <xpath expr="//div[@id='payment_method']/h3" position="before">
