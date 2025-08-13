@@ -16,15 +16,16 @@ from odoo.addons.website_sale_payment_slimpay.tests.common import SlimpayControl
 
 @tagged("-at_install", "post_install")
 class ControllerTC(HttpCase):
-    def setUp(self):
-        super().setUp()
-        self.test_client = Client(http.root, Response)
-        self.werkzeug_environ = {
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.test_client = Client(http.root, Response)
+        cls.werkzeug_environ = {
             "REMOTE_ADDR": "127.0.0.1",
             "HTTP_USER_AGENT": "user-agent",
             "HTTP_ACCEPT_LANGUAGE": "common",
         }
-        self.test_client.get("/web/session/logout")
+        cls.test_client.get("/web/session/logout")
 
     def check_redirect(self, path, expected_path):
         resp = self.test_client.get(
