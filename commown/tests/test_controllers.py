@@ -3,9 +3,9 @@ from unittest.mock import patch
 from urllib.parse import urlparse
 
 from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
-from odoo.service import wsgi_server
+from odoo import http
 from odoo.tests import HttpCase, tagged
 
 from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
@@ -18,7 +18,7 @@ from odoo.addons.website_sale_payment_slimpay.tests.common import SlimpayControl
 class ControllerTC(HttpCase):
     def setUp(self):
         super().setUp()
-        self.test_client = Client(wsgi_server.application, BaseResponse)
+        self.test_client = Client(http.root, Response)
         self.test_client.get("/web/session/logout")
 
     def check_redirect(self, path, expected_path):
