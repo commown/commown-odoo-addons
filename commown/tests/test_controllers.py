@@ -19,11 +19,19 @@ class ControllerTC(HttpCase):
     def setUp(self):
         super().setUp()
         self.test_client = Client(http.root, Response)
+        self.werkzeug_environ = {
+            "REMOTE_ADDR": "127.0.0.1",
+            "HTTP_USER_AGENT": "user-agent",
+            "HTTP_ACCEPT_LANGUAGE": "common",
+        }
         self.test_client.get("/web/session/logout")
 
     def check_redirect(self, path, expected_path):
-        resp = self.test_client.get("/shop/redirect?" + path, follow_redirects=False)
-
+        resp = self.test_client.get(
+            "/shop/redirect?" + path,
+            follow_redirects=False,
+            environ_base=self.werkzeug_environ,
+        )
         self.assertEqual(resp.status_code, 302)
 
         self.assertEqual(urlparse(resp.headers["Location"]).path, expected_path)
