@@ -1,7 +1,6 @@
 from . import account_bank_statement
 from . import account_move
 from . import contract
-from . import ir_http
 from . import payment_provider
 from . import payment_transaction
 from . import product_template
