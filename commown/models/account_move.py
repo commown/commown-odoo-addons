@@ -15,8 +15,8 @@ class AccountInvoice(models.Model):
     def _invoice_merge_auto_pay_invoice_job(self):
         result = super()._invoice_merge_auto_pay_invoice_job()
         if (
-            self.state == "paid"
-            and self.sent is False
+            self.payment_state == "paid"
+            and self.is_move_sent is False
             and self.partner_id.type == "invoice"
             and self.partner_id.email
         ):
@@ -27,7 +27,7 @@ class AccountInvoice(models.Model):
             if mail_template:
                 mail_template.send_mail(self.id)
             self.with_context(mail_post_autofollow=True)
-            self.sent = True
+            self.is_move_sent = True
             self.message_post(body=_("Invoice sent"))
 
         return result
