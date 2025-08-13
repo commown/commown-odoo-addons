@@ -59,7 +59,7 @@ class TestSlimpayPaymentControllerTC(SlimpayControllersTC):
 
         token = self.env["payment.token"].create(
             {
-                "name": "Test token",
+                "payment_details": "Test token",
                 "partner_id": partner.id,
                 "provider_id": provider.id,
                 "provider_ref": "test slimpay ref",

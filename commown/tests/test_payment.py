@@ -36,7 +36,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         partner = self.so.partner_id
         old_token = self.env["payment.token"].create(
             {
-                "name": "Test Token",
+                "payment_details": "Test Token",
                 "partner_id": partner.id,
                 "active": True,
                 "provider_id": self.slimpay.id,
