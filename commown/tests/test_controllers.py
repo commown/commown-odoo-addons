@@ -32,7 +32,7 @@ class ControllerTC(HttpCase):
             follow_redirects=False,
             environ_base=self.werkzeug_environ,
         )
-        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.status_code, 303)
 
         self.assertEqual(urlparse(resp.headers["Location"]).path, expected_path)
 
