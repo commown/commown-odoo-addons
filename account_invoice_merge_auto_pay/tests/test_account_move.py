@@ -16,14 +16,7 @@ def fake_do_tx_ok(self, *args, **kwargs):
     self.update({"state": "done", "provider_reference": "test-%d" % self.id})
 
 
-class AccountMoveTC(AbstractAccountInvoiceMergeAutoTC):
-    "Test class for this module's account move methods"
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        inject_payment_data(cls, cls.partner_a)
-
+class AccountMoveMergeAutoPayMixin(AbstractAccountInvoiceMergeAutoTC):
     def _merge_and_pay(self, date="2019-05-16", expect_merge=True, expect_pay=True):
         with trap_jobs() as trap:
             invs, merge_infos = self.env["account.move"]._cron_invoice_merge(date)
@@ -57,6 +50,15 @@ class AccountMoveTC(AbstractAccountInvoiceMergeAutoTC):
             self.create_invoice(self.partner_a, date, 1.0, **params)
             for date in ("2019-05-09", "2019-05-10")
         ]
+
+
+class AccountMoveTC(AccountMoveMergeAutoPayMixin):
+    "Test class for this module's account move methods"
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        inject_payment_data(cls, cls.partner_a)
 
     def test_do_not_pay_refund(self):
         "Do not pay refunds, but do not prevent their merge"

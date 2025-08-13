@@ -1,12 +1,18 @@
 from odoo.tests import tagged
 
+from odoo.addons.account_invoice_merge_auto_pay.tests import common
 from odoo.addons.account_invoice_merge_auto_pay.tests.test_account_move import (
-    AccountMoveTC,
+    AccountMoveMergeAutoPayMixin,
 )
 
 
 @tagged("-at_install", "post_install")
-class AccountInvoiceTC(AccountMoveTC):
+class AccountInvoiceTC(AccountMoveMergeAutoPayMixin):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        common.inject_payment_data(cls, cls.partner_a)
+
     def test_user_id_ignored_in_invoice_merge(self):
         """
         When merging invoices, the (invoice_)user_id should not
