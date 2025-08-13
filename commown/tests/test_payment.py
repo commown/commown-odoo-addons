@@ -14,7 +14,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
     def setUp(self):
         request_patcher = patch(
             "odoo.addons.website_sale_affiliate"
-            ".models.sale_affiliate_request.request"
+            ".models.sale_affiliate_request.AffiliateRequest"
         )
         request_mock = request_patcher.start()
         request_mock.configure_mock(session={})
