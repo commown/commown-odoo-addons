@@ -87,7 +87,6 @@
         "views/website_templates.xml",
     ],
     "qweb": [
-        "static/src/xml/account_reconciliation.xml",
         "static/src/xml/menu.xml",
     ],
     "assets": {
