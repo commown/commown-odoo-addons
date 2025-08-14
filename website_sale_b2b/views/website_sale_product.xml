@@ -84,10 +84,6 @@
                 class="text-muted"
             >(viewed by sales only) -
         <span>Variant id: <span id="variant_id_placeholder" /></span>
-        <script
-                    type="text/javascript"
-                    src="/website_sale_b2b/static/src/js/website_sale.js"
-                />
       </div>
     </xpath>
 

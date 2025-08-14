@@ -27,5 +27,10 @@
         "views/website_sale_order.xml",
         "views/website_sale_product.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "/website_sale_b2b/static/src/js/website_sale.js",
+        ],
+    },
     "installable": True,
 }
