@@ -29,10 +29,6 @@
     flex-shrink: 0;
 }
 
-#services-banner > a {
-    width: min-content;
-}
-
 /* Hide payment methods */
 #payment_method h3,
 #payment_method .card {
