@@ -86,12 +86,12 @@
         "views/website_site_portal_sale_templates.xml",
         "views/website_templates.xml",
     ],
-    "qweb": [
-        "static/src/xml/menu.xml",
-    ],
     "assets": {
         "web.assets_frontend": [
             "/commown/static/src/css/website_sale.css",
+        ],
+        "web.assets_backend": [
+            "/commown/static/src/js/user_menu_items.esm.js",
         ],
     },
     "installable": True,
