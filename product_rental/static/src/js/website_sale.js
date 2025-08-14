@@ -1,10 +1,12 @@
-odoo.define("product_rental.ProductConfiguratorMixin", function (require) {
+odoo.define("product_rental.VariantMixin", function (require) {
     "use strict";
 
-    var ProductConfiguratorMixin = require("sale.ProductConfiguratorMixin");
-    var sAnimations = require("website.content.snippets.animation");
+    var VariantMixin = require("sale.VariantMixin");
+    var publicWidget = require("web.public.widget");
 
-    sAnimations.registry.WebsiteSale.include({
+    require("website_sale.website_sale");
+
+    publicWidget.registry.WebsiteSale.include({
         _onChangeCombination: function (ev, $parent, combination) {
             this._super.apply(this, arguments);
             const $recurrent_payment_amount = $parent.find(
@@ -18,15 +20,17 @@ odoo.define("product_rental.ProductConfiguratorMixin", function (require) {
         },
     });
 
-    return ProductConfiguratorMixin;
+    return VariantMixin;
 });
 
 odoo.define("product_rental.OptionalProductsModal", function (require) {
     "use strict";
 
-    var optionalProductModal = require("sale.OptionalProductsModal");
+    const {
+        OptionalProductsModal,
+    } = require("@sale_product_configurator/js/product_configurator_modal");
 
-    optionalProductModal.include({
+    OptionalProductsModal.include({
         _onChangeCombination: function (ev, $parent, combination) {
             this._super.apply(this, arguments);
             const $recurrent_payment_amount = $parent.find(
@@ -40,5 +44,5 @@ odoo.define("product_rental.OptionalProductsModal", function (require) {
         },
     });
 
-    return optionalProductModal;
+    return OptionalProductsModal;
 });
