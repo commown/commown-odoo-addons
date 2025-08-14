@@ -1,0 +1,13 @@
+<odoo>
+
+  <record
+        id="account_payment_slimpay.payment_provider_slimpay"
+        model="payment.provider"
+    >
+    <field name="slimpay_api_url">https://api.preprod.slimpay.com</field>
+    <field name="slimpay_creditor">democreditor</field>
+    <field name="slimpay_app_id">democreditor01</field>
+    <field name="slimpay_app_secret">democreditor01</field>
+  </record>
+
+</odoo>

@@ -66,6 +66,9 @@
         "web_notify",
         "website_sale_cart_selectable",
     ],
+    "demo": [
+        "demo/payment_provider.xml",
+    ],
     "data": [
         "data/mail_templates.xml",
         "data/product.xml",
