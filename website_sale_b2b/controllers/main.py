@@ -91,9 +91,9 @@ class WebsiteSaleB2B(WebsiteSale):
             rental_infos = plist._rented_quantity_infos(product, partner)
 
             if "add_qty" not in kwargs:
-                _rid = plist._compute_price_rule(
-                    [(product, self.BIG_PRODUCT_QTY, partner)]
-                )[product.id][1]
+                _rid = plist._compute_price_rule(product, self.BIG_PRODUCT_QTY)[
+                    product.id
+                ][1]
                 if _rid:
                     best_rule = env["product.pricelist.item"].browse(_rid)
                     kwargs["add_qty"] = best_rule.min_quantity
