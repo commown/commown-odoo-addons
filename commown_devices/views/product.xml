@@ -31,6 +31,14 @@
                             />
               <field name="storable_tmpl_id" />
               <field name="storable_variant_id" />
+              <button
+                                string="Copy service image"
+                                class="oe_highlight"
+                                type="object"
+                                name="action_service_copy_image"
+                                attrs="{'invisible': [('storable_type', '!=', 'primary')]}"
+                            />
+
             </tree>
           </field>
         </page>

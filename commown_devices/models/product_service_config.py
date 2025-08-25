@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class ProductServiceStorableConfig(models.Model):
@@ -66,3 +67,11 @@ class ProductServiceStorableConfig(models.Model):
         res = super().unlink()
         affected_variants._set_storable_variants()
         return res
+
+    @api.multi
+    def action_service_copy_image(self):
+        self.ensure_one()
+        if not self.service_tmpl_id.image:
+            raise UserError(_("Current service has no image!"))
+        else:
+            self.storable_tmpl_id.image = self.service_tmpl_id.image

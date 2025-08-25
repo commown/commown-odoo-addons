@@ -1,4 +1,18 @@
+import base64
+import io
+
+from PIL import Image
+
+from odoo.exceptions import UserError
+
 from .common import DeviceAsAServiceTC, add_attributes_to_product, create_config
+
+
+def _image_black():
+    f = io.BytesIO()
+    Image.new("RGB", (1024, 1024), "#000000").save(f, "PNG")
+    f.seek(0)
+    return base64.b64encode(f.read())
 
 
 class ProductServiceConfigTC(DeviceAsAServiceTC):
@@ -77,3 +91,23 @@ class ProductServiceConfigTC(DeviceAsAServiceTC):
         c.unlink()
         self.assertFalse(self.fp3_service_color1.secondary_storable_variant_ids)
         self.assertFalse(self.fp3_service_color2.secondary_storable_variant_ids)
+
+    def test_action_service_copy_image(self):
+        fp3_storable_tmpl = self.storable_product.copy({"name": "fp3+"})
+        config = create_config(
+            self.fp3_service_tmpl,
+            "primary",
+            fp3_storable_tmpl,
+            fp3_storable_tmpl.product_variant_id,
+        )
+
+        with self.assertRaises(UserError) as err:
+            config.action_service_copy_image()
+        self.assertEqual(err.exception.args[0], "Current service has no image!")
+
+        image_black = _image_black()
+        self.fp3_service_tmpl.image = image_black
+
+        config.action_service_copy_image()
+
+        self.assertEqual(fp3_storable_tmpl.image, image_black)
