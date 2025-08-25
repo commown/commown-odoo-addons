@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 11:45+0000\n"
-"PO-Revision-Date: 2025-03-07 11:45+0000\n"
+"POT-Creation-Date: 2025-09-19 09:16+0000\n"
+"PO-Revision-Date: 2025-09-19 09:16+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgid "Archived users"
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:165
+#: code:addons/customer_team_manager/models/res_partner.py:159
 #, python-format
 msgid "At least one administrator is mandatory"
 msgstr ""
@@ -144,7 +144,7 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model:customer_team_manager.customer_role,name:customer_team_manager.customer_role_fleet_manager
-msgid "Fleet managment"
+msgid "Fleet management"
 msgstr ""
 
 #. module: customer_team_manager
@@ -178,6 +178,12 @@ msgid "HTTP Routing"
 msgstr ""
 
 #. module: customer_team_manager
+#: model:ir.actions.act_url,name:customer_team_manager.action_open_help
+#: model:ir.ui.menu,name:customer_team_manager.menu_help
+msgid "Help"
+msgstr ""
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__id
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__id
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__id
@@ -206,7 +212,7 @@ msgid "Import Template for Users"
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:91
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:99
 #, python-format
 msgid "Incorrect password."
 msgstr ""
@@ -243,8 +249,13 @@ msgid "Make sure this permission doesn't fall into the wrong hands: carefully ch
 msgstr ""
 
 #. module: customer_team_manager
-#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
-msgid "My managment space"
+#: model:ir.ui.menu,name:customer_team_manager.menu_customer_manager_root
+msgid "Management space"
+msgstr ""
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-management-space-portal-access
+msgid "My management space"
 msgstr ""
 
 #. module: customer_team_manager
@@ -338,11 +349,6 @@ msgid "Team"
 msgstr ""
 
 #. module: customer_team_manager
-#: model:ir.ui.menu,name:customer_team_manager.menu_customer_team_manager_root
-msgid "Team manager"
-msgstr ""
-
-#. module: customer_team_manager
 #: model:res.groups,name:customer_team_manager.group_customer_admin
 msgid "Team manager Customer"
 msgstr ""
@@ -361,7 +367,7 @@ msgid "The e-mails of the people to whom you grant access do not all come from t
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:184
+#: code:addons/customer_team_manager/models/res_partner.py:181
 #, python-format
 msgid "The email of partners having portal access cannot be modified!"
 msgstr ""
@@ -376,8 +382,9 @@ msgstr ""
 #. module: customer_team_manager
 #: model:ir.actions.act_window,name:customer_team_manager.action_customer_users
 #: model:ir.model,name:customer_team_manager.model_res_users
+#: model:ir.ui.menu,name:customer_team_manager.menu_customer_team_parent
 #: model:ir.ui.menu,name:customer_team_manager.menu_partners
-#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-management-space-portal-access
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
 msgid "Users"
@@ -404,7 +411,7 @@ msgid "You are going to grant people permission to have an account on this platf
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:70
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:76
 #, python-format
 msgid "You are not allowed to manage users."
 msgstr ""
