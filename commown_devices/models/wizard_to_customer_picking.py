@@ -84,7 +84,7 @@ class PickingToCustomerWizard(models.AbstractModel):
         """
         ref = self.env.ref
 
-        if self.usage == "internal":
+        if self.entity_id.contract_id.stock_ownership == "internal":
             loc_new = ref("commown_devices.stock_location_modules_and_accessories")
             loc_repack = ref("commown_devices.stock_repackaged_modules_and_accessories")
             if self.prioritize_repackaged:
