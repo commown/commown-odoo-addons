@@ -4,11 +4,13 @@
     function set_recurrent_price(priceToStr, $parent, combination) {
         const $recurrent_payment_amount = $parent.find(".oe_recurrent_payment_amount");
 
-        const ratio = parseFloat(
-            $recurrent_payment_amount.data("recurrent-payment-ratio")
-        );
-        const price = priceToStr(combination.price / ratio);
-        $recurrent_payment_amount.find(".oe_currency_value").html(price);
+        if ($recurrent_payment_amount.length) {
+            const ratio = parseFloat(
+                $recurrent_payment_amount.data("recurrent-payment-ratio")
+            );
+            const price = priceToStr(combination.price / ratio);
+            $recurrent_payment_amount.find(".oe_currency_value").html(price);
+        }
     }
 
     odoo.define("product_rental.VariantMixin", function (require) {
