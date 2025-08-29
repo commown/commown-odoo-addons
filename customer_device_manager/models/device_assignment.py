@@ -84,7 +84,7 @@ class DeviceAssignment(models.Model):
 
     contract_name = fields.Char(
         string="Contract",
-        related="device_id.contract_id.name",
+        compute="_compute_contract_name",
         store=False,
         readonly=True,
     )
@@ -118,6 +118,16 @@ class DeviceAssignment(models.Model):
                         "assignment_date": fields.Datetime.now(),
                     }
                 )
+
+    @api.depends("device_id.contract_id")
+    def _compute_contract_name(self):
+        for record in self:
+            commercial_partner = record.partner_id.commercial_partner_id
+            sudo_contract = record.device_id.sudo().contract_id
+            if sudo_contract.commercial_partner_id == commercial_partner:
+                record.contract_name = sudo_contract.name
+            else:
+                record.contract_name = False
 
     def name_get(self):
         return [(rec.id, rec.device_id.name) for rec in self]
