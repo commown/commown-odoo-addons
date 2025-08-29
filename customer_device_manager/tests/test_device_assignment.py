@@ -87,19 +87,23 @@ class DeviceAssignmentTC(DeviceAssignmentBaseTC):
 
 
 class DeviceAssignmentHistoryTC(DeviceAssignmentBaseTC):
-    def setUp(self):
-        super().setUp()
+    def test_name_get(self):
+        "Test the name_get method of history items from assignment creation and update"
 
-        self.assignment = self.create_assignment(
+        assignment = self.create_assignment(
+            date=fields.Datetime.from_string("2023-01-01 10:00:00"),
             partner=self.partner1,
         )
 
-        self.history_record = self.assignment.history_ids[0]
-
-    def test_name_get(self):
-        """Test the name_get method of history records"""
-        dt = self.history_record.date
         self.assertEqual(
-            self.history_record.display_name,
-            "test-lot - Joel Willis (%s)" % fields.Datetime.to_string(dt),
+            assignment.history_ids[0].display_name,
+            "test-lot - Joel Willis (2023-01-01 10:00:00)",
+        )
+
+        now = fields.Datetime.now()
+        assignment.update({"partner_id": self.partner2.id})
+
+        self.assertEqual(
+            assignment.history_ids[0].display_name,
+            "test-lot - Nicole Ford (%s)" % fields.Datetime.to_string(now),
         )
