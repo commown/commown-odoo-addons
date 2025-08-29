@@ -96,15 +96,10 @@ class DeviceAssignmentHistoryTC(DeviceAssignmentBaseTC):
 
         self.history_record = self.assignment.history_ids[0]
 
-    def test_name_get_method(self):
+    def test_name_get(self):
         """Test the name_get method of history records"""
-        result = self.history_record.name_get()
-        self.assertEqual(result[0][0], self.history_record.id)
-        self.assertEqual(result[0][1], "test-lot")
-
-        self.assignment.device_name = False
-        result = self.history_record.name_get()
-        self.assertEqual(result[0][0], self.history_record.id)
-        self.assertEqual(result[0][1], str(self.assignment.id))
-
-        self.assertEqual(self.history_record.display_name, str(self.assignment.id))
+        dt = self.history_record.date
+        self.assertEqual(
+            self.history_record.display_name,
+            "test-lot - Joel Willis (%s)" % fields.Datetime.to_string(dt),
+        )
