@@ -106,6 +106,7 @@
       <tree string="Assignment History">
         <field name="date"/>
         <field name="assignment_id"/>
+        <field name="partner_id"/>
       </tree>
     </field>
   </record>
