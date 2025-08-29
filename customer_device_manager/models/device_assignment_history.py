@@ -34,6 +34,12 @@ class DeviceAssignmentHistory(models.Model):
     )
 
     def name_get(self):
-        return [
-            (r.id, r.assignment_id.device_name or str(r.assignment_id.id)) for r in self
-        ]
+        result = []
+        for rec in self:
+            rec_date = fields.Datetime.to_string(rec.date)
+            name = (
+                f"{rec.assignment_id.device_name} - {rec.partner_id.name}"
+                f" ({rec_date})"
+            )
+            result.append((rec.id, name))
+        return result
