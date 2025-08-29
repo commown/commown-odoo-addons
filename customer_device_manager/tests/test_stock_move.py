@@ -57,16 +57,10 @@ class StockMoveTC(SavepointCase):
 
         self.internal_user = self.env.ref("base.group_user")
 
-    def get_assignments(self, lot, company):
-        """Find device assignments for a lot and company, including assignments to contacts of the company."""
-        assignments = self.env["customer_device_manager.device_assignment"].search(
-            [
-                ("device_id", "=", lot.id),
-            ]
-        )
-        return assignments.filtered(
-            lambda a: a.partner_id.commercial_partner_id
-            == company.commercial_partner_id
+    def get_assignments(self, lot):
+        "Find device assignments for a lot"
+        return self.env["customer_device_manager.device_assignment"].search(
+            [("device_id", "=", lot.id)]
         )
 
     def _send(self, lot, orig, dest):
@@ -84,12 +78,13 @@ class StockMoveTC(SavepointCase):
         - Check that an history line is created at each step
         """
         # Check test prerequisite, no assignment exists
-        self.assertFalse(self.get_assignments(self.lot, self.company))
+        self.assertFalse(self.get_assignments(self.lot))
 
         self.contract.send_devices(self.lot, {}, do_transfer=True)
-        assignment = self.get_assignments(self.lot, self.company)
+        assignment = self.get_assignments(self.lot)
         self.assertEqual(len(assignment), 1)
         self.assertEqual(assignment.device_location, "at_customer")
+        self.assertEqual(assignment.partner_id, self.company)
         self.assertEqual(len(assignment.history_ids), 1)
 
         with self.assertRaises(AccessError):
@@ -119,6 +114,6 @@ class StockMoveTC(SavepointCase):
         self.lot.grade_id = self.env.ref("commown_grade.grade_D1")
         self.contract.send_devices(self.lot, {}, do_transfer=True)
 
-        self.assertEqual(assignment, self.get_assignments(self.lot, self.company))
+        self.assertEqual(assignment, self.get_assignments(self.lot))
         self.assertEqual(assignment.device_location, "at_customer")
         self.assertEqual(len(assignment.history_ids), 4)
