@@ -9,6 +9,13 @@ class StockMoveTC(SavepointCase):
     def setUp(self):
         super().setUp()
 
+        def _ref(name):
+            return self.env.ref("commown_devices.%s" % name)
+
+        self.loc_to_check = _ref("stock_location_devices_to_check")
+        self.loc_for_rent = _ref("stock_location_available_for_rent")
+        self.loc_repacked = _ref("stock_repackaged_modules_and_accessories")
+
         self.partner = self.env.ref("base.partner_demo_portal")
         self.company = self.env.ref("base.res_partner_1")
         self.assertTrue(self.company.is_company)
@@ -17,9 +24,8 @@ class StockMoveTC(SavepointCase):
         self.contract = self.env["contract.contract"].create(
             {"name": "Contract", "partner_id": self.partner.id}
         )
-        parent_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
         self.stock_location = self.env["stock.location"].create(
-            {"name": "Test Loc", "usage": "internal", "location_id": parent_loc.id}
+            {"name": "MyLoc", "usage": "internal", "location_id": self.loc_for_rent.id}
         )
 
         product = self.env["product.product"].create(
@@ -102,28 +108,13 @@ class StockMoveTC(SavepointCase):
         self.assertEqual(assignment.assignment_notes, "Update as a customer assigner")
         self.assertEqual(len(assignment.history_ids), 2)
 
-        loc_to_check = self.env.ref("commown_devices.stock_location_devices_to_check")
-        self.contract.receive_devices(self.lot, {}, loc_to_check, do_transfer=True)
+        self.contract.receive_devices(self.lot, {}, self.loc_to_check, do_transfer=True)
 
         self.assertEqual(assignment.device_location, "at_commown")
         self.assertEqual(len(assignment.history_ids), 3)
 
-        loc_repacked = self.env.ref(
-            "commown_devices.stock_repackaged_modules_and_accessories"
-        )
-        picking = self._send(self.lot, loc_to_check, loc_repacked)
+        picking = self._send(self.lot, self.loc_to_check, self.loc_repacked)
         self.assertEqual(picking.state, "done")
-
-        dest_loc_parent = self.env.ref(
-            "commown_devices.stock_location_available_for_rent"
-        )
-        dest_loc = self.env["stock.location"].search(
-            [
-                ("location_id", "=", dest_loc_parent.id),
-                ("usage", "=", "internal"),
-            ],
-            limit=1,
-        )
 
         self.lot.grade_id = self.env.ref("commown_grade.grade_D1")
         self.contract.send_devices(self.lot, {}, do_transfer=True)
