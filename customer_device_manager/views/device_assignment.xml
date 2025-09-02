@@ -199,20 +199,26 @@
   </record>
 
   <menuitem id="menu_device_assignment_parent"
-          name="Devices"
-          parent="customer_team_manager.menu_customer_team_manager_root"
-          sequence="50"/>
+            name="Devices"
+            parent="customer_team_manager.menu_customer_manager_root"
+            sequence="50"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
 
   <menuitem id="menu_device_assignment"
             name="Devices"
             parent="menu_device_assignment_parent"
             action="action_device_assignment"
-            sequence="10"/>
+            sequence="10"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
 
   <menuitem id="menu_device_assignment_history"
             name="Assignment History"
             parent="menu_device_assignment_parent"
             action="action_device_assignment_history"
-            sequence="20"/>
+            sequence="20"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
 
 </odoo>
