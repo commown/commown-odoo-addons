@@ -21,6 +21,7 @@
         "security/ir.model.access.csv",
         "security/rules.xml",
         "views/device_assignment.xml",
+        "views/portal_templates.xml",
     ],
     "installable": True,
 }
