@@ -326,21 +326,23 @@
         id="menu_team"
         action="action_teams"
         sequence="20"
-        parent="customer_manager_base.menu_customer_team_manager_root"
+        parent="customer_manager_base.menu_customer_manager_root"
+        groups="group_customer_admin,sales_team.group_sale_manager"
     />
 
   <menuitem
         id="menu_partners"
         action="action_customer_users"
         sequence="10"
-        parent="customer_manager_base.menu_customer_team_manager_root"
+        parent="customer_manager_base.menu_customer_manager_root"
+        groups="group_customer_admin,sales_team.group_sale_manager"
     />
 
   <menuitem
         id="menu_role"
         action="action_customer_roles"
         sequence="100"
-        parent="customer_manager_base.menu_customer_team_manager_root"
+        parent="customer_manager_base.menu_customer_manager_root"
         groups="sales_team.group_sale_manager"
     />
 

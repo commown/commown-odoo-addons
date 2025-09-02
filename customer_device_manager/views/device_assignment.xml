@@ -200,19 +200,22 @@
 
   <menuitem id="menu_device_assignment_parent"
           name="Devices"
-          parent="customer_team_manager.menu_customer_team_manager_root"
+          parent="customer_manager_base.menu_customer_manager_root"
+          groups="group_customer_device_assigner,sales_team.group_sale_manager"
           sequence="50"/>
 
   <menuitem id="menu_device_assignment"
             name="Devices"
             parent="menu_device_assignment_parent"
             action="action_device_assignment"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
             sequence="10"/>
 
   <menuitem id="menu_device_assignment_history"
             name="Assignment History"
             parent="menu_device_assignment_parent"
             action="action_device_assignment_history"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
             sequence="20"/>
 
 </odoo>

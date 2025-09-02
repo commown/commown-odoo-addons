@@ -9,7 +9,7 @@
     <field name="model_id" ref="base.model_ir_ui_menu" />
     <field
             name="domain_force"
-            eval="[('id', 'child_of', ref('menu_customer_team_manager_root'))]"
+            eval="[('id', 'child_of', ref('menu_customer_manager_root'))]"
         />
     <field name="groups" eval="[Command.set([ref('group_customer_admin')])]" />
     <field name="perm_read" eval="1" />
