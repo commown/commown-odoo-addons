@@ -84,7 +84,7 @@ class DeviceAssignment(models.Model):
     contract_name = fields.Char(
         string="Contract",
         compute="_compute_contract_name",
-        store=False,
+        store=True,
         readonly=True,
     )
 
