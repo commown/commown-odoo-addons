@@ -74,11 +74,10 @@ class DeviceAssignment(models.Model):
         store=False,
     )
 
-    product_id = fields.Many2one(
-        "product.product",
+    product_name = fields.Char(
         string="Product",
-        related="device_id.product_id",
-        store=False,
+        related="device_id.product_id.name",
+        store=True,
         readonly=True,
     )
 
