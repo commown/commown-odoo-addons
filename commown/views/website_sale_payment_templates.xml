@@ -1,0 +1,17 @@
+<odoo>
+
+    <template id="checkout" inherit_id="payment.checkout">
+        <!--
+            Since we hide the payment options (providers/tokens alike) in the website_sale.payment,
+            we pre-select Slimpay as the default payment option in payment.checkout (called in website_sale.payment)
+            in the event there's more than one payment option.
+
+        -->
+        <xpath expr="//t[@t-set='default_payment_option_id']" position="attributes">
+            <attribute
+                name="t-value"
+            >env.ref('account_payment_slimpay.payment_provider_slimpay').id</attribute>
+        </xpath>
+    </template>
+
+</odoo>

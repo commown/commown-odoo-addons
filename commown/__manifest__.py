@@ -85,6 +85,7 @@
         "views/website.xml",
         "views/website_portal_templates.xml",
         "views/website_sale_templates.xml",
+        "views/website_sale_payment_templates.xml",
         "views/website_site_portal_sale_templates.xml",
         "views/website_templates.xml",
     ],
