@@ -92,9 +92,8 @@ class TestSlimpayPaymentControllerTC(SlimpayControllersTC):
         with patch.object(
             SlimpayClient, "action", side_effect=action_mock
         ) as mocked_act:
-            result = self.pay_cart(token=token.id)
+            self.pay_cart(token=token.id)
 
-        self.assertEqual(result, "/shop/payment/validate")
         calls = mocked_act.call_args_list
         self.assertEqual(len(calls), 2)
         self.assertEqual(calls[0][0], ("GET", "get-mandates"))

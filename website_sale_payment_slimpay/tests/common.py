@@ -111,11 +111,13 @@ class SlimpayControllersTC(common.WebsiteSaleControllerTC):
             },
         )
 
-    def pay_cart(self, **params):
+    def pay_cart(self, **kwargs):
         """Simulate a click on Slimpay "Pay" button.
         `SlimpayClient.approval_url` mock returns the transaction
         reference instead of a Slimpay URL, so we can use it later to
         check the transaction.
+        However, if we pass a token for the payment, we check whether
+        we're correctly redirected to the payment validation page.
         """
         page = self.url_open("/shop/payment", timeout=self.timeout)
         doc = lxml.html.fromstring(page.text)
@@ -138,9 +140,12 @@ class SlimpayControllersTC(common.WebsiteSaleControllerTC):
         tx_data = self.jsonrpc("/shop/payment/transaction/%d" % so_id, params=params)
 
         form = lxml.html.fromstring(tx_data["redirect_form_html"])
-        self.assertEqual(form.get("action"), "https://slimpay.test/hello")
-        params = dict(form.form_values())
-        self.assertEqual(params, {"code": "mycode", "tx_ref": tx_data["reference"]})
+        if "token" in kwargs:
+            self.assertEqual(form.get("action"), "/shop/payment/validate")
+        else:
+            self.assertEqual(form.get("action"), "https://slimpay.test/hello")
+            params = dict(form.form_values())
+            self.assertEqual(params, {"code": "mycode", "tx_ref": tx_data["reference"]})
         return tx_data["reference"]
 
     def simulate_feedback(self, tx_ref, state="closed.completed", assert_code=200):
