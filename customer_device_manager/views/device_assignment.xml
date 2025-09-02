@@ -9,7 +9,7 @@
         <field name="assignment_notes"/>
         <field name="image_medium"/>
         <field name="device_name"/>
-        <field name="product_id"/>
+        <field name="product_name"/>
         <field name="contract_name"/>
         <templates>
           <t t-name="kanban-box">
@@ -21,7 +21,7 @@
 
               <div class="oe_kanban_details text-truncate">
                 <strong>
-                  <field name="product_id" />
+                  <field name="product_name" />
                 </strong>
 
                 <ul>
@@ -51,7 +51,7 @@
     <field name="model">customer_device_manager.device_assignment</field>
     <field name="arch" type="xml">
       <tree string="Device Assignment">
-        <field name="product_id"/>
+        <field name="product_name"/>
         <field name="device_name"/>
         <field name="contract_name"/>
         <field name="partner_id"/>
@@ -73,7 +73,7 @@
           />
           <div class="oe_title">
             <h1>
-              <field name="product_id" class="oe_inline" readonly="True" options='{"no_open": True}'/>
+              <field name="product_name" class="oe_inline"/>
             </h1>
           </div>
           <group>
@@ -135,7 +135,7 @@
       <search string="Search Device Assignments">
         <field name="device_name" string="Serial Number / IMEI"/>
         <field name="partner_id" string="User"/>
-        <field name="product_id" string="Product"/>
+        <field name="product_name" string="Product"/>
         <field name="contract_name" string="Contract"/>
         <filter string="At Customer" name="at_customer"
         domain="[('device_location', '=', 'at_customer')]"/>
