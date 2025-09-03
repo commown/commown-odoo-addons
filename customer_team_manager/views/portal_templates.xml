@@ -1,10 +1,10 @@
 <odoo>
 
-  <template id="my-managment-space-portal-access" inherit_id="portal.portal_my_home">
+  <template id="my-management-space-portal-access" inherit_id="portal.portal_my_home">
     <xpath expr="//div[hasclass('o_portal_my_home')]//h3" position="before">
       <div
                 t-if="env.user.has_group('customer_manager_base.group_customer_admin')"
-                id="o_portal_managment_space"
+                id="o_portal_management_space"
                 class="mb-4"
             >
         <h3>My managment space</h3>
@@ -12,6 +12,7 @@
 
           <a
                         class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                        t-if="env.user.has_group('customer_manager_base.group_customer_admin')"
                         t-att-href="'/web#menu_id=%daction_id=%d' % (env.ref('customer_manager_base.menu_customer_manager_root').id, env.ref('customer_team_manager.action_customer_users').id)"
                     >
             Users
