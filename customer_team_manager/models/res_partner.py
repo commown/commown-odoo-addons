@@ -231,6 +231,9 @@ class ResPartner(models.Model):
     @api.multi
     def action_revoke_portal_access(self):
         self.ensure_one()
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         users = self.sudo().user_ids
         if users:
             users[0].groups_id -= self.env.ref("base.group_portal")
