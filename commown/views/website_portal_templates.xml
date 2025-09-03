@@ -93,6 +93,15 @@
 
   </template>
 
+  <template
+        id="portal_my_invoices_payment"
+        inherit_id="account_payment.portal_my_invoices_payment"
+    >
+    <xpath expr="//t[@t-set='pending_manual_txs']/.." position="attributes">
+      <attribute name="t-if">False</attribute>
+    </xpath>
+  </template>
+
   <!-- Customize portal section titles -->
 
   <template id="portal_my_home_sale" inherit_id="sale.portal_my_home_sale">
