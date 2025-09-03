@@ -1,6 +1,7 @@
 from datetime import datetime
 from unittest.mock import patch
 
+from odoo import Command
 from odoo.tests import tagged
 
 from odoo.addons.account_payment_slimpay.tests.common import MockedSlimpayMixin
@@ -46,15 +47,15 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         partner.payment_token_id = old_token.id
 
         # Simulate a website sale:
-        tx = self.so._create_payment_transaction(
+        tx = self.env["payment.transaction"].create(
             {
                 "provider_id": self.slimpay.id,
-                "type": "form",
                 "amount": self.so.amount_total,
                 "currency_id": self.so.pricelist_id.currency_id.id,
                 "partner_id": partner.id,
                 "partner_country_id": partner.country_id.id,
                 "reference": self.so.name,
+                "sale_order_ids": [Command.set([self.so.id])],
             }
         )
         self.fake_get.return_value = {
