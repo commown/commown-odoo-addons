@@ -161,6 +161,13 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertEqual(empl.portal_status, "not_granted")
         self.assertFalse(empl.user_ids)
 
+    def test_rule_write_not_granted_on_company_partners(self):
+        customer_company_as_admin = self._model(
+            "res.partner", sudo_as=self.customer_user_admin
+        ).browse(self.customer_company.id)
+        with self.assertRaises(AccessError):
+            customer_company_as_admin.name = "Evil Corp"
+
     def test_rule_unlink_not_granted_to_customers(self):
         "Even group_customer_admin members are not granted unlink permission"
 

@@ -160,6 +160,9 @@ class ResPartner(models.Model):
 
     @api.multi
     def write(self, vals):
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         def is_b2c(partner):
             return not partner.commercial_partner_id.is_company
 
