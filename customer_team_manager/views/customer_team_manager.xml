@@ -203,12 +203,14 @@
                         name="%(action_wizard_portal_access)d"
                         type="action"
                         attrs="{'invisible': ['|', ('portal_status', '!=', 'not_granted'), ('active', '=', False)]}"
+                        groups="sales_team.group_sale_manager,customer_manager_base.group_customer_admin"
                     />
           <button
                         string="Revoke portal access"
                         name="action_revoke_portal_access"
                         type="object"
                         attrs="{'invisible': ['|', ('portal_status', '=', 'not_granted'), ('active', '=', False)]}"
+                        groups="sales_team.group_sale_manager,customer_manager_base.group_customer_admin"
                     />
           <field name="portal_status" widget="statusbar" />
         </header>
