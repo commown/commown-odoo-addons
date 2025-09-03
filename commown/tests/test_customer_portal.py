@@ -38,8 +38,8 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
             partner = env["res.partner"].browse(self.partner.id)
             invs = self.generate_contract_invoices(partner)
             self.assertTrue(len(invs) > 2)
-            invs[0].action_invoice_open()
-            invs[2].action_invoice_open()
+            invs[0].action_post()
+            invs[2].action_post()
         doc = self.get_page(test_client, "/my/invoices")
         hrefs = doc.xpath("//*[hasclass('o_portal_my_doc_table')]//a/@href")
         self.assertTrue(
