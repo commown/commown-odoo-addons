@@ -11,7 +11,7 @@
             />
       <div class="mt-4" t-if="user_channels">
         <h4>Contact us</h4>
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
           <div class="list-group">
           <t t-set="action_id" t-value="env.ref('mail.action_discuss').id" />
           <t t-foreach="user_channels" t-as="channel" t-attr-href="">
@@ -26,7 +26,7 @@
       </div>
       <div class="mt-4">
         <h4>Documentation - Tutoriels</h4>
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
         <div class="list-group">
           Retrouvez nos tutoriels et toute la documentation de Commown...
           <a
@@ -38,7 +38,7 @@
 
       <div class="mt-4">
         <h4>Entraide - Communauté</h4>
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
         <div class="list-group">
           Rejoignez la communauté pour résoudre vos problèmes, échanger des astuces...
           <a
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="mt-4" t-if="st_data">
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
         <p>Pour contacter l'équipe parcourez la section "Vos besoins d'assistance".</p>
       </div>
     </xpath>
