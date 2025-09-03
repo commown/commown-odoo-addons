@@ -64,11 +64,11 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
             "id": "test-id",
             "dateClosed": datetime.today().isoformat(),
         }
-        self.slimpay._slimpay_s2s_validate(
-            tx, {"reference": tx.reference, "_links": {"self": {"href": "fake_url"}}}
+        tx._process_notification_data(
+            {"reference": tx.reference, "_links": {"self": {"href": "fake_url"}}}
         )
 
         # Check that partner's token changed and is the one associated
         # to the transaction:
         self.assertNotEqual(partner.payment_token_id, old_token)
-        self.assertEqual(partner.payment_token_id, tx.payment_token_id)
+        self.assertEqual(partner.payment_token_id, tx.token_id)
