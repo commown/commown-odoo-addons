@@ -238,6 +238,9 @@ class ResPartner(models.Model):
 
     def action_revoke_portal_access(self):
         self.ensure_one()
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         wizard_model = self.env["portal.wizard"].with_context(active_ids=[self.id])
         role_model = self.env["customer_team_manager.customer_role"]
 
