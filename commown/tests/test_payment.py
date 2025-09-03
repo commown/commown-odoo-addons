@@ -35,6 +35,9 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         self.slimpay.journal_id = (
             self.env["account.journal"].search([("type", "=", "bank")], limit=1).id
         )
+        self.env["account.payment.method"].create(
+            {"code": "slimpay", "name": "Slimpay", "payment_type": "inbound"}
+        )
         partner = self.so.partner_id
         old_token = self.env["payment.token"].create(
             {
