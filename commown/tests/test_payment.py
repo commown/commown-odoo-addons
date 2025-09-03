@@ -31,6 +31,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
     def test_token_replaced(self):
         "Partner payment_token_id must be the last token created for a web sale"
         # Assign an "old" token to the web partner:
+        self.slimpay.state = "test"
         self.slimpay.journal_id = (
             self.env["account.journal"].search([("type", "=", "bank")], limit=1).id
         )
