@@ -86,7 +86,7 @@
             position="before"
         >
       <td class="text-right"><span
-                    t-esc="-invoice.amount_total if invoice.type == 'out_refund' else invoice.amount_total"
+                    t-esc="-invoice.amount_total if invoice.move_type == 'out_refund' else invoice.amount_total"
                     t-options='{"widget": "monetary", "display_currency": invoice.currency_id}'
                 /></td>
     </xpath>
