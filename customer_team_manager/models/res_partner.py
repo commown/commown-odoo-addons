@@ -30,12 +30,6 @@ class ResPartner(models.Model):
         index=True,
         ondelete="restrict",
         domain="[('customer_company', '=', commercial_partner_id)]",
-        groups=",".join(
-            (
-                "sales_team.group_sale_manager",
-                "customer_team_manager.group_customer_admin",
-            )
-        ),
     )
 
     parent_id = fields.Many2one(
