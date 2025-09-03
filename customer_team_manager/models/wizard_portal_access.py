@@ -75,9 +75,11 @@ class CustomerDedicatedGrantPortalAccessWizard(models.TransientModel):
         if not any(self.env.user.has_group(g) for g in self.allowed_groups):
             raise UserError(_("You are not allowed to manage users."))
 
-        partners = self.customer_partners.filtered(
-            lambda e: e.portal_status == "not_granted"
-        ).filtered(_has_valid_email)
+        partners = (
+            self.customer_partners.filtered(lambda e: e.portal_status == "not_granted")
+            .filtered(_has_valid_email)
+            .filtered(lambda p: not p.is_company)
+        )
 
         wizard = self._prepare_portal_wizard(partners)
         wizard.action_apply()
