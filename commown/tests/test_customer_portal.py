@@ -149,6 +149,7 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
     def test_product(self):
         website = self.env.ref("website.default_website")
         website.product_service_details_url = "http://commown.coop/our-services"
+        website.invalidate_recordset()
 
         # Create a product with a storable config
         storable_product = self.env["product.template"].search(
@@ -170,6 +171,7 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
         # See product in all languages:
         rental_product.website_published = True
         rental_product.public_categ_ids |= self.env.ref("commown.categ_de")
+        rental_product.invalidate_recordset()
 
         product_page = self.get_page(self.portal_client(), rental_product.website_url)
         banner_url = product_page.xpath("//*[@id='services-banner']//a/@href")[0]
