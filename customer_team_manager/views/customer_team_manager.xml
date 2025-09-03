@@ -196,7 +196,8 @@
     <field name="model">res.partner</field>
     <field name="arch" type="xml">
       <form string="Users">
-        <header>
+        <field name="is_company" invisible="1" />
+        <header attrs="{'invisible': [('is_company', '=', True)]}">
           <button
                         string="Grant portal access"
                         class="oe_highlight"
@@ -239,6 +240,7 @@
               <field name="display_name" class="oe_inline" />
             </h1>
           </div>
+          <div attrs="{'invisible': [('is_company', '=', True)]}">
           <div class="alert alert-danger" role="alert">
             For legal reasons, please never reuse an account for someone else.
           </div>
@@ -273,6 +275,7 @@
               <field name="customer_note" />
             </group>
           </group>
+          </div>
         </sheet>
       </form>
     </field>
