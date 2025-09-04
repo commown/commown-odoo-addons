@@ -8,11 +8,20 @@ from .common import add_attributes_to_product, create_config
 class SaleOrderTC(TransactionCase):
     "Test class for sale order methods"
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         # Use a company with a chart of account as commown_partner_property_accounts
         # needs it to create the partner's property account on sale confirmation:
-        self.env.company = self.env.companies.filtered("chart_template_id")[0]
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
 
     def create_sale_order(self, product):
         oline = {
