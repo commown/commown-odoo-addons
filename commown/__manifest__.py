@@ -68,6 +68,7 @@
     ],
     "demo": [
         "demo/payment_provider.xml",
+        "demo/product_rental_pub_category.xml",
     ],
     "data": [
         "data/mail_templates.xml",
