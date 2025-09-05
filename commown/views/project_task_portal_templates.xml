@@ -18,6 +18,42 @@
       <attribute name="t-if">False</attribute>
     </xpath>
 
+    <!-- Hide priority/state of a task from customers. -->
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_priority_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_state_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+
+  </template>
+
+  <template id="portal_tasks_list" inherit_id="project.portal_tasks_list">
+    <!--
+      Disable columns related to Task priority/state.
+    -->
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_priority_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_state_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
   </template>
 
 </odoo>
