@@ -33,16 +33,20 @@ class CommownPartner(models.Model):
 
             account = getattr(partner, data["field_name"])
             if not account or account == ref_account:
-                new_account = self.env["account.account"].create(
-                    {
-                        "code": data["code_template"] % partner.id,
-                        "name": partner.name,
-                        "tag_ids": [Command.set(ref_account.tag_ids.ids)],
-                        "account_type": data["account_type"],
-                        "tax_ids": [Command.set(ref_account.tax_ids.ids)],
-                        "reconcile": True,
-                    }
-                )
+                attrs = {
+                    "code": data["code_template"] % partner.id,
+                    "name": partner.name,
+                    "account_type": data["account_type"],
+                    "reconcile": True,
+                }
+                if ref_account:
+                    attrs.update(
+                        {
+                            "tag_ids": [Command.set(ref_account.tag_ids.ids)],
+                            "tax_ids": [Command.set(ref_account.tax_ids.ids)],
+                        }
+                    )
+                new_account = self.env["account.account"].create(attrs)
                 (partner | partner.child_ids).update({data["field_name"]: new_account})
 
     def _create_payable_account(self):

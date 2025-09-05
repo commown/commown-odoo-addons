@@ -1,12 +1,12 @@
 odoo.define("product_rental.ProductConfiguratorMixin", function (require) {
     "use strict";
 
-    var ProductConfiguratorMixin = require("sale.ProductConfiguratorMixin");
-    var sAnimations = require("website.content.snippets.animation");
+    var publicWidget = require("web.public.widget");
+    require("website_sale.website_sale");
 
     var variantIdEl = document.getElementById("variant_id_placeholder");
 
-    sAnimations.registry.WebsiteSale.include({
+    publicWidget.registry.WebsiteSale.include({
         _onChangeCombination: function (ev, $parent, combination) {
             this._super.apply(this, arguments);
             if (variantIdEl !== null) {
@@ -14,6 +14,4 @@ odoo.define("product_rental.ProductConfiguratorMixin", function (require) {
             }
         },
     });
-
-    return ProductConfiguratorMixin;
 });

@@ -13,6 +13,14 @@ class ResPartnerSimpleTC(TransactionCase):
         expected = "401.F.%d" % p1.id
         self.assertEqual(p1.property_account_payable_id.code, expected)
 
+    def test_create_supplier_no_ir_property(self):
+        self.env["ir.property"]._get_property(
+            "property_account_payable_id", "res.partner", False
+        ).unlink()
+        p1 = self.env["res.partner"].create({"name": "p1", "supplier_rank": 1})
+
+        self.assertTrue(p1.property_account_payable_id)
+
     def test_update_to_supplier(self):
         p1 = self.env["res.partner"].create({"name": "p1", "supplier_rank": 0})
 

@@ -82,6 +82,7 @@ class WebsiteSaleB2B(WebsiteSale):
         """
 
         rental_infos = {"reason": None, "quantity": 0.0}
+        forced_add_qty = None
 
         env = request.env
         if request.website == env.ref("website_b2b.b2b_website"):
@@ -91,15 +92,17 @@ class WebsiteSaleB2B(WebsiteSale):
             rental_infos = plist._rented_quantity_infos(product, partner)
 
             if "add_qty" not in kwargs:
-                _rid = plist._compute_price_rule(
-                    [(product, self.BIG_PRODUCT_QTY, partner)]
-                )[product.id][1]
+                _rid = plist._compute_price_rule(product, self.BIG_PRODUCT_QTY)[
+                    product.id
+                ][1]
                 if _rid:
                     best_rule = env["product.pricelist.item"].browse(_rid)
-                    kwargs["add_qty"] = best_rule.min_quantity
+                    forced_add_qty = best_rule.min_quantity
 
         result = super().product(product, category, search, **kwargs)
         result.qcontext["rental_infos"] = rental_infos
+        if forced_add_qty:
+            result.qcontext["add_qty"] = forced_add_qty
         return result
 
     def checkout_form_validate(self, mode, all_form_values, data):
