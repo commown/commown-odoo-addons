@@ -109,6 +109,31 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
             ["name"],
         )
 
+    def test_tasks_list_page(self):
+        "Grouping/sorting options should be restricted in the tasks page."
+        # Setup
+        test_client = self.portal_client()
+        task = self.env.ref("project.project_1_task_1")
+        task.user_ids += self.env.ref("base.user_demo")
+
+        doc = self.get_page(test_client, "/my/tasks")
+
+        # Checking the sorting options.
+        sortby_hrefs = doc.xpath("//button[@id='portal_searchbar_sortby']/..//a/@href")
+        self.assertEqual(
+            sorted([href.split("?sortby=", 1)[1] for href in sortby_hrefs]),
+            ["date", "stage", "update"],
+        )
+
+        # Checking the grouping options.
+        groupby_hrefs = doc.xpath(
+            "//button[@id='portal_searchbar_groupby']/..//a/@href"
+        )
+        self.assertEqual(
+            sorted([href.split("?groupby=", 1)[1] for href in groupby_hrefs]),
+            ["none", "project"],
+        )
+
     def test_product(self):
         website = self.env.ref("website.default_website")
         website.product_service_details_url = "http://commown.coop/our-services"
