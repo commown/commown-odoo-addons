@@ -72,7 +72,8 @@
                         t-att-data-recurrent-payment-ratio="recurrent_payment_amount_ratio"
                         t-esc="recurrent_payment_amount_base"
                         t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
-                    /> <b t-field="product.recurrent_payment_frequency" />
+                    />
+          <b t-field="product.recurrent_payment_frequency" />
         </h4>
       </div>
     </xpath>
