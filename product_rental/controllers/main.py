@@ -10,7 +10,6 @@ class RentalProductWebsiteSale(WebsiteSale):
         if product.has_recurrent_payment:
             result.qcontext.update(
                 {
-                    "recurrent_payment_amount_base": product.recurrent_payment_amount,
                     "recurrent_payment_amount_ratio": product.recurrent_payment_amount_ratio(),
                 }
             )
