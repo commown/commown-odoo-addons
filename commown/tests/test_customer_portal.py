@@ -176,3 +176,36 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
         product_page = self.get_page(self.portal_client(), rental_product.website_url)
         banner_url = product_page.xpath("//*[@id='services-banner']//a/@href")[0]
         self.assertEqual(banner_url, "http://commown.coop/our-services")
+
+    def test_portal_zip_slimpay_check(self):
+        """
+        Portal users' zipcode should be checked if their country is France,
+        meaning it should be a string of only 5 numbers (ie. '67000')
+        """
+        # Setup
+        self.partner.country_id = self.env.ref("base.fr")
+        self.partner.zip = "12345"
+        self.partner.invalidate_recordset()
+
+        test_client = self.portal_client()
+        account_form = self.get_form(test_client, "/my/account")
+
+        # Case 1: Valid zip code passed (string of only 5 numbers)
+        account_form.update({"zipcode": "67000"})
+        resp_ok = test_client.post(
+            "/my/account", data=account_form, environ_base=self.werkzeug_environ
+        )
+
+        self.assertEqual(resp_ok.status_code, 303)
+        self.assertIn("/my/home", resp_ok.data.decode("utf-8"))
+
+        self.assertEqual(self.partner.zip, "67000")
+
+        # Case 2: Invalid zip code passed
+        account_form.update({"zipcode": "0"})
+        resp_not_ok = test_client.post(
+            "/my/account", data=account_form, environ_base=self.werkzeug_environ
+        )
+
+        self.assertEqual(resp_not_ok.status_code, 200)
+        self.assertIn(b"Incorrect zip code", resp_not_ok.data)
