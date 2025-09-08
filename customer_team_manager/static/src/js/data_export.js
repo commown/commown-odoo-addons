@@ -11,9 +11,9 @@ odoo.define('customer_team_manager.DataExport', function(require) {
     start: function () {
       var deferred = this._super.apply(this, arguments);
 
-      if (session.is_customer_admin) {
+      if (session.is_customer) {
         // Make css customization easy to accomodate the UI:
-        this.$el.addClass("js-customer-admin");
+        this.$el.addClass("js-is-customer");
 
         // Reset css height to content instead of hard-js-coded 100%:
         this.$modal.find(".modal-content").css("height", "initial");
