@@ -146,3 +146,18 @@ class DeviceAssignment(models.Model):
 
     def name_get(self):
         return [(rec.id, rec.device_id.name) for rec in self]
+
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        result = super().fields_get(allfields=allfields, attributes=attributes)
+        hide_fields_in_filters = (
+            "create_date",
+            "create_uid",
+            "write_date",
+            "write_uid",
+            "history_ids",
+            "device_id",
+        )
+        for fname in hide_fields_in_filters:
+            result[fname]["searchable"] = False
+        return result
