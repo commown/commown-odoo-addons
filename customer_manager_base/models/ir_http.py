@@ -21,11 +21,9 @@ class IrHttp(models.AbstractModel):
         user = self.env.user
 
         result = super().session_info()
-        admin_group_ref = "customer_manager_base.group_customer_admin"
-        result["is_customer_admin"] = user.has_group(admin_group_ref)
-        result["is_internal_user"] = user.has_group("base.group_user")
+        result["is_customer"] = not self.env.user.has_group("base.group_user")
 
-        if result["is_customer_admin"]:
+        if result["is_customer"]:
             menus = (
                 self.env["ir.ui.menu"]
                 .with_context(lang=request.session.context["lang"])

@@ -39,15 +39,15 @@ class SessionInfoTC(HttpCase):
             forms_values.update(dict(form.form_values()))
         return forms_values
 
-    def portal_client(self):
-        user = self.partner.user_ids.ensure_one()
+    def portal_client(self, user, password="portal"):
+        user.ensure_one()
         test_client = Client(http.root, Response)
 
         login_form = self.get_form(test_client, "/web/login/", db=get_db_name())
         login_form.update(
             {
                 "login": user.login,
-                "password": "portal",
+                "password": password,
                 "redirect": "/my/account",
             }
         )
@@ -61,8 +61,8 @@ class SessionInfoTC(HttpCase):
         self.assertIn("/my/account", response.location)
         return test_client
 
-    def get_session_info(self):
-        response = self.portal_client().get(
+    def get_session_info(self, user, password="portal"):
+        response = self.portal_client(user, password).get(
             "/web/session/get_session_info",
             content_type="application/json",
             data="{}",
@@ -70,21 +70,15 @@ class SessionInfoTC(HttpCase):
         )
         return json.loads(response.data)["result"]
 
-    def test_session_info_is_customer_admin_false(self):
-        with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            partner = env["res.partner"].browse(self.partner.id)
-            # Check test prerequisite
-            self.assertFalse(partner.parent_id)
+    def test_session_info_is_customer_false(self):
+        user = self.env.ref("base.user_demo")
+        user.password = "portal"
 
-        self.assertIs(self.get_session_info().get("is_customer_admin"), False)
+        self.assertFalse(self.get_session_info(user).get("is_customer"))
 
-    def test_session_info_is_customer_admin_true(self):
-        with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            partner = env["res.partner"].browse(self.partner.id)
-            partner.user_ids.groups_id |= env.ref(
-                "customer_manager_base.group_customer_admin"
-            )
+    def test_session_info_is_customer_true(self):
+        partner = self.env.ref("base.partner_demo_portal")
+        user = partner.user_ids.ensure_one()
+        user.groups_id |= self.env.ref("customer_manager_base.group_customer_admin")
 
-        self.assertIs(self.get_session_info().get("is_customer_admin"), True)
+        self.assertTrue(self.get_session_info(user).get("is_customer"))

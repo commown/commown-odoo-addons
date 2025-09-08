@@ -15,10 +15,10 @@ patch(ExportDataDialog.prototype, "customer_admin", {
         this.export_right_panel = useRef("right_panel");
         this.import_compat_input = useRef("import_compat");
         onMounted(() => {
-            if (session.is_customer_admin) {
+            if (session.is_customer) {
                 // Make css customization easy to accomodate the UI:
-                this.export_left_panel.el.classList.add("js-customer-admin");
-                this.export_right_panel.el.classList.add("js-customer-admin");
+                this.export_left_panel.el.classList.add("js-is-customer");
+                this.export_right_panel.el.classList.add("js-is-customer");
 
                 // Remove width and height related classes of the left_panel,
                 // to place the export file format input better.

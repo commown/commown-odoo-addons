@@ -15,7 +15,7 @@ patch(NavBar.prototype, "customer_team_manager_navbar", {
      */
     get systrayItems() {
         var navbar_items = this._super();
-        if (!session.is_internal_user) {
+        if (session.is_customer) {
             navbar_items = navbar_items.filter((item) => !item.key.includes("mail"));
         }
         return navbar_items;
