@@ -328,10 +328,18 @@
   </record>
 
   <menuitem
+        id="menu_customer_team_parent"
+        name="Users"
+        parent="customer_manager_base.menu_customer_manager_root"
+        sequence="10"
+        groups="group_customer_admin,sales_team.group_sale_manager"
+    />
+
+  <menuitem
         id="menu_team"
         action="action_teams"
         sequence="20"
-        parent="customer_manager_base.menu_customer_manager_root"
+        parent="menu_customer_team_parent"
         groups="group_customer_admin,sales_team.group_sale_manager"
     />
 
@@ -339,7 +347,7 @@
         id="menu_partners"
         action="action_customer_users"
         sequence="10"
-        parent="customer_manager_base.menu_customer_manager_root"
+        parent="menu_customer_team_parent"
         groups="group_customer_admin,sales_team.group_sale_manager"
     />
 
@@ -347,7 +355,7 @@
         id="menu_role"
         action="action_customer_roles"
         sequence="100"
-        parent="customer_manager_base.menu_customer_manager_root"
+        parent="menu_customer_team_parent"
         groups="sales_team.group_sale_manager"
     />
 
