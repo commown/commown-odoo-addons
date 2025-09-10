@@ -1,6 +1,6 @@
 import logging
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -85,23 +85,3 @@ class Contract(models.Model):
                 lambda l: (l.qty_type != "variable" or "[DE]" in l.qty_formula_id.name)
             ).mapped("price_subtotal")
         )
-
-    @api.model
-    def _default_invoice_mail_template_id(self):
-        "Inactivate default invoice_mail_template_id"
-        return False
-
-    @api.model
-    def _default_pay_retry_mail_template_id(self):
-        "Inactivate default pay_retry_mail_template_id"
-        return False
-
-    @api.model
-    def _default_pay_fail_mail_template_id(self):
-        "Inactivate default pay_fail_mail_template_id"
-        return False
-
-    @api.model
-    def _default_auto_pay_retries(self):
-        "Disable auto_pay_retries"
-        return 0
