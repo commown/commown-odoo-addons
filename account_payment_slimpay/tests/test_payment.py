@@ -108,7 +108,9 @@ class SlimpayPaymentTC(TransactionCase):
         )
 
         with patch.object(SlimpayClient, "action", side_effect=fake_action):
-            payment_in.with_context(slimpay_payin_label="my payin label").action_post()
+            payment_in.with_context(
+                payment_transaction_label="my payin label"
+            ).action_post()
             payment_out.action_post()
 
         tx_in = payment_in.payment_transaction_id

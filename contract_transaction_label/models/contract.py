@@ -36,5 +36,5 @@ class Contract(models.Model):
             )
             label = self._format_transaction_label(invoice, last_date_invoiced)
             _logger.debug("Bank label for invoice %s: %s", invoice.number, label)
-            self = self.with_context(slimpay_payin_label=label)
+            self = self.with_context(payment_transaction_label=label)
         return super()._pay_invoice(invoice)

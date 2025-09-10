@@ -379,7 +379,7 @@ class ProjectTask(models.Model):
                 .with_context(
                     active_model="account.move",
                     active_ids=invoice.ids,
-                    slimpay_payin_label=self.slimpay_payment_label,
+                    payment_transaction_label=self.slimpay_payment_label,
                 )
                 .create(
                     {
