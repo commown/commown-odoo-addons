@@ -5,7 +5,7 @@ from odoo.addons.website_sale.controllers.main import WebsiteSale
 _logger = logging.getLogger(__name__)
 
 
-class SlimpayControllerWebsiteSale(WebsiteSale):
+class CommownFirstNameWebsiteSale(WebsiteSale):
     "Override address edition methods to add Slimpay-specific field constraints"
 
     def _get_mandatory_fields_billing(self, country_id=False):
@@ -27,8 +27,8 @@ class SlimpayControllerWebsiteSale(WebsiteSale):
         for field in ("firstname", "lastname"):
             if field in values:
                 _logger.debug(
-                    "payment_slimpay postprocess: %s value has finally *not* "
-                    "been dropped.",
+                    "website_sale_partner_firstname postprocess: "
+                    "%s value has finally *not* been dropped.",
                     field,
                 )
                 new_values[field] = values[field]

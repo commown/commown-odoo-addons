@@ -36,7 +36,7 @@
     </xpath>
 
     <xpath expr="//form//input[@name='field_required']" position="attributes">
-      <!-- Adjust required fields for Slimpay -->
+      <!-- Adjust harcoded required fields -->
       <attribute name="value">firstname,lastname,phone,country_id</attribute>
     </xpath>
 
