@@ -4,7 +4,7 @@ from odoo.addons.portal.controllers.portal import CustomerPortal
 
 
 class CommownShippingCustomerPortal(CustomerPortal):
-    OPTIONAL_BILLING_FIELDS = CustomerPortal.OPTIONAL_BILLING_FIELDS + ["street2"]
+    CustomerPortal.OPTIONAL_BILLING_FIELDS.extend(["street2"])
 
     def details_form_validate(self, data):
         """Add Colissimo address validation to submitted partner data"""

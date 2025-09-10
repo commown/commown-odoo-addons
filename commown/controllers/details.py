@@ -2,15 +2,13 @@ import logging
 
 from odoo import http
 
-from odoo.addons.commown_administrative_docs.controllers import details
+from odoo.addons.portal.controllers.portal import CustomerPortal
 
 _logger = logging.getLogger(__name__)
 
 
-class CommownCustomerPortal(details.AdminDocsCustomerPortal):
-    MANDATORY_BILLING_FIELDS = (
-        details.AdminDocsCustomerPortal.MANDATORY_BILLING_FIELDS + ["zipcode"]
-    )
+class CommownCustomerPortal(CustomerPortal):
+    CustomerPortal.MANDATORY_BILLING_FIELDS.extend(["zipcode"])
 
     def details_form_validate(self, data):
         """Add Slimpay validation of submitted partner data"""
