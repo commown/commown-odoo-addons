@@ -4,7 +4,7 @@
 {
     "name": "Mail - Auto-unsubscribe users from channels",
     "summary": "Auto-unsubscribe users from specific channels when they've been striped from a role. ",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
