@@ -9,7 +9,7 @@
     "depends": [
         "account_loan",
         "attachment_indexation",
-        "base_user_role",
+        "mail_user_roles_auto_unsubscribe",
         "survey",
         # Commown modules
         "account_invoice_merge_auto_pay",
