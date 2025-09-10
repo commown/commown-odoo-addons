@@ -11,10 +11,7 @@
     "author": "Commown SCIC",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
-    "depends": [
-        "payment_slimpay_issue",
-        "commown_contractual_issue",
-    ],
+    "depends": ["payment_slimpay_issue"],
     "data": [
         "views/contract_contract.xml",
     ],
