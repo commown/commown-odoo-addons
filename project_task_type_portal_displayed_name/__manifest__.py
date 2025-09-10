@@ -4,7 +4,7 @@
 {
     "name": "Project - Display a different name on the portal",
     "summary": "Display a different name for project task stages (types) for portal users",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
