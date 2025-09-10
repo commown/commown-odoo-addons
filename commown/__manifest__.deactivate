@@ -76,7 +76,6 @@
         "views/account_move.xml",
         "views/address_template.xml",
         "views/contract_contract.xml",
-        "views/contract_template.xml",
         "views/crm_lead.xml",
         "views/ir_attachment.xml",
         "views/payment_portal_templates.xml",
