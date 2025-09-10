@@ -12,6 +12,7 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "account_payment_slimpay_transaction_label",
+        "contract_transaction_label",
     ],
 }
