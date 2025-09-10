@@ -108,16 +108,14 @@ class SlimpayPaymentTC(TransactionCase):
         )
 
         with patch.object(SlimpayClient, "action", side_effect=fake_action):
-            payment_in.with_context(
-                payment_transaction_label="my payin label"
-            ).action_post()
+            payment_in.action_post()
             payment_out.action_post()
 
         tx_in = payment_in.payment_transaction_id
         self.assertEqual(tx_in.state, "done")
         slimpay_call_params = json.loads(tx_in.provider_reference)
         self.assertEqual(slimpay_call_params["func"], "create-payins")
-        self.assertEqual(slimpay_call_params["label"], "my payin label")
+        self.assertEqual(slimpay_call_params["label"], "test payment")
         self.assertEqual(slimpay_call_params["amount"], 149.2)
         self.assertEqual(slimpay_call_params["currency"], "EUR")
 
