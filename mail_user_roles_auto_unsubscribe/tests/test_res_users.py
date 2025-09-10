@@ -8,7 +8,7 @@ class UserUnsubscribeChannelTC(TransactionCase):
 
     @classmethod
     def _create_role(cls, name, group, user):
-        # create a role from name and associated group and add the user in
+        "Create a role from name and associated group and add the user in it."
         role = cls.env["res.users.role"].create(
             {
                 "name": name,
