@@ -1,0 +1,16 @@
+<odoo>
+
+  <!-- Edit task type form -->
+  <record model="ir.ui.view" id="task_type_edit">
+    <field name="name">project.task.type.form</field>
+    <field name="model">project.task.type</field>
+    <field name="inherit_id" ref="project.task_type_edit" />
+    <field name="arch" type="xml">
+      <!-- Insert displayed status below name -->
+      <xpath expr="//field[@name='name']" position="after">
+        <field name="portal_displayed_name" />
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

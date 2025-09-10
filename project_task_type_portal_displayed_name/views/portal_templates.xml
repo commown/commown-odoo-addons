@@ -1,19 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-
-  <!-- Edit task type form -->
-  <record model="ir.ui.view" id="task_type_edit">
-    <field name="name">project.task.type.form</field>
-    <field name="model">project.task.type</field>
-    <field name="inherit_id" ref="project.task_type_edit" />
-    <field name="arch" type="xml">
-      <!-- Insert displayed status below name -->
-      <xpath expr="//field[@name='name']" position="after">
-        <field name="portal_displayed_name" />
-      </xpath>
-    </field>
-  </record>
-
   <!-- Edit task list on portal -->
   <template id="portal_tasks_list" inherit_id="project.portal_tasks_list">
 
@@ -47,12 +32,6 @@
                 name="t-esc"
             >task.stage_id.portal_displayed_name or task.stage_id.name</attribute>
     </xpath>
-
-    <xpath expr="//t[@t-foreach='task.user_ids']//a" position="attributes">
-      <!-- Do not expose our support people name and email -->
-      <attribute name="invisible">1</attribute>
-    </xpath>
-
   </template>
 
 </odoo>
