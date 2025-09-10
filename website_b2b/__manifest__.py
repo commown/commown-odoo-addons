@@ -22,5 +22,6 @@
         "views/res_users.xml",
         "views/signup.xml",
         "views/website.xml",
+        "views/website_portal_templates.xml",
     ],
 }

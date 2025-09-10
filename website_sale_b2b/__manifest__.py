@@ -24,6 +24,7 @@
         "views/product_pricelist.xml",
         "views/product_template.xml",
         "views/sale_portal_templates.xml",
+        "views/website_address_template.xml",
         "views/website_sale_order.xml",
         "views/website_sale_product.xml",
     ],
