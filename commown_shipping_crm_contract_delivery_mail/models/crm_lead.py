@@ -9,9 +9,10 @@ class CrmLead(models.Model):
         domain="[('commercial_partner_id', '=', commercial_partner_id)]",
     )
 
-    @api.model
-    def create(self, vals):
-        result = super().create(vals)
-        if not result.contract_id:
-            result.send_email_on_delivery = False
+    @api.model_create_multi
+    def create(self, vals_list):
+        result = super().create(vals_list)
+        result.filtered(lambda lead: not lead.contract_id).write(
+            {"send_email_on_delivery": False}
+        )
         return result
