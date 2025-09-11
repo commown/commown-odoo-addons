@@ -4,7 +4,7 @@
 {
     "name": "Website sale - partner_firstname integration",
     "summary": "Replace name field by firstname/last name in the website_sale.address template.",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
