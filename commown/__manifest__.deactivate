@@ -14,6 +14,7 @@
         # Commown modules
         "account_invoice_merge_auto_pay",
         "account_move_slimpay_import",
+        "contract_payment_issues",
         "commown_administrative_docs",
         "commown_contract_forecast",
         "commown_shipping",
