@@ -12,9 +12,11 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["website_sale", "account_payment_slimpay"],
+    "depends": [
+        "website_sale_partner_firstname",
+        "account_payment_slimpay",
+    ],
     "data": [
-        "views/address_template.xml",
         "views/payment_templates.xml",
         "data/payment_provider.xml",  # After redirect_form definition!
     ],
