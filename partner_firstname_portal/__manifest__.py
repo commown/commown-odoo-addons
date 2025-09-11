@@ -4,7 +4,7 @@
 {
     "name": "Portal - Add firstname/lastname fields edition",
     "summary": "Replace the name field by firstname/lastname from partner_firstname in the portal templates.",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
