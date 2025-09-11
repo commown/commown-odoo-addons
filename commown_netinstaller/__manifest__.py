@@ -19,5 +19,6 @@
         "view/netinstaller_feature.xml",
         "view/netinstaller_feature_value.xml",
         "view/product_template.xml",
+        "view/product_product.xml",
     ],
 }
