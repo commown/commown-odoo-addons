@@ -5,7 +5,7 @@ from odoo import api, models
 _logger = logging.getLogger(__name__)
 
 
-class res_users(models.Model):
+class CommownResUsers(models.Model):
     _inherit = "res.users"
 
     @api.model_create_multi
