@@ -8,4 +8,8 @@ class Contract(models.Model):
     def netinstaller_feature_values(self):
         self.ensure_one()
         product = self.get_main_rental_line().sale_order_line_id.product_id
-        return product.netinstaller_feature_values()
+        result = {}
+        for fvalue in product.cumulated_netinstaller_feature_value_ids:
+            assert fvalue.feature_id.name not in result
+            result[fvalue.feature_id.name] = fvalue.value
+        return result
