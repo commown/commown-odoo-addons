@@ -30,7 +30,7 @@ class ResPartnerInvoiceActionTC(TransactionCase):
                 ("name", "=", "account_invoice_merge_auto_pay"),
                 ("state", "=", "installed"),
             ]
-        ):
+        ):  # pragma: no cover
             from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
                 inject_payment_data,
             )

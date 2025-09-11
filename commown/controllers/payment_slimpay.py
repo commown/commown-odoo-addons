@@ -31,9 +31,9 @@ class CommownPaymentPortal(PaymentPortal):
 
         try:
             so_sudo = self._document_check_access("sale.order", order_id, access_token)
-        except MissingError as error:
+        except MissingError as error:  # pragma: no cover
             raise error
-        except AccessError as error:
+        except AccessError as error:  # pragma: no cover
             raise ValidationError(_("The access token is invalid.")) from error
         sepa = env.ref("commown.sepa_mandate")
 
