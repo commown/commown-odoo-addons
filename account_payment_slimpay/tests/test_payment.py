@@ -9,26 +9,10 @@ from odoo.tests.common import TransactionCase, tagged
 from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
 
 
-@tagged("-at_install", "post_install")
-class SlimpayPaymentTC(TransactionCase):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-
-        cls.loader = FakeModelLoader(cls.env, cls.__module__)
-        cls.loader.backup_registry()
-        from .models import TestPaymentProvider, TestPaymentTransaction
-
-        cls.loader.update_registry((TestPaymentTransaction, TestPaymentProvider))
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.loader.restore_registry()
-        super().tearDownClass()
-
+class SlimpayPaymentTestMixin:
     def setUp(self):
         patcher = patch(
-            "odoo.addons.account_payment_slimpay.models." "slimpay_utils.get_client"
+            "odoo.addons.account_payment_slimpay.models.slimpay_utils.get_client"
         )
         patcher.start()
         super().setUp()
@@ -66,13 +50,8 @@ class SlimpayPaymentTC(TransactionCase):
         data.update(kwargs)
         return self.env["account.payment"].create(data)
 
-    def test_support(self):
-        slimpay = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
-        self.assertEqual(slimpay.support_refund, "partial")
-        self.assertTrue(slimpay.support_tokenization)
-
-    def test_send_payment_request_ok(self):
-        def fake_action(method, func, params=None):
+    def fake_action(self):
+        def _fake_action(method, func, params=None):
             """Fake code for slimpay client `action` method
 
             Checks the params common to all calls and return a result
@@ -96,6 +75,32 @@ class SlimpayPaymentTC(TransactionCase):
                     "reference": json.dumps(params),
                 }  # easy check of called meth
 
+        return _fake_action
+
+
+@tagged("-at_install", "post_install")
+class SlimpayPaymentTC(SlimpayPaymentTestMixin, TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        cls.loader = FakeModelLoader(cls.env, cls.__module__)
+        cls.loader.backup_registry()
+        from .models import TestPaymentProvider, TestPaymentTransaction
+
+        cls.loader.update_registry((TestPaymentTransaction, TestPaymentProvider))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.loader.restore_registry()
+        super().tearDownClass()
+
+    def test_support(self):
+        slimpay = self.env.ref("account_payment_slimpay.payment_provider_slimpay")
+        self.assertEqual(slimpay.support_refund, "partial")
+        self.assertTrue(slimpay.support_tokenization)
+
+    def test_send_payment_request_ok(self):
         meth_in = self.env.ref("account.account_payment_method_manual_in")
         payment_in = self._create_payment(
             payment_type="inbound", payment_method_id=meth_in.id
@@ -107,7 +112,7 @@ class SlimpayPaymentTC(TransactionCase):
             payment_type="outbound", payment_method_id=meth_out.id
         )
 
-        with patch.object(SlimpayClient, "action", side_effect=fake_action):
+        with patch.object(SlimpayClient, "action", side_effect=self.fake_action()):
             payment_in.action_post()
             payment_out.action_post()
 
