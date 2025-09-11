@@ -4,7 +4,7 @@
 {
     "name": "Contract - Payment issues linkage",
     "summary": "Show payment issues related to any given contract",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",

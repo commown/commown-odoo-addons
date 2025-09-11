@@ -4,7 +4,7 @@
 {
     "name": "View - Place all contract-related issues in a single tab",
     "summary": "Unite any given contract's contractual or payment issues in a dedicated tab.",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
