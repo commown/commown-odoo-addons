@@ -11,12 +11,14 @@ _logger = logging.getLogger(__name__)
 
 
 class AdminDocsCustomerPortal(CustomerPortal):
-    OPTIONAL_BILLING_FIELDS = CustomerPortal.OPTIONAL_BILLING_FIELDS + [
-        "id_card1",
-        "id_card2",
-        "proof_of_address",
-        "company_record",
-    ]
+    CustomerPortal.OPTIONAL_BILLING_FIELDS.extend(
+        [
+            "id_card1",
+            "id_card2",
+            "proof_of_address",
+            "company_record",
+        ]
+    )
 
     def details_form_validate(self, data):
         "Check given files' sizes before uploading them."
