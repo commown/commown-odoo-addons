@@ -3,7 +3,7 @@
 {
     "name": "Slimpay Payment base",
     "summary": "Provides server to server implementation of Slimpay payment",
-    "version": "16.0.1.0.4",
+    "version": "16.0.1.0.5",
     "development_status": "Beta",
     "category": "Accounting",
     "website": "https://github.com/commown/commown-odoo-addons",

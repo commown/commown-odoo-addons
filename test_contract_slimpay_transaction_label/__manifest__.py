@@ -4,7 +4,7 @@
 {
     "name": "Test module - Contract Slimpay transaction label",
     "summary": "Functionnal test module checking contract_transaction_label correctly provides a label to account_payment_slimpay_transaction_label    ",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
