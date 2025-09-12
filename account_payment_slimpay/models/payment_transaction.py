@@ -93,19 +93,14 @@ class SlimpayTransaction(models.Model):
 
     def _label(self):
         """Try hard to return a useful label, using:
-        - the 'slimpay_payin_label' of the context, if any
         - the `ref` field of the payment found in the transaction's payment, if any
         - the `reference` field of current transaction, if not empty
         - 'TR%d' % self.id as a last resort.
         """
-        context = self.env.context
-        if "slimpay_payin_label" in context:
-            return context["slimpay_payin_label"]
-        else:
-            payment = self.payment_id
-            if payment and payment.ref:
-                return payment.ref
-            return self.reference or "TR%d" % self.id
+        payment = self.payment_id
+        if payment and payment.ref:
+            return payment.ref
+        return self.reference or "TR%d" % self.id
 
     def _send_payment_request(self):
         """Perform a payment through a server to server call using a previously
