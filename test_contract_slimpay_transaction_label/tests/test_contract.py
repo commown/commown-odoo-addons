@@ -53,11 +53,8 @@ class ContractPaymentTC(TestContractBase):
             cline.date_start = cline.recurring_next_date
             cline.date_end = cline.next_period_date_end - relativedelta(days=1)
 
-        self.contract.write(
-            {
-                "transaction_label": "Invoice #START# - #END# (#INV#)",
-            }
-        )
+        self.contract.transaction_label = "Invoice #START# - #END# (#INV#)"
+
         with patch(
             "odoo.addons.account_payment_slimpay.models."
             "slimpay_utils.SlimpayClient.create_payment"
