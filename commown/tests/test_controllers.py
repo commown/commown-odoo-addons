@@ -3,9 +3,9 @@ from unittest.mock import patch
 from urllib.parse import urlparse
 
 from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
-from odoo.service import wsgi_server
+from odoo import http
 from odoo.tests import HttpCase, tagged
 
 from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
@@ -16,15 +16,24 @@ from odoo.addons.website_sale_payment_slimpay.tests.common import SlimpayControl
 
 @tagged("-at_install", "post_install")
 class ControllerTC(HttpCase):
-    def setUp(self):
-        super().setUp()
-        self.test_client = Client(wsgi_server.application, BaseResponse)
-        self.test_client.get("/web/session/logout")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.test_client = Client(http.root, Response)
+        cls.werkzeug_environ = {
+            "REMOTE_ADDR": "127.0.0.1",
+            "HTTP_USER_AGENT": "user-agent",
+            "HTTP_ACCEPT_LANGUAGE": "common",
+        }
+        cls.test_client.get("/web/session/logout")
 
     def check_redirect(self, path, expected_path):
-        resp = self.test_client.get("/shop/redirect?" + path, follow_redirects=False)
-
-        self.assertEqual(resp.status_code, 302)
+        resp = self.test_client.get(
+            "/shop/redirect?" + path,
+            follow_redirects=False,
+            environ_base=self.werkzeug_environ,
+        )
+        self.assertEqual(resp.status_code, 303)
 
         self.assertEqual(urlparse(resp.headers["Location"]).path, expected_path)
 
@@ -59,7 +68,7 @@ class TestSlimpayPaymentControllerTC(SlimpayControllersTC):
 
         token = self.env["payment.token"].create(
             {
-                "name": "Test token",
+                "payment_details": "Test token",
                 "partner_id": partner.id,
                 "provider_id": provider.id,
                 "provider_ref": "test slimpay ref",
@@ -83,9 +92,8 @@ class TestSlimpayPaymentControllerTC(SlimpayControllersTC):
         with patch.object(
             SlimpayClient, "action", side_effect=action_mock
         ) as mocked_act:
-            result = self.pay_cart(token=token.id)
+            self.pay_cart(token=token.id)
 
-        self.assertEqual(result, "/shop/payment/validate")
         calls = mocked_act.call_args_list
         self.assertEqual(len(calls), 2)
         self.assertEqual(calls[0][0], ("GET", "get-mandates"))

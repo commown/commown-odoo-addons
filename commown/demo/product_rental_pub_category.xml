@@ -1,0 +1,10 @@
+<odoo>
+    <record id="product.product_delivery_02_product_template" model="product.template">
+        <!--
+            Since shop products are hidden by default with the template modification,
+            we publish the item used in the website_sale_partner_firstname tests to avoid an access error.
+        -->
+        <field name="public_categ_ids" eval="[(6, 0, [ref('commown.categ_de')])]" />
+        <field name="website_published">True</field>
+    </record>
+</odoo>

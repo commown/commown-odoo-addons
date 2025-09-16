@@ -71,6 +71,12 @@ class WebsiteSaleB2BControllersTC(RentalSaleOrderMixin, HttpCase):
         # Publish the product on the web...
         self.fp_premium.website_published = True
 
+        # (For integration testing, the product must appear in the categ_de public category
+        # due to the `commown module`)
+        categ_de = self.env.ref("commown.categ_de", raise_if_not_found=False)
+        if categ_de:  # pragma: no cover
+            self.fp_premium.public_categ_ids |= categ_de
+
         # ... and simulate we are on the B2B website
         self.env["ir.model.data"].search(
             [("module", "=", "website_b2b"), ("name", "=", "b2b_website")]

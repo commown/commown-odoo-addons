@@ -24,3 +24,24 @@ class CommownCustomerPortal(CustomerPortal):
             error_message.append(message)
 
         return error, error_message
+
+    def _prepare_tasks_values(self, *args, **kwargs):
+        """
+        We're simplifying the sorting/grouping options for portal users :
+        - Sort by: date (create_date), stage
+        """
+        values = super()._prepare_tasks_values(*args, **kwargs)
+        filtered_sortings = {
+            key: values["searchbar_sortings"][key]
+            for key in ["date", "stage", "update"]
+        }
+        filtered_groupby = {
+            key: values["searchbar_groupby"][key] for key in ["none", "project"]
+        }
+        values.update(
+            {
+                "searchbar_sortings": filtered_sortings,
+                "searchbar_groupby": filtered_groupby,
+            }
+        )
+        return values

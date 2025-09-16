@@ -3,9 +3,55 @@
   <!-- Edit task page on portal -->
   <template id="portal_my_task" inherit_id="project.portal_my_task">
 
-    <xpath expr="//t[@t-foreach='task.user_ids']//a" position="attributes">
-      <!-- Do not expose our support people name and email -->
-      <attribute name="invisible">1</attribute>
+    <!-- Do not expose our support people name and email -->
+    <xpath
+            expr="//t[@t-foreach='task.user_ids']//a[@t-if='user.phone']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+    <xpath
+            expr="//t[@t-foreach='task.user_ids']//a[@t-if='user.email']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+    <!-- Hide priority/state of a task from customers. -->
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_priority_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_state_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+
+  </template>
+
+  <template id="portal_tasks_list" inherit_id="project.portal_tasks_list">
+    <!--
+      Disable columns related to Task priority/state.
+    -->
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_priority_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
+
+    <xpath
+            expr="//t[@t-call='project.portal_my_tasks_state_widget_template']"
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
     </xpath>
 
   </template>

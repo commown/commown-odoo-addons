@@ -3,54 +3,60 @@
   <template id="footer_custom" inherit_id="website.footer_custom" name="Commown Footer">
 
     <xpath expr="//div[@id='footer']" position="attributes">
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
 
     <xpath expr="//div[@id='footer']" position="after">
       <link href="/commown/static/src/css/icons.css" rel="stylesheet" type="text/css" />
       <div id="footer" class="container hidden-print">
+            <section
+                    class="s_text_block pt40 pb16"
+                    data-snippet="s_text_block"
+                    data-name="Text"
+                >
+
         <div class="row">
           <div class="col-md-4 col-lg-3">
             <h4>Liens</h4>
             <ul class="list-unstyled">
               <li>
                 <a
-                                    class="lang fr"
-                                    href="https://commown.coop/"
-                                    target="_blank"
-                                >Accueil</a>
+                                        class="lang fr"
+                                        href="https://commown.coop/"
+                                        target="_blank"
+                                    >Accueil</a>
                 <a
-                                    class="lang de"
-                                    href="https://commown.coop/de"
-                                    target="_blank"
-                                >Accueil</a>
+                                        class="lang de"
+                                        href="https://commown.coop/de"
+                                        target="_blank"
+                                    >Accueil</a>
               </li>
               <li>
                 <a
-                                    class="lang fr"
-                                    href="https://commown.coop/qui-sommes-nous/"
-                                    target="_blank"
-                                >Qui sommes-nous ?</a>
+                                        class="lang fr"
+                                        href="https://commown.coop/qui-sommes-nous/"
+                                        target="_blank"
+                                    >Qui sommes-nous ?</a>
                 <a
-                                    class="lang de"
-                                    href="https://commown.coop/de/wer-sind-wir/"
-                                    target="_blank"
-                                >Qui sommes-nous ?</a>
+                                        class="lang de"
+                                        href="https://commown.coop/de/wer-sind-wir/"
+                                        target="_blank"
+                                    >Qui sommes-nous ?</a>
               </li>
               <li class="lang fr">
                 <a href="https://commown.coop/faq/" target="_blank">FAQ</a>
               </li>
               <li>
                 <a
-                                    class="lang fr"
-                                    href="https://commown.coop/mentions-legales/"
-                                    target="_blank"
-                                >Mentions légales</a>
+                                        class="lang fr"
+                                        href="https://commown.coop/mentions-legales/"
+                                        target="_blank"
+                                    >Mentions légales</a>
                 <a
-                                    class="lang de"
-                                    href="https://commown.coop/de/impressum/"
-                                    target="_blank"
-                                >Mentions légales</a>
+                                        class="lang de"
+                                        href="https://commown.coop/de/impressum/"
+                                        target="_blank"
+                                    >Mentions légales</a>
               </li>
             </ul>
           </div>
@@ -59,55 +65,55 @@
             <ul class="list-unstyled">
               <li>
                 <a
-                                    class="lang fr"
-                                    href="https://commown.coop/#contact"
-                                    target="_blank"
-                                >Contactez-nous</a>
+                                        class="lang fr"
+                                        href="https://commown.coop/#contact"
+                                        target="_blank"
+                                    >Contactez-nous</a>
                 <a
-                                    class="lang de"
-                                    href="https://commown.coop/de/#contact"
-                                    target="_blank"
-                                >Contactez-nous</a>
+                                        class="lang de"
+                                        href="https://commown.coop/de/#contact"
+                                        target="_blank"
+                                    >Contactez-nous</a>
               </li>
             </ul>
             <h2>
               <a
-                                style="text-decoration: none"
-                                target="_blank"
-                                href="https://mamot.fr/@commownfr"
-                            >
+                                    style="text-decoration: none"
+                                    target="_blank"
+                                    href="https://mamot.fr/@commownfr"
+                                >
                 <i class="icon icon-mastodon" />
               </a>
               <a
-                                style="text-decoration: none"
-                                target="_blank"
-                                t-att-href="website.social_facebook"
-                                t-if="website.social_facebook"
-                            >
+                                    style="text-decoration: none"
+                                    target="_blank"
+                                    t-att-href="website.social_facebook"
+                                    t-if="website.social_facebook"
+                                >
                 <i class="fa fa-facebook-square" />
               </a>
               <a
-                                style="text-decoration: none"
-                                target="_blank"
-                                t-att-href="website.social_linkedin"
-                                t-if="website.social_linkedin"
-                            >
+                                    style="text-decoration: none"
+                                    target="_blank"
+                                    t-att-href="website.social_linkedin"
+                                    t-if="website.social_linkedin"
+                                >
                 <i class="fa fa-linkedin" />
               </a>
               <a
-                                style="text-decoration: none"
-                                target="_blank"
-                                t-att-href="website.social_youtube"
-                                t-if="website.social_youtube"
-                            >
+                                    style="text-decoration: none"
+                                    target="_blank"
+                                    t-att-href="website.social_youtube"
+                                    t-if="website.social_youtube"
+                                >
                 <i class="fa fa-youtube-play" />
               </a>
               <a
-                                style="text-decoration: none"
-                                target="_blank"
-                                t-att-href="website.social_github"
-                                t-if="website.social_github"
-                            >
+                                    style="text-decoration: none"
+                                    target="_blank"
+                                    t-att-href="website.social_github"
+                                    t-if="website.social_github"
+                                >
                 <i class="fa fa-github" />
               </a>
             </h2>
@@ -125,12 +131,12 @@
                     <span t-if="res_company.street2" t-field="res_company.street2" />
                     <br />
                     <span t-field="res_company.zip" /> <span
-                                            t-field="res_company.city"
-                                        />
+                                                t-field="res_company.city"
+                                            />
                   </p>
                   <p>
                     <em
-                                        >Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société Anonyme</em>
+                                            >Commown est une Société Coopérative d'Intérêt Collectif basée sur une Société Anonyme</em>
                   </p>
                   <p>
                     <em>SIREN 828 811 489</em>
@@ -141,6 +147,7 @@
             <t t-call="website.language_selector" />
           </div>
         </div>
+        </section>
       </div>
 
     </xpath>

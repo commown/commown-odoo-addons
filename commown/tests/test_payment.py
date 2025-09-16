@@ -1,6 +1,7 @@
 from datetime import datetime
 from unittest.mock import patch
 
+from odoo import Command
 from odoo.tests import tagged
 
 from odoo.addons.account_payment_slimpay.tests.common import MockedSlimpayMixin
@@ -14,7 +15,7 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
     def setUp(self):
         request_patcher = patch(
             "odoo.addons.website_sale_affiliate"
-            ".models.sale_affiliate_request.request"
+            ".models.sale_affiliate_request.AffiliateRequest"
         )
         request_mock = request_patcher.start()
         request_mock.configure_mock(session={})
@@ -30,13 +31,17 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
     def test_token_replaced(self):
         "Partner payment_token_id must be the last token created for a web sale"
         # Assign an "old" token to the web partner:
+        self.slimpay.state = "test"
         self.slimpay.journal_id = (
             self.env["account.journal"].search([("type", "=", "bank")], limit=1).id
+        )
+        self.env["account.payment.method"].create(
+            {"code": "slimpay", "name": "Slimpay", "payment_type": "inbound"}
         )
         partner = self.so.partner_id
         old_token = self.env["payment.token"].create(
             {
-                "name": "Test Token",
+                "payment_details": "Test Token",
                 "partner_id": partner.id,
                 "active": True,
                 "provider_id": self.slimpay.id,
@@ -46,15 +51,15 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
         partner.payment_token_id = old_token.id
 
         # Simulate a website sale:
-        tx = self.so._create_payment_transaction(
+        tx = self.env["payment.transaction"].create(
             {
                 "provider_id": self.slimpay.id,
-                "type": "form",
                 "amount": self.so.amount_total,
                 "currency_id": self.so.pricelist_id.currency_id.id,
                 "partner_id": partner.id,
                 "partner_country_id": partner.country_id.id,
                 "reference": self.so.name,
+                "sale_order_ids": [Command.set([self.so.id])],
             }
         )
         self.fake_get.return_value = {
@@ -63,11 +68,11 @@ class PaymentTC(MockedSlimpayMixin, RentalSaleOrderTC):
             "id": "test-id",
             "dateClosed": datetime.today().isoformat(),
         }
-        self.slimpay._slimpay_s2s_validate(
-            tx, {"reference": tx.reference, "_links": {"self": {"href": "fake_url"}}}
+        tx._process_notification_data(
+            {"reference": tx.reference, "_links": {"self": {"href": "fake_url"}}}
         )
 
         # Check that partner's token changed and is the one associated
         # to the transaction:
         self.assertNotEqual(partner.payment_token_id, old_token)
-        self.assertEqual(partner.payment_token_id, tx.payment_token_id)
+        self.assertEqual(partner.payment_token_id, tx.token_id)

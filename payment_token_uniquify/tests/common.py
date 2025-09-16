@@ -13,7 +13,15 @@ class PaymentTokenUniquifyTC(TransactionCase):
 
         # Current company must have a chart of account as some tests
         # will use invoices and payments:
-        cls.env.company = cls.env.companies.filtered("chart_template_id")[0]
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
 
         # A hierarchy of companies:
         cls.company = cls.new_company()

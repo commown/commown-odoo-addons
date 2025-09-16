@@ -1,10 +1,25 @@
 from odoo.tests.common import HttpCase
 
-from odoo.addons.commown_administrative_docs.tests import CustomerPortalMixin
+from odoo.addons.commown_administrative_docs.tests.test_customer_portal import (
+    CustomerPortalMixin,
+)
 from odoo.addons.commown_devices.tests.common import create_config
 
 
 class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
     def test_invoices(self):
         test_client = self.portal_client()
 
@@ -23,8 +38,8 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
             partner = env["res.partner"].browse(self.partner.id)
             invs = self.generate_contract_invoices(partner)
             self.assertTrue(len(invs) > 2)
-            invs[0].action_invoice_open()
-            invs[2].action_invoice_open()
+            invs[0].action_post()
+            invs[2].action_post()
         doc = self.get_page(test_client, "/my/invoices")
         hrefs = doc.xpath("//*[hasclass('o_portal_my_doc_table')]//a/@href")
         self.assertTrue(
@@ -97,21 +112,44 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
     def test_task_page(self):
         test_client = self.portal_client()
 
-        with self.registry.cursor() as test_cursor:
-            env = self.env(test_cursor)
-            task = env.ref("project.project_task_1")
-            # Test pre-condition
-            self.assertIn(self.partner, task.mapped("message_follower_ids.partner_id"))
+        task = self.env.ref("project.project_1_task_1")
+        task.user_ids += self.env.ref("base.user_demo")
 
         doc = self.get_page(test_client, "/my/task/%d" % task.id)
         self.assertEqual(
-            doc.xpath("//*[text()='Assigned to']/.." "//span[@itemprop]/@itemprop"),
+            doc.xpath("//*[text()='Assignees']/..//span[@itemprop]/@itemprop"),
             ["name"],
+        )
+
+    def test_tasks_list_page(self):
+        "Grouping/sorting options should be restricted in the tasks page."
+        # Setup
+        test_client = self.portal_client()
+        task = self.env.ref("project.project_1_task_1")
+        task.user_ids += self.env.ref("base.user_demo")
+
+        doc = self.get_page(test_client, "/my/tasks")
+
+        # Checking the sorting options.
+        sortby_hrefs = doc.xpath("//button[@id='portal_searchbar_sortby']/..//a/@href")
+        self.assertEqual(
+            sorted([href.split("?sortby=", 1)[1] for href in sortby_hrefs]),
+            ["date", "stage", "update"],
+        )
+
+        # Checking the grouping options.
+        groupby_hrefs = doc.xpath(
+            "//button[@id='portal_searchbar_groupby']/..//a/@href"
+        )
+        self.assertEqual(
+            sorted([href.split("?groupby=", 1)[1] for href in groupby_hrefs]),
+            ["none", "project"],
         )
 
     def test_product(self):
         website = self.env.ref("website.default_website")
         website.product_service_details_url = "http://commown.coop/our-services"
+        website.invalidate_recordset()
 
         # Create a product with a storable config
         storable_product = self.env["product.template"].search(
@@ -133,7 +171,41 @@ class CustomerPortalB2CTC(CustomerPortalMixin, HttpCase):
         # See product in all languages:
         rental_product.website_published = True
         rental_product.public_categ_ids |= self.env.ref("commown.categ_de")
+        rental_product.invalidate_recordset()
 
         product_page = self.get_page(self.portal_client(), rental_product.website_url)
         banner_url = product_page.xpath("//*[@id='services-banner']//a/@href")[0]
         self.assertEqual(banner_url, "http://commown.coop/our-services")
+
+    def test_portal_zip_slimpay_check(self):
+        """
+        Portal users' zipcode should be checked if their country is France,
+        meaning it should be a string of only 5 numbers (ie. '67000')
+        """
+        # Setup
+        self.partner.country_id = self.env.ref("base.fr")
+        self.partner.zip = "12345"
+        self.partner.invalidate_recordset()
+
+        test_client = self.portal_client()
+        account_form = self.get_form(test_client, "/my/account")
+
+        # Case 1: Valid zip code passed (string of only 5 numbers)
+        account_form.update({"zipcode": "67000"})
+        resp_ok = test_client.post(
+            "/my/account", data=account_form, environ_base=self.werkzeug_environ
+        )
+
+        self.assertEqual(resp_ok.status_code, 303)
+        self.assertIn("/my/home", resp_ok.data.decode("utf-8"))
+
+        self.assertEqual(self.partner.zip, "67000")
+
+        # Case 2: Invalid zip code passed
+        account_form.update({"zipcode": "0"})
+        resp_not_ok = test_client.post(
+            "/my/account", data=account_form, environ_base=self.werkzeug_environ
+        )
+
+        self.assertEqual(resp_not_ok.status_code, 200)
+        self.assertIn(b"Incorrect zip code", resp_not_ok.data)

@@ -9,7 +9,15 @@ class ResPartnerInvoiceActionTC(TransactionCase):
         a company with a contract, and two partners linked to that company
         """
         super().setUpClass()
-        cls.env.company = cls.env.companies.filtered("chart_template_id")[0]
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
         cls.company = cls.env["res.partner"].create(
             {"name": "Company", "is_company": True}
         )
@@ -22,7 +30,7 @@ class ResPartnerInvoiceActionTC(TransactionCase):
                 ("name", "=", "account_invoice_merge_auto_pay"),
                 ("state", "=", "installed"),
             ]
-        ):
+        ):  # pragma: no cover
             from odoo.addons.account_invoice_merge_auto_pay.tests.common import (
                 inject_payment_data,
             )

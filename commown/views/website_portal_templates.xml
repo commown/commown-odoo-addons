@@ -11,7 +11,7 @@
             />
       <div class="mt-4" t-if="user_channels">
         <h4>Contact us</h4>
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
           <div class="list-group">
           <t t-set="action_id" t-value="env.ref('mail.action_discuss').id" />
           <t t-foreach="user_channels" t-as="channel" t-attr-href="">
@@ -26,7 +26,7 @@
       </div>
       <div class="mt-4">
         <h4>Documentation - Tutoriels</h4>
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
         <div class="list-group">
           Retrouvez nos tutoriels et toute la documentation de Commown...
           <a
@@ -38,7 +38,7 @@
 
       <div class="mt-4">
         <h4>Entraide - Communauté</h4>
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
         <div class="list-group">
           Rejoignez la communauté pour résoudre vos problèmes, échanger des astuces...
           <a
@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="mt-4" t-if="st_data">
-        <hr class="mt-1 mb-0" />
+        <hr class="mt-2 mb-2" />
         <p>Pour contacter l'équipe parcourez la section "Vos besoins d'assistance".</p>
       </div>
     </xpath>
@@ -86,11 +86,20 @@
             position="before"
         >
       <td class="text-right"><span
-                    t-esc="-invoice.amount_total if invoice.type == 'out_refund' else invoice.amount_total"
+                    t-esc="-invoice.amount_total if invoice.move_type == 'out_refund' else invoice.amount_total"
                     t-options='{"widget": "monetary", "display_currency": invoice.currency_id}'
                 /></td>
     </xpath>
 
+  </template>
+
+  <template
+        id="portal_my_invoices_payment"
+        inherit_id="account_payment.portal_my_invoices_payment"
+    >
+    <xpath expr="//t[@t-set='pending_manual_txs']/.." position="attributes">
+      <attribute name="t-if">False</attribute>
+    </xpath>
   </template>
 
   <!-- Customize portal section titles -->
@@ -101,7 +110,7 @@
             expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Quotations')]/ancestor::t[1]"
             position="attributes"
         >
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
     <xpath
             expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Quotations')]/ancestor::t[1]"
@@ -114,7 +123,7 @@
             expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Sales Orders')]/ancestor::t[1]"
             position="attributes"
         >
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
     <xpath
             expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Sales Orders')]/ancestor::t[1]"
@@ -131,7 +140,7 @@
             expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Invoices')]/ancestor::t[1]"
             position="attributes"
         >
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
     <xpath
             expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Invoices')]/ancestor::t[1]"
@@ -145,19 +154,19 @@
   <!-- Hide contracts on portal -->
   <template id="portal_my_home_contract" inherit_id="contract.portal_my_home_contract">
     <xpath expr="//t[@t-call='portal.portal_docs_entry']" position="attributes">
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
   </template>
 
   <template id="portal_my_contracts" inherit_id="contract.portal_my_contracts">
     <xpath expr="//t[@t-if='contracts']" position="attributes">
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
   </template>
 
   <template id="portal_contract_page" inherit_id="contract.portal_contract_page">
     <xpath expr="//t[@t-call='portal.portal_record_layout']" position="attributes">
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
   </template>
   <!-- End Hide contracts on portal -->
@@ -165,14 +174,14 @@
   <template id="portal_my_home" inherit_id="project.portal_my_home">
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Projects')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Tasks')]/ancestor::t[1]"
             position="attributes"
         >
-      <attribute name="invisible">1</attribute>
+      <attribute name="t-if">False</attribute>
     </xpath>
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Projects')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Tasks')]/ancestor::t[1]"
             position="after"
         >
       <t t-set="title">My interactions with Commown team</t>
