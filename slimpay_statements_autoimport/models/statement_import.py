@@ -117,7 +117,7 @@ class SlimpayStatementImport(models.Model):
         resp = requests.post(
             conf["reports_url"],
             headers={
-                "Accept": "application/json",
+                "Accept": "application/hal+json",
                 "Authorization": "Bearer %s" % token,
                 "Content-Type": "application/json",
             },
