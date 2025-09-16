@@ -290,7 +290,7 @@
     <field name="context">{'res_partner_search_mode': 'customer'}</field>
     <field
             name="domain"
-        >[("customer_rank", "&gt;", 0),("is_company", "=", False), ("type", "=", "contact"), ("commercial_partner_id.is_company", "=", True)]</field>
+        >[("customer_rank", "&gt;", 0),("is_company", "=", False), ("commercial_partner_id.is_company", "=", True), '|', ("user_ids", "!=", False), ("type", "in", ["contact", "other"])]</field>
     <field name="search_view_id" ref="view_customer_user_search" />
   </record>
 
