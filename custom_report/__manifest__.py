@@ -9,12 +9,11 @@
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
-        "account_usability",  # needed for account_invoice.has_discount (py3o)
         "base_company_extension",  # required for legal_type (py3o)
         "l10n_fr",  # required for siret (py3o)
         "product_rental",
         "report_py3o",
-        "sale_usability",  # required for sale.layout_category (py3o)
+        "sale_usability",  # required for py3o_lines_layout + invoice.has_discount
         "scic",  # required for is_equity (py3o)
     ],
     "external_dependencies": {
