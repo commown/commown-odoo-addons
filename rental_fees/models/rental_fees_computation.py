@@ -194,79 +194,6 @@ class RentalFeesComputation(models.Model):
             result.append((record.id, name))
         return result
 
-    def rental_periods(self, device):
-        """Return a descr of the rental periods of `device` until `self.date`
-
-        Each period is a dict of the form:
-        - contract: a contract.contract instance the device was attributed to
-        - from_date: date from which the device was rented as of this contract
-        - to_date: date to which the device was rented as of this contract
-        """
-        current_period = {}
-        result = []
-
-        if self.has_forecast:
-            last_real_date = self.run_datetime.date()
-        else:
-            last_real_date = self.until_date
-
-        move_lines = (
-            self.env["stock.move.line"]
-            .search(
-                [
-                    ("state", "=", "done"),
-                    ("lot_id", "=", device.id),
-                    ("move_id.date", "<", last_real_date + _one_day),
-                ]
-            )
-            .sorted(lambda ml: ml.move_id.date)
-        )
-
-        customer_locations = self.env["stock.location"].search(
-            [("id", "child_of", self.env.ref("stock.stock_location_customers").id)]
-        )
-
-        for move_line in move_lines:
-            move = move_line.move_id
-            move_date = move.date.date()
-
-            if move_line.location_dest_id in customer_locations:
-                if not current_period:
-                    current_period["is_forecast"] = False
-                    current_period["from_date"] = move_date
-                    current_period["contract"] = move.contract_id
-                else:
-                    raise ValueError(
-                        "Device %s was already at customer location" % device.name
-                    )
-
-            elif current_period:
-                assert (
-                    move_line.location_id in customer_locations
-                ), "Device %s should be moving to a customer at %s" % (
-                    move_line.lot_id.name,
-                    move_date,
-                )
-                current_period["to_date"] = move_date
-                result.append(current_period.copy())
-                current_period.clear()
-
-        if current_period:
-            current_period["to_date"] = last_real_date + _one_day
-            result.append(current_period)
-
-            if self.has_forecast:
-                result.append(
-                    dict(
-                        current_period,
-                        from_date=current_period["to_date"],
-                        to_date=self.until_date + _one_day,
-                        is_forecast=True,
-                    )
-                )
-
-        return result
-
     def scan_no_rental(self, fees_def, device, delivery_date, periods):
         """Scan gaps between periods for too long no rental periods
 
@@ -743,7 +670,8 @@ class RentalFeesComputation(models.Model):
             )
             return
 
-        periods = self.rental_periods(device)
+        periods = device._single_device_rental_periods(self.until_date)
+
         no_rental_limit, periods = self.scan_no_rental(
             fees_def, device, delivery_date, periods
         )
