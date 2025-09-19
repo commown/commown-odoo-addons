@@ -80,7 +80,11 @@
             <group name="main">
               <field name="device_name"/>
               <field name="contract_name"/>
-              <field name="partner_id" context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"/>
+              <field
+                  name="partner_id"
+                  context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"
+                   attrs="{'readonly': [('device_location', '=', 'at_commown')]}"
+                  />
               <field name="device_location"/>
             </group>
             <group name="history">
