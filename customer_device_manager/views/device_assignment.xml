@@ -218,4 +218,12 @@
             groups="group_customer_device_assigner,sales_team.group_sale_manager"
             sequence="20"/>
 
+  <menuitem id="menu_help"
+            name="Help"
+            action="action_open_help"
+            sequence="1000"
+            parent="menu_device_assignment_parent"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
+
 </odoo>

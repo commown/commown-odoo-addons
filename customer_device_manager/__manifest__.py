@@ -20,6 +20,7 @@
         "data/customer_roles.xml",
         "security/ir.model.access.csv",
         "security/rules.xml",
+        "data/actions_act_url.xml",
         "data/ir_ui_menu.xml",
         "views/device_assignment.xml",
         "views/portal_templates.xml",
