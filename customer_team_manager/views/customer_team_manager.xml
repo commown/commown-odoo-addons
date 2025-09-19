@@ -321,4 +321,12 @@
             groups="sales_team.group_sale_manager"
             />
 
+  <menuitem id="menu_help"
+            name="Help"
+            action="action_open_help"
+            sequence="1000"
+            parent="menu_customer_team_parent"
+            groups="group_customer_admin,sales_team.group_sale_manager"
+            />
+
 </odoo>
