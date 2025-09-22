@@ -1,0 +1,217 @@
+<odoo>
+  <record id ="view_device_assignment_kanban" model="ir.ui.view">
+    <field name="name">device.assignment.kanban</field>
+    <field name="model">customer_device_manager.device_assignment</field>
+    <field name="arch" type="xml">
+      <kanban class="oe_device_assignment_kanban">
+        <field name="partner_id"/>
+        <field name="assignment_date"/>
+        <field name="assignment_notes"/>
+        <field name="image_medium"/>
+        <field name="device_name"/>
+        <field name="product_id"/>
+        <field name="contract_name"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_device_assignment_kanban">
+
+              <div class="o_kanban_image_fill_left d-none d-md-block">
+                <field name="image_medium" widget="image" options='{"preview_image": "image_medium"}'/>
+              </div>
+
+              <div class="oe_kanban_details text-truncate">
+                <strong>
+                  <field name="product_id" />
+                </strong>
+
+                <ul>
+                  <li>
+                    <i class="fa fa-laptop" />
+                    <field name="device_name" />
+                  </li>
+                  <li>
+                    <i class="fa fa-file-contract" />
+                    <field name="contract_name" />
+                  </li>
+                  <li>
+                    <i class="fa fa-user" />
+                    <field name="partner_id" />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <record id ="view_device_assignment_tree" model="ir.ui.view">
+    <field name="name">device.assignment.tree</field>
+    <field name="model">customer_device_manager.device_assignment</field>
+    <field name="arch" type="xml">
+      <tree string="Device Assignment">
+        <field name="product_id"/>
+        <field name="device_name"/>
+        <field name="contract_name"/>
+        <field name="partner_id"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_device_assignment_form" model="ir.ui.view">
+    <field name="name">device.assignment.form</field>
+    <field name="model">customer_device_manager.device_assignment</field>
+    <field name="arch" type="xml">
+      <form string="Device Assignment">
+        <sheet>
+          <field
+          name="image_medium"
+          widget='image'
+          class="oe_avatar"
+          options='{"preview_image": "image_medium"}'
+          />
+          <div class="oe_title">
+            <h1>
+              <field name="product_id" class="oe_inline" readonly="True" options='{"no_open": True}'/>
+            </h1>
+          </div>
+          <group>
+            <group name="main">
+              <field name="device_name"/>
+              <field name="contract_name"/>
+              <field name="partner_id" context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"/>
+              <field name="device_location"/>
+            </group>
+            <group name="history">
+              <field name="history_ids">
+                <tree>
+                  <field name="date"/>
+                  <field name="partner_id" string="Partner at date"/>
+                  <field name="device_location" string="Device location at date"/>
+                </tree>
+              </field>
+              <field name="assignment_notes" style="word-break: break-word;"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_device_assignment_history_tree" model="ir.ui.view">
+    <field name="name">device.assignment.history.tree</field>
+    <field name="model">customer_device_manager.device_assignment_history</field>
+    <field name="arch" type="xml">
+      <tree string="Assignment History">
+        <field name="date"/>
+        <field name="assignment_id"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_device_assignment_history_form" model="ir.ui.view">
+    <field name="name">device.assignment.history.form</field>
+    <field name="model">customer_device_manager.device_assignment_history</field>
+    <field name="arch" type="xml">
+      <form string="Assignment History">
+        <sheet>
+          <group>
+            <field name="date"/>
+            <field name="partner_id" context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"/>
+            <field name="assignment_id"/>
+            <field name="device_location"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_device_assignment_search" model="ir.ui.view">
+    <field name="name">device.assignment.search</field>
+    <field name="model">customer_device_manager.device_assignment</field>
+    <field name="arch" type="xml">
+      <search string="Search Device Assignments">
+        <field name="device_name" string="Serial Number / IMEI"/>
+        <field name="partner_id" string="User"/>
+        <field name="product_id" string="Product"/>
+        <field name="contract_name" string="Contract"/>
+        <filter string="At Customer" name="at_customer"
+        domain="[('device_location', '=', 'at_customer')]"/>
+        <filter string="At Commown" name="at_commown"
+              domain="[('device_location', '=', 'at_commown')]"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="view_device_assignment_history_search" model="ir.ui.view">
+    <field name="name">device.assignment.history.search</field>
+    <field name="model">customer_device_manager.device_assignment_history</field>
+    <field name="arch" type="xml">
+      <search string="Search Assignment History">
+        <field name="partner_id"/>
+        <field name="assignment_id"/>
+        <field name="date"/>
+      <filter string="At Customer" name="at_customer"
+              domain="[('device_location', '=', 'at_customer')]"/>
+      <filter string="At Commown" name="at_commown"
+              domain="[('device_location', '=', 'at_commown')]"/>
+        <group expand="0" string="Group By">
+          <filter name="group_partner" string="User" context="{'group_by': 'partner_id'}"/>
+          <filter name="group_assignment" string="Serial Number / IMEI" context="{'group_by': 'assignment_id'}"/>
+          <filter name="group_date" string="Date" context="{'group_by': 'date'}"/>
+          <filter name="group_device_location" string="Device Location" context="{'group_by': 'device_location'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_device_assignment" model="ir.actions.act_window">
+    <field name="name">Devices</field>
+    <field name="res_model">customer_device_manager.device_assignment</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="search_view_id" ref="customer_device_manager.view_device_assignment_search"/>
+    <field name="context">{'search_default_at_customer': 1}
+    </field>
+  </record>
+
+  <record id="action_device_assignment_view_kanban" model="ir.actions.act_window.view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">kanban</field>
+    <field name="view_id" ref="view_device_assignment_kanban"/>
+    <field name="act_window_id" ref="action_device_assignment"/>
+  </record>
+
+  <record id="action_device_assignment_view_tree" model="ir.actions.act_window.view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="view_device_assignment_tree"/>
+    <field name="act_window_id" ref="action_device_assignment"/>
+  </record>
+
+  <record id="action_device_assignment_history" model="ir.actions.act_window">
+    <field name="name">Assignment History</field>
+    <field name="res_model">customer_device_manager.device_assignment_history</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="view_device_assignment_history_search"/>
+    <field name="context">{'search_default_group_partner': 1, 'search_default_at_customer': 1}</field>
+  </record>
+
+  <menuitem id="menu_device_assignment_parent"
+          name="Devices"
+          parent="customer_team_manager.menu_customer_team_manager_root"
+          sequence="50"/>
+
+  <menuitem id="menu_device_assignment"
+            name="Devices"
+            parent="menu_device_assignment_parent"
+            action="action_device_assignment"
+            sequence="10"/>
+
+  <menuitem id="menu_device_assignment_history"
+            name="Assignment History"
+            parent="menu_device_assignment_parent"
+            action="action_device_assignment_history"
+            sequence="20"/>
+
+</odoo>
