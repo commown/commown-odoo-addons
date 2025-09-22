@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 19:35+0000\n"
-"PO-Revision-Date: 2025-03-20 19:35+0000\n"
+"POT-Creation-Date: 2025-08-25 14:22+0000\n"
+"PO-Revision-Date: 2025-08-25 14:22+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:90
+#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:95
 #, python-format
 msgid "%(product)s for %(partner)s"
 msgstr ""
@@ -88,7 +88,7 @@ msgid "Cannot change po if picking already has a linked po"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:83
+#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:88
 #, python-format
 msgid "Cannot find given device. Is it really available?"
 msgstr ""
@@ -131,6 +131,11 @@ msgstr ""
 #. module: commown_devices
 #: model:project.task.type,name:commown_devices.resiliated_stage
 msgid "Contract terminated, email sent"
+msgstr ""
+
+#. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.view_template_property_form
+msgid "Copy service image"
 msgstr ""
 
 #. module: commown_devices
@@ -196,6 +201,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/product_service_config.py:74
+#, python-format
+msgid "Current service has no image!"
 msgstr ""
 
 #. module: commown_devices
@@ -398,13 +409,13 @@ msgid "In Progress"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:86
+#: code:addons/commown_devices/models/stock_move.py:101
 #, python-format
 msgid "Inconsistent locations between move (id: %(move_id)s, picking id: %(picking_id)s) and contract (id: %(contract_id)s)"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:71
+#: code:addons/commown_devices/models/stock_move.py:84
 #, python-format
 msgid "Inconsistent move (id: %(move_id)s, picking id: %(picking_id)s) contract (id: %(contract_id)s) and lot contract (id: %(lot_contract_id)s)"
 msgstr ""
@@ -569,7 +580,7 @@ msgid "Message"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:54
+#: code:addons/commown_devices/models/stock_move.py:67
 #, python-format
 msgid "More than one contract on move %s lots"
 msgstr ""
@@ -682,7 +693,7 @@ msgid "Please set the task's partner before using this wizard"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:69
+#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:74
 #, python-format
 msgid "Please use an employee as a partner"
 msgstr ""
@@ -787,7 +798,7 @@ msgstr ""
 
 #. module: commown_devices
 #: model:stock.picking.type,name:commown_devices.stock_picking_type_in_rental
-msgid "Receipts - Rental"
+msgid "Receipts"
 msgstr ""
 
 #. module: commown_devices
@@ -869,7 +880,7 @@ msgid "Select purchase order line from this purchase order"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:273
+#: code:addons/commown_devices/models/common.py:276
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_abstract_to_customer_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_outward_picking_form
 #, python-format

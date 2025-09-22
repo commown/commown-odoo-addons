@@ -74,27 +74,42 @@ class DeviceAssignment(models.Model):
         store=False,
     )
 
-    product_id = fields.Many2one(
-        "product.product",
+    product_name = fields.Char(
         string="Product",
-        related="device_id.product_id",
-        store=False,
+        related="device_id.product_id.name",
+        store=True,
         readonly=True,
     )
 
     contract_name = fields.Char(
         string="Contract",
-        related="device_id.contract_id.name",
-        store=False,
+        compute="_compute_contract_name",
+        store=True,
         readonly=True,
     )
 
+    @api.model
+    def create(self, values):
+        "Force first assignment history item date to the one of the assignment"
+        _self, orig_context = self, self._context
+
+        _date = values.get("assignment_date")
+        if _date:
+            _self = self.with_context(forced_assignment_history_date=_date)
+
+        # Restore the original context in the returned result to avoid any side effect:
+        return super(DeviceAssignment, _self).create(values).with_context(orig_context)
+
     def _inverse_partner_id(self):
         for rec in self:
+            _date = self.env.context.get(
+                "forced_assignment_history_date",
+                fields.Datetime.now(),
+            )
             self.env["customer_device_manager.device_assignment_history"].sudo().create(
                 {
                     "assignment_id": rec.id,
-                    "date": fields.Datetime.now(),
+                    "date": _date,
                     "partner_id": rec.partner_id.id,
                     "device_location": rec.device_location,
                 }
@@ -119,5 +134,30 @@ class DeviceAssignment(models.Model):
                     }
                 )
 
+    @api.depends("device_id.contract_id")
+    def _compute_contract_name(self):
+        for record in self:
+            commercial_partner = record.partner_id.commercial_partner_id
+            sudo_contract = record.device_id.sudo().contract_id
+            if sudo_contract.commercial_partner_id == commercial_partner:
+                record.contract_name = sudo_contract.name
+            else:
+                record.contract_name = False
+
     def name_get(self):
         return [(rec.id, rec.device_id.name) for rec in self]
+
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        result = super().fields_get(allfields=allfields, attributes=attributes)
+        hide_fields_in_filters = (
+            "create_date",
+            "create_uid",
+            "write_date",
+            "write_uid",
+            "history_ids",
+            "device_id",
+        )
+        for fname in hide_fields_in_filters:
+            result[fname]["searchable"] = False
+        return result

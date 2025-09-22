@@ -1,0 +1,9 @@
+<odoo noupdate="1">
+
+  <record id="action_open_help" model="ir.actions.act_url">
+    <field name="name">Help</field>
+    <field name="target">new</field>
+    <field name="url">https://forum.commown.coop/t/mon-espace-gestionnaire-gerer-les-utilisateurs-et-appareils-de-son-organisation/3156</field>
+  </record>
+
+</odoo>

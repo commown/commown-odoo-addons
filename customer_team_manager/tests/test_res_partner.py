@@ -161,6 +161,13 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertEqual(empl.portal_status, "not_granted")
         self.assertFalse(empl.user_ids)
 
+    def test_rule_write_not_granted_on_company_partners(self):
+        customer_company_as_admin = self._model(
+            "res.partner", sudo_as=self.customer_user_admin
+        ).browse(self.customer_company.id)
+        with self.assertRaises(AccessError):
+            customer_company_as_admin.name = "Evil Corp"
+
     def test_rule_unlink_not_granted_to_customers(self):
         "Even group_customer_admin members are not granted unlink permission"
 
@@ -207,7 +214,7 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         )
 
     def test_grant_and_revoke_portal_access(self):
-        "Customer can grant and revoke portal access"
+        "Customer admins can grant and revoke portal access of their company's employees"
 
         role_accounting = self.env.ref("customer_team_manager.customer_role_accounting")
         empl = self.create_partner(
@@ -232,6 +239,36 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
 
         empl.action_revoke_portal_access()
         self.assertEqual(empl.portal_status, "not_granted")
+
+    def test_revoke_portal_access_requires_customer_admin(self):
+        empl1 = self.create_partner(
+            sudo_as=self.customer_user_admin, name="p1", email="p1@test.coop"
+        )
+        self._grant_portal_access(empl1)
+        user1 = empl1.user_ids[0]
+        empl2 = self.create_partner(
+            sudo_as=self.customer_user_admin, name="p2", email="p2@test.coop"
+        )
+        self._grant_portal_access(empl2)
+
+        empl2_seen_by_user1 = self.env["res.partner"].sudo(user1).browse(empl2.id)
+
+        with self.assertRaises(AccessError):
+            empl2_seen_by_user1.action_revoke_portal_access()
+
+    def test_revoke_portal_access_requires_same_company(self):
+        other_company = self.customer_company.copy({"name": "Other company"})
+        other_company_empl = self.create_partner(
+            name="p", email="p@test.coop", parent_id=other_company.id
+        )
+        self._grant_portal_access(other_company_empl)
+
+        other_company_empl_seen_by_customer_admin = self._model(
+            "res.partner", sudo_as=self.customer_user_admin
+        ).browse(other_company_empl.id)
+
+        with self.assertRaises(AccessError):
+            other_company_empl_seen_by_customer_admin.action_revoke_portal_access()
 
     def test_perm_read_by_company_admin(self):
         admin = self.customer_user_admin

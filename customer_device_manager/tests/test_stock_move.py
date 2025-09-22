@@ -9,6 +9,13 @@ class StockMoveTC(SavepointCase):
     def setUp(self):
         super().setUp()
 
+        def _ref(name):
+            return self.env.ref("commown_devices.%s" % name)
+
+        self.loc_to_check = _ref("stock_location_devices_to_check")
+        self.loc_for_rent = _ref("stock_location_available_for_rent")
+        self.loc_repacked = _ref("stock_repackaged_modules_and_accessories")
+
         self.partner = self.env.ref("base.partner_demo_portal")
         self.company = self.env.ref("base.res_partner_1")
         self.assertTrue(self.company.is_company)
@@ -17,9 +24,8 @@ class StockMoveTC(SavepointCase):
         self.contract = self.env["contract.contract"].create(
             {"name": "Contract", "partner_id": self.partner.id}
         )
-        parent_loc = self.env.ref("commown_devices.stock_location_available_for_rent")
         self.stock_location = self.env["stock.location"].create(
-            {"name": "Test Loc", "usage": "internal", "location_id": parent_loc.id}
+            {"name": "MyLoc", "usage": "internal", "location_id": self.loc_for_rent.id}
         )
 
         product = self.env["product.product"].create(
@@ -51,16 +57,10 @@ class StockMoveTC(SavepointCase):
 
         self.internal_user = self.env.ref("base.group_user")
 
-    def get_assignments(self, lot, company):
-        """Find device assignments for a lot and company, including assignments to contacts of the company."""
-        assignments = self.env["customer_device_manager.device_assignment"].search(
-            [
-                ("device_id", "=", lot.id),
-            ]
-        )
-        return assignments.filtered(
-            lambda a: a.partner_id.commercial_partner_id
-            == company.commercial_partner_id
+    def get_assignments(self, lot):
+        "Find device assignments for a lot"
+        return self.env["customer_device_manager.device_assignment"].search(
+            [("device_id", "=", lot.id)]
         )
 
     def _send(self, lot, orig, dest):
@@ -69,22 +69,25 @@ class StockMoveTC(SavepointCase):
         do_new_transfer(picking, picking.scheduled_date)
         return picking
 
-    def test_device_assignment_lifecycle(self):
+    def test_device_assignment_lifecycle_same_customer(self):
         """
-        Test the lifecycle of a device assignment:
+        Test a typical lifecycle of a device assignment:
         - Send the device.
         - Update the assignment as a customer assigner.
         - Receive the device.
-        - Check that an history line is created at each step
+        - Repack the device and resend it to the same customer.
+        - Check that an history line is created at each step.
         """
         # Check test prerequisite, no assignment exists
-        self.assertFalse(self.get_assignments(self.lot, self.company))
+        self.assertFalse(self.get_assignments(self.lot))
 
         self.contract.send_devices(self.lot, {}, do_transfer=True)
-        assignment = self.get_assignments(self.lot, self.company)
+        assignment = self.get_assignments(self.lot)
         self.assertEqual(len(assignment), 1)
         self.assertEqual(assignment.device_location, "at_customer")
+        self.assertEqual(assignment.partner_id, self.company)
         self.assertEqual(len(assignment.history_ids), 1)
+        self.assertEqual(assignment.contract_name, self.contract.name)
 
         with self.assertRaises(AccessError):
             assignment.sudo(self.customer_employee).update(
@@ -102,32 +105,72 @@ class StockMoveTC(SavepointCase):
         self.assertEqual(assignment.assignment_notes, "Update as a customer assigner")
         self.assertEqual(len(assignment.history_ids), 2)
 
-        loc_to_check = self.env.ref("commown_devices.stock_location_devices_to_check")
-        self.contract.receive_devices(self.lot, {}, loc_to_check, do_transfer=True)
+        self.contract.receive_devices(self.lot, {}, self.loc_to_check, do_transfer=True)
 
         self.assertEqual(assignment.device_location, "at_commown")
         self.assertEqual(len(assignment.history_ids), 3)
 
-        loc_repacked = self.env.ref(
-            "commown_devices.stock_repackaged_modules_and_accessories"
-        )
-        picking = self._send(self.lot, loc_to_check, loc_repacked)
+        picking = self._send(self.lot, self.loc_to_check, self.loc_repacked)
         self.assertEqual(picking.state, "done")
-
-        dest_loc_parent = self.env.ref(
-            "commown_devices.stock_location_available_for_rent"
-        )
-        dest_loc = self.env["stock.location"].search(
-            [
-                ("location_id", "=", dest_loc_parent.id),
-                ("usage", "=", "internal"),
-            ],
-            limit=1,
-        )
 
         self.lot.grade_id = self.env.ref("commown_grade.grade_D1")
         self.contract.send_devices(self.lot, {}, do_transfer=True)
 
-        self.assertEqual(assignment, self.get_assignments(self.lot, self.company))
+        self.assertEqual(assignment, self.get_assignments(self.lot))
         self.assertEqual(assignment.device_location, "at_customer")
         self.assertEqual(len(assignment.history_ids), 4)
+
+    def test_device_assignment_lifecycle_another_customer(self):
+        """
+        Test another lifecycle of a device assignment:
+        - Send the device.
+        - Receive the device.
+        - Repack the device and resend it to another customer.
+        - Check the assignements and their history from each customer's point of view
+        """
+
+        # Send the device to a first company and check the history
+        self.contract.send_devices(self.lot, {}, do_transfer=True)
+
+        assignment = self.get_assignments(self.lot)
+        self.assertEqual(len(assignment), 1)
+        self.assertEqual(assignment.device_location, "at_customer")
+        self.assertEqual(assignment.partner_id, self.company)
+        self.assertEqual(len(assignment.history_ids), 1)
+        self.assertEqual(assignment.contract_name, self.contract.name)
+
+        # Receive the device back
+        self.contract.receive_devices(self.lot, {}, self.loc_to_check, do_transfer=True)
+
+        self.assertEqual(assignment.device_location, "at_commown")
+        self.assertEqual(len(assignment.history_ids), 2)
+
+        # Repack it
+        picking = self._send(self.lot, self.loc_to_check, self.loc_repacked)
+        self.lot.grade_id = self.env.ref("commown_grade.grade_D1")
+
+        self.assertEqual(picking.state, "done")
+
+        # Send it to another customer
+        other_company = self.company.copy()
+        other_partner = self.partner.copy({"parent_id": other_company.id})
+        other_contract = self.env["contract.contract"].create(
+            {"name": "Other contract", "partner_id": other_partner.id}
+        )
+
+        other_contract.send_devices(self.lot, {}, do_transfer=True)
+
+        assignments = self.get_assignments(self.lot)
+
+        self.assertEqual(len(assignments), 2)
+        self.assertIn(assignment, assignments)
+        self.assertEqual(assignment.device_location, "at_commown")
+        self.assertEqual(assignment.partner_id, self.company)
+        self.assertFalse(assignment.contract_name)
+        self.assertEqual(len(assignment.history_ids), 2)
+
+        other_assignment = assignments - assignment
+        self.assertEqual(other_assignment.device_location, "at_customer")
+        self.assertEqual(other_assignment.partner_id, other_company)
+        self.assertEqual(other_assignment.contract_name, other_contract.name)
+        self.assertEqual(len(other_assignment.history_ids), 1)

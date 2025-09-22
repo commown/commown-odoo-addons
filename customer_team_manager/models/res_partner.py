@@ -30,12 +30,6 @@ class ResPartner(models.Model):
         index=True,
         ondelete="restrict",
         domain="[('customer_company', '=', commercial_partner_id)]",
-        groups=",".join(
-            (
-                "sales_team.group_sale_manager",
-                "customer_team_manager.group_customer_admin",
-            )
-        ),
     )
 
     parent_id = fields.Many2one(
@@ -166,6 +160,9 @@ class ResPartner(models.Model):
 
     @api.multi
     def write(self, vals):
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         def is_b2c(partner):
             return not partner.commercial_partner_id.is_company
 
@@ -231,6 +228,9 @@ class ResPartner(models.Model):
     @api.multi
     def action_revoke_portal_access(self):
         self.ensure_one()
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         users = self.sudo().user_ids
         if users:
             users[0].groups_id -= self.env.ref("base.group_portal")

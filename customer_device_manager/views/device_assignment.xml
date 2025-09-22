@@ -9,7 +9,7 @@
         <field name="assignment_notes"/>
         <field name="image_medium"/>
         <field name="device_name"/>
-        <field name="product_id"/>
+        <field name="product_name"/>
         <field name="contract_name"/>
         <templates>
           <t t-name="kanban-box">
@@ -21,7 +21,7 @@
 
               <div class="oe_kanban_details text-truncate">
                 <strong>
-                  <field name="product_id" />
+                  <field name="product_name" />
                 </strong>
 
                 <ul>
@@ -51,7 +51,7 @@
     <field name="model">customer_device_manager.device_assignment</field>
     <field name="arch" type="xml">
       <tree string="Device Assignment">
-        <field name="product_id"/>
+        <field name="product_name"/>
         <field name="device_name"/>
         <field name="contract_name"/>
         <field name="partner_id"/>
@@ -73,14 +73,18 @@
           />
           <div class="oe_title">
             <h1>
-              <field name="product_id" class="oe_inline" readonly="True" options='{"no_open": True}'/>
+              <field name="product_name" class="oe_inline"/>
             </h1>
           </div>
           <group>
             <group name="main">
               <field name="device_name"/>
               <field name="contract_name"/>
-              <field name="partner_id" context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"/>
+              <field
+                  name="partner_id"
+                  context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"
+                   attrs="{'readonly': [('device_location', '=', 'at_commown')]}"
+                  />
               <field name="device_location"/>
             </group>
             <group name="history">
@@ -106,6 +110,7 @@
       <tree string="Assignment History">
         <field name="date"/>
         <field name="assignment_id"/>
+        <field name="partner_id"/>
       </tree>
     </field>
   </record>
@@ -134,7 +139,7 @@
       <search string="Search Device Assignments">
         <field name="device_name" string="Serial Number / IMEI"/>
         <field name="partner_id" string="User"/>
-        <field name="product_id" string="Product"/>
+        <field name="product_name" string="Product"/>
         <field name="contract_name" string="Contract"/>
         <filter string="At Customer" name="at_customer"
         domain="[('device_location', '=', 'at_customer')]"/>
@@ -198,20 +203,34 @@
   </record>
 
   <menuitem id="menu_device_assignment_parent"
-          name="Devices"
-          parent="customer_team_manager.menu_customer_team_manager_root"
-          sequence="50"/>
+            name="Devices"
+            parent="customer_team_manager.menu_customer_manager_root"
+            sequence="50"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
 
   <menuitem id="menu_device_assignment"
             name="Devices"
             parent="menu_device_assignment_parent"
             action="action_device_assignment"
-            sequence="10"/>
+            sequence="10"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
 
   <menuitem id="menu_device_assignment_history"
             name="Assignment History"
             parent="menu_device_assignment_parent"
             action="action_device_assignment_history"
-            sequence="20"/>
+            sequence="20"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
+
+  <menuitem id="menu_help"
+            name="Help"
+            action="action_open_help"
+            sequence="1000"
+            parent="menu_device_assignment_parent"
+            groups="group_customer_device_assigner,sales_team.group_sale_manager"
+            />
 
 </odoo>

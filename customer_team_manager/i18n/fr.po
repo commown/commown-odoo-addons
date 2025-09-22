@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-07 11:45+0000\n"
-"PO-Revision-Date: 2025-03-07 12:46+0100\n"
+"POT-Creation-Date: 2025-09-19 09:16+0000\n"
+"PO-Revision-Date: 2025-09-19 11:17+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -42,7 +42,7 @@ msgid "Archived users"
 msgstr "Utilisateurs archivés"
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:165
+#: code:addons/customer_team_manager/models/res_partner.py:159
 #, python-format
 msgid "At least one administrator is mandatory"
 msgstr "Il faut au moins une personne chargée de l'administration"
@@ -149,8 +149,8 @@ msgstr "Exemple : 'fa-lock'"
 
 #. module: customer_team_manager
 #: model:customer_team_manager.customer_role,name:customer_team_manager.customer_role_fleet_manager
-msgid "Fleet managment"
-msgstr "Gestion de la flotte"
+msgid "Fleet management"
+msgstr "Gestion de flotte"
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
@@ -185,6 +185,12 @@ msgid "HTTP Routing"
 msgstr "Routage HTTP"
 
 #. module: customer_team_manager
+#: model:ir.actions.act_url,name:customer_team_manager.action_open_help
+#: model:ir.ui.menu,name:customer_team_manager.menu_help
+msgid "Help"
+msgstr "Aide"
+
+#. module: customer_team_manager
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_customer_role__id
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_portal_access_wizard__id
 #: model:ir.model.fields,field_description:customer_team_manager.field_customer_team_manager_team__id
@@ -215,7 +221,7 @@ msgid "Import Template for Users"
 msgstr "Modèle de fichier d'import d'utilisateurs"
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:91
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:99
 #, python-format
 msgid "Incorrect password."
 msgstr "Mot de passe incorrect."
@@ -256,8 +262,13 @@ msgstr ""
 "vérifiez attentivement les e-mails et les rôles que vous avez accordés."
 
 #. module: customer_team_manager
-#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
-msgid "My managment space"
+#: model:ir.ui.menu,name:customer_team_manager.menu_customer_manager_root
+msgid "Management space"
+msgstr "Espace gestionnaire"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-management-space-portal-access
+msgid "My management space"
 msgstr "Mon espace Gestionnaire"
 
 #. module: customer_team_manager
@@ -362,11 +373,6 @@ msgid "Team"
 msgstr "Équipe"
 
 #. module: customer_team_manager
-#: model:ir.ui.menu,name:customer_team_manager.menu_customer_team_manager_root
-msgid "Team manager"
-msgstr "Gestionnaire d'équipe"
-
-#. module: customer_team_manager
 #: model:res.groups,name:customer_team_manager.group_customer_admin
 msgid "Team manager Customer"
 msgstr "Client gestionnaire d'équipe"
@@ -390,7 +396,7 @@ msgstr ""
 "de vérifier que les différences ci-dessous sont normales :"
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:184
+#: code:addons/customer_team_manager/models/res_partner.py:181
 #, python-format
 msgid "The email of partners having portal access cannot be modified!"
 msgstr ""
@@ -406,8 +412,9 @@ msgstr "Rôle des utilisateurs"
 #. module: customer_team_manager
 #: model:ir.actions.act_window,name:customer_team_manager.action_customer_users
 #: model:ir.model,name:customer_team_manager.model_res_users
+#: model:ir.ui.menu,name:customer_team_manager.menu_customer_team_parent
 #: model:ir.ui.menu,name:customer_team_manager.menu_partners
-#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-managment-space-portal-access
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.my-management-space-portal-access
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_search
 msgid "Users"
@@ -440,7 +447,7 @@ msgstr ""
 "cette plateforme au nom de votre organisation."
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:70
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:76
 #, python-format
 msgid "You are not allowed to manage users."
 msgstr ""
@@ -466,6 +473,15 @@ msgstr "Donner l'accès au site de Commown"
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.wizard_portal_access_form
 msgid "or"
 msgstr "ou"
+
+#~ msgid "Fleet managment"
+#~ msgstr "Gestion de la flotte"
+
+#~ msgid "My managment space"
+#~ msgstr "Mon espace Gestionnaire"
+
+#~ msgid "Team manager"
+#~ msgstr "Gestionnaire d'équipe"
 
 #~ msgid ""
 #~ "The e-mails of the people to whom you grant access do not all come from "
