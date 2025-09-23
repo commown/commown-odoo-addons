@@ -1,9 +1,9 @@
 from odoo import fields
 from odoo.exceptions import AccessError
-from odoo.tests import SavepointCase
+from odoo.tests import TransactionCase
 
 
-class TestDeviceAssignmentSecurity(SavepointCase):
+class TestDeviceAssignmentSecurity(TransactionCase):
     def setUp(self):
         super().setUp()
 

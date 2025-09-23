@@ -1,11 +1,11 @@
 from odoo.exceptions import AccessError
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 from odoo.addons.commown_devices.models.common import do_new_transfer, internal_picking
 from odoo.addons.commown_devices.tests.common import create_lot_and_quant
 
 
-class StockMoveTC(SavepointCase):
+class StockMoveTC(TransactionCase):
     def setUp(self):
         super().setUp()
 

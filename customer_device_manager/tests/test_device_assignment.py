@@ -1,8 +1,8 @@
 from odoo import fields
-from odoo.tests.common import SavepointCase
+from odoo.tests.common import TransactionCase
 
 
-class DeviceAssignmentBaseTC(SavepointCase):
+class DeviceAssignmentBaseTC(TransactionCase):
     """Base test case with common setup for device assignment tests"""
 
     def setUp(self):
