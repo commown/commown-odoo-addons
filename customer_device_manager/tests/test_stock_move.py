@@ -83,7 +83,7 @@ class StockMoveTC(SavepointCase):
         picking = self.contract.send_devices(self.lot, {}).mapped("picking_id")
 
         # This is the actual test that must not crash:
-        picking.sudo(user.id).button_validate()
+        picking.with_user(user.id).button_validate()
 
     def test_device_assignment_lifecycle_same_customer(self):
         """
@@ -106,13 +106,13 @@ class StockMoveTC(SavepointCase):
         self.assertEqual(assignment.contract_name, self.contract.name)
 
         with self.assertRaises(AccessError):
-            assignment.sudo(self.customer_employee).update(
+            assignment.with_user(self.customer_employee).update(
                 {
                     "assignment_notes": "Attempt to update as a customer employee",
                 }
             )
 
-        assignment.sudo(self.customer_device_assigner).update(
+        assignment.with_user(self.customer_device_assigner).update(
             {
                 "partner_id": self.partner.id,
                 "assignment_notes": "Update as a customer assigner",

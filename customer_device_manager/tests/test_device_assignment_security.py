@@ -101,17 +101,17 @@ class TestDeviceAssignmentSecurity(SavepointCase):
     def can_see_assignment(self, user):
         return (
             self.env["customer_device_manager.device_assignment"]
-            .sudo(user)
+            .with_user(user)
             .search([("id", "=", self.assignment.id)])
         )
 
     def update_assignment(self, user, partner):
-        self.assignment.sudo(user).update({"partner_id": partner.id})
+        self.assignment.with_user(user).update({"partner_id": partner.id})
 
     def can_see_assignment_history(self, user):
         return (
             self.env["customer_device_manager.device_assignment_history"]
-            .sudo(user)
+            .with_user(user)
             .search([("id", "=", self.history_record.id)])
         )
 
@@ -168,7 +168,7 @@ class TestDeviceAssignmentSecurity(SavepointCase):
 
         assignment = (
             self.env["customer_device_manager.device_assignment"]
-            .sudo(self.internal_user_manager)
+            .with_user(self.internal_user_manager)
             .create(
                 {
                     "device_id": self.lot.id,
@@ -180,7 +180,7 @@ class TestDeviceAssignmentSecurity(SavepointCase):
 
         self.assertTrue(
             self.env["customer_device_manager.device_assignment"]
-            .sudo(self.internal_user_manager)
+            .with_user(self.internal_user_manager)
             .search([("id", "=", assignment.id)])
         )
 
@@ -197,7 +197,7 @@ class TestDeviceAssignmentSecurity(SavepointCase):
         )
 
         with self.assertRaises(AccessError):
-            self.history_record.sudo(fresh_assigner_user_outsider).update(
+            self.history_record.with_user(fresh_assigner_user_outsider).update(
                 {"partner_id": self.partner2.id}
             )
 
@@ -209,12 +209,12 @@ class TestDeviceAssignmentSecurity(SavepointCase):
             "login-fresh-internal-manager", self.group_user_manager, parent_id=False
         )
 
-        self.history_record.sudo(fresh_internal_user_manager).update(
+        self.history_record.with_user(fresh_internal_user_manager).update(
             {"partner_id": self.partner2.id}
         )
         self.assertTrue(
             self.env["customer_device_manager.device_assignment_history"]
-            .sudo(fresh_internal_user_manager)
+            .with_user(fresh_internal_user_manager)
             .search([("id", "=", self.history_record.id)])
         )
 
@@ -222,16 +222,16 @@ class TestDeviceAssignmentSecurity(SavepointCase):
         "Portal users should only read their company's devices."
         self.assertTrue(
             self.env["stock.production.lot"]
-            .sudo(self.assigner_user_insider)
+            .with_user(self.assigner_user_insider)
             .search([("id", "=", self.lot.id)])
         )
         self.assertFalse(
             self.env["stock.production.lot"]
-            .sudo(self.assigner_user_outsider)
+            .with_user(self.assigner_user_outsider)
             .search([("id", "=", self.lot.id)])
         )
         self.assertFalse(
             self.env["stock.production.lot"]
-            .sudo(self.assigner_user_b2c)
+            .with_user(self.assigner_user_b2c)
             .search([("id", "=", self.lot.id)])
         )

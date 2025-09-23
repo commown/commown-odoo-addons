@@ -68,7 +68,6 @@ class ProductServiceStorableConfig(models.Model):
         affected_variants._set_storable_variants()
         return res
 
-    @api.multi
     def action_service_copy_image(self):
         self.ensure_one()
         if not self.service_tmpl_id.image:

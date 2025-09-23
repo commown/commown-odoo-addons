@@ -33,7 +33,6 @@ class DeviceAssignment(models.Model):
     )
 
     assignment_date = fields.Datetime(
-        string="Assignment Date",
         required=True,
         default=fields.Datetime.now,
         compute="_compute_history_change_impact",
@@ -50,7 +49,6 @@ class DeviceAssignment(models.Model):
             ("at_customer", "At Customer"),
             ("at_commown", "At Commown"),
         ],
-        string="Device Location",
         default="at_customer",
         compute="_compute_history_change_impact",
         store=True,
@@ -98,7 +96,7 @@ class DeviceAssignment(models.Model):
             _self = self.with_context(forced_assignment_history_date=_date)
 
         # Restore the original context in the returned result to avoid any side effect:
-        return super(DeviceAssignment, _self).create(values).with_context(orig_context)
+        return super(DeviceAssignment, _self).create(values).with_context(orig_context)  # pylint: disable=context-overridden
 
     def _inverse_partner_id(self):
         for rec in self:

@@ -28,7 +28,6 @@ class DeviceAssignmentHistory(models.Model):
             ("at_customer", "At Customer"),
             ("at_commown", "At Commown"),
         ],
-        string="Device Location",
         required=True,
         default="at_customer",
     )

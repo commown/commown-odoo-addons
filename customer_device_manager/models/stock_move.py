@@ -40,6 +40,7 @@ class StockMove(models.Model):
                             "device_location": "at_customer",
                         }
                     )
+        return
 
     def _unset_lot_contract(self, lots, contract, location_dest, **kwargs):
         "Archive Device Assignment on device return validation"
@@ -67,3 +68,4 @@ class StockMove(models.Model):
                         "device_location": "at_commown",
                     }
                 )
+        return

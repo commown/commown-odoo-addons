@@ -56,7 +56,7 @@
     <field name="name">device.assignment.tree</field>
     <field name="model">customer_device_manager.device_assignment</field>
     <field name="arch" type="xml">
-      <tree string="Device Assignment">
+      <tree>
         <field name="product_name" />
         <field name="device_name" />
         <field name="contract_name" />
@@ -113,7 +113,7 @@
     <field name="name">device.assignment.history.tree</field>
     <field name="model">customer_device_manager.device_assignment_history</field>
     <field name="arch" type="xml">
-      <tree string="Assignment History">
+      <tree>
         <field name="date" />
         <field name="assignment_id" />
         <field name="partner_id" />
