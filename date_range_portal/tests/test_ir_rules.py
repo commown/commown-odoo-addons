@@ -11,7 +11,7 @@ class PortalDateRangeTypeIRRulesTC(SavepointCase):
     def test_read(self):
         results = (
             self.env["date.range.type"]
-            .sudo(self.portal_user)
+            .with_user(self.portal_user)
             .search_read([], fields=["name"])
         )
         self.assertFalse(results)
