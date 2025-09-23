@@ -40,6 +40,7 @@
             "/customer_team_manager/static/src/scss/field_widget.scss",
             "/customer_team_manager/static/src/js/field_widget.esm.js",
             "/customer_team_manager/static/src/js/export_data_dialog.esm.js",
+            "/customer_team_manager/static/src/js/favorites.esm.js",
         ],
     },
     "installable": True,
