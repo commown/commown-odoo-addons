@@ -4,92 +4,94 @@ from odoo.tests import TransactionCase
 
 
 class TestDeviceAssignmentSecurity(TransactionCase):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.partner1 = self.env.ref("base.res_partner_address_15")
-        self.partner2 = self.env.ref("base.res_partner_address_16")
-        self.company = self.env.ref("base.res_partner_1")
-        self.other_company = self.company.copy()
-        self.assertTrue(self.company.is_company)
-        self.assertTrue(self.other_company.is_company)
+        cls.partner1 = cls.env.ref("base.res_partner_address_15")
+        cls.partner2 = cls.env.ref("base.res_partner_address_16")
+        cls.company = cls.env.ref("base.res_partner_1")
+        cls.other_company = cls.company.copy()
+        assert cls.company.is_company
+        assert cls.other_company.is_company
 
-        self.partner1.parent_id = self.company.id
-        self.partner2.parent_id = self.company.id
+        cls.partner1.parent_id = cls.company.id
+        cls.partner2.parent_id = cls.company.id
 
-        self.group_assigner = self.env.ref(
+        cls.group_assigner = cls.env.ref(
             "customer_device_manager.group_customer_device_assigner"
         )
-        self.group_portal = self.env.ref("base.group_portal")
-        self.group_user = self.env.ref("base.group_user")
-        self.group_user_manager = self.env.ref(
+        cls.group_portal = cls.env.ref("base.group_portal")
+        cls.group_user = cls.env.ref("base.group_user")
+        cls.group_user_manager = cls.env.ref(
             "customer_device_manager.group_user_manager"
         )
 
-        self.portal_user_insider = self.create_user(
-            "login1-NOMATTER", self.group_portal, parent_id=self.company.id
+        cls.portal_user_insider = cls.create_user(
+            "login1-NOMATTER", cls.group_portal, parent_id=cls.company.id
         )
-        self.portal_user_outsider = self.create_user(
-            "login2-NOMATTER", self.group_portal, parent_id=self.other_company.id
+        cls.portal_user_outsider = cls.create_user(
+            "login2-NOMATTER", cls.group_portal, parent_id=cls.other_company.id
         )
-        self.portal_user_b2c = self.create_user(
-            "login3-NOMATTER", self.group_portal, parent_id=False
-        )
-
-        self.assigner_user_insider = self.create_user(
-            "login4-NOMATTER", self.group_assigner, parent_id=self.company.id
-        )
-        self.assigner_user_outsider = self.create_user(
-            "login5-NOMATTER", self.group_assigner, parent_id=self.other_company.id
-        )
-        self.assigner_user_b2c = self.create_user(
-            "login6-NOMATTER", self.group_assigner, parent_id=False
+        cls.portal_user_b2c = cls.create_user(
+            "login3-NOMATTER", cls.group_portal, parent_id=False
         )
 
-        self.internal_user = self.create_user(
-            "login7-NOMATTER", self.group_user, parent_id=False
+        cls.assigner_user_insider = cls.create_user(
+            "login4-NOMATTER", cls.group_assigner, parent_id=cls.company.id
         )
-        self.internal_user_manager = self.create_user(
-            "login8-NOMATTER", self.group_user_manager, parent_id=False
+        cls.assigner_user_outsider = cls.create_user(
+            "login5-NOMATTER", cls.group_assigner, parent_id=cls.other_company.id
+        )
+        cls.assigner_user_b2c = cls.create_user(
+            "login6-NOMATTER", cls.group_assigner, parent_id=False
         )
 
-        self.product_tmpl = self.env["product.template"].create(
+        cls.internal_user = cls.create_user(
+            "login7-NOMATTER", cls.group_user, parent_id=False
+        )
+        cls.internal_user_manager = cls.create_user(
+            "login8-NOMATTER", cls.group_user_manager, parent_id=False
+        )
+
+        cls.product_tmpl = cls.env["product.template"].create(
             {
                 "name": "Test Product",
                 "type": "product",
                 "tracking": "serial",
             }
         )
-        self.product = self.product_tmpl.product_variant_id
-        self.lot = self.env["stock.lot"].create(
+        cls.product = cls.product_tmpl.product_variant_id
+        cls.lot = cls.env["stock.lot"].create(
             {
                 "name": "Test lot",
-                "product_id": self.product.id,
+                "product_id": cls.product.id,
             }
         )
-        self.assignment = self.env["customer_device_manager.device_assignment"].create(
+        cls.assignment = cls.env["customer_device_manager.device_assignment"].create(
             {
-                "device_id": self.lot.id,
-                "partner_id": self.partner1.id,
+                "device_id": cls.lot.id,
+                "partner_id": cls.partner1.id,
                 "assignment_date": fields.Datetime.now(),
             }
         )
 
-        self.history_record = self.env[
+        cls.history_record = cls.env[
             "customer_device_manager.device_assignment_history"
         ].create(
             {
-                "assignment_id": self.assignment.id,
+                "assignment_id": cls.assignment.id,
                 "date": fields.Datetime.now(),
-                "partner_id": self.partner1.id,
+                "partner_id": cls.partner1.id,
             }
         )
 
-    def create_user(self, login, group, **kwargs):
+    @classmethod
+    def create_user(cls, login, group, **kwargs):
         kwargs.setdefault("name", "test-partner")
-        partner = self.env["res.partner"].create(kwargs)
+        partner = cls.env["res.partner"].create(kwargs)
 
-        return self.env["res.users"].create(
+        return cls.env["res.users"].create(
             {
                 "name": "test-user",
                 "login": login,

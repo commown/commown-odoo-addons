@@ -6,56 +6,57 @@ from odoo.addons.commown_devices.tests.common import create_lot_and_quant
 
 
 class StockMoveTC(TransactionCase):
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
         def _ref(name):
-            return self.env.ref("commown_devices.%s" % name)
+            return cls.env.ref("commown_devices.%s" % name)
 
-        self.loc_to_check = _ref("stock_location_devices_to_check")
-        self.loc_for_rent = _ref("stock_location_available_for_rent")
-        self.loc_repacked = _ref("stock_repackaged_modules_and_accessories")
+        cls.loc_to_check = _ref("stock_location_devices_to_check")
+        cls.loc_for_rent = _ref("stock_location_available_for_rent")
+        cls.loc_repacked = _ref("stock_repackaged_modules_and_accessories")
 
-        self.partner = self.env.ref("base.partner_demo_portal")
-        self.company = self.env.ref("base.res_partner_1")
-        self.assertTrue(self.company.is_company)
-        self.partner.parent_id = self.company.id
+        cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.company = cls.env.ref("base.res_partner_1")
+        assert cls.company.is_company
+        cls.partner.parent_id = cls.company.id
 
-        self.contract = self.env["contract.contract"].create(
-            {"name": "Contract", "partner_id": self.partner.id}
+        cls.contract = cls.env["contract.contract"].create(
+            {"name": "Contract", "partner_id": cls.partner.id}
         )
-        self.stock_location = self.env["stock.location"].create(
-            {"name": "MyLoc", "usage": "internal", "location_id": self.loc_for_rent.id}
+        cls.stock_location = cls.env["stock.location"].create(
+            {"name": "MyLoc", "usage": "internal", "location_id": cls.loc_for_rent.id}
         )
 
-        product = self.env["product.product"].create(
+        product = cls.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}
         )
-        self.lot = create_lot_and_quant(self.env, "lot", product, self.stock_location)
+        cls.lot = create_lot_and_quant(cls.env, "lot", product, cls.stock_location)
 
-        group_assigner = self.env.ref(
+        group_assigner = cls.env.ref(
             "customer_device_manager.group_customer_device_assigner"
         )
-        self.customer_device_assigner = self.env["res.users"].create(
+        cls.customer_device_assigner = cls.env["res.users"].create(
             {
                 "name": "Customer device assigner",
                 "login": "customer_device_assigner",
-                "partner_id": self.partner.id,
+                "partner_id": cls.partner.id,
                 "groups_id": [(6, 0, [group_assigner.id])],
             }
         )
 
-        group_portal = self.env.ref("base.group_portal")
-        self.customer_employee = self.env["res.users"].create(
+        group_portal = cls.env.ref("base.group_portal")
+        cls.customer_employee = cls.env["res.users"].create(
             {
                 "name": "Customer employee",
                 "login": "customer_employee",
-                "partner_id": self.partner.id,
+                "partner_id": cls.partner.id,
                 "groups_id": [(6, 0, [group_portal.id])],
             }
         )
 
-        self.internal_user = self.env.ref("base.group_user")
+        cls.internal_user = cls.env.ref("base.group_user")
 
     def get_assignments(self, lot):
         "Find device assignments for a lot"

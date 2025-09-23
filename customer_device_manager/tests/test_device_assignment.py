@@ -5,27 +5,28 @@ from odoo.tests.common import TransactionCase
 class DeviceAssignmentBaseTC(TransactionCase):
     """Base test case with common setup for device assignment tests"""
 
-    def setUp(self):
-        super().setUp()
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
 
-        self.company = self.env.ref("base.res_partner_1")
-        self.partner1 = self.env.ref("base.partner_demo_portal")
-        self.partner1.parent_id = self.company.id
-        self.partner2 = self.env.ref("base.res_partner_address_16")
+        cls.company = cls.env.ref("base.res_partner_1")
+        cls.partner1 = cls.env.ref("base.partner_demo_portal")
+        cls.partner1.parent_id = cls.company.id
+        cls.partner2 = cls.env.ref("base.res_partner_address_16")
 
-        self.product_tmpl = self.env["product.template"].create(
+        cls.product_tmpl = cls.env["product.template"].create(
             {
                 "name": "Test Device",
                 "type": "product",
                 "tracking": "serial",
             }
         )
-        self.product = self.product_tmpl.product_variant_id
+        cls.product = cls.product_tmpl.product_variant_id
 
-        self.lot = self.env["stock.lot"].create(
+        cls.lot = cls.env["stock.lot"].create(
             {
                 "name": "test-lot",
-                "product_id": self.product.id,
+                "product_id": cls.product.id,
             }
         )
 
