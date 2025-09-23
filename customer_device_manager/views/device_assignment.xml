@@ -32,15 +32,19 @@
 
                 <ul>
                   <li>
-                    <i class="fa fa-laptop" />
+                    <i class="fa fa-laptop" title="Device name" aria-hidden="true" />
                     <field name="device_name" />
                   </li>
                   <li>
-                    <i class="fa fa-file-contract" />
+                    <i
+                                            class="fa fa-file-contract"
+                                            title="Contract"
+                                            aria-hidden="true"
+                                        />
                     <field name="contract_name" />
                   </li>
                   <li>
-                    <i class="fa fa-user" />
+                    <i class="fa fa-user" title="Partner" aria-hidden="true" />
                     <field name="partner_id" />
                   </li>
                 </ul>
