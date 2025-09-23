@@ -60,9 +60,9 @@ class DeviceAssignment(models.Model):
         inverse_name="assignment_id",
     )
 
-    image_medium = fields.Binary(
+    image_128 = fields.Image(
         string="Product Image",
-        related="device_id.product_id.image_medium",
+        related="device_id.product_id.image_128",
         store=False,
     )
 
