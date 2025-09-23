@@ -1,5 +1,11 @@
 <odoo>
-  <record id="customer_team_manager.customer_role_fleet_manager" model="customer_team_manager.customer_role">
-    <field name="groups" eval="[(4, ref('customer_device_manager.group_customer_device_assigner'))]"/>
+  <record
+        id="customer_team_manager.customer_role_fleet_manager"
+        model="customer_team_manager.customer_role"
+    >
+    <field
+            name="groups"
+            eval="[(4, ref('customer_device_manager.group_customer_device_assigner'))]"
+        />
   </record>
 </odoo>

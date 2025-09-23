@@ -246,15 +246,15 @@
           </div>
           <group name="admin">
             <field
-                            name="parent_id"
-                            groups="sales_team.group_sale_manager"
-                            domain="[('is_company', '=', True)]"
-                        />
+                                name="parent_id"
+                                groups="sales_team.group_sale_manager"
+                                domain="[('is_company', '=', True)]"
+                            />
             <field
-                            name="customer_roles"
-                            widget="customer_role_tag_widget"
-                            context="{'partner_id': id}"
-                        />
+                                name="customer_roles"
+                                widget="customer_role_tag_widget"
+                                context="{'partner_id': id}"
+                            />
           </group>
           <group>
             <group name="main">
@@ -263,10 +263,10 @@
             </group>
             <group name="contact">
               <field
-                                name="email"
-                                attrs="{'readonly': [('portal_status', '!=', 'not_granted')]}"
-                                help="Cannot be modified when the user was granted portal access. Remove the portal access first"
-                            />
+                                    name="email"
+                                    attrs="{'readonly': [('portal_status', '!=', 'not_granted')]}"
+                                    help="Cannot be modified when the user was granted portal access. Remove the portal access first"
+                                />
               <field name="phone" />
             </group>
             <group name="customer_others">
@@ -359,12 +359,13 @@
         groups="sales_team.group_sale_manager"
     />
 
-  <menuitem id="menu_help"
-            name="Help"
-            action="action_open_help"
-            sequence="1000"
-            parent="menu_customer_team_parent"
-            groups="group_customer_admin,sales_team.group_sale_manager"
-            />
+  <menuitem
+        id="menu_help"
+        name="Help"
+        action="action_open_help"
+        sequence="1000"
+        parent="menu_customer_team_parent"
+        groups="group_customer_admin,sales_team.group_sale_manager"
+    />
 
 </odoo>

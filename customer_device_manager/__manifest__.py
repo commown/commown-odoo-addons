@@ -6,7 +6,7 @@
     "version": "12.0.1.0.4",
     "development_status": "Alpha",
     "category": "Manager customer",
-    "website": "https://commown.coop",
+    "website": "https://github.com/commown/commown-odoo-addons",
     "author": "Commown SCIC",
     "maintainers": ["Honeyxilia", "fcayre"],
     "license": "AGPL-3",
