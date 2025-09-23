@@ -106,8 +106,8 @@ class ProductServiceConfigTC(DeviceAsAServiceTC):
         self.assertEqual(err.exception.args[0], "Current service has no image!")
 
         image_black = _image_black()
-        self.fp3_service_tmpl.image = image_black
+        self.fp3_service_tmpl.image_1920 = image_black
 
         config.action_service_copy_image()
 
-        self.assertEqual(fp3_storable_tmpl.image, image_black)
+        self.assertEqual(fp3_storable_tmpl.image_1920, image_black)

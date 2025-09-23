@@ -70,7 +70,7 @@ class ProductServiceStorableConfig(models.Model):
 
     def action_service_copy_image(self):
         self.ensure_one()
-        if not self.service_tmpl_id.image:
+        if not self.service_tmpl_id.image_1920:
             raise UserError(_("Current service has no image!"))
         else:
-            self.storable_tmpl_id.image = self.service_tmpl_id.image
+            self.storable_tmpl_id.image_1920 = self.service_tmpl_id.image_1920
