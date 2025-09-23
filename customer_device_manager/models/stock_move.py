@@ -32,7 +32,7 @@ class StockMove(models.Model):
                     )
 
                 else:
-                    assign_model.create(
+                    assign_model.sudo().create(
                         {
                             "device_id": lot.id,
                             "partner_id": partner.id,
