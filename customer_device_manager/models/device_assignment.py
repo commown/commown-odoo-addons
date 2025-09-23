@@ -116,6 +116,7 @@ class DeviceAssignment(models.Model):
     @api.depends("history_ids.date")
     def _compute_history_change_impact(self):
         for rec in self:
+            rec.invalidate_recordset(["history_ids"])
             last_history = rec.history_ids and rec.history_ids[0]
             if last_history:
                 rec.update(

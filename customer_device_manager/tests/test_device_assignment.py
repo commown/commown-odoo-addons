@@ -56,6 +56,7 @@ class DeviceAssignmentTC(DeviceAssignmentBaseTC):
         assignment.update({"partner_id": self.partner2.id})
         self.assertEqual(len(assignment.history_ids), 2)
 
+        assignment.invalidate_recordset()
         history_dates = assignment.history_ids.mapped("date")
         self.assertEqual(history_dates, sorted(history_dates, reverse=True))
 
@@ -102,6 +103,7 @@ class DeviceAssignmentHistoryTC(DeviceAssignmentBaseTC):
 
         now = fields.Datetime.now()
         assignment.update({"partner_id": self.partner2.id})
+        assignment.invalidate_recordset()
 
         self.assertEqual(
             assignment.history_ids[0].display_name,
