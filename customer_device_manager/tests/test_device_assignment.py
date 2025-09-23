@@ -22,7 +22,7 @@ class DeviceAssignmentBaseTC(SavepointCase):
         )
         self.product = self.product_tmpl.product_variant_id
 
-        self.lot = self.env["stock.production.lot"].create(
+        self.lot = self.env["stock.lot"].create(
             {
                 "name": "test-lot",
                 "product_id": self.product.id,

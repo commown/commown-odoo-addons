@@ -61,7 +61,7 @@ class TestDeviceAssignmentSecurity(SavepointCase):
             }
         )
         self.product = self.product_tmpl.product_variant_id
-        self.lot = self.env["stock.production.lot"].create(
+        self.lot = self.env["stock.lot"].create(
             {
                 "name": "Test lot",
                 "product_id": self.product.id,
@@ -221,17 +221,17 @@ class TestDeviceAssignmentSecurity(SavepointCase):
     def test_rule_stock_production_lot_portal(self):
         "Portal users should only read their company's devices."
         self.assertTrue(
-            self.env["stock.production.lot"]
+            self.env["stock.lot"]
             .with_user(self.assigner_user_insider)
             .search([("id", "=", self.lot.id)])
         )
         self.assertFalse(
-            self.env["stock.production.lot"]
+            self.env["stock.lot"]
             .with_user(self.assigner_user_outsider)
             .search([("id", "=", self.lot.id)])
         )
         self.assertFalse(
-            self.env["stock.production.lot"]
+            self.env["stock.lot"]
             .with_user(self.assigner_user_b2c)
             .search([("id", "=", self.lot.id)])
         )

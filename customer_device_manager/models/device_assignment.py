@@ -17,7 +17,7 @@ class DeviceAssignment(models.Model):
     _rec_name = "device_name"
 
     device_id = fields.Many2one(
-        "stock.production.lot",
+        "stock.lot",
         string="Device",
         required=True,
         ondelete="cascade",

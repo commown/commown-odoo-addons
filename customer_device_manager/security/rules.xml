@@ -38,11 +38,9 @@
 
   </record>
 
-  <record model="ir.rule" id="rule_stock_production_lot_portal">
-    <field
-            name="name"
-        >Stock Production Lot: Base group portal see only their devices</field>
-    <field name="model_id" ref="stock.model_stock_production_lot" />
+  <record model="ir.rule" id="rule_stock_lot_portal">
+    <field name="name">Stock Lot: Base group portal see only their devices</field>
+    <field name="model_id" ref="stock.model_stock_lot" />
     <field name="groups" eval="[(4, ref('base.group_portal'))]" />
     <field name="domain_force">
         [
