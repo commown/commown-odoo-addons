@@ -87,6 +87,34 @@ class DeviceAssignmentTC(DeviceAssignmentBaseTC):
         second_history_line.date = date2
         self.assertEqual(assignment.assignment_date, date2)
 
+    def test_hidden_fields_in_search(self):
+        "The fields in removed_fields should be declared as unsearchable"
+        device_assign_model = "customer_device_manager.device_assignment"
+        removed_fields = (
+            "create_date",
+            "create_uid",
+            "write_date",
+            "write_uid",
+            "history_ids",
+            "device_id",
+        )
+
+        # Retrieve search view and the fields retrieved with it.
+        search_view_id = self.ref(
+            "customer_device_manager.view_device_assignment_search"
+        )
+        search_fields = self.env[device_assign_model].get_views(
+            [(search_view_id, "search")]
+        )["models"][device_assign_model]
+
+        # Check if the removed_fields are correctly removed from searchable fields
+        hidden_search_fields = [
+            fname
+            for fname in search_fields.keys()
+            if not search_fields[fname]["searchable"]
+        ]
+        self.assertTrue(all(fname in hidden_search_fields for fname in removed_fields))
+
 
 class DeviceAssignmentHistoryTC(DeviceAssignmentBaseTC):
     def test_name_get(self):
