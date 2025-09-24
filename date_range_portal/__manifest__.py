@@ -8,7 +8,7 @@
     "category": "Uncategorized",
     "website": "https://commown.coop",
     "author": "Commown SCIC",
-    "maintainers": ["loganSIO"],
+    "maintainers": ["Honeyxilia", "fcayre"],
     "license": "AGPL-3",
     "depends": [
         "date_range",
