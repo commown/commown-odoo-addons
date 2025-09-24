@@ -69,6 +69,22 @@ class StockMoveTC(SavepointCase):
         do_new_transfer(picking, picking.scheduled_date)
         return picking
 
+    def test_device_assignment_allow_creation_on_picking_validation(self):
+        "A user in the stock user group must be able to validate a picking that creates an assignment"
+
+        user = self.env.ref("base.user_demo")
+        groups = (
+            self.env.ref("base.group_user")
+            | self.env.ref("stock.group_stock_user")  # allow reading lots a.s.o.
+            | self.env.ref("account.group_account_invoice")  # allow reading contracts
+        )
+        user.groups_id = [(6, 0, groups.ids)]
+
+        picking = self.contract.send_devices(self.lot, {}).mapped("picking_id")
+
+        # This is the actual test that must not crash:
+        picking.sudo(user.id).button_validate()
+
     def test_device_assignment_lifecycle_same_customer(self):
         """
         Test a typical lifecycle of a device assignment:
