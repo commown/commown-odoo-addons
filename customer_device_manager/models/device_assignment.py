@@ -157,6 +157,6 @@ class DeviceAssignment(models.Model):
             "history_ids",
             "device_id",
         )
-        for fname in hide_fields_in_filters:
+        for fname in result.keys() & hide_fields_in_filters:
             result[fname]["searchable"] = False
         return result
