@@ -3,7 +3,7 @@
 {
     "name": "Customer device manager",
     "summary": "Allow customers to assign devices to users",
-    "version": "12.0.1.0.3",
+    "version": "12.0.1.0.4",
     "development_status": "Alpha",
     "category": "Manager customer",
     "website": "https://commown.coop",
