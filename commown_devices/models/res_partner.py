@@ -66,18 +66,15 @@ class ResPartner(models.Model):
             self.id,
             self.name,
         )
-        return (
-            self.env["stock.location"]
-            .sudo()
-            .create(
-                {
-                    "name": self.name,
-                    "usage": usage,
-                    "partner_id": self.id,
-                    "location_id": parent_location.id,
-                }
-            )
-        )
+
+        attrs = {
+            "name": self.name,
+            "usage": usage,
+            "partner_id": self.id,
+            "location_id": parent_location.id,
+        }
+        location_sudo = self.env["stock.location"].sudo().create(attrs)
+        return self.env["stock.location"].browse(location_sudo.id)
 
     def _get_fk_on(self, table):
         """Copied from MergePartnerAutomatic in odoo code base

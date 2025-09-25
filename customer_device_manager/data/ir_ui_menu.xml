@@ -1,0 +1,7 @@
+<odoo>
+
+  <record id="customer_manager_base.menu_customer_manager_root" model="ir.ui.menu">
+    <field name="groups_id" eval="[(4, ref('group_customer_device_assigner'))]" />
+  </record>
+
+</odoo>

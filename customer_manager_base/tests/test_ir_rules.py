@@ -1,3 +1,4 @@
+from odoo import Command
 from odoo.tests import TransactionCase
 
 
@@ -100,6 +101,10 @@ class PortalInvoiceIrRulesTC(PortalIrRulesTC, TransactionCase):
 
         partner1 = cls.obj.partner_id.child_ids[0]
         cls.user1 = cls._give_portal_access(partner1)
+        # As the only company user which was granted portal access,
+        # they can have groups added to them.
+        # As such, we assign to them the only group we require.
+        cls.user1.groups_id = [Command.set(cls.env.ref("base.group_portal").ids)]
 
         partner2 = cls.obj.partner_id.child_ids[1]
         cls.user2 = cls._give_portal_access(partner2)
@@ -155,6 +160,11 @@ class PortalProjectTaskIrRulesTC(PortalIrRulesTC, TransactionCase):
         partner1 = ref("base.partner_demo_portal").copy({"email": "test1@example.com"})
         partner1.parent_id = ref("base.res_partner_1")
         cls.user1 = cls._give_portal_access(partner1)
+
+        # As the only company user which was granted portal access,
+        # they can have groups added to them.
+        # As such, we assign to them the only group we require.
+        cls.user1.groups_id = [Command.set(cls.env.ref("base.group_portal").ids)]
 
         partner2 = partner1.copy({"email": "test2@example.com"})
         cls.user2 = cls._give_portal_access(partner2)

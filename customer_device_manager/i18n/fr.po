@@ -1,0 +1,238 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* customer_device_manager
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-19 09:16+0000\n"
+"PO-Revision-Date: 2025-09-19 11:17+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__assignment_date
+msgid "Assignment Date"
+msgstr "Date d'assignation"
+
+#. module: customer_device_manager
+#: model:ir.actions.act_window,name:customer_device_manager.action_device_assignment_history
+#: model:ir.ui.menu,name:customer_device_manager.menu_device_assignment_history
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_form
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_tree
+msgid "Assignment History"
+msgstr "Historique des assignations"
+
+#. module: customer_device_manager
+#: selection:customer_device_manager.device_assignment,device_location:0
+#: selection:customer_device_manager.device_assignment_history,device_location:0
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
+msgid "At Commown"
+msgstr "Chez Commown"
+
+#. module: customer_device_manager
+#: selection:customer_device_manager.device_assignment,device_location:0
+#: selection:customer_device_manager.device_assignment_history,device_location:0
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
+msgid "At Customer"
+msgstr "Chez le client"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__contract_name
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
+msgid "Contract"
+msgstr "Contrat"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__create_uid
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__create_date
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: customer_device_manager
+#: model:res.groups,name:customer_device_manager.group_customer_device_assigner
+msgid "Customer: Device Assigner"
+msgstr "Client : Assignateur d'appareil"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__date
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+msgid "Date"
+msgstr "Date "
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__device_id
+msgid "Device"
+msgstr "Appareil"
+
+#. module: customer_device_manager
+#: model:ir.model,name:customer_device_manager.model_customer_device_manager_device_assignment
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_form
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_tree
+msgid "Device Assignment"
+msgstr "Attribution des appareils"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__device_location
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__device_location
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+msgid "Device Location"
+msgstr "Emplacement de l'appareil"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_form
+msgid "Device location at date"
+msgstr "Emplacement à date"
+
+#. module: customer_device_manager
+#: model:ir.actions.act_window,name:customer_device_manager.action_device_assignment
+#: model:ir.model.fields,field_description:customer_device_manager.field_stock_production_lot__device_assignment_ids
+#: model:ir.ui.menu,name:customer_device_manager.menu_device_assignment
+#: model:ir.ui.menu,name:customer_device_manager.menu_device_assignment_parent
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.my-management-space-portal-access
+msgid "Devices"
+msgstr "Appareils"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__display_name
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__display_name
+msgid "Display Name"
+msgstr "Afficher Nom"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+msgid "Group By"
+msgstr "Grouper par"
+
+#. module: customer_device_manager
+#: model:ir.actions.act_url,name:customer_device_manager.action_open_help
+#: model:ir.ui.menu,name:customer_device_manager.menu_help
+msgid "Help"
+msgstr "Aide"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__history_ids
+msgid "History"
+msgstr "Historique"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__id
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__id
+msgid "ID"
+msgstr "ID"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,help:customer_device_manager.field_customer_device_manager_device_assignment__image_medium
+msgid ""
+"Image of the product variant (Medium-sized image of product template if "
+"false)."
+msgstr ""
+"Image de la variante d'article (si non renseigné, image de dimensions "
+"moyennes du modèle d'article)"
+
+#. module: customer_device_manager
+#: model:res.groups,name:customer_device_manager.group_user_manager
+msgid "Internal: Device Assignment Manager"
+msgstr "Interne: Gestionnaire d'attribution des appareils"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment____last_update
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history____last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__write_uid
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__write_date
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: customer_device_manager
+#: model:ir.model,name:customer_device_manager.model_stock_production_lot
+msgid "Lot/Serial"
+msgstr "Lot/N° série"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__assignment_notes
+msgid "Notes"
+msgstr "Notes"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_form
+msgid "Partner at date"
+msgstr "Utilisateur à date"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__product_name
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
+msgid "Product"
+msgstr "Article"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__image_medium
+msgid "Product Image"
+msgstr "Image de l'article"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+msgid "Search Assignment History"
+msgstr "Recherche dans l'historique des affectations"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
+msgid "Search Device Assignments"
+msgstr "Recherche d'affectations des appareils"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__device_name
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__assignment_id
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
+msgid "Serial Number / IMEI"
+msgstr "Numéro de série / IMEI"
+
+#. module: customer_device_manager
+#: model:ir.model,name:customer_device_manager.model_stock_move
+msgid "Stock Move"
+msgstr "Mouvement"
+
+#. module: customer_device_manager
+#: model:ir.model,name:customer_device_manager.model_customer_device_manager_device_assignment_history
+msgid "Store the partner an assignment had at one given date"
+msgstr "Stock le partenaire d'une assignation à une date donnée"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,help:customer_device_manager.field_customer_device_manager_device_assignment__device_name
+msgid "Unique Lot/Serial Number"
+msgstr "Numéro de lot/série unique"
+
+#. module: customer_device_manager
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__partner_id
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment_history__partner_id
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
+msgid "User"
+msgstr "Utilisateur"
+
+#~ msgid "Current Assignments"
+#~ msgstr "Assignations actuelles"

@@ -30,12 +30,6 @@ class ResPartner(models.Model):
         index=True,
         ondelete="restrict",
         domain="[('customer_company', '=', commercial_partner_id)]",
-        groups=",".join(
-            (
-                "sales_team.group_sale_manager",
-                "customer_manager_base.group_customer_admin",
-            )
-        ),
     )
 
     parent_id = fields.Many2one(
@@ -172,6 +166,9 @@ class ResPartner(models.Model):
             raise ValidationError(_("At least one administrator is mandatory"))
 
     def write(self, vals):
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         def is_b2c(partner):
             return not partner.commercial_partner_id.is_company
 
@@ -238,6 +235,9 @@ class ResPartner(models.Model):
 
     def action_revoke_portal_access(self):
         self.ensure_one()
+        self.check_access_rights("write")
+        self.check_access_rule("write")
+
         wizard_model = self.env["portal.wizard"].with_context(active_ids=[self.id])
         role_model = self.env["customer_team_manager.customer_role"]
 

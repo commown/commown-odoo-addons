@@ -26,6 +26,19 @@ class StockMove(models.Model):
         self.update_lot_contract()
         return res
 
+    def _set_lot_contract(self, lots, contract, **kwargs):
+        "Set the contract on the provided lots."
+        lots.update({"contract_id": contract})
+
+    def _unset_lot_contract(self, lots, contract, location_dest, **kwargs):
+        "Remove the contract from the provided lots and reset the grade if needed"
+        attrs = {"contract_id": False}
+        if location_dest != self.env.ref(
+            "commown_devices.stock_location_contract_transfer"
+        ):
+            attrs["grade_id"] = False
+        lots.update(attrs)
+
     def update_lot_contract(self):
         """If the move is associated with a contract create or delete relation
         between lot and contract depending on the move destination.
@@ -63,7 +76,7 @@ class StockMove(models.Model):
                     )
 
                 if rec.location_dest_id.has_partner_child_of(contract_loc):
-                    lots.update({"contract_id": contract})
+                    self._set_lot_contract(lots, rec.contract_id)
 
                 elif rec.location_id.has_partner_child_of(contract_loc):
                     if lots.mapped("contract_id") != contract:
@@ -79,7 +92,9 @@ class StockMove(models.Model):
                         "commown_devices.stock_location_contract_transfer"
                     ):
                         attrs["grade_id"] = False
-                    lots.update(attrs)
+                    self._unset_lot_contract(
+                        lots, rec.contract_id, rec.location_dest_id
+                    )
 
                 else:
                     msg = _(

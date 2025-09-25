@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo noupdate="1">
+    <record id="date_range_type_portal" model="ir.rule">
+        <field name="name">Date Range Type portal</field>
+        <field name="model_id" ref="date_range.model_date_range_type" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+        <field name="domain_force">[(0, '=', 1)]</field>
+    </record>
+    <record id="date_range_portal" model="ir.rule">
+        <field name="name">Date Range portal</field>
+        <field name="model_id" ref="date_range.model_date_range" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+        <field name="domain_force">[(0, '=', 1)]</field>
+    </record>
+</odoo>

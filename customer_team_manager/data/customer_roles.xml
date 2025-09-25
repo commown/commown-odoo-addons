@@ -43,7 +43,7 @@
   </record>
 
   <record id="customer_role_fleet_manager" model="customer_team_manager.customer_role">
-    <field name="name">Fleet managment</field>
+    <field name="name">Fleet management</field>
     <field
             name="description"
         >People who manage the device fleet of their organization (new orders, contract termination, device attribution)</field>

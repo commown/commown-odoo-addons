@@ -3,7 +3,7 @@
 {
     "name": "Customer team manager",
     "summary": "Allow customers to manage their team and users",
-    "version": "16.0.1.0.4",
+    "version": "16.0.1.0.5",
     "development_status": "Alpha",
     "category": "Manager customer",
     "website": "https://github.com/commown/commown-odoo-addons",
@@ -27,6 +27,7 @@
         "security/ir.model.access.csv",
         "security/rules.xml",
         "data/customer_roles.xml",
+        "data/actions_act_url.xml",
         "views/wizard_portal_access.xml",  # referenced in customer_team_manager.xml!
         "views/customer_team_manager.xml",
         "views/portal_templates.xml",
@@ -39,6 +40,7 @@
             "/customer_team_manager/static/src/scss/field_widget.scss",
             "/customer_team_manager/static/src/js/field_widget.esm.js",
             "/customer_team_manager/static/src/js/export_data_dialog.esm.js",
+            "/customer_team_manager/static/src/js/favorites.esm.js",
         ],
     },
     "installable": True,

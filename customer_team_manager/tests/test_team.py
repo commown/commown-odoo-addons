@@ -6,6 +6,9 @@ from .common import CustomerTeamManagerAbstractTC
 class TeamTC(CustomerTeamManagerAbstractTC):
     "Test class for team behaviour"
 
+    def seen_teams(self, sudo_as=False):
+        return self._model("customer_team_manager.team", sudo_as).search([])
+
     def test_create_automatic_company(self):
         team = self.create_team(sudo_as=self.customer_user_admin, name="Test team")
 
@@ -13,6 +16,28 @@ class TeamTC(CustomerTeamManagerAbstractTC):
 
         with self.assertRaises(AccessError):
             team.customer_company  # pylint: disable=pointless-statement
+
+    def test_read(self):
+        "Portal users must see (only) their company's teams"
+        c1 = self.customer_company
+        team1 = self.create_team(sudo_as=self.customer_user_admin, name="Team1")
+        empl1 = self.create_partner(
+            name="Employee1", email="employee1@c1.coop", parent_id=c1.id
+        )
+        self._grant_portal_access(empl1)
+        user1 = empl1.user_ids[0]
+
+        c2 = self.customer_company.copy({"name": "Test company2"})
+        team2 = self.create_team(name="Team2", customer_company=c2.id)
+        empl2 = self.create_partner(
+            name="Employee2", email="employee2@c2.coop", parent_id=c2.id
+        )
+        self._grant_portal_access(empl2)
+        user2 = empl2.user_ids[0]
+
+        self.assertEqual(self.seen_teams(self.customer_user_admin), team1)
+        self.assertEqual(self.seen_teams(user1), team1)
+        self.assertEqual(self.seen_teams(user2), team2)
 
     def test_full_name(self):
         admin = self.customer_user_admin
