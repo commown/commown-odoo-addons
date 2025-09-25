@@ -14,6 +14,7 @@
         # Commown modules
         "commown_devices",
         "customer_team_manager",
+        "date_range_portal",
     ],
     "data": [
         "security/groups.xml",
