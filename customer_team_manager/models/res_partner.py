@@ -100,9 +100,7 @@ class ResPartner(models.Model):
                         for action in result["views"][view_type]["toolbar"]["action"]
                         if action["id"] in authorized_action_ids
                     ]
-                    result["views"][view_type]["toolbar"].update(
-                        {"action": actions, "relate": []}
-                    )
+                    result["views"][view_type]["toolbar"].update({"action": actions})
         return result
 
     def copy_data(self, default=None):
