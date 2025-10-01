@@ -15,7 +15,7 @@ class ResPartner(models.Model):
             "team",
             "customer_note",
             "customer_roles",
-            "avatar_128",
+            "image_1920",
             "active",
             "__last_update",
         }
