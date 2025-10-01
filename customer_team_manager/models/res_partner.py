@@ -130,6 +130,10 @@ class ResPartner(models.Model):
         if vals.get("parent_id", False) == self.env.user.commercial_partner_id.id:
             allowed.add("parent_id")
 
+        # Allow setting is_company to False (which the create form might do)
+        if vals.get("is_company", True) is False:
+            allowed.add("is_company")
+
         if vals.get("company_name", True) is False:
             allowed.add("company_name")
 
