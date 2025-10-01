@@ -15,7 +15,7 @@ class ResPartner(models.Model):
             "team",
             "customer_note",
             "customer_roles",
-            "avatar_128",
+            "image_1920",
             "active",
             "__last_update",
         }
@@ -100,9 +100,7 @@ class ResPartner(models.Model):
                         for action in result["views"][view_type]["toolbar"]["action"]
                         if action["id"] in authorized_action_ids
                     ]
-                    result["views"][view_type]["toolbar"].update(
-                        {"action": actions, "relate": []}
-                    )
+                    result["views"][view_type]["toolbar"].update({"action": actions})
         return result
 
     def copy_data(self, default=None):
@@ -129,6 +127,10 @@ class ResPartner(models.Model):
 
         if vals.get("parent_id", False) == self.env.user.commercial_partner_id.id:
             allowed.add("parent_id")
+
+        # Allow setting is_company to False (which the create form might do)
+        if vals.get("is_company", True) is False:
+            allowed.add("is_company")
 
         if vals.get("company_name", True) is False:
             allowed.add("company_name")
