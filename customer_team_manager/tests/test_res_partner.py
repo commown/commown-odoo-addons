@@ -2,6 +2,7 @@ from pathlib import Path
 
 from odoo.exceptions import AccessError, ValidationError
 from odoo.modules.module import get_resource_path
+from odoo.tests import Form
 
 from .common import CustomerTeamManagerAbstractTC
 
@@ -100,36 +101,55 @@ class ResPartnerTC(CustomerTeamManagerAbstractTC):
         self.assertNotIn(self.customer_partner_admin.user_ids, admin_group.users)
 
     def test_portal_user_create_and_write_with_role_ok(self):
+        "Customer admins should be able to create and modify partners from their view"
         admin_role = self.env.ref("customer_team_manager.customer_role_admin")
-        admin = self.create_partner(
-            sudo_as=self.customer_user_admin,
-            name="New Admin",
-            email="admin@test.coop",
-            customer_roles=[(6, 0, admin_role.ids)],
-        )
+
+        # We create the users from the form view, since creating through the view
+        # adds a few fields which may not be accounted for in _check_customer_allowed_attrs
+        view = self.env.ref("customer_team_manager.view_customer_user_form")
+        partner_model = self._model("res.partner", self.customer_user_admin)
+
+        # Creating an admin through the view as a customer admin
+        form = Form(partner_model, view)
+        form.firstname = "New Admin"
+        form.email = "admin@test.coop"
+        form.customer_roles.add(admin_role)
+        admin = form.save()
+
         self.assertEqual(admin.parent_id, self.customer_company)
         self._grant_portal_access(admin)
         self.assertIsAdmin(admin)
 
-        empl = self.create_partner(
-            sudo_as=self.customer_user_admin,
-            name="New Empl",
-            email="employee@test.coop",
-        )
+        # Creating an employee through the view as a customer admin
+        form = Form(partner_model, view)
+        form.firstname = "New Empl"
+        form.email = "employee@test.coop"
+        empl = form.save()
+
         self.assertEqual(empl.parent_id, self.customer_company)
         self._grant_portal_access(empl)
         self.assertIsUser(empl)
 
-        empl.write({"customer_roles": [(6, 0, admin_role.ids)]})
+        # Set an employee as an admin through the view as a customer admin
+        with Form(empl, view) as form:
+            form.customer_roles.add(admin_role)
+
         self.assertIsAdmin(empl)
 
+        # Removing the admin role to a then-admin user
         minor_role = self.env.ref("customer_team_manager.customer_role_accounting")
-        admin.write({"customer_roles": [(6, 0, minor_role.ids)]})
+        with Form(admin, view) as form:
+            form.customer_roles.clear()
+            form.customer_roles.add(minor_role)
+
         self.assertIsUser(admin)
 
-        self.customer_partner_admin.with_user(self.customer_user_admin).write(
-            {"customer_roles": [(6, 0, minor_role.ids)]}
-        )
+        # Removing the admin role to itself
+        admin_partner = self.customer_partner_admin.with_user(self.customer_user_admin)
+        with Form(admin_partner, view) as form:
+            form.customer_roles.clear()
+            form.customer_roles.add(minor_role)
+
         self.assertIsUser(self.customer_user_admin)
         admin_group = self.env.ref("customer_manager_base.group_customer_admin")
         self.assertFalse(self.customer_user_admin in admin_group.users)
