@@ -33,7 +33,9 @@ def first_common_location(locs):
             return env["stock.location"]
 
 
-def find_products_orig_location(env, products, stocks=None, compute_summary=False):
+def find_products_orig_location(
+    env, products, stocks=None, compute_summary=False, _raise=True
+):
     """From a dictionary {product: quantity} find the location from where product can be
     sent and produce a summary to tell user where each product should be sent from.
     `stocks` parameter is a list of stock.location to look in for `products` ordered by
@@ -45,48 +47,45 @@ def find_products_orig_location(env, products, stocks=None, compute_summary=Fals
     def enough_to_send(q, to_send):
         return q.quantity - q.reserved_quantity >= to_send
 
+    def qsearch(product, stock):
+        return env["stock.quant"].search(
+            [("product_id", "=", product.id), ("location_id", "child_of", stock.id)]
+        )
+
     for product, quantity_to_send in products.items():
         enough_in_quant = partial(enough_to_send, to_send=quantity_to_send)
-        quants = env["stock.quant"]
+        location = None
         for stock in stocks:
-            quants += (
-                env["stock.quant"]
-                .search(
-                    [
-                        ("product_id", "=", product.id),
-                        ("location_id", "child_of", stock.id),
-                    ]
-                )
-                .filtered(enough_in_quant)
-            )
+            quants = qsearch(product, stock).filtered(enough_in_quant)
             if quants:
+                location = quants[0].location_id
                 break
         else:
-            raise UserError(
-                _("Not enough %s under location(s) %s")
-                % (
-                    product.name,
-                    ", ".join(stocks.mapped("name")),
-                )
-            )
+            if _raise:
+                ctx = {
+                    "product": product.name,
+                    "locs": ", ".join(stocks.mapped("name")),
+                }
+                msg = _("Not enough %(product)s under location(s) %(locs)s") % ctx
+                raise UserError(msg)
 
-        pts_orig[product] = {"qty": quantity_to_send, "loc": quants[0].location_id}
+        pts_orig[product] = {"qty": quantity_to_send, "loc": location}
+
     if compute_summary:
         location_summary_dict = {}
         for pt, pt_infos in pts_orig.items():
             location_summary_dict.setdefault(pt_infos["loc"], []).append(pt)
-        location_summary = ""
+        summary = []
         for loc in location_summary_dict.keys():
-            location_summary += (
-                loc.name
-                + ": "
-                + ", ".join(pt.name for pt in location_summary_dict[loc])
-                + "\n"
-            )
+            ctx = {
+                "loc": loc.name if loc else _("Not in stock"),
+                "products": ", ".join(pt.name for pt in location_summary_dict[loc]),
+            }
+            summary.append(_("%(loc)s: %(products)s") % ctx)
     else:
-        location_summary = "Summary hasn't been computed"
+        summary = ["Summary hasn't been computed"]
 
-    return {"pts_orig": pts_orig, "text_summary": location_summary}
+    return {"pts_orig": pts_orig, "text_summary": "\n".join(summary)}
 
 
 def create_move_from_lots(picking, located_lots):
