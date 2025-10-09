@@ -96,6 +96,7 @@ class PickingToCustomerWizard(models.AbstractModel):
             {pt: 1 for pt in self._compute_untracked_products()},
             self._compute_send_non_serial_from(),
             compute_summary=True,
+            _raise=False,
         )["text_summary"]
 
     @api.onchange("all_products", "prioritize_repackaged")
