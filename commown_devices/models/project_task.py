@@ -122,6 +122,9 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
                     (
                         self.env.ref("commown_devices.stock_location_devices_to_check")
                         | self.env.ref("commown_devices.stock_location_new_devices")
+                        | self.env.ref(
+                            "commown_devices.stock_location_repackaged_devices"
+                        )
                     ).ids,
                 ),
             ]
