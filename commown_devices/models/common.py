@@ -82,6 +82,8 @@ def find_products_orig_location(
                 "products": ", ".join(pt.name for pt in location_summary_dict[loc]),
             }
             summary.append(_("%(loc)s: %(products)s") % ctx)
+            if loc is None:
+                env.user.notify_info(summary[-1], sticky=True)
     else:
         summary = ["Summary hasn't been computed"]
 

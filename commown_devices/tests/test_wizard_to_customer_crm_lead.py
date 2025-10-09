@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from odoo.exceptions import UserError
 
@@ -16,24 +17,21 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         self.adjust_stock(self.fp3_plus_storable_color1, serial="test-fp3+-2")
 
     def test_find_nonserial_product_orig_location(self):
-
         lead = self.lead
 
         loc_repackaged_modules = self.env.ref(
             "commown_devices.stock_repackaged_modules_and_accessories"
         )
 
-        with self.assertRaises(UserError) as err:
-            defaults, possibilities = self.prepare_wizard(lead, "entity_id")
-        locations = loc_repackaged_modules + self.loc_new_untracked
+        defaults, possibilities = self.prepare_wizard(lead, "entity_id")
+
+        chan = json.dumps(getattr(self.env.user, "notify_info_channel_name"))
+        notifs = self.env["bus.bus"].search([("channel", "=", chan)])
         self.assertEqual(
-            "Not enough %s under location(s) %s"
-            % (
-                self.protective_screen.name,
-                ", ".join(locations.mapped("name")),
-            ),
-            err.exception.name,
+            {"Not in stock: %s" % self.protective_screen.name},
+            {json.loads(n["message"])["message"] for n in notifs},
         )
+
         self.adjust_stock_notracking(
             self.protective_screen.product_variant_id, self.loc_new_untracked
         )
@@ -50,7 +48,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         )
         self.assertEqual(
             wizard._compute_products_locations(),
-            "%s: %s, %s\n"
+            "%s: %s, %s"
             % (
                 self.loc_new_untracked.name,
                 self.protective_screen.name,
@@ -64,7 +62,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
 
         self.assertEqual(
             wizard._compute_products_locations(),
-            "%s: %s\n%s: %s\n"
+            "%s: %s\n%s: %s"
             % (
                 loc_repackaged_modules.name,
                 self.protective_screen.name,
@@ -76,7 +74,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         wizard.prioritize_repackaged = False
         self.assertEqual(
             wizard._compute_products_locations(),
-            "%s: %s, %s\n"
+            "%s: %s, %s"
             % (
                 self.loc_new_untracked.name,
                 self.protective_screen.name,
