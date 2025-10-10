@@ -27,7 +27,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
 
         defaults, possibilities = self.prepare_wizard(lead, "entity_id")
 
-        chan = json.dumps(self.env.user.notify_info_channel_name)
+        chan = self.env.user.notify_info_channel_name
         notifs = self.env["bus.bus"].search([("channel", "=", chan)])
         self.assertEqual(
             {"Not in stock: %s" % self.protective_screen.name},
