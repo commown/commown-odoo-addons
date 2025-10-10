@@ -6,14 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-25 14:22+0000\n"
-"PO-Revision-Date: 2025-08-25 14:22+0000\n"
+"POT-Creation-Date: 2025-10-09 09:11+0000\n"
+"PO-Revision-Date: 2025-10-09 09:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/common.py:81
+#, python-format
+msgid "%(loc)s: %(products)s"
+msgstr ""
 
 #. module: commown_devices
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:95
@@ -136,11 +142,6 @@ msgstr ""
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.view_template_property_form
 msgid "Copy service image"
-msgstr ""
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_crm_lead_picking_wizard
-msgid "Create a picking from a lead"
 msgstr ""
 
 #. module: commown_devices
@@ -634,9 +635,15 @@ msgid "Move to purchase_line link"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:66
+#: code:addons/commown_devices/models/common.py:65
 #, python-format
-msgid "Not enough %s under location(s) %s"
+msgid "Not enough %(product)s under location(s) %(locs)s"
+msgstr ""
+
+#. module: commown_devices
+#: code:addons/commown_devices/models/common.py:78
+#, python-format
+msgid "Not in stock"
 msgstr ""
 
 #. module: commown_devices
@@ -880,7 +887,7 @@ msgid "Select purchase order line from this purchase order"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:276
+#: code:addons/commown_devices/models/common.py:274
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_abstract_to_customer_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_outward_picking_form
 #, python-format
@@ -990,7 +997,7 @@ msgid "Task Stage"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:262
+#: code:addons/commown_devices/models/common.py:260
 #, python-format
 msgid "The contract has already assigned picking(s)!\n"
 "Either cancel, scrap or validate it."
@@ -1087,7 +1094,7 @@ msgid "Wizard to link purchase order line to invoices lines"
 msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_to_customer_picking.py:122
+#: code:addons/commown_devices/models/wizard_to_customer_picking.py:123
 #, python-format
 msgid "You have to select a lot for each tracked product"
 msgstr ""
