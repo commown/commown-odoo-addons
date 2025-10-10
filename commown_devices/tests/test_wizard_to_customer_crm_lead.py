@@ -31,7 +31,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         notifs = self.env["bus.bus"].search([("channel", "=", chan)])
         self.assertEqual(
             {"Not in stock: %s" % self.protective_screen.name},
-            {json.loads(n["message"])["message"] for n in notifs},
+            {json.loads(n["message"])["payload"][0]["message"] for n in notifs},
         )
 
         self.adjust_stock_notracking(
