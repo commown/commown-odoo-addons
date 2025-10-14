@@ -85,6 +85,28 @@ def find_products_orig_location(
             summary.append(_("%(loc)s: %(products)s") % ctx)
             if loc is None:
                 env.user.notify_info(summary[-1], sticky=True)
+
+                # When opening a wizard, the products_locations field is computed twice
+                # with the onchange_all_products_or_priority method,
+                # since both all_products and prioritize_refurbished are initially written.
+                #
+                # As such, we test if a notification with the same  message has already been sent,
+                # and if so, we delete the later one, since they computed the same products_locations.
+                bus_sudo = env["bus.bus"].sudo()
+                chan = env.user.notify_info_channel_name
+
+                last_notif = bus_sudo.search(
+                    [("channel", "=", chan)], order="id desc", limit=1
+                )
+                other_notifs = bus_sudo.search(
+                    [
+                        ("channel", "=", chan),
+                        ("write_date", "=", last_notif.write_date),
+                        ("id", "!=", last_notif.id),
+                    ]
+                )
+                if last_notif.message in other_notifs.mapped("message"):
+                    last_notif.unlink()
     else:
         summary = ["Summary hasn't been computed"]
 
