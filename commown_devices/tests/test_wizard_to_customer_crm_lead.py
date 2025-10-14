@@ -28,7 +28,11 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         defaults, possibilities = self.prepare_wizard(lead, "entity_id")
 
         chan = self.env.user.notify_info_channel_name
-        notifs = self.env["bus.bus"].search([("channel", "=", chan)])
+        notifs = (
+            self.env["bus.bus"]
+            .search([("channel", "=", chan)])
+            .filtered(lambda nf: json.loads(nf.message)["type"] == "web.notify")
+        )
         self.assertEqual(
             ["Not in stock: %s" % self.protective_screen.name],
             [json.loads(n["message"])["payload"][0]["message"] for n in notifs],
