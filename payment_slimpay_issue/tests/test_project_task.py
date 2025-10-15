@@ -556,7 +556,15 @@ class ProjectTC(TransactionCase):
             self.env["base.automation"]._check()
         if check_job_function:
             trap.assert_jobs_count(1, only=check_job_function)
-            trap.perform_enqueued_jobs()
+
+            # Since the Slimpay payment retry is passed through a queued job,
+            # and it's only launched after the retry attempt is performed,
+            # we check for any potential followup payment jobs.
+            with trap_jobs() as trap_payment_job:
+                trap.perform_enqueued_jobs()
+
+            if trap_payment_job.enqueued_jobs:
+                trap_payment_job.perform_enqueued_jobs()
 
     def flush_tracking(self):
         """Force the creation of tracking values."""
