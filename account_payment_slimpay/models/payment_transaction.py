@@ -101,29 +101,27 @@ class SlimpayTransaction(models.Model):
             return payment.ref
         return self.reference or "TR%d" % self.id
 
-    def slimpay_s2s_do_transaction(self, **kwargs):
-        "Execute non-interactive slimpay transactions in a job queue"
-
-        if self.env.context.get("slimpay_async_http", False):
-            self.with_delay(max_retries=1)._slimpay_s2s_do_transaction(**kwargs)
-            return True
-        else:
-            return self.slimpay_s2s_do_transaction(**kwargs)
-
-    def _slimpay_s2s_do_transaction(self, **kwargs):
-        "Slimpay transaction: MUST be executed in a queue job"
-        result = SlimpayTransaction.slimpay_s2s_do_transaction(self, **kwargs)
-        if not result:
-            raise ValueError(_("Slimpay transaction failed!"))
-
     def _send_payment_request(self):
-        """Perform a payment through a server to server call using a previously
-        signed mandate.
-        """
+        "Execute non-interactive slimpay transactions in a job queue"
         super()._send_payment_request()
         if self.provider_code != "slimpay":
             return
 
+        if self.env.context.get("slimpay_async_http", False):
+            self.update({"state": "done", "provider_reference": "unknown-yet"})
+            self.with_delay(max_retries=1)._send_payment_http_request()
+        else:
+            with self.env.cr.savepoint():
+                try:
+                    self._send_payment_http_request()
+                    self.state = "done" if self.provider_reference else "error"
+                except ErrorMessage as exc:
+                    self.update({"state": "error", "state_message": _(exc)})
+
+    def _send_payment_http_request(self):
+        """Perform a payment through a server to server call using a previously
+        signed mandate.
+        """
         _logger.debug("Starting auto Slimpay Transaction TR%s...", self.id)
         client = self.provider_id.slimpay_client()
         mandate_ref = client.action(
@@ -132,29 +130,16 @@ class SlimpayTransaction(models.Model):
         _logger.debug("Found mandate reference: %s", mandate_ref)
         amount = round(self.amount, self.currency_id.decimal_places)
 
-        with self.env.cr.savepoint():
-            err_msg = None
-            try:
-                provider_reference = client.create_payment(
-                    mandate_ref,
-                    amount,
-                    self.currency_id.name,
-                    self._label(),
-                    out=self._is_out_transaction(),
-                )
-                _logger.debug("Payment creation result: %s", provider_reference)
-            except ErrorMessage as exc:
-                err_msg = _(exc)
+        provider_reference = client.create_payment(
+            mandate_ref,
+            amount,
+            self.currency_id.name,
+            self._label(),
+            out=self._is_out_transaction(),
+        )
+        _logger.debug("Payment creation result: %s", provider_reference)
 
-        if err_msg is not None:
-            self.update({"state": "error", "state_message": err_msg})
-        else:
-            self.update(
-                {
-                    "state": "done" if provider_reference else "error",
-                    "provider_reference": provider_reference,
-                }
-            )
+        self.provider_reference = provider_reference
 
     def approval_url(self, so=None):
         "Return Slimpay approval URL for given optional sale order (1st one by default)"
