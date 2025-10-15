@@ -42,7 +42,7 @@ class ContractPaymentTC(TestContractBase):
             "slimpay_utils.SlimpayClient.create_payment"
         ) as pay:
             invoice = self.contract.with_context(
-                test_queue_job_no_delay=True
+                queue_job__no_delay=True
             ).recurring_create_invoice()
 
         label = pay.call_args[0][-1]
@@ -62,7 +62,7 @@ class ContractPaymentTC(TestContractBase):
             "slimpay_utils.SlimpayClient.create_payment"
         ) as pay:
             invoice = self.contract.with_context(
-                test_queue_job_no_delay=True
+                queue_job__no_delay=True
             ).recurring_create_invoice()
 
         label = pay.call_args[0][-1]
@@ -83,7 +83,7 @@ class ContractPaymentTC(TestContractBase):
         ) as pay:
             self.contract.with_context(
                 payment_transaction_label=payment_transaction_label,
-                test_queue_job_no_delay=True,
+                queue_job__no_delay=True,
             ).recurring_create_invoice()
 
         label = pay.call_args[0][-1]
