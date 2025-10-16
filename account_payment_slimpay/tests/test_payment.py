@@ -7,6 +7,7 @@ from odoo_test_helper import FakeModelLoader
 from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
+from odoo.addons.queue_job.tests.common import trap_jobs
 
 
 class SlimpayPaymentTestMixin:
@@ -100,7 +101,7 @@ class SlimpayPaymentTC(SlimpayPaymentTestMixin, TransactionCase):
         self.assertEqual(slimpay.support_refund, "partial")
         self.assertTrue(slimpay.support_tokenization)
 
-    def test_send_payment_request_ok(self):
+    def test_send_payment_request_sync_ok(self):
         meth_in = self.env.ref("account.account_payment_method_manual_in")
         payment_in = self._create_payment(
             payment_type="inbound", payment_method_id=meth_in.id
@@ -141,6 +142,25 @@ class SlimpayPaymentTC(SlimpayPaymentTestMixin, TransactionCase):
             cm.output,
         )
 
+    def test_send_payment_request_async_ok(self):
+        meth_in = self.env.ref("account.account_payment_method_manual_in")
+        payment = self._create_payment(
+            payment_type="inbound", payment_method_id=meth_in.id
+        )
+        with trap_jobs() as trap:
+            payment.with_context(slimpay_async_http=True).action_post()
+
+        tx = payment.payment_transaction_id
+        trap.assert_jobs_count(1, only=tx._send_payment_http_request)
+        self.assertEqual(tx.state, "done")
+        self.assertEqual(tx.provider_reference, "unknown-yet")
+
+        with patch.object(SlimpayClient, "action", side_effect=self.fake_action()):
+            trap.perform_enqueued_jobs()
+
+        self.assertEqual(tx.state, "done")
+        self.assertNotEqual(tx.provider_reference, "unknown-yet")
+
     def test_transaction_notification_methods(self):
         tx_model = self.env["payment.transaction"]
 
@@ -167,7 +187,7 @@ class SlimpayPaymentTC(SlimpayPaymentTestMixin, TransactionCase):
         tx.reference = False
         self.assertEqual(tx._label(), "TR%d" % tx.id)
 
-    def test_send_payment_request_error(self):
+    def test_send_payment_request_sync_error(self):
         meth_in = self.env.ref("account.account_payment_method_manual_in")
         payment = self._create_payment(
             payment_type="inbound", payment_method_id=meth_in.id
