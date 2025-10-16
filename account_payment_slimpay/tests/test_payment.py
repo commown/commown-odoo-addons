@@ -4,7 +4,7 @@ from unittest.mock import patch
 from coreapi.exceptions import ErrorMessage
 from odoo_test_helper import FakeModelLoader
 
-from odoo.tests.common import TransactionCase, tagged
+from odoo.tests.common import HttpCase, TransactionCase, get_db_name, tagged
 
 from odoo.addons.account_payment_slimpay.models.slimpay_utils import SlimpayClient
 from odoo.addons.queue_job.tests.common import trap_jobs
@@ -200,3 +200,40 @@ class SlimpayPaymentTC(SlimpayPaymentTestMixin, TransactionCase):
         tx = payment.payment_transaction_id
         self.assertEqual(tx.state, "error")
         self.assertEqual(tx.state_message, "crash")
+
+
+class SlimpayPaymentJobTC(SlimpayPaymentTestMixin, HttpCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        cls.loader = FakeModelLoader(cls.env, cls.__module__)
+        cls.loader.backup_registry()
+        from .models import TestPaymentProvider, TestPaymentTransaction
+
+        cls.loader.update_registry((TestPaymentTransaction, TestPaymentProvider))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.loader.restore_registry()
+        super().tearDownClass()
+
+    def _test_send_payment_request_async_error(self):
+        meth_in = self.env.ref("account.account_payment_method_manual_in")
+        payment = self._create_payment(
+            payment_type="inbound", payment_method_id=meth_in.id
+        )
+        payment.with_context(slimpay_async_http=True).action_post()
+        job = self.env["queue.job"].search(
+            [("model_name", "=", "payment.transaction")], limit=1
+        )
+        job.state = "enqueued"
+        url = f"/queue_job/runjob?db={get_db_name()}&job_uuid={job.uuid}"
+        self.authenticate("admin", "admin")
+
+        with patch.object(
+            SlimpayClient, "create_payment", side_effect=ErrorMessage("crash")
+        ):
+            self.url_open(url, timeout=30000)
+        # TODO
+        pass
