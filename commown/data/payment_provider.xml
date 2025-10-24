@@ -1,0 +1,8 @@
+<odoo>
+    <record
+        id="account_payment_slimpay.payment_provider_slimpay"
+        model="payment.provider"
+    >
+        <field name="tech_name">payment_provider_slimpay</field>
+    </record>
+</odoo>

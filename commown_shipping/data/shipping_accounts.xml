@@ -2,6 +2,7 @@
 
   <record id="shipping-account-colissimo-std-account" model="commown.shipping_account">
     <field name="name">Colissimo standard</field>
+    <field name="tech_name">shipping-account-colissimo-std-account</field>
     <field name="account">970066</field>
   </record>
 
@@ -10,6 +11,7 @@
         model="commown.shipping_account"
     >
     <field name="name">Colissimo SAV</field>
+    <field name="tech_name">shipping-account-colissimo-support-account</field>
     <field name="account">850952</field>
   </record>
 

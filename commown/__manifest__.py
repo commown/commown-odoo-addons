@@ -72,6 +72,7 @@
     ],
     "data": [
         "data/mail_templates.xml",
+        "data/payment_provider.xml",
         "data/product.xml",
         "data/product_public_category.xml",
         "data/res_partner_action.xml",
