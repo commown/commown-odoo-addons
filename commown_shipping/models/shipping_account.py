@@ -4,7 +4,7 @@ from odoo import fields, models
 class CommownShippingAccount(models.Model):
     _name = "commown.shipping_account"
     _description = "Shipping account data"
-    _inherit = ["server.env.mixin"]
+    _inherit = ["server.env.techname.mixin"]
 
     name = fields.Char(required=True)
     account = fields.Char(string="Account Number", required=True)

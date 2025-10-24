@@ -2,7 +2,7 @@ from odoo import models
 
 
 class PaymentProviderSlimpay(models.Model):
-    _inherit = ["payment.provider", "server.env.mixin"]
+    _inherit = ["payment.provider", "server.env.techname.mixin"]
     _name = "payment.provider"
 
     @property
