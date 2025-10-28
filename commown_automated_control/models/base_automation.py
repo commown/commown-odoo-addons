@@ -20,3 +20,6 @@ class BaseAutomation(models.Model):
     def _compute_automated_contol_id(self):
         for rec in self.filtered("automated_control_ids"):
             rec.automated_control_id = rec.automated_control_ids[0]
+
+    def delete_last_line(self):
+        self.action_server_id.delete_last_line()
