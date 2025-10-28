@@ -107,26 +107,26 @@
   <template id="portal_my_home_sale" inherit_id="sale.portal_my_home_sale">
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Quotations')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/quotes')]/ancestor::t/t[@t-set='title']"
             position="attributes"
         >
       <attribute name="t-if">False</attribute>
     </xpath>
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Quotations')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/quotes')]/ancestor::t/t[@t-set='title']"
             position="after"
         >
       <t t-set="title">My quotations</t>
     </xpath>
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Sales Orders')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/orders')]/ancestor::t/t[@t-set='title']"
             position="attributes"
         >
       <attribute name="t-if">False</attribute>
     </xpath>
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Sales Orders')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/orders')]/ancestor::t/t[@t-set='title']"
             position="after"
         >
       <t t-set="title">My orders</t>
@@ -137,13 +137,13 @@
   <template id="portal_my_home_invoice" inherit_id="account.portal_my_home_invoice">
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Invoices')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/invoices')]/ancestor::t/t[@t-set='title']"
             position="attributes"
         >
       <attribute name="t-if">False</attribute>
     </xpath>
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Invoices')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/invoices')]/ancestor::t/t[@t-set='title']"
             position="after"
         >
       <t t-set="title">My receipts, invoices and payments</t>
@@ -174,14 +174,14 @@
   <template id="portal_my_home" inherit_id="project.portal_my_home">
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Tasks')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/tasks')]/ancestor::t/t[@t-set='title']"
             position="attributes"
         >
       <attribute name="t-if">False</attribute>
     </xpath>
 
     <xpath
-            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='title']/text()[contains(., 'Tasks')]/ancestor::t[1]"
+            expr="//t[@t-call='portal.portal_docs_entry']/t[@t-set='url']/@t-value[contains(., '/my/tasks')]/ancestor::t/t[@t-set='title']"
             position="after"
         >
       <t t-set="title">My interactions with Commown team</t>
