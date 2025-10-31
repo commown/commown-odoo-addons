@@ -17,7 +17,7 @@
   </template>
 
   <template id="products_item" inherit_id="website_sale.products_item">
-    <xpath expr="//div[@itemprop='offers']/t" position="after">
+    <xpath expr="//div[@itemprop='offers']" position="after">
       <b t-if="product.has_recurrent_payment">
         <span>From</span>
         <span
@@ -33,7 +33,9 @@
         <t>$0</t>
       </t>
     </xpath>
-    <xpath expr="//div[@itemprop='offers']/b" t-if="False" />
+    <xpath expr="//div[@itemprop='offers']" position="attributes">
+      <attribute name="t-if">False</attribute>
+    </xpath>
 
   </template>
 
