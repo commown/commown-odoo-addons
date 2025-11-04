@@ -26,11 +26,15 @@
                 />
         <span t-field="product.recurrent_payment_frequency" />
       </b>
-      <t t-else="">
+      <t t-elif="template_price_vals['price_reduce'] > 0">
         <span
                     t-if="product.product_variant_count > 1 and product._get_combination_info()['price']"
                 >From</span>
-        <t>$0</t>
+        <span
+                    class="h6 mb-0"
+                    t-esc="template_price_vals['price_reduce']"
+                    t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
+                />
       </t>
     </xpath>
     <xpath expr="//div[@itemprop='offers']" position="attributes">
