@@ -17,23 +17,36 @@
   </template>
 
   <template id="products_item" inherit_id="website_sale.products_item">
-    <xpath expr="//div[@itemprop='offers']/t" position="after">
-      <b t-if="product.has_recurrent_payment">
-        <span>From</span>
-        <span
-                    t-esc="product.recurrent_payment_amount"
-                    t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
-                />
-        <span t-field="product.recurrent_payment_frequency" />
-      </b>
-      <t t-else="">
-        <span
-                    t-if="product.product_variant_count > 1 and product._get_combination_info()['price']"
-                >From</span>
-        <t>$0</t>
-      </t>
+    <xpath expr="//div[@itemprop='offers']" position="after">
+      <div
+                class="product_price"
+                itemprop="offers"
+                itemscope="itemscope"
+                itemtype="http://schema.org/Offer"
+            >
+        <b t-if="product.has_recurrent_payment">
+          <span>From</span>
+          <span
+                        t-esc="product.recurrent_payment_amount"
+                        t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
+                    />
+          <span t-field="product.recurrent_payment_frequency" />
+        </b>
+        <t t-elif="template_price_vals['price_reduce'] > 0">
+          <span
+                        t-if="product.product_variant_count > 1 and product._get_combination_info()['price']"
+                    >From</span>
+          <span
+                        class="h6 mb-0"
+                        t-esc="template_price_vals['price_reduce']"
+                        t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
+                    />
+        </t>
+      </div>
     </xpath>
-    <xpath expr="//div[@itemprop='offers']/b" t-if="False" />
+    <xpath expr="//div[@itemprop='offers']" position="attributes">
+      <attribute name="t-if">False</attribute>
+    </xpath>
 
   </template>
 
