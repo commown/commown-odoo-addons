@@ -21,6 +21,7 @@ class DeviceAssignmentHistory(models.Model):
         string="User",
         index=True,
         required=True,
+        domain="[('type', 'in', ['contact', 'other'])]",
     )
 
     device_location = fields.Selection(
