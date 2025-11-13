@@ -164,8 +164,10 @@ class Coupon(models.Model):
     def action_coop_campaign_optin_status(self):
         partner, key = self._action_coop_prerequisites()
         campaign = self.campaign_id
-        base_url = self.env["ir.config_parameter"].get_param(
-            "commown_cooperative_campaign.base_url"
+        base_url = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("commown_cooperative_campaign.base_url")
         )
 
         response = [
