@@ -34,7 +34,10 @@
           <group>
             <group>
               <field name="contractual_issue_type" />
-              <field name="contractual_issue_date" />
+              <field
+                                name="contractual_issue_date"
+                                attrs="{'required': [('contractual_issues_tracking', '=', True)]}"
+                            />
             </group>
             <group>
               <field name="penalty_exemption" />
