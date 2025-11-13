@@ -30,6 +30,7 @@ class DeviceAssignment(models.Model):
         string="User",
         required=True,
         inverse="_inverse_partner_id",
+        domain="[('type', 'in', ['contact', 'other'])]",
     )
 
     assignment_date = fields.Datetime(
