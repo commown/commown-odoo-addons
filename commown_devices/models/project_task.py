@@ -210,8 +210,8 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
                 [
                     picking["origin"] == task.get_name_for_origin()
                     and picking.state == "assigned"
-                    and "/" + str(task.contract_id.send_default_location().id) + "/"
-                    in picking.location_id.parent_path
+                    and "/%d/" % self.env.ref("stock.stock_location_customers").id
+                    in picking.location_dest_id.parent_path
                     for picking in task.contract_id.move_line_ids.mapped("picking_id")
                 ]
             )
