@@ -105,7 +105,7 @@ def create_move_from_lots(picking, located_lots):
                 "location_id": located_lots[lot]["loc"].id,
                 "location_dest_id": picking.location_dest_id.id,
                 "product_id": lot.product_id.id,
-                "product_uom_qty": lot.product_qty,
+                "product_uom_qty": 1,
                 "product_uom": lot.product_uom_id.id,
                 "date": picking.date,
                 "date_expected": picking.date,
