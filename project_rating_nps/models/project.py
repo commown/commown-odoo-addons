@@ -16,17 +16,12 @@ class Project(models.Model):
     # Originally computed in _compute_rating_satisfaction_percentage,
     rating_count = fields.Integer(compute="_compute_net_promoter_score")
 
-    @api.depends("task_ids.rating_ids.rating")
+    @api.depends("rating_ids.rating")
     def _compute_net_promoter_score(self):
         for record in self:
-            task_ids = self.env["project.task"].search(
-                [
-                    ("project_id", "=", record.id),
-                ]
-            )
             base_domain = [
-                ("res_model", "=", task_ids._name),
-                ("res_id", "in", task_ids.ids),
+                ("parent_res_model", "=", record._name),
+                ("parent_res_id", "=", record.id),
                 ("consumed", "=", True),
                 (
                     "create_date",
