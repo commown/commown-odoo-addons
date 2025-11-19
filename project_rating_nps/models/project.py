@@ -31,17 +31,13 @@ class Project(models.Model):
                     ),
                 ),
             ]
-            total_count = self.env["rating.rating"].search_count(base_domain)
-            record.rating_count = total_count
-            if total_count == 0:
+            ratings = self.env["rating.rating"].search(base_domain)
+            record.rating_count = total_count = len(ratings)
+            if not ratings:
                 record.net_promoter_score = False
             else:
-                promoters_count = self.env["rating.rating"].search_count(
-                    base_domain + [("rating", ">=", 9)]
-                )
-                detractors_count = self.env["rating.rating"].search_count(
-                    base_domain + [("rating", "<=", 6)]
-                )
+                promoters_count = len(ratings.filtered_domain([("rating", ">=", 9)]))
+                detractors_count = len(ratings.filtered_domain([("rating", "<=", 6)]))
                 record.net_promoter_score = int(
                     100 * (1.0 * promoters_count - detractors_count) / total_count
                 )
