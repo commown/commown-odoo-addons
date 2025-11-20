@@ -100,6 +100,16 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             "project.task", self.project, "project_id", user_choices=user_choices
         )
 
+    def test_get_name_for_origin(self):
+        self.task.name = ""
+        self.assertEqual(self.task.get_name_for_origin(), "Task-%s" % self.task.id)
+
+        self.task.name = "[SO91821-01] Any suffix"
+        self.assertEqual(self.task.get_name_for_origin(), "SO91821-01")
+
+        self.task.name = "Any title"
+        self.assertEqual(self.task.get_name_for_origin(), "Task-%s" % self.task.id)
+
     def test_ui_help_desk(self):
         self.project.update({"device_tracking": True, "require_contract": True})
 

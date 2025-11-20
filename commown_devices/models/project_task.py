@@ -1,9 +1,12 @@
 import json
+import re
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, Warning
 
 from .common import ToCustomerPickingMixin, _assigned
+
+REGEX_SO = re.compile(r"^\[(SO[0-9]+-[0-9]+)\].*$")
 
 CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.diagnostic_stage",
@@ -207,8 +210,8 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
                 [
                     picking["origin"] == task.get_name_for_origin()
                     and picking.state == "assigned"
-                    and "/" + str(task.contract_id.send_default_location().id) + "/"
-                    in picking.location_id.parent_path
+                    and "/%d/" % self.env.ref("stock.stock_location_customers").id
+                    in picking.location_dest_id.parent_path
                     for picking in task.contract_id.move_line_ids.mapped("picking_id")
                 ]
             )
@@ -276,4 +279,11 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         }
 
     def get_name_for_origin(self):
-        return "Task-%s" % self.id
+        """Return an origin for the picking(s) current task is related to:
+
+        - "SOxxxx-xx" if current task is the task used to send the
+          initial device of a contract
+        - "Task-<id>" otherwise
+        """
+        match = REGEX_SO.match(self.name or "")
+        return match.groups()[0] if match else "Task-%s" % self.id
