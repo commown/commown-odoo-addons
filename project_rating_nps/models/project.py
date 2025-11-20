@@ -23,7 +23,7 @@ class Project(models.Model):
                 ("parent_res_model", "=", record._name),
                 ("parent_res_id", "=", record.id),
                 ("consumed", "=", True),
-                ("create_date", ">=", fields.datetime.now() - timedelta(days=30)),
+                ("write_date", ">=", fields.datetime.now() - timedelta(days=30)),
             ]
             ratings = self.env["rating.rating"].search(base_domain)
             record.rating_count = total_count = len(ratings)
