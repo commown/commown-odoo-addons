@@ -99,8 +99,10 @@
     <!-- Hide spans containing the extra prices in both select and radio inputs -->
     <xpath
             expr="//*[hasclass('sign_badge_price_extra')]//ancestor::span"
-            t-if="False"
-        />
+            position="attributes"
+        >
+      <attribute name="t-if">False</attribute>
+    </xpath>
 
   </template>
 
