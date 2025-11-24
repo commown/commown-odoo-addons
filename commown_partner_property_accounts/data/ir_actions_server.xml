@@ -1,0 +1,21 @@
+<odoo>
+
+  <record id="create_payable_account" model="ir.actions.server">
+    <field name="name">[commown] Create payable account</field>
+    <field name="model_id" ref="base.model_res_partner" />
+    <field name="binding_model_id" ref="base.model_res_partner" />
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+    <field name="code">records._create_payable_account()</field>
+  </record>
+
+  <record id="create_receivable_account" model="ir.actions.server">
+    <field name="name">[commown] Create receivable account</field>
+    <field name="model_id" ref="base.model_res_partner" />
+    <field name="binding_model_id" ref="base.model_res_partner" />
+    <field name="sequence">10</field>
+    <field name="state">code</field>
+    <field name="code">records._create_receivable_account()</field>
+  </record>
+
+</odoo>
