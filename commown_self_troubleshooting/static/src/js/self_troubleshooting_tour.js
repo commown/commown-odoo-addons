@@ -24,7 +24,7 @@ odoo.define("commown_self_troubleshooting.test_tours", function (require) {
             content: "Check name",
             trigger: "input[name=name]",
             run: function () {
-                const user = $("#top_menu li:last-child a b span:eq(0)").text();
+                const user = $("#top_menu li:last-child a span:eq(0)").text();
                 if (this.$anchor.val() !== user) {
                     console.log(
                         "Field 'name' value should equal the logged-in user name:"
