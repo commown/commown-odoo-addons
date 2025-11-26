@@ -38,6 +38,7 @@
         "views/project_task.xml",
         "views/website_portal_templates.xml",
         "views/wizard_print_label.xml",
+        "security/res_groups.xml",
         "security/ir.model.access.csv",
     ],
     "demo": [
