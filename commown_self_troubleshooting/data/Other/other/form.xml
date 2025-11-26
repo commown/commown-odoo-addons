@@ -38,7 +38,7 @@
               <input
                                 type="hidden"
                                 name="project_ref"
-                                value="commown_support.support_project"
+                                value="commown_support.commercial_project"
                             />
               <input
                                 type="hidden"
@@ -108,11 +108,6 @@
                       </div>
 
                       <div class="form-group">
-                        <input
-                                                    type="hidden"
-                                                    name="stage_ref"
-                                                    value="commown_support.stage_received"
-                                                />
                         <button
                                                     type="submit"
                                                     class="btn btn-primary"
