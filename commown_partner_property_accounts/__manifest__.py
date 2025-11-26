@@ -4,7 +4,7 @@
 {
     "name": "Commown partner property accounts",
     "summary": "Create Commown's partners property accounts automatically.",
-    "version": "16.0.1.0.3",
+    "version": "16.0.1.0.4",
     "development_status": "Alpha",
     "category": "Accounting",
     "website": "https://github.com/commown/commown-odoo-addons",
