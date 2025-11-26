@@ -15,4 +15,7 @@
         "account",
         "sale",
     ],
+    "data": [
+        "data/ir_actions_server.xml",
+    ],
 }
