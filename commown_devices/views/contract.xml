@@ -47,7 +47,7 @@
                 <field name="location_id" />
                 <field name="location_dest_id" />
                 <field name="date" />
-                <field name="origin" />
+                <field name="origin_label" />
                 <button
                                     string="Origin"
                                     class="oe_highlight"
