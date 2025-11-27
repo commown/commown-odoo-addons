@@ -659,3 +659,35 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         with self.assertRaises(UserError) as err:
             self.task.action_scrap_device()
         self.assertEqual(err.exception.args[0], "Device is already in a scrap location")
+
+    def test_task_related_move_lines(self):
+        "Only move lines related to any given task should be directly accessible"
+        # Setup
+        contract = self.c1.copy()
+        task_1 = self.task.copy({"contract_id": contract.id})
+        task_2 = task_1.copy()
+
+        # Initial case: no stock moves have been created
+        self.assertFalse(task_1.move_line_ids)
+        self.assertFalse(task_2.move_line_ids)
+
+        # Creating a picking through both tasks
+        pt_variant = self.nontracked_product.product_variant_id
+        pt_location = (
+            self.env["stock.quant"]
+            .search([("product_id", "=", pt_variant.id), ("quantity", ">", "0")])
+            .location_id
+        )
+        self.adjust_stock_notracking(pt_variant, pt_location, qty=2.0)
+
+        wizard_1 = self.env["project.task.notracking.outward.picking.wizard"].create(
+            {"task_id": task_1.id, "variant_id": pt_variant.id}
+        )
+        wizard_2 = wizard_1.copy({"task_id": task_2.id})
+
+        ml_1 = wizard_1.create_picking().mapped("move_line_ids")
+        ml_2 = wizard_2.create_picking().mapped("move_line_ids")
+
+        self.assertEqual(contract.move_line_ids, (ml_1 | ml_2))
+        self.assertEqual(task_1.move_line_ids, ml_1)
+        self.assertEqual(task_2.move_line_ids, ml_2)
