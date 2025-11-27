@@ -74,7 +74,7 @@
             $(document).ready(function() {
               $('#toggleMoveLines').on('click', function(event) {
                 event.preventDefault();
-                $(".o_field_widget[name='move_line_ids'] tr.text-it").toggle()
+                $(".o_field_widget[name='move_line_ids'] tr.fst-italic").toggle()
               });
             });
           </script>
