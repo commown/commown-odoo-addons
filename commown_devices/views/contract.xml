@@ -12,59 +12,58 @@
 
       <xpath expr="//notebook" position="inside">
         <page name="devices" string="Devices">
-          <group name="devices" string="Devices">
-            <field name="lot_ids" nolabel="1">
-              <tree>
-                <field name="product_id" />
-                <field name="name" />
-              </tree>
-            </field>
-          </group>
-          <group name="move_lines" string="Move lines">
-            <field
-                            name="move_line_ids"
-                            nolabel="1"
-                            context='{"short_location_name": True}'
-                        >
-              <tree
-                                decoration-it="not lot_id"
-                                decoration-bf="state != 'done'"
-                                decoration-success="is_contract_in"
-                                decoration-danger="not is_contract_in"
-                                default_order="date ASC, id ASC"
-                            >
-                <field name="is_contract_in" invisible="1" />
-                <field name="show_validate_picking" invisible="1" />
-                <button
-                                    string="Operation"
-                                    class="oe_highlight"
-                                    type="object"
-                                    name="action_open_parent"
-                                />
+          <separator string="Devices" />
+          <field name="lot_ids" nolabel="1">
+            <tree>
+              <field name="product_id" />
+              <field name="name" />
+            </tree>
+          </field>
 
-                <field name="product_id" />
-                <field name="lot_id" />
-                <field name="location_id" />
-                <field name="location_dest_id" />
-                <field name="date" />
-                <field name="origin_label" />
-                <button
-                                    string="Origin"
-                                    class="oe_highlight"
-                                    type="object"
-                                    name="action_open_parent_origin"
-                                />
-                <field name="state" />
-                <button
-                                    name="action_validate_linked_picking"
-                                    string="Validate"
-                                    class="btn-primary"
-                                    type="object"
-                                    attrs="{'invisible': [('show_validate_picking', '=', False)]}"
-                                />
-              </tree>
-            </field>
-          </group>
+          <separator string="Move lines" />
+          <field
+                        name="move_line_ids"
+                        nolabel="1"
+                        context='{"short_location_name": True}'
+                    >
+            <tree
+                            decoration-it="not lot_id"
+                            decoration-bf="state != 'done'"
+                            decoration-success="is_contract_in"
+                            decoration-danger="not is_contract_in"
+                            default_order="date ASC, id ASC"
+                        >
+              <field name="is_contract_in" invisible="1" />
+              <field name="show_validate_picking" invisible="1" />
+              <button
+                                string="Operation"
+                                class="oe_highlight"
+                                type="object"
+                                name="action_open_parent"
+                            />
+
+              <field name="product_id" />
+              <field name="lot_id" />
+              <field name="location_id" />
+              <field name="location_dest_id" />
+              <field name="date" />
+              <field name="origin_label" />
+              <button
+                                string="Origin"
+                                class="oe_highlight"
+                                type="object"
+                                name="action_open_parent_origin"
+                            />
+              <field name="state" />
+              <button
+                                name="action_validate_linked_picking"
+                                string="Validate"
+                                class="btn-primary"
+                                type="object"
+                                attrs="{'invisible': [('show_validate_picking', '=', False)]}"
+                            />
+            </tree>
+          </field>
           <a
                         href="#"
                         id="toggleMoveLines"
@@ -75,7 +74,7 @@
             $(document).ready(function() {
               $('#toggleMoveLines').on('click', function(event) {
                 event.preventDefault();
-                $(".o_field_widget[name='move_line_ids'] tr.text-it").toggle()
+                $(".o_field_widget[name='move_line_ids'] tr.fst-italic").toggle()
               });
             });
           </script>
