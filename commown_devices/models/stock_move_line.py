@@ -21,7 +21,12 @@ class StockMoveLine(models.Model):
         compute="_compute_show_validate_picking", store=False
     )
 
-    origin = fields.Char(string="origin", compute="_compute_origin", store=False)
+    origin_label = fields.Char(
+        string="Origin",
+        help="Used by commown_devices to retrieve a move line's origin resource",
+        compute="_compute_origin_label",
+        store=False,
+    )
 
     def _get_parent(self):
         return self.move_id.scrap_ids or self.move_id.picking_id
@@ -38,9 +43,9 @@ class StockMoveLine(models.Model):
                 rec.is_contract_in = False
 
     @api.depends("move_id.picking_id", "move_id.scrap_ids")
-    def _compute_origin(self):
+    def _compute_origin_label(self):
         for rec in self:
-            rec.origin = rec._get_parent().origin
+            rec.origin_label = rec._get_parent().origin
 
     def _compute_show_validate_picking(self):
         for rec in self:

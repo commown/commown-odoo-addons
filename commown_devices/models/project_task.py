@@ -56,7 +56,8 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
     move_line_ids = fields.One2many(
         "stock.move.line",
         string="Move Lines",
-        related="contract_id.move_line_ids",
+        compute="_compute_move_line_ids",
+        store=False,
     )
 
     def _compute_storable_product_domain(self):
@@ -65,6 +66,20 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
             products = self._may_be_related_lots().mapped("product_id")
             domain = [("id", "in", products.ids)]
         self.storable_product_id_domain = domain
+
+    @api.depends("contract_id.move_line_ids")
+    def _compute_move_line_ids(self):
+        """
+        On a given task, filter contract move lines to only display
+        moves related to the task directly.
+        """
+        for rec in self:
+            if rec.contract_id:
+                rec.move_line_ids = rec.contract_id.move_line_ids.filtered(
+                    lambda ml: ml.origin_label == rec.get_name_for_origin()
+                )
+            else:
+                rec.move_line_ids = False
 
     def _may_be_related_lots(self):
         """Return lots that lay be related to current task:
