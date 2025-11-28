@@ -4,7 +4,7 @@ from odoo.http import request
 from odoo.service import security
 
 from odoo.addons.portal.controllers.web import Home as WebHome
-from odoo.addons.web.controllers.utils import ensure_db, is_user_internal
+from odoo.addons.web.controllers.utils import ensure_db
 
 
 class Home(WebHome):
@@ -26,17 +26,10 @@ class Home(WebHome):
         ensure_db()
         if not request.session.uid:
             return request.redirect("/web/login", 303)
-
-        session_user = request.env["res.users"].browse(request.session.uid)
-
         if kw.get("redirect"):
             return request.redirect(kw.get("redirect"), 303)
         if not security.check_session(request.session, request.env):
             raise http.SessionExpiredException("Session expired")
-        if not session_user.has_group(
-            "customer_manager_base.group_customer_admin"
-        ) and not is_user_internal(request.session.uid):
-            return request.redirect("/web/login_successful", 303)
 
         # Side-effect, refresh the session lifetime
         request.session.touch()

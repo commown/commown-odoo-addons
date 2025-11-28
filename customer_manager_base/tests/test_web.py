@@ -57,24 +57,9 @@ class CustomerManagerControllerTC(HttpCase):
             self.base_url() + "/web",
         )
 
-    def test_customer_admin_user(self):
-        # Check redirect for non-customer admin portal user
-        self.authenticate("portal", "portal")
-        non_customer_admin_res = self.get("/web", assert_code=303)
-        self.assertEqual(
-            non_customer_admin_res.headers["location"],
-            self.base_url() + "/web/login_successful",
-        )
-
-        # Check /web access for customer admin portal user
-        self.portal_user.groups_id |= self.env.ref(
-            "customer_manager_base.group_customer_admin"
-        )
-        customer_admin_res = self.get("/web")
-        self.assertEqual(
-            customer_admin_res.url,
-            self.base_url() + "/web",
-        )
+    def test_portal_user_web_access(self):
+        portal_res = self.get("/web")
+        self.assertEqual(portal_res.url, self.base_url() + "/web")
 
     # Misc. routes
     def test_access_with_redirect(self):
