@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="contract_contract_form_view" model="ir.ui.view">
+        <field name="name">contract.contract form view (in contract)</field>
+        <field name="model">contract.contract</field>
+        <field name="inherit_id" ref="contract.contract_contract_form_view" />
+        <field name="arch" type="xml">
+            <!-- Replace string attributes by title attributes -->
+            <xpath expr="//button[@name='action_plan_successor']" position='attributes'>
+                <attribute name="string" value="" />
+                <attribute name="title">Plan Start</attribute>
+            </xpath>
+
+            <xpath
+                expr="//button[@name='action_stop_plan_successor']"
+                position='attributes'
+            >
+                <attribute name="string" value="" />
+                <attribute name="title">Stop Plan Successor</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_stop']" position='attributes'>
+                <attribute name="string" value="" />
+                <attribute name="title">Stop</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='cancel']" position='attributes'>
+                <attribute name="string" value="" />
+                <attribute name="title">Cancel</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_uncancel']" position='attributes'>
+                <attribute name="string" value="" />
+                <attribute name="title">Un-cancel</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='renew']" position='attributes'>
+                <attribute name="string" value="" />
+                <attribute name="title">Renew</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
