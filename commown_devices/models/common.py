@@ -233,6 +233,7 @@ def _force_picking_date(picking, date):
 
 
 def _force_scrap_date(scrap, date):
+    _set_date(scrap, date, "date_done")
     loc = scrap.scrap_location_id
     _set_date(scrap.move_id, date, "date")
     for move_line in scrap.move_id.move_line_ids:
