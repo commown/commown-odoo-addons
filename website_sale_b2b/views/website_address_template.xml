@@ -50,9 +50,11 @@
 
     <!-- * add in field_required hidden input for the controller -->
     <xpath expr="//form//input[@name='field_required']" position="attributes">
-      <t t-if="edit_company_infos">
-        <attribute name="t-att-value" add="',company_name'" separator="+" />
-      </t>
+        <attribute
+                name="t-att-value"
+                add="(',company_name' if edit_company_infos else '')"
+                separator="+"
+            />
     </xpath>
 
   </template>
