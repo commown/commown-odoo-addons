@@ -131,6 +131,9 @@ class ContractLine(models.Model):
         for line in c_lines:
             yield line
 
+    def name_get(self):
+        return [(line.id, f"{line.date_start} - {line.name}") for line in self]
+
 
 class Contract(models.Model):
     _inherit = "contract.contract"

@@ -384,3 +384,8 @@ class ContractTC(TestContractBase):
             cline = self.contract.contract_line_ids[0]
             cdiscount._condition_ok(cline, inv1.date)
         self.assertIn("invalid discount condition", err.exception.args[0].lower())
+
+    def test_contract_line_name_get(self):
+        "Check the name_get method correctly computes the line display_name"
+        line = self.contract.contract_line_ids[0]
+        self.assertEqual(line.display_name, f"{line.date_start} - {line.name}")
