@@ -29,7 +29,7 @@ class StockScrapTC(BaseLotTC):
             self.scrap.action_set_date_done_to_move_line_date()
         self.assertEqual(err.exception.args[0], "Scrap must be done to use this action")
 
-        # Do scrap and set date done to expected
+        # Do scrap and set date done to move line date
         self.scrap.action_validate()
         self.scrap.move_id.move_line_ids.date = self.scrap_date
         self.scrap.action_set_date_done_to_move_line_date()
@@ -37,6 +37,7 @@ class StockScrapTC(BaseLotTC):
         # Check results
         quant = self.lot.quant_ids.filtered(lambda q: q.quantity > 0)
 
+        self.assertEqual(self.scrap.date_done, self.scrap_date)
         self.assertEqual(self.scrap.move_id.date, self.scrap_date)
         self.assertEqual(self.scrap.move_id.move_line_ids.date, self.scrap_date)
         self.assertEqual(quant.in_date, self.scrap_date)
