@@ -431,7 +431,15 @@ class RentalFeesDefinitionLine(models.Model):
                 )
                 date_amounts = [(p.date_invoice, p.price_subtotal) for p in forecasts]
             else:
-                date_amounts = self._get_invoiced_amounts(period)
+                try:
+                    date_amounts = self._get_invoiced_amounts(period)
+                except Exception as error:  # pylint: disable=except-pass
+                    raise ValidationError(
+                        _(
+                            "Error occurred while computing invoices amounts for period %(p)s"
+                        )
+                        % {"p": period}
+                    ) from error
 
             for from_date, to_date in month_intervals(period):
                 total = 0.0

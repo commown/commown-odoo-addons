@@ -1,3 +1,4 @@
+import traceback as tb
 from datetime import date, datetime
 
 import pyexcel
@@ -645,11 +646,11 @@ class RentalFeesComputationTC(RentalFeesTC):
         # Do the same computation but with an error in get_main_rental_service:
         rental_service.property_contract_template_id = False
         with mute_logger("odoo.addons.rental_fees.models.rental_fees_computation"):
-            with self.assertRaises(RuntimeError) as err:
+            with self.assertRaises(ValidationError) as err:
                 self.compute("2021-05-01")
 
         # Check the generated error contains useful information
-        exc = str(err.exception)
+        exc = "\n".join(tb.format_exception(err.exception))
         self.assertIn("device: N/S 1", exc)
         self.assertIn(contract.name, exc)
         self.assertIn(self.fees_def.name, exc)
