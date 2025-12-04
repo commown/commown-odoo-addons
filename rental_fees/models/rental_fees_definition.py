@@ -486,7 +486,7 @@ class RentalFeesDefinitionLine(models.Model):
         )
 
         aas = period["contract"].contract_line_ids.mapped("analytic_distribution")
-        aa_ids = list(itertools.chain.from_iterable(aa.keys() for aa in aas))
+        aa_ids = list(itertools.chain.from_iterable(aa.keys() for aa in aas if aa))
 
         self.env.cr.execute(
             """ SELECT ML.id
