@@ -39,7 +39,10 @@
           </page>
         </xpath>
 
-        <xpath expr="//field[@name='partner_id']" position="after">
+        <xpath
+                expr="//group[@name='opportunity_partner']//field[@name='partner_id']"
+                position="after"
+            >
           <field name="commercial_partner_id" invisible="1" />
           <field
                     name="recipient_partner_id"
