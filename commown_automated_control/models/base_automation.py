@@ -18,8 +18,14 @@ class BaseAutomation(models.Model):
 
     @api.depends("automated_control_ids")
     def _compute_automated_contol_id(self):
-        for rec in self.filtered("automated_control_ids"):
-            rec.automated_control_id = rec.automated_control_ids[0]
+        no_control_ids = []
+        for rec in self:
+            if rec.automated_control_ids:
+                rec.automated_control_id = rec.automated_control_ids[0]
+            else:
+                no_control_ids.append(rec.id)
+
+        self.env["base.automation"].browse(no_control_ids).automated_control_id = False
 
     def delete_last_line(self):
         self.action_server_id.delete_last_line()
