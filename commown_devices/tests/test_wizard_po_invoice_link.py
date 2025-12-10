@@ -39,7 +39,7 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
 
     def test_invoice_domain(self):
         wizard = self.create_wizard()
-        base_domain = [("type", "=", "in_invoice")]
+        base_domain = [("move_type", "=", "in_invoice")]
         # Test prerequisite
         self.assertTrue(wizard.po_id.partner_id.commercial_partner_id)
 
@@ -78,13 +78,13 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
         wizard = self.create_wizard()
         self.assertEqual(
             set(wizard.mapped("link_line_ids.invoice_line_id_domain")),
-            {'[["invoice_id", "=", false]]'},
+            {'[["move_id", "=", false]]'},
         )
         wizard.invoice_id = self.invoice.id
         wizard.link_line_ids._compute_invoice_line_id_domain()
         self.assertEqual(
             set(wizard.mapped("link_line_ids.invoice_line_id_domain")),
-            {'[["invoice_id", "=", %s]]' % self.invoice.id},
+            {'[["move_id", "=", %s]]' % self.invoice.id},
         )
 
     def test_action_assign_invoice(self):

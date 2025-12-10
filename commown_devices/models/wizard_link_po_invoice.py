@@ -33,7 +33,7 @@ class POInvoiceLinkLine(models.TransientModel):
     def _compute_invoice_line_id_domain(self):
         for rec in self:
             rec.invoice_line_id_domain = json.dumps(
-                [("invoice_id", "=", rec.wizard_id.invoice_id.id)]
+                [("move_id", "=", rec.wizard_id.invoice_id.id)]
             )
 
 
@@ -87,7 +87,7 @@ class POInvoiceLinkWizard(models.TransientModel):
                         pid,
                     ),
                     (
-                        "type",
+                        "move_type",
                         "=",
                         "in_invoice",
                     ),
