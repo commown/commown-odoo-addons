@@ -1,5 +1,7 @@
 import json
 
+from odoo.exceptions import UserError
+
 from .common import LinkWizardTC
 
 
@@ -125,3 +127,16 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
             set(self.invoice.line_ids.mapped("name")),
             {"%s: %s" % (self.po.name, p.name) for p in [self.fp, self.pc1, self.pc2]},
         )
+
+        # If no link lines are present in the wizard (ie. all lines are already fused),
+        # the wizard should raise an exception
+        wizard = (
+            self.env["po.invoice.link.wizard"]
+            .with_context(active_ids=[self.po.id], default_po_id=self.po.id)
+            .create({})
+        )
+        self.assertFalse(wizard.link_line_ids)
+
+        with self.assertRaises(UserError) as exc:
+            wizard.action_assign_invoice()
+        self.assertIn("link is required", exc.exception.args[0])
