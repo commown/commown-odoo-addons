@@ -1,6 +1,7 @@
 import json
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class POInvoiceLinkLine(models.TransientModel):
@@ -33,7 +34,7 @@ class POInvoiceLinkLine(models.TransientModel):
     def _compute_invoice_line_id_domain(self):
         for rec in self:
             rec.invoice_line_id_domain = json.dumps(
-                [("invoice_id", "=", rec.wizard_id.invoice_id.id)]
+                [("move_id", "=", rec.wizard_id.invoice_id.id)]
             )
 
 
@@ -87,7 +88,7 @@ class POInvoiceLinkWizard(models.TransientModel):
                         pid,
                     ),
                     (
-                        "type",
+                        "move_type",
                         "=",
                         "in_invoice",
                     ),
@@ -96,12 +97,16 @@ class POInvoiceLinkWizard(models.TransientModel):
         }
 
     def action_assign_invoice(self):
+        if not self.link_line_ids:
+            raise UserError(_("At least one purchase order/invoice link is required."))
+
         for link in self.link_line_ids:
             link.invoice_line_id.name = "%s: %s" % (
                 link.wizard_id.po_id.name,
                 link.invoice_line_id.name,
             )
             link.po_line_id.invoice_lines |= link.invoice_line_id
+
         self.link_line_ids.mapped("invoice_line_id.move_id").update(
-            {"invoice_origin": link.wizard_id.po_id.name}
+            {"invoice_origin": self.po_id.name}
         )

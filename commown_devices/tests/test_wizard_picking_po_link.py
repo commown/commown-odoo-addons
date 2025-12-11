@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 from .common import LinkWizardTC
@@ -77,16 +78,31 @@ class PickingPoLinkWizardTC(LinkWizardTC):
 
     def test_purchase_line_id_domain(self):
         wizard = self.create_wizard()
+        lines_domain = set(wizard.mapped("link_line_ids.purchase_line_id_domain"))
         self.assertEqual(
-            set(wizard.mapped("link_line_ids.purchase_line_id_domain")),
+            lines_domain,
             {'[["order_id", "=", false]]'},
         )
+
+        # Perform a search with the generated domain, to insure it's valid.
+        po_lines = self.env["purchase.order.line"].search(
+            json.loads(lines_domain.pop())
+        )
+        self.assertFalse(po_lines)
+
         wizard.po_id = self.po.id
         wizard.link_line_ids._compute_purchase_line_id_domain()
+        lines_domain = set(wizard.mapped("link_line_ids.purchase_line_id_domain"))
         self.assertEqual(
-            set(wizard.mapped("link_line_ids.purchase_line_id_domain")),
+            lines_domain,
             {'[["order_id", "=", %s]]' % self.po.id},
         )
+
+        # Perform a search with the generated domain, to insure it's valid.
+        po_lines = self.env["purchase.order.line"].search(
+            json.loads(lines_domain.pop())
+        )
+        self.assertEqual(po_lines, wizard.po_id.order_line)
 
     def test_assign_po(self):
         # Check prerequisite

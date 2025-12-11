@@ -1,3 +1,7 @@
+import json
+
+from odoo.exceptions import UserError
+
 from .common import LinkWizardTC
 
 
@@ -39,7 +43,7 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
 
     def test_invoice_domain(self):
         wizard = self.create_wizard()
-        base_domain = [("type", "=", "in_invoice")]
+        base_domain = [("move_type", "=", "in_invoice")]
         # Test prerequisite
         self.assertTrue(wizard.po_id.partner_id.commercial_partner_id)
 
@@ -58,6 +62,9 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
             ),
         )
 
+        # Perform a search with the generated domain, to insure it's valid.
+        self.env["account.move"].search(invoice_domain)
+
         wizard.po_id.partner_id.commercial_partner_id = False
         invoice_domain = wizard._compute_invoice_domain()["domain"]["invoice_id"]
         self.assertEqual(
@@ -74,18 +81,32 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
             ),
         )
 
+        # Perform a search with the generated domain, to insure it's valid.
+        self.env["account.move"].search(invoice_domain)
+
     def test_invoice_line_domain(self):
         wizard = self.create_wizard()
+        lines_domain = set(wizard.mapped("link_line_ids.invoice_line_id_domain"))
         self.assertEqual(
-            set(wizard.mapped("link_line_ids.invoice_line_id_domain")),
-            {'[["invoice_id", "=", false]]'},
+            lines_domain,
+            {'[["move_id", "=", false]]'},
         )
+
+        # Perform a search with the generated domain, to insure it's valid.
+        inv_lines = self.env["account.move.line"].search(json.loads(lines_domain.pop()))
+        self.assertFalse(inv_lines)
+
         wizard.invoice_id = self.invoice.id
         wizard.link_line_ids._compute_invoice_line_id_domain()
+        lines_domain = set(wizard.mapped("link_line_ids.invoice_line_id_domain"))
         self.assertEqual(
-            set(wizard.mapped("link_line_ids.invoice_line_id_domain")),
-            {'[["invoice_id", "=", %s]]' % self.invoice.id},
+            lines_domain,
+            {'[["move_id", "=", %s]]' % self.invoice.id},
         )
+
+        # Perform a search with the generated domain, to insure it's valid.
+        inv_lines = self.env["account.move.line"].search(json.loads(lines_domain.pop()))
+        self.assertEqual(inv_lines, wizard.invoice_id.line_ids)
 
     def test_action_assign_invoice(self):
         self.assertFalse(self.po.order_line.mapped("invoice_lines"))
@@ -106,3 +127,16 @@ class POInvoiceLinkWizardTC(LinkWizardTC):
             set(self.invoice.line_ids.mapped("name")),
             {"%s: %s" % (self.po.name, p.name) for p in [self.fp, self.pc1, self.pc2]},
         )
+
+        # If no link lines are present in the wizard (ie. all lines are already fused),
+        # the wizard should raise an exception
+        wizard = (
+            self.env["po.invoice.link.wizard"]
+            .with_context(active_ids=[self.po.id], default_po_id=self.po.id)
+            .create({})
+        )
+        self.assertFalse(wizard.link_line_ids)
+
+        with self.assertRaises(UserError) as exc:
+            wizard.action_assign_invoice()
+        self.assertIn("link is required", exc.exception.args[0])
