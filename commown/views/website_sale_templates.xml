@@ -183,7 +183,7 @@
   <template id="product" inherit_id="website_sale_b2b.product_b2b">
 
     <!-- Display availability warning for service products -->
-    <xpath expr="//a[@id='add_to_cart']" position="after">
+    <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
       <t
                 t-set="availability_class"
                 t-value="product.type == 'service' and {'warning': 'warning', 'block': 'danger'}.get(product.sale_line_warn, '') or ''"
