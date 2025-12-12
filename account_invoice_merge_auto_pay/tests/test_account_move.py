@@ -112,3 +112,27 @@ class AccountMoveTC(AccountMoveMergeAutoPayMixin):
             self._merge_and_pay()
 
         self.assertIn("No payment token", err.exception.args[0])
+
+    def test_reversed_move_no_auto_merge(self):
+        "Reversed moves created using the account.move.reversal wizard should have the auto_merge value to False"
+        inv = self.create_invoice(self.partner_a, "2019-05-10", 1.0)
+        inv.action_post()
+
+        self.assertTrue(inv.auto_merge)  # Test pre-requisite
+
+        # Creating reserval move, and checking its auto_merge field
+        wiz = (
+            self.env["account.move.reversal"]
+            .with_context(active_model="account.move", active_ids=inv.ids)
+            .create(
+                {
+                    "move_ids": inv.ids,
+                    "journal_id": inv.journal_id.id,
+                    "refund_method": "refund",
+                }
+            )
+        )
+        wiz.reverse_moves()
+
+        reversed_inv = inv.reversal_move_id
+        self.assertFalse(reversed_inv.auto_merge)
