@@ -14,6 +14,24 @@ class SaleOrderReportTC(ReportTC):
         cls.so = cls.env.ref("sale.sale_order_1")
         assert cls.so.state == "draft", "Test pre-requisite failure"
 
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+                coa.try_loading(company=cls.env.company, install_demo=True)
+
+        tax = cls.env["account.tax"].search(
+            [
+                ("company_id", "=", cls.env.company.id),
+                ("amount", ">", 0.0),
+            ],
+            limit=1,
+        )
+        cls.so.order_line.tax_id |= tax
+
     def test_sale_order_actions(self):
         view = self.env.ref("sale.view_order_form")
         result = self.env["sale.order"].get_views(
