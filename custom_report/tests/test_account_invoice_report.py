@@ -126,11 +126,7 @@ class AccountInvoiceReportTC(ReportTC):
             limit=1,
         )
 
-        inv_line.write(
-            {
-                "tax_ids": [(6, 0, tax.ids)],
-            }
-        )
+        inv_line.tax_ids |= tax
 
     def test_account_move_actions(self):
         view = self.env.ref("account.view_move_form")
