@@ -21,11 +21,11 @@ class SaleOrder(models.Model):
             record._create_followup_entities()
         return result
 
-    def choose_stage(self, team):
-        stages = self.env["crm.stage"].search(
-            [("team_id", "=", team.id)], order="sequence"
+    def choose_stage(self, model_name, parent_entity, relation_name):
+        stages = self.env[model_name].search(
+            [(relation_name, "=", parent_entity.id)], order="sequence"
         )
-        stage = stages[0] if stages else self.env["crm.stage"]
+        stage = stages[0] if stages else False
         for _stage in stages:
             if "[stage: start]" in _stage.name:
                 stage = _stage
@@ -36,13 +36,14 @@ class SaleOrder(models.Model):
         return self.env["contract.contract"].of_sale(self)
 
     def _create_followup_entity_crm_lead(self, prefix, team, so_line, contract=None):
+        stage = self.choose_stage("crm.stage", team, "team_id")
         lead = self.env["crm.lead"].create(
             {
                 "name": " ".join([prefix, so_line.product_id.display_name]),
                 "partner_id": self.partner_id.id,
                 "type": "opportunity",
                 "team_id": team.id,
-                "stage_id": self.choose_stage(team).id,
+                "stage_id": stage and stage.id,
                 "so_line_id": so_line.id,
                 "contract_id": contract.id if contract else False,
             }
@@ -63,12 +64,13 @@ class SaleOrder(models.Model):
                 "contract": contract,
             }
         )
+        stage = self.choose_stage("project.task.type", project, "project_ids")
         return self.env["project.task"].create(
             {
                 "name": " ".join([prefix, so_line.product_id.name]),
                 "partner_id": self.partner_id.id,
                 "project_id": project.id,
-                "stage_id": self.choose_stage(project).id,
+                "stage_id": stage and stage.id,
                 "contract_id": contract.id if contract else False,
                 "description": description,
             }

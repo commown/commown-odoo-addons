@@ -138,9 +138,15 @@ class SaleOrderTC(RentalSaleOrderTC):
         self.assertEqual(len(leads2), 1)
         self.assertEqual(len(leads3), 2)
 
-    def test_create_project_tasks_with_contracts(self):
+    def new_project_stage(self, project, name):
+        stage = self.env["project.task.type"].create({"name": name})
+        stage.project_ids |= project
+        return stage
 
+    def test_create_project_tasks_with_contracts(self):
         my_project = self.env["project.project"].create({"name": "my project"})
+        self.new_project_stage(my_project, "stage 1")
+        start_stage = self.new_project_stage(my_project, "stage 2 [stage: start]")
         self.product1.followup_sales_project_id = my_project
         self.product1.property_contract_template_id.stock_ownership = "customer"
 
@@ -157,6 +163,7 @@ class SaleOrderTC(RentalSaleOrderTC):
 
         so.action_confirm()
         self.assertEqual(len(my_project.task_ids), 2)
+        self.assertEqual(my_project.task_ids.mapped("stage_id"), start_stage)
         self.assertEqual(
             my_project.mapped("task_ids.contract_id.stock_ownership"),
             ["customer", "customer"],
