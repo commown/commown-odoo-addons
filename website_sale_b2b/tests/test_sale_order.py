@@ -19,6 +19,7 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         )
         prefix = so_line.product_id.display_name + "\n"
 
+        # Testing value printing
         pt.description_sale = "${record.display_recurrent_payment_amount()}"
         so_line.price_unit = 20
 
@@ -32,6 +33,11 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         pt.description_sale = "${record.display_commitment_duration()}"
         so_line._onchange_recompute_name()
         self.assertEqual(so_line.name, prefix + "12 month(s)")
+
+        # Testing variable declaration
+        pt.description_sale = "<% set dummy_value = 'Dummy value'%> - ${dummy_value}"
+        so_line._onchange_recompute_name()
+        self.assertEqual(so_line.name, prefix + " - Dummy value")
 
     def test_action_quotation_send(self):
         self.so.partner_id.website_id = self.env.ref("website_b2b.b2b_website").id
