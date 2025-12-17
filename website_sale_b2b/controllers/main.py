@@ -102,7 +102,7 @@ class WebsiteSaleB2B(WebsiteSale):
         result = super().product(product, category, search, **kwargs)
         result.qcontext["rental_infos"] = rental_infos
         if forced_add_qty:
-            result.qcontext["add_qty"] = forced_add_qty
+            result.qcontext["add_qty"] = int(forced_add_qty)
         return result
 
     def checkout_form_validate(self, mode, all_form_values, data):
