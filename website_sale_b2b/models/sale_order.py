@@ -11,6 +11,8 @@ _logger = logging.getLogger(__name__)
 mako_template_env = SandboxedEnvironment(
     variable_start_string="${",
     variable_end_string="}",
+    block_start_string="<%",
+    block_end_string="%>",
     line_statement_prefix="%",
     trim_blocks=True,  # do not output newline after blocks
 )
