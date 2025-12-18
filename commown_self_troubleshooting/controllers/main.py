@@ -61,6 +61,7 @@ class SelfHelp(http.Controller):
             "contractual_issue_type": post.get("contractual_issue_type"),
             "contractual_issue_date": post.get("contractual_issue_date"),
             "partner_id": partner.id,
+            "user_ids": False,
             "description": self._description(**post),
             "project_id": project.id,
             "tag_ids": [(6, 0, self._tag_ids(**post))],
