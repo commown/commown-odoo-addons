@@ -75,9 +75,7 @@
                   </li>
                   <li><i class="fa fa-users" title="Team" /> <field name="team" /></li>
                   <li><i class="fa fa-phone" title="Phone" /> <field
-                                            t-if="record.phone.raw_value"
                                             name="phone"
-                                            widget="phone"
                                         /></li>
                   <li style="text-wrap: nowrap"><i
                                             class="fa fa-envelope"
