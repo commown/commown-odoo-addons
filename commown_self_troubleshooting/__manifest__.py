@@ -5,7 +5,7 @@
 {
     "name": "Commown Self Troubleshooting",
     "category": "",
-    "version": "16.0.1.0.4",
+    "version": "16.0.1.0.5",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
