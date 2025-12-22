@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* commown_shareholder_register
+# 	* commown_shareholder_register
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-18 18:10+0000\n"
-"PO-Revision-Date: 2024-12-18 18:10+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
+"PO-Revision-Date: 2025-12-22 15:46+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,12 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_shareholder_register
+#: model:ir.actions.report,print_report_name:commown_shareholder_register.action_py3o_spreadsheet
+msgid "\"Registre_%s.ods\" % object.date.strftime(\"%Y-%m-%d\")"
+msgstr ""
+
+#. module: commown_shareholder_register
 #: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__account_id
 msgid "Account"
 msgstr ""
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.category:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_category_account_id_uniq
 msgid "Account already used!"
 msgstr ""
 
@@ -32,7 +37,7 @@ msgid "Cancel"
 msgstr ""
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.category:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_category_name_uniq
 msgid "Category already exists!"
 msgstr ""
 
@@ -42,14 +47,35 @@ msgid "College"
 msgstr ""
 
 #. module: commown_shareholder_register
-#: code:addons/commown_shareholder_register/models/shareholder_college.py:24
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_college.py:0
 #, python-format
 msgid "College %s"
 msgstr ""
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.college:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_college_name_uniq
 msgid "College already exists!"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_A
+msgid "Collège A"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_B
+msgid "Collège B"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_C
+msgid "Collège C"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_D
+msgid "Collège D"
 msgstr ""
 
 #. module: commown_shareholder_register
@@ -155,7 +181,7 @@ msgid "Rank"
 msgstr ""
 
 #. module: commown_shareholder_register
-#: sql_constraint:commown_shareholder_register.college:0
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_college_rank_uniq
 msgid "Rank must be unique"
 msgstr ""
 
@@ -214,20 +240,28 @@ msgid "Shareholders Reporting"
 msgstr ""
 
 #. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag
+msgid "Sociétariat"
+msgstr ""
+
+#. module: commown_shareholder_register
 #: model:ir.ui.menu,name:commown_shareholder_register.tagging_contact_menu
 msgid "Tagging"
 msgstr ""
 
 #. module: commown_shareholder_register
-#: code:addons/commown_shareholder_register/models/shareholder_register.py:106
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_register.py:0
 #, python-format
-msgid "The partner %s has a negative share number"
+msgid ""
+"The partner %(part_name)s has not enough shares for college %(college_name)s"
 msgstr ""
 
 #. module: commown_shareholder_register
-#: code:addons/commown_shareholder_register/models/shareholder_register.py:110
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_register.py:0
 #, python-format
-msgid "The partner %s has not enough shares for college %s"
+msgid "The partner %s has a negative share number"
 msgstr ""
 
 #. module: commown_shareholder_register
@@ -255,4 +289,3 @@ msgstr ""
 #: model:ir.actions.report,name:commown_shareholder_register.action_py3o_spreadsheet
 msgid "[commown] Export to spreadsheet"
 msgstr ""
-

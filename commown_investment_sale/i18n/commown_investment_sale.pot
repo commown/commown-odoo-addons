@@ -1,0 +1,82 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* commown_investment_sale
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:48+0000\n"
+"PO-Revision-Date: 2025-12-22 15:48+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_investment_sale
+#. odoo-python
+#: code:addons/commown_investment_sale/models/sale_order.py:0
+#, python-format
+msgid ""
+"<p><b>Sale number:</b> %(sale_name)s</p><p><b>Sale date:</b> "
+"%(year)d-%(month)d-%(day)d</p><p><b>Product:</b> %(product_name)s</p>"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:project.task.type,legend_blocked:commown_investment_sale.investment_followup_start_stage
+msgid "Blocked"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:project.task.type,legend_normal:commown_investment_sale.investment_followup_start_stage
+msgid "In Progress"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:project.task.type,name:commown_investment_sale.investment_followup_start_stage
+msgid "Initial amount paid on website"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:project.project,name:commown_investment_sale.investment_followup_project
+msgid "Investments followup"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:ir.model,name:commown_investment_sale.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:account.payment.term,name:commown_investment_sale.investment_payment_term
+msgid "Paiement immédiat 10% prélèvement auto + Solde virement"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:project.task.type,legend_done:commown_investment_sale.investment_followup_start_stage
+msgid "Ready for Next Stage"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:ir.model,name:commown_investment_sale.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:project.project,label_tasks:commown_investment_sale.investment_followup_project
+msgid "Tasks"
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:project.task.type,description:commown_investment_sale.investment_followup_start_stage
+msgid ""
+"The card is created here when an investor places an online order for 10%.\n"
+"As soon as we have checked if the amount of the investment is really the one displayed (!! with the trap of the quantities, we have to go to the Purchase Order as long as Florent has not added the field \"total of the order line\" in the card), we pass the card in the following column (ID dunning and 90% balance request (auto mail)."
+msgstr ""
+
+#. module: commown_investment_sale
+#: model:ir.actions.server,name:commown_investment_sale.fix_invoice_investment_line_price
+msgid "[commown] Multiply by 10 investments' line amount"
+msgstr ""

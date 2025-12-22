@@ -4,20 +4,21 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-25 14:22+0000\n"
-"PO-Revision-Date: 2025-08-25 16:24+0200\n"
-"Last-Translator: <florent@commown.coop>\n"
-"Language-Team: Commown\n"
-"Language: French\n"
+"POT-Creation-Date: 2025-12-22 15:48+0000\n"
+"PO-Revision-Date: 2025-12-22 14:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:95
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "%(product)s for %(partner)s"
 msgstr "%(product)s pour %(partner)s"
@@ -25,25 +26,28 @@ msgstr "%(product)s pour %(partner)s"
 #. module: commown_devices
 #: model:mail.template,body_html:commown_devices.late_pickings_with_lots_mail
 msgid ""
-"<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
-"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a ${object.env."
-"context.get('late_pickings')} transferts en retard.</p><p style=\"margin:0px "
-"0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;\">Rendez vous sur&nbsp;<a href=\"https://shop."
-"commown.coop/web?debug#action=694&amp;active_id=5&amp;model=stock."
-"picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" style=\"text-"
-"decoration:none;background-color:transparent;color:rgb(124, 123, 173);"
-"\">cette page</a> pour les traiter.<br></p>"
+"<html>\n"
+"  <body>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a <t t-"
+"out=\"object.env.context.get(&#x27;late_pickings&#x27;)\"></t> transferts en "
+"retard.</p>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Rendez vous sur <a "
+"href=\"https://shop.commown.coop/web?debug#action=694&amp;active_id=5&amp;"
+"model=stock.picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" "
+"style=\"text-decoration:none;background-color:transparent;color:rgb(124, "
+"123, 173);\">cette page</a> pour les traiter.<br/></p>\n"
+"  </body>\n"
+"</html>\n"
 msgstr ""
-"<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
-"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a ${object.env."
-"context.get('late_pickings')} transferts en retard.</p><p style=\"margin:0px "
-"0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
-"Verdana, Arial, sans-serif;\">Rendez vous sur&nbsp;<a href=\"https://shop."
-"commown.coop/web?debug#action=694&amp;active_id=5&amp;model=stock."
-"picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" style=\"text-"
-"decoration:none;background-color:transparent;color:rgb(124, 123, 173);"
-"\">cette page</a> pour les traiter.<br></p>"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_crm_lead
+#: model:ir.model,name:commown_devices.model_project_task
+#: model:ir.model,name:commown_devices.model_to_customer_picking_mixin
+msgid "Abstract class for obect that use wizard to send device to a customer"
+msgstr "Piste/opportunité"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_abstract_to_customer_wizard
@@ -75,14 +79,21 @@ msgid "Ask confirmation for move line action validate linked picking"
 msgstr "Confirmation de l'action Valider le transfert lié aux mouvements"
 
 #. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_link_po_invoice.py:0
+#, python-format
+msgid "At least one purchase order/invoice link is required."
+msgstr ""
+
+#. module: commown_devices
 #: model:project.task.type,legend_blocked:commown_devices.diagnostic_stage
 #: model:project.task.type,legend_blocked:commown_devices.resiliated_stage
 msgid "Blocked"
 msgstr "Bloqué"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:95
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:304
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:0
 #, python-format
 msgid "Can't move device: no device set on this task!"
 msgstr ""
@@ -112,7 +123,8 @@ msgstr ""
 "asocié"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:88
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "Cannot find given device. Is it really available?"
 msgstr "Impossible de trouver cet appareil. Est-il vraiment disponible ?"
@@ -150,9 +162,9 @@ msgstr "Contact"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_contract_contract
+#: model:ir.model.fields,field_description:commown_devices.field_stock_lot__contract_id
 #: model:ir.model.fields,field_description:commown_devices.field_stock_move__contract_id
 #: model:ir.model.fields,field_description:commown_devices.field_stock_picking__contract_ids
-#: model:ir.model.fields,field_description:commown_devices.field_stock_production_lot__contract_id
 #: model:ir.model.fields,field_description:commown_devices.field_stock_scrap__contract_id
 msgid "Contract"
 msgstr "Contrat"
@@ -166,11 +178,6 @@ msgstr "Contrat résilié, mail envoyé"
 #: model_terms:ir.ui.view,arch_db:commown_devices.view_template_property_form
 msgid "Copy service image"
 msgstr "Copier l'image du service"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_crm_lead_picking_wizard
-msgid "Create a picking from a lead"
-msgstr "Créer un transfert depuis une opportunité"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_crm_lead_to_customer_wizard
@@ -194,6 +201,26 @@ msgstr "Faire une expédition de l'appareil lié à une tâche"
 #: model:ir.model,name:commown_devices.model_project_task_involved_nonserial_product_picking_wizard
 msgid "Create a picking of the nonserial product attached to a task"
 msgstr "Faire une expédition d'un module ou accéssoire lié à une tache"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_inward_picking_wizard
+msgid "Create inward picking for a lot"
+msgstr "project.task.inward.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_notracking_inward_picking_wizard
+msgid "Create inward picking of a nonserial product"
+msgstr "project.task.notracking.inward.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_outward_picking_wizard
+msgid "Create outward picking for a lot"
+msgstr "project.task.outward.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_notracking_outward_picking_wizard
+msgid "Create outward picking of a nonserial product"
+msgstr "project.task.notracking.outward.picking.wizard"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__create_uid
@@ -236,7 +263,8 @@ msgid "Created on"
 msgstr "Créé le"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/product_service_config.py:74
+#. odoo-python
+#: code:addons/commown_devices/models/product_service_config.py:0
 #, python-format
 msgid "Current service has no image!"
 msgstr "Ce service n'a pas d'image !"
@@ -329,13 +357,15 @@ msgid "Device"
 msgstr "Appareil"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:227
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid "Device field is not set"
 msgstr "Le chanp appareil n'est pas renseigné"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:235
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid "Device is already in a scrap location"
 msgstr "L'appareil se trouve déja dans un emplacement de scrap"
@@ -347,7 +377,6 @@ msgid "Devices"
 msgstr "Appareils"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_abstract_to_customer_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__display_name
@@ -355,7 +384,6 @@ msgstr "Appareils"
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__display_name
-#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__display_name
@@ -371,7 +399,7 @@ msgstr "Nom affiché"
 #. module: commown_devices
 #: model:ir.model.fields,help:commown_devices.field_product_service_storable_config__storable_type
 msgid ""
-"Does current config concern the primary storable or the secondary storables "
+"Does current config concern the primary storable or the secondarystorables "
 "of current product variants ?"
 msgstr ""
 "Est ce que la configuration concerne un produit stockable primaire ou un des "
@@ -404,7 +432,8 @@ msgid "Facturation et/ou Remboursement dépôt en cours"
 msgstr "Facturation et/ou Remboursement dépôt en cours"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/product.py:77
+#. odoo-python
+#: code:addons/commown_devices/models/product.py:0
 #, python-format
 msgid ""
 "For product %s, two secondary variants derive from the same template, are "
@@ -425,7 +454,6 @@ msgid "Give a device to an employee"
 msgstr "Confier l'appareil à un.e employé.e"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_abstract_to_customer_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__id
@@ -433,7 +461,6 @@ msgstr "Confier l'appareil à un.e employé.e"
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__id
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__id
-#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__id
@@ -453,7 +480,8 @@ msgid "In Progress"
 msgstr "En cours"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:101
+#. odoo-python
+#: code:addons/commown_devices/models/stock_move.py:0
 #, python-format
 msgid ""
 "Inconsistent locations between move (id: %(move_id)s, picking id: "
@@ -463,7 +491,8 @@ msgstr ""
 "%(picking_id)s) and contract (id: %(contract_id)s)"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:84
+#. odoo-python
+#: code:addons/commown_devices/models/stock_move.py:0
 #, python-format
 msgid ""
 "Inconsistent move (id: %(move_id)s, picking id: %(picking_id)s) contract "
@@ -476,11 +505,6 @@ msgstr ""
 #: model:ir.model,name:commown_devices.model_stock_location
 msgid "Inventory Locations"
 msgstr "Localisations d'inventaire"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_account_invoice_line
-msgid "Invoice Line"
-msgstr "Ligne de facture"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line__invoice_line_id_domain
@@ -503,7 +527,11 @@ msgid "Is storable primary or secondary"
 msgstr "Le produit stockable est primaire ou secondaire"
 
 #. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_abstract_to_customer_wizard____last_update
+#: model:ir.model,name:commown_devices.model_account_move_line
+msgid "Journal Item"
+msgstr "Écriture comptable"
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line____last_update
@@ -511,7 +539,6 @@ msgstr "Le produit stockable est primaire ou secondaire"
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_line____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_po_invoice_link_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config____last_update
-#: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard____last_update
@@ -565,14 +592,8 @@ msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
 #. module: commown_devices
-#: model:mail.channel,name:commown_devices.late_pickings_with_lots_channel
-msgid "Late pickings channel"
-msgstr "Cannal éxpéditions en retard"
-
-#. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.late_pickings_with_lots_cron_ir_actions_server
 #: model:ir.cron,cron_name:commown_devices.late_pickings_with_lots_cron
-#: model:ir.cron,name:commown_devices.late_pickings_with_lots_cron
 #: model:mail.template,subject:commown_devices.late_pickings_with_lots_mail
 msgid "Late pickings with lots"
 msgstr "Expitition de lots en retard"
@@ -584,24 +605,22 @@ msgid "Lead"
 msgstr "Piste"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/crm_lead.py:19
+#. odoo-python
+#: code:addons/commown_devices/models/crm_lead.py:0
 #, python-format
 msgid "Lead has no assigned picking."
 msgstr "Aucun appareil expédié !"
 
 #. module: commown_devices
-#: model:ir.model,name:commown_devices.model_crm_lead
-msgid "Lead/Opportunity"
-msgstr "Piste/opportunité"
-
-#. module: commown_devices
-#: code:addons/commown_devices/models/stock_production_lot.py:35
+#. odoo-python
+#: code:addons/commown_devices/models/stock_lot.py:0
 #, python-format
 msgid "Lot %s is already reserved"
 msgstr "Le lot %s est déjà reservé"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_production_lot.py:33
+#. odoo-python
+#: code:addons/commown_devices/models/stock_lot.py:0
 #, python-format
 msgid "Lot %s not found in available stock"
 msgstr "Le lot %s n'est pas trouvé dans le stock disponible"
@@ -612,7 +631,7 @@ msgid "Lot Id Domain"
 msgstr "Domaine appareils suivits"
 
 #. module: commown_devices
-#: model:ir.model,name:commown_devices.model_stock_production_lot
+#: model:ir.model,name:commown_devices.model_stock_lot
 msgid "Lot/Serial"
 msgstr "Lot/N° série"
 
@@ -632,18 +651,20 @@ msgid "Message"
 msgstr "Message"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_move.py:67
+#. odoo-python
+#: code:addons/commown_devices/models/stock_move.py:0
 #, python-format
 msgid "More than one contract on move %s lots"
 msgstr "Plus d'un contrat sur les appareils du mouvement %s"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/product.py:67
+#. odoo-python
+#: code:addons/commown_devices/models/product.py:0
 #, python-format
-msgid "More than one primary variant configured for %s with attributes %s"
+msgid ""
+"More than one primary variant configured for %(product)s with attributes "
+"%(attrs)s"
 msgstr ""
-"Il y a plus d'une variante primaire configurée pour le produit %s (avec les "
-"attributs %s)"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_line_ids
@@ -662,7 +683,8 @@ msgid "Move involved nonserial product"
 msgstr "Déplacer le module/accessoire"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:271
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid "Move involved product"
 msgstr "Transférer les produits concernés"
@@ -688,10 +710,11 @@ msgid "Move to purchase_line link"
 msgstr "Lien mouvement/Ligne d'ordre d'achat"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:66
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
 #, python-format
-msgid "Not enough %s under location(s) %s"
-msgstr "Pas assez de %s dans %s"
+msgid "Not enough %(product)s under location(s) %(location)s"
+msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__lot_nb
@@ -720,9 +743,20 @@ msgid "Operation"
 msgstr "Opération"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__origin_label
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
 msgid "Origin"
 msgstr "Origine"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_location__partner_id
+msgid "Owner"
+msgstr "Propriétaire"
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_stock_location__partner_id
+msgid "Owner of the location if not internal"
+msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__picking_id
@@ -735,19 +769,22 @@ msgid "Picking Po wizard"
 msgstr "Wizard Expédition/Ordre d'achat"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/contract.py:72
+#. odoo-python
+#: code:addons/commown_devices/models/contract.py:0
 #, python-format
-msgid "Please set the grade on lots %s (ids: %s)"
-msgstr "Mettez un grade sur les appareils %s (ids: %s)"
+msgid "Please set the grade on lots %(lots)s (ids: %(ids)s)"
+msgstr ""
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:66
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "Please set the task's partner before using this wizard"
 msgstr "Merci de paramétrer un partenaire avant de lancer cet utilitaire"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:74
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "Please use an employee as a partner"
 msgstr "Merci d'utiliser un.e partenaire-employé.e"
@@ -769,7 +806,7 @@ msgid "Present location of the product"
 msgstr "Localisation actuelle"
 
 #. module: commown_devices
-#: selection:product.service_storable_config,storable_type:0
+#: model:ir.model.fields.selection,name:commown_devices.selection__product_service_storable_config__storable_type__primary
 msgid "Primary product"
 msgstr "Produit stockable primaire"
 
@@ -779,17 +816,17 @@ msgid "Primary storable variant"
 msgstr "Produit stockable primaire"
 
 #. module: commown_devices
-#: model:ir.model,name:commown_devices.model_product_product
+#: model:ir.model,name:commown_devices.model_product_template
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__variant_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__variant_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__product_tmpl_id
 msgid "Product"
-msgstr "Article"
+msgstr "Modèle d'article"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_product_category
 msgid "Product Category"
-msgstr "Catégorie interne"
+msgstr "Catégorie d'article"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_stock_move_line
@@ -797,9 +834,9 @@ msgid "Product Moves (Stock Move Line)"
 msgstr "Mouvements de produit (lignes de mouvements)"
 
 #. module: commown_devices
-#: model:ir.model,name:commown_devices.model_product_template
-msgid "Product Template"
-msgstr "Modèle d'article"
+#: model:ir.model,name:commown_devices.model_product_product
+msgid "Product Variant"
+msgstr "Article"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__product_location
@@ -840,11 +877,6 @@ msgid "Purchase order line"
 msgstr "Ligne d'ordre d'achat"
 
 #. module: commown_devices
-#: model:ir.model,name:commown_devices.model_stock_quant
-msgid "Quants"
-msgstr "Quants"
-
-#. module: commown_devices
 #: model:project.task.type,legend_done:commown_devices.diagnostic_stage
 #: model:project.task.type,legend_done:commown_devices.resiliated_stage
 msgid "Ready for Next Stage"
@@ -853,7 +885,7 @@ msgstr "Prêt pour la prochaine étape"
 #. module: commown_devices
 #: model:stock.picking.type,name:commown_devices.stock_picking_type_in_rental
 msgid "Receipts"
-msgstr "Réceptions"
+msgstr "Réceptions pour location"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_inward_picking_form
@@ -881,16 +913,17 @@ msgid "Résiliation traitée"
 msgstr "Résiliation traitée"
 
 #. module: commown_devices
-#: model:ir.model,name:commown_devices.model_sale_order
-msgid "Sale Order"
-msgstr "Commande"
-
-#. module: commown_devices
-#: code:addons/commown_devices/models/sale_order.py:31
+#. odoo-python
+#: code:addons/commown_devices/models/sale_order.py:0
 #, python-format
 msgid "Sale must be draft to use this action."
 msgstr ""
 "La commande doit être dans l'état \"devis\" pour utiliser cette action."
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_sale_order
+msgid "Sales Order"
+msgstr "Bon de commande"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_sale_order_line
@@ -903,19 +936,21 @@ msgid "Scrap"
 msgstr "Mise au rebut"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:253
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid "Scrap device"
 msgstr "Mise au rebut"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_scrap.py:16
+#. odoo-python
+#: code:addons/commown_devices/models/stock_scrap.py:0
 #, python-format
 msgid "Scrap must be done to use this action"
 msgstr "Le scrap doit être validé pour utiliser cette action"
 
 #. module: commown_devices
-#: selection:product.service_storable_config,storable_type:0
+#: model:ir.model.fields.selection,name:commown_devices.selection__product_service_storable_config__storable_type__secondary
 msgid "Secondary product"
 msgstr "Produit stockable secondaire"
 
@@ -935,7 +970,8 @@ msgid "Select purchase order line from this purchase order"
 msgstr "Sélectionner les lignes d'achat depuis cet achat"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:276
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_abstract_to_customer_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_outward_picking_form
 #, python-format
@@ -1025,7 +1061,6 @@ msgid "Storable configurations"
 msgstr "Configurations de produits stockable"
 
 #. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_abstract_picking_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_contract_transfer_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__task_id
@@ -1045,7 +1080,8 @@ msgid "Task Stage"
 msgstr "Étape de tâche"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/common.py:262
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
 #, python-format
 msgid ""
 "The contract has already assigned picking(s)!\n"
@@ -1055,7 +1091,8 @@ msgstr ""
 "Il faut d'abord l'annuler, la valider ou mettre l'appareil au rebut."
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:218
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid ""
 "These tasks can not be moved forward. There are no picking linked to those "
@@ -1065,7 +1102,8 @@ msgstr ""
 "transfert associé : %s"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/project_task.py:191
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid ""
 "These tasks can not be moved forward. There are still device(s) associated "
@@ -1075,8 +1113,8 @@ msgstr ""
 "plusieurs appareils associé au(x) contrat(s) : %s"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:90
-#: code:addons/commown_devices/models/wizard_project_task_picking.py:135
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:0
 #, python-format
 msgid "This action should not be used in resiliation project"
 msgstr ""
@@ -1086,7 +1124,7 @@ msgstr ""
 #. module: commown_devices
 #: model:project.task.type,name:commown_devices.diagnostic_stage
 msgid "To be invoiced"
-msgstr "À facturer"
+msgstr "[APPAREIL] Diag fait"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
@@ -1111,7 +1149,8 @@ msgid "Transfer device to new contract"
 msgstr "Transférer un appareil vers un autre contrat"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/stock_picking.py:35
+#. odoo-python
+#: code:addons/commown_devices/models/stock_picking.py:0
 #, python-format
 msgid "Transfer must be done to use this action"
 msgstr ""
@@ -1127,6 +1166,11 @@ msgstr "Décocher si l'appareil doit être expédié"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task__device_tracking
 msgid "Use for device tracking?"
 msgstr "Suivi des appareils ?"
+
+#. module: commown_devices
+#: model:ir.model.fields,help:commown_devices.field_stock_move_line__origin_label
+msgid "Used by commown_devices to retrieve a move line's origin resource"
+msgstr ""
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
@@ -1156,15 +1200,16 @@ msgid "Wizard to link purchase order line to invoices lines"
 msgstr "Utilitaire pour lier lignes d'achat et de facture"
 
 #. module: commown_devices
-#: code:addons/commown_devices/models/wizard_to_customer_picking.py:122
+#: model:ir.model,name:commown_devices.model_project_task_contract_transfer_wizard
+msgid "Wizard to transfer contract property of a lot"
+msgstr "project.task.contract_transfer.wizard"
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_to_customer_picking.py:0
 #, python-format
 msgid "You have to select a lot for each tracked product"
 msgstr "Vous devez séléctionner un lot par produit traqué"
-
-#. module: commown_devices
-#: model:ir.filters,name:commown_devices.late_pickings_with_lots_filter
-msgid "[Commown] Late transfer with lots"
-msgstr "[Commown] Expédition d'appareils en retard"
 
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_set_picking_date_done_to_scheduled
@@ -1174,7 +1219,7 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_set_scrap_date_done_to_scheduled
-msgid "[LOG] Force scrap and move date to scrap scheduled date"
+msgid "[LOG] Force scrap and move date to move line date"
 msgstr "[LOG] Forcer la date du scrap et mouvements associés à la date prévue"
 
 #. module: commown_devices
@@ -1262,42 +1307,3 @@ msgstr "[commown] Mettre l'appareil concerné au rebut"
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_to_employee
 msgid "or"
 msgstr "ou"
-
-#. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__origin
-msgid "origin"
-msgstr "origine"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_contract_transfer_wizard
-msgid "project.task.contract_transfer.wizard"
-msgstr "project.task.contract_transfer.wizard"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_inward_picking_wizard
-msgid "project.task.inward.picking.wizard"
-msgstr "project.task.inward.picking.wizard"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_notracking_inward_picking_wizard
-msgid "project.task.notracking.inward.picking.wizard"
-msgstr "project.task.notracking.inward.picking.wizard"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_notracking_outward_picking_wizard
-msgid "project.task.notracking.outward.picking.wizard"
-msgstr "project.task.notracking.outward.picking.wizard"
-
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_outward_picking_wizard
-msgid "project.task.outward.picking.wizard"
-msgstr "project.task.outward.picking.wizard"
-
-#~ msgid "Receipts - Rental"
-#~ msgstr "Réception - Location"
-
-#~ msgid "All product to send"
-#~ msgstr "Tous les produits à envoyer"
-
-#~ msgid "[commown] Generate picking"
-#~ msgstr "[commown] Générer le mouvement d'appareils"

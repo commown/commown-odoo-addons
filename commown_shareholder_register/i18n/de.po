@@ -1,0 +1,296 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * disable_odoo_online
+#
+# Translators:
+# Rudolf Schnapka <rs@techno-flex.de>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: server-tools (9.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
+"PO-Revision-Date: 2020-05-15 00:19+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
+"Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
+"language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
+
+#. module: commown_shareholder_register
+#: model:ir.actions.report,print_report_name:commown_shareholder_register.action_py3o_spreadsheet
+msgid "\"Registre_%s.ods\" % object.date.strftime(\"%Y-%m-%d\")"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__account_id
+msgid "Account"
+msgstr "Konto"
+
+#. module: commown_shareholder_register
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_category_account_id_uniq
+msgid "Account already used!"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model_terms:ir.ui.view,arch_db:commown_shareholder_register.register_form
+#: model_terms:ir.ui.view,arch_db:commown_shareholder_register.update_shareholder_form
+msgid "Cancel"
+msgstr "Löschen"
+
+#. module: commown_shareholder_register
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_category_name_uniq
+msgid "Category already exists!"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__college_id
+msgid "College"
+msgstr ""
+
+#. module: commown_shareholder_register
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_college.py:0
+#, python-format
+msgid "College %s"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_college_name_uniq
+msgid "College already exists!"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_A
+msgid "Collège A"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_B
+msgid "Collège B"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_C
+msgid "Collège C"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag_col_D
+msgid "Collège D"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model,name:commown_shareholder_register.model_res_company
+msgid "Companies"
+msgstr "Unternehmen"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__create_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__create_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__create_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__create_uid
+msgid "Created by"
+msgstr "Erstellt von"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__create_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__create_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__create_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__create_date
+msgid "Created on"
+msgstr "Erstellt am:"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__date
+msgid "Date"
+msgstr "Datum"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,help:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__date
+msgid "Date of the register"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__display_name
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__display_name
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__display_name
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__report_name
+msgid "Filename"
+msgstr "Dateiname"
+
+#. module: commown_shareholder_register
+#: model_terms:ir.ui.view,arch_db:commown_shareholder_register.register_form
+msgid "Generate"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__id
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__id
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__id
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category____last_update
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college____last_update
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register____last_update
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update____last_update
+msgid "Last Modified on"
+msgstr "Zuletzt geändert am"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__write_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__write_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__write_uid
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert von"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__write_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__write_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__write_date
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_shareholder_tags_update__write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__min_share_number
+msgid "Minimum share number"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_category__name
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__name
+msgid "Name"
+msgstr "Name"
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_res_company__nominal_share_amount
+msgid "Nominal share amount"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__rank
+msgid "Rank"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.constraint,message:commown_shareholder_register.constraint_commown_shareholder_register_college_rank_uniq
+msgid "Rank must be unique"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__date
+msgid "Register at date (included)"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_college__category_ids
+msgid "Shareholder Categories"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.actions.act_window,name:commown_shareholder_register.action_category
+#: model:ir.ui.menu,name:commown_shareholder_register.category_menu
+msgid "Shareholder Category"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.actions.act_window,name:commown_shareholder_register.action_college
+#: model:ir.ui.menu,name:commown_shareholder_register.college_menu
+msgid "Shareholder College"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.actions.act_window,name:commown_shareholder_register.register_action
+#: model:ir.model.fields,field_description:commown_shareholder_register.field_commown_shareholder_register_register__report
+#: model:ir.ui.menu,name:commown_shareholder_register.register_report_menu
+msgid "Shareholder Register"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model,name:commown_shareholder_register.model_commown_shareholder_register_category
+msgid "Shareholder category"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model,name:commown_shareholder_register.model_commown_shareholder_register_college
+msgid "Shareholder college"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model.fields,help:commown_shareholder_register.field_commown_shareholder_register_register__date
+msgid "Shareholder moves at this date will be included."
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.ui.menu,name:commown_shareholder_register.shareholders_update_contact_menu
+msgid "Shareholders"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.ui.menu,name:commown_shareholder_register.shareholders_reporting_menu
+msgid "Shareholders Reporting"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:res.partner.category,name:commown_shareholder_register.shareholder_tag
+msgid "Sociétariat"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.ui.menu,name:commown_shareholder_register.tagging_contact_menu
+msgid "Tagging"
+msgstr ""
+
+#. module: commown_shareholder_register
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_register.py:0
+#, python-format
+msgid ""
+"The partner %(part_name)s has not enough shares for college %(college_name)s"
+msgstr ""
+
+#. module: commown_shareholder_register
+#. odoo-python
+#: code:addons/commown_shareholder_register/models/shareholder_register.py:0
+#, python-format
+msgid "The partner %s has a negative share number"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model_terms:ir.ui.view,arch_db:commown_shareholder_register.update_shareholder_form
+msgid "Update"
+msgstr "Aktualisieren"
+
+#. module: commown_shareholder_register
+#: model:ir.actions.act_window,name:commown_shareholder_register.update_tags_action
+#: model:ir.ui.menu,name:commown_shareholder_register.shareholders_update_tags_menu
+msgid "Update Shareholders"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model,name:commown_shareholder_register.model_commown_shareholder_register_register
+msgid "Utility class to compute a shareholder register"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.model,name:commown_shareholder_register.model_commown_shareholder_register_shareholder_tags_update
+msgid "Utility class to update partner shareholder's tag"
+msgstr ""
+
+#. module: commown_shareholder_register
+#: model:ir.actions.report,name:commown_shareholder_register.action_py3o_spreadsheet
+msgid "[commown] Export to spreadsheet"
+msgstr ""

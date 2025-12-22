@@ -1,381 +1,383 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* urban_mine
+# 	* urban_mine
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-03 08:29+0000\n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
 "PO-Revision-Date: 2023-07-03 08:29+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
 #. module: urban_mine
-#: model:mail.template,body_html:urban_mine.email_template_with_coupon_only
-msgid "\n"
-"<div>\n"
-"  <p>Bonjour ${object.partner_id.firstname},</p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p>Nous avons bien reçu votre Fairphone et celui-ci correspond bien aux conditions\n"
-"  d'achats convenues dans la cadre de l'offre de reprise \"Deuxième Vie\".\n"
-"  </p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p>Nous avons bien noté votre choix de recevoir un <b>Code de Réduction</b> d'une\n"
-"  valeur de <b>90€</b>, à valoir sur toute la gamme d'appareils proposés sur le <a\n"
-"  href=\"https://commown.coop/\" target=\"_blank\">site web de Commown</a> <i>(ce code\n"
-"  non-nominatif est valable indéfiniment pour toute <u>nouvelle future</u> souscription,\n"
-"  et pour un seul appareil par coupon)</i>) :\n"
-"  <b>${object.env[\"coupon.coupon\"].create({\"campaign_id\": object.env.ref(\"urban_mine.campaign_coupon_only\").id}).code}</b>\n"
-"  </p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p>En vous remerciant encore pour votre engagement pour une électronique plus\n"
-"  responsable,</p>\n"
-"\n"
-"\n"
-"  <p>Coopérativement,</p>\n"
-"\n"
-"  <p>--</p>\n"
-"\n"
-"  <div class=\"moz-signature\">\n"
-"    <div>L'équipe Commown\n"
-"\n"
-"      <br><br>\n"
-"\n"
-"      <a href=\"https://commown.coop\" target=\"_blank\">\n"
-"        <img src=\"https://shop.commown.fr/web/image/673\" alt=\"Logo de Commown\" border=\"0\">\n"
-"      </a>\n"
-"\n"
-"    </div>\n"
-"  </div>\n"
-"</div>\n"
-""
+#: model:ir.actions.report,print_report_name:urban_mine.report_autoinvoice
+msgid ""
+"\"Facture%s_%s.pdf\" % ((object.state == \"cancel\" and \"_annulee\") or "
+"(object.state == \"draft\" and \"_brouillon\") or \"\", object.display_name."
+"strip().replace('/', ''))"
 msgstr ""
 
 #. module: urban_mine
-#: model:mail.template,body_html:urban_mine.email_template_with_auto_invoice
-msgid "\n"
-"<div>\n"
-"  <p>Bonjour ${object.partner_id.firstname},</p>\n"
+#: model:project.project,name:urban_mine.project
+msgid "3.6 Achats et Stocks - Mine Urbaine [MU]"
+msgstr ""
+
+#. module: urban_mine
+#: model:mail.template,body_html:urban_mine.email_template_with_coupon_only
+msgid ""
+"<html>\n"
+"  <body><div>\n"
+"  <p>Bonjour <t t-out=\"object.partner_id.firstname\"></t>,</p>\n"
 "\n"
-"  <br>\n"
+"  <br/>\n"
 "\n"
-"  <p>Nous avons bien reçu votre Fairphone et celui-ci correspond bien aux conditions\n"
+"  <p>Nous avons bien reçu votre Fairphone et celui-ci correspond bien aux "
+"conditions\n"
 "  d'achats convenues dans la cadre de l'offre de reprise \"Deuxième Vie\".\n"
 "  </p>\n"
 "\n"
-"  <br>\n"
+"  <br/>\n"
 "\n"
-"  <p>Nous avons bien noté votre choix pour la compensation et <b>ce mail fait donc\n"
-"  office de Bon Pour Accord pour le rachat de votre appareil au tarif de\n"
-"  60€&nbsp;TTC.</b></p>\n"
-"\n"
-"  <p>Comme vous avez accepté de mandater Commown pour établir la facture de vente\n"
-"  correspondante en votre nom et pour votre compte nous vous prions donc de <b>trouver\n"
-"  ci-joint l'Auto-Facture correspondant à la vente de l'appareil à\n"
-"  COMMOWN.</b>\n"
+"  <p>Nous avons bien noté votre choix de recevoir un <b>Code de Réduction</"
+"b> d'une\n"
+"  valeur de <b>90€</b>, à valoir sur toute la gamme d'appareils proposés sur "
+"le <a href=\"https://commown.coop/\" target=\"_blank\">site web de Commown</"
+"a> <i>(ce code\n"
+"  non-nominatif est valable indéfiniment pour toute <u>nouvelle future</u> "
+"souscription,\n"
+"  et pour un seul appareil par coupon)</i>) :\n"
+"  <b><t t-out=\"object.env[&quot;coupon.coupon&quot;].create({&quot;"
+"campaign_id&quot;: object.env.ref(&quot;urban_mine."
+"campaign_coupon_only&quot;).id\"></t>)}</b>\n"
 "  </p>\n"
 "\n"
-"  <p>Comme convenu le règlement s'effectuera par virement à l'aide du RIB transmis (ou\n"
-"  que nous vous invitons à nous transmettre si vous ne l'avez pas encore fait), celui-ci\n"
-"  sera effectif sur votre compte sous 5 à 15 jours ouvrés.\n"
-"  </p>\n"
+"  <br/>\n"
 "\n"
-"  <br>\n"
-"\n"
-"  <p>Pour vous remercier de ce geste engagé, en bonus nous vous prions également de\n"
-"  trouver ci-après un <b>Coupon de Réduction</b> équivalent à une mensualité, à valoir\n"
-"  sur toute la gamme d'appareils proposés sur le <a href=\"https://commown.coop/\"\n"
-"  target=\"_blank\">site web de Commown</a> et pour toute nouvelle location souscrite\n"
-"  (non-nominatif et valable pour un seul appareil par coupon dans les 12 prochains\n"
-"  mois) : <b>${object.env.context.get(\"coupon\", \"COUPON À FOURNIR\")}</b>\n"
-"  </p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p>En vous remerciant encore pour votre engagement pour une électronique plus\n"
+"  <p>En vous remerciant encore pour votre engagement pour une électronique "
+"plus\n"
 "  responsable,</p>\n"
+"\n"
 "\n"
 "  <p>Coopérativement,</p>\n"
 "\n"
 "  <p>--</p>\n"
+"\n"
 "  <div class=\"moz-signature\">\n"
 "    <div>L'équipe Commown\n"
 "\n"
-"      <br><br>\n"
+"      <br/><br/>\n"
 "\n"
 "      <a href=\"https://commown.coop\" target=\"_blank\">\n"
-"        <img src=\"https://shop.commown.fr/web/image/673\" alt=\"Logo de Commown\" border=\"0\">\n"
+"        <img src=\"https://shop.commown.fr/web/image/673\" alt=\"Logo de "
+"Commown\" border=\"0\"/>\n"
 "      </a>\n"
 "\n"
 "    </div>\n"
 "  </div>\n"
 "</div>\n"
-""
+"</body>\n"
+"</html>\n"
 msgstr ""
 
 #. module: urban_mine
 #: model:mail.template,body_html:urban_mine.email_template_make_your_choice
-msgid "\n"
-"<div>\n"
-"  <p>Bonjour ${object.partner_id.firstname},</p>\n"
+#: model:mail.template,body_html:urban_mine.email_template_with_auto_invoice
+msgid ""
+"<html>\n"
+"  <body><div>\n"
+"  <p>Bonjour <t t-out=\"object.partner_id.firstname\"></t>,</p>\n"
+"  <br/>\n"
+"  <p>Nous avons bien reçu votre Fairphone 2 et celui-ci correspond\n"
+"    bien aux conditions d'achats convenues dans la cadre de l'offre\n"
+"    de reprise \"Mine Urbaine\".</p>\n"
 "\n"
-"  <br>\n"
+"  <p><font class=\"text-beta\"><b>Ce mail fait donc office de Bon Pour\n"
+"        Accord pour le rachat de votre appareil au tarif de\n"
+"        50€ TTC.</b></font></p>\n"
 "\n"
-"  <p>Nous avons bien reçu votre Fairphone et celui-ci correspond bien aux conditions d'achats convenues dans la cadre de l'offre de reprise \"Deuxième Vie\".</p>\n"
+"  <p><font class=\"text-beta\"><b>Merci de trouver ci-joint\n"
+"        l'Auto-Facture correspondant à la vente de l'appareil à\n"
+"        COMMOWN.</b></font></p>\n"
 "\n"
-"  <br>\n"
+"  <p>Comme convenu le règlement du prix se fera sous la forme\n"
+"    de <b>chèques-cadeau \"Le Chéquier Vert\"</b> émis par notre\n"
+"    partenaire de paiment Green Capital, et utilisables sans frais dans\n"
+"    toutes les enseignes\n"
+"    référencées <a href=\"http://www.lechequiervert.fr/produits/"
+"listepointvente\" target=\"_blank\"><b>sur le site du partenaire</b></a>. "
+"Vous recevrez\n"
+"    ces chèques par courrier AR à l'adresse renseignée sous 5 à 15\n"
+"    jours ouvrés.</p>\n"
 "\n"
-"  <p>Nous vous invitons à nous confirmer par simple retour de mail votre mode de compensation souhaité, à savoir :</p>\n"
-"\n"
-"  <p>- soit recevoir la somme de <b>60€</b> par virement. Si vous optez pour cette\n"
-"  option il vous suffit de nous envoyer votre RIB par retour de mail (vous acceptez de\n"
-"  mandater Commown pour établir la facture de vente correspondante en votre nom et pour\n"
-"  votre compte, et vous recevrez un mail de confirmation récapitulant tous ces\n"
-"  éléments).\n"
+"  <br/>\n"
+"  <p>Pour vous remercier de ce geste engagé, nous vous prions\n"
+"    également de trouver ci-après le <b>Coupon de Réduction</b>\n"
+"    équivalent à une mensualité, à valoir sur toute la gamme\n"
+"    d'appareils proposés sur le site web de Commown et pour toute\n"
+"    nouvelle location souscrite (valable jusqu'au 31/12/19) :\n"
+"    <b><t t-out=\"object.env.context.get(&quot;coupon&quot;, &quot;COUPON À "
+"FOURNIR&quot;)\"></t></b>\n"
 "  </p>\n"
+"  <br/>\n"
 "\n"
-"  <p>- soit recevoir un <b>Code de Réduction</b> d'une valeur de <b>90€</b>, à valoir\n"
-"  sur toute la gamme d'appareils proposés sur le <a href=\"https://commown.coop\"\n"
-"  target=\"_blank\">site web de Commown</a> <i>(ce code est transmissible et valable\n"
-"  indéfiniment pour toute <u>nouvelle future</u> souscription, et pour un seul appareil\n"
-"  par coupon).</i>\n"
-"  </p>\n"
+"  <p>En vous remerciant encore pour votre engagement pour une\n"
+"    électronique plus responsable,</p>\n"
 "\n"
-"  <br>\n"
-"\n"
-"  <p>Dans l'attente de votre retour,</p>\n"
-"\n"
-"  <p>--</p>\n"
-"  <div class=\"moz-signature\">\n"
-"    <div>L'équipe Commown\n"
-"\n"
-"      <br><br>\n"
-"\n"
-"      <a href=\"https://commown.coop\" target=\"_blank\">\n"
-"        <img src=\"https://shop.commown.fr/web/image/673\" alt=\"Logo de Commown\" border=\"0\">\n"
-"      </a>\n"
-"\n"
-"    </div>\n"
-"  </div>\n"
-"</div>\n"
-""
-msgstr ""
-
-#. module: urban_mine
-#: model:mail.template,body_html:urban_mine.email_template_with_label
-msgid "\n"
-"<div>\n"
-"  <p>Bonjour ${object.partner_id.firstname},</p>\n"
-"  <br>\n"
-"  <p>Votre proposition de reprise du Fairphone 3 ou 3+ dont vous êtes actuellement propriétaire a bien été prise en compte ; nous vous remercions au nom de la Coopérative pour l'intérêt que vous portez à notre projet circulaire \"Deuxième Vie\".&nbsp; :)</p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p><b>Ce mail explique vos prochaines actions nécessaires pour finaliser la vente :</b></p>\n"
-"\n"
-"  <p><b>1/ Expédition de l'appareil :</b></p>\n"
-"\n"
-"  <p>Nous vous demandons de bien vouloir emballer soigneusement l'appareil en suivant\n"
-"  les recommandations expliquées <a\n"
-"  href=\"https://forum.commown.coop/t/emballer-son-appareil-pour-une-expedition/2434\"\n"
-"  target=\"_blank\">ici</a>.\n"
-"  </p>\n"
-"\n"
-"  <p>NB : si vous avez des accessoires et/ou des pièces détachées, quel que soit leur\n"
-"  état nous vous invitons à les joindre au colis.</p>\n"
-"\n"
-"  <p>Il vous suffira ensuite de simplement coller l'étiquette de retour ci-jointe sur le\n"
-"  colis et de le déposer à votre Bureau de Poste préféré ( ! le colis doit faire moins\n"
-"  de 750 grammes ! ), et de faire signer la preuve de dépôt.</p>\n"
-"\n"
-"  <p>Si vous avez une boite aux lettres normalisée, nous vous encourageons à utiliser le\n"
-"  ramassage à domicile, c'est simple et ça vous évite de vous déplacer :-) (cf. <a\n"
-"  href=\"https://www.laposte.fr/expedition-bal/formulaire\"\n"
-"  target=\"_blank\">https://www.laposte.fr/expedition-bal/formulaire</a>)\n"
-"  </p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p>La preuve de dépôt fait foi en cas de contestation, nous vous recommandons de la\n"
-"  conserver soigneusement.  </p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p><b>2/ Réception et vérification de l'appareil :</b></p>\n"
-"\n"
-"  <p>Lorsque nous réceptionnons le colis, celui-ci est vérifié dans les 3 à 5 jours\n"
-"  ouvrés.</p>\n"
-"\n"
-"  <p>NB : pour que la vente soit définitivement acceptée par Commown, <b>il est\n"
-"  indispensable que le Fairphone n'ait pas été exposé à l'eau ou l'humidité</b> (nous en\n"
-"  ferons systématiquement la vérification à l'aide des watermarks présentes dans\n"
-"  l'appareil, donc même en cas de doute ça ne sert à rien de nous l'envoyer), et que le\n"
-"  colis contienne <b>l'ensemble des modules</b> composant le Fairphone (montés ou\n"
-"  démontés), ceci quel que soit leur état.</p>\n"
-"\n"
-"  <p><i>Si le colis n'est pas complet ou si l'appareil présente une quelconque trace de\n"
-"  corrosion nous nous réservons le droit de ne pas donner suite à notre proposition\n"
-"  d'achat et nous ré-expédierons le colis en retour (à vos frais) si vous en faites la\n"
-"  demande.</span></i></p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p><b>3/ Règlement du prix de l'appareil :</b></p>\n"
-"\n"
-"  <p>En nous soumettant cette proposition vous acceptez* :</p>\n"
-"\n"
-"  <p>- soit de recevoir la somme de <b>60€</b> par virement. Si vous optez pour cette\n"
-"  option il vous suffit de nous envoyer votre RIB par retour de mail (une fois l'achat\n"
-"  définitivement validé par Commown, vous acceptez* de mandater Commown pour établir la\n"
-"  facture de vente correspondante en votre nom et pour votre compte, et vous recevrez un\n"
-"  mail de confirmation récapitulant tous ces éléments).</p>\n"
-"\n"
-"  <p>- soit de recevoir <b style=\"font-weight:bold;\">Code de Réduction</b> d'une valeur\n"
-"  de <b>90€</b>, à valoir sur toute la gamme d'appareils proposés sur le <a\n"
-"  href=\"https://commown.coop\" target=\"_blank\">site web de Commown</a> <i>(ce code est\n"
-"  transmissible et valable indéfiniment pour toute <u>nouvelle future</u> souscription,\n"
-"  et pour un seul appareil par coupon)</i>.\n"
-"  </p>\n"
-"\n"
-"  <br>\n"
-"\n"
-"  <p>En vous remerciant encore pour votre engagement pour une électronique plus\n"
-"  responsable,</p>\n"
 "  <p>Coopérativement,</p>\n"
 "\n"
 "  <p>--</p>\n"
 "  <div class=\"moz-signature\">\n"
 "    <div>L'équipe Commown\n"
-"      <br><br>\n"
-"      <a href=\"https://commown.coop\">\n"
-"        <img src=\"https://shop.commown.coop/web/image/673\" alt=\"Logo de Commown\" border=\"0\">\n"
+"      <br/><br/>\n"
+"      <a href=\"https://commown.fr\">\n"
+"        <img src=\"https://shop.commown.fr/web/image/673\" alt=\"Logo de "
+"Commown\" style=\"-moz-border-right-colors:none;-moz-border-bottom-colors:"
+"none;-moz-border-left-colors:none;-moz-border-top-colors:none;border-image-"
+"repeat:initial;border-image-outset:initial;border-image-width:initial;border-"
+"image-slice:initial;border-image-source:initial;border-left-color:initial;"
+"border-bottom-color:initial;border-right-color:initial;border-top-color:"
+"initial;border-left-style:initial;border-bottom-style:initial;border-right-"
+"style:initial;border-top-style:initial;max-width: 400px;width: 69.8333px;"
+"height: auto\" border=\"0\"/>\n"
 "      </a>\n"
-"      <br><br><br>\n"
+"    </div>\n"
+"  </div>\n"
+"</div>\n"
+"</body>\n"
+"</html>\n"
+msgstr ""
+
+#. module: urban_mine
+#: model:mail.template,body_html:urban_mine.email_template_with_label
+msgid ""
+"<html>\n"
+"  <body><div>\n"
+"  <p>Bonjour <t t-out=\"object.partner_id.firstname\"></t>,</p>\n"
+"  <br/>\n"
+"  <p>Votre proposition de reprise du Fairphone 2 dont vous êtes\n"
+"    actuellement propriétaire a bien été prise en compte ; nous vous\n"
+"    remercions au nom de la Coopérative pour l'intérêt que vous portez à\n"
+"    notre projet circulaire de Mine Urbaine.</p>\n"
+"  <br/>\n"
+"  <p><b>Ce mail explique vos prochaines actions nécessaires pour\n"
+"      finaliser la vente :</b></p>\n"
+"  <br/>\n"
+"  <p><b>1/ Expédition de l'appareil :</b></p>\n"
+"  <p>Nous vous demandons de bien vouloir emballer soigneusement\n"
+"    l'appareil en suivant les recommandations\n"
+"    expliquées <a href=\"https://wiki.commown.fr/Emballer-son-appareil-pour-"
+"une-expédition\" target=\"_blank\"><b>ICI</b></a>.</p>\n"
+"  <p>NB : si vous avez des accessoires et/ou des pièces détachées, quel\n"
+"    que soit leur état nous vous invitons à les joindre au colis.</p>\n"
+"  <p>Il vous suffira ensuite de simplement coller l'étiquette de retour\n"
+"    ci-jointe sur le colis et de le déposer à votre Bureau de Poste\n"
+"    préféré (!! le colis doit faire moins de 500 grammes !!), et de faire\n"
+"    signer la preuve de dépôt.</p>\n"
+"  <p>Si vous avez une boite aux lettres normalisée, nous vous\n"
+"    encourageons à utiliser le ramassage à domicile, c'est simple et\n"
+"    ça vous évite de vous déplacer :-)\n"
+"     (cf. <a href=\"https://www.laposte.fr/particulier/retourbal/"
+"formulaire\" target=\"_blank\">https://www.laposte.fr/particulier/retourbal/"
+"formulaire</a>) </p>\n"
+"  <br/>\n"
+"  <p>La preuve de dépôt fait foi en cas de contestation, nous vous\n"
+"    recommandons de la conserver soigneusement.</p>\n"
+"  <br/>\n"
+"  <p><b>2/ Réception et vérification de l'appareil :</b></p>\n"
+"  <p>Lorsque nous réceptionnons le colis, celui-ci est vérifié dans les\n"
+"    3 à 5 jours ouvrés. </p> <p>NB : pour que la vente soit définitivement\n"
+"    acceptée par Commown, il est indispensable que le colis contienne a\n"
+"    minima les éléments suivants (montés ou démontés), ceci quel que soit\n"
+"    leur état :</p>\n"
+"  <ul>\n"
+"    <li><p>1 module \"core\" (l'élément principal du Fairphone contenant\n"
+"        le processeur)</p></li>\n"
+"    <li><p>1 module caméra</p></li>\n"
+"    <li><p>1 écran</p></li>\n"
+"    <li><p>1 module bas</p>\n"
+"    </li><li><p>1 module haut</p></li>\n"
+"  </ul>\n"
+"  <p><i>Si le colis n'est pas complet nous nous réservons le droit de ne\n"
+"      pas donner suite à notre proposition d'achat et nous ré-expédierons "
+"le\n"
+"      colis en retour (à vos frais).</i></p>\n"
+"  <br/>\n"
+"  <p><b>3/ Règlement du prix de l'appareil :</b></p>\n"
+"  <p>En nous soumettant cette proposition vous avez accepté* de\n"
+"    recevoir le règlement du prix convenu sous le forme\n"
+"    de <b>chèques-cadeau \"Le Chéquier Vert\" </b>émis\n"
+"    par notre partenaire de paiement Green Capital, et utilisables\n"
+"    sans frais dans toutes les enseignes\n"
+"    référencées <a href=\"http://www.lechequiervert.fr/produits/"
+"listepointvente\" target=\"_blank\"><b>sur le site du partenaire</b></a>.</"
+"p>\n"
+"  <p>Pour vous remercier de ce geste engagé, vous recevrez également\n"
+"    un <b>Coupon de Réduction</b> équivalent à une mensualité, à\n"
+"    valoir sur toute la gamme d'appareils proposés sur le site web de\n"
+"    Commown et pour toute nouvelle location souscrite (<i>valable\n"
+"      jusqu'au 31/12/19).</i></p>\n"
+"  <p>Une fois l'achat définitivement validé par Commown, vous recevrez\n"
+"    un mail de confirmation récapitulant toutes ces informations.</p>\n"
+"  <br/>\n"
+"  <p>En vous remerciant encore pour votre engagement pour une\n"
+"    électronique plus responsable,</p>\n"
+"  <p>Coopérativement, </p>\n"
+"  <p>--</p>\n"
+"  <div class=\"moz-signature\">\n"
+"    <div>L'équipe Commown\n"
+"      <br/><br/>\n"
+"      <a href=\"https://commown.fr\">\n"
+"        <img src=\"https://shop.commown.fr/web/image/673\" alt=\"Logo de "
+"Commown\" style=\"-moz-border-right-colors:none;-moz-border-bottom-colors:"
+"none;-moz-border-left-colors:none;-moz-border-top-colors:none;border-image-"
+"repeat:initial;border-image-outset:initial;border-image-width:initial;border-"
+"image-slice:initial;border-image-source:initial;border-left-color:initial;"
+"border-bottom-color:initial;border-right-color:initial;border-top-color:"
+"initial;border-left-style:initial;border-bottom-style:initial;border-right-"
+"style:initial;border-top-style:initial;max-width: 400px;width: 69.8333px;"
+"height: auto\" border=\"0\"/>\n"
+"      </a>\n"
+"      <br/><br/><br/>\n"
 "      <p>* si l'une ou plusieurs des conditions ou dispositions\n"
-"        présentées dans ce mail ne vous convenait pas vous êtes\n"
+"        présentées dans ce mail ne vous convenait pas vous êtes\n"
 "        libre de renoncer à la vente, pour cela il vous suffit de nous\n"
 "        prévenir par simple retour de mail et de ne pas nous expédier\n"
 "        l'appareil.</p>\n"
 "    </div>\n"
 "  </div>\n"
 "</div>\n"
-""
-msgstr ""
-
-#. module: urban_mine
-#: model:mail.template,subject:urban_mine.email_template_make_your_choice
-#: model:mail.template,subject:urban_mine.email_template_with_auto_invoice
-#: model:mail.template,subject:urban_mine.email_template_with_coupon_only
-msgid "${object.company_id.name} - Accord de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}"
-msgstr ""
-
-#. module: urban_mine
-#: model:mail.template,subject:urban_mine.email_template_with_label
-msgid "${object.company_id.name} - Accusé Réception offre de reprise de votre Fairphone - Référence COMMOWN-MU-${object.id}"
+"</body>\n"
+"</html>\n"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.11295776941460978\"> Nom </span>"
+msgid ""
+"<select class=\"form-select s_website_form_input\" name=\"country_id\" "
+"required=\"1\">\n"
+"                          <option style=\"display:none\"/>\n"
+"                          <option value=\"12\">Austria</option>\n"
+"                          <option value=\"20\">Belgium</option>\n"
+"                          <option value=\"75\">France</option>\n"
+"                          <option value=\"57\">Germany</option>\n"
+"                        </select>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.13304869947822462\"> Créé par inscription à la mine urbaine </span>"
+msgid "<span class=\"s_website_form_label_content\">Autres informations</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.15405683242885826\"> Rue </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Code Postal</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.2108634439241115\"> Code postal </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Courriel</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.3720513783157616\"> Rue 2 </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Date approximative d'achat</"
+"span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.4155083523227755\">\n"
-"                            N° de téléphone\n"
-"                        </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">From urban mine registration</"
+"span>\n"
+"                            <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.5006927962308493\"> Pays </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Nom</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.7724189214426304\"> Ville </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">N° de téléphone</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.7844412993838685\"> Courriel </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Pays</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span class=\"o_default_snippet_text\" tc-textcontent=\"true\" data-tc-id=\"w-0.7952233202241941\"> Est un Fournisseur </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Prénom</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span tc-textcontent=\"true\" data-tc-id=\"w-0.29109961460135025\">\n"
-"                          <span data-tc-id=\"w-0.6538460584701483\" tc-textcontent=\"true\"> Date approximative d'achat </span>\n"
-"                        </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Rue 1</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span tc-textcontent=\"true\" data-tc-id=\"w-0.47387475858076467\">Autres informations</span>"
+msgid "<span class=\"s_website_form_label_content\">Rue 2</span>"
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "<span tc-textcontent=\"true\" data-tc-id=\"w-0.7068631613805739\"> Prénom </span>"
+msgid ""
+"<span class=\"s_website_form_label_content\">Supplier Rank</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
 msgstr ""
 
 #. module: urban_mine
-#: model:project.task.type,legend_blocked:urban_mine.stage3
+#: model_terms:ir.ui.view,arch_db:urban_mine.registration
+msgid ""
+"<span class=\"s_website_form_label_content\">Ville</span>\n"
+"                          <span class=\"s_website_form_mark\"> *</span>"
+msgstr ""
+
+#. module: urban_mine
+#: model:ir.model,name:urban_mine.model_project_task
+msgid "Abstract class for obect that use wizard to send device to a customer"
+msgstr ""
+
+#. module: urban_mine
+#: model:crm.team,name:urban_mine.urban_mine_managers
+msgid "B2C - Mine urbaine"
+msgstr ""
+
+#. module: urban_mine
+#: model:project.task.type,legend_blocked:urban_mine.stage5
 msgid "Blocked"
-msgstr ""
+msgstr "Bloquée"
 
 #. module: urban_mine
 #: model:project.task.type,legend_blocked:urban_mine.stage1
+#: model:project.task.type,legend_blocked:urban_mine.stage2
+#: model:project.task.type,legend_blocked:urban_mine.stage3
 #: model:project.task.type,legend_blocked:urban_mine.stage4
-#: model:project.task.type,legend_blocked:urban_mine.stage5
 #: model:project.task.type,legend_blocked:urban_mine.stage6
 #: model:project.task.type,legend_blocked:urban_mine.stage7
 #: model:project.task.type,legend_blocked:urban_mine.stage8
@@ -388,15 +390,16 @@ msgid "CASH - à virer"
 msgstr ""
 
 #. module: urban_mine
-#: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "Cocher cette case si ce contact est un fournisseur. Si elle n'est pas cochée, les acheteurs ne le verront pas lors de la saisie d'un ordre d'achat."
+#. odoo-python
+#: code:addons/urban_mine/controllers/form.py:0
+#, python-format
+msgid "Captcha failed for the following reason: %s"
 msgstr ""
 
 #. module: urban_mine
 #: model:ir.model,name:urban_mine.model_res_partner
 msgid "Contact"
-msgstr ""
+msgstr "Contact"
 
 #. module: urban_mine
 #: model:project.task.type,name:urban_mine.stage1
@@ -404,14 +407,15 @@ msgid "Demande à vérifier"
 msgstr ""
 
 #. module: urban_mine
-#: model:crm.stage,name:urban_mine.stage2
+#: model:project.task.type,name:urban_mine.stage2
 msgid "En attente de l’appareil [urban-mine: send-label]"
 msgstr ""
 
 #. module: urban_mine
 #: model:project.task.type,legend_normal:urban_mine.stage1
+#: model:project.task.type,legend_normal:urban_mine.stage2
+#: model:project.task.type,legend_normal:urban_mine.stage3
 #: model:project.task.type,legend_normal:urban_mine.stage4
-#: model:project.task.type,legend_normal:urban_mine.stage5
 #: model:project.task.type,legend_normal:urban_mine.stage6
 #: model:project.task.type,legend_normal:urban_mine.stage7
 #: model:project.task.type,legend_normal:urban_mine.stage8
@@ -419,15 +423,8 @@ msgid "En cours"
 msgstr ""
 
 #. module: urban_mine
-#: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "Format : JJ/MM/AAAA<br/>"
-msgstr ""
-
-#. module: urban_mine
-#: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "France"
+#: model:project.task.type,name:urban_mine.stage8
+msgid "FIN - à diag/reco"
 msgstr ""
 
 #. module: urban_mine
@@ -438,21 +435,49 @@ msgstr "Créé par inscription à la mine urbaine"
 
 #. module: urban_mine
 #: model:project.task.type,description:urban_mine.stage3
-#: model:project.task.type,description:urban_mine.stage8
-msgid "Glisser l'appareil dans cette colonne à réception physique du colis, en attente de vérifier l'appareil."
+msgid ""
+"Glisser l'appareil dans cette colonne à réception physique du colis, en "
+"attente de vérifier l'appareil "
+msgstr ""
+
+#. module: urban_mine
+#: model:coupon.campaign,description:urban_mine.campaign_payment
+msgid ""
+"Grâce à ce Coupon \"Mine Urbaine\", la première mensualité vous sera "
+"offerte sur un appareil !"
 msgstr ""
 
 #. module: urban_mine
 #: model:coupon.campaign,description:urban_mine.campaign_coupon_only
-msgid "Grâce à ce Coupon \"Mine Urbaine\", vous bénéficiez d'une remise de 90€ sur les premières mensualités !"
+msgid ""
+"Grâce à ce Coupon \"Mine Urbaine\", vous bénéficiez d'une remise de 90€ sur "
+"les premières mensualités !"
+msgstr ""
+
+#. module: urban_mine
+#: model:project.task.type,description:urban_mine.stage4
+msgid ""
+"Ici on met les cartes lorsque le Fairphone est éligible au programme ET que "
+"le client a précisé qu'il veut du CASH\n"
+"Un mail auto est envoyé avec l'auto-facture"
+msgstr ""
+
+#. module: urban_mine
+#: model:project.task.type,description:urban_mine.stage6
+msgid ""
+"Ici on met les cartes lorsque le Fairphone est éligible au programme ET que "
+"le client souhaute un code de REDUC\n"
+"Un mail auto pour lui transmettre ce code quand on dépose la carte ici"
 msgstr ""
 
 #. module: urban_mine
 #: model:project.task.type,description:urban_mine.stage7
-msgid "Ici on met les cartes lorsque le Fairphone est éligible\n"
-"      au programme MAIS que le client ne nous a pas précisé son choix pour la\n"
-"      compensation (Cash ou bon de réduc). Un mail auto pour lui demander ce qu'il\n"
-"      souhaite faire part automatiquement quand on dépose une carte ici."
+msgid ""
+"Ici on met les cartes lorsque le Fairphone est éligible au programme MAIS "
+"que le client ne nous a pas précisé son choix pour la compensation (Cash ou "
+"bon de réduc)\n"
+"Un mail auto pour lui demander ce qu'il souhaite faire part automatiquement "
+"quand on dépose une carte ici"
 msgstr ""
 
 #. module: urban_mine
@@ -461,14 +486,30 @@ msgid "Ici on met les cartes pour lesquelles il faut faire un virement."
 msgstr ""
 
 #. module: urban_mine
-#: model:project.task.type,legend_normal:urban_mine.stage3
+#: model:project.task.type,description:urban_mine.stage8
+msgid ""
+"Ici on stock les cartes de FP3/3+ à reconditionner (ces cartes vont donc "
+"changer de projet) -> Equipe RECO"
+msgstr ""
+
+#. module: urban_mine
+#: model:project.task.type,legend_normal:urban_mine.stage5
 msgid "In Progress"
+msgstr "En progrès"
+
+#. module: urban_mine
+#: model_terms:ir.ui.view,arch_db:urban_mine.registration
+msgid ""
+"Indiquez ici toute information utile pour notre gestion de votre appareil : "
+"pannes connues, changement de module déjà effectué, etc."
 msgstr ""
 
 #. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "Indiquez ici toute information utile pour notre gestion de votre appareil : pannes connues, changement de module déjà effectué, etc.<br/>"
+msgid ""
+"Insérer une valeur supérieure à 1 si ce contact est un fournisseur. Si elle "
+"est à zéro, les acheteurs ne le verront pas lors de la saisie d'un ordre "
+"d'achat."
 msgstr ""
 
 #. module: urban_mine
@@ -477,25 +518,27 @@ msgid "OK - CASH [urban-mine: payment]"
 msgstr ""
 
 #. module: urban_mine
-#: model:project.task.type,name:urban_mine.stage6
-msgid "OK Code réduc [urban-mine: coupon-only]"
-msgstr ""
-
-#. module: urban_mine
 #: model:project.task.type,name:urban_mine.stage7
-msgid "OK choix à préciser"
+msgid "OK - Choix à préciser"
 msgstr ""
 
 #. module: urban_mine
-#: code:addons/urban_mine/models/project_task.py:36
+#: model:project.task.type,name:urban_mine.stage6
+msgid "OK CODE REDUC [urban-mine: coupon-only]"
+msgstr ""
+
+#. module: urban_mine
+#. odoo-python
+#: code:addons/urban_mine/models/project_task.py:0
 #, python-format
 msgid "Please fill-in the storable product field of the task!"
 msgstr "Il faut remplir le champ Article de la tâche au préalable !"
 
 #. module: urban_mine
 #: model:project.task.type,legend_done:urban_mine.stage1
+#: model:project.task.type,legend_done:urban_mine.stage2
+#: model:project.task.type,legend_done:urban_mine.stage3
 #: model:project.task.type,legend_done:urban_mine.stage4
-#: model:project.task.type,legend_done:urban_mine.stage5
 #: model:project.task.type,legend_done:urban_mine.stage6
 #: model:project.task.type,legend_done:urban_mine.stage7
 #: model:project.task.type,legend_done:urban_mine.stage8
@@ -503,8 +546,13 @@ msgid "Prêt pour la prochaine étape"
 msgstr ""
 
 #. module: urban_mine
-#: model:project.task.type,legend_done:urban_mine.stage3
+#: model:project.task.type,legend_done:urban_mine.stage5
 msgid "Ready for Next Stage"
+msgstr "Prête pour l'étape suivante"
+
+#. module: urban_mine
+#: model:stock.picking.type,name:urban_mine.picking_type_receive_to_diagnose
+msgid "Reception Urban Mine"
 msgstr ""
 
 #. module: urban_mine
@@ -513,14 +561,8 @@ msgid "Reprise Fairphone"
 msgstr ""
 
 #. module: urban_mine
-#: model:ir.model,name:urban_mine.model_project_task
-msgid "Task"
-msgstr "Tâche"
-
-#. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
-msgid "This placeholder prevents its parent from disappearing when emptied"
+msgid "Revendez votre appareil à la coopérative"
 msgstr ""
 
 #. module: urban_mine
@@ -529,46 +571,28 @@ msgid "Tâches"
 msgstr ""
 
 #. module: urban_mine
-#: model:project.task.type,description:urban_mine.stage4
-msgid "Un email de Bon pour accord contenant une auto-facture et un coupon a été envoyé lors du passage dans cette colonne."
+#: model:project.task.type,description:urban_mine.stage2
+msgid ""
+"Une étiquette d'expédition a été générée et envoyée par mail au partenaire "
+"lors du passage dans cette colonne : on attend désormais son appareil."
 msgstr ""
 
 #. module: urban_mine
-#: model:product.template,uom_name:urban_mine.product
-msgid "Unit(s)"
-msgstr "Unité(s)"
-
-#. module: urban_mine
 #: model_terms:ir.ui.view,arch_db:urban_mine.registration
-#: model_terms:website.page,arch_db:urban_mine.registration_page
 msgid "Valider"
 msgstr ""
 
 #. module: urban_mine
-#: model:coupon.campaign,description:urban_mine.campaign_payment
-msgid "Vous avez la première mensualité offerte grâce à votre code !"
-msgstr ""
-
-#. module: urban_mine
 #: model:project.task.type,name:urban_mine.stage3
-#: model:project.task.type,name:urban_mine.stage8
-msgid "Vérification appareil à faire"
-msgstr ""
-
-#. module: urban_mine
-#: model:project.task.type,description:urban_mine.stage6
-msgid "Vérifier ici que les chèques sont bien parvenus au client."
+msgid "Vérification FP à faire"
 msgstr ""
 
 #. module: urban_mine
 #: model:project.task.type,description:urban_mine.stage1
-msgid "Vérifier qu'il ne s'agit pas d'un spam"
+msgid ""
+"Vérifier qu'il ne s'agit pas d'un Spam par exemple, que c'est une "
+"proposition sérieuse"
 msgstr ""
-
-#. module: urban_mine
-#: model:ir.model,name:urban_mine.model_website_form_recaptcha
-msgid "Website Form Recaptcha Validations"
-msgstr "Validations des formulaires ReCaptcha du site Web"
 
 #. module: urban_mine
 #: model:ir.actions.report,name:urban_mine.report_autoinvoice
@@ -576,25 +600,66 @@ msgid "[commown] Imprimer auto-facture"
 msgstr ""
 
 #. module: urban_mine
-#: model:base.automation,name:urban_mine.action_registration_payment
+#: model:mail.template,name:urban_mine.email_template_with_label
+msgid "[commown] MU-FP3 : AR Offre de Reprise"
+msgstr ""
+
+#. module: urban_mine
+#: model:mail.template,name:urban_mine.email_template_with_coupon_only
+msgid "[commown] MU-FP3 : Bon pour accord Offre de Reprise (Bon 120€)"
+msgstr ""
+
+#. module: urban_mine
+#: model:mail.template,name:urban_mine.email_template_with_auto_invoice
+msgid "[commown] MU-FP3 : Bon pour accord Offre de Reprise (choix 60€)"
+msgstr ""
+
+#. module: urban_mine
+#: model:mail.template,name:urban_mine.email_template_make_your_choice
+msgid "[commown] MU-FP3 : Bon pour accord Offre de Reprise (choix à faire)"
+msgstr ""
+
+#. module: urban_mine
 #: model:ir.actions.server,name:urban_mine.action_registration_payment_ir_actions_server
 msgid "[commown] Urban mine device payment to be done"
 msgstr ""
 
 #. module: urban_mine
-#: model:base.automation,name:urban_mine.action_registration_coupon_only
 #: model:ir.actions.server,name:urban_mine.action_registration_coupon_only_ir_actions_server
 msgid "[commown] Urban mine only a coupon to be sent"
 msgstr ""
 
 #. module: urban_mine
-#: model:base.automation,name:urban_mine.action_registration_validated
 #: model:ir.actions.server,name:urban_mine.action_registration_validated_ir_actions_server
 msgid "[commown] Urban mine was validated"
 msgstr ""
 
 #. module: urban_mine
-#: model:product.template,weight_uom_name:urban_mine.product
-msgid "kg"
+#: model_terms:ir.ui.view,arch_db:urban_mine.registration
+msgid "en remplissant le formulaire suivant :"
 msgstr ""
 
+#. module: urban_mine
+#: model:mail.template,subject:urban_mine.email_template_make_your_choice
+#: model:mail.template,subject:urban_mine.email_template_with_auto_invoice
+#: model:mail.template,subject:urban_mine.email_template_with_coupon_only
+msgid ""
+"{{object.company_id.name}} - Accord de reprise de votre Fairphone - "
+"Référence COMMOWN-MU-{{object.id}}"
+msgstr ""
+
+#. module: urban_mine
+#: model:mail.template,subject:urban_mine.email_template_with_label
+msgid ""
+"{{object.company_id.name}} - Accusé Réception offre de reprise de votre "
+"Fairphone - Référence COMMOWN-MU-{{object.id}}"
+msgstr ""
+
+#~ msgid "Task"
+#~ msgstr "Tâche"
+
+#~ msgid "Unit(s)"
+#~ msgstr "Unité(s)"
+
+#~ msgid "Website Form Recaptcha Validations"
+#~ msgstr "Validations des formulaires ReCaptcha du site Web"

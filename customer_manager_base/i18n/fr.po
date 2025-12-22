@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-27 18:06+0000\n"
+"POT-Creation-Date: 2025-12-22 15:48+0000\n"
 "PO-Revision-Date: 2024-06-27 20:16+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
@@ -15,26 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: customer_manager_base
-#: model_terms:ir.ui.view,arch_db:customer_manager_base.wizard_customer_group_form
-msgid "Add customer to management groups"
-msgstr "Ajouter un client dans les groupes de gestion"
-
-#. module: customer_manager_base
-#: model_terms:ir.ui.view,arch_db:customer_manager_base.wizard_customer_group_form
-msgid "Cancel"
-msgstr "Annuler"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__create_uid
-msgid "Created by"
-msgstr "Créé par"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__create_date
-msgid "Created on"
-msgstr "Créé le"
 
 #. module: customer_manager_base
 #: model:res.groups,name:customer_manager_base.group_customer_accounting
@@ -57,72 +37,18 @@ msgid "Customer: Purchase"
 msgstr "Client : Achats"
 
 #. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__display_name
-msgid "Display Name"
-msgstr "Nom affiché"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__id
-msgid "ID"
-msgstr "ID"
+#: model:ir.model,name:customer_manager_base.model_ir_http
+msgid "HTTP Routing"
+msgstr "Routage HTTP"
 
 #. module: customer_manager_base
 #: model:ir.model.fields,help:customer_manager_base.field_project_project__portal_visibility_extend_to_group_ids
 msgid ""
 "If not empty, portal users will view this project's tasks only if they "
 "belong to one of these groups and have a colleague following the task."
-msgstr "Lorsque ce champ est non vide, les utilisateurs du portail de ces groupes verront les éléments suivis par l'un.e de leurs collègues."
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__in_group_accounting
-msgid "In Group Accounting"
-msgstr "Comptabilité"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__in_group_contract_manager
-msgid "In Group Contract Manager"
-msgstr "Gestion des contrats"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__in_group_it_support
-msgid "In Group It Support"
-msgstr "Support informatique"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__in_group_purchase
-msgid "In Group Purchase"
-msgstr "Achats"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard____last_update
-msgid "Last Modified on"
-msgstr "Dernière Modification le"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__write_uid
-msgid "Last Updated by"
-msgstr "Dernière mise à jour par"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__write_date
-msgid "Last Updated on"
-msgstr "Dernière mise à jour le"
-
-#. module: customer_manager_base
-#: model_terms:ir.ui.view,arch_db:customer_manager_base.wizard_customer_group_form
-msgid "OK"
-msgstr "OK"
-
-#. module: customer_manager_base
-#: model:ir.model.fields,field_description:customer_manager_base.field_customer_manager_base_customer_group_wizard__partner_id
-msgid "Partner"
-msgstr "Partenaire"
-
-#. module: customer_manager_base
-#: code:addons/customer_manager_base/models/wizard_customer_manager_group.py:26
-#, python-format
-msgid "Partner has no portal access!"
-msgstr "Le contact n'a pas accès au portail"
+msgstr ""
+"Lorsque ce champ est non vide, les utilisateurs du portail de ces groupes "
+"verront les éléments suivis par l'un.e de leurs collègues."
 
 #. module: customer_manager_base
 #: model:ir.model.fields,field_description:customer_manager_base.field_project_project__portal_visibility_extend_to_group_ids
@@ -135,24 +61,75 @@ msgid "Project"
 msgstr "Projet"
 
 #. module: customer_manager_base
-#: model:ir.model,name:customer_manager_base.model_customer_manager_base_customer_group_wizard
-msgid "Wizard to add portal users to customer-dedicated groups"
-msgstr ""
-"Assistant d'ajout des utilisateurs du portail dans les groupes dédiés aux "
-"clients"
+#: model:ir.ui.menu,name:customer_manager_base.menu_customer_manager_root
+msgid "Team manager"
+msgstr "Gestionnaire d'équipe"
 
 #. module: customer_manager_base
-#: code:addons/customer_manager_base/models/wizard_customer_manager_group.py:46
+#: model:res.groups,name:customer_manager_base.group_customer_admin
+msgid "Team manager Customer"
+msgstr "Client gestionnaire d'équipe"
+
+#~ msgid "Add customer to management groups"
+#~ msgstr "Ajouter un client dans les groupes de gestion"
+
+#~ msgid "Cancel"
+#~ msgstr "Annuler"
+
+#~ msgid "Created by"
+#~ msgstr "Créé par"
+
+#~ msgid "Created on"
+#~ msgstr "Créé le"
+
+#~ msgid "Display Name"
+#~ msgstr "Nom affiché"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "In Group Accounting"
+#~ msgstr "Comptabilité"
+
+#~ msgid "In Group Contract Manager"
+#~ msgstr "Gestion des contrats"
+
+#~ msgid "In Group It Support"
+#~ msgstr "Support informatique"
+
+#~ msgid "In Group Purchase"
+#~ msgstr "Achats"
+
+#~ msgid "Last Modified on"
+#~ msgstr "Dernière Modification le"
+
+#~ msgid "Last Updated by"
+#~ msgstr "Dernière mise à jour par"
+
+#~ msgid "Last Updated on"
+#~ msgstr "Dernière mise à jour le"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Partner"
+#~ msgstr "Partenaire"
+
 #, python-format
-msgid "You are not allowed to execute this operation"
-msgstr "Vous n'êtes pas autorisé.e à effectuer cette opération"
+#~ msgid "Partner has no portal access!"
+#~ msgstr "Le contact n'a pas accès au portail"
 
-#. module: customer_manager_base
-#: model:ir.actions.act_window,name:customer_manager_base.action_wizard_customer_group_form
-msgid "[commown] Set customer management groups"
-msgstr "[commown] Paramétrer les groupes de gestion client"
+#~ msgid "Wizard to add portal users to customer-dedicated groups"
+#~ msgstr ""
+#~ "Assistant d'ajout des utilisateurs du portail dans les groupes dédiés aux "
+#~ "clients"
 
-#. module: customer_manager_base
-#: model_terms:ir.ui.view,arch_db:customer_manager_base.wizard_customer_group_form
-msgid "or"
-msgstr "ou"
+#, python-format
+#~ msgid "You are not allowed to execute this operation"
+#~ msgstr "Vous n'êtes pas autorisé.e à effectuer cette opération"
+
+#~ msgid "[commown] Set customer management groups"
+#~ msgstr "[commown] Paramétrer les groupes de gestion client"
+
+#~ msgid "or"
+#~ msgstr "ou"

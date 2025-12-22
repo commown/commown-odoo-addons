@@ -1,0 +1,51 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* commown_payment_token_uniquify
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:48+0000\n"
+"PO-Revision-Date: 2025-12-22 15:48+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_payment_token_uniquify
+#: model:ir.model,name:commown_payment_token_uniquify.model_payment_token_uniquify_obsolescence_action
+msgid "Action to be taken when a payment token becomes obsolete"
+msgstr ""
+
+#. module: commown_payment_token_uniquify
+#: model:ir.model,name:commown_payment_token_uniquify.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: commown_payment_token_uniquify
+#: model:ir.model.fields.selection,name:commown_payment_token_uniquify.selection__payment_token_uniquify_obsolescence_action__technical_name__copy_invoice_partner
+msgid "Copy invoice partner"
+msgstr ""
+
+#. module: commown_payment_token_uniquify
+#: model:ir.model.fields.selection,name:commown_payment_token_uniquify.selection__payment_token_uniquify_obsolescence_action__technical_name__reattribute_contracts
+msgid "Reattribute contracts"
+msgstr ""
+
+#. module: commown_payment_token_uniquify
+#: model:ir.model.fields.selection,name:commown_payment_token_uniquify.selection__payment_token_uniquify_obsolescence_action__technical_name__reattribute_draft_contract_invoices
+msgid "Reattribute draft contract invoices"
+msgstr ""
+
+#. module: commown_payment_token_uniquify
+#: model:ir.model.fields.selection,name:commown_payment_token_uniquify.selection__payment_token_uniquify_obsolescence_action__technical_name__set_partner_invoice_merge_prefs
+msgid "Set partner invoice merge preferences"
+msgstr ""
+
+#. module: commown_payment_token_uniquify
+#: model:ir.model.fields,field_description:commown_payment_token_uniquify.field_payment_token_uniquify_obsolescence_action__technical_name
+msgid "Technical name"
+msgstr ""

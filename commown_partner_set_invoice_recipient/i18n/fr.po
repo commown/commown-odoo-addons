@@ -1,0 +1,62 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mrp_usability
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
+"PO-Revision-Date: 2020-10-06 15:38+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 2.3\n"
+
+#. module: commown_partner_set_invoice_recipient
+#: model_terms:ir.ui.view,arch_db:commown_partner_set_invoice_recipient.view_partner_form
+msgid ""
+"<i title=\"Send invoices to this contact\" class=\"far fa-envelope\"/>\n"
+"          <span class=\"d-none d-sm-inline\"> Send invoices to this contact</"
+"span>"
+msgstr ""
+
+#. module: commown_partner_set_invoice_recipient
+#: model:ir.model,name:commown_partner_set_invoice_recipient.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: commown_partner_set_invoice_recipient
+#. odoo-python
+#: code:addons/commown_partner_set_invoice_recipient/models/res_partner.py:0
+#, python-format
+msgid "Information"
+msgstr "Information"
+
+#. module: commown_partner_set_invoice_recipient
+#. odoo-python
+#: code:addons/commown_partner_set_invoice_recipient/models/res_partner.py:0
+#, python-format
+msgid "Modified %(cs)d contracts and %(invs)d invoices"
+msgstr ""
+
+#. module: commown_partner_set_invoice_recipient
+#: model:ir.model.fields,field_description:commown_partner_set_invoice_recipient.field_res_partner__parent_payment_token_id
+#: model:ir.model.fields,field_description:commown_partner_set_invoice_recipient.field_res_users__parent_payment_token_id
+msgid "Parent Payment token"
+msgstr "Données de paiement du parent"
+
+#. module: commown_partner_set_invoice_recipient
+#: model:ir.model.fields,help:commown_partner_set_invoice_recipient.field_res_partner__parent_payment_token_id
+#: model:ir.model.fields,help:commown_partner_set_invoice_recipient.field_res_users__parent_payment_token_id
+msgid ""
+"This is the payment token that will be used to automatically reconcile debts "
+"for this partner, if there is not one already set on the analytic account."
+msgstr ""
+"C'est ce moyen de paiement qui sera utilisé automatiquement pour le lettrage "
+"des dettes de ce partenaire, à moins qu'un autre soit paramétré sur le "
+"contrat."

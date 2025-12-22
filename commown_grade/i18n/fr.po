@@ -1,19 +1,25 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* commown_grade
+# 	* commown_grade
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-04 17:07+0000\n"
+"POT-Creation-Date: 2025-12-22 15:49+0000\n"
 "PO-Revision-Date: 2024-12-04 17:07+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_A2
+msgid "Bon état"
+msgstr ""
 
 #. module: commown_grade
 #: model:ir.actions.act_window,name:commown_grade.action_grade
@@ -44,7 +50,7 @@ msgid "Created on"
 msgstr "Créé le"
 
 #. module: commown_grade
-#: model:ir.model.fields,field_description:commown_grade.field_stock_production_lot__grade_id
+#: model:ir.model.fields,field_description:commown_grade.field_stock_lot__grade_id
 msgid "Current grade"
 msgstr "Grade Actuel"
 
@@ -65,21 +71,14 @@ msgid "Display Name"
 msgstr "Afficher Nom"
 
 #. module: commown_grade
-#: code:addons/commown_grade/models/stock_production_lot.py:60
-#, python-format
-msgid "New grade is better than the last known grade, are you sure of this change?"
-msgstr "Le nouveau grade est meilleur que le dernier connu, êtes vous sur de ce changement ?"
-
-#. module: commown_grade
-#: code:addons/commown_grade/models/stock_production_lot.py:61
-#, python-format
-msgid "Grade Improvement"
-msgstr "Amélioration du Grade"
-
-#. module: commown_grade
 #: model:commown_grade.grade,description:commown_grade.grade_B1
 msgid "Etat correct"
 msgstr "Etat correct"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_A0
+msgid "Etat parfait"
+msgstr ""
 
 #. module: commown_grade
 #: model:ir.model,name:commown_grade.model_commown_grade_grade
@@ -89,19 +88,16 @@ msgid "Grade"
 msgstr "Grade"
 
 #. module: commown_grade
-#: model:commown_grade.grade,description:commown_grade.grade_A0
 #: model:commown_grade.grade,name:commown_grade.grade_A0
 msgid "Grade A0"
 msgstr "Grade A0"
 
 #. module: commown_grade
-#: model:commown_grade.grade,description:commown_grade.grade_A1
 #: model:commown_grade.grade,name:commown_grade.grade_A1
 msgid "Grade A1"
 msgstr "Grade A1"
 
 #. module: commown_grade
-#: model:commown_grade.grade,description:commown_grade.grade_A2
 #: model:commown_grade.grade,name:commown_grade.grade_A2
 msgid "Grade A2"
 msgstr "Grade A2"
@@ -139,9 +135,16 @@ msgid "Grade History"
 msgstr "Historique des grades"
 
 #. module: commown_grade
-#: model:ir.model.fields,field_description:commown_grade.field_stock_production_lot__grade_history_line_ids
+#: model:ir.model.fields,field_description:commown_grade.field_stock_lot__grade_history_line_ids
 msgid "Grade History Line"
 msgstr "Ligne d'historique de grade"
+
+#. module: commown_grade
+#. odoo-python
+#: code:addons/commown_grade/models/stock_lot.py:0
+#, python-format
+msgid "Grade Improvement"
+msgstr "Amélioration du Grade"
 
 #. module: commown_grade
 #: model:ir.ui.menu,name:commown_grade.grade_parent_menu
@@ -158,6 +161,11 @@ msgstr "Grouper par"
 #: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__id
 msgid "ID"
 msgstr "ID"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_D2
+msgid "Jugé irrécupérable, pour pièce"
+msgstr ""
 
 #. module: commown_grade
 #: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade____last_update
@@ -188,7 +196,7 @@ msgid "Lot name"
 msgstr "Lot name"
 
 #. module: commown_grade
-#: model:ir.model,name:commown_grade.model_stock_production_lot
+#: model:ir.model,name:commown_grade.model_stock_lot
 msgid "Lot/Serial"
 msgstr "Lot/N° série"
 
@@ -196,6 +204,16 @@ msgstr "Lot/N° série"
 #: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade__name
 msgid "Name"
 msgstr "Nom"
+
+#. module: commown_grade
+#. odoo-python
+#: code:addons/commown_grade/models/stock_lot.py:0
+#, python-format
+msgid ""
+"New grade is better than the last known grade, are you sure of this change?"
+msgstr ""
+"Le nouveau grade est meilleur que le dernier connu, êtes vous sur de ce "
+"changement ?"
 
 #. module: commown_grade
 #: model:ir.model.fields,field_description:commown_grade.field_commown_grade_grade_history_line__product_id
@@ -209,9 +227,14 @@ msgid "Store the grade a lot had at one given date"
 msgstr "Stock le grade qu'un appareil avait à une date"
 
 #. module: commown_grade
-#: sql_constraint:commown_grade.grade:0
+#: model:ir.model.constraint,message:commown_grade.constraint_commown_grade_grade_name_uniq
 msgid "The grade name must be unique"
 msgstr "Le nom des grades doivent être unique"
+
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_A1
+msgid "Très bon état"
+msgstr ""
 
 #. module: commown_grade
 #: model:commown_grade.grade,description:commown_grade.grade_C2
@@ -223,3 +246,7 @@ msgstr "Très très usé"
 msgid "Usé mais fonctionnel"
 msgstr "Usé mais fonctionnel"
 
+#. module: commown_grade
+#: model:commown_grade.grade,description:commown_grade.grade_D1
+msgid "Écran à changer"
+msgstr ""

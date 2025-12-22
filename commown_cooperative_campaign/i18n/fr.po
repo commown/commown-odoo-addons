@@ -1,0 +1,238 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mrp_usability
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
+"PO-Revision-Date: 2020-10-06 15:38+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 2.3\n"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model,name:commown_cooperative_campaign.model_coupon_campaign
+msgid "A coupon campaign that describes the coupon benefits"
+msgstr "Une campagne promotionnelle décrivant les bénéfices de ses coupons"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model,name:commown_cooperative_campaign.model_coupon_coupon
+msgid "A coupon that customers can associate to their shop order"
+msgstr "Un coupon que les clients peuvent associer à leur commande"
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/discount.py:0
+#, python-format
+msgid "Already opt-in (may not be visible if before the campaign start)"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model_terms:ir.ui.view,arch_db:commown_cooperative_campaign.wizard_late_optin_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model,name:commown_cooperative_campaign.model_contract_contract
+msgid "Contract"
+msgstr "Contrat"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model,name:commown_cooperative_campaign.model_contract_line
+msgid "Contract Line"
+msgstr "Ligne de Contrat"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model,name:commown_cooperative_campaign.model_contract_abstract_discount_line
+msgid "Contract abstract variable discount line"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_campaign__cooperative_salt
+msgid "Cooperative Salt"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_campaign__is_coop_campaign
+msgid "Cooperative campaign"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#: model_terms:ir.ui.view,arch_db:commown_cooperative_campaign.wizard_late_optin_form
+#, python-format
+msgid "Cooperative campaign late optin"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__coupon_id
+msgid "Coupon"
+msgstr "Coupon"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__create_date
+msgid "Created on"
+msgstr "Date"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model,name:commown_cooperative_campaign.model_coupon_late_optin_wizard
+msgid "Helper to manually register a coupon"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,help:commown_cooperative_campaign.field_coupon_campaign__is_coop_campaign
+msgid ""
+"If true, the coupon-related discount condition will use the cooperative web "
+"services to check its validity."
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "Key: %(key)s"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "No subscription at all (to any partner)"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "No subscription to %s."
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "Not a cooperative campaign!"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model_terms:ir.ui.view,arch_db:commown_cooperative_campaign.wizard_late_optin_form
+msgid "OK"
+msgstr "OK"
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,field_description:commown_cooperative_campaign.field_coupon_late_optin_wizard__date
+msgid "Optin date"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "Partner (%s) has no valid key."
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.model.fields,help:commown_cooperative_campaign.field_coupon_campaign__cooperative_salt
+msgid "Salt used to create a cooperative identifier from partner data"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "Subscription status for %(partner)s is: %(result)s"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "Subscription to %(member)s: %(optinout)s"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid ""
+"Validity: %(validity)s\n"
+"--\n"
+"Key: %(key)s\n"
+"--\n"
+"Details:\n"
+"%(details)s\n"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.actions.server,name:commown_cooperative_campaign.action_coop_campaign_optin_now
+msgid "[commown] Optin partner to coop campaign now"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model:ir.actions.server,name:commown_cooperative_campaign.action_coop_campaign_optin_status
+msgid "[commown] See coop campaign optin status"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "fully subscribed"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "not fully subscribed"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#. odoo-python
+#: code:addons/commown_cooperative_campaign/models/coupon.py:0
+#, python-format
+msgid "not subscribed"
+msgstr ""
+
+#. module: commown_cooperative_campaign
+#: model_terms:ir.ui.view,arch_db:commown_cooperative_campaign.wizard_late_optin_form
+msgid "or"
+msgstr "ou"

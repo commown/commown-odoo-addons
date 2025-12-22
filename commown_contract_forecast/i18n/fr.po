@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-30 16:58+0000\n"
+"POT-Creation-Date: 2025-12-22 15:47+0000\n"
 "PO-Revision-Date: 2024-07-30 19:02+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
@@ -22,7 +22,8 @@ msgid "Amount taxed"
 msgstr "Montant TTC"
 
 #. module: commown_contract_forecast
-#: code:addons/commown_contract_forecast/models/contract_line.py:44
+#. odoo-python
+#: code:addons/commown_contract_forecast/models/contract_line.py:0
 #, python-format
 msgid ""
 "Applied discounts:\n"
@@ -32,12 +33,12 @@ msgstr ""
 "- %s"
 
 #. module: commown_contract_forecast
-#: selection:contract.line.forecast.period,market:0
+#: model:ir.model.fields.selection,name:commown_contract_forecast.selection__contract_line_forecast_period__market__b2b
 msgid "B2B"
 msgstr "B2B"
 
 #. module: commown_contract_forecast
-#: selection:contract.line.forecast.period,market:0
+#: model:ir.model.fields.selection,name:commown_contract_forecast.selection__contract_line_forecast_period__market__b2c
 msgid "B2C"
 msgstr "B2C"
 
@@ -73,10 +74,13 @@ msgstr "Marché"
 
 #. module: commown_contract_forecast
 #: model:ir.model.fields,field_description:commown_contract_forecast.field_contract_line_forecast_period__product_range
-msgid "Product range"
-msgstr "Gamme de produit"
+msgid "Product Range"
+msgstr ""
 
 #. module: commown_contract_forecast
 #: model:ir.actions.server,name:commown_contract_forecast.action_contract_regenerate_forecasts
 msgid "[commown] Regenerate contract forecasts"
 msgstr "[commown] Recalculer les prévisions (résultat immédiat)"
+
+#~ msgid "Product range"
+#~ msgstr "Gamme de produit"

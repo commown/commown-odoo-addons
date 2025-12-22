@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-04 12:33+0000\n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
 "PO-Revision-Date: 2024-09-09 10:53+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -17,7 +17,8 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:458
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid ""
 "\n"
@@ -34,67 +35,59 @@ msgstr ""
 "- %(period)s"
 
 #. module: rental_fees
-#: model:mail.template,body_html:rental_fees.send_report_mail_template
+#: model:ir.actions.report,print_report_name:rental_fees.action_py3o_spreadsheet_fees_rental_computation
 msgid ""
-"\n"
-"<p>Hello dear ${object.partner_id.name} team,</p>\n"
-"\n"
-"<br/>\n"
-"\n"
-"<p>Please find attached the fees report dated\n"
-"${format_date(object.fees_computation_id.until_date)}<p>\n"
-"\n"
-"<p>Please return the corresponding invoice amouting to\n"
-"${format_amount(object.amount_total, object.currency_id)} by simply "
-"attaching it in\n"
-"reply to this email without changing its subject.</p>\n"
-"\n"
-"<br><br>\n"
-"\n"
-"<p>Cooperatively,</p>\n"
-"<p>--</p>\n"
-"<div>\n"
-"  <div>The Commown team.<br></div>\n"
-"</div>\n"
+"\"%s %s.ods\" % (object.partner_id.name, object.until_date.strftime(\"%Y-%m-"
+"%d\"))"
 msgstr ""
-"\n"
-"<p>Hallo liebes ${object.partner_id.name} Team,</p>\n"
-"\n"
-"<br/>\n"
-"\n"
-"<p>Anbei finden Sie die Honorarabrechnung vom\n"
-"${format_date(object.fees_computation_id.until_date)}<p>\n"
-"\n"
-"<p>Bitte senden Sie uns die entsprechende Rechnung über\n"
-"${format_amount(object.amount_total, object.currency_id)} zurück, indem Sie "
-"sie einfach\n"
-"als Antwort auf diese E-Mail anhängen, ohne den Betreff zu ändern.</p>\n"
-"\n"
-"<br><br>\n"
-"\n"
-"<p>Mit freundlichen Grüßen,</p>\n"
-"<p>--</p>\n"
-"<div>\n"
-"  <div>Das Commown-Team.<br></div>\n"
-"</div>\n"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:505
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid "%(fixed_amount)s %(currency)s (fixed)"
 msgstr "%(fixed_amount)s %(currency)s (fest)"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:317
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid "%s is not fully delivered."
 msgstr "%s wurde nicht vollständig zugestellt."
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:306
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid "%s is still in an early state."
 msgstr "%s befindet sich noch in einem wenig fortgeschrittenen Status."
+
+#. module: rental_fees
+#: model:mail.template,body_html:rental_fees.send_report_mail_template
+msgid ""
+"<html>\n"
+"  <body><p>Hello dear <t t-out=\"object.partner_id.name\"></t> team,</p>\n"
+"\n"
+"<br/>\n"
+"\n"
+"<p>Please find attached the fees report dated\n"
+"<t t-out=\"format_date(object.fees_computation_id.until_date)\"></t></p><p>\n"
+"\n"
+"</p><p>Please return the corresponding invoice amouting to\n"
+"<t t-out=\"format_amount(object.amount_total, object.currency_id)\"></t> by "
+"simply attaching it in\n"
+"reply to this email without changing its subject.</p>\n"
+"\n"
+"<br/><br/>\n"
+"\n"
+"<p>Cooperatively,</p>\n"
+"<p>--</p>\n"
+"<div>\n"
+"  <div>The Commown team.<br/></div>\n"
+"</div>\n"
+"</body>\n"
+"</html>\n"
+msgstr ""
 
 #. module: rental_fees
 #: model:ir.model,name:rental_fees.model_rental_fees_definition
@@ -116,9 +109,10 @@ msgid "Actual"
 msgstr "Tatsächlich"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:321
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
-msgid "Adding new POs to fees def '%s': %s"
+msgid "Adding new POs to fees def '%(def)s': %(pos)s"
 msgstr ""
 
 #. module: rental_fees
@@ -132,14 +126,13 @@ msgid "Amount"
 msgstr "Betrag"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:186
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid ""
-"At least one other fees def, %s (id %d), has the same partner, product & "
-"order"
+"At least one other fees def, %(def)s (id %(id)d), has the same partner, "
+"product & order"
 msgstr ""
-"Mindestens ein weiterer Gebührendefinition, %s (id %d), hat denselben "
-"Partner, dasselbe Produkt und denselben Auftrag"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_attachment_count
@@ -147,25 +140,27 @@ msgid "Attachment Count"
 msgstr "Anzahl der Anhänge"
 
 #. module: rental_fees
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation_detail__market__b2b
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_search
-#: selection:rental_fees.computation.detail,market:0
 msgid "B2B"
 msgstr "B2B"
 
 #. module: rental_fees
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation_detail__market__b2c
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_search
-#: selection:rental_fees.computation.detail,market:0
 msgid "B2C"
 msgstr "B2C"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:170
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid "Cannot add an excluded-from-fees PO to a fees definition"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:596
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "Cannot reset fees computation if not in the 'done' state"
 msgstr ""
@@ -173,7 +168,8 @@ msgstr ""
 "im Zustand \"erledigt\" befindet."
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:600
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "Cannot reset fees computation with a non-canceled invoice"
 msgstr ""
@@ -221,11 +217,6 @@ msgid "Contract"
 msgstr "Vertrag"
 
 #. module: rental_fees
-#: model:ir.model,name:rental_fees.model_contract_line
-msgid "Contract Line"
-msgstr "Vertragszeile"
-
-#. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__contract_template_id
 msgid "Contract template"
 msgstr "Vertragsmodell"
@@ -259,9 +250,9 @@ msgid "Date until which fees are computed (past, present or future)"
 msgstr ""
 
 #. module: rental_fees
-#: selection:rental_fees.definition_line,duration_unit:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_definition_line__duration_unit__days
 msgid "Days"
-msgstr ""
+msgstr "Tage"
 
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_tree
@@ -281,7 +272,7 @@ msgstr ""
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__lot_id
@@ -290,13 +281,15 @@ msgid "Device"
 msgstr "Gerät"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:26
+#. odoo-python
+#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "Device %(serial)s excluded from fees in def id %(def_id)d"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:21
+#. odoo-python
+#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid ""
 "Device %(serial)s was already excluded from fees (in fees def id %(def_id)d)"
@@ -308,13 +301,15 @@ msgid "Device Domain"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:28
+#. odoo-python
+#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "Device used by employee %s"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:259
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_view_form
 #, python-format
 msgid "Devices"
@@ -330,19 +325,19 @@ msgid "Display Name"
 msgstr "Anzeigename"
 
 #. module: rental_fees
-#: selection:rental_fees.computation,state:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation__state__done
 msgid "Done"
-msgstr ""
+msgstr "Erledigt"
 
 #. module: rental_fees
-#: selection:rental_fees.computation,state:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation__state__draft
 msgid "Draft"
-msgstr ""
+msgstr "Entwurf"
 
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_line_view_form
 msgid "Duration"
-msgstr ""
+msgstr "Dauer"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition_line__duration_unit
@@ -375,7 +370,7 @@ msgid "Exclude from fees"
 msgstr ""
 
 #. module: rental_fees
-#: selection:rental_fees.computation.detail,fees_type:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation_detail__fees_type__excluded_device_compensation
 msgid "Excluded device compensation"
 msgstr ""
 
@@ -390,13 +385,15 @@ msgid "Fees"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:485
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "Fees computation details"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:499
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "Fees computation job"
 msgstr ""
@@ -409,9 +406,10 @@ msgid "Fees definition"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:304
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
-msgid "Fees definition %s (id %d) has no line."
+msgid "Fees definition %(def)s (id %(id)d) has no line."
 msgstr ""
 
 #. module: rental_fees
@@ -425,7 +423,8 @@ msgid "Fees definition lines"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:160
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid ""
 "Fees definition purchase orders partners must all be the same as the fees "
@@ -455,9 +454,9 @@ msgid "Fees value"
 msgstr ""
 
 #. module: rental_fees
-#: selection:rental_fees.definition_line,fees_type:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_definition_line__fees_type__fix
 msgid "Fixed"
-msgstr ""
+msgstr "Festnetz"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_definition_line__fees_type
@@ -470,17 +469,12 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_follower_ids
 msgid "Followers"
-msgstr ""
-
-#. module: rental_fees
-#: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_channel_ids
-msgid "Followers (Channels)"
-msgstr ""
+msgstr "Followers"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Abonnenten (Partner)"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_purchase_order__exclude_from_fees
@@ -500,7 +494,7 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__from_date
 msgid "From date"
-msgstr ""
+msgstr "Anfangsdatum"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_definition__valid_from
@@ -528,6 +522,11 @@ msgid "Has Forecast"
 msgstr ""
 
 #. module: rental_fees
+#: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__id
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__id
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__id
@@ -537,19 +536,16 @@ msgid "ID"
 msgstr "ID"
 
 #. module: rental_fees
-#: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_unread
-msgid "If checked new messages require your attention."
-msgstr ""
-
-#. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Wenn es gesetzt ist, erfordern neue Nachrichten Ihre Aufmerksamkeit."
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_has_error
+#: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
 msgstr ""
+"Wenn es gesetzt ist, gibt es einige Nachrichten mit einem Übertragungsfehler."
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_excluded_device__with_compensation
@@ -564,15 +560,9 @@ msgid "Index of the period in the fees definition"
 msgstr ""
 
 #. module: rental_fees
-#: model:ir.model,name:rental_fees.model_account_invoice
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__invoice_ids
 msgid "Invoice"
 msgstr "Rechnung"
-
-#. module: rental_fees
-#: model:ir.model,name:rental_fees.model_account_invoice_line
-msgid "Invoice Line"
-msgstr ""
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__invoice_line_ids
@@ -601,12 +591,12 @@ msgstr ""
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_search
 msgid "Invoices"
-msgstr ""
+msgstr "Rechnungen"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Ist Abonnent"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__is_forecast
@@ -617,6 +607,16 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
 msgid "Job"
 msgstr ""
+
+#. module: rental_fees
+#: model:ir.model,name:rental_fees.model_account_move
+msgid "Journal Entry"
+msgstr "Journal-Buchung"
+
+#. module: rental_fees
+#: model:ir.model,name:rental_fees.model_account_move_line
+msgid "Journal Item"
+msgstr "Buchungszeile"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation____last_update
@@ -651,14 +651,14 @@ msgid "Last Updated on"
 msgstr "Zuletzt aktualisiert am"
 
 #. module: rental_fees
-#: selection:rental_fees.computation.detail,fees_type:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation_detail__fees_type__lost_device_compensation
 msgid "Lost device compensation"
 msgstr ""
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Haupt-Anhang"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__market
@@ -669,12 +669,12 @@ msgstr "Markt"
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Nachrichten-Zustellfehler"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Nachrichten"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition_line__monthly_fees
@@ -682,12 +682,13 @@ msgid "Monthly fees"
 msgstr ""
 
 #. module: rental_fees
-#: selection:rental_fees.definition_line,duration_unit:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_definition_line__duration_unit__months
 msgid "Months"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:19
+#. odoo-python
+#: code:addons/rental_fees/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "More than 1 fees def found for %s"
 msgstr ""
@@ -698,19 +699,21 @@ msgid "Name"
 msgstr "Name"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:330
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid "No fees definition needs updating."
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:242
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid "No price for device %(serial)s: its PO line has no invoice, see %(po)s"
 msgstr ""
 
 #. module: rental_fees
-#: selection:rental_fees.computation.detail,fees_type:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation_detail__fees_type__no_rental_compensation
 msgid "No rental compensation"
 msgstr ""
 
@@ -727,30 +730,26 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Anzahl der Aktionen"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_has_error_counter
-msgid "Number of error"
+msgid "Number of errors"
 msgstr ""
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_needaction_counter
-msgid "Number of messages which requires an action"
+msgid "Number of messages requiring action"
 msgstr ""
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Dies ist die Anzahl von Nachrichten mit einem Übertragungsfehler."
 
 #. module: rental_fees
-#: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_unread_counter
-msgid "Number of unread messages"
-msgstr ""
-
-#. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:180
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid ""
 "Operation not allowed: there are later fees computations with invoices which "
@@ -763,13 +762,15 @@ msgid "Partner"
 msgstr "Partner"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:525
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "Please set the invoice model on all fees definitions."
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:536
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "Please use the same invoice model on all fees definition."
 msgstr ""
@@ -783,17 +784,18 @@ msgid "Product"
 msgstr "Produkt"
 
 #. module: rental_fees
-#: selection:rental_fees.definition_line,fees_type:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_definition_line__fees_type__proportional
 msgid "Proportional"
 msgstr ""
 
 #. module: rental_fees
 #: model:ir.model,name:rental_fees.model_purchase_order
 msgid "Purchase Order"
-msgstr ""
+msgstr "Einkaufsbestellung"
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/purchase_order.py:22
+#. odoo-python
+#: code:addons/rental_fees/models/purchase_order.py:0
 #, python-format
 msgid ""
 "Purchase order's partner and its fees definition must have the same partner"
@@ -802,7 +804,7 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__order_ids
 msgid "Purchase orders"
-msgstr ""
+msgstr "Bestellungen"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_definition__agreed_to_std_price_ratio
@@ -814,11 +816,11 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_excluded_device__reason
 msgid "Reason"
-msgstr ""
+msgstr "Grund"
 
 #. module: rental_fees
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation_detail__fees_type__fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_view_search
-#: selection:rental_fees.computation.detail,fees_type:0
 msgid "Rental Fees"
 msgstr ""
 
@@ -838,25 +840,21 @@ msgid "Rental fees"
 msgstr ""
 
 #. module: rental_fees
-#: model:ir.model.fields,field_description:rental_fees.field_account_invoice__fees_computation_id
+#: model:ir.model.fields,field_description:rental_fees.field_account_bank_statement_line__fees_computation_id
+#: model:ir.model.fields,field_description:rental_fees.field_account_move__fees_computation_id
+#: model:ir.model.fields,field_description:rental_fees.field_account_payment__fees_computation_id
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
 msgid "Rental fees computation"
 msgstr ""
 
 #. module: rental_fees
-#: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_tree
-msgid "Rental fees computation details"
-msgstr ""
-
-#. module: rental_fees
 #: model:ir.actions.act_window,name:rental_fees.rental_fees_computations_action
 #: model:ir.ui.menu,name:rental_fees.menu_rental_fees_computation_menu
-#: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_tree
 msgid "Rental fees computations"
 msgstr ""
 
 #. module: rental_fees
-#: model:ir.model.fields,field_description:rental_fees.field_account_invoice_line__fees_definition_id
+#: model:ir.model.fields,field_description:rental_fees.field_account_move_line__fees_definition_id
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_excluded_device__fees_definition_id
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_view_form
 msgid "Rental fees definition"
@@ -870,7 +868,6 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.actions.act_window,name:rental_fees.rental_fees_definitions_action
 #: model:ir.ui.menu,name:rental_fees.menu_rental_fees_definitions_menu
-#: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_view_tree
 msgid "Rental fees definitions"
 msgstr ""
 
@@ -882,7 +879,7 @@ msgstr ""
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
 msgid "Reset to draft"
-msgstr ""
+msgstr "Auf Entwurf setzen"
 
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
@@ -895,8 +892,13 @@ msgid "Run datetime"
 msgstr ""
 
 #. module: rental_fees
-#: selection:rental_fees.computation,state:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_computation__state__running
 msgid "Running"
+msgstr "Läuft"
+
+#. module: rental_fees
+#: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_has_sms_error
+msgid "SMS Delivery error"
 msgstr ""
 
 #. module: rental_fees
@@ -905,7 +907,8 @@ msgid "Send report for invoicing"
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_definition.py:146
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid ""
 "Some non-draft computations use this fees definition. Please remove or set "
@@ -915,12 +918,12 @@ msgstr ""
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_detail_view_search
 msgid "Start date"
-msgstr ""
+msgstr "Startdatum"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__state
 msgid "State"
-msgstr ""
+msgstr "Status"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__partner_id
@@ -928,7 +931,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_search
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_definition_view_search
 msgid "Supplier"
-msgstr ""
+msgstr "Lieferant"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_excluded_device__device
@@ -958,7 +961,8 @@ msgid ""
 msgstr ""
 
 #. module: rental_fees
-#: code:addons/rental_fees/models/rental_fees_computation.py:531
+#. odoo-python
+#: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "There is a later invoice for the same fees definition"
 msgstr ""
@@ -971,7 +975,7 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__to_date
 msgid "To date"
-msgstr ""
+msgstr "Enddatum"
 
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_search
@@ -989,16 +993,6 @@ msgid "Units of the duration of the period"
 msgstr ""
 
 #. module: rental_fees
-#: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_unread
-msgid "Unread Messages"
-msgstr ""
-
-#. module: rental_fees
-#: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_unread_counter
-msgid "Unread Messages Counter"
-msgstr ""
-
-#. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_definition_line__sequence
 msgid "Useful to order the periods in the fees definition"
 msgstr ""
@@ -1006,7 +1000,7 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__valid_from
 msgid "Valid from"
-msgstr ""
+msgstr "Gültig ab"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_definition_line__duration_value
@@ -1018,15 +1012,15 @@ msgstr ""
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Website-Nachrichten"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Website-Kommunikationshistorie"
 
 #. module: rental_fees
-#: selection:rental_fees.definition_line,duration_unit:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_definition_line__duration_unit__weeks
 msgid "Weeks"
 msgstr ""
 
@@ -1041,15 +1035,8 @@ msgid "Wizard to give a device to an employee"
 msgstr ""
 
 #. module: rental_fees
-#: selection:rental_fees.definition_line,duration_unit:0
+#: model:ir.model.fields.selection,name:rental_fees.selection__rental_fees_definition_line__duration_unit__years
 msgid "Years"
-msgstr ""
-
-#. module: rental_fees
-#: model:mail.template,subject:rental_fees.send_report_mail_template
-msgid ""
-"[${object.company_id.name}] Fees to be invoices as of ${format_date(object."
-"fees_computation_id.until_date)}"
 msgstr ""
 
 #. module: rental_fees
@@ -1071,6 +1058,67 @@ msgstr ""
 #: model:ir.actions.server,name:rental_fees.update_defs_with_new_pos
 msgid "[commown] Update fees definitions with the new POs"
 msgstr ""
+
+#. module: rental_fees
+#: model:mail.template,subject:rental_fees.send_report_mail_template
+msgid ""
+"[{{object.company_id.name}}] Fees to be invoices as of {{format_date(object."
+"fees_computation_id.until_date)}}"
+msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "<p>Hello dear ${object.partner_id.name} team,</p>\n"
+#~ "\n"
+#~ "<br/>\n"
+#~ "\n"
+#~ "<p>Please find attached the fees report dated\n"
+#~ "${format_date(object.fees_computation_id.until_date)}<p>\n"
+#~ "\n"
+#~ "<p>Please return the corresponding invoice amouting to\n"
+#~ "${format_amount(object.amount_total, object.currency_id)} by simply "
+#~ "attaching it in\n"
+#~ "reply to this email without changing its subject.</p>\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "<p>Cooperatively,</p>\n"
+#~ "<p>--</p>\n"
+#~ "<div>\n"
+#~ "  <div>The Commown team.<br></div>\n"
+#~ "</div>\n"
+#~ msgstr ""
+#~ "\n"
+#~ "<p>Hallo liebes ${object.partner_id.name} Team,</p>\n"
+#~ "\n"
+#~ "<br/>\n"
+#~ "\n"
+#~ "<p>Anbei finden Sie die Honorarabrechnung vom\n"
+#~ "${format_date(object.fees_computation_id.until_date)}<p>\n"
+#~ "\n"
+#~ "<p>Bitte senden Sie uns die entsprechende Rechnung über\n"
+#~ "${format_amount(object.amount_total, object.currency_id)} zurück, indem "
+#~ "Sie sie einfach\n"
+#~ "als Antwort auf diese E-Mail anhängen, ohne den Betreff zu ändern.</p>\n"
+#~ "\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "<p>Mit freundlichen Grüßen,</p>\n"
+#~ "<p>--</p>\n"
+#~ "<div>\n"
+#~ "  <div>Das Commown-Team.<br></div>\n"
+#~ "</div>\n"
+
+#, python-format
+#~ msgid ""
+#~ "At least one other fees def, %s (id %d), has the same partner, product & "
+#~ "order"
+#~ msgstr ""
+#~ "Mindestens ein weiterer Gebührendefinition, %s (id %d), hat denselben "
+#~ "Partner, dasselbe Produkt und denselben Auftrag"
+
+#~ msgid "Contract Line"
+#~ msgstr "Vertragszeile"
 
 #~ msgid "Device used by an employee (%s)"
 #~ msgstr "Von einem Mitarbeiter verwendetes Gerät (%s)"

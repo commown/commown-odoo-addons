@@ -1,0 +1,64 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * disable_odoo_online
+#
+# Translators:
+# Rudolf Schnapka <rs@techno-flex.de>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: server-tools (9.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:49+0000\n"
+"PO-Revision-Date: 2020-05-15 00:19+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
+"Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
+"language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
+
+#. module: utm_utils_merge_and_remove_actions
+#. odoo-python
+#: code:addons/utm_utils_merge_and_remove_actions/models/utm.py:0
+#, python-format
+msgid "Cannot remove: %(nb_ent)d '%(field)s' point to '%(ent_names)s'"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.model,name:utm_utils_merge_and_remove_actions.model_utm_merge_remove_mixin
+msgid "Mixin for utm classes, to easily merge/ safely remove them"
+msgstr ""
+"Mixin für utm-Klassen, um sie einfach zusammenzuführen/ sicher zu entfernen"
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.model,name:utm_utils_merge_and_remove_actions.model_utm_campaign
+msgid "UTM Campaign"
+msgstr "UTM Kampagne"
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.model,name:utm_utils_merge_and_remove_actions.model_utm_source
+msgid "UTM Source"
+msgstr "UTM Quelle"
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_merge_utm_campaigns
+msgid "[commown] Merge campaigns"
+msgstr "[commown] Kampagnen zusammenführen"
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_merge_utm_sources
+msgid "[commown] Merge sources"
+msgstr "[commown] Quellen zusammenführen"
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_remove_utm_campaigns
+msgid "[commown] Remove campaigns"
+msgstr "[commown] Kampagnen entfernen"
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_remove_utm_sources
+msgid "[commown] Remove sources"
+msgstr "[commown] Quellen entfernen"

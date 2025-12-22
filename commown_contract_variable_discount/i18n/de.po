@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 19:34+0000\n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
 "PO-Revision-Date: 2024-05-14 19:27+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
@@ -17,99 +17,79 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_contract_variable_discount
+#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_abstract_discount_line__coupon_campaign_id
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_discount_line__coupon_campaign_id
-#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_abstract_discount_line__coupon_campaign_id
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_discount_line__coupon_campaign_id
 msgid "Campaign"
 msgstr ""
 
 #. module: commown_contract_variable_discount
-#: selection:contract.discount.line,end_reference:0
-#: selection:contract.discount.line,start_reference:0
-#: selection:contract.template.abstract.discount.line,end_reference:0
-#: selection:contract.template.abstract.discount.line,start_reference:0
-#: selection:contract.template.discount.line,end_reference:0
-#: selection:contract.template.discount.line,start_reference:0
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_abstract_discount_line__end_reference__contract:commitment_end_date
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_abstract_discount_line__start_reference__contract:commitment_end_date
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_discount_line__end_reference__contract:commitment_end_date
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_discount_line__start_reference__contract:commitment_end_date
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_template_discount_line__end_reference__contract:commitment_end_date
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_template_discount_line__start_reference__contract:commitment_end_date
 msgid "Commitment end date"
 msgstr "Enddatum der Verpflichtungsperiode"
 
 #. module: commown_contract_variable_discount
+#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_abstract_discount_line__condition
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_discount_line__condition
-#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_abstract_discount_line__condition
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_discount_line__condition
 msgid "Condition of this discount applicability"
 msgstr ""
 
 #. module: commown_contract_variable_discount
-#: selection:contract.discount.line,end_reference:0
-#: selection:contract.discount.line,start_reference:0
-#: selection:contract.template.abstract.discount.line,end_reference:0
-#: selection:contract.template.abstract.discount.line,start_reference:0
-#: selection:contract.template.discount.line,end_reference:0
-#: selection:contract.template.discount.line,start_reference:0
-msgid "Contract line start date"
+#: model:ir.model,name:commown_contract_variable_discount.model_contract_abstract_discount_line
+msgid "Contract abstract variable discount line"
 msgstr ""
 
 #. module: commown_contract_variable_discount
-#: selection:contract.discount.line,end_reference:0
-#: selection:contract.discount.line,start_reference:0
-#: selection:contract.template.abstract.discount.line,end_reference:0
-#: selection:contract.template.abstract.discount.line,start_reference:0
-#: selection:contract.template.discount.line,end_reference:0
-#: selection:contract.template.discount.line,start_reference:0
-msgid "Contract start date"
-msgstr ""
-
-#. module: commown_contract_variable_discount
-#: model:ir.model,name:commown_contract_variable_discount.model_contract_template_abstract_discount_line
-msgid "Contract template variable discount line"
-msgstr ""
-
-#. module: commown_contract_variable_discount
-#: selection:contract.discount.line,condition:0
-#: selection:contract.template.abstract.discount.line,condition:0
-#: selection:contract.template.discount.line,condition:0
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_abstract_discount_line__condition__coupon_from_campaign
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_discount_line__condition__coupon_from_campaign
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_template_discount_line__condition__coupon_from_campaign
 msgid "Coupon from supplied campaign"
 msgstr ""
 
 #. module: commown_contract_variable_discount
+#: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_abstract_discount_line__end_reference
 #: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_discount_line__end_reference
-#: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_template_abstract_discount_line__end_reference
 #: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_template_discount_line__end_reference
 msgid "Date reference used to compute the discount end date"
 msgstr ""
 
 #. module: commown_contract_variable_discount
+#: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_abstract_discount_line__start_reference
 #: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_discount_line__start_reference
-#: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_template_abstract_discount_line__start_reference
 #: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_template_discount_line__start_reference
 msgid "Date reference used to compute the discount start date"
 msgstr ""
 
 #. module: commown_contract_variable_discount
+#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_abstract_discount_line__end_reference
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_discount_line__end_reference
-#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_abstract_discount_line__end_reference
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_discount_line__end_reference
 msgid "End reference date"
 msgstr ""
 
 #. module: commown_contract_variable_discount
+#: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_abstract_discount_line__condition
 #: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_discount_line__condition
-#: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_template_abstract_discount_line__condition
 #: model:ir.model.fields,help:commown_contract_variable_discount.field_contract_template_discount_line__condition
 msgid "If empty: discount line always apply"
 msgstr ""
 
 #. module: commown_contract_variable_discount
-#: selection:contract.discount.line,condition:0
-#: selection:contract.template.abstract.discount.line,condition:0
-#: selection:contract.template.discount.line,condition:0
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_abstract_discount_line__condition__no_issue_to_date
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_discount_line__condition__no_issue_to_date
+#: model:ir.model.fields.selection,name:commown_contract_variable_discount.selection__contract_template_discount_line__condition__no_issue_to_date
 msgid "No contractual issue to date"
 msgstr ""
 
 #. module: commown_contract_variable_discount
+#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_abstract_discount_line__start_reference
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_discount_line__start_reference
-#: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_abstract_discount_line__start_reference
 #: model:ir.model.fields,field_description:commown_contract_variable_discount.field_contract_template_discount_line__start_reference
 msgid "Start reference date"
 msgstr ""

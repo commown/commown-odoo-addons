@@ -1,0 +1,58 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* utm_utils_merge_and_remove_actions
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:49+0000\n"
+"PO-Revision-Date: 2025-12-22 15:49+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: utm_utils_merge_and_remove_actions
+#. odoo-python
+#: code:addons/utm_utils_merge_and_remove_actions/models/utm.py:0
+#, python-format
+msgid "Cannot remove: %(nb_ent)d '%(field)s' point to '%(ent_names)s'"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.model,name:utm_utils_merge_and_remove_actions.model_utm_merge_remove_mixin
+msgid "Mixin for utm classes, to easily merge/ safely remove them"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.model,name:utm_utils_merge_and_remove_actions.model_utm_campaign
+msgid "UTM Campaign"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.model,name:utm_utils_merge_and_remove_actions.model_utm_source
+msgid "UTM Source"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_merge_utm_campaigns
+msgid "[commown] Merge campaigns"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_merge_utm_sources
+msgid "[commown] Merge sources"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_remove_utm_campaigns
+msgid "[commown] Remove campaigns"
+msgstr ""
+
+#. module: utm_utils_merge_and_remove_actions
+#: model:ir.actions.server,name:utm_utils_merge_and_remove_actions.action_remove_utm_sources
+msgid "[commown] Remove sources"
+msgstr ""
