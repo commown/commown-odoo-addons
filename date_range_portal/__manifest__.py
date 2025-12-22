@@ -3,7 +3,7 @@
 {
     "name": "Date range for portal users",
     "summary": "Fix read access on date range type for portal users",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",

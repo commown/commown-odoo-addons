@@ -4,7 +4,7 @@
 {
     "name": "Commown shipping - Delivery mail send based on CRM contract",
     "summary": "Handle automatic delivery mail sending based on the CRM's contract",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",

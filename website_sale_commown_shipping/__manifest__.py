@@ -4,7 +4,7 @@
 {
     "name": "Commown Shipping - Website Sale integration",
     "summary": "Integrate address validation from commown_shipping into the website sale address form.",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",

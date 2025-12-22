@@ -4,7 +4,7 @@
     "name": "Project Rating: Net Promoter Score",
     "category": "Project",
     "summary": "Implement net promoter score on top of odoo project rating",
-    "version": "16.0.1.0.2",
+    "version": "16.0.1.0.3",
     "author": "Commown SCIC, Akretion, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",

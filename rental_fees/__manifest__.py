@@ -1,7 +1,7 @@
 {
     "name": "rental_fees",
     "category": "Business",
-    "version": "16.0.1.0.3",
+    "version": "16.0.1.0.4",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",

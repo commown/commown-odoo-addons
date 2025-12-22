@@ -3,7 +3,7 @@
 {
     "name": "Attachment language",
     "summary": "Add a language field to an attachment",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     # see https://odoo-community.org/page/development-status
     "development_status": "Alpha",
     "category": "Uncategorized",

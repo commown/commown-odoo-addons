@@ -4,7 +4,7 @@
 {
     "name": "Contract - Transaction label for invoices",
     "summary": "Adds a custom transaction label for payment providers, to add an invoice/invoiced payment date or the invoice number.",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",

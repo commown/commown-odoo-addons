@@ -4,7 +4,7 @@
 {
     "name": "Commown mass reconcile",
     "summary": "Because we mainly reconcile regular subscription payments, we can customize account_mass_reconcile implementation to better suit our needs and optimize the algorithm.",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Accounting/Payment",
     "website": "https://github.com/commown/commown-odoo-addons",

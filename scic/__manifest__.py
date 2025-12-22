@@ -4,7 +4,7 @@
     "name": "SCIC (Société Coopérative d'Intérêts Collectifs)",
     "category": "Custom",
     "summary": "Module that defines functionalities related to the SCIC companies",
-    "version": "16.0.1.0.2",
+    "version": "16.0.1.0.3",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",

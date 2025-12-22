@@ -4,7 +4,7 @@
 {
     "name": "Commown Website Sale Coupon",
     "summary": "Add features related to the website_sale_coupon module (coupon file, coupon in sale.order title)",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",

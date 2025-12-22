@@ -5,7 +5,7 @@
     "name": "Contract Transaction Label - Slimpay implementation",
     "summary": "Slimpay-specific implementation of the payment_transaction_label context value, "
     "declared of the contract_transaction_label module",
-    "version": "16.0.1.0.1",
+    "version": "16.0.1.0.2",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
