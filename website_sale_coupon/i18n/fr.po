@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:48+0000\n"
-"PO-Revision-Date: 2023-06-28 09:56+0000\n"
+"PO-Revision-Date: 2025-12-22 17:04+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -302,7 +302,7 @@ msgstr "Partenaire qui vend les coupons"
 #: code:addons/website_sale_coupon/models/sale_order.py:0
 #, python-format
 msgid "Please add at least one item in your cart to reserve a coupon."
-msgstr ""
+msgstr "Merci d'ajouter au moins un article dans votre panier pour utiliser le coupon."
 
 #. module: website_sale_coupon
 #: model_terms:ir.ui.view,arch_db:website_sale_coupon.coupon_coupon_search
@@ -324,7 +324,7 @@ msgstr "Bon de commande"
 #: code:addons/website_sale_coupon/models/coupon.py:0
 #, python-format
 msgid "Start date must be before end date"
-msgstr ""
+msgstr "La date de début doit être antérieure à la date de fin"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__target_product_tmpl_ids

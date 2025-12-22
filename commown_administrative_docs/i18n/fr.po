@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:45+0000\n"
-"PO-Revision-Date: 2020-10-06 15:38+0200\n"
+"PO-Revision-Date: 2025-12-22 17:58+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -43,7 +43,7 @@ msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
 #. module: commown_administrative_docs
 #: model:ir.model,name:commown_administrative_docs.model_crm_lead
 msgid "Abstract class for obect that use wizard to send device to a customer"
-msgstr ""
+msgstr "Classe abstraite pour les objets qui utilisent l'assistant d'expédition d'appareil à un client"
 
 #. module: commown_administrative_docs
 #: model:ir.model.fields,field_description:commown_administrative_docs.field_res_partner__company_record
@@ -158,4 +158,4 @@ msgstr "[commown] SMS relance doc"
 msgid ""
 "mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object."
 "partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"
-msgstr ""
+msgstr "mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"

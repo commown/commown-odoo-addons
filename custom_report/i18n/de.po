@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:48+0000\n"
-"PO-Revision-Date: 2023-02-02 10:56+0000\n"
+"PO-Revision-Date: 2025-12-22 16:56+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -270,7 +270,7 @@ msgstr "Rechnungsbetrag"
 #: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Total Taxes"
-msgstr ""
+msgstr "Gesamtsteuern"
 
 #. module: custom_report
 #. odoo-python

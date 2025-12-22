@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:48+0000\n"
-"PO-Revision-Date: 2025-12-22 14:30+0000\n"
+"PO-Revision-Date: 2025-12-22 17:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: \n"
@@ -41,6 +41,12 @@ msgid ""
 "  </body>\n"
 "</html>\n"
 msgstr ""
+"<html>\n"
+"  <body>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a <t t-out=\"object.env.context.get(&#x27;late_pickings&#x27;)\"></t> transferts en retard.</p>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Rendez vous sur <a href=\"https://shop.commown.coop/web?debug#action=694&amp;active_id=5&amp;model=stock.picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" style=\"text-decoration:none;background-color:transparent;color:rgb(124, 123, 173);\">cette page</a> pour les traiter.<br/></p>\n"
+"  </body>\n"
+"</html>\n"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_crm_lead
@@ -83,7 +89,7 @@ msgstr "Confirmation de l'action Valider le transfert lié aux mouvements"
 #: code:addons/commown_devices/models/wizard_link_po_invoice.py:0
 #, python-format
 msgid "At least one purchase order/invoice link is required."
-msgstr ""
+msgstr "Au moins un lien ordre d'achat / facture est requis"
 
 #. module: commown_devices
 #: model:project.task.type,legend_blocked:commown_devices.diagnostic_stage
@@ -664,7 +670,7 @@ msgstr "Plus d'un contrat sur les appareils du mouvement %s"
 msgid ""
 "More than one primary variant configured for %(product)s with attributes "
 "%(attrs)s"
-msgstr ""
+msgstr "Plus d'une variante primaire configurée pour %(product)s avec les attributs %(attrs)s"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_line_ids
@@ -714,7 +720,7 @@ msgstr "Lien mouvement/Ligne d'ordre d'achat"
 #: code:addons/commown_devices/models/common.py:0
 #, python-format
 msgid "Not enough %(product)s under location(s) %(location)s"
-msgstr ""
+msgstr "Pas assez de %(product)s à l'emplacement %(location)s"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__lot_nb
@@ -756,7 +762,7 @@ msgstr "Propriétaire"
 #. module: commown_devices
 #: model:ir.model.fields,help:commown_devices.field_stock_location__partner_id
 msgid "Owner of the location if not internal"
-msgstr ""
+msgstr "Propriétaire de l'emplacement si pas interne"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__picking_id
@@ -773,7 +779,7 @@ msgstr "Wizard Expédition/Ordre d'achat"
 #: code:addons/commown_devices/models/contract.py:0
 #, python-format
 msgid "Please set the grade on lots %(lots)s (ids: %(ids)s)"
-msgstr ""
+msgstr "Merci de spécifier le grade des appareils %(lots)s (ids: %(ids)s)"
 
 #. module: commown_devices
 #. odoo-python
@@ -1170,7 +1176,7 @@ msgstr "Suivi des appareils ?"
 #. module: commown_devices
 #: model:ir.model.fields,help:commown_devices.field_stock_move_line__origin_label
 msgid "Used by commown_devices to retrieve a move line's origin resource"
-msgstr ""
+msgstr "Utilisé par commown_devices pour retrouver le document d'origine d'une ligne de mouvement"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view

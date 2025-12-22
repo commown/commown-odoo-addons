@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:46+0000\n"
-"PO-Revision-Date: 2025-03-20 20:52+0100\n"
+"PO-Revision-Date: 2025-12-22 16:57+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -34,7 +34,7 @@ msgstr "3ème appel"
 #. module: commown_lead_risk_analysis
 #: model:ir.model,name:commown_lead_risk_analysis.model_crm_lead
 msgid "Abstract class for obect that use wizard to send device to a customer"
-msgstr ""
+msgstr "Classe abstraite pour les objets qui utilise l'assitant d'expédition à un client"
 
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__address_hesitation
@@ -146,7 +146,7 @@ msgstr "Équipe de suivi des locations"
 #. module: commown_lead_risk_analysis
 #: model:ir.model.fields,field_description:commown_lead_risk_analysis.field_crm_lead__global_feeling
 msgid "Global Feeling"
-msgstr ""
+msgstr "Impression générale"
 
 #. module: commown_lead_risk_analysis
 #: model_terms:ir.ui.view,arch_db:commown_lead_risk_analysis.crm_case_form_view_oppor

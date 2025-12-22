@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:46+0000\n"
-"PO-Revision-Date: 2025-02-04 13:41+0100\n"
+"PO-Revision-Date: 2025-12-22 17:21+0100\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
 "Language: French\n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid ""
 "\"%s %s.ods\" % (object.partner_id.name, object.until_date.strftime(\"%Y-%m-"
 "%d\"))"
-msgstr ""
+msgstr "\"%s %s.ods\" % (object.partner_id.name, object.until_date.strftime(\"%Y-%m-%d\"))"
 
 #. module: rental_fees
 #. odoo-python
@@ -88,6 +88,27 @@ msgid ""
 "</body>\n"
 "</html>\n"
 msgstr ""
+"<html>\n"
+"  <body><p>Bonjour l'équipe <t t-out=\"object.partner_id.name\"></t></p>\n"
+"\n"
+"<br/>\n"
+"\n"
+"<p>Veuillez trouver ci-joint le rapport des commissions sur les loyers en date du\n"
+"<t t-out=\"format_date(object.fees_computation_id.until_date)\"></t></p><p>\n"
+"\n"
+"</p><p>Merci de nous renvoyer la facture correspondante d'un montant de\n"
+"<t t-out=\"format_amount(object.amount_total, object.currency_id)\"></t> en la joignant simplement en\n"
+"réponse à ce courriel sans en changer le sujet.</p>\n"
+"\n"
+"<br/><br/>\n"
+"\n"
+"<p>Coopérativement,</p>\n"
+"<p>--</p>\n"
+"<div>\n"
+"  <div>L'équipe Commown.<br/></div>\n"
+"</div>\n"
+"</body>\n"
+"</html>\n"
 
 #. module: rental_fees
 #: model:ir.model,name:rental_fees.model_rental_fees_definition
@@ -113,7 +134,7 @@ msgstr "Effectif"
 #: code:addons/rental_fees/models/rental_fees_definition.py:0
 #, python-format
 msgid "Adding new POs to fees def '%(def)s': %(pos)s"
-msgstr ""
+msgstr "Ajoût de nouveaux ordres d'achat à la définition de commissionnement '%(def)s' : %(pos)s"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_definition__agreed_to_std_price_ratio
@@ -132,7 +153,7 @@ msgstr "Montant"
 msgid ""
 "At least one other fees def, %(def)s (id %(id)d), has the same partner, "
 "product & order"
-msgstr ""
+msgstr "Au moins une autre définition de commissionnement, %(def)s (id %(id)d), a les mêmes partenaire, article et ordre d'achat"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_attachment_count
@@ -424,7 +445,7 @@ msgstr "Définition des commissions"
 #: code:addons/rental_fees/models/rental_fees_computation.py:0
 #, python-format
 msgid "Fees definition %(def)s (id %(id)d) has no line."
-msgstr ""
+msgstr "La définition de commissionnement %(def)s (id %(id)d) n'a aucune ligne de définition."
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation_detail__fees_definition_line_id
@@ -546,7 +567,7 @@ msgstr "Prévisionnel"
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "Avec message"
 
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__id
@@ -764,12 +785,12 @@ msgstr "Nombre d'actions"
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Nombre d'erreurs"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr ""
+msgstr "Nombre de messages nécessitant une action"
 
 #. module: rental_fees
 #: model:ir.model.fields,help:rental_fees.field_rental_fees_computation__message_has_error_counter
@@ -940,7 +961,7 @@ msgstr "En cours"
 #. module: rental_fees
 #: model:ir.model.fields,field_description:rental_fees.field_rental_fees_computation__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr ""
+msgstr "Erreur d'envoi du SMS"
 
 #. module: rental_fees
 #: model_terms:ir.ui.view,arch_db:rental_fees.rental_fees_computation_view_form
@@ -1118,7 +1139,7 @@ msgstr ""
 msgid ""
 "[{{object.company_id.name}}] Fees to be invoices as of {{format_date(object."
 "fees_computation_id.until_date)}}"
-msgstr ""
+msgstr "[{{object.company_id.name}}] Commissions à facturer au {{format_date(object.fees_computation_id.until_date)}}"
 
 #~ msgid ""
 #~ "\n"

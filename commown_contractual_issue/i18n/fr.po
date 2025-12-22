@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:46+0000\n"
-"PO-Revision-Date: 2022-06-10 15:51+0000\n"
+"PO-Revision-Date: 2025-12-22 18:02+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -21,12 +21,12 @@ msgstr ""
 #: code:addons/commown_contractual_issue/models/project_project.py:0
 #, python-format
 msgid "A contract must be set on tasks to track contractual issues"
-msgstr ""
+msgstr "Un contrat doit être paramétré sur les tâches de suivi des incidents contractuels."
 
 #. module: commown_contractual_issue
 #: model:ir.model,name:commown_contractual_issue.model_project_task
 msgid "Abstract class for obect that use wizard to send device to a customer"
-msgstr ""
+msgstr "Classe abstraite pour les objets qui utilisent l'assistant d'expédition d'appareils vers un client"
 
 #. module: commown_contractual_issue
 #: model:ir.model.fields.selection,name:commown_contractual_issue.selection__project_task__contractual_issue_type__breakage

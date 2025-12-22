@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: server-tools (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:46+0000\n"
-"PO-Revision-Date: 2020-05-15 00:19+0000\n"
+"PO-Revision-Date: 2025-12-22 18:03+0100\n"
 "Last-Translator: Peter Schubert <psc@saco.info>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
 "language/de/)\n"
@@ -25,12 +25,12 @@ msgstr ""
 #: code:addons/commown_contractual_issue/models/project_project.py:0
 #, python-format
 msgid "A contract must be set on tasks to track contractual issues"
-msgstr ""
+msgstr "Für Projektaufgaben, die vertragliche Angelegenheiten betreffen, muss ein Vertrag abgeschlossen werden."
 
 #. module: commown_contractual_issue
 #: model:ir.model,name:commown_contractual_issue.model_project_task
 msgid "Abstract class for obect that use wizard to send device to a customer"
-msgstr ""
+msgstr "Abstrakte Klasse für Objekte, die den Assistenten verwenden, um Geräte an Kunden zu senden"
 
 #. module: commown_contractual_issue
 #: model:ir.model.fields.selection,name:commown_contractual_issue.selection__project_task__contractual_issue_type__breakage
@@ -56,7 +56,7 @@ msgstr "Verträge"
 #. module: commown_contractual_issue
 #: model_terms:ir.ui.view,arch_db:commown_contractual_issue.view_task_form2
 msgid "Contractual issues"
-msgstr ""
+msgstr "Vertragliche Probleme"
 
 #. module: commown_contractual_issue
 #: model:ir.model.fields,field_description:commown_contractual_issue.field_project_project__contractual_issues_tracking

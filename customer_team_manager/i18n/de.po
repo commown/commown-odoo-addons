@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:45+0000\n"
-"PO-Revision-Date: 2025-09-19 11:17+0200\n"
+"PO-Revision-Date: 2025-12-22 17:57+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -19,22 +19,22 @@ msgstr ""
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
 msgid "<i class=\"fa fa-building\" title=\"Company\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-building\" title=\"Firma\"/>"
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
 msgid "<i class=\"fa fa-envelope\" title=\"Email\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-envelope\" title=\"Email\"/>"
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
 msgid "<i class=\"fa fa-phone\" title=\"Phone\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-phone\" title=\"Telefonnummer\"/>"
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
 msgid "<i class=\"fa fa-users\" title=\"Team\"/>"
-msgstr ""
+msgstr "<i class=\"fa fa-users\" title=\"Team\"/>"
 
 #. module: customer_team_manager
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_team
@@ -472,7 +472,7 @@ msgstr "Sie sind nicht berechtigt, Benutzer zu verwalten."
 #: code:addons/customer_team_manager/models/res_partner.py:0
 #, python-format
 msgid "You are not allowed to perform this operation on this partner"
-msgstr ""
+msgstr "Sie dürfen diesen Vorgang für diesen Benutzer nicht ausführen."
 
 #. module: customer_team_manager
 #: model:ir.model.fields,help:customer_team_manager.field_res_partner__customer_note

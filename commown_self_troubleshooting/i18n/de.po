@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:48+0000\n"
-"PO-Revision-Date: 2025-02-27 13:52+0100\n"
+"PO-Revision-Date: 2025-12-22 17:50+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -267,6 +267,8 @@ msgid ""
 "<i class=\"fa fa-check-double\"/>\n"
 "          Confirmation de votre demande"
 msgstr ""
+"<i class=\"fas fa-check-double\"/>\n"
+"          Bestätigung Ihrer Anfrage"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -274,6 +276,8 @@ msgid ""
 "<i class=\"fa fa-envelope\"/>\n"
 "                Adresse email"
 msgstr ""
+"<i class=\"fa fa-envelope\"/>\n"
+"                E-Mail-Adresse"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contact-human
@@ -281,6 +285,8 @@ msgid ""
 "<i class=\"fa fa-hands-helping\"/>\n"
 "          Contacter un humain"
 msgstr ""
+"<i class=\"fa fa-hands-helping\"/>\n"
+"          Eine Ansprechperson kontaktieren"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -288,6 +294,8 @@ msgid ""
 "<i class=\"fa fa-home\"/>\n"
 "              Rue - 1ère ligne"
 msgstr ""
+"<i class=\"fa fa-home\"/>\n"
+"              Straße - 1. Zeile"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -295,6 +303,8 @@ msgid ""
 "<i class=\"fa fa-home\"/>\n"
 "              Rue - 2ème ligne (si nécessaire)"
 msgstr ""
+"<i class=\"fa fa-home\"/>\n"
+"              Straße - 2. Zeile (falls erforderlich)"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -302,6 +312,8 @@ msgid ""
 "<i class=\"fa fa-id-card\" aria-hidden=\"true\"/>\n"
 "              Nom complet"
 msgstr ""
+"<i class=\"fa fa-id-card\" aria-hidden=\"true\"/>\n"
+"              Vollständiger Name"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -309,6 +321,8 @@ msgid ""
 "<i class=\"fa fa-map-marker-alt\"/>\n"
 "                C. Postal"
 msgstr ""
+"<i class=\"fa fa-map-marker-alt\"/>\n"
+"                Postleitzahl"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -316,6 +330,8 @@ msgid ""
 "<i class=\"fa fa-map-marker-alt\"/>\n"
 "                Pays"
 msgstr ""
+"<i class=\"fa fa-map-marker-alt\"/>\n"
+"                Land"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -323,6 +339,8 @@ msgid ""
 "<i class=\"fa fa-map-marker-alt\"/>\n"
 "                Ville"
 msgstr ""
+"<i class=\"fa fa-map-marker-alt\"/>\n"
+"                Stadt"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -330,6 +348,8 @@ msgid ""
 "<i class=\"fa fa-phone-alt\"/>\n"
 "                N° de mobile"
 msgstr ""
+"<i class=\"fa fa-phone-alt\"/>\n"
+"                Handy-Nr"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-ship-module
@@ -337,6 +357,8 @@ msgid ""
 "<i class=\"fa fa-shipping-fast\"/>\n"
 "          Informations d'expédition"
 msgstr ""
+"<i class=\"fa fa-shipping-fast\"/>\n"
+"          Informationen zum Versand"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
@@ -434,7 +456,7 @@ msgstr "<i class=\"fas fa-wind\"/> Test Unruhe des Kabels"
 msgid ""
 "<option disabled=\"disabled\" selected=\"1\" value=\"\">-- Choisir une "
 "réponse --</option>"
-msgstr ""
+msgstr "<option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
@@ -449,6 +471,11 @@ msgid ""
 "option>\n"
 "                        </select>"
 msgstr ""
+"<select class=\"form-control\" name=\"contract_termination\" id=\"contract_termination\" required=\"required\">\n"
+"                          <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"                          <option value=\"pay\">Die restlichen Monatsraten begleichen</option>\n"
+"                          <option value=\"no\">Meinen Vertrag übertragen</option>\n"
+"                        </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
@@ -465,6 +492,13 @@ msgid ""
 "option>\n"
 "                        </select>"
 msgstr ""
+"<select class=\"form-control\" name=\"generic_issue_type\" id=\"generic_issue_type\" required=\"required\">\n"
+"                          <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"                          <option value=\"bug\">Vorfall, Unterstützung</option>\n"
+"                          <option value=\"broken\">Bruchschäden</option>\n"
+"                          <option value=\"course\">Schulung</option>\n"
+"                          <option value=\"upgrade\">Material anfragen</option>\n"
+"                        </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.theft-and-loss
@@ -477,6 +511,11 @@ msgid ""
 "                          <option value=\"loss\">Perte</option>\n"
 "                        </select>"
 msgstr ""
+"<select class=\"form-control\" name=\"theft_loss\" id=\"theft_loss\" required=\"required\">\n"
+"                          <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"                          <option value=\"theft\">Flug</option>\n"
+"                          <option value=\"loss\">Verlust</option>\n"
+"                        </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
@@ -490,6 +529,11 @@ msgid ""
 "                            <option value=\"inf\">Inférieure à 80%</option>\n"
 "                          </select>"
 msgstr ""
+"<select class=\"form-control\" required=\"required\" id=\"accu_battery\" name=\"accu_battery\" data-required-error=\"Veuillez sélectionner l'état de votre batterie.\">\n"
+"                            <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"                            <option value=\"sup\">Mehr als 80%</option>\n"
+"                            <option value=\"inf\">Weniger als 80%</option>\n"
+"                          </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
@@ -503,6 +547,11 @@ msgid ""
 "                            <option value=\"old\">Ancien modèle</option>\n"
 "                          </select>"
 msgstr ""
+"<select class=\"form-control\" required=\"required\" id=\"camera_model\" name=\"camera_model\" data-required-error=\"Veuillez sélectionner un modèle de caméra dans la liste ci-dessus.\">\n"
+"                            <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"                            <option value=\"new\">Neues Modell</option>\n"
+"                            <option value=\"old\">Altes Modell</option>\n"
+"                          </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
@@ -518,6 +567,11 @@ msgid ""
 "résolu</option>\n"
 "                          </select>"
 msgstr ""
+"<select class=\"form-control\" required=\"required\" id=\"tighten_screws_solved_pb\" name=\"tighten_screws_solved_pb\" data-required-error=\"Bitte wählen Sie einen Eintrag aus der Liste.\">\n"
+"                            <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"                            <option value=\"yes\">Das Problem ist gelöst</option>\n"
+"                            <option value=\"no\">Das Problem ist nicht gelöst</option>\n"
+"                          </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-manipulation-option
@@ -533,6 +587,11 @@ msgid ""
 "option>\n"
 "            </select>"
 msgstr ""
+"<select class=\"form-control\" required=\"required\" id=\"type_contrat\" name=\"type_contrat\" data-required-error=\"Bitte wählen Sie die Vertragsart aus\">\n"
+"              <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"              <option value=\"commown\">Commown schickt Ihnen ein Ersatzgerät</option>\n"
+"              <option value=\"me\">Commown schickt mir die Module und ich kümmere mich selbst um die Reparatur</option>\n"
+"            </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
@@ -548,6 +607,11 @@ msgid ""
 "j'entends d'une seule oreille</option>\n"
 "                        </select>"
 msgstr ""
+"<select class=\"form-control\" required=\"required\" id=\"type_problem\" name=\"type_problem\" data-required-error=\"Bitte wählen Sie die Art des Problems aus.\">\n"
+"                          <option disabled=\"disabled\" selected=\"1\" value=\"\">-- Eine Antwort auswählen --</option>\n"
+"                          <option value=\"yes\">Der Sound hört sich seltsam an</option>\n"
+"                          <option value=\"no\">Ich höre gar nichts mehr oder nur auf einer Seite</option>\n"
+"                        </select>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.portal_breadcrumbs
@@ -680,7 +744,7 @@ msgstr "Gerät"
 #. module: commown_self_troubleshooting
 #: model:project.tags,name:commown_self_troubleshooting.tag-device-fp2
 msgid "Appareil FP2"
-msgstr ""
+msgstr "FP2 Gerät"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
@@ -737,7 +801,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model:project.tags,name:commown_self_troubleshooting.tag-self-troubleshooting
 msgid "Auto-dépannage"
-msgstr ""
+msgstr "Selbsthilfe"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
@@ -1268,7 +1332,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model:project.tags,name:commown_self_troubleshooting.tag-to-be-shipped
 msgid "EXPED À FAIRE"
-msgstr ""
+msgstr "EXPED À FAIRE"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
@@ -1386,7 +1450,7 @@ msgstr "Ethibox <i class=\"fas fa-external-link-alt\"/>"
 #. module: commown_self_troubleshooting
 #: model:project.tags,name:commown_self_troubleshooting.tag-fp2-mod-camera
 msgid "FP MOD caméra"
-msgstr ""
+msgstr "FP MOD Kamera"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
@@ -2157,7 +2221,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model:project.tags,name:commown_self_troubleshooting.tag-inform-only
 msgid "Pour information"
-msgstr ""
+msgstr "Zur Information"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
@@ -2356,7 +2420,7 @@ msgstr "Torx"
 #. module: commown_self_troubleshooting
 #: model:project.tags,name:commown_self_troubleshooting.tag-need-screwdriver
 msgid "Tournevis demandé"
-msgstr ""
+msgstr "Schraubendreher benötigt"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
@@ -2638,7 +2702,7 @@ msgstr "dieses Tutorial <i class=\"fas fa-external-link-alt\"/>"
 msgid ""
 "cette\n"
 "                    page de notre wiki"
-msgstr ""
+msgstr "dieser Seite in unserem Wiki"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
@@ -2715,6 +2779,8 @@ msgid ""
 "et répondez à la question\n"
 "                      ci-dessous :"
 msgstr ""
+"und beantworten Sie die Frage\n"
+"                      unten:"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
@@ -2730,7 +2796,7 @@ msgstr "https://www.ifixit.com/de-de/products/t3-torx-screwdriver"
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-manipulation-option
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.tool_form
 msgid "ici <i class=\"fa fa-external-link-alt\"/>"
-msgstr ""
+msgstr "hier <i class=\"fa fa-external-link-alt\"/>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
@@ -2740,7 +2806,7 @@ msgstr "hier <i class=\"fas fa-external-link-alt\"/>"
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
 msgid "ici pour les ordinateurs  <i class=\"fa fa-external-link-alt\"/>"
-msgstr ""
+msgstr "hier für Computer <i class=\"fa fa-external-link-alt\"/>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
@@ -2860,7 +2926,7 @@ msgstr ""
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
 msgid "là pour les téléphones <i class=\"fa fa-external-link-alt\"/>"
-msgstr ""
+msgstr "dort für die Telefone <i class=\"fa fa-external-link-alt\"/>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
@@ -2929,7 +2995,7 @@ msgstr "Ihre Verfügbarkeit"
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-confirm-change
 msgid "votre espace personnel <i class=\"fa fa-external-link-alt\"/>"
-msgstr ""
+msgstr "ihrem Persönlichen Bereich <i class=\"fa fa-external-link-alt\"/>"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue

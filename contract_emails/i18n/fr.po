@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0-20180123\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-22 15:47+0000\n"
-"PO-Revision-Date: 2024-02-13 09:12+0100\n"
+"PO-Revision-Date: 2025-12-22 18:09+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -53,7 +53,7 @@ msgstr "Nombre d'intervalles de temps après le début du contrat"
 #. module: contract_emails
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_sent__send_date
 msgid "Date the planned email was sent"
-msgstr ""
+msgstr "Date à laquelle le courriel planifié a été envoyé"
 
 #. module: contract_emails
 #: model:ir.model.fields.selection,name:contract_emails.selection__contract_emails_planned_mail_generator__interval_type__daily
@@ -141,7 +141,7 @@ msgstr "Retard max du mail (en jours)"
 #. module: contract_emails
 #: model_terms:ir.ui.view,arch_db:contract_emails.channel_message
 msgid "Message posted by"
-msgstr ""
+msgstr "Message envoyé par"
 
 #. module: contract_emails
 #: model:ir.model.fields.selection,name:contract_emails.selection__contract_emails_planned_mail_generator__interval_type__monthly
@@ -194,7 +194,7 @@ msgstr "Envoyer les mails planifiés"
 #. module: contract_emails
 #: model_terms:ir.ui.view,arch_db:contract_emails.channel_message
 msgid "Subject:"
-msgstr ""
+msgstr "Objet :"
 
 #. module: contract_emails
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator__interval_type
