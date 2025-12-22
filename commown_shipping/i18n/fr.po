@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-07 15:11+0000\n"
-"PO-Revision-Date: 2024-09-09 10:58+0200\n"
+"POT-Creation-Date: 2025-12-22 15:49+0000\n"
+"PO-Revision-Date: 2025-12-22 18:14+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -17,36 +17,66 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_shipping
-#: model:mail.template,subject:commown_shipping.parcel_at_postoffice
+#: model:res.groups,comment:commown_shipping.group_print_label
 msgid ""
-"${object.user_id.company_id.name} - Customer parcel waiting at the postoffice"
+"\n"
+"      The user will be able to use wizards to print shipping labels.\n"
+"    "
 msgstr ""
-"${object.user_id.company_id.name} - Un colis attend le client au bureau de "
-"poste"
+"\n"
+"      L'utilisateur pourra utiliser des assistants pour imprimer des étiquettes d'expédition.\n"
+"    "
 
 #. module: commown_shipping
 #: model:mail.template,body_html:commown_shipping.parcel_at_postoffice
 msgid ""
-"<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
-"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est&nbsp;<b "
+"<html>\n"
+"  <body>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est <b "
 "style=\"font-weight:bolder;font-style: initial; font-variant-ligatures: "
 "initial; font-variant-caps: initial; text-align: inherit; font-weight: bold;"
-"\">${object.partner_id.name}.</b></p><p style=\"margin:0px 0 1rem 0;font-"
-"size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, "
-"sans-serif;\"><b style=\"font-weight:bolder;font-style: initial; font-"
-"variant-ligatures: initial; font-variant-caps: initial; text-align: inherit; "
-"font-weight: bold;\"><br></b><span style=\"font-style: initial; font-variant-"
-"ligatures: initial; font-variant-caps: initial; font-weight: initial; text-"
-"align: inherit;\">Il a au maximum 10 jours pour le récupérer, s'assurer "
-"qu'il peut le faire avant que le colis ne nous revienne.</span></p>"
-msgstr "<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est&nbsp;<b style=\"font-weight:bolder;font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; text-align: inherit; font-weight: bold;\">${object.partner_id.name}.</b></p><p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\"><b style=\"font-weight:bolder;font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; text-align: inherit; font-weight: bold;\"><br></b><span style=\"font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; font-weight: initial; text-align: inherit;\">Il a au maximum 10 jours pour le récupérer, s'assurer qu'il peut le faire avant que le colis ne nous revienne.</span></p>"
+"\"><t t-out=\"object.partner_id.name\"></t>.</b></p>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"      <b style=\"font-weight:bolder;font-style: initial; font-variant-"
+"ligatures: initial; font-variant-caps: initial; text-align: inherit; font-"
+"weight: bold;\">\n"
+"        <br/>\n"
+"      </b>\n"
+"      <span style=\"font-style: initial; font-variant-ligatures: initial; "
+"font-variant-caps: initial; font-weight: initial; text-align: inherit;\">Il "
+"a au maximum 10 jours pour le récupérer, s'assurer qu'il peut le faire avant "
+"que le colis ne nous revienne.</span>\n"
+"    </p>\n"
+"  </body>\n"
+"</html>\n"
+msgstr ""
+"<html>\n"
+"  <body>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est <b style=\"font-weight:bolder;font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; text-align: inherit; font-weight: bold;\"><t t-out=\"object.partner_id.name\"></t>.</b></p>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"      <b style=\"font-weight:bolder;font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; text-align: inherit; font-weight: bold;\">\n"
+"        <br/>\n"
+"      </b>\n"
+"      <span style=\"font-style: initial; font-variant-ligatures: initial; font-variant-caps: initial; font-weight: initial; text-align: inherit;\">Il a au maximum 10 jours pour le récupérer, s'assurer qu'il peut le faire avant que le colis ne nous revienne.</span>\n"
+"    </p>\n"
+"  </body>\n"
+"</html>\n"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/colissimo_utils.py:93
+#. odoo-python
+#: code:addons/commown_shipping/models/colissimo_utils.py:0
 #, python-format
 msgid "A phone number is required to generate a Colissimo label!"
 msgstr ""
 "Un numéro de téléphone est requis pour générer une étiquette Colissimo !"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_crm_lead
+#: model:ir.model,name:commown_shipping.model_project_task
+msgid "Abstract class for obect that use wizard to send device to a customer"
+msgstr "Classe abstraite pour les objets qui utilisent un assistant d'expédition d'appareil à un client"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__account
@@ -59,13 +89,20 @@ msgid "Account Password"
 msgstr "Mot de passe du compte"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/res_partner.py:43
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__password_env_default
+msgid "Account Password Env Default"
+msgstr "Account Password Env Default"
+
+#. module: commown_shipping
+#. odoo-python
+#: code:addons/commown_shipping/models/res_partner.py:0
 #, python-format
 msgid "Address lines' length is limited to %s. Please fix."
 msgstr "Les lignes d'adresse sont limitées à %s caractères."
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/colissimo_utils.py:97
+#. odoo-python
+#: code:addons/commown_shipping/models/colissimo_utils.py:0
 #, python-format
 msgid "An email is required to generate a Colissimo label!"
 msgstr ""
@@ -97,7 +134,8 @@ msgid "Class holding the fields and methods to track parcel delivery"
 msgstr "Classe portant les champs et méthodes de suivi des colis"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:173
+#. odoo-python
+#: code:addons/commown_shipping/models/shipping_mixin.py:0
 #, python-format
 msgid ""
 "Colissimo error:\n"
@@ -110,6 +148,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__commercial_partner_id
 msgid "Commercial Entity"
 msgstr "Entité commerciale"
+
+#. module: commown_shipping
+#: model:ir.model,name:commown_shipping.model_commown_delivery_parent_mixin
+msgid "Commown shipping parent mixin"
+msgstr "Commown shipping parent mixin"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_res_partner
@@ -177,26 +220,19 @@ msgstr "Suivi d'expédition"
 
 #. module: commown_shipping
 #: model:ir.cron,cron_name:commown_shipping.delivery_tracking_crm_lead
-#: model:ir.cron,name:commown_shipping.delivery_tracking_crm_lead
 msgid "Delivery tracking: crm.lead"
 msgstr "Suivi colissimo : opportunités"
 
 #. module: commown_shipping
 #: model:ir.cron,cron_name:commown_shipping.delivery_tracking_project_task
-#: model:ir.cron,name:commown_shipping.delivery_tracking_project_task
 msgid "Delivery tracking: project.task"
 msgstr "Suivi colissimo : tâches"
 
 #. module: commown_shipping
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__display_name
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__display_name
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin__display_name
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__display_name
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__display_name
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__display_name
 msgid "Display Name"
 msgstr "Afficher Nom"
 
@@ -208,25 +244,25 @@ msgid "Expedition Date"
 msgstr "Date d'expédition"
 
 #. module: commown_shipping
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_ref
-#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_ref
-#: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_ref
-msgid "Expedition reference"
-msgstr "N° d'expédition"
-
-#. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_status
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_status
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_status
-msgid "Expedition status"
+msgid "Expedition Status"
 msgstr "Statut de l'expédition"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_status_fetch_date
 #: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_status_fetch_date
 #: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_status_fetch_date
-msgid "Expedition status fetch date"
-msgstr "Date de récupération du statut"
+msgid "Expedition Status Fetch Date"
+msgstr "Date de récupération du statut de l'expédition"
+
+#. module: commown_shipping
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_ref
+#: model:ir.model.fields,field_description:commown_shipping.field_crm_lead__expedition_ref
+#: model:ir.model.fields,field_description:commown_shipping.field_project_task__expedition_ref
+msgid "Expedition reference"
+msgstr "N° d'expédition"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__expedition_urgency_mail_sent
@@ -236,15 +272,10 @@ msgid "Expedition urgency mail send"
 msgstr "Courriel au client pour une récupération urgente"
 
 #. module: commown_shipping
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__id
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__id
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin__id
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin__id
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__id
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin__id
 msgid "ID"
 msgstr "ID"
 
@@ -271,20 +302,15 @@ msgid "Insurance value (€)"
 msgstr "Valeur assurée (€)"
 
 #. module: commown_shipping
-#: sql_constraint:commown.parcel.type:0
+#: model:ir.model.constraint,message:commown_shipping.constraint_commown_parcel_type_check_insurance_value
 msgid "Insurance value must be >= 0!"
 msgstr "La valeur assurée doit être >= 0 !"
 
 #. module: commown_shipping
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_delivery_parent_mixin____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type____last_update
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard____last_update
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_mixin____last_update
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_parent_mixin____last_update
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard____last_update
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_track_delivery_mixin____last_update
 msgid "Last Modified on"
 msgstr "Dernière Modification le"
 
@@ -305,17 +331,13 @@ msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/crm_lead.py:52
+#. odoo-python
+#: code:addons/commown_shipping/models/crm_lead.py:0
 #, python-format
 msgid "Lead has no expedition ref. Please fill it in."
 msgstr ""
 "L'opportunité n'a pas de numéro d'expédition. Remplissez le pour passer dans "
 "cette colonne"
-
-#. module: commown_shipping
-#: model:ir.model,name:commown_shipping.model_crm_lead
-msgid "Lead/Opportunity"
-msgstr "Piste/opportunité"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_lead_print_label_wizard__shipping_ids
@@ -328,7 +350,8 @@ msgid "Name"
 msgstr "Nom"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/delivery_mixin.py:122
+#. odoo-python
+#: code:addons/commown_shipping/models/delivery_mixin.py:0
 #, python-format
 msgid ""
 "No mail email template specified for %s (neither in current record nor its "
@@ -338,7 +361,8 @@ msgstr ""
 "parent)"
 
 #. module: commown_shipping
-#: code:addons/commown_shipping/models/shipping_mixin.py:66
+#. odoo-python
+#: code:addons/commown_shipping/models/shipping_mixin.py:0
 #, python-format
 msgid "No shipping account defined"
 msgstr "Aucun compte de livraison défini"
@@ -375,7 +399,7 @@ msgid "Parcel technical name"
 msgstr "Nom technique du colis"
 
 #. module: commown_shipping
-#: sql_constraint:commown.parcel.type:0
+#: model:ir.model.constraint,message:commown_shipping.constraint_commown_parcel_type_uniq_technical_name
 msgid "Parcel technical names must be unique."
 msgstr "Le nom technique du colis doit être unique."
 
@@ -391,14 +415,8 @@ msgstr "Type de colis"
 #. module: commown_shipping
 #: model:ir.actions.act_window,name:commown_shipping.action_view_parcel_types
 #: model:ir.ui.menu,name:commown_shipping.menu_parcel_types
-#: model_terms:ir.ui.view,arch_db:commown_shipping.parcel_types_tree
 msgid "Parcel types"
 msgstr "Types de colis"
-
-#. module: commown_shipping
-#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__password_env_default
-msgid "Password Env Default"
-msgstr "Valeur Env par défaut pour le mot de passe"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__password_env_is_editable
@@ -427,9 +445,14 @@ msgid "Print label"
 msgstr "Imprimer une étiquette"
 
 #. module: commown_shipping
+#: model:res.groups,name:commown_shipping.group_print_label
+msgid "Print shipping labels"
+msgstr "Impression d'étiquettes d'expédition"
+
+#. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_product_template
-msgid "Product Template"
-msgstr "Modèle d'article"
+msgid "Product"
+msgstr "Article"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_project_project
@@ -448,8 +471,8 @@ msgstr "Ligne de bons de commande"
 
 #. module: commown_shipping
 #: model:ir.model,name:commown_shipping.model_crm_team
-msgid "Sales Channels"
-msgstr "Canaux de vente"
+msgid "Sales Team"
+msgstr "Équipe commerciale"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_parcel_type__sender
@@ -481,9 +504,9 @@ msgid "Shipping account data"
 msgstr "Données du compte d'expédition"
 
 #. module: commown_shipping
-#: model:ir.model,name:commown_shipping.model_project_task
-msgid "Task"
-msgstr "Tâche"
+#: model_terms:ir.ui.view,arch_db:commown_shipping.portal_my_details_fields
+msgid "Street 2"
+msgstr "Rue 2"
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_task_print_label_wizard__shipping_ids
@@ -491,14 +514,25 @@ msgid "Tasks"
 msgstr "Tâches"
 
 #. module: commown_shipping
-#: sql_constraint:res.partner:0
+#: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_account__tech_name
+msgid "Tech Name"
+msgstr "Nom technique"
+
+#. module: commown_shipping
+#: model:ir.model.constraint,message:commown_shipping.constraint_res_partner_street2_max_size_colissimo
+#: model:ir.model.constraint,message:commown_shipping.constraint_res_partner_street_max_size_colissimo
 msgid "The street field size cannot exceed 35"
 msgstr "Chaque ligne d'adresse ne peut dépasser 35 caractères"
 
 #. module: commown_shipping
-#: sql_constraint:commown.parcel.type:0
+#: model:ir.model.constraint,message:commown_shipping.constraint_commown_parcel_type_check_weight
 msgid "The weight must be > 0!"
 msgstr "Le poids doit être > 0 !"
+
+#. module: commown_shipping
+#: model:ir.model.fields,help:commown_shipping.field_commown_shipping_account__tech_name
+msgid "Unique name for technical purposes. Eg: server env keys."
+msgstr "Nom unique pour usage technique. Exemple : nom de variables d'environnement serveur."
 
 #. module: commown_shipping
 #: model:ir.model.fields,field_description:commown_shipping.field_commown_shipping_abstract_print_label_wizard__use_full_page_per_label
@@ -528,15 +562,77 @@ msgid "[commown] Un colis attend le client au bureau de poste"
 msgstr "[commown] Un colis attend le client au bureau de poste"
 
 #. module: commown_shipping
-#: model:ir.model,name:commown_shipping.model_commown_delivery_parent_mixin
-msgid "commown.delivery.parent.mixin"
-msgstr "commown.delivery.parent.mixin"
-
-#. module: commown_shipping
 #: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_crm_lead_print_label_form
 #: model_terms:ir.ui.view,arch_db:commown_shipping.wizard_project_task_print_label_form
 msgid "or"
 msgstr "ou"
+
+#. module: commown_shipping
+#: model:mail.template,subject:commown_shipping.parcel_at_postoffice
+msgid ""
+"{{object.user_id.company_id.name}} - Customer parcel waiting at the "
+"postoffice"
+msgstr "{{object.user_id.company_id.name}} - Colis en attente au bureau de poste"
+
+#~ msgid ""
+#~ "${object.user_id.company_id.name} - Customer parcel waiting at the "
+#~ "postoffice"
+#~ msgstr ""
+#~ "${object.user_id.company_id.name} - Un colis attend le client au bureau "
+#~ "de poste"
+
+#~ msgid ""
+#~ "<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+#~ "Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est&nbsp;"
+#~ "<b style=\"font-weight:bolder;font-style: initial; font-variant-"
+#~ "ligatures: initial; font-variant-caps: initial; text-align: inherit; font-"
+#~ "weight: bold;\">${object.partner_id.name}.</b></p><p style=\"margin:0px 0 "
+#~ "1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
+#~ "Verdana, Arial, sans-serif;\"><b style=\"font-weight:bolder;font-style: "
+#~ "initial; font-variant-ligatures: initial; font-variant-caps: initial; "
+#~ "text-align: inherit; font-weight: bold;\"><br></b><span style=\"font-"
+#~ "style: initial; font-variant-ligatures: initial; font-variant-caps: "
+#~ "initial; font-weight: initial; text-align: inherit;\">Il a au maximum 10 "
+#~ "jours pour le récupérer, s'assurer qu'il peut le faire avant que le colis "
+#~ "ne nous revienne.</span></p>"
+#~ msgstr ""
+#~ "<p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+#~ "Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le client est&nbsp;"
+#~ "<b style=\"font-weight:bolder;font-style: initial; font-variant-"
+#~ "ligatures: initial; font-variant-caps: initial; text-align: inherit; font-"
+#~ "weight: bold;\">${object.partner_id.name}.</b></p><p style=\"margin:0px 0 "
+#~ "1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, "
+#~ "Verdana, Arial, sans-serif;\"><b style=\"font-weight:bolder;font-style: "
+#~ "initial; font-variant-ligatures: initial; font-variant-caps: initial; "
+#~ "text-align: inherit; font-weight: bold;\"><br></b><span style=\"font-"
+#~ "style: initial; font-variant-ligatures: initial; font-variant-caps: "
+#~ "initial; font-weight: initial; text-align: inherit;\">Il a au maximum 10 "
+#~ "jours pour le récupérer, s'assurer qu'il peut le faire avant que le colis "
+#~ "ne nous revienne.</span></p>"
+
+#~ msgid "Expedition status"
+#~ msgstr "Statut de l'expédition"
+
+#~ msgid "Expedition status fetch date"
+#~ msgstr "Date de récupération du statut"
+
+#~ msgid "Lead/Opportunity"
+#~ msgstr "Piste/opportunité"
+
+#~ msgid "Password Env Default"
+#~ msgstr "Valeur Env par défaut pour le mot de passe"
+
+#~ msgid "Product Template"
+#~ msgstr "Modèle d'article"
+
+#~ msgid "Sales Channels"
+#~ msgstr "Canaux de vente"
+
+#~ msgid "Task"
+#~ msgstr "Tâche"
+
+#~ msgid "commown.delivery.parent.mixin"
+#~ msgstr "commown.delivery.parent.mixin"
 
 #~ msgid ""
 #~ "\n"

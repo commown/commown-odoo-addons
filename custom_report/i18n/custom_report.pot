@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* custom_report
+# 	* custom_report
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-20 19:34+0000\n"
-"PO-Revision-Date: 2025-03-20 19:34+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2025-12-22 15:48+0000\n"
+"PO-Revision-Date: 2025-12-22 15:48+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,175 +16,207 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:6
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Amount"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:7
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Base"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:8
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Certificate"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:9
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Certificate date"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:38
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Company number / registry / VAT"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:51
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Confirmation \"good for agreement\" desired before %s."
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:10
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Contract"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:44
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Customer Number:"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:12
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Customer VAT number"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:11
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Customer number"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:48
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Delivery address"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:13
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Deposit"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:14
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Description"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:15
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Equity subscription"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:16
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Invoice"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:49
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Invoice address"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:17
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Invoice date"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:47
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Net Total"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:18
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Net total"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:33
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
-msgid "No discount in case of anticipated payment. Delay penalty of 20% annual rate. For professionals, fixed-price debt collection compensation in case of payment delay: 40€."
+msgid ""
+"No discount in case of anticipated payment. Delay penalty of 20% annual "
+"rate. For professionals, fixed-price debt collection compensation in case of"
+" payment delay: 40€."
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:50
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Notes"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:43
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Order Acknowledgement"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:19
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Page"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:20
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Payment conditions"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:21
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Quantity"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:22
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Quotation"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:23
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Refund"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:24
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Refund date"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:25
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Related invoice"
 msgstr ""
@@ -195,56 +227,71 @@ msgid "Report Action"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:26
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Sales contact"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:27
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Sub-Total"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:28
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Tax"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:46
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "To the attention of:"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:29
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Total"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:30
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
+#, python-format
+msgid "Total Taxes"
+msgstr ""
+
+#. module: custom_report
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Unit Price"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:31
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Untaxed Amount"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:45
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "VAT Number:"
 msgstr ""
 
 #. module: custom_report
-#: code:addons/custom_report/i18n/i18n.py:32
+#. odoo-python
+#: code:addons/custom_report/i18n/i18n.py:0
 #, python-format
 msgid "Your reference"
 msgstr ""
-

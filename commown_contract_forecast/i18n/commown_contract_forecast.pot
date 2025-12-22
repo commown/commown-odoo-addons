@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* commown_contract_forecast
+# 	* commown_contract_forecast
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-30 16:58+0000\n"
-"PO-Revision-Date: 2024-07-30 16:58+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2025-12-22 15:47+0000\n"
+"PO-Revision-Date: 2025-12-22 15:47+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,19 +21,21 @@ msgid "Amount taxed"
 msgstr ""
 
 #. module: commown_contract_forecast
-#: code:addons/commown_contract_forecast/models/contract_line.py:44
+#. odoo-python
+#: code:addons/commown_contract_forecast/models/contract_line.py:0
 #, python-format
-msgid "Applied discounts:\n"
+msgid ""
+"Applied discounts:\n"
 "- %s"
 msgstr ""
 
 #. module: commown_contract_forecast
-#: selection:contract.line.forecast.period,market:0
+#: model:ir.model.fields.selection,name:commown_contract_forecast.selection__contract_line_forecast_period__market__b2b
 msgid "B2B"
 msgstr ""
 
 #. module: commown_contract_forecast
-#: selection:contract.line.forecast.period,market:0
+#: model:ir.model.fields.selection,name:commown_contract_forecast.selection__contract_line_forecast_period__market__b2c
 msgid "B2C"
 msgstr ""
 
@@ -69,11 +71,10 @@ msgstr ""
 
 #. module: commown_contract_forecast
 #: model:ir.model.fields,field_description:commown_contract_forecast.field_contract_line_forecast_period__product_range
-msgid "Product range"
+msgid "Product Range"
 msgstr ""
 
 #. module: commown_contract_forecast
 #: model:ir.actions.server,name:commown_contract_forecast.action_contract_regenerate_forecasts
 msgid "[commown] Regenerate contract forecasts"
 msgstr ""
-

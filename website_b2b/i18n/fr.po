@@ -1,0 +1,115 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mrp_usability
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:47+0000\n"
+"PO-Revision-Date: 2020-10-06 15:38+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 2.3\n"
+
+#. module: website_b2b
+#: model:website,contact_us_button_url:website_b2b.b2b_website
+msgid "/contactus"
+msgstr ""
+
+#. module: website_b2b
+#: model_terms:ir.ui.view,arch_db:website_b2b.login
+msgid "<br/>Connect to"
+msgstr "<br/>Aller sur"
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: website_b2b
+#: model_terms:ir.ui.view,arch_db:website_b2b.view_website_form
+msgid "Custom features"
+msgstr ""
+
+#. module: website_b2b
+#: model:ir.model.fields,help:website_b2b.field_portal_wizard_user__website_id
+msgid "Empty means all websites"
+msgstr "La valeur vide signifie tous les sites"
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_portal_wizard
+msgid "Grant Portal Access"
+msgstr "Gestion de l'accès au portail"
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_portal_wizard_user__had_user
+msgid "Had User"
+msgstr "Avait déjà un utilisateur"
+
+#. module: website_b2b
+#: model:website,login_checkbox_message:website_b2b.b2b_website
+msgid "Je représente une entreprise, association, collectivité..."
+msgstr "Je représente une entreprise, association, collectivité..."
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_website__legal_notice_url
+msgid "Legal notice URL"
+msgstr "URL des mentions légales"
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_website__login_checkbox_message
+msgid "Login checkbox message"
+msgstr "Message de la case à cocher sur la page de connexion"
+
+#. module: website_b2b
+#: model:website,prevent_zero_price_sale_text:website_b2b.b2b_website
+msgid "Not Available For Sale"
+msgstr ""
+
+#. module: website_b2b
+#: model_terms:ir.ui.view,arch_db:website_b2b.login
+msgid "Or am I at the wrong place?"
+msgstr "Ou je suis au mauvais endroit..."
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_portal_wizard_user
+msgid "Portal User Config"
+msgstr "Paramétrage du portail utilisateur"
+
+#. module: website_b2b
+#: model:website,name:website_b2b.b2b_website
+msgid "Products for professionals"
+msgstr "Commown pour les professionnels"
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_website
+#: model:ir.model.fields,field_description:website_b2b.field_portal_wizard_user__website_id
+#: model:ir.model.fields,field_description:website_b2b.field_res_partner__website_id
+msgid "Website"
+msgstr "Site Internet"
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_website__name
+msgid "Website Name"
+msgstr "Nom du site web"
+
+#. module: website_b2b
+#: model:ir.model.fields,help:website_b2b.field_res_partner__website_id
+msgid "Website the user can log in. An empty value means all websites."
+msgstr "Site web de connexion. Une valeur vide signifie tous les sites."
+
+#. module: website_b2b
+#: model:website,legal_notice_url:website_b2b.b2b_website
+msgid "https://commown.coop/mentions-legales/#12-pour-les-professionnels"
+msgstr "https://commown.coop/mentions-legales/#12-pour-les-professionnels"
+
+#. module: website_b2b
+#: model:website,product_service_details_url:website_b2b.b2b_website
+msgid "https://commown.coop/professionnels/"
+msgstr ""

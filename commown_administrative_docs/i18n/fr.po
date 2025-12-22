@@ -1,0 +1,161 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mrp_usability
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:45+0000\n"
+"PO-Revision-Date: 2025-12-22 17:58+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 2.3\n"
+
+#. module: commown_administrative_docs
+#: model:mail.template,body_html:commown_administrative_docs.sms_template_lead_doc_reminder
+msgid ""
+"\n"
+"Rappel finalisation de votre commande : Pensez à mettre vos documents en "
+"ligne svp !\n"
+msgstr ""
+"Rappel finalisation de votre commande : Pensez à mettre vos documents en "
+"ligne svp !\n"
+"--\n"
+"L'équipe Commown - contact@commown.coop"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_layout
+msgid "<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">ID card</span>"
+msgstr ""
+"<i class=\"fa fa-copy fa-fw\"/><span class=\"ml-2\">Carte d'identité</span>"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_my_details_fields
+msgid "<i title=\"Download document\" class=\"fa fa-download\"/>"
+msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
+
+#. module: commown_administrative_docs
+#: model:ir.model,name:commown_administrative_docs.model_crm_lead
+msgid "Abstract class for obect that use wizard to send device to a customer"
+msgstr "Classe abstraite pour les objets qui utilisent l'assistant d'expédition d'appareil à un client"
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_partner__company_record
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_users__company_record
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_layout
+msgid "Company record"
+msgstr "K-bis ou similaire"
+
+#. module: commown_administrative_docs
+#: model:ir.model,name:commown_administrative_docs.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_my_details_fields
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.view_partner_form
+msgid "Documents"
+msgstr "Documents"
+
+#. module: commown_administrative_docs
+#. odoo-python
+#: code:addons/commown_administrative_docs/models/res_partner.py:0
+#, python-format
+msgid "File too big (limit is %dMo)"
+msgstr "Fichier trop gros (la limite est %d Mo)"
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_partner__id_card1
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_users__id_card1
+msgid "ID card"
+msgstr "Carte d'identité"
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_partner__id_card2
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_users__id_card2
+msgid "ID card (2)"
+msgstr "Carte d'identité (verso, si besoin)"
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_partner__proof_of_address
+#: model:ir.model.fields,field_description:commown_administrative_docs.field_res_users__proof_of_address
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_layout
+msgid "Proof of address"
+msgstr "Justificatif de domicile"
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_partner__company_record
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_users__company_record
+msgid ""
+"This field holds a file to store a company record. Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage du K-bis ou similaire. Les images "
+"seront redimensionnées en 1240x1754 maxi, et les fichiers stockés sont "
+"limités à 5Mo."
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_partner__proof_of_address
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_users__proof_of_address
+msgid ""
+"This field holds a file to store a proof of address. Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage du justificatif de domicile. Les "
+"images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés "
+"sont limités à 5Mo."
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_partner__id_card2
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_users__id_card2
+msgid ""
+"This field holds a file to store the ID card (2). Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage complémentaire pour la carte "
+"d'identité. Les images seront redimensionnées en 1240x1754 maxi, et les "
+"fichiers stockés sont limités à 5Mo."
+
+#. module: commown_administrative_docs
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_partner__id_card1
+#: model:ir.model.fields,help:commown_administrative_docs.field_res_users__id_card1
+msgid ""
+"This field holds a file to store the ID card. Images are resized to "
+"1240x1754 and, all files are limited to 5Mo."
+msgstr ""
+"Ce champ contient un fichier de stockage pour la carte d'identité. Les "
+"images seront redimensionnées en 1240x1754 maxi, et les fichiers stockés "
+"sont limités à 5Mo."
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_my_details_fields
+msgid "Trash document"
+msgstr "Supprimer le document"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_my_details_fields
+msgid "Undo removal"
+msgstr "Annuler la suppression"
+
+#. module: commown_administrative_docs
+#: model:ir.actions.server,name:commown_administrative_docs.action_crm_lead_send_sms_doc_reminder
+msgid "[commown] Envoyer le SMS de relance doc"
+msgstr "[commown] Envoyer le SMS de relance doc"
+
+#. module: commown_administrative_docs
+#: model:mail.template,name:commown_administrative_docs.sms_template_lead_doc_reminder
+msgid "[commown] SMS relance doc"
+msgstr "[commown] SMS relance doc"
+
+#. module: commown_administrative_docs
+#: model:mail.template,subject:commown_administrative_docs.sms_template_lead_doc_reminder
+msgid ""
+"mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object."
+"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"
+msgstr "mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"

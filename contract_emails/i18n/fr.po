@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0-20180123\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 08:10+0000\n"
-"PO-Revision-Date: 2024-02-13 09:12+0100\n"
+"POT-Creation-Date: 2025-12-22 15:47+0000\n"
+"PO-Revision-Date: 2025-12-22 18:09+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -19,6 +19,7 @@ msgstr ""
 #. module: contract_emails
 #: model:ir.model,name:contract_emails.model_contract_contract
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_sent__contract_id
+#: model_terms:ir.ui.view,arch_db:contract_emails.channel_message
 msgid "Contract"
 msgstr "Contrat"
 
@@ -50,7 +51,12 @@ msgid "Date interval number after contract start"
 msgstr "Nombre d'intervalles de temps après le début du contrat"
 
 #. module: contract_emails
-#: selection:contract_emails.planned_mail_generator,interval_type:0
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_sent__send_date
+msgid "Date the planned email was sent"
+msgstr "Date à laquelle le courriel planifié a été envoyé"
+
+#. module: contract_emails
+#: model:ir.model.fields.selection,name:contract_emails.selection__contract_emails_planned_mail_generator__interval_type__daily
 msgid "Day(s)"
 msgstr "Jour(s)"
 
@@ -91,7 +97,9 @@ msgstr "ID"
 msgid ""
 "If true, the planned emails set on the contract model will not be sent for "
 "current contract."
-msgstr "Si coché, les emails planifiés du modèle de contrat ne seront pas envoyés pour le présent contrat."
+msgstr ""
+"Si coché, les emails planifiés du modèle de contrat ne seront pas envoyés "
+"pour le présent contrat."
 
 #. module: contract_emails
 #: model:ir.model.fields,help:contract_emails.field_contract_emails_planned_mail_generator__interval_number
@@ -131,12 +139,17 @@ msgid "Max email delay (in days)"
 msgstr "Retard max du mail (en jours)"
 
 #. module: contract_emails
-#: selection:contract_emails.planned_mail_generator,interval_type:0
+#: model_terms:ir.ui.view,arch_db:contract_emails.channel_message
+msgid "Message posted by"
+msgstr "Message envoyé par"
+
+#. module: contract_emails
+#: model:ir.model.fields.selection,name:contract_emails.selection__contract_emails_planned_mail_generator__interval_type__monthly
 msgid "Month(s)"
 msgstr "Mois"
 
 #. module: contract_emails
-#: selection:contract_emails.planned_mail_generator,interval_type:0
+#: model:ir.model.fields.selection,name:contract_emails.selection__contract_emails_planned_mail_generator__interval_type__monthlylastday
 msgid "Month(s) last day"
 msgstr "Dernier jour du mois"
 
@@ -150,32 +163,22 @@ msgstr ""
 "envoyé"
 
 #. module: contract_emails
-#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_sent__planned_mail_generator_id
-msgid "Planned Mail Generator"
-msgstr "Générateur de courriels planifiés"
-
-#. module: contract_emails
 #: model:ir.model.fields,field_description:contract_emails.field_contract_template__planned_mail_gen_ids
 #: model_terms:ir.ui.view,arch_db:contract_emails.contract_template_form_view
-#: model_terms:ir.ui.view,arch_db:contract_emails.planned_mail_generator_tree
 msgid "Planned emails"
 msgstr "Courriels planifiés"
 
 #. module: contract_emails
-#: sql_constraint:contract_emails.planned_mail_sent:0
+#: model:ir.model.constraint,message:contract_emails.constraint_contract_emails_planned_mail_sent_uniq_contract_and_mail_gen
 msgid "Planned mail cannot be send twice for the same contract."
 msgstr ""
 "Un mail planifié ne peut pas être envoyé deux fois pour un même contrat."
 
 #. module: contract_emails
+#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_sent__planned_mail_generator_id
 #: model_terms:ir.ui.view,arch_db:contract_emails.planned_mail_generator_form
 msgid "Planned mail generator"
 msgstr "Générateur de courriels planifiés"
-
-#. module: contract_emails
-#: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_sent__send_date
-msgid "Send Date"
-msgstr "Date d'envoi"
 
 #. module: contract_emails
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator__send_date_offset_days
@@ -185,14 +188,13 @@ msgstr "Date d'envoi en jours après la date de démarrage du contrat"
 #. module: contract_emails
 #: model:ir.actions.server,name:contract_emails.ir_cron_send_planned_emails_ir_actions_server
 #: model:ir.cron,cron_name:contract_emails.ir_cron_send_planned_emails
-#: model:ir.cron,name:contract_emails.ir_cron_send_planned_emails
 msgid "Send planned emails"
 msgstr "Envoyer les mails planifiés"
 
 #. module: contract_emails
-#: model:mail.channel,name:contract_emails.channel
-msgid "TEST GESTION"
-msgstr "TEST GESTION"
+#: model_terms:ir.ui.view,arch_db:contract_emails.channel_message
+msgid "Subject:"
+msgstr "Objet :"
 
 #. module: contract_emails
 #: model:ir.model.fields,field_description:contract_emails.field_contract_emails_planned_mail_generator__interval_type
@@ -207,11 +209,25 @@ msgid ""
 msgstr "Unité de temps pour le calcul de la date d'envoi"
 
 #. module: contract_emails
-#: selection:contract_emails.planned_mail_generator,interval_type:0
+#: model:ir.model.fields.selection,name:contract_emails.selection__contract_emails_planned_mail_generator__interval_type__weekly
 msgid "Week(s)"
 msgstr "Semaine(s)"
 
 #. module: contract_emails
-#: selection:contract_emails.planned_mail_generator,interval_type:0
+#: model:ir.model.fields.selection,name:contract_emails.selection__contract_emails_planned_mail_generator__interval_type__yearly
 msgid "Year(s)"
 msgstr "Année(s)"
+
+#. module: contract_emails
+#: model_terms:ir.ui.view,arch_db:contract_emails.channel_message
+msgid "in"
+msgstr "en"
+
+#~ msgid "Planned Mail Generator"
+#~ msgstr "Générateur de courriels planifiés"
+
+#~ msgid "Send Date"
+#~ msgstr "Date d'envoi"
+
+#~ msgid "TEST GESTION"
+#~ msgstr "TEST GESTION"

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 09:16+0000\n"
-"PO-Revision-Date: 2025-09-19 11:17+0200\n"
+"POT-Creation-Date: 2025-12-22 15:49+0000\n"
+"PO-Revision-Date: 2025-12-22 17:53+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -15,6 +15,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_kanban
+msgid ""
+"<i class=\"fa fa-file-contract\" title=\"Contract\" aria-hidden=\"true\"/>"
+msgstr "<i class=\"fa fa-file-contract\" title=\"Contrat\" aria-hidden=\"true\"/>"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_kanban
+msgid "<i class=\"fa fa-laptop\" title=\"Device name\" aria-hidden=\"true\"/>"
+msgstr "<i class=\"fa fa-laptop\" title=\"Nom de l'appareil\" aria-hidden=\"true\"/>"
+
+#. module: customer_device_manager
+#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_kanban
+msgid "<i class=\"fa fa-user\" title=\"Partner\" aria-hidden=\"true\"/>"
+msgstr "<i class=\"fa fa-user\" title=\"Utilisateur\" aria-hidden=\"true\"/>"
 
 #. module: customer_device_manager
 #: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__assignment_date
@@ -25,21 +41,20 @@ msgstr "Date d'assignation"
 #: model:ir.actions.act_window,name:customer_device_manager.action_device_assignment_history
 #: model:ir.ui.menu,name:customer_device_manager.menu_device_assignment_history
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_form
-#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_tree
 msgid "Assignment History"
 msgstr "Historique des assignations"
 
 #. module: customer_device_manager
-#: selection:customer_device_manager.device_assignment,device_location:0
-#: selection:customer_device_manager.device_assignment_history,device_location:0
+#: model:ir.model.fields.selection,name:customer_device_manager.selection__customer_device_manager_device_assignment__device_location__at_commown
+#: model:ir.model.fields.selection,name:customer_device_manager.selection__customer_device_manager_device_assignment_history__device_location__at_commown
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
 msgid "At Commown"
 msgstr "Chez Commown"
 
 #. module: customer_device_manager
-#: selection:customer_device_manager.device_assignment,device_location:0
-#: selection:customer_device_manager.device_assignment_history,device_location:0
+#: model:ir.model.fields.selection,name:customer_device_manager.selection__customer_device_manager_device_assignment__device_location__at_customer
+#: model:ir.model.fields.selection,name:customer_device_manager.selection__customer_device_manager_device_assignment_history__device_location__at_customer
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_history_search
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
 msgid "At Customer"
@@ -82,7 +97,6 @@ msgstr "Appareil"
 #. module: customer_device_manager
 #: model:ir.model,name:customer_device_manager.model_customer_device_manager_device_assignment
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_form
-#: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_tree
 msgid "Device Assignment"
 msgstr "Attribution des appareils"
 
@@ -100,7 +114,7 @@ msgstr "Emplacement à date"
 
 #. module: customer_device_manager
 #: model:ir.actions.act_window,name:customer_device_manager.action_device_assignment
-#: model:ir.model.fields,field_description:customer_device_manager.field_stock_production_lot__device_assignment_ids
+#: model:ir.model.fields,field_description:customer_device_manager.field_stock_lot__device_assignment_ids
 #: model:ir.ui.menu,name:customer_device_manager.menu_device_assignment
 #: model:ir.ui.menu,name:customer_device_manager.menu_device_assignment_parent
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.my-management-space-portal-access
@@ -136,15 +150,6 @@ msgid "ID"
 msgstr "ID"
 
 #. module: customer_device_manager
-#: model:ir.model.fields,help:customer_device_manager.field_customer_device_manager_device_assignment__image_medium
-msgid ""
-"Image of the product variant (Medium-sized image of product template if "
-"false)."
-msgstr ""
-"Image de la variante d'article (si non renseigné, image de dimensions "
-"moyennes du modèle d'article)"
-
-#. module: customer_device_manager
 #: model:res.groups,name:customer_device_manager.group_user_manager
 msgid "Internal: Device Assignment Manager"
 msgstr "Interne: Gestionnaire d'attribution des appareils"
@@ -168,7 +173,7 @@ msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
 #. module: customer_device_manager
-#: model:ir.model,name:customer_device_manager.model_stock_production_lot
+#: model:ir.model,name:customer_device_manager.model_stock_lot
 msgid "Lot/Serial"
 msgstr "Lot/N° série"
 
@@ -189,7 +194,7 @@ msgid "Product"
 msgstr "Article"
 
 #. module: customer_device_manager
-#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__image_medium
+#: model:ir.model.fields,field_description:customer_device_manager.field_customer_device_manager_device_assignment__image_128
 msgid "Product Image"
 msgstr "Image de l'article"
 
@@ -233,6 +238,13 @@ msgstr "Numéro de lot/série unique"
 #: model_terms:ir.ui.view,arch_db:customer_device_manager.view_device_assignment_search
 msgid "User"
 msgstr "Utilisateur"
+
+#~ msgid ""
+#~ "Image of the product variant (Medium-sized image of product template if "
+#~ "false)."
+#~ msgstr ""
+#~ "Image de la variante d'article (si non renseigné, image de dimensions "
+#~ "moyennes du modèle d'article)"
 
 #~ msgid "Current Assignments"
 #~ msgstr "Assignations actuelles"

@@ -1,0 +1,120 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * disable_odoo_online
+#
+# Translators:
+# Rudolf Schnapka <rs@techno-flex.de>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: server-tools (9.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-22 15:47+0000\n"
+"PO-Revision-Date: 2020-05-15 00:19+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
+"Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
+"language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
+
+#. module: website_b2b
+#: model:website,contact_us_button_url:website_b2b.b2b_website
+msgid "/contactus"
+msgstr ""
+
+#. module: website_b2b
+#: model_terms:ir.ui.view,arch_db:website_b2b.login
+msgid "<br/>Connect to"
+msgstr "<br/>verbinden zu"
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: website_b2b
+#: model_terms:ir.ui.view,arch_db:website_b2b.view_website_form
+msgid "Custom features"
+msgstr ""
+
+#. module: website_b2b
+#: model:ir.model.fields,help:website_b2b.field_portal_wizard_user__website_id
+msgid "Empty means all websites"
+msgstr ""
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_portal_wizard
+msgid "Grant Portal Access"
+msgstr ""
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_portal_wizard_user__had_user
+msgid "Had User"
+msgstr ""
+
+#. module: website_b2b
+#: model:website,login_checkbox_message:website_b2b.b2b_website
+msgid "Je représente une entreprise, association, collectivité..."
+msgstr "Ich vertrete ein Unternehmen, einen Verein, eine Körperschaft..."
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_website__legal_notice_url
+msgid "Legal notice URL"
+msgstr ""
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_website__login_checkbox_message
+msgid "Login checkbox message"
+msgstr ""
+
+#. module: website_b2b
+#: model:website,prevent_zero_price_sale_text:website_b2b.b2b_website
+msgid "Not Available For Sale"
+msgstr ""
+
+#. module: website_b2b
+#: model_terms:ir.ui.view,arch_db:website_b2b.login
+msgid "Or am I at the wrong place?"
+msgstr "Oder bin ich auf der falschen Website?"
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_portal_wizard_user
+msgid "Portal User Config"
+msgstr ""
+
+#. module: website_b2b
+#: model:website,name:website_b2b.b2b_website
+msgid "Products for professionals"
+msgstr ""
+
+#. module: website_b2b
+#: model:ir.model,name:website_b2b.model_website
+#: model:ir.model.fields,field_description:website_b2b.field_portal_wizard_user__website_id
+#: model:ir.model.fields,field_description:website_b2b.field_res_partner__website_id
+msgid "Website"
+msgstr "Webseite"
+
+#. module: website_b2b
+#: model:ir.model.fields,field_description:website_b2b.field_website__name
+msgid "Website Name"
+msgstr ""
+
+#. module: website_b2b
+#: model:ir.model.fields,help:website_b2b.field_res_partner__website_id
+msgid "Website the user can log in. An empty value means all websites."
+msgstr ""
+
+#. module: website_b2b
+#: model:website,legal_notice_url:website_b2b.b2b_website
+msgid "https://commown.coop/mentions-legales/#12-pour-les-professionnels"
+msgstr ""
+"https://commown.coop/de/allgemeine_gesch%c3%a4ftsbedingungen/#1-angebote-"
+"f%C3%BCr-berufst%C3%A4tige"
+
+#. module: website_b2b
+#: model:website,product_service_details_url:website_b2b.b2b_website
+msgid "https://commown.coop/professionnels/"
+msgstr ""

@@ -1,19 +1,39 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* customer_team_manager
+# 	* customer_team_manager
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-19 09:16+0000\n"
-"PO-Revision-Date: 2025-09-19 09:16+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2025-12-22 15:45+0000\n"
+"PO-Revision-Date: 2025-12-22 15:45+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
+msgid "<i class=\"fa fa-building\" title=\"Company\"/>"
+msgstr ""
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
+msgid "<i class=\"fa fa-envelope\" title=\"Email\"/>"
+msgstr ""
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
+msgid "<i class=\"fa fa-phone\" title=\"Phone\"/>"
+msgstr ""
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_kanban
+msgid "<i class=\"fa fa-users\" title=\"Team\"/>"
+msgstr ""
 
 #. module: customer_team_manager
 #: model:ir.model,name:customer_team_manager.model_customer_team_manager_team
@@ -31,8 +51,13 @@ msgid "Administration"
 msgstr ""
 
 #. module: customer_team_manager
-#: selection:res.partner,portal_status:0
+#: model:ir.model.fields.selection,name:customer_team_manager.selection__res_partner__portal_status__already_connected
 msgid "Already connected"
+msgstr ""
+
+#. module: customer_team_manager
+#: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
+msgid "Archived"
 msgstr ""
 
 #. module: customer_team_manager
@@ -41,7 +66,8 @@ msgid "Archived users"
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:159
+#. odoo-python
+#: code:addons/customer_team_manager/models/res_partner.py:0
 #, python-format
 msgid "At least one administrator is mandatory"
 msgstr ""
@@ -58,7 +84,9 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_customer_user_form
-msgid "Cannot be modified when the user was granted portal access. Remove the portal access first"
+msgid ""
+"Cannot be modified when the user was granted portal access. Remove the "
+"portal access first"
 msgstr ""
 
 #. module: customer_team_manager
@@ -108,7 +136,7 @@ msgid "Customer Partners"
 msgstr ""
 
 #. module: customer_team_manager
-#: sql_constraint:customer_team_manager.customer_role:0
+#: model:ir.model.constraint,message:customer_team_manager.constraint_customer_team_manager_customer_role_name_uniq
 msgid "Customer role already exists!"
 msgstr ""
 
@@ -119,8 +147,9 @@ msgid "Customer role(s)"
 msgstr ""
 
 #. module: customer_team_manager
-#. openerp-web
-#: code:addons/customer_team_manager/static/src/xml/field_widget_template.xml:19
+#. odoo-javascript
+#: code:addons/customer_team_manager/static/src/xml/field_widget_template.xml:0
+#: code:addons/customer_team_manager/static/src/xml/field_widget_template.xml:0
 #, python-format
 msgid "Delete"
 msgstr ""
@@ -173,11 +202,6 @@ msgid "Group By"
 msgstr ""
 
 #. module: customer_team_manager
-#: model:ir.model,name:customer_team_manager.model_ir_http
-msgid "HTTP Routing"
-msgstr ""
-
-#. module: customer_team_manager
 #: model:ir.actions.act_url,name:customer_team_manager.action_open_help
 #: model:ir.ui.menu,name:customer_team_manager.menu_help
 msgid "Help"
@@ -206,13 +230,15 @@ msgid "If unsure, please cancel and check again before proceeding."
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:287
+#. odoo-python
+#: code:addons/customer_team_manager/models/res_partner.py:0
 #, python-format
 msgid "Import Template for Users"
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:99
+#. odoo-python
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:0
 #, python-format
 msgid "Incorrect password."
 msgstr ""
@@ -245,17 +271,14 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
-msgid "Make sure this permission doesn't fall into the wrong hands: carefully check the e-mails and roles you've granted."
-msgstr ""
-
-#. module: customer_team_manager
-#: model:ir.ui.menu,name:customer_team_manager.menu_customer_manager_root
-msgid "Management space"
+msgid ""
+"Make sure this permission doesn't fall into the wrong hands: carefully check"
+" the e-mails and roles you've granted."
 msgstr ""
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.my-management-space-portal-access
-msgid "My management space"
+msgid "My managment space"
 msgstr ""
 
 #. module: customer_team_manager
@@ -265,12 +288,12 @@ msgid "Name"
 msgstr ""
 
 #. module: customer_team_manager
-#: selection:res.partner,portal_status:0
+#: model:ir.model.fields.selection,name:customer_team_manager.selection__res_partner__portal_status__never_connected
 msgid "Never connected"
 msgstr ""
 
 #. module: customer_team_manager
-#: selection:res.partner,portal_status:0
+#: model:ir.model.fields.selection,name:customer_team_manager.selection__res_partner__portal_status__not_granted
 msgid "Not granted"
 msgstr ""
 
@@ -296,12 +319,15 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model:customer_team_manager.customer_role,description:customer_team_manager.customer_role_accounting
-msgid "People who have access to the orders and the invoices of their organization"
+msgid ""
+"People who have access to the orders and the invoices of their organization"
 msgstr ""
 
 #. module: customer_team_manager
 #: model:customer_team_manager.customer_role,description:customer_team_manager.customer_role_fleet_manager
-msgid "People who manage the device fleet of their organization (new orders, contract termination, device attribution)"
+msgid ""
+"People who manage the device fleet of their organization (new orders, "
+"contract termination, device attribution)"
 msgstr ""
 
 #. module: customer_team_manager
@@ -349,11 +375,6 @@ msgid "Team"
 msgstr ""
 
 #. module: customer_team_manager
-#: model:res.groups,name:customer_team_manager.group_customer_admin
-msgid "Team manager Customer"
-msgstr ""
-
-#. module: customer_team_manager
 #: model:ir.actions.act_window,name:customer_team_manager.action_teams
 #: model:ir.ui.menu,name:customer_team_manager.menu_team
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.view_team_form
@@ -362,14 +383,21 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
-msgid "The e-mails of the people to whom you grant access do not all come from the\n"
+msgid ""
+"The e-mails of the people to whom you grant access do not all come from the\n"
 "            same domain. Please make sure the following domain list is normal:"
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/res_partner.py:181
+#. odoo-python
+#: code:addons/customer_team_manager/models/res_partner.py:0
 #, python-format
 msgid "The email of partners having portal access cannot be modified!"
+msgstr ""
+
+#. module: customer_team_manager
+#: model:ir.model,name:customer_team_manager.model_res_users
+msgid "User"
 msgstr ""
 
 #. module: customer_team_manager
@@ -381,7 +409,6 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model:ir.actions.act_window,name:customer_team_manager.action_customer_users
-#: model:ir.model,name:customer_team_manager.model_res_users
 #: model:ir.ui.menu,name:customer_team_manager.menu_customer_team_parent
 #: model:ir.ui.menu,name:customer_team_manager.menu_partners
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.my-management-space-portal-access
@@ -407,13 +434,23 @@ msgstr ""
 
 #. module: customer_team_manager
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.portal_access_info
-msgid "You are going to grant people permission to have an account on this platform on behalf of your organization."
+msgid ""
+"You are going to grant people permission to have an account on this platform"
+" on behalf of your organization."
 msgstr ""
 
 #. module: customer_team_manager
-#: code:addons/customer_team_manager/models/wizard_portal_access.py:76
+#. odoo-python
+#: code:addons/customer_team_manager/models/wizard_portal_access.py:0
 #, python-format
 msgid "You are not allowed to manage users."
+msgstr ""
+
+#. module: customer_team_manager
+#. odoo-python
+#: code:addons/customer_team_manager/models/res_partner.py:0
+#, python-format
+msgid "You are not allowed to perform this operation on this partner"
 msgstr ""
 
 #. module: customer_team_manager
@@ -436,4 +473,3 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:customer_team_manager.wizard_portal_access_form
 msgid "or"
 msgstr ""
-

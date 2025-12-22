@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* commown_automated_control
+# 	* commown_automated_control
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0\n"
+"Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-24 09:08+0000\n"
-"PO-Revision-Date: 2025-01-24 09:08+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2025-12-22 15:46+0000\n"
+"PO-Revision-Date: 2025-12-22 15:46+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,13 +16,15 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: commown_automated_control
-#: code:addons/commown_automated_control/models/automated_control.py:116
+#. odoo-python
+#: code:addons/commown_automated_control/models/automated_control.py:0
 #, python-format
-msgid "%s\n"
+msgid ""
+"%(message)s\n"
 "\n"
 "\n"
-"This message comes from automated control \"%s\" (id: %s)\n"
-"Raised by %s"
+"This message comes from automated control \"%(name)s\" (id: %(control_id)s)\n"
+"Raised by %(record)smessage"
 msgstr ""
 
 #. module: commown_automated_control
@@ -31,7 +33,8 @@ msgid "Active"
 msgstr ""
 
 #. module: commown_automated_control
-#: code:addons/commown_automated_control/models/automated_control.py:95
+#. odoo-python
+#: code:addons/commown_automated_control/models/automated_control.py:0
 #, python-format
 msgid "Application domain is mandatory, please set one"
 msgstr ""
@@ -39,6 +42,11 @@ msgstr ""
 #. module: commown_automated_control
 #: model:ir.model.fields,field_description:commown_automated_control.field_commown_automated_control_automated_control__filter_domain
 msgid "Apply on"
+msgstr ""
+
+#. module: commown_automated_control
+#: model_terms:ir.ui.view,arch_db:commown_automated_control.view_automated_control_form
+msgid "Archived"
 msgstr ""
 
 #. module: commown_automated_control
@@ -64,7 +72,7 @@ msgid "Automated control manager"
 msgstr ""
 
 #. module: commown_automated_control
-#: sql_constraint:commown_automated_control.automated_control:0
+#: model:ir.model.constraint,message:commown_automated_control.constraint_commown_automated_control_automated_control_automation_uniq
 msgid "Automation already linked to an automated control"
 msgstr ""
 
@@ -79,7 +87,8 @@ msgid "Before Update Domain"
 msgstr ""
 
 #. module: commown_automated_control
-#: code:addons/commown_automated_control/models/automated_control.py:87
+#. odoo-python
+#: code:addons/commown_automated_control/models/automated_control.py:0
 #, python-format
 msgid "Before Update Domain not defined"
 msgstr ""
@@ -90,7 +99,7 @@ msgid "Behaviour"
 msgstr ""
 
 #. module: commown_automated_control
-#: selection:commown_automated_control.automated_control,behaviour:0
+#: model:ir.model.fields.selection,name:commown_automated_control.selection__commown_automated_control_automated_control__behaviour__raise
 msgid "Block the action with a message"
 msgstr ""
 
@@ -115,7 +124,8 @@ msgid "Display Name"
 msgstr ""
 
 #. module: commown_automated_control
-#: code:addons/commown_automated_control/models/automated_control.py:105
+#. odoo-python
+#: code:addons/commown_automated_control/models/automated_control.py:0
 #, python-format
 msgid "Domain is not restrictive enough. Please add a %s"
 msgstr ""
@@ -127,12 +137,16 @@ msgstr ""
 
 #. module: commown_automated_control
 #: model:ir.model.fields,help:commown_automated_control.field_commown_automated_control_automated_control__filter_domain
-msgid "If present, this condition must be satisfied before executing the action rule."
+msgid ""
+"If present, this condition must be satisfied before executing the action "
+"rule."
 msgstr ""
 
 #. module: commown_automated_control
 #: model:ir.model.fields,help:commown_automated_control.field_commown_automated_control_automated_control__filter_pre_domain
-msgid "If present, this condition must be satisfied before the update of the record."
+msgid ""
+"If present, this condition must be satisfied before the update of the "
+"record."
 msgstr ""
 
 #. module: commown_automated_control
@@ -191,13 +205,13 @@ msgid "Name"
 msgstr ""
 
 #. module: commown_automated_control
-#: selection:commown_automated_control.automated_control,behaviour:0
+#: model:ir.model.fields.selection,name:commown_automated_control.selection__commown_automated_control_automated_control__behaviour__notify
 msgid "Notify the user with a messsage"
 msgstr ""
 
 #. module: commown_automated_control
-#: code:addons/commown_automated_control/models/automated_control.py:88
+#. odoo-python
+#: code:addons/commown_automated_control/models/automated_control.py:0
 #, python-format
 msgid "This could lead to unexpected results"
 msgstr ""
-

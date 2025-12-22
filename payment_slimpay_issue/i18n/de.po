@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-14 19:54+0000\n"
+"POT-Creation-Date: 2025-12-22 15:48+0000\n"
 "PO-Revision-Date: 2024-05-14 19:27+0200\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
@@ -17,71 +17,22 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: payment_slimpay_issue
-#: model:mail.template,body_html:payment_slimpay_issue.mail_max_trial
-msgid ""
-"\n"
-"      <p>Max trial number reached for payment issue ${object.name} id "
-"${object.id}.</p>\n"
-"      \n"
-"      "
-msgstr ""
-
-#. module: payment_slimpay_issue
-#: model:mail.template,body_html:payment_slimpay_issue.mail_warn_user
-msgid ""
-"\n"
-"<div style=\"background:#F0F0F0;color:#515166;padding:10px 0px;font-family:"
-"Arial,Helvetica,sans-serif;font-size:14px;\">\n"
-"  <p>\n"
-"    <a href=\"/\"><img src=\"/web/binary/company_logo\" style=\"vertical-"
-"align:baseline;max-width:100px;\"></a>\n"
-"  </p>\n"
-"  <br>\n"
-"  <p>Hello,</p>\n"
-"  <br>\n"
-"  <p>Your payment of invoice number ${object.invoice_id.number} has been\n"
-"    rejected${object.invoice_unpaid_count != 0 and object."
-"invoice_unpaid_count != 1 and ' again' or ''}.\n"
-"  </p>\n"
-"  <p>Next attempt will occur in the coming days.\n"
-"    Please contact us quickly in case you think this new payment could be "
-"rejected too,\n"
-"    to avoid bank fees to all parties.\n"
-"  </p>\n"
-"  <br>\n"
-"  <p>Regards,<br>\n"
-"    The\n"
-"    <a href=\"${object.project_id.company_id.website}\" style=\"color:"
-"#875A7B;\">\n"
-"      ${object.project_id.company_id.name}\n"
-"    </a>\n"
-"    team.\n"
-"  </p>\n"
-"</div>\n"
-"\n"
-"    "
-msgstr ""
-
-#. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_new
 msgid "!! NE PAS SUPPRIMER !! (besoin les automatisques)"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:mail.template,subject:payment_slimpay_issue.mail_warn_user
-msgid "${object.project_id.company_id.name}: rejected payment"
-msgstr ""
-
-#. module: payment_slimpay_issue
-#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
-msgid "${object.user_id.company_id.name}: max payment trials reached"
+#: model:project.project,name:payment_slimpay_issue.project_payment_issue
+msgid "5.11 IMPAYES : Suivi auto"
 msgstr ""
 
 #. module: payment_slimpay_issue
 #: model:mail.template,body_html:payment_slimpay_issue.smspro_payment_issue
 msgid ""
-"<div>\n"
-"%if object.invoice_unpaid_count in (0, 1):\n"
+"<html>\n"
+"  <body>\n"
+"    <div>\n"
+"<t t-if=\"object.invoice_unpaid_count in (0, 1)\">\n"
 "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
 "Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le prélèvement de "
 "votre dernière mensualité a été rejeté =&gt; Infos par mail (pensez à "
@@ -90,17 +41,69 @@ msgid ""
 "\">--</p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;"
 "Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe "
 "Commown - contact@commown.coop</p>\n"
-"%else:\n"
+"</t>\n"
+"<t t-else=\"\">\n"
 "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
 "Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">RAPPEL : Rejet de "
-"prélèvement de mensualité =&gt; Contactez-nous d'urgence svp.</p><p style="
-"\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
-"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p><p style="
-"\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"prélèvement de mensualité =&gt; Contactez-nous d'urgence svp.</p><p "
+"style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">--</p><p "
+"style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
 "Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">L'équipe Commown - "
 "contact@commown.coop</p>\n"
-"%endif\n"
-"</div>"
+"</t>\n"
+"</div>\n"
+"  </body>\n"
+"</html>\n"
+msgstr ""
+
+#. module: payment_slimpay_issue
+#: model:mail.template,body_html:payment_slimpay_issue.mail_warn_user
+msgid ""
+"<html>\n"
+"  <body><div style=\"background:#F0F0F0;color:#515166;padding:10px 0px;font-"
+"family:Arial,Helvetica,sans-serif;font-size:14px;\">\n"
+"  <p>\n"
+"    <a href=\"/\"><img src=\"/web/binary/company_logo\" style=\"vertical-"
+"align:baseline;max-width:100px;\"/></a>\n"
+"  </p>\n"
+"  <br/>\n"
+"  <p>Hello,</p>\n"
+"  <br/>\n"
+"  <p>Your payment of invoice number <t t-out=\"object.invoice_id.number\"></"
+"t> has been\n"
+"    rejected<t t-out=\"object.invoice_unpaid_count != 0 and object."
+"invoice_unpaid_count != 1 and &#x27; again&#x27; or &#x27;&#x27;\"></t>.\n"
+"  </p>\n"
+"  <p>Next attempt will occur in the coming days.\n"
+"    Please contact us quickly in case you think this new payment could be "
+"rejected too,\n"
+"    to avoid bank fees to all parties.\n"
+"  </p>\n"
+"  <br/>\n"
+"  <p>Regards,<br/>\n"
+"    The\n"
+"    <a t-attf-href=\"{{object.project_id.company_id.website}}\" "
+"style=\"color:#875A7B;\">\n"
+"      <t t-out=\"object.project_id.company_id.name\"></t>\n"
+"    </a>\n"
+"    team.\n"
+"  </p>\n"
+"</div>\n"
+"\n"
+"    </body>\n"
+"</html>\n"
+msgstr ""
+
+#. module: payment_slimpay_issue
+#: model:mail.template,body_html:payment_slimpay_issue.mail_max_trial
+msgid ""
+"<html>\n"
+"  <body><p>Max trial number reached for payment issue <t t-out=\"object."
+"name\"></t> id <t t-out=\"object.id\"></t>.</p>\n"
+"      \n"
+"      </body>\n"
+"</html>\n"
 msgstr ""
 
 #. module: payment_slimpay_issue
@@ -114,25 +117,34 @@ msgid ""
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:4
+#: model:ir.model,name:payment_slimpay_issue.model_project_task
+msgid "Abstract class for obect that use wizard to send device to a customer"
+msgstr ""
+
+#. module: payment_slimpay_issue
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Account Identifier incorrect"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:6
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Account blocked"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:5
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Account closed"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:25
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Bank Identifier (BIC) Incorrect"
 msgstr ""
@@ -153,54 +165,62 @@ msgid "Blocked"
 msgstr "Blockiert"
 
 #. module: payment_slimpay_issue
-#: model:ir.cron,name:payment_slimpay_issue.ir_cron_check
-msgid "Check Slimpay payment issues"
+#: model:sms.template,body:payment_slimpay_issue.sms
+msgid "Contenu du SMS à rédiger"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:15
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Creditor Bank is not registered under this BIC in the CSM"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:16
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Debtor Bank is not registered under this BIC in the CSM"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:22
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Debtor Deceased"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:7
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Debtor account is a consumer account"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:8
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Direct Debit forbidden on this account for regulatory reasons"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:21
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Disputed authorised transaction"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:13
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Duplicate collection"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:17
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "File format incomplete or invalid"
 msgstr ""
@@ -211,7 +231,8 @@ msgid "Fixed payment issue"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:18
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Following a cancellation request (by the creditor)"
 msgstr ""
@@ -227,7 +248,8 @@ msgid "Frais de gestion rejet de prélèvement"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:14
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Identifier of the Creditor Incorrect"
 msgstr ""
@@ -249,7 +271,8 @@ msgid "In Progress"
 msgstr "In Arbeit"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:12
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Insufficient funds"
 msgstr ""
@@ -258,6 +281,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_id
 msgid "Invoice"
 msgstr "Rechnung"
+
+#. module: payment_slimpay_issue
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/project_task.py:0
+#, python-format
+msgid "Invoice id %d: could not find a payment token!"
+msgstr ""
 
 #. module: payment_slimpay_issue
 #: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_next_payment_date
@@ -290,7 +320,8 @@ msgid "Linked invoice not determined or not linked to a contract"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:20
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Mandate data missing or incorrect"
 msgstr ""
@@ -306,13 +337,11 @@ msgid "Max payment trials reached"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:base.automation,name:payment_slimpay_issue.move_to_fixed_after_waiting_delay
 #: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_fixed
 msgid "Move task to fixed after waiting delay"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:base.automation,name:payment_slimpay_issue.retry_payment_on_programed_date
 #: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_payment_retrial
 msgid "Move to retry payment stage at invoice next payment date"
 msgstr ""
@@ -320,16 +349,18 @@ msgstr ""
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_new
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:19
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "No mandate or Unauthorised Transaction"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_task.py:193
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/project_task.py:0
 #, python-format
 msgid "No payment ref"
 msgstr ""
@@ -340,7 +371,8 @@ msgid "Number of payment issues"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:9
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid ""
 "Operation code/transaction code/sequence type incorrect, invalid file format"
@@ -349,7 +381,7 @@ msgstr ""
 #. module: payment_slimpay_issue
 #: model_terms:ir.ui.view,arch_db:payment_slimpay_issue.project_task_form_view
 msgid "Payment"
-msgstr ""
+msgstr "Zahlung"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_orphan
@@ -369,28 +401,29 @@ msgid "Ready for Next Stage"
 msgstr "Bereit für die nächste Etappe"
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:24
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Reason not specified"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:23
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Refusal by the Debtor"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:26
-#: code:addons/payment_slimpay_issue/models/utils.py:27
-#: code:addons/payment_slimpay_issue/models/utils.py:28
-#: code:addons/payment_slimpay_issue/models/utils.py:29
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Regulatory Reason"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_task.py:430
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/project_task.py:0
 #, python-format
 msgid "Reject reason is %(code)s: %(text)s"
 msgstr ""
@@ -406,14 +439,11 @@ msgid "Retry payment and wait"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:base.automation,name:payment_slimpay_issue.retry_payment
 #: model:ir.actions.server,name:payment_slimpay_issue.action_retry_payment
 msgid "Retry payment when entering the dedicated stage"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:base.automation,name:payment_slimpay_issue.set_invoice_next_date_when_entering_warn_stage
-#: model:ir.actions.server,name:payment_slimpay_issue.set_invoice_next_date_when_entering_warn_stage_ir_actions_server
 #: model:ir.actions.server,name:payment_slimpay_issue.set_invoice_next_payment_date_and_send_sms
 msgid "Set next payment date when entering warn partner and wait stage"
 msgstr ""
@@ -429,27 +459,17 @@ msgid "Slimpay supplier fees"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/utils.py:30
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/utils.py:0
 #, python-format
 msgid "Specific Service offered by the Debtor Bank"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:ir.model,name:payment_slimpay_issue.model_project_task
-msgid "Task"
-msgstr "Aufgabe"
-
-#. module: payment_slimpay_issue
-#: model:product.template,uom_name:payment_slimpay_issue.bank_fees_product
-#: model:product.template,uom_name:payment_slimpay_issue.bank_supplier_fees_product
-#: model:product.template,uom_name:payment_slimpay_issue.management_fees_product
-msgid "Unit(s)"
-msgstr "Einheit(en)"
-
-#. module: payment_slimpay_issue
-#: code:addons/payment_slimpay_issue/models/project_task.py:428
+#. odoo-python
+#: code:addons/payment_slimpay_issue/models/project_task.py:0
 #, python-format
-msgid "Unknown reject error"
+msgid "Unknown reject error: %s"
 msgstr ""
 
 #. module: payment_slimpay_issue
@@ -477,17 +497,39 @@ msgid "[Commown] SMS impayé"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:product.template,weight_uom_name:payment_slimpay_issue.bank_fees_product
-#: model:product.template,weight_uom_name:payment_slimpay_issue.bank_supplier_fees_product
-#: model:product.template,weight_uom_name:payment_slimpay_issue.management_fees_product
-msgid "kg"
-msgstr "kg"
+#: model:sms.template,name:payment_slimpay_issue.sms
+msgid "[commown] SMS impayé"
+msgstr ""
 
 #. module: payment_slimpay_issue
 #: model:mail.template,subject:payment_slimpay_issue.smspro_payment_issue
 msgid ""
-"mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
-"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
+"mail2smsid=35370501&sendername=Commown&recipients={{''.join((object."
+"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}}"
 msgstr ""
-"mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
-"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
+
+#. module: payment_slimpay_issue
+#: model:mail.template,subject:payment_slimpay_issue.mail_warn_user
+msgid "{{object.project_id.company_id.name}}: rejected payment"
+msgstr ""
+
+#. module: payment_slimpay_issue
+#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
+msgid "{{object.user_id.company_id.name}}: max payment trials reached"
+msgstr ""
+
+#~ msgid "Task"
+#~ msgstr "Aufgabe"
+
+#~ msgid "Unit(s)"
+#~ msgstr "Einheit(en)"
+
+#~ msgid "kg"
+#~ msgstr "kg"
+
+#~ msgid ""
+#~ "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
+#~ "partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
+#~ msgstr ""
+#~ "mail2smsid=35370501&sendername=Commown&recipients=${''.join((object."
+#~ "partner_id.mobile or object.partner_id.phone).split()).replace('+', '')}"
