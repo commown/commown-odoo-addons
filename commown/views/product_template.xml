@@ -19,6 +19,7 @@
           <field
                         name="website_description"
                         attrs="{'readonly': [('is_user_lang_fr', '=', False)]}"
+                        options="{'codeview': true}"
                     />
         </group>
       </xpath>
