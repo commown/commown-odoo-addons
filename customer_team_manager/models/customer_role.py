@@ -33,7 +33,6 @@ class CustomerRole(models.Model):
         "res.groups",
         string="Corresponding groups",
         readonly=True,  # Would not user group sync, not yet available
-        domain=lambda self: [("category_id.name", "=", "Manager customer")],
     )
 
     readonly = fields.Boolean(

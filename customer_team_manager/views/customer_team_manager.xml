@@ -50,17 +50,17 @@
 
                 <strong>
                   <span
-                                        class="float-right fa fa-user-check"
+                                        class="float-end fa fa-user-check"
                                         t-if="record.portal_status.raw_value == 'already_connected'"
                                         t-att-title="record.portal_status.value"
                                     />
                   <span
-                                        class="float-right far fa-user"
+                                        class="float-end far fa-user"
                                         t-elif="record.portal_status.raw_value == 'never_connected'"
                                         t-att-title="record.portal_status.value"
                                     />
                   <span
-                                        class="float-right fa fa-lock"
+                                        class="float-end fa fa-lock"
                                         t-else=""
                                         t-att-title="record.portal_status.value"
                                     />
@@ -75,9 +75,7 @@
                   </li>
                   <li><i class="fa fa-users" title="Team" /> <field name="team" /></li>
                   <li><i class="fa fa-phone" title="Phone" /> <field
-                                            t-if="record.phone.raw_value"
                                             name="phone"
-                                            widget="phone"
                                         /></li>
                   <li style="text-wrap: nowrap"><i
                                             class="fa fa-envelope"
