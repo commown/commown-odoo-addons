@@ -10,6 +10,7 @@ class ProjectTask(models.Model):
         default=lambda self: self._default_contract(),
         domain="[('partner_id.commercial_partner_id', '=', commercial_partner_id)]",
     )
+    contract_type = fields.Selection(related="contract_id.contract_type")
     commercial_partner_id = fields.Many2one(
         "res.partner", related="partner_id.commercial_partner_id"
     )
