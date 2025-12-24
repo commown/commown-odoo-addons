@@ -43,6 +43,7 @@ class CommownCrmLead(models.Model):
     so_line_id = fields.Many2one("sale.order.line", "Sale order line")
 
     contract_id = fields.Many2one("contract.contract", "Contract")
+    contract_type = fields.Selection(related="contract_id.contract_type")
 
     email_rating = fields.Selection(EMAIL_RATINGS, default=EMAIL_RATINGS[0][0])
     web_searchurl = fields.Html("Search on the web", compute="_compute_web_searchurl")

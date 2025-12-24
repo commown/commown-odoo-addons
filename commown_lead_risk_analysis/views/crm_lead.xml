@@ -25,7 +25,8 @@
       </xpath>
 
       <xpath expr="//group[@name='opportunity_partner']" position="inside">
-        <field name="contract_id" />
+        <field name="contract_type" invisible="True" />
+        <field name="contract_id" context="{'default_contract_type': contract_type}" />
       </xpath>
 
       <xpath
