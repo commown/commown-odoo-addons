@@ -59,7 +59,12 @@
   <record id="sms" model="sms.template">
     <field name="name">[commown] SMS impayé</field>
     <field name="model_id" ref="project.model_project_task" />
-    <field name="body">Contenu du SMS à rédiger</field>
+    <field name="lang">{{ object.partner_id.lang }}</field>
+    <field
+            name="body"
+        >{{ "Le prélèvement de votre dernière mensualité a été rejeté => Infos par mail (pensez à consulter vos spams)." if object.invoice_unpaid_count in (0, 1) else "RAPPEL : Rejet de prélèvement de mensualité => Contactez-nous d'urgence svp." }}
+--
+L'équipe Commown - contact@commown.coop</field>
   </record>
 
 </odoo>
