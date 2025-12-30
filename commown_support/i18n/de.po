@@ -54,18 +54,13 @@ msgid ""
 msgstr ""
 
 #. module: commown_support
-#: model:mail.template,body_html:commown_support.sms_template_issue_reminder
+#: model:sms.template,body:commown_support.sms_template_issue_reminder
 msgid ""
-"\n"
-"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés "
-"sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la "
-"clore.</p>\n"
+"Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore."
 msgstr ""
-"\n"
-"<p>Hallo, im Anschluss an Ihre Support-Anfrage sind unsere E-Mails "
-"unbeantwortet geblieben. Überprüfen Sie bitte Ihren Spam-Ordner, um darauf "
-"zu antworten oder ignorieren Sie diese SMS, um die Anfrage zu schließen. Ihr "
-"Commown-Team</p>\n"
+"Hallo, im Anschluss an Ihre Support-Anfrage sind unsere E-Mails unbeantwortet geblieben. Überprüfen Sie bitte Ihren Spam-Ordner, um darauf zu antworten oder ignorieren Sie diese SMS, um die Anfrage zu schließen. "
+""
+"Ihr Commown-Team"
 
 #. module: commown_support
 #: model:ir.model,name:commown_support.model_project_task
@@ -268,7 +263,7 @@ msgid "[commown] Issue was put in the reminder email stage"
 msgstr "[commown] Problem wurde in die Erinnerungs-E-Mail-Stufe gestellt"
 
 #. module: commown_support
-#: model:mail.template,name:commown_support.sms_template_issue_reminder
+#: model:sms.template,name:commown_support.sms_template_issue_reminder
 msgid "[commown] SAV : relance SMS"
 msgstr "[commown] Service nach dem Verkauf: SMS Mahnung"
 
@@ -286,10 +281,3 @@ msgstr "[commown] Erinnerungs-SMS zu einem Problem senden"
 #: model:ir.actions.server,name:commown_support.action_send_issue_reminder_email
 msgid "[commown] Send a reminder email concerning an issue"
 msgstr "[commown] Senden einer Erinnerungs-E-Mail zu einem Problem"
-
-#. module: commown_support
-#: model:mail.template,subject:commown_support.sms_template_issue_reminder
-msgid ""
-"mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object."
-"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"
-msgstr ""

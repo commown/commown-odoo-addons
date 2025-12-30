@@ -51,17 +51,13 @@ msgid ""
 msgstr ""
 
 #. module: commown_support
-#: model:mail.template,body_html:commown_support.sms_template_issue_reminder
+#: model:sms.template,body:commown_support.sms_template_issue_reminder
 msgid ""
-"\n"
-"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés "
-"sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la "
-"clore.</p>\n"
+"Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore."
 msgstr ""
-"\n"
-"<p>Bonjour, suite à votre demande d'assistance nos courriels sont restés "
-"sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la "
-"clore.</p><p>L'équipe Commown</p>\n"
+"Bonjour, suite à votre demande d'assistance nos courriels sont restés sans réponse. Vérifiez vos spams pour y répondre ou ignorez ce SMS pour la clore.\n"
+""
+"L'équipe Commown"
 
 #. module: commown_support
 #: model:ir.model,name:commown_support.model_project_task
@@ -259,7 +255,7 @@ msgid "[commown] Issue was put in the reminder email stage"
 msgstr "[commown] L'incident a été bougé dans le colonne de rappel"
 
 #. module: commown_support
-#: model:mail.template,name:commown_support.sms_template_issue_reminder
+#: model:sms.template,name:commown_support.sms_template_issue_reminder
 msgid "[commown] SAV : relance SMS"
 msgstr "[commown] SAV : relance SMS"
 
@@ -278,10 +274,3 @@ msgstr "[commown] Envoyer un SMS de rappel"
 msgid "[commown] Send a reminder email concerning an issue"
 msgstr ""
 "[commown] Envoyer un courriel de rappel concernant une demande d'assistance"
-
-#. module: commown_support
-#: model:mail.template,subject:commown_support.sms_template_issue_reminder
-msgid ""
-"mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object."
-"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"
-msgstr ""
