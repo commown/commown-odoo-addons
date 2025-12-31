@@ -21,9 +21,8 @@ msgstr ""
 "X-Generator: Weblate 3.10\n"
 
 #. module: commown_administrative_docs
-#: model:mail.template,body_html:commown_administrative_docs.sms_template_lead_doc_reminder
+#: model:sms.template,body:commown_administrative_docs.sms_template_lead_doc_reminder
 msgid ""
-"\n"
 "Rappel finalisation de votre commande : Pensez à mettre vos documents en "
 "ligne svp !\n"
 msgstr ""
@@ -148,13 +147,6 @@ msgid "[commown] Envoyer le SMS de relance doc"
 msgstr "[commown] Senden Sie die Erinnerungs-SMS doc"
 
 #. module: commown_administrative_docs
-#: model:mail.template,name:commown_administrative_docs.sms_template_lead_doc_reminder
+#: model:sms.template,name:commown_administrative_docs.sms_template_lead_doc_reminder
 msgid "[commown] SMS relance doc"
 msgstr "[commown] SMS Mahnung zu Dokumenten"
-
-#. module: commown_administrative_docs
-#: model:mail.template,subject:commown_administrative_docs.sms_template_lead_doc_reminder
-msgid ""
-"mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object."
-"partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"
-msgstr "mail2smsid=xxx&sendername=Commown&recipients=<t t-out=\"''.join((object.partner_id.mobile or object.partner_id.phone).split()).replace('+', '')\" />"
