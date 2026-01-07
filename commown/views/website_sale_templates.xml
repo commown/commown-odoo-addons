@@ -179,6 +179,12 @@
     <xpath expr="//t[@t-set='search_type']" position="attributes">
       <attribute name="t-valuef">products_only</attribute>
     </xpath>
+
+    <!-- Hide extra links (used to display product's public categories) -->
+    <xpath expr="//t[@t-set='display_extra_link']" position="attributes">
+      <attribute name="t-valuef">false</attribute>
+    </xpath>
+
   </template>
 
   <template id="product" inherit_id="website_sale_b2b.product_b2b">
