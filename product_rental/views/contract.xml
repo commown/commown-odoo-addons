@@ -82,6 +82,24 @@
 	<attribute name="string">Recurrence</attribute>
       </xpath>
 
+      <xpath expr="//field[@name='recurring_next_date']/.." position="attributes">
+        <!--
+          Removing "{'invisible': [('line_recurrence', '=', True)]}"
+          to always display the 'recurring_next_date' field
+        -->
+        <attribute name="attrs" value="{}" />
+      </xpath>
+
+      <xpath expr="//field[@name='recurring_next_date']" position="attributes">
+        <!--
+          Set 'recurring_next_date' as readonly when it would natively be invisible
+          (see above XPath modification)
+        -->
+        <attribute
+                    name="attrs"
+                >{'readonly': [('line_recurrence', '=', True)]}</attribute>
+      </xpath>
+
       <field name="contract_template_id" position="after">
 	<field
                     name="contractual_documents"
