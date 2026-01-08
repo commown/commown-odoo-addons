@@ -4,7 +4,7 @@
 {
     "name": "Contract payment automatic in job with post-processing",
     "summary": "This module with automatically pay contract invoices in jobs (like when you install both contract_payment_auto and contract_queue_job), and adds post-processing of the created transaction in each job.",
-    "version": "16.0.1.0.2",
+    "version": "16.0.1.0.3",
     "development_status": "Alpha",
     "category": "Accounting/Payment",
     "website": "https://github.com/commown/commown-odoo-addons",
