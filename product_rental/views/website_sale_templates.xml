@@ -73,12 +73,7 @@
                 id="product_recurrent_payment_amount"
                 class="product_price mt16"
             >
-        <p t-if="product.is_contract and commitment_period['number'] > 0">
-          <b class="commitment"><span>Commitment duration: </span><span
-                            t-esc="commitment_period['number']"
-                        /> <span t-esc="commitment_period['type']" /></b>
-        </p>
-        <h4 class="oe_price_h4 css_editable_mode_hidden">
+        <h3 class="oe_price_h3 css_editable_mode_hidden">
           <b
                         class="oe_recurrent_payment_amount"
                         style="white-space: nowrap;"
@@ -87,7 +82,12 @@
                         t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"
                     />
           <b t-field="product.recurrent_payment_frequency" />
-        </h4>
+        </h3>
+        <p t-if="product.is_contract and commitment_period['number'] > 0">
+          <b class="commitment"><span>Commitment duration: </span><span
+                            t-esc="commitment_period['number']"
+                        /> <span t-esc="commitment_period['type']" /></b>
+        </p>
       </div>
     </xpath>
 
