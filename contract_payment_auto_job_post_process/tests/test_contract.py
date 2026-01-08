@@ -17,7 +17,9 @@ class TestContract(TestContractBase):
         cls.loader.backup_registry()
         from odoo.addons.contract_payment_auto.tests.models import TransactionTest
 
-        cls.loader.update_registry((TransactionTest,))
+        from .base import TestTargetStateContextBase
+
+        cls.loader.update_registry((TransactionTest, TestTargetStateContextBase))
 
         # Configure invoice creation in jobs and contract automatic payment:
         cls.env["ir.config_parameter"].sudo().set_param("contract.queue.job", "True")
