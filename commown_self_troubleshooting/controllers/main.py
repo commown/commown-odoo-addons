@@ -52,6 +52,7 @@ class SelfHelp(http.Controller):
         env = request.env
         partner = env.user.partner_id
         post = request.params.copy()
+        root_user = env.ref("base.user_root")
 
         project = env.ref(post["project_ref"])
 
@@ -76,13 +77,13 @@ class SelfHelp(http.Controller):
             stage_ref = post["stage_ref"]
             task_data["stage_id"] = env.ref(stage_ref).id
 
-        task = env["project.task"].sudo().create(task_data)
+        task = env["project.task"].with_user(root_user).create(task_data)
         task.onchange_contract_or_product()
 
         if partner not in task.message_follower_ids.mapped("partner_id"):
             comment = env.ref("mail.mt_comment")
             rating = env.ref("project.mt_task_rating")
-            env["mail.followers"].create(
+            env["mail.followers"].with_user(root_user).create(
                 {
                     "res_model": task._name,
                     "res_id": task.id,
