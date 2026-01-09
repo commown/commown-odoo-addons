@@ -232,10 +232,10 @@
                                                     required="1"
                                                 >
                           <option style="display:none" />
-                          <option value="12">Austria</option>
-                          <option value="20">Belgium</option>
-                          <option value="75">France</option>
-                          <option value="57">Germany</option>
+                          <option t-att-value="env.ref('base.at').id">Austria</option>
+                          <option t-att-value="env.ref('base.be').id">Belgium</option>
+                          <option t-att-value="env.ref('base.fr').id">France</option>
+                          <option t-att-value="env.ref('base.de').id">Germany</option>
                         </select>
                       </div>
                       <div
