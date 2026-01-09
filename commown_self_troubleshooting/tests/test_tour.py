@@ -148,6 +148,24 @@ class TestPageRealContractTC(RunTourTC, DeviceAsAServiceTC):
         contract.date_start = "2023-09-01"
         self._run_tour("commown_self_troubleshooting_tour_theft_and_loss")
 
+        # Checking the partner was notified by the automatic Theft/Loss mail
+        theft_and_loss_project = self.env.ref(
+            "product_rental.contract_theft_and_loss_project"
+        )
+        task = self.env["project.task"].search(
+            [
+                ("contract_id", "=", contract.id),
+                ("partner_id", "=", contract.partner_id.id),
+                ("project_id", "=", theft_and_loss_project.id),
+            ]
+        )
+
+        task_messages = task.message_ids.filtered(
+            lambda m: m.subtype_id.name != "Task Created"
+        )
+        self.assertTrue(task_messages)
+        self.assertIn(contract.partner_id, task_messages.notified_partner_ids)
+
 
 class TestPageGSDay(TestTourWithContractTC):
     contract_name = "GS/B2C"
