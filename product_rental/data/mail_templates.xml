@@ -5,14 +5,17 @@
     <field name="name">[commown] AR déclaration Perte</field>
     <field name="email_from">contact@commown.coop</field>
     <field name="reply_to">contact@commown.coop</field>
-    <field name="subject">${object.company_id.name} - Votre déclaration de perte</field>
+    <field
+            name="subject"
+        >{{ object.company_id.name }} - Votre déclaration de perte</field>
+    <field name="partner_to">{{ object.partner_id.id }}</field>
     <field name="model_id" ref="project.model_project_task" />
     <field name="auto_delete" eval="True" />
-    <field name="lang">${object.partner_id.lang}</field>
+    <field name="lang">{{ object.partner_id.lang }}</field>
     <field
             name="body_html"
         ><![CDATA[
-<p>Bonjour ${object.partner_id.firstname},</p>
+<p>Bonjour {{ object.partner_id.firstname }},</p>
 <br/>
 <p>Nous vous contactons suite à votre demande d'assistance concernant la perte de l'appareil.
   Nous sommes vraiment désolés de ce qui vous arrive, tant pour votre usage que pour l'impact financier
@@ -71,14 +74,17 @@
     <field name="name">[commown] AR déclaration Vol</field>
     <field name="email_from">contact@commown.coop</field>
     <field name="reply_to">contact@commown.coop</field>
-    <field name="subject">${object.company_id.name} - Votre déclaration de vol</field>
+    <field
+            name="subject"
+        >{{ object.company_id.name }} - Votre déclaration de vol</field>
+    <field name="partner_to">{{ object.partner_id.id }}</field>
     <field name="model_id" ref="project.model_project_task" />
     <field name="auto_delete" eval="True" />
-    <field name="lang">${object.partner_id.lang}</field>
+    <field name="lang">{{ object.partner_id.lang }}</field>
     <field
             name="body_html"
         ><![CDATA[
-<p>Bonjour ${object.partner_id.firstname},</p>
+<p>Bonjour {{ object.partner_id.firstname }},</p>
 <br/>
 <p>
   Nous vous contactons suite à votre demande d'assistance concernant
