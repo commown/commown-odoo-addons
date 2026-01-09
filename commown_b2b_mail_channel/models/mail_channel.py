@@ -4,6 +4,8 @@ from odoo import api, fields, models
 class MailChannel(models.Model):
     _inherit = "mail.channel"
 
+    name = fields.Char(translate=True)
+
     partner_companies = fields.One2many(
         "res.partner",
         inverse_name="mail_channel_id",
