@@ -168,16 +168,23 @@
 
   <!-- Language related hacks START -->
 
-  <template
-        id="products_categories_list"
-        inherit_id="website_sale.products_categories_list"
-    >
-    <xpath
-            expr="//t[@t-call='website_sale.categories_recursive']"
-            position="attributes"
-        >
-      <attribute name="t-if">c != env.ref('commown.categ_de')</attribute>
+  <template id="products" inherit_id="website_sale.products">
+    <xpath expr="//div[hasclass('o_wsale_products_page')]" position="before">
+      <t t-set="categories" t-value="categories - env.ref('commown.categ_de')" />
     </xpath>
+  </template>
+
+  <template id="products_only_search" inherit_id="website_sale.search">
+    <!-- Override search_type value to include products only, and not categories -->
+    <xpath expr="//t[@t-set='search_type']" position="attributes">
+      <attribute name="t-valuef">products_only</attribute>
+    </xpath>
+
+    <!-- Hide extra links (used to display product's public categories) -->
+    <xpath expr="//t[@t-set='display_extra_link']" position="attributes">
+      <attribute name="t-valuef">false</attribute>
+    </xpath>
+
   </template>
 
   <template id="product" inherit_id="website_sale_b2b.product_b2b">
