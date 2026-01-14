@@ -191,4 +191,11 @@
 
   <!-- End Customize portal section titles -->
 
+  <!-- Hide "Manage payment methods" link -->
+  <template id="hide_pay_meth_link" inherit_id="payment.pay_meth_link">
+    <xpath expr="//a[@href='/my/payment_method']" position="attributes">
+      <attribute name="t-if">False</attribute>
+    </xpath>
+  </template>
+
 </odoo>
