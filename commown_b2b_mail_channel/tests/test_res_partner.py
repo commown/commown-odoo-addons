@@ -20,12 +20,12 @@ class ResPartnerTC(TransactionCase):
             {"name": "Test support", "login": "login"}
         )
 
-        support_role = self.env.ref("commown_user_roles.support")
+        self.b2b_chan_role = self.env.ref("commown_b2b_mail_channel.role_b2b_channels")
 
         self.env["res.users.role.line"].create(
-            {"user_id": self.user_support.id, "role_id": support_role.id}
+            {"user_id": self.user_support.id, "role_id": self.b2b_chan_role.id}
         )
-        support_role.update_users()
+        self.b2b_chan_role.update_users()
 
         self.contract = self.env["contract.contract"].create(
             {
@@ -43,16 +43,14 @@ class ResPartnerTC(TransactionCase):
         self.contract.date_start = date.today()
 
         company_chan = self.company.mail_channel_id
-        expected_groups = self.env["res.groups"]
-        for name in ["support", "commercial", "admin"]:
-            expected_groups |= self.env.ref("commown_user_roles.%s" % name).group_id
+        expected_group = self.b2b_chan_role.group_id
 
         self.assertEqual(company_chan.name, "Support of company %s" % self.company.name)
         self.assertEqual(
             company_chan.channel_partner_ids,
             self.part1 + self.part2 + self.user_support.partner_id,
         )
-        self.assertEqual(company_chan.group_ids, expected_groups)
+        self.assertEqual(company_chan.group_ids, expected_group)
 
     def test_disable_automatic_subscription(self):
         self.company.disable_channel_subscription = True

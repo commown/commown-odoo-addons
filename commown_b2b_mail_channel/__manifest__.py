@@ -14,6 +14,7 @@
     "depends": ["commown_user_roles", "contract", "mail"],
     "data": [
         "data/ir_config_parameter.xml",
+        "data/res_users_role.xml",
         "views/res_partner.xml",
         "views/mail_channel.xml",
     ],
