@@ -7,7 +7,7 @@
     <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
       <t
                 t-set="user_channels"
-                t-value="[c for c in user_id.partner_id.channel_ids if c.channel_type=='channel']"
+                t-value="[c for c in user_id.partner_id.channel_ids if c.channel_type=='group']"
             />
       <div class="mt-4" t-if="user_channels">
         <h4>Contact us</h4>

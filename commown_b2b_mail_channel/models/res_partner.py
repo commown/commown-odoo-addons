@@ -11,7 +11,7 @@ class ResPartner(models.Model):
     mail_channel_id = fields.Many2one(
         "mail.channel",
         string="Support mail channel",
-        domain=[("channel_type", "=", "channel")],
+        domain=[("channel_type", "=", "group")],
     )
 
     disable_channel_subscription = fields.Boolean(
@@ -114,11 +114,13 @@ class ResPartner(models.Model):
             self.mail_channel_id = self.env["mail.channel"].create(
                 {
                     "name": "TEMP NAME",
-                    "channel_type": "channel",
+                    "channel_type": "group",
                     "partner_company": self.id,
                 }
             )
-            self.mail_channel_id.group_ids += groups_to_subscribe
+            self.mail_channel_id.add_members(
+                partner_ids=groups_to_subscribe.users.partner_id.ids
+            )
 
             # Compute name
             self.set_support_channel_name()

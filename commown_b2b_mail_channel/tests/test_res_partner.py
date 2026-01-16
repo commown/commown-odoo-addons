@@ -43,14 +43,12 @@ class ResPartnerTC(TransactionCase):
         self.contract.date_start = date.today()
 
         company_chan = self.company.mail_channel_id
-        expected_group = self.b2b_chan_role.group_id
 
         self.assertEqual(company_chan.name, "Support of company %s" % self.company.name)
         self.assertEqual(
             company_chan.channel_partner_ids,
             self.part1 + self.part2 + self.user_support.partner_id,
         )
-        self.assertEqual(company_chan.group_ids, expected_group)
 
     def test_disable_automatic_subscription(self):
         self.company.disable_channel_subscription = True
