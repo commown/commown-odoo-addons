@@ -1,0 +1,8 @@
+<odoo>
+
+    <record id="role_b2b_channels" model="res.users.role">
+        <field name="name">B2B Channels Role</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+
+</odoo>
