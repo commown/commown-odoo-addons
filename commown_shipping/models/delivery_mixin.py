@@ -16,6 +16,8 @@ QUEUE_CHANNEL = "root.DELIVERY_TRACKING"
 
 MLVARS_MAX_WAIT = datetime.timedelta(days=8)
 
+TIMEOUT = (10, 15)
+
 
 class ParcelError(Exception):
     pass
@@ -23,7 +25,9 @@ class ParcelError(Exception):
 
 def colissimo_status_request(account, password, ref):
     resp = requests.get(
-        BASE_URL, {"accountNumber": account, "password": password, "skybillNumber": ref}
+        BASE_URL,
+        {"accountNumber": account, "password": password, "skybillNumber": ref},
+        timeout=TIMEOUT,
     )
     resp.raise_for_status()
     return resp.content.decode("utf-8")
