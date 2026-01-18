@@ -12,7 +12,7 @@ BASE_URL = "https://www.coliposte.fr/tracking-chargeur-cxf/TrackingServiceWS/tra
 
 MLVARS_MAX_WAIT = datetime.timedelta(days=8)
 
-TIMEOUT = 10
+TIMEOUT = (10, 15)
 
 
 class ParcelError(Exception):
