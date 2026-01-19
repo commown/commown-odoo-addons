@@ -14,6 +14,15 @@ from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
 from .common import BaseShippingTC, pdf_page_num
 
 
+def _mock_delivery_job(job, result):
+    with patch.object(
+        DeliveryMixin,
+        "_delivery_tracking_colissimo_status",
+        side_effect=result,
+    ):
+        job.perform()
+
+
 class CheckMailMixin:
     "Small helper class to check sent emails easily"
 
@@ -24,6 +33,11 @@ class CheckMailMixin:
         if check_recipients is not None:
             self.assertItemsEqual(mail.partner_ids.mapped("name"), check_recipients)
         return mail
+
+    def _object_messages(self, obj):
+        return self.env["mail.message"].search(
+            [("res_id", "=", obj.id), ("model", "=", obj._name)]
+        )
 
 
 class CrmLeadShippingTC(MockedEmptySessionMixin, BaseShippingTC):
@@ -248,13 +262,9 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
             }
         )
 
-    def _last_message(self):
-        return self.env["mail.message"].search(
-            [("res_id", "=", self.lead.id), ("model", "=", "crm.lead")]
-        )[0]
-
     def check_mail_delivered(self, subject, code):
-        return self._check_mail(self._last_message(), subject, "code: " + code)
+        last_message = self._object_messages(self.lead)[0]
+        return self._check_mail(last_message, subject, "code: " + code)
 
     def test_delivery_email_template(self):
         # Shipping deactivated, template set => None expected
@@ -401,12 +411,7 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         trap.assert_jobs_count(len(lead_statuses))
 
         for job in trap.enqueued_jobs:
-            with patch.object(
-                DeliveryMixin,
-                "_delivery_tracking_colissimo_status",
-                side_effect=lambda *args: lead_statuses[job.recordset.name],
-            ):
-                job.perform()
+            _mock_delivery_job(job, lambda *args: lead_statuses[job.recordset.name])
 
         return leads.sorted(lambda l: list(lead_statuses.keys()).index(l.name))
 
