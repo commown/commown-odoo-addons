@@ -421,6 +421,38 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         self.assertEqual(leads.mapped("expedition_status"), ["[LIVCFM] test label"] * 2)
         self.assertEqual(leads.mapped("stage_id"), self.stage_final)
 
+    def test_duplicated_tracking_job(self):
+        "Re-submitted jobs before the first ones were completed must do nothing"
+
+        def _delivered_parcel_emails(lead):
+            return self._object_messages(lead).filtered(
+                lambda m: m.subject == "Product delivered"
+            )
+
+        # Simulate jobs are re-created (trap2) before the others are ended (trap1):
+        with trap_jobs() as trap1:
+            leads1 = self.env["crm.lead"]._cron_delivery_auto_track()
+
+        with trap_jobs() as trap2:
+            leads2 = self.env["crm.lead"]._cron_delivery_auto_track()
+
+        # Check the concerned leads are the same
+        self.assertTrue(len(leads1) > 0 and leads1 == leads2)
+
+        tracking_results = {l: _status("LIVCFM") for l in ("l1", "l2")}
+
+        for job in trap1.enqueued_jobs:
+            lead = job.recordset
+            lead.send_email_on_delivery = True
+            _mock_delivery_job(job, lambda *args: tracking_results[lead.name])
+            self.assertEqual(len(_delivered_parcel_emails(lead)), 1)
+
+        # Execute duplicated jobs and check their result: job skipped, email not sent
+        for job in trap2.enqueued_jobs:
+            job.perform()  # No need to mock here as we return before calling colissimo
+            self.assertIn("Skipping", job.result)
+            self.assertEqual(len(_delivered_parcel_emails(lead)), 1)
+
     def test_cron_ok2(self):
         lead1, lead2 = self.exec_job_with_status(
             {"l1": _status("LIVCFM"), "l2": _status("RENLNA")}
