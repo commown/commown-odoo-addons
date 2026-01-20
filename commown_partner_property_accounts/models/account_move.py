@@ -37,4 +37,11 @@ class PropertyAccountsAccountMove(models.Model):
             partner = self.env["res.partner"].browse(vals.get("partner_id")).exists()
             partner._create_payable_account()
 
+            # Instruction fetched from the onchange method _inverse_partner_id,
+            # to assign the newly created account to the payment_term lines.
+            # (see odoo/addons/account/models/account_move_line.py:L1125)
+            self.line_ids._conditional_add_to_compute(
+                "account_id", lambda line: (line.display_type == "payment_term")
+            )
+
         return super().write(vals)
