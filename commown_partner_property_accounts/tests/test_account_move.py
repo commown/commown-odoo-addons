@@ -59,6 +59,7 @@ class PropertyAccountsAccountMoveTC(TransactionCase):
             **safe_eval(vendors_bills_action.context)
         )
 
+        # Use case 1: On account.move create
         form_create = Form(move_model)
 
         form_create.partner_id = self.partner_1
@@ -70,3 +71,11 @@ class PropertyAccountsAccountMoveTC(TransactionCase):
         p1_payable_account = self.partner_1.property_account_payable_id
         self.assertNotEqual(p1_payable_account, self.ref_account)
         self.assertPaymentTermAccount(mv, p1_payable_account)
+
+        # Use case 2: On account.move write
+        with Form(mv) as form_update:
+            form_update.partner_id = self.partner_2
+
+        p2_payable_account = self.partner_2.property_account_payable_id
+        self.assertNotEqual(p2_payable_account, self.ref_account)
+        self.assertPaymentTermAccount(mv, p2_payable_account)
