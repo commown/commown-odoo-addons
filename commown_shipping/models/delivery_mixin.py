@@ -16,6 +16,8 @@ QUEUE_CHANNEL = "root.DELIVERY_TRACKING"
 
 MLVARS_MAX_WAIT = datetime.timedelta(days=8)
 
+TIMEOUT = (10, 15)
+
 
 class ParcelError(Exception):
     pass
@@ -23,7 +25,9 @@ class ParcelError(Exception):
 
 def colissimo_status_request(account, password, ref):
     resp = requests.get(
-        BASE_URL, {"accountNumber": account, "password": password, "skybillNumber": ref}
+        BASE_URL,
+        {"accountNumber": account, "password": password, "skybillNumber": ref},
+        timeout=TIMEOUT,
     )
     resp.raise_for_status()
     return resp.content.decode("utf-8")
@@ -102,9 +106,16 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     @api.multi
     def write(self, values):
+
+        _act = None
+        if "delivery_date" in values:
+            _act = self.filtered(lambda o: o.delivery_date != values["delivery_date"])
+
         res = super(CommownTrackDeliveryMixin, self).write(values)
-        if values.get("delivery_date", False):
-            self.delivery_perform_actions()
+
+        if _act:  # Not None nor empty resultset
+            _act.delivery_perform_actions()
+
         return res
 
     @api.multi
@@ -177,6 +188,10 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     @job(default_channel=QUEUE_CHANNEL)
     def _delivery_tracking_update(self):
         self.ensure_one()
+
+        if self.delivery_date:
+            return "Parcel already delivered... Skipping."
+
         now = datetime.datetime.utcnow()
 
         infos = self._delivery_tracking_colissimo_status()
