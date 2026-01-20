@@ -7,6 +7,17 @@ class PropertyAccountsAccountMoveTC(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+
+        if not cls.env.company.chart_template_id:  # pragma: no cover
+            # Load a CoA if there's none in current company
+            coa = cls.env.ref("l10n_generic_coa.configurable_chart_template", False)
+            if not coa:  # pragma: no cover
+                # Load the first available CoA
+                coa = cls.env["account.chart.template"].search(
+                    [("visible", "=", True)], limit=1
+                )
+            coa.try_loading(company=cls.env.company, install_demo=False)
+
         cls.partner_1, cls.partner_2 = cls.env["res.partner"].create(
             [
                 {"name": "Partner 1"},
