@@ -8,6 +8,7 @@ class PropertyAccountsAccountMove(models.Model):
     def create(self, vals_list):
         "Automatically create a payable account for partners of Vendor Bills"
         purchase_move_types = self.get_purchase_types()
+        ctx_move_type = self._context.get("default_move_type")
         seen_partners_ids = set()
 
         for vals in vals_list:
@@ -15,7 +16,7 @@ class PropertyAccountsAccountMove(models.Model):
             if not partner_id or partner_id in seen_partners_ids:
                 continue
 
-            if vals.get("move_type") in purchase_move_types:
+            if vals.get("move_type", ctx_move_type) in purchase_move_types:
                 partner = self.env["res.partner"].browse(partner_id)
                 partner._create_payable_account()
                 seen_partners_ids.add(partner_id)
