@@ -94,6 +94,7 @@
     ],
     "assets": {
         "web.assets_frontend": [
+            "/commown/static/src/js/slimpay_payment_form_mixin.js",
             "/commown/static/src/css/website_sale.css",
         ],
         "web.assets_backend": [
