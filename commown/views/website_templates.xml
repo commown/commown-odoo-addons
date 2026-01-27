@@ -34,23 +34,23 @@
                 <a class="lang de" href="https://commown.coop/de/#contact" target="_blank">Contactez-nous</a>
               </li>
             </ul>
-            <h2>
+            <p>
               <a style="text-decoration: none" target="_blank" href="https://mamot.fr/@commownfr">
-                <i class="icon icon-mastodon"/>
+                <i class="icon icon-mastodon fa-2x"/>
               </a>
               <a style="text-decoration: none" target="_blank" t-att-href="website.social_facebook" t-if="website.social_facebook">
-                <i class="fa fa-facebook-square"/>
+                <i class="fa fa-facebook-square fa-2x"/>
               </a>
               <a style="text-decoration: none" target="_blank" t-att-href="website.social_linkedin" t-if="website.social_linkedin">
-                <i class="fa fa-linkedin"/>
+                <i class="fa fa-linkedin fa-2x"/>
               </a>
               <a style="text-decoration: none" target="_blank" t-att-href="website.social_youtube" t-if="website.social_youtube">
-                <i class="fa fa-youtube-play"/>
+                <i class="fa fa-youtube-play fa-2x"/>
               </a>
               <a style="text-decoration: none" target="_blank" t-att-href="website.social_github" t-if="website.social_github">
-                <i class="fa fa-github"/>
+                <i class="fa fa-github fa-2x"/>
               </a>
-            </h2>
+            </p>
           </div>
           <div class="col-md-4 col-lg-5 col-lg-offset-1">
             <h4>
