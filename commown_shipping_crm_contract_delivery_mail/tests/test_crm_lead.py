@@ -18,7 +18,7 @@ class CrmLeadTC(RentalSaleOrderTC):
 
     def test_default_action_on_delivery_with_contract(self):
         self.so.team_id.default_perform_actions_on_delivery = True
-        lead = self._create_ra_leads().filtered("contract_id")[0]
+        lead = self._create_ra_leads(self.so).filtered("contract_id")[0]
 
         self.assertTrue(lead.send_email_on_delivery)
 
@@ -28,7 +28,7 @@ class CrmLeadTC(RentalSaleOrderTC):
         self.so.order_line.filtered("product_id.is_contract").unlink()
 
         self.so.team_id.default_perform_actions_on_delivery = True
-        lead = self._create_ra_leads().filtered(lambda l: not l.contract_id)[0]
+        lead = self._create_ra_leads(self.so).filtered(lambda l: not l.contract_id)[0]
 
         self.assertFalse(lead.contract_id)  # Check pre-requisite
         self.assertFalse(lead.send_email_on_delivery)
@@ -38,11 +38,11 @@ class CrmLeadTC(RentalSaleOrderTC):
 
     def test_default_no_action_on_delivery(self):
         self.so.team_id.default_perform_actions_on_delivery = False
-        lead = self._create_ra_leads()[0]
+        lead = self._create_ra_leads(self.so)[0]
 
         self.assertFalse(lead.send_email_on_delivery)
 
-    def _create_ra_leads(self):
+    def _create_ra_leads(self, so):
         "Confirm the sale and return all its just-created risk-analysis leads"
-        self.so.action_confirm()
-        return self.env["crm.lead"].search([("so_line_id.order_id", "=", self.so.id)])
+        so.action_confirm()
+        return self.env["crm.lead"].search([("so_line_id.order_id", "=", so.id)])
