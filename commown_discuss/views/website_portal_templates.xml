@@ -1,0 +1,28 @@
+<odoo>
+
+  <template id="portal_layout" inherit_id="portal.portal_layout">
+    <xpath expr="//a[@href='/my/account']/ancestor::div[1]" position="after">
+
+       <t
+                t-set="user_channels"
+                t-value="[c for c in user_id.partner_id.channel_ids if c.channel_type=='group']"
+            />
+       <div class="mt-4" t-if="user_channels">
+         <h4>Contact us</h4>
+         <hr class="mt-2 mb-2" />
+         <div class="list-group">
+           <t t-set="action_id" t-value="env.ref('mail.action_discuss').id" />
+           <t t-foreach="user_channels" t-as="channel" t-attr-href="">
+             <a
+                            class="list-group-item"
+                            t-attf-href="/web#action=#{action_id}&amp;active_id=#{channel.id}"
+                        >
+               Channel <t t-esc="channel.name" />
+             </a>
+           </t>
+         </div>
+       </div>
+    </xpath>
+  </template>
+
+</odoo>

@@ -11,6 +11,9 @@
     "author": "Commown SCIC",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
+    "data": [
+        "views/website_portal_templates.xml",
+    ],
     "depends": [
         "commown_allow_backend_passage",
     ],

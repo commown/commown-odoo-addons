@@ -12,6 +12,9 @@ class CommownDiscussControllersTC(HttpCase):
         self.authenticate("portal", "portal")
 
         # Case 1: the user is not subscribed to any mail channels
+        resp_portal_no_chans = self.url_open(self.base_url() + "/my")
+        self.assertNotIn("Channel", resp_portal_no_chans.text)
+
         resp_no_chans = self.url_open(self.base_url() + "/web", allow_redirects=False)
 
         self.assertEqual(resp_no_chans.status_code, 303)
@@ -19,6 +22,9 @@ class CommownDiscussControllersTC(HttpCase):
 
         # Case 2: the user is subscribed to at least one mail channel
         channel.add_members(partner_ids=partner.ids)
+
+        resp_portal_w_chans = self.url_open(self.base_url() + "/my")
+        self.assertIn(f"Channel {channel.name}", resp_portal_w_chans.text)
 
         resp_w_chans = self.url_open(self.base_url() + "/web", allow_redirects=False)
 
