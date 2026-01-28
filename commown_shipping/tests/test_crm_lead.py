@@ -244,13 +244,17 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
                 ).id,
             }
         )
-        self.lead = self.env["crm.lead"].create(
-            {
-                "name": "[SO99999-01] TEST DELIVERY",
-                "partner_id": self.env.ref("base.res_partner_1").id,
-                "type": "opportunity",
-                "team_id": team.id,
-            }
+        self.lead = (
+            self.env["crm.lead"]
+            .with_context(test_commown_shipping_no_contract_check=True)
+            .create(
+                {
+                    "name": "[SO99999-01] TEST DELIVERY",
+                    "partner_id": self.env.ref("base.res_partner_1").id,
+                    "type": "opportunity",
+                    "team_id": team.id,
+                }
+            )
         )
 
     def _last_message(self):
@@ -298,7 +302,9 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         """
         # Setup
         team = self.lead.team_id
-        lead_model = self.env["crm.lead"]
+        lead_model = self.env["crm.lead"].with_context(
+            test_commown_shipping_no_contract_check=True
+        )
 
         # Case 1: actions are enabled by default
         team.default_perform_actions_on_delivery = True
@@ -317,7 +323,12 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         team = self.lead.team_id
 
         def assertFormSendEmailOnDelivery():
-            form = Form(self.env["crm.lead"].with_context(default_team_id=team.id))
+            form = Form(
+                self.env["crm.lead"].with_context(
+                    default_team_id=team.id,
+                    test_commown_shipping_no_contract_check=True,
+                )
+            )
             self.assertEqual(
                 form.send_email_on_delivery, team.default_perform_actions_on_delivery
             )
@@ -441,7 +452,9 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
             }
         )
         # Imitate context passed by web UI
-        lead_model = self.env["crm.lead"].with_context(default_team_id=team.id)
+        lead_model = self.env["crm.lead"].with_context(
+            default_team_id=team.id, test_commown_shipping_no_contract_check=True
+        )
         return lead_model.create(kwargs)
 
     def test_tracked_records(self):
