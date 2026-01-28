@@ -348,7 +348,7 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         assertFormSendEmailOnDelivery()
 
     def test_actions_on_delivery_send_email_team_template(self):
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         # Simulate delivery
         self.lead.expedition_status = "[LIVCFM] Test"
@@ -360,7 +360,7 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
     def test_actions_on_delivery_send_email_no_status(self):
         "Check empty expedition status is OK"
 
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         # Simulate delivery
         self.lead.expedition_status = False
@@ -370,7 +370,7 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         self.check_mail_delivered("Product delivered", "EMPTY_CODE")
 
     def test_actions_on_delivery_send_email_custom_template(self):
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         self.lead.on_delivery_email_template_id = (
             self.lead.team_id.on_delivery_email_template_id.copy(  # noqa: B950
@@ -388,7 +388,7 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
     def test_actions_on_delivery_send_email_no_template(self):
         "A user error must be raised in the case no template was specified"
 
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         self.lead.on_delivery_email_template_id = False
         self.lead.team_id.on_delivery_email_template_id = False
