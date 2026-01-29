@@ -8,6 +8,10 @@ from odoo.addons.web.controllers.utils import ensure_db, is_user_internal
 
 
 class Home(WebHome):
+    def allow_backend_passage(self):
+        "To be overriden by other modules"
+        return False
+
     @http.route()
     def web_client(self, s_action=None, **kw):
         """
@@ -29,15 +33,13 @@ class Home(WebHome):
         if not request.session.uid:
             return request.redirect("/web/login", 303)
 
-        session_user = request.env["res.users"].browse(request.session.uid)
+        allow_backend_passage = self.allow_backend_passage()
 
         if kw.get("redirect"):
             return request.redirect(kw.get("redirect"), 303)
         if not security.check_session(request.session, request.env):
             raise http.SessionExpiredException("Session expired")
-        if not session_user.has_group(
-            "customer_manager_base.group_customer_admin"
-        ) and not is_user_internal(request.session.uid):
+        if not allow_backend_passage and not is_user_internal(request.session.uid):
             return request.redirect("/web/login_successful", 303)
 
         # Side-effect, refresh the session lifetime

@@ -3,6 +3,8 @@ from unittest.mock import patch
 from odoo.service import security
 from odoo.tests.common import HttpCase, tagged
 
+from odoo.addons.commown_allow_backend_passage.controllers import web
+
 
 @tagged("-at_install", "post_install")
 class BackendPassageControllerTC(HttpCase):
@@ -56,6 +58,24 @@ class BackendPassageControllerTC(HttpCase):
             internal_user_res.url,
             self.base_url() + "/web",
         )
+
+    def test_portal_user(self):
+        "Check /web access for a portal user, if they're allowed or not to access the backend"
+        self.authenticate("portal", "portal")
+
+        # Case 1: the user doesn't meet the criteria for backend passage
+        not_allowed_user_res = self.get("/web", assert_code=303)
+        self.assertTrue(not_allowed_user_res.is_redirect)
+        self.assertEqual(
+            not_allowed_user_res.headers["location"],
+            self.base_url() + "/web/login_successful",
+        )
+
+        # Case 2: the user meets the criteria for backend passage
+        with patch.object(web.Home, "allow_backend_passage", return_value=True):
+            allowed_user_res = self.get("/web")
+
+        self.assertFalse(allowed_user_res.is_redirect)
 
     # Misc. routes
     def test_access_with_redirect(self):
