@@ -16,9 +16,11 @@ class Home(WebHome):
         if the current user is not internal.
         This blocks any portal users to access the Manager menus, located in the `web` section.
 
-        So, we reimplemented the code, but added a group_customer_admin check
-        to allow customer admin users to access the web section of the Odoo app.
-        This requires robust access rules to isolate correctly customer admin users
+        So, we reimplemented the code, but added a allow_backend_passage method
+        to allow certain portal users to access the web section of the Odoo app,
+        depending on various conditions which can be defined in sub modules.
+
+        This requires robust access rules to isolate correctly portal users
         from the rest of the app.
         """
 

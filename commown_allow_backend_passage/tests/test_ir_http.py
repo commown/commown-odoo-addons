@@ -79,6 +79,5 @@ class SessionInfoTC(HttpCase):
     def test_session_info_is_customer_true(self):
         partner = self.env.ref("base.partner_demo_portal")
         user = partner.user_ids.ensure_one()
-        user.groups_id |= self.env.ref("customer_manager_base.group_customer_admin")
 
         self.assertTrue(self.get_session_info(user).get("is_customer"))
