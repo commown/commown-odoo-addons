@@ -14,6 +14,9 @@
     "depends": [
         "portal",
     ],
+    "data": [
+        "security/ir.model.access.csv",
+    ],
     "assets": {
         "web.assets_backend": [
             "/commown_allow_backend_passage/static/src/js/backend_passage_navbar.esm.js",
