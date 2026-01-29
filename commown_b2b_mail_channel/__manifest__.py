@@ -7,7 +7,7 @@
     "name": "Commown B2B mail channel",
     "summary": "Commown features related to B2B mail channels",
     "category": "Business",
-    "version": "16.0.1.0.7",
+    "version": "16.0.1.0.8",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
