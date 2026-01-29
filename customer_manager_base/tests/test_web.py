@@ -1,12 +1,10 @@
 from odoo.tests.common import tagged
 
-from odoo.addons.commown_allow_backend_passage.tests.test_web import (
-    BackendPassageControllerTC,
-)
+from odoo.addons.commown_allow_backend_passage.tests.common import BackendPassageTC
 
 
 @tagged("-at_install", "post_install")
-class CustomerManagerControllerTC(BackendPassageControllerTC):
+class CustomerManagerControllerTC(BackendPassageTC):
     def test_customer_admin_user(self):
         # Check redirect for non-customer admin portal user
         self.authenticate("portal", "portal")
