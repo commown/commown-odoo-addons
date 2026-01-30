@@ -78,13 +78,23 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
     def _default_send_email_on_delivery(self):
         "By default, send email if parent config says to perform actions on delivery"
         parent = self._delivery_tracking_parent()
-        if not parent:
-            context = self.env.context
-            default_rel = "default_%s" % self._delivery_tracking_parent_rel
-            # Web UI passes default parent rel in context
-            if default_rel in context:
-                parent = self.env[parent._name].browse(context[default_rel])
+        context = self.env.context
+        default_rel = "default_%s" % self._delivery_tracking_parent_rel
+        # Web UI passes default parent rel in context
+        if default_rel in context:
+            parent = self.env[parent._name].browse(context[default_rel])
         return parent.default_perform_actions_on_delivery if parent else True
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        "By default, send email if parent config says to perform actions on delivery"
+        result = super().create(vals_list)
+
+        for entity, vals in zip(result, vals_list):
+            if "send_email_on_delivery" not in vals:
+                entity.send_email_on_delivery = entity._delivery_tracking_parent().default_perform_actions_on_delivery
+
+        return result
 
     def initialize_expedition_data(self, parcel_number):
         parent = self._delivery_tracking_parent()

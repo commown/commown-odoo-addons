@@ -12,7 +12,8 @@ class CrmLead(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         result = super().create(vals_list)
-        result.filtered(lambda lead: not lead.contract_id).write(
-            {"send_email_on_delivery": False}
-        )
+        if not self._context.get("test_commown_shipping_no_contract_check", False):
+            result.filtered(lambda lead: not lead.contract_id).write(
+                {"send_email_on_delivery": False}
+            )
         return result

@@ -4,7 +4,7 @@ from unittest.mock import patch
 import requests_mock
 
 from odoo.exceptions import UserError, ValidationError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import Form, TransactionCase
 
 from odoo.addons.commown_shipping.models.delivery_mixin import ParcelError
 from odoo.addons.commown_shipping.models.shipping_mixin import CommownShippingMixin
@@ -244,13 +244,17 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
                 ).id,
             }
         )
-        self.lead = self.env["crm.lead"].create(
-            {
-                "name": "[SO99999-01] TEST DELIVERY",
-                "partner_id": self.env.ref("base.res_partner_1").id,
-                "type": "opportunity",
-                "team_id": team.id,
-            }
+        self.lead = (
+            self.env["crm.lead"]
+            .with_context(test_commown_shipping_no_contract_check=True)
+            .create(
+                {
+                    "name": "[SO99999-01] TEST DELIVERY",
+                    "partner_id": self.env.ref("base.res_partner_1").id,
+                    "type": "opportunity",
+                    "team_id": team.id,
+                }
+            )
         )
 
     def _last_message(self):
@@ -289,25 +293,62 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         self.lead.team_id.delivery_tracking = False
         self.assertIsNone(self.lead.delivery_email_template())
 
-    def test_default_send_email_on_delivery_value(self):
+    def test_default_send_email_on_delivery_without_ui(self):
         """
         The default value of send_email_on_delivery should match
         the lead's team default_perform_actions_on_delivery value,
         both from the record itself, and from the context value default_team_id.
+        (Using the create method without UI)
         """
+        # Setup
         team = self.lead.team_id
-        crm_model = self.env["crm.lead"].with_context(default_team_id=team.id)
+        lead_model = self.env["crm.lead"].with_context(
+            test_commown_shipping_no_contract_check=True
+        )
 
+        # Case 1: actions are enabled by default
         team.default_perform_actions_on_delivery = True
-        self.assertTrue(crm_model._default_send_email_on_delivery())
-        self.assertTrue(self.lead._default_send_email_on_delivery())
+        lead_w_actions = lead_model.create({"name": "Lead 1", "team_id": team.id})
 
+        self.assertTrue(lead_w_actions.send_email_on_delivery)
+
+        # Case 2: actions are enabled by default
         team.default_perform_actions_on_delivery = False
-        self.assertFalse(crm_model._default_send_email_on_delivery())
-        self.assertFalse(self.lead._default_send_email_on_delivery())
+        lead_w_out_actions = lead_model.create({"name": "Lead 1", "team_id": team.id})
+
+        self.assertFalse(lead_w_out_actions.send_email_on_delivery)
+
+    def test_default_send_email_on_delivery_with_ui(self):
+        "Same as previous code, but using the web UI with the context"
+        team = self.lead.team_id
+
+        def assertFormSendEmailOnDelivery():
+            form = Form(
+                self.env["crm.lead"].with_context(
+                    default_team_id=team.id,
+                    test_commown_shipping_no_contract_check=True,
+                )
+            )
+            self.assertEqual(
+                form.send_email_on_delivery, team.default_perform_actions_on_delivery
+            )
+
+            form.name = "Dummy name"
+            lead = form.save()
+            self.assertEqual(
+                lead.send_email_on_delivery, team.default_perform_actions_on_delivery
+            )
+
+        # Case 1: actions are enabled by default
+        team.default_perform_actions_on_delivery = True
+        assertFormSendEmailOnDelivery()
+
+        # Case 2: actions are disabled by default
+        team.default_perform_actions_on_delivery = False
+        assertFormSendEmailOnDelivery()
 
     def test_actions_on_delivery_send_email_team_template(self):
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         # Simulate delivery
         self.lead.expedition_status = "[LIVCFM] Test"
@@ -319,7 +360,7 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
     def test_actions_on_delivery_send_email_no_status(self):
         "Check empty expedition status is OK"
 
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         # Simulate delivery
         self.lead.expedition_status = False
@@ -329,7 +370,7 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         self.check_mail_delivered("Product delivered", "EMPTY_CODE")
 
     def test_actions_on_delivery_send_email_custom_template(self):
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         self.lead.on_delivery_email_template_id = (
             self.lead.team_id.on_delivery_email_template_id.copy(  # noqa: B950
@@ -347,7 +388,7 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
     def test_actions_on_delivery_send_email_no_template(self):
         "A user error must be raised in the case no template was specified"
 
-        self.lead.send_email_on_delivery = True
+        self.assertTrue(self.lead.send_email_on_delivery)
 
         self.lead.on_delivery_email_template_id = False
         self.lead.team_id.on_delivery_email_template_id = False
@@ -411,7 +452,9 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
             }
         )
         # Imitate context passed by web UI
-        lead_model = self.env["crm.lead"].with_context(default_team_id=team.id)
+        lead_model = self.env["crm.lead"].with_context(
+            default_team_id=team.id, test_commown_shipping_no_contract_check=True
+        )
         return lead_model.create(kwargs)
 
     def test_tracked_records(self):
