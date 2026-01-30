@@ -11,10 +11,13 @@
     "maintainers": ["fcayre"],
     "license": "AGPL-3",
     "depends": [
+        # Odoo modules
         "account",
         "portal",
         "project",
         "sale",
+        # Commown modules
+        "commown_allow_backend_passage",
     ],
     "data": [
         "security/groups.xml",
@@ -23,10 +26,5 @@
         "security/rules.xml",
         "views/project.xml",
     ],
-    "assets": {
-        "web.assets_backend": [
-            "/customer_manager_base/static/src/js/customer_admin_navbar.esm.js",
-        ],
-    },
     "installable": True,
 }

@@ -4,7 +4,7 @@ import {NavBar} from "@web/webclient/navbar/navbar";
 import {patch} from "@web/core/utils/patch";
 import {session} from "@web/session";
 
-patch(NavBar.prototype, "customer_team_manager_navbar", {
+patch(NavBar.prototype, "commown_allow_backend_passage_navbar", {
     /**
      * @override
      * Filters all mail-related NavBar menu items from the Systray Items,

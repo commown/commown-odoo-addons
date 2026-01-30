@@ -17,6 +17,7 @@
         "account_payment_slimpay_transaction_label",
         "commown_administrative_docs",
         "commown_contract_forecast",
+        "commown_discuss",
         "commown_shipping",
         "commown_shipping_crm_contract_delivery_mail",
         "commown_ergonomy_asset",
