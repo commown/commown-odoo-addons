@@ -4,7 +4,7 @@
 {
     "name": "Commown - Allow backend passage",
     "summary": "Allow passage to the backend (/web) part of the web client for non-internal users, with limited access",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
