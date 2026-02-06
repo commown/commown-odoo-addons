@@ -10,13 +10,19 @@ _logger = logging.getLogger(__name__)
 
 class ShopRedirect(WebsiteSale):
     def _get_allowed_redirect_netlocs(self):
+        local_netlocs = [
+            urlparse(url).netloc
+            for url in request.env["website"].search([]).mapped("domain")
+            if url
+        ]
+
         param_netlocs = (
             request.env["ir.config_parameter"]
             .sudo()
             .get_param("commown.allowed_redirect_netlocs")
         )
 
-        return param_netlocs.split(",") if param_netlocs else []
+        return local_netlocs + (param_netlocs.split(",") if param_netlocs else [])
 
     @route(["/shop/redirect"], type="http", auth="none", website=True)
     def shop_redirect(self, redirect="/", **kwargs):

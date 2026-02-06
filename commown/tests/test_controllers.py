@@ -59,6 +59,16 @@ class ControllerTC(HttpCase):
         "Links leading to unallowed third-party sites should redirect to the Odoo shop"
         self.check_redirect("redirect=https://mystupidsite.com", "/shop")
 
+    def test_shop_redirect_odoo_app_location(self):
+        "Links leading to the Odoo website app locations should redirect correctly"
+        website = self.env.ref("website.default_website")
+        website.domain = "https://website.com/"
+        website.invalidate_recordset()
+
+        self.check_redirect(
+            "redirect=https://website.com/", "/", expected_netloc="website.com"
+        )
+
 
 class TestSlimpayPaymentControllerTC(SlimpayControllersTC):
     def setUp(self):
