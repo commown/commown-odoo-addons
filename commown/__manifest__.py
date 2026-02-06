@@ -72,6 +72,7 @@
         "demo/product_rental_pub_category.xml",
     ],
     "data": [
+        "data/ir_config_parameter.xml",
         "data/mail_templates.xml",
         "data/payment_provider.xml",
         "data/product.xml",

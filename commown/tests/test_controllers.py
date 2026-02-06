@@ -45,6 +45,12 @@ class ControllerTC(HttpCase):
 
     def test_shop_redirect_external(self):
         "Links leading to commown.coop links should redirect correctly"
+        # Setup
+        param = self.env.ref("commown.allowed_redirect_netlocs")
+        param.value = "commown.coop"
+        param.invalidate_recordset()
+
+        # Case 1: Trying to redirect to an allowed site
         self.check_redirect(
             "redirect=https://commown.coop/", "/", expected_netloc="commown.coop"
         )
