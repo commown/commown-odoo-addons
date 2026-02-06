@@ -25,7 +25,7 @@
         Devices
         <span
                     t-esc="env['customer_device_manager.device_assignment'].search_count([('device_location', '=', 'at_customer')])"
-                    class="badge badge-secondary badge-pill"
+                    class="badge text-bg-secondary rounded-pill"
                 />
       </a>
     </xpath>
