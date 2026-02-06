@@ -27,7 +27,7 @@ class ControllerTC(HttpCase):
         }
         cls.test_client.get("/web/session/logout")
 
-    def check_redirect(self, path, expected_path):
+    def check_redirect(self, path, expected_path, expected_netloc="localhost"):
         resp = self.test_client.get(
             "/shop/redirect?" + path,
             follow_redirects=False,
@@ -35,7 +35,9 @@ class ControllerTC(HttpCase):
         )
         self.assertEqual(resp.status_code, 303)
 
-        self.assertEqual(urlparse(resp.headers["Location"]).path, expected_path)
+        url = urlparse(resp.headers["Location"])
+        self.assertEqual(url.path, expected_path)
+        self.assertEqual(url.netloc, expected_netloc)
 
     def test_shop_redirect_local(self):
         "Links leading to locations on the same website should redirect correctly"
@@ -43,7 +45,9 @@ class ControllerTC(HttpCase):
 
     def test_shop_redirect_external(self):
         "Links leading to commown.coop links should redirect correctly"
-        self.check_redirect("redirect=https://commown.coop/", "/")
+        self.check_redirect(
+            "redirect=https://commown.coop/", "/", expected_netloc="commown.coop"
+        )
 
     def test_shop_redirect_spam(self):
         "Links leading to unallowed third-party sites should redirect to the Odoo shop"
