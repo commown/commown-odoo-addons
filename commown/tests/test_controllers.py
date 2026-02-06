@@ -37,10 +37,16 @@ class ControllerTC(HttpCase):
 
         self.assertEqual(urlparse(resp.headers["Location"]).path, expected_path)
 
-    def test_shop_redirect_ok(self):
+    def test_shop_redirect_local(self):
+        "Links leading to locations on the same website should redirect correctly"
         self.check_redirect("aff_ref=1&redirect=/test/a", "/test/a")
 
+    def test_shop_redirect_external(self):
+        "Links leading to commown.coop links should redirect correctly"
+        self.check_redirect("redirect=https://commown.coop/", "/")
+
     def test_shop_redirect_spam(self):
+        "Links leading to unallowed third-party sites should redirect to the Odoo shop"
         self.check_redirect("redirect=https://mystupidsite.com", "/shop")
 
 
