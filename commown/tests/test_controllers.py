@@ -27,7 +27,7 @@ class ControllerTC(HttpCase):
         }
         cls.test_client.get("/web/session/logout")
 
-    def check_redirect(self, path, expected_path):
+    def check_redirect(self, path, expected_path, expected_netloc="localhost"):
         resp = self.test_client.get(
             "/shop/redirect?" + path,
             follow_redirects=False,
@@ -35,13 +35,39 @@ class ControllerTC(HttpCase):
         )
         self.assertEqual(resp.status_code, 303)
 
-        self.assertEqual(urlparse(resp.headers["Location"]).path, expected_path)
+        url = urlparse(resp.headers["Location"])
+        self.assertEqual(url.path, expected_path)
+        self.assertEqual(url.netloc, expected_netloc)
 
-    def test_shop_redirect_ok(self):
+    def test_shop_redirect_local(self):
+        "Links leading to locations on the same website should redirect correctly"
         self.check_redirect("aff_ref=1&redirect=/test/a", "/test/a")
 
+    def test_shop_redirect_external(self):
+        "Links leading to commown.coop links should redirect correctly"
+        # Setup
+        param = self.env.ref("commown.allowed_redirect_netlocs")
+        param.value = "commown.coop"
+        param.invalidate_recordset()
+
+        # Case 1: Trying to redirect to an allowed site
+        self.check_redirect(
+            "redirect=https://commown.coop/", "/", expected_netloc="commown.coop"
+        )
+
     def test_shop_redirect_spam(self):
+        "Links leading to unallowed third-party sites should redirect to the Odoo shop"
         self.check_redirect("redirect=https://mystupidsite.com", "/shop")
+
+    def test_shop_redirect_odoo_app_location(self):
+        "Links leading to the Odoo website app locations should redirect correctly"
+        website = self.env.ref("website.default_website")
+        website.domain = "https://website.com/"
+        website.invalidate_recordset()
+
+        self.check_redirect(
+            "redirect=https://website.com/", "/", expected_netloc="website.com"
+        )
 
 
 class TestSlimpayPaymentControllerTC(SlimpayControllersTC):

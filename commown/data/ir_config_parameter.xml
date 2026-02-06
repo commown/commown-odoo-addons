@@ -1,0 +1,9 @@
+<odoo noupdate="1">
+
+  <!-- Network locations should be seperated by a comma. -->
+  <record id="allowed_redirect_netlocs" model="ir.config_parameter">
+    <field name="key">commown.allowed_redirect_netlocs</field>
+    <field name="value">commown.coop,forum.commown.coop</field>
+  </record>
+
+</odoo>
