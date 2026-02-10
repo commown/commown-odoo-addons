@@ -176,7 +176,8 @@ class RentalFeesTC(DeviceAsAServiceTC):
             self.env["bus.bus"]
             .search([("channel", "=", name)], order="id")
             .filtered(
-                lambda nf: json.loads(nf.message)["payload"][0]["type"] == msg_level
+                lambda nf: json.loads(nf.message)["type"] == "web.notify"
+                and json.loads(nf.message)["payload"][0]["type"] == msg_level
             )
         )
 
