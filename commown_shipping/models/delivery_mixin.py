@@ -12,7 +12,7 @@ BASE_URL = "https://www.coliposte.fr/tracking-chargeur-cxf/TrackingServiceWS/tra
 
 MLVARS_MAX_WAIT = datetime.timedelta(days=8)
 
-TIMEOUT = 10
+TIMEOUT = (10, 15)
 
 
 class ParcelError(Exception):
@@ -108,9 +108,15 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
             )
 
     def write(self, values):
+        _act = None
+        if "delivery_date" in values:
+            _act = self.filtered(lambda o: o.delivery_date != values["delivery_date"])
+
         res = super().write(values)
-        if values.get("delivery_date", False):
-            self.delivery_perform_actions()
+
+        if _act:  # Not None nor empty resultset
+            _act.delivery_perform_actions()
+
         return res
 
     def delivery_perform_actions(self):
@@ -179,6 +185,10 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     def _delivery_tracking_update(self):
         self.ensure_one()
+
+        if self.delivery_date:
+            return "Parcel already delivered... Skipping."
+
         now = datetime.datetime.utcnow()
 
         infos = self._delivery_tracking_colissimo_status()
