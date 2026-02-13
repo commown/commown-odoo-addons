@@ -146,7 +146,7 @@ class SlimpayStatementImport(models.Model):
                 "commission_account_id": journal.commission_account_id.id,
             }
         )
-        action = importer.import_statement()
+        action = importer.with_context(skip_computed_taxes=True).import_statement()
 
         self.imported_statement = action.get("res_id", False)
         self.name = self.imported_statement.ref
