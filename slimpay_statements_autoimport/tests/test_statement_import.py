@@ -27,6 +27,19 @@ class SlimpayStatementImportBaseTC(TransactionCase):
         journal = self.env.ref("account_move_slimpay_import.slimpay_journal")
         journal.receivable_account_id = account_receivable
 
+        # Adding a tax to the Slimpay account, to check that the import doesn't create tax lines in the account move
+        tax = self.env["account.tax"].create({"name": "Test Tax", "amount": 20})
+        self.env.ref(
+            "account_move_slimpay_import.slimpay_supplier_account"
+        ).tax_ids = tax
+
+        # If taxes are created, a suspense account is required.
+        if not self.env.company.account_journal_suspense_account_id:
+            suspense_acc = self.env["account.account"].create(
+                {"name": "Suspense Acc", "code": "123"}
+            )
+            self.env.company.account_journal_suspense_account_id = suspense_acc
+
     def create_statement_import(self):
         model = self.env["slimpay_statements_autoimport.statement_import"]
 
@@ -134,6 +147,8 @@ class SlimpayStatementImportTC(SlimpayStatementImportBaseTC):
         move = self.si.imported_statement
         self.assertTrue(all(aml.date == aml.date_maturity for aml in move.line_ids))
         self.assertEqual(move.date, date(2023, 11, 3))
+
+        self.assertFalse(move.line_ids.filtered("tax_ids"))
 
 
 class SlimpayStatementImportCronTC(SlimpayStatementImportBaseTC):
