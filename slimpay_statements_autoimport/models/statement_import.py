@@ -154,6 +154,8 @@ class SlimpayStatementImport(models.Model):
         for move_line in self.imported_statement.line_ids:
             move_line.date = move_line.date_maturity
 
+        self.imported_statement.action_post()
+
     def fetch_and_import_statement(self):
         "Find the download link in the email, fetch the csv file and import it"
         doc = lxml.html.fromstring(self.mail_html)
