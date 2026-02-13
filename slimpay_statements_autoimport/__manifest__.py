@@ -4,7 +4,7 @@
 {
     "name": "Slimpay statements automatic import",
     "summary": "Regularly fetch Slimpay statements and import them",
-    "version": "16.0.1.0.3",
+    "version": "16.0.1.0.4",
     "development_status": "Alpha",
     "category": "Accounting/Accounting",
     "website": "https://github.com/commown/commown-odoo-addons",
