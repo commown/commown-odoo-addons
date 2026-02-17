@@ -146,6 +146,7 @@ class SlimpayStatementImportTC(SlimpayStatementImportBaseTC):
         self.assertEqual(self.si.name, "my_report")
 
         move = self.si.imported_statement
+        self.assertEqual(move.state, "posted")
         self.assertTrue(all(aml.date == aml.date_maturity for aml in move.line_ids))
         self.assertEqual(move.date, date(2023, 11, 3))
 
