@@ -216,15 +216,17 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
 
         self.assertEqual(self.task.stage_id, self.stage_end_ok)
 
-    def _send_partner_email(self, author_id=None):
+    def _send_partner_email(self, task=None, author_id=None):
+        if task is None:
+            task = self.task
         self.env["mail.message"].create(
             {
-                "author_id": author_id or self.task.partner_id.id,
+                "author_id": author_id or task.partner_id.id,
                 "subject": "Test subject",
                 "body": "<p>Test body</p>",
                 "message_type": "comment",
                 "model": "project.task",
-                "res_id": self.task.id,
+                "res_id": task.id,
                 "subtype_id": self.env.ref("mail.mt_comment").id,
             }
         )
