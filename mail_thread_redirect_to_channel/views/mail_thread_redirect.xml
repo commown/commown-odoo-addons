@@ -1,0 +1,63 @@
+<odoo>
+
+    <record id="view_mail_thread_redirect_form" model="ir.ui.view">
+        <field name="name">mail.thread.redirect form view</field>
+        <field name="model">mail.thread.redirect</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Name" />
+                        <h1>
+                            <field name="name" class="oe_inline" default_focus="1" />
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="model_id" />
+                        <field name="model_name" invisible="1" />
+                        <field
+                            name="filter_domain"
+                            widget="domain"
+                            options="{'model': 'model_name'}"
+                        />
+                        <field name="target_channel_id" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mail_thread_redirect_tree" model="ir.ui.view">
+        <field name="name">mail.thread.redirect tree view</field>
+        <field name="model">mail.thread.redirect</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="model_id" />
+                <field name="model_name" invisible="1" />
+                <field
+                    name="filter_domain"
+                    widget="domain"
+                    options="{'model': 'model_name'}"
+                />
+                <field name="target_channel_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_mail_thread_redirect" model="ir.actions.act_window">
+        <field name="name">Redirects</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mail.thread.redirect</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem
+        id="menuitem_mail_thread_redirect"
+        action="action_mail_thread_redirect"
+        parent="base.menu_email"
+        sequence="99"
+    />
+
+</odoo>
