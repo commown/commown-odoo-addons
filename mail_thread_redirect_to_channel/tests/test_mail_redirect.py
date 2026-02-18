@@ -1,0 +1,70 @@
+from odoo_test_helper import FakeModelLoader
+
+from odoo.tests import TransactionCase
+
+
+class MailThreadRedirectTC(TransactionCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.loader = FakeModelLoader(cls.env, cls.__module__)
+        cls.loader.backup_registry()
+
+        from .models import Redirect_DummyModel
+
+        cls.loader.update_registry((Redirect_DummyModel,))
+
+        cls.user_internal = cls.env.ref("base.user_demo")
+
+        cls.channel = cls.env["mail.channel"].create({"name": "Test Channel"})
+        cls.dummy_1, cls.dummy_2 = cls.env["dummy.model"].create(
+            [
+                {"name": "Dummy 1", "dummy_boolean": True},
+                {"name": "Dummy 2", "dummy_boolean": False},
+            ]
+        )
+
+        cls.redirect = cls.env["mail.thread.redirect"].create(
+            {
+                "name": "Redirection",
+                "model_id": cls.env["ir.model"]._get("dummy.model").id,
+                "target_channel_id": cls.channel.id,
+            }
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.loader.restore_registry()
+        return super().tearDownClass()
+
+    def _post_message(self, rec, body, email_from, message_type="email"):
+        rec.message_post(
+            body=body,
+            email_from=email_from,
+            subject="Test subject",
+            message_type=message_type,
+            subtype_xml="mail.mt_comment",
+        )
+
+    def test_redirect_message_from_rec_to_channel(self):
+        self.redirect.filter_domain = "[('dummy_boolean', '=', True)]"
+
+        self._post_message(
+            self.dummy_1,
+            "Redirect test n°1 - Should redirect",
+            self.user_internal.email,
+        )
+        self._post_message(
+            self.dummy_2,
+            "Redirect test n°2 - Shouldn't redirect",
+            self.user_internal.email,
+        )
+
+        chan_message = self.channel.message_ids
+        self.assertEqual(len(chan_message), 1)
+
+        self.assertIn("test n°1", chan_message.body)
+        self.assertNotIn("test n°2", chan_message.body)
+
+        expected_link = f"/web#model={self.dummy_1._name}&amp;id={self.dummy_1.id}"
+        self.assertIn(expected_link, chan_message.body)
