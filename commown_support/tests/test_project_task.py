@@ -231,11 +231,29 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
             }
         )
 
-    def test_move_task_when_message_arrives_if_not_from_employee(self):
+    def test_move_task_when_message_arrives_if_not_from_employee_support(self):
         """When a partner sends a message concerning an task, it moves
         automatically to the pending stage, unless it is an employee.
         """
         self.assertTaskAwakenAction(self.task, self.stage_pending, self.stage_reminder)
+
+    def test_move_task_when_message_arrives_if_not_from_employee_commercial(self):
+        """Same as test_move_task_when_message_arrives_if_not_from_employee_support,
+        but with the Commercial support project pipe.
+        """
+        commercial_project = self.env.ref("commown_support.commercial_project")
+
+        commercial_stage_pending = self.stage_pending.copy({})
+        commercial_stage_pending.project_ids |= commercial_project
+
+        commercial_stage_reminder = self.stage_reminder.copy({})
+        commercial_stage_reminder.project_ids |= commercial_project
+
+        commercial_task = self.task.copy({"project_id": commercial_project.id})
+
+        self.assertTaskAwakenAction(
+            commercial_task, commercial_stage_pending, commercial_stage_reminder
+        )
 
     def assertTaskAwakenAction(self, task, stage_pending, stage_reminder):
         employees = self.env.ref("base.group_user")
