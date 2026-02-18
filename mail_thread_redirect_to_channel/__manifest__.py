@@ -12,6 +12,10 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "mail",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/mail_thread_redirect.xml",
     ],
 }
