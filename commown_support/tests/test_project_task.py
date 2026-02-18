@@ -235,26 +235,29 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         """When a partner sends a message concerning an task, it moves
         automatically to the pending stage, unless it is an employee.
         """
+        self.assertTaskAwakenAction(self.task, self.stage_pending, self.stage_reminder)
+
+    def assertTaskAwakenAction(self, task, stage_pending, stage_reminder):
         employees = self.env.ref("base.group_user")
 
         # Check test prerequisite
-        assert employees not in self.task.partner_id.mapped("user_ids.groups_id")
+        assert employees not in task.partner_id.mapped("user_ids.groups_id")
 
-        self.task.update({"stage_id": self.stage_reminder.id})
-        self._send_partner_email()
-        self.assertEqual(self.task.stage_id, self.stage_pending)
+        task.update({"stage_id": stage_reminder.id})
+        self._send_partner_email(task=task)
+        self.assertEqual(task.stage_id, stage_pending)
 
         with self.assertNoSMSLogged():
-            self.task.update({"stage_id": self.stage_reminder.id})
+            task.update({"stage_id": stage_reminder.id})
         other_partner = self.env.ref("base.partner_demo_portal")
-        self._send_partner_email(author_id=other_partner.id)
-        self.assertEqual(self.task.stage_id, self.stage_pending)
+        self._send_partner_email(task=task, author_id=other_partner.id)
+        self.assertEqual(task.stage_id, stage_pending)
 
         other_partner.user_ids.groups_id -= self.env.ref("base.group_portal")
         other_partner.user_ids.groups_id |= employees
-        self.task.update({"stage_id": self.stage_reminder.id})
-        self._send_partner_email(author_id=other_partner.id)
-        self.assertEqual(self.task.stage_id, self.stage_reminder)
+        task.update({"stage_id": stage_reminder.id})
+        self._send_partner_email(task=task, author_id=other_partner.id)
+        self.assertEqual(task.stage_id, stage_reminder)
 
     def test_move_customer_long_waiting_task_to_reminder(self):
         self.task.update({"stage_id": self.stage_wait.id})
