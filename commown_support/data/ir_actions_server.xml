@@ -74,7 +74,7 @@ for orig, dest in next_stage_marker.items():
         ><![CDATA[
 if record.model == 'project.task' and record.message_type in ('email', 'comment'):
     task = env[record.model].browse(record.res_id).sudo()
-    if task.project_id == env.ref('commown_support.support_project'):
+    if task.project_id in (env.ref('commown_support.support_project'), env.ref('commown_support.commercial_project')):
         employees = env.ref('base.group_user')
         if employees not in record.author_id.mapped('user_ids.groups_id'):
             stage = env['project.task.type'].search([
