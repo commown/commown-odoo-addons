@@ -125,7 +125,7 @@ msgstr ""
 #: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:0
 #, python-format
 msgid "Coupon number"
-msgstr ""
+msgstr "Der Gutscheincode"
 
 #. module: website_sale_coupon
 #. odoo-python
@@ -219,7 +219,7 @@ msgstr ""
 #. module: website_sale_coupon
 #: model_terms:ir.ui.view,arch_db:website_sale_coupon.cart
 msgid "Have a code? Enter it and submit:"
-msgstr ""
+msgstr "Haben Sie einen Gutschein? Geben Sie den Code hier ein:"
 
 #. module: website_sale_coupon
 #: model:ir.model.fields,field_description:website_sale_coupon.field_coupon_campaign__id
@@ -393,4 +393,4 @@ msgstr ""
 #: code:addons/website_sale_coupon/static/src/xml/coupon_templates.xml:0
 #, python-format
 msgid "has just been applied to current order!"
-msgstr ""
+msgstr "wurde soeben auf die aktuelle Bestellung angewendet!"
