@@ -132,11 +132,6 @@ msgid "Base de connaissance Commown"
 msgstr ""
 
 #. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.portal_layout
-msgid "Channel"
-msgstr ""
-
-#. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.orders_followup_products_links
 msgid "Close"
 msgstr ""
@@ -151,11 +146,6 @@ msgstr ""
 #. module: commown
 #: model:ir.model,name:commown.model_res_partner
 msgid "Contact"
-msgstr ""
-
-#. module: commown
-#: model_terms:ir.ui.view,arch_db:commown.portal_layout
-msgid "Contact us"
 msgstr ""
 
 #. module: commown
