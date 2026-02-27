@@ -14,6 +14,19 @@ class MailThreadRedirectTC(TransactionCase):
 
         cls.loader.update_registry((Redirect_DummyModel,))
 
+        cls.acl = cls.env["ir.model.access"].create(
+            {
+                "name": "dummy.model.access",
+                "model_id": cls.env.ref(
+                    "mail_thread_redirect_to_channel.model_dummy_model"
+                ).id,
+                "perm_read": 1,
+                "perm_write": 1,
+                "perm_create": 1,
+                "perm_unlink": 1,
+            }
+        )
+
         cls.user_internal = cls.env.ref("base.user_demo")
         cls.user_portal = cls.env.ref("base.demo_user0")
 
@@ -35,13 +48,14 @@ class MailThreadRedirectTC(TransactionCase):
 
     @classmethod
     def tearDownClass(cls):
+        cls.acl.unlink()
         cls.loader.restore_registry()
         return super().tearDownClass()
 
-    def _post_message(self, rec, body, email_from, message_type="email"):
-        rec.message_post(
+    def _post_message(self, rec, body, user, message_type="email"):
+        rec.with_user(user).message_post(
             body=body,
-            email_from=email_from,
+            email_from=user.email,
             subject="Test subject",
             message_type=message_type,
             subtype_xml="mail.mt_comment",
@@ -51,14 +65,12 @@ class MailThreadRedirectTC(TransactionCase):
         self.redirect.filter_domain = "[('dummy_boolean', '=', True)]"
 
         self._post_message(
-            self.dummy_1,
-            "Redirect test n°1 - Should redirect",
-            self.user_internal.email,
+            self.dummy_1, "Redirect test n°1 - Should redirect", self.user_internal
         )
         self._post_message(
             self.dummy_2,
             "Redirect test n°2 - Shouldn't redirect",
-            self.user_internal.email,
+            self.user_internal,
         )
 
         chan_message = self.channel.message_ids
@@ -75,12 +87,10 @@ class MailThreadRedirectTC(TransactionCase):
         self.redirect.only_portal_users = True
 
         self._post_message(
-            self.dummy_1, "Redirect test n°1 - Should redirect", self.user_portal.email
+            self.dummy_1, "Redirect test n°1 - Should redirect", self.user_portal
         )
         self._post_message(
-            self.dummy_1,
-            "Redirect test n°2 - Shouldn't redirect",
-            self.user_internal.email,
+            self.dummy_1, "Redirect test n°2 - Shouldn't redirect", self.user_internal
         )
 
         chan_message_1 = self.channel.message_ids
@@ -93,12 +103,10 @@ class MailThreadRedirectTC(TransactionCase):
         self.redirect.only_portal_users = False
 
         self._post_message(
-            self.dummy_1, "Redirect test n°1 - Should redirect", self.user_portal.email
+            self.dummy_1, "Redirect test n°1 - Should redirect", self.user_portal
         )
         self._post_message(
-            self.dummy_1,
-            "Redirect test n°2 - Should redirect",
-            self.user_internal.email,
+            self.dummy_1, "Redirect test n°2 - Should redirect", self.user_internal
         )
         new_chan_messages = self.channel.message_ids - chan_message_1
         self.assertEqual(len(new_chan_messages), 2)
