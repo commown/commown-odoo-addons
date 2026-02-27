@@ -22,8 +22,10 @@ class MailThread(models.AbstractModel):
             origin_thread_link = _("(from %s)", self._get_origin_thread_link_element())
             channel_body = Markup(origin_thread_link + "<br/><br/>") + body
 
-            redirects = self.env["mail.thread.redirect"].search(
-                [("model_name", "=", self._name)]
+            redirects = (
+                self.env["mail.thread.redirect"]
+                .sudo()
+                .search([("model_name", "=", self._name)])
             )
             for redirect in redirects:
                 if (
