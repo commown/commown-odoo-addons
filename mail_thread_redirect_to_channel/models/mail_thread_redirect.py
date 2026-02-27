@@ -25,6 +25,11 @@ class MailThreadRedirect(models.Model):
 
     filter_domain = fields.Char(string="Apply on")
 
+    only_portal_users = fields.Boolean(
+        string="Redirect only portal user messages",
+        help="Only redirect messages from portal users (ie. non-employees)",
+    )
+
     def _get_eval_domain(self):
         eval_context = {
             "datetime": safe_eval.datetime,

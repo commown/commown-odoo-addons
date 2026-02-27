@@ -21,6 +21,7 @@
                             options="{'model': 'model_name'}"
                         />
                         <field name="target_channel_id" />
+                        <field name="only_portal_users" />
                     </group>
                 </sheet>
             </form>

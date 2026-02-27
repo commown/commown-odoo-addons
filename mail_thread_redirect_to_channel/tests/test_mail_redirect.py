@@ -15,6 +15,7 @@ class MailThreadRedirectTC(TransactionCase):
         cls.loader.update_registry((Redirect_DummyModel,))
 
         cls.user_internal = cls.env.ref("base.user_demo")
+        cls.user_portal = cls.env.ref("base.demo_user0")
 
         cls.channel = cls.env["mail.channel"].create({"name": "Test Channel"})
         cls.dummy_1, cls.dummy_2 = cls.env["dummy.model"].create(
@@ -68,3 +69,38 @@ class MailThreadRedirectTC(TransactionCase):
 
         expected_link = f"/web#model={self.dummy_1._name}&amp;id={self.dummy_1.id}"
         self.assertIn(expected_link, chan_message.body)
+
+    def test_redirect_only_portal_users(self):
+        # Case 1: Only portal user messages are redirected
+        self.redirect.only_portal_users = True
+
+        self._post_message(
+            self.dummy_1, "Redirect test n°1 - Should redirect", self.user_portal.email
+        )
+        self._post_message(
+            self.dummy_1,
+            "Redirect test n°2 - Shouldn't redirect",
+            self.user_internal.email,
+        )
+
+        chan_message_1 = self.channel.message_ids
+        self.assertEqual(len(chan_message_1), 1)
+
+        self.assertIn("test n°1", chan_message_1.body)
+        self.assertNotIn("test n°2", chan_message_1.body)
+
+        # Case 2: All messages are redirected
+        self.redirect.only_portal_users = False
+
+        self._post_message(
+            self.dummy_1, "Redirect test n°1 - Should redirect", self.user_portal.email
+        )
+        self._post_message(
+            self.dummy_1,
+            "Redirect test n°2 - Should redirect",
+            self.user_internal.email,
+        )
+        new_chan_messages = self.channel.message_ids - chan_message_1
+        self.assertEqual(len(new_chan_messages), 2)
+        self.assertIn("Redirect test", new_chan_messages[0].body)
+        self.assertIn("Redirect test", new_chan_messages[1].body)

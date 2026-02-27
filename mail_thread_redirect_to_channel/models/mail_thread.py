@@ -26,7 +26,10 @@ class MailThread(models.AbstractModel):
                 [("model_name", "=", self._name)]
             )
             for redirect in redirects:
-                if self.filtered_domain(redirect._get_eval_domain()):
+                if (
+                    not redirect.only_portal_users
+                    or res.author_id.user_ids.has_group("base.group_portal")
+                ) and self.filtered_domain(redirect._get_eval_domain()):
                     redirect.target_channel_id.message_post(
                         body=channel_body,
                         message_type="comment",
