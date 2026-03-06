@@ -4,6 +4,7 @@ from odoo.tools import safe_eval
 
 class MailThreadRedirect(models.Model):
     _name = "mail.thread.redirect"
+    _description = "Redirect messages sent on a given model to a mail.channel"
 
     name = fields.Char(required=True)
 
