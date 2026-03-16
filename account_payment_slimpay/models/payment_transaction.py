@@ -62,7 +62,6 @@ class SlimpayTransaction(models.Model):
         # Confirm sale if necessary
         _logger.info("Setting sale transaction as done...")
         self._set_done()
-        self._reconcile_after_done()  #
         self._finalize_post_processing()
         # Use mandate as a token for later automatic payments
         partner = self.partner_id
