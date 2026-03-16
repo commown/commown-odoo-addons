@@ -251,13 +251,13 @@ class ProjectTask(models.Model):
         """Override this if you want special rules to deny automatic
         processing of some issues.
 
-        The default implementation handles basically all issues for
-        which an invoice has been found.
+        The default implementation handles all issues related to an
+        invoice which is to be paid using an inbound slimpay payment.
 
         """
         self.ensure_one()
         pay_meth = self.invoice_id.payment_mode_id.payment_method_id
-        return pay_meth.payment_type == "inbound" and pay_meth.code == "electronic"
+        return pay_meth.payment_type == "inbound" and pay_meth.code == "slimpay"
 
     @api.model
     def _slimpay_payment_issue_fees_product(self, fees_name):

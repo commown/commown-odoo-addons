@@ -73,19 +73,22 @@ class ProjectTC(TransactionCase):
     def setUp(self):
         super().setUp()
 
+        ref = self.env.ref
+
+        self.slimpay = ref("account_payment_slimpay.payment_provider_slimpay")
+        self.slimpay.state = "enabled"
+
         self.inv_journal = self.env["account.journal"].search(
             [("type", "=", "sale"), ("company_id", "=", self.env.company.id)],
             limit=1,
         )
-
-        ref = self.env.ref
 
         self.project = ref("payment_slimpay_issue.project_payment_issue")
 
         electronic_in = self.env["account.payment.method"].create(
             {
                 "name": "Electronic In",
-                "code": "electronic",
+                "code": "slimpay",
                 "payment_type": "inbound",
             }
         )
@@ -96,6 +99,16 @@ class ProjectTC(TransactionCase):
                 "code": "RC",
                 "company_id": self.env.company.id,
                 "type": "bank",
+            }
+        )
+
+        self.customer_journal.inbound_payment_method_line_ids |= self.env[
+            "account.payment.method.line"
+        ].create(
+            {
+                "payment_method_id": electronic_in.id,
+                "journal_id": self.customer_journal.id,
+                "payment_provider_id": self.slimpay.id,
             }
         )
 
@@ -116,9 +129,6 @@ class ProjectTC(TransactionCase):
                 "account_type": "income",
             }
         )
-
-        self.slimpay = ref("account_payment_slimpay.payment_provider_slimpay")
-        self.slimpay.state = "enabled"
 
         self.partner = ref("base.res_partner_3")
         token = self.env["payment.token"].create(
