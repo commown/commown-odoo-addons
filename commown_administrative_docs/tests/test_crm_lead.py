@@ -22,13 +22,11 @@ class CrmLeadTC(RentalSaleOrderTC):
             country_code,
         )
         with mock.patch(
-            "odoo.addons.commown_res_partner_sms.models."
-            "mail_thread.MailThread.send_sms_from_template"
+            "odoo.addons.sms.models.mail_thread.MailThread._message_sms_with_template"
         ) as post_message:
             lead._action_send_sms_doc_reminder()
             post_message.assert_called_once_with(
-                template,
-                lead,
+                template=template,
                 numbers=[partner_mobile],
                 log_error=True,
             )

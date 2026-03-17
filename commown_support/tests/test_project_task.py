@@ -153,7 +153,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
 
             self.task.update({"stage_id": self.stage_reminder.id})
             self.flush_tracking()
-        trap.assert_jobs_count(1, only=self.task.send_sms_from_template)
+        trap.assert_jobs_count(1, only=self.task._message_sms_with_template)
 
         # Check email message
         # 2 expected messages: email, stage change (in reverse order)
@@ -169,13 +169,11 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
             country_code,
         )
         with mock.patch(
-            "odoo.addons.commown_res_partner_sms.models."
-            "mail_thread.MailThread.send_sms_from_template"
+            "odoo.addons.sms.models.mail_thread.MailThread._message_sms_with_template"
         ) as post_message:
             trap.perform_enqueued_jobs()
             post_message.assert_called_once_with(
-                template,
-                self.task,
+                template=template,
                 numbers=[partner_mobile],
                 log_error=True,
             )

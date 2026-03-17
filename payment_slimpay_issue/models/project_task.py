@@ -465,10 +465,8 @@ class ProjectTask(models.Model):
         )
         if phone:
             template = self.env.ref("payment_slimpay_issue.sms")
-            self.with_delay().send_sms_from_template(
-                template,
-                self,
-                sms_numbers=[phone],
+            self.with_delay()._message_sms_with_template(
+                template=template, sms_numbers=[phone]
             )
         else:
             _logger.warning(
