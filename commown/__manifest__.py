@@ -15,6 +15,7 @@
         "account_invoice_merge_auto_pay",
         "account_move_slimpay_import",
         "account_payment_slimpay_transaction_label",
+        "contract_payment_auto_job_post_process",
         "commown_administrative_docs",
         "commown_contract_forecast",
         "commown_discuss",
