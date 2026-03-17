@@ -1,5 +1,3 @@
-from unittest import mock
-
 from odoo.tests import tagged
 
 from odoo.addons.commown_res_partner_sms.models.common import normalize_phone
@@ -13,20 +11,15 @@ class CrmLeadTC(RentalSaleOrderTC):
 
         lead = self.env.ref("crm.crm_case_22")
         lead.partner_id.update({"country_id": fr.id, "phone": "+33747397654"})
-        template = self.env.ref(
-            "commown_administrative_docs.sms_template_lead_doc_reminder"
-        )
         country_code = lead.partner_id.country_id.code
         partner_mobile = normalize_phone(
             lead.partner_id.get_mobile_phone(),
             country_code,
         )
-        with mock.patch(
-            "odoo.addons.sms.models.mail_thread.MailThread._message_sms_with_template"
-        ) as post_message:
-            lead._action_send_sms_doc_reminder()
-            post_message.assert_called_once_with(
-                template=template,
-                numbers=[partner_mobile],
-                log_error=True,
-            )
+
+        lead._action_send_sms_doc_reminder()
+
+        # Check whether a SMS text was created, with the partner mobile as number
+        lead_sms = lead.message_ids.filtered(lambda m: m.message_type == "sms")
+        self.assertTrue(lead_sms)
+        self.assertEqual(lead_sms.notification_ids.sms_number, partner_mobile)

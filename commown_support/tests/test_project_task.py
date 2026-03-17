@@ -1,5 +1,4 @@
 from contextlib import contextmanager
-from unittest import mock
 
 from odoo.exceptions import AccessError
 from odoo.tests.common import TransactionCase, tagged
@@ -162,21 +161,18 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertIsReminderEmail(self.task.message_ids[1])
 
         # Check job for sms has been posted
-        template = self.env.ref("commown_support.sms_template_issue_reminder")
         country_code = self.task.partner_id.country_id.code
         partner_mobile = normalize_phone(
             self.task.partner_id.get_mobile_phone(),
             country_code,
         )
-        with mock.patch(
-            "odoo.addons.sms.models.mail_thread.MailThread._message_sms_with_template"
-        ) as post_message:
-            trap.perform_enqueued_jobs()
-            post_message.assert_called_once_with(
-                template=template,
-                numbers=[partner_mobile],
-                log_error=True,
-            )
+
+        trap.perform_enqueued_jobs()
+
+        # Check whether a SMS text was created, with the partner mobile as number
+        task_sms = self.task.message_ids.filtered(lambda m: m.message_type == "sms")
+        self.assertTrue(task_sms)
+        self.assertEqual(task_sms.notification_ids.sms_number, partner_mobile)
 
     def test_send_reminder_no_sms(self):
         """A reminder SMS must not be sent when a non-employee message
