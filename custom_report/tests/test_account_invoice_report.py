@@ -333,3 +333,85 @@ class AccountInvoiceReportTC(ReportTC):
         html = tostring(self.html_report(inv))
         self.assertTrue(b"Payment conditions" in html)
         self.assertTrue(b"Payment terms: Immediate" in html)
+
+    def test_b2c_customer_invoice_address(self):
+        "An invoice issue to a partner related to a company should present the partner and company names"
+        # Applying a title on the partner, for coverage reasons
+        self.b2c_partner.title = self.env.ref("base.res_partner_title_doctor")
+        expected_name = " ".join(
+            [self.b2c_partner.title.shortcut, self.b2c_partner.name]
+        )
+
+        inv = self.open_invoice(self.sale(self.b2c_partner, self.std_product))
+        doc = self.html_report(inv)
+
+        address = doc.xpath(
+            f"//font[text()='{expected_name}']/ancestor::td//font/text()"
+        )
+        self.assertEqual(
+            address,
+            [
+                expected_name,
+            ]
+            + self.b2c_partner._display_address(without_company=True).split("\n"),
+        )
+
+    def test_b2b_customer_invoice_address(self):
+        "An invoice issue to a partner related to a company should present the partner and company names"
+        inv = self.open_invoice(self.sale(self.b2b_partner, self.std_product))
+        doc = self.html_report(inv)
+
+        address = doc.xpath(
+            f"//font[text()='{self.b2b_partner.commercial_partner_id.name}']/ancestor::td//font/text()"
+        )
+        self.assertEqual(
+            address,
+            [
+                self.b2b_partner.commercial_partner_id.name,
+                self.b2b_partner.name,
+            ]
+            + self.b2b_partner._display_address(without_company=True).split("\n"),
+        )
+
+    def test_b2b_company_invoice_address(self):
+        "An invoice issued to a company should only have the company name"
+        company = self.b2b_partner.commercial_partner_id
+
+        inv = self.open_invoice(self.sale(company, self.std_product))
+
+        doc = self.html_report(inv)
+        address = doc.xpath(
+            f"//font[text()='{self.b2b_partner.commercial_partner_id.name}']/ancestor::td//font/text()"
+        )
+        self.assertEqual(
+            address,
+            [
+                company.name,
+            ]
+            + company._display_address(without_company=True).split("\n"),
+        )
+
+    def test_commercial_user_invoice_address(self):
+        "The user of an invoice, the commercial partner, should have their address displayed"
+        demo_partner = self.env.ref("base.partner_demo")
+        demo_partner.mobile = "+123456789"
+
+        inv = self.open_invoice(self.sale(self.b2c_partner, self.std_product))
+        inv.invoice_user_id = demo_partner.user_ids
+
+        doc = self.html_report(inv)
+        # Due to a linebreak right before the salesperson's name (though it doesn't appear in the real document),
+        # we strip the linebreaks and indents
+        address = doc.xpath(
+            f"//p[contains(text(), '{demo_partner.name}')]/ancestor::td/p/text()"
+        )
+        address = [line.strip() for line in address]
+        self.assertEqual(
+            address,
+            [
+                demo_partner.name,
+                f"\U0001F4DE {demo_partner.phone}",
+                f"\U0001F4F1 {demo_partner.mobile}",
+                f"\u2709 {demo_partner.email}",
+            ],
+        )
