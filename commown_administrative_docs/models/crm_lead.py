@@ -14,4 +14,6 @@ class CrmLead(models.Model):
         country_code = self.partner_id.country_id.code
         phone = normalize_phone(self.partner_id.get_mobile_phone(), country_code)
         # Send the SMS
-        self.send_sms_from_template(template, self, numbers=[phone], log_error=True)
+        self._message_sms_with_template(
+            template=template, sms_numbers=[phone], log_error=True
+        )

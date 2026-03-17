@@ -719,7 +719,7 @@ class ProjectTC(TransactionCase):
 
         # Check that a job is created with this function.
         # The function itself is tested in a specific test.
-        trap.assert_jobs_count(1, only=task.send_sms_from_template)
+        trap.assert_jobs_count(1, only=task._message_sms_with_template)
 
         self.assertEqual(len(task), 1)
         self.assertIssuesAcknowledged(mocker, "i1")
@@ -842,7 +842,7 @@ class ProjectTC(TransactionCase):
             )
 
         task = self._project_tasks()
-        trap.assert_jobs_count(1, only=task.send_sms_from_template)
+        trap.assert_jobs_count(1, only=task._message_sms_with_template)
 
         # Check that the job execute the function to send sms with the right argumetns
         template = self.env.ref("payment_slimpay_issue.sms")
@@ -853,13 +853,11 @@ class ProjectTC(TransactionCase):
             country_code,
         )
         with mock.patch(
-            "odoo.addons.commown_res_partner_sms.models."
-            "mail_thread.MailThread.send_sms_from_template"
+            "odoo.addons.sms.models.mail_thread.MailThread._message_sms_with_template"
         ) as post_message:
             trap.perform_enqueued_jobs()
             post_message.assert_called_once_with(
-                template,
-                task,
+                template=template,
                 sms_numbers=[partner_mobile],
             )
 
