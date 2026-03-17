@@ -10,7 +10,7 @@
     "website": "https://github.com/commown/commown-odoo-addons",
     "depends": [
         "account_payment_partner",
-        "account_payment_slimpay",
+        "account_payment_slimpay_transaction_label",
         "base_automation",
         "contract_payment_auto",
         "commown_res_partner_sms",
