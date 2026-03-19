@@ -11,9 +11,9 @@ git+https://github.com/commown/contract@16.0-imp-contract_payment_auto-packaging
 git+https://github.com/commown/contract@16.0-imp-contract_forecast-factor-out-jobs-creation#subdirectory=contract_forecast
 
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=account_usability_akretion
-git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=base_usability
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=base_company_extension
 git+https://github.com/commown/odoo-usability@16.0-imp-whool-packaging#subdirectory=sale_usability
+git+https://github.com/commown/odoo-usability@16.0-imp-base_usability-fetch_company_name_from_commercial_partner_whool#subdirectory=base_usability
 
 git+https://github.com/Honeyxilia/website@16.0-imp-captcha-whool-packaging#subdirectory=website_recaptcha_v2
 
