@@ -99,7 +99,7 @@ class BaseShippingTC(TransactionCase):
         )
         self.assertEqual(
             [a for a in actions if a["type"] == "ir.actions.client"][0]["tag"],
-            "soft_reload",
+            "reload",
         )
 
         return self._attachment_from_download_action(action_multi["actions"][0])
