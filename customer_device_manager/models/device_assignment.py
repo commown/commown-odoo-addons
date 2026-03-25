@@ -87,24 +87,27 @@ class DeviceAssignment(models.Model):
         readonly=True,
     )
 
-    @api.model
-    def create(self, values):
+    @api.model_create_multi
+    def create(self, vals_list):
         "Force first assignment history item date to the one of the assignment"
         _self = self.with_context(_in_device_assignment_creation=True)
-        rec = super(DeviceAssignment, _self).create(values)
+        records = super(DeviceAssignment, _self).create(vals_list)
 
         now = fields.Datetime.now()
         self.env["customer_device_manager.device_assignment_history"].sudo().create(
-            {
-                "assignment_id": rec.id,
-                "date": values.get("assignment_date", now),
-                "partner_id": rec.partner_id.id,
-                "device_location": rec.device_location,
-            }
+            [
+                {
+                    "assignment_id": rec.id,
+                    "date": values.get("assignment_date", now),
+                    "partner_id": rec.partner_id.id,
+                    "device_location": rec.device_location,
+                }
+                for rec, values in zip(records, vals_list)
+            ],
         )
 
         # Restore the original context in the returned result to avoid any side effect:
-        return rec.with_context(_in_device_assignment_creation=False)
+        return records.with_context(_in_device_assignment_creation=False)
 
     def _inverse_partner_id(self):
         if self._context.get("_in_device_assignment_creation", False):
