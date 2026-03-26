@@ -135,8 +135,10 @@ class ContractAbstractDiscountLine(models.AbstractModel):
                     )
                     if len(emitted_invoices) == 0:
                         # Contract start invoice: optin to the campaign
-                        url = self.env["ir.config_parameter"].get_param(
-                            "commown_cooperative_campaign.base_url"
+                        url = (
+                            self.env["ir.config_parameter"]
+                            .sudo()
+                            .get_param("commown_cooperative_campaign.base_url")
                         )
                         coop_ws_optin(
                             url,
@@ -177,8 +179,10 @@ class ContractAbstractDiscountLine(models.AbstractModel):
                 if not identifier:
                     return False
 
-                url = self.env["ir.config_parameter"].get_param(
-                    "commown_cooperative_campaign.base_url"
+                url = (
+                    self.env["ir.config_parameter"]
+                    .sudo()
+                    .get_param("commown_cooperative_campaign.base_url")
                 )
 
                 result = coop_ws_query(url, campaign.name, identifier, date)
