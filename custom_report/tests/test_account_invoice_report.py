@@ -333,3 +333,87 @@ class AccountInvoiceReportTC(ReportTC):
         html = tostring(self.html_report(inv))
         self.assertTrue(b"Payment conditions" in html)
         self.assertTrue(b"Payment terms: Immediate" in html)
+
+    def invoiceCustomerAddress(self, invoice):
+        expected_name = invoice.partner_id.name_title
+
+        doc = self.html_report(invoice)
+        address = doc.xpath(
+            f"//font[text()='{expected_name}']/ancestor::td//font/text()"
+        )
+
+        return address
+
+    def test_b2c_customer_invoice_address(self):
+        "An invoice issue to a partner related to a company should present the partner and company names"
+        # Applying a title on the partner, for coverage reasons
+        self.b2c_partner.title = self.env.ref("base.res_partner_title_doctor")
+
+        inv = self.open_invoice(self.sale(self.b2c_partner, self.std_product))
+        invoice_address = self.invoiceCustomerAddress(inv)
+
+        self.assertEqual(
+            invoice_address,
+            [
+                f"{self.b2c_partner.title.shortcut} {self.b2c_partner.name}",
+                self.b2c_partner.street,
+                f"{self.b2c_partner.city} {self.b2c_partner.state_id.code} {self.b2c_partner.zip}",
+                self.b2c_partner.country_id.name,
+            ],
+        )
+
+    def test_b2b_customer_invoice_address(self):
+        "An invoice issue to a partner related to a company should present the partner and company names"
+        # Case 1: Invoice directly issued to a partner directly related to the company
+        inv1 = self.open_invoice(self.sale(self.b2b_partner, self.std_product))
+        inv1_address = self.invoiceCustomerAddress(inv1)
+
+        self.assertEqual(
+            inv1_address,
+            [
+                self.b2b_partner.commercial_partner_id.name,
+                self.b2b_partner.name,
+                self.b2b_partner.street,
+                f"{self.b2b_partner.city} {self.b2b_partner.state_id.code} {self.b2b_partner.zip}",
+                self.b2b_partner.country_id.name,
+            ],
+        )
+
+        # Case 2: Invoice directly issued to a sub-partner of company
+        invoice_partner = self.b2b_partner.copy(
+            {"type": "invoice", "parent_id": self.b2b_partner.id}
+        )
+        self.assertNotEqual(
+            invoice_partner.parent_id, invoice_partner.commercial_partner_id
+        )
+
+        inv2 = self.open_invoice(self.sale(invoice_partner, self.std_product))
+        inv2_address = self.invoiceCustomerAddress(inv2)
+
+        self.assertEqual(
+            inv2_address,
+            [
+                invoice_partner.commercial_partner_id.name,
+                invoice_partner.name,
+                invoice_partner.street,
+                f"{invoice_partner.city} {invoice_partner.state_id.code} {invoice_partner.zip}",
+                invoice_partner.country_id.name,
+            ],
+        )
+
+    def test_b2b_company_invoice_address(self):
+        "An invoice issued to a company should only have the company name"
+        company = self.b2b_partner.commercial_partner_id
+
+        inv = self.open_invoice(self.sale(company, self.std_product))
+        invoice_address = self.invoiceCustomerAddress(inv)
+
+        self.assertEqual(
+            invoice_address,
+            [
+                company.name,
+                company.street,
+                f"{company.city} {company.state_id.code} {company.zip}",
+                company.country_id.name,
+            ],
+        )
