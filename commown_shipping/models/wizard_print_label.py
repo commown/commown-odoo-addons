@@ -33,7 +33,9 @@ class ProjectTaskAbstractPrintLabelWizard(models.AbstractModel):
                     "target": "current",
                 },
                 {"type": "ir.actions.act_window_close"},
-                {"type": "ir.actions.client", "tag": "soft_reload"},
+                {"type": "ir.actions.client", "tag": "reload"},
+                # 'soft_reload' replaced by 'reload temporarily.
+                # (see https://github.com/odoo/odoo/issues/256020)
             ],
         }
 
