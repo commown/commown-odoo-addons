@@ -18,6 +18,13 @@ msgstr ""
 
 #. module: commown_devices
 #. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "%(loc)s: %(products)s"
+msgstr "%(loc)s : %(products)s"
+
+#. module: commown_devices
+#. odoo-python
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "%(product)s for %(partner)s"
@@ -719,8 +726,15 @@ msgstr "Lien mouvement/Ligne d'ordre d'achat"
 #. odoo-python
 #: code:addons/commown_devices/models/common.py:0
 #, python-format
-msgid "Not enough %(product)s under location(s) %(location)s"
-msgstr "Pas assez de %(product)s à l'emplacement %(location)s"
+msgid "Not enough %(product)s under location(s) %(locs)s"
+msgstr "Plus de %(product)s dans le(s) stock(s) %(locs)s"
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "Not in stock"
+msgstr "Plus en stock"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__lot_nb
@@ -1313,3 +1327,48 @@ msgstr "[commown] Mettre l'appareil concerné au rebut"
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_project_task_to_employee
 msgid "or"
 msgstr "ou"
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__origin
+msgid "origin"
+msgstr "origine"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_contract_transfer_wizard
+msgid "project.task.contract_transfer.wizard"
+msgstr "project.task.contract_transfer.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_inward_picking_wizard
+msgid "project.task.inward.picking.wizard"
+msgstr "project.task.inward.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_notracking_inward_picking_wizard
+msgid "project.task.notracking.inward.picking.wizard"
+msgstr "project.task.notracking.inward.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_notracking_outward_picking_wizard
+msgid "project.task.notracking.outward.picking.wizard"
+msgstr "project.task.notracking.outward.picking.wizard"
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_outward_picking_wizard
+msgid "project.task.outward.picking.wizard"
+msgstr "project.task.outward.picking.wizard"
+
+#~ msgid "Create a picking from a lead"
+#~ msgstr "Créer un transfert depuis une opportunité"
+
+#~ msgid "Not enough %s under location(s) %s"
+#~ msgstr "Pas assez de %s dans %s"
+
+#~ msgid "Receipts - Rental"
+#~ msgstr "Réception - Location"
+
+#~ msgid "All product to send"
+#~ msgstr "Tous les produits à envoyer"
+
+#~ msgid "[commown] Generate picking"
+#~ msgstr "[commown] Générer le mouvement d'appareils"

@@ -17,6 +17,13 @@ msgstr ""
 
 #. module: commown_devices
 #. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "%(loc)s: %(products)s"
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
 #: code:addons/commown_devices/models/wizard_project_task_to_employee.py:0
 #, python-format
 msgid "%(product)s for %(partner)s"
@@ -682,7 +689,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/commown_devices/models/common.py:0
 #, python-format
-msgid "Not enough %(product)s under location(s) %(location)s"
+msgid "Not enough %(product)s under location(s) %(locs)s"
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "Not in stock"
 msgstr ""
 
 #. module: commown_devices
