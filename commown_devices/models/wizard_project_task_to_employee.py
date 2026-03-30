@@ -94,6 +94,7 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
                 "name": cname % {"product": pt.name, "partner": partner.name},
                 "contract_template_id": ct.id,
                 "partner_id": partner.id,
+                "recurring_next_date": fields.Datetime.now(),
             }
         )
         contract._onchange_contract_template_id()

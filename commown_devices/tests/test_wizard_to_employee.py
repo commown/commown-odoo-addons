@@ -1,6 +1,7 @@
 import requests_mock
 
 from odoo.exceptions import UserError
+from odoo.fields import Command
 
 from odoo.addons.commown_shipping.tests.common import BaseShippingTC
 
@@ -27,6 +28,10 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
             {"name": "FP3", "type": "product", "tracking": "serial"}
         )
         cls.lot = create_lot_and_quant(cls.env, "fp3_1", pt.product_variant_id, cls.loc)
+
+        # Add a line to the employee contract template, to more closely ressemble the production's template
+        ct = cls.env.ref("commown_devices.contract_template_to_employee")
+        ct.contract_line_ids = [Command.create({"name": "Dummy employee line"})]
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("lot_id", self.lot.id)
