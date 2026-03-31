@@ -3,7 +3,7 @@
 {
     "name": "Customer device manager",
     "summary": "Allow customers to assign devices to users",
-    "version": "16.0.1.0.4",
+    "version": "16.0.1.0.5",
     "development_status": "Alpha",
     "category": "Manager customer",
     "website": "https://github.com/commown/commown-odoo-addons",
