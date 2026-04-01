@@ -12,6 +12,11 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "web",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "/web_increase_default_load_limit/static/src/dynamic_list_group.esm.js",
+        ]
+    },
 }
