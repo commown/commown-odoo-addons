@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+  <t
+        t-name="customer_team_manager.Buttons.KanbanImport"
+        t-inherit="web.KanbanView.Buttons"
+        t-inherit-mode="primary"
+        owl="1"
+    >
+    <xpath
+            expr="//*[@class='o_cp_buttons d-flex align-items-baseline']"
+            position="inside"
+        >
+        <t t-if="canCreate">
+          <button
+                    type="button"
+                    class="btn btn-secondary o_kanban_import_button"
+                    t-on-click="importRecords"
+                >
+            Import
+          </button>
+        </t>
+      </xpath>
+  </t>
+</templates>

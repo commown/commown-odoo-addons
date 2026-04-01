@@ -15,7 +15,7 @@
     <field name="name">customer_team_manager.customer_user.kanban</field>
     <field name="model">res.partner</field>
     <field name="arch" type="xml">
-      <kanban class="o_res_partner_kanban">
+      <kanban class="o_res_partner_kanban" js_class="kanban_import_button">
         <field name="id" />
         <field name="name" />
         <field name="email" />
