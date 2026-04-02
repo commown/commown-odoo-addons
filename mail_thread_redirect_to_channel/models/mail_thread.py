@@ -16,11 +16,11 @@ class MailThread(models.AbstractModel):
             }
         )
 
-    def message_post(self, *args, body="", **kwargs):
-        res = super().message_post(*args, body=body, **kwargs)
+    def message_post(self, *args, **kwargs):
+        res = super().message_post(*args, **kwargs)
         if res.message_type in ("email", "comment") and res:
             origin_thread_link = _("(from %s)", self._get_origin_thread_link_element())
-            channel_body = Markup(origin_thread_link + "<br/><br/>") + body
+            channel_body = Markup(origin_thread_link + "<br/><br/>") + res.body
 
             redirects = (
                 self.env["mail.thread.redirect"]
