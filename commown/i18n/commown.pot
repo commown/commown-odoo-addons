@@ -72,9 +72,9 @@ msgid ""
 "<html>\n"
 "  <body><p>Bonjour <t t-out=\"object.partner_id.firstname\"></t>,</p>\n"
 "<br/>\n"
-"<p>Votre facture <strong><t t-out=\"object.number\"></t></strong>\n"
-"<t t-if=\"object.origin\">\n"
-"(référence : <t t-out=\"object.origin\"></t> )\n"
+"<p>Votre facture <strong><t t-out=\"object.name\"></t></strong>\n"
+"<t t-if=\"object.invoice_origin\">\n"
+"(référence : <t t-out=\"object.invoice_origin\"></t> )\n"
 "</t>\n"
 "d'un montant de <strong><t t-out=\"object.amount_total\"></t> <t t-out=\"object.currency_id.symbol\"></t></strong> est disponible dans votre espace Commown.</p>\n"
 "\n"
@@ -139,7 +139,7 @@ msgstr ""
 #. module: commown
 #: model:mail.template,report_name:commown.email_send_invoice_from_contract
 msgid ""
-"Commown_Facture_{{(object.number or '').replace('/','_')}}_{{object.state =="
+"Commown_Facture_{{(object.name or '').replace('/','_')}}_{{object.state =="
 " 'draft' and 'draft' or ''}}"
 msgstr ""
 
@@ -556,7 +556,7 @@ msgstr ""
 
 #. module: commown
 #: model:mail.template,subject:commown.email_send_invoice_from_contract
-msgid "[{{object.company_id.name}}] Facture (Ref {{object.number or 'n/a'}})"
+msgid "[{{object.company_id.name}}] Facture (Ref {{object.name or 'n/a'}})"
 msgstr ""
 
 #. module: commown

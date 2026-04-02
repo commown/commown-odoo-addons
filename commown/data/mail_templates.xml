@@ -6,23 +6,23 @@
     <field name="reply_to">contact@commown.fr</field>
     <field
             name="subject"
-        >[{{object.company_id.name}}] Facture (Ref {{object.number or 'n/a'}})</field>
+        >[{{object.company_id.name}}] Facture (Ref {{object.name or 'n/a'}})</field>
     <field name="partner_to">{{object.partner_id.id}}</field>
     <field name="model_id" ref="account.model_account_move" />
     <field name="auto_delete" eval="True" />
     <field name="report_template" ref="account.account_invoices" />
     <field
             name="report_name"
-        >Commown_Facture_{{(object.number or '').replace('/','_')}}_{{object.state == 'draft' and 'draft' or ''}}</field>
+        >Commown_Facture_{{(object.name or '').replace('/','_')}}_{{object.state == 'draft' and 'draft' or ''}}</field>
     <field name="lang">{{object.partner_id.lang}}</field>
     <field
             name="body_html"
         ><![CDATA[
 <p>Bonjour <t t-out="object.partner_id.firstname" />,</p>
 <br/>
-<p>Votre facture <strong><t t-out="object.number" /></strong>
-<t t-if="object.origin" >
-(référence : <t t-out="object.origin" /> )
+<p>Votre facture <strong><t t-out="object.name" /></strong>
+<t t-if="object.invoice_origin" >
+(référence : <t t-out="object.invoice_origin" /> )
 </t>
 d'un montant de <strong><t t-out="object.amount_total" /> <t t-out="object.currency_id.symbol" /></strong> est disponible dans votre espace Commown.</p>
 
