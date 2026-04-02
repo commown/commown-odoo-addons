@@ -133,12 +133,6 @@
   </template>
 
   <!-- Hide contracts on portal -->
-  <template id="portal_my_home_contract" inherit_id="contract.portal_my_home_contract">
-    <xpath expr="//t[@t-call='portal.portal_docs_entry']" position="attributes">
-      <attribute name="t-if">False</attribute>
-    </xpath>
-  </template>
-
   <template id="portal_my_contracts" inherit_id="contract.portal_my_contracts">
     <xpath expr="//t[@t-if='contracts']" position="attributes">
       <attribute name="t-if">False</attribute>
