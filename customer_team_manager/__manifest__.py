@@ -36,11 +36,13 @@
         "web.assets_backend": [
             "/customer_team_manager/static/src/xml/field_widget_template.xml",
             "/customer_team_manager/static/src/xml/export_data_dialog.xml",
+            "/customer_team_manager/static/src/xml/kanban_import_button.xml",
             "/customer_team_manager/static/src/css/export.css",
             "/customer_team_manager/static/src/scss/field_widget.scss",
             "/customer_team_manager/static/src/js/field_widget.esm.js",
             "/customer_team_manager/static/src/js/export_data_dialog.esm.js",
             "/customer_team_manager/static/src/js/favorites.esm.js",
+            "/customer_team_manager/static/src/js/kanban_import_button.esm.js",
         ],
     },
     "installable": True,
