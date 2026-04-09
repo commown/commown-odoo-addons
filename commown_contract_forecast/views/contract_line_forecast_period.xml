@@ -11,4 +11,22 @@
     </field>
   </record>
 
+  <record id="forecast_view_search" model="ir.ui.view">
+    <field
+            name="name"
+        >contract.line.forecast.period.search (in commown_contract_forecast)</field>
+    <field name="model">contract.line.forecast.period</field>
+    <field
+            name="inherit_id"
+            ref="contract_forecast.contract_line_forecast_period_search_view"
+        />
+    <field name="arch" type="xml">
+      <filter name="groupby_date_invoice" position="attributes">
+        <!-- Replace 'date_invoice:day' by 'date_invoice:month'-->
+        <attribute name="context">{'group_by':'date_invoice:month'}</attribute>
+      </filter>
+    </field>
+  </record>
+
+
 </odoo>
