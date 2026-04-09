@@ -82,6 +82,17 @@ class MailThreadRedirectTC(TransactionCase):
         expected_link = f"/web#model={self.dummy_1._name}&amp;id={self.dummy_1.id}"
         self.assertIn(expected_link, chan_message.body)
 
+    def test_redirect_with_markup_body(self):
+        "The body of the channel post should be properly transcribed"
+        body_w_tags = "<b>Redirect with HTML tag</b>"
+
+        self._post_message(self.dummy_1, body_w_tags, self.user_internal)
+
+        chan_message = self.channel.message_ids
+        self.assertEqual(len(chan_message), 1)
+
+        self.assertIn(body_w_tags, chan_message.body)
+
     def test_redirect_only_portal_users(self):
         # Case 1: Only portal user messages are redirected
         self.redirect.only_portal_users = True
