@@ -27,8 +27,8 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         default=True,
     )
 
-    shipping_account_id = fields.Many2one(
-        related="task_id.project_id.shipping_account_id",
+    carrier_account_id = fields.Many2one(
+        related="task_id.project_id.carrier_account_id",
     )
 
     parcel_type = fields.Many2one(
