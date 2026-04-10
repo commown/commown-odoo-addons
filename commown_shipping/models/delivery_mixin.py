@@ -256,7 +256,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     def _delivery_tracking_colissimo_status(self):
         self.ensure_one()
-        account = self._delivery_tracking_parent().shipping_account_id
+        account = self._delivery_tracking_parent().carrier_account_id
         resp = colissimo_status_request(
             account.account, account.password, self.expedition_ref
         )
@@ -282,8 +282,13 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
 class CommownDeliveryParentMixin(models.AbstractModel):
     _name = "commown.delivery.parent.mixin"
-    _inherit = "commown.shipping.parent.mixin"
     _description = "Commown shipping parent mixin"
+
+    carrier_account_id = fields.Many2one(
+        "carrier.account",
+        string="Carrier account",
+        company_dependent=True,
+    )
 
     delivery_tracking = fields.Boolean("Delivery tracking", default=False)
     default_perform_actions_on_delivery = fields.Boolean(
