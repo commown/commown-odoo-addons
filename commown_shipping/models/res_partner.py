@@ -1,6 +1,7 @@
 from odoo import _, models
 
-from .colissimo_utils import MAX_ADDRESS_SIZE_COLISSIMO, delivery_data
+MAX_ADDRESS_SIZE_COLISSIMO = 35
+
 
 ADDRESS_LENGTH_ERROR = (
     "The street field size cannot exceed %d" % MAX_ADDRESS_SIZE_COLISSIMO
@@ -23,10 +24,6 @@ class ResPartner(models.Model):
             ADDRESS_LENGTH_ERROR,
         ),
     ]
-
-    def colissimo_delivery_data(self, raise_on_error=True):
-        self.ensure_one()
-        return delivery_data(self, raise_on_error=raise_on_error)
 
     @classmethod
     def validate_street_lines(cls, data, error, error_message):

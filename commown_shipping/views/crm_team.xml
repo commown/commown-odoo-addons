@@ -11,7 +11,7 @@
       <xpath expr="//notebook" position="inside">
         <page name="shipping" string="Shipping">
           <group>
-            <field name="shipping_account_id" />
+            <field name="carrier_account_id" />
           </group>
           <group attrs="{'invisible': [('delivery_tracking', '=', False)]}">
             <field name="default_perform_actions_on_delivery" />
