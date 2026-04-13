@@ -13,10 +13,10 @@
           </group>
           <group name="delivery">
             <field name="delivered_by_hand" />
-            <field name="shipping_account_id" invisible="1" />
+            <field name="carrier_account_id" invisible="1" />
             <field
                             name="parcel_type"
-                            attrs="{'invisible': ['|', ('delivered_by_hand', '=', True), ('shipping_account_id', '=', False)]}"
+                            attrs="{'invisible': ['|', ('delivered_by_hand', '=', True), ('carrier_account_id', '=', False)]}"
                         />
           </group>
         </sheet>
