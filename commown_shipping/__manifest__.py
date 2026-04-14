@@ -40,7 +40,6 @@
     ],
     "demo": [
         "demo/mail_template.xml",
-        "demo/parcel_type.xml",
     ],
     "installable": True,
 }
