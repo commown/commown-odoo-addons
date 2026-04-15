@@ -2,13 +2,12 @@ import requests_mock
 
 from odoo.exceptions import UserError
 from odoo.fields import Command
-
-from odoo.addons.commown_shipping.tests.common import BaseShippingTC
+from odoo.tests.common import TransactionCase
 
 from .common import BaseWizardToEmployeeMixin, create_lot_and_quant
 
 
-class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
+class WizardToEmployeeTC(BaseWizardToEmployeeMixin, TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -16,7 +15,7 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
         cls.task.project_id.update(
             {
                 "delivery_tracking": True,
-                "shipping_account_id": cls.shipping_account.id,
+                "carrier_account_id": cls.carrier_account.id,
             }
         )
 
@@ -35,8 +34,7 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("lot_id", self.lot.id)
-        kwargs.setdefault("shipping_account_id", self.shipping_account.id)
-        kwargs.setdefault("parcel_type", self.parcel_type.id)
+        kwargs.setdefault("carrier_account_id", self.carrier_account.id)
         return super().get_wizard(**kwargs)
 
     def test_delivered_by_hand_ok(self):
@@ -56,19 +54,6 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
             quant.location_id.location_id,
             self.env.ref("stock.stock_location_customers"),
         )
-
-    def test_post_shipping_ok(self):
-        self.assertEqual(self.task.message_attachment_count, 0)  # pre-requisite
-
-        with requests_mock.Mocker() as mocker:
-            self.mock_colissimo_ok(mocker)
-            self.get_wizard().execute()
-
-        atts = self.env["ir.attachment"].search(
-            [("res_id", "=", self.task.id), ("res_model", "=", self.task._name)]
-        )
-        self.assertEqual(atts.mapped("mimetype"), ["application/pdf"])
-        self.assertEqual(self.task.expedition_ref, "6X0000000000")
 
     def test_lot_domain(self):
         wizard = self.get_wizard()
