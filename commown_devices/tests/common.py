@@ -309,13 +309,12 @@ class BaseWizardToEmployeeMixin:
         cls.task = cls.env["project.task"].create(
             {"name": "test", "project_id": project.id, "partner_id": partner.id}
         )
+        cls.carrier_account = cls.env.ref("commown_shipping.carrier-account-colissimo-std-account")
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("task_id", self.task.id)
         kwargs.setdefault("delivered_by_hand", False)
-        wizard = self.env["project.task.to.employee.wizard"].create(kwargs)
-        wizard.onchange_reset_shipping_data_if_delivered_by_hand()
-        return wizard
+        return self.env["project.task.to.employee.wizard"].create(kwargs)
 
 
 class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
