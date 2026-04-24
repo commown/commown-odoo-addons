@@ -1,4 +1,4 @@
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -30,6 +30,31 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
     carrier_account_id = fields.Many2one(
         related="task_id.project_id.carrier_account_id",
     )
+
+    carrier_id = fields.Many2one(
+        "delivery.carrier",
+        domain="[('carrier_account_id', '=', carrier_account_id)]",
+    )
+
+    commercial_partner_id = fields.Many2one(related="task_id.commercial_partner_id")
+
+    recipient_partner_id = fields.Many2one(
+        "res.partner",
+        "Delivery partner",
+        domain="[('commercial_partner_id', '=', commercial_partner_id)]",
+        default=lambda self: self._default_recipient(),
+    )
+
+    def _default_recipient(self):
+        task = self.task_id
+        if not task and self._context.get("default_task_id", None):
+            task = task.browse(self._context["default_task_id"]).exists()
+        if task:
+            partner = task.partner_id
+            delivery_partner = partner.browse(
+                partner.address_get(["delivery"])["delivery"]
+            )
+            return delivery_partner if delivery_partner.type == "delivery" else partner
 
     def _domain_lot_id(self):
         loc_avail = self.env.ref("commown_devices.stock_location_available_for_rent")
@@ -92,10 +117,19 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         # important here, so its simpler to do it at the given date:
         dtime = self.date or fields.Datetime.now()
         contract.date_start = dtime.date()
+
+        # Use chosen carrier id for picking if not delivered by hand
+        if not self.delivered_by_hand and self.carrier_id:
+            contract = contract.with_context(
+                default_carrier_id=self.carrier_id,
+                default_partner_id=self.recipient_partner_id,
+            )
+
         contract.send_devices(
             self.lot_id,
             {},
             {},
+            origin=self.task_id.get_name_for_origin(),
             date=dtime,
             do_transfer=self.delivered_by_hand,
         )
