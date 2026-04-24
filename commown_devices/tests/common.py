@@ -309,7 +309,11 @@ class BaseWizardToEmployeeMixin:
         cls.task = cls.env["project.task"].create(
             {"name": "test", "project_id": project.id, "partner_id": partner.id}
         )
-        cls.carrier_account = cls.env.ref("commown_shipping.carrier-account-colissimo-std-account")
+        cls.carrier_account = cls.env.ref(
+            "commown_shipping.carrier-account-colissimo-std-account"
+        )
+        cls.carrier = cls.env.ref("delivery_roulier_laposte_fr.delivery_carrier_DOS")
+        cls.carrier.carrier_account_id = cls.carrier_account
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("task_id", self.task.id)
