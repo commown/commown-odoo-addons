@@ -7,6 +7,7 @@ class CrmLead(models.Model):
     _inherit = [
         "crm.lead",
         "commown.track_delivery.mixin",
+        "commown.shipping.mixin",
     ]
 
     # Used by recipient_partner_id domain
@@ -14,7 +15,7 @@ class CrmLead(models.Model):
         "res.partner", related="partner_id.commercial_partner_id"
     )
 
-    _delivery_tracking_parent_rel = "team_id"
+    _delivery_tracking_parent_rel = _shipping_parent_rel = "team_id"
     _delivery_tracking_stage_parent_rel = "team_id"
 
     so_line_id = fields.Many2one("sale.order.line", "Ligne de commande")

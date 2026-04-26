@@ -6,9 +6,10 @@ class CommownProjectTask(models.Model):
     _inherit = [
         "project.task",
         "commown.track_delivery.mixin",
+        "commown.shipping.mixin",
     ]
 
-    _delivery_tracking_parent_rel = "project_id"
+    _delivery_tracking_parent_rel = _shipping_parent_rel = "project_id"
     _delivery_tracking_stage_parent_rel = "project_ids"
 
     delivery_tracking = fields.Boolean(
