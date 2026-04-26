@@ -12,6 +12,10 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "base_origin_document",
+        "stock",
+    ],
+    "data": [
+        "view/stock_picking.xml",
     ],
 }
