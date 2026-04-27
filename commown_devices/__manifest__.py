@@ -19,6 +19,7 @@
         "purchase",
         "stock_picking_origin_document",
         "stock_scrap_origin_document",
+        "stock_picking_back2draft",
     ],
     "data": [
         "data/action_crm_lead.xml",
