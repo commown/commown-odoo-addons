@@ -1,0 +1,23 @@
+<odoo>
+
+  <record model="ir.ui.view" id="crm_case_form_view_oppor">
+    <field name="name">commown_shipping.lead.form.opportunity</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_lead_view_form" />
+    <field name="arch" type="xml">
+      <xpath
+                expr="//group[@name='opportunity_partner']//field[@name='partner_id']"
+                position="after"
+            >
+        <field name="commercial_partner_id" invisible="1" />
+        <field
+                    name="recipient_partner_id"
+                    widget="res_partner_many2one"
+                    context="{'show_address': 1}"
+                    options='{"always_reload": True}'
+                />
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
