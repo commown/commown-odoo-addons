@@ -92,6 +92,18 @@ class AccountMoveTC(AccountMoveMergeAutoPayMixin):
             fields.Date.from_string("2019-06-15"),
         )
 
+    def test_auto_pay_0_amount_invoice(self):
+        inv = self.create_invoice(self.partner_a, "2019-05-10", 0.0)
+
+        self._merge_and_pay(expect_merge=False)
+
+        self.assertEqual(inv.payment_state, "paid")
+        self.assertEqual(inv.invoice_date, fields.Date.from_string("2019-05-10"))
+        self.assertEqual(
+            self.partner_a.invoice_merge_next_date,
+            fields.Date.from_string("2019-06-15"),
+        )
+
     def test_invoice_auto_merge_payment_mode_constraint(self):
         inv = self.create_invoice(self.partner_a, "2019-05-10", 1.0)
         self.assertTrue(inv.auto_merge)  # Test pre-requisite
