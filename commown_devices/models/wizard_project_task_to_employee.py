@@ -90,6 +90,9 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         contract.date_start = dtime.date()
 
         ctx = {"default_partner_id": self.task_id.recipient_partner_id}
+        if not self.delivered_by_hand:
+            ctx["default_carrier_required"] = True
+
         contract.with_context(**ctx).send_devices(
             self.lot_id,
             {},
