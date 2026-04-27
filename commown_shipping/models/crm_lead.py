@@ -6,8 +6,8 @@ class CrmLead(models.Model):
     _name = "crm.lead"
     _inherit = [
         "crm.lead",
-        "commown.track_delivery.mixin",
         "commown.shipping.mixin",
+        "commown.track_delivery.mixin",
     ]
 
     # Used by recipient_partner_id domain
@@ -30,3 +30,10 @@ class CrmLead(models.Model):
                 raise ValidationError(
                     _("Lead has no expedition ref. Please fill it in.")
                 )
+
+    def _recipient_partner(self):
+        "Override to use the sale order shipping partner as best non-explicit choice"
+        self.ensure_one()
+        return self.recipient_partner_id or self.mapped(
+            "so_line_id.order_id.partner_shipping_id"
+        )

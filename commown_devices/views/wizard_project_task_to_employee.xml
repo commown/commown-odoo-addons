@@ -12,24 +12,6 @@
             <field name="date" />
             <field name="delivered_by_hand" />
           </group>
-          <group
-                        name="delivery"
-                        attrs="{'invisible': [('delivered_by_hand', '=', True)]}"
-                    >
-            <field name="carrier_account_id" invisible="1" />
-            <field
-                            name="carrier_id"
-                            attrs="{'required': [('delivered_by_hand', '=', False)]}"
-                        />
-            <field name="commercial_partner_id" invisible="1" />
-            <field
-                            name="recipient_partner_id"
-                            attrs="{'required': [('delivered_by_hand', '=', False)]}"
-                            widget="res_partner_many2one"
-                            context="{'show_address': 1}"
-                            options='{"always_reload": True}'
-                        />
-          </group>
         </sheet>
         <footer>
           <button name="execute" string="OK" class="btn-primary" type="object" />
