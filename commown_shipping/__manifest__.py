@@ -36,6 +36,7 @@
         "views/crm_lead.xml",
         "views/project_project.xml",
         "views/project_task.xml",
+        "views/stock_picking.xml",
         "views/website_portal_templates.xml",
     ],
     "demo": [

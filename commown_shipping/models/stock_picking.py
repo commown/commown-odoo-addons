@@ -1,8 +1,10 @@
-from odoo import models
+from odoo import fields, models
 
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
+
+    carrier_required = fields.Boolean(default=False)
 
     def _laposte_fr_get_service(self, account, package=None):
         vals = self._roulier_get_service(account, package=package)
