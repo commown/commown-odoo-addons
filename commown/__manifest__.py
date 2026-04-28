@@ -2,7 +2,7 @@
     "name": "Commown SCIC",
     "category": "Business",
     "summary": "Commown SCIC business application",
-    "version": "16.0.1.0.16",
+    "version": "16.0.1.0.17",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
