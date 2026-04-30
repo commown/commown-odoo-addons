@@ -5,6 +5,7 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     carrier_required = fields.Boolean(default=False)
+    carrier_domain = fields.Char()
 
     def _laposte_fr_get_service(self, account, package=None):
         vals = self._roulier_get_service(account, package=package)

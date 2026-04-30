@@ -7,6 +7,7 @@
     <field name="arch" type="xml">
 
       <field name="carrier_id" position="before">
+        <field name="carrier_domain" invisible="1" />
         <field name="carrier_required" />
       </field>
 
@@ -14,6 +15,7 @@
         <attribute
                     name="attrs"
                 >{"required": [("carrier_required", "=", True)]}</attribute>
+        <attribute name="domain">carrier_domain</attribute>
       </field>
 
     </field>
