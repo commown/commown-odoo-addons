@@ -45,8 +45,6 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, TransactionCase):
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("lot_id", self.lot.id)
-        kwargs.setdefault("carrier_id", self.carrier.id)
-        kwargs.setdefault("recipient_partner_id", self.task.partner_id.id)
         return super().get_wizard(**kwargs)
 
     def test_delivered_by_hand_ok(self):
@@ -77,9 +75,15 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, TransactionCase):
         self.assertTrue(self.task.move_line_ids)
         picking = self.task.move_line_ids.picking_id
         self.assertEqual(picking.message_attachment_count, 0)  # prerequisite
-        self.assertEqual(picking.carrier_id, self.carrier)
+        self.assertTrue(picking.carrier_required)
+        self.assertFalse(picking.carrier_id)
         self.assertEqual(picking.partner_id, self.task.partner_id)
+        self.assertEqual(
+            picking.carrier_domain,
+            '[["carrier_account_id", "=", %d]]' % self.carrier_account.id,
+        )
 
+        picking.carrier_id = self.carrier.id
         picking._put_in_pack(self.task.move_line_ids)
 
         with requests_mock.Mocker() as mocker:
