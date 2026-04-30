@@ -1,3 +1,5 @@
+import json
+
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
@@ -92,6 +94,10 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         ctx = {"default_partner_id": self.task_id.recipient_partner_id}
         if not self.delivered_by_hand:
             ctx["default_carrier_required"] = True
+            if carrier_account := self.task_id.project_id.carrier_account_id:
+                ctx["default_carrier_domain"] = json.dumps(
+                    [("carrier_account_id", "=", carrier_account.id)]
+                )
 
         contract.with_context(**ctx).send_devices(
             self.lot_id,
