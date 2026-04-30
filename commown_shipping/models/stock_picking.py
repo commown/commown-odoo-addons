@@ -14,7 +14,7 @@ class StockPicking(models.Model):
         else:
             vals["returnTypeChoice"] = 3  # do not return to sender
 
-        if getattr(origin := self.origin_entity(), "get_label_ref", None):
+        if getattr(origin := self.origin_document(), "get_label_ref", None):
             vals["reference1"] = origin.get_label_ref()
 
         return vals
