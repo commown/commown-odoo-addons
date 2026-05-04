@@ -88,7 +88,7 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, TransactionCase):
 
         with requests_mock.Mocker() as mocker:
             mock_colissimo_ok(mocker)
-            picking.button_validate()
+            picking.action_generate_label()
 
         picking._compute_message_attachment_count()
         self.assertEqual(picking.message_attachment_count, 1)

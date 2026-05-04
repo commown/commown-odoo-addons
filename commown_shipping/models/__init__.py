@@ -1,3 +1,4 @@
+from . import delivery_carrier
 from . import delivery_mixin
 from . import shipping_mixin
 from . import crm_lead
