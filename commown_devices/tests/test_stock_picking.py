@@ -46,19 +46,19 @@ class StockPickingTC(TransactionCase):
         )
         return moves.mapped("picking_id")
 
-    def test_compute_contract_ids(self):
+    def test_compute_contract_id(self):
         lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
         date = datetime.datetime.now()
         picking = self.create_picking(lot, date)
 
-        self.assertFalse(picking.contract_ids)
+        self.assertFalse(picking.contract_id)
 
         contract = self.env["contract.contract"].create(
             {"name": "contract", "partner_id": 1}
         )
         picking.move_ids.update({"contract_id": contract.id})
 
-        self.assertEqual(picking.contract_ids, contract)
+        self.assertEqual(picking.contract_id, contract)
 
     def test_error_case_action_set_date_done_to_scheduled(self):
         lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
