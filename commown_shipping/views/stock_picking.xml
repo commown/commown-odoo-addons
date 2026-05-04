@@ -8,6 +8,7 @@
 
       <field name="carrier_id" position="before">
         <field name="carrier_domain" invisible="1" />
+        <field name="carrier_tracking_ref" invisible="1" />
         <field name="carrier_required" />
       </field>
 
@@ -17,6 +18,25 @@
                 >{"required": [("carrier_required", "=", True)]}</attribute>
         <attribute name="domain">carrier_domain</attribute>
       </field>
+
+      <button name="do_print_picking" position="after">
+        <button
+                    name="action_generate_label"
+                    string="Generate shipping label"
+                    groups="stock.group_stock_user"
+                    type="object"
+                    attrs="{'invisible': ['|', ('state', '!=', 'assigned'), ('carrier_tracking_ref', '!=', False)]}"
+                    data-hotkey="é"
+                />
+      </button>
+
+      <button name="do_print_picking" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </button>
+
+      <button name="action_open_label_type" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </button>
 
     </field>
   </record>

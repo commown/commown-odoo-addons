@@ -19,3 +19,14 @@ class StockPicking(models.Model):
             vals["reference1"] = origin.get_label_ref()
 
         return vals
+
+    def action_generate_label(self):
+        if self.carrier_tracking_ref:  # pragma: no cover
+            return  # UI makes this impossible, this is defensive code
+
+        result = self._roulier_generate_labels()
+        if result:
+            for label in result[0].get("labels", []):
+                self.attach_shipping_label(label)
+                if label.get("tracking_number") and not self.carrier_tracking_ref:
+                    self.carrier_tracking_ref = label["tracking_number"]
