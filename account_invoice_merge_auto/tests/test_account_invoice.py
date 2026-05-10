@@ -27,13 +27,12 @@ class AbstractAccountInvoiceMergeAutoTC(AccountTestInvoicingCommon):
             [("partner_id", "=", partner.id), ("move_type", "=", "out_invoice")]
         )
 
-    def create_invoice(self, partner, date, price, move_type="out_invoice"):
-        inv = self.init_invoice(
+    def create_invoice(self, partner, date, amount, move_type="out_invoice"):
+        inv = self._create_invoice(
             move_type,
-            partner=partner,
-            invoice_date=date,
-            products=self.product_a,
-            amounts=[price],
+            partner_id=partner.id,
+            date_invoice=date,
+            invoice_amount=amount,
         )
         inv.auto_merge = True
         return inv
@@ -79,7 +78,7 @@ class AccountInvoiceMergeAutoTC(AbstractAccountInvoiceMergeAutoTC):
 
         other_inv = self._partner_invoices(self.partner_a) - old_invoices
         self.assertEqual(len(other_inv), 1)
-        self.assertEqual(other_inv.amount_untaxed, 2015)
+        self.assertEqual(other_inv.amount_untaxed, 15)
         self.assertEqual(other_inv.state, "draft")
         self.assertEqual(other_inv.date, fields.Date.from_string("2019-05-17"))
         self.assertEqual(

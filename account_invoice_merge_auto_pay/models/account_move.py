@@ -35,8 +35,8 @@ class AccountMove(models.Model):
         _logger.info(
             "_invoice_merge_auto_pay_invoice_job executed for invoice %d", self.id
         )
-        if self.payment_state != "paid":  # Avoid crash if, e.g. amount == 0
-            self._invoice_merge_payment()
+
+        self._invoice_merge_payment()
 
     @api.model
     def _invoice_merge_payment(self):
@@ -46,26 +46,28 @@ class AccountMove(models.Model):
         """
         self.ensure_one()
 
-        token = self.partner_id.payment_token_id
-        if not token:
-            raise ValidationError(
-                _("No payment token for invoice id %(id)s (%(num)s)")
-                % {"id": self.id, "num": self.name}
-            )
-
         self.action_post()
 
-        register_payment = (
-            self.env["account.payment.register"]
-            .with_context(active_ids=self.ids, active_model=self._name)
-            .create(
-                {
-                    "journal_id": self.payment_mode_id.fixed_journal_id.id,
-                    "payment_token_id": token.id,
-                }
+        # Avoid a crash if there is nothing to be paid:
+        if self.amount_residual > 0.0:
+            token = self.partner_id.payment_token_id
+            if not token:
+                raise ValidationError(
+                    _("No payment token for invoice id %(id)s (%(num)s)")
+                    % {"id": self.id, "num": self.name}
+                )
+
+            register_payment = (
+                self.env["account.payment.register"]
+                .with_context(active_ids=self.ids, active_model=self._name)
+                .create(
+                    {
+                        "journal_id": self.payment_mode_id.fixed_journal_id.id,
+                        "payment_token_id": token.id,
+                    }
+                )
             )
-        )
-        return register_payment._create_payments()
+            return register_payment._create_payments()
 
     @api.model
     def _cron_invoice_merge(self, merge_date=None):
