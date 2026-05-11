@@ -10,6 +10,7 @@
       <field name="list_price">0</field>
       <field name="standard_price">60</field>
       <field name="invoice_policy">order</field>
+      <field name="weight">0.75</field>
       <field name="property_account_expense_id" search="[('code','=', '606800')]" />
     </record>
 
