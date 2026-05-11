@@ -1,11 +1,59 @@
+import logging
 from datetime import date
+
+from roulier import roulier
 
 from odoo import _, models
 from odoo.exceptions import UserError
 
+_logger = logging.getLogger(__name__)
+
 
 class ProjectTask(models.Model):
     _inherit = "project.task"
+
+    def urban_mine_parcel_label(self):
+        self.ensure_one()
+
+        payload = {}
+
+        account = self.project_id.carrier_account_id
+        payload["auth"] = {"login": account.account, "password": account.password}
+
+        _roulier_convert_address = self.env["stock.picking"]._roulier_convert_address
+        # WARNING: the sender is the customer and our company the recipient:
+        payload["from_address"] = _roulier_convert_address(self._recipient_partner())
+        payload["to_address"] = _roulier_convert_address(self.company_id.partner_id)
+
+        payload["service"] = {
+            "product": "CORE",
+            "shippingDate": date.today(),
+            "labelFormat": account.laposte_fr_file_format or None,
+            "orderNumber": self.urban_mine_name(),
+        }
+        payload["parcels"] = [{"weight": self.env.ref("urban_mine.product").weight}]
+
+        response = roulier.get("laposte_fr", "get_label", payload)
+
+        parcel = response.get("parcels", ()) and response["parcels"][0]
+        if not parcel:
+            _logger.error("La poste response is:\n%r", response)
+            raise UserError(_("No parcel in La Poste response"))
+        if not parcel.get("tracking", {}).get("number"):
+            _logger.error("La poste response is:\n%r", response)
+            raise UserError(_("No tracking number in La Poste response parcel"))
+        if not parcel.get("label", {}).get("data"):
+            _logger.error("La poste response is:\n%r", response)
+            raise UserError(_("No label file in La Poste response parcel"))
+
+        return self.env["ir.attachment"].create(
+            {
+                "name": parcel["tracking"]["number"],
+                "res_id": self.id,
+                "res_model": self._name,
+                "datas": parcel["label"]["data"],
+            }
+        )
 
     def urban_mine_name(self):
         return "COMMOWN-MU-%d" % self.id
