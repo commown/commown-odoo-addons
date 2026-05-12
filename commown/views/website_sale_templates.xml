@@ -65,8 +65,8 @@
         <button
                     type="button"
                     class="btn btn-info btn-sm"
-                    data-toggle="modal"
-                    t-attf-data-target="#myModal{{line.id}}"
+                    data-bs-toggle="modal"
+                    t-attf-data-bs-target="#myModal{{line.id}}"
                 >
           See product details
         </button>
