@@ -7,7 +7,7 @@ from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
 from odoo import http
-from odoo.tests.common import HttpCase
+from odoo.tests.common import HttpCase, tagged
 
 from ..models.res_partner import ResPartner
 
@@ -20,6 +20,7 @@ def ts_link_urls(doc):
     return set(doc.xpath("//a[starts-with(@href, '/page/self-troubleshoot-')]/@href"))
 
 
+@tagged("post_install", "-at_install")
 class PagesTC(HttpCase):
     def setUp(self):
         super().setUp()
