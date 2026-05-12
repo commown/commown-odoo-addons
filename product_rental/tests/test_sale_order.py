@@ -382,7 +382,7 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
     def setUp(self):
         super().setUp()
         self.partner = self.env.ref("base.res_partner_3")
-        self.env["res.lang"].load_lang("fr_FR")
+        self.env["res.lang"]._activate_lang("fr_FR")
         self.so = self.create_sale_order(self.partner)
         ct = self.so.mapped("order_line.product_id.property_contract_template_id")[0]
         ct.contractual_documents |= self.create_attachment("doc1_fr.txt", "fr_FR")
