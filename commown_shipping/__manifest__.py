@@ -2,7 +2,7 @@
     "name": "Commown shipping",
     "category": "Business",
     "summary": "Commown shipping-related features",
-    "version": "16.0.1.0.12",
+    "version": "16.0.1.0.13",
     "author": "Commown SCIC,Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
