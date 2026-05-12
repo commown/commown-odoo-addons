@@ -54,8 +54,9 @@ class AccountInvoiceTC(AccountMoveMergeAutoPayMixin):
             [
                 ("model", "=", new_inv._name),
                 ("res_id", "=", new_inv.id),
-                ("attachment_ids.res_name", "=", new_inv.display_name),
                 ("attachment_ids.mimetype", "=", "application/pdf"),
             ]
         )
-        self.assertTrue(mail)
+        self.assertTrue(
+            mail.filtered(lambda m: m.attachment_ids.res_name == new_inv.display_name)
+        )
