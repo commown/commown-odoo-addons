@@ -2,13 +2,14 @@ import requests_mock
 
 from odoo.exceptions import UserError
 from odoo.fields import Command
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase, tagged
 
 from odoo.addons.commown_shipping.tests.common import mock_colissimo_ok
 
 from .common import BaseWizardToEmployeeMixin, create_lot_and_quant
 
 
+@tagged("post_install", "-at_install")
 class WizardToEmployeeTC(BaseWizardToEmployeeMixin, TransactionCase):
     @classmethod
     def setUpClass(cls):
