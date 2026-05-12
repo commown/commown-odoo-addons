@@ -19,7 +19,7 @@ BASE_URL = "https://ws.colissimo.fr/sls-ws/SlsServiceWSRest"
 
 MAX_ADDRESS_SIZE_COLISSIMO = 35
 
-TIMEOUT = 10
+TIMEOUT = 20
 
 
 class ColissimoError(Exception):
