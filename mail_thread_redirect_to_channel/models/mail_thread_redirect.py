@@ -16,7 +16,11 @@ class MailThreadRedirect(models.Model):
         domain=[("is_mail_thread", "=", True)],
     )
 
-    model_name = fields.Char(related="model_id.model", readonly=True)
+    model_name = fields.Char(
+        string="Model name",
+        related="model_id.model",
+        readonly=True,
+    )
 
     target_channel_id = fields.Many2one(
         "mail.channel",
