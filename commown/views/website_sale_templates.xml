@@ -94,9 +94,10 @@
                 <t t-esc="line.product_id.name" />
               </h4>
             </div>
-            <div class="modal-body">
-              <t t-raw="line.product_id.product_tmpl_id.website_description" />
-            </div>
+            <div
+                            class="modal-body"
+                            t-field="line.product_id.product_tmpl_id.website_description"
+                        />
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">
                 Fermer
@@ -106,11 +107,7 @@
         </div>
       </div>
 
-      <!-- Display order line description sale converted to HTML -->
-      <p
-                class="mx-4 p-4 bg-light"
-                t-raw="env['ir.qweb.field.text'].value_to_html(line.name, None)"
-            />
+      <p class="mx-4 p-4 bg-light" t-field="line.name" />
 
     </xpath>
 
