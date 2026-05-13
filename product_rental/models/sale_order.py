@@ -77,6 +77,10 @@ class ProductRentalSaleOrder(models.Model):
             )
         return email_act
 
+    def _get_confirmation_template(self):
+        # Override of the sale module method
+        return self.env.ref("product_rental.mail_template_sale_confirmation")
+
     def assign_contract_products(self):
         "Assign main product and accessories to n contracts per sale order line"
 
