@@ -95,6 +95,11 @@ class SaleOrder(models.Model):
             result["context"]["default_template_id"] = b2b_template.id
         return result
 
+    def _get_confirmation_template(self):
+        if self.partner_id.website_id == self.env.ref("website_b2b.b2b_website"):
+            return self.env.ref("website_sale_b2b.mail_template_sale_confirmation")
+        return super()._get_confirmation_template()
+
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
