@@ -81,6 +81,24 @@ class ProductRentalSaleOrder(models.Model):
         # Override of the sale module method
         return self.env.ref("product_rental.mail_template_sale_confirmation")
 
+    def _send_order_confirmation_mail(self):
+        "Attach contractual documents to the posted message - they'll be sent w/ the mail after the commit"
+        super()._send_order_confirmation_mail()
+        for order in self:
+            order_attachments = sum(
+                self.contractual_documents(allow_from_template=True).values(),
+                self.env["ir.attachment"],
+            )
+
+            if order_attachments:
+                _logger.info(
+                    "Prepare sending %s with %d attachment(s): %s",
+                    self.name,
+                    len(order_attachments),
+                    ", ".join(["'%s'" % n for n in order_attachments.mapped("name")]),
+                )
+                order.message_ids[0].attachment_ids = order_attachments
+
     def assign_contract_products(self):
         "Assign main product and accessories to n contracts per sale order line"
 

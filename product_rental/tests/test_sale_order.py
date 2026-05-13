@@ -441,3 +441,34 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
 
         self.assertTrue(order_only_service.only_services)
         self.assertFalse(order_mix.only_services)
+
+    def get_confirmation_email_attachments(self, lang):
+        self.partner.lang = lang
+        self.so.with_context(lang=lang)._send_order_confirmation_mail()
+
+        # Checking the sent mail is indeed the confirmation mail template
+        confirm_msg = self.so.message_ids[0]
+        self.assertIn(
+            f"Réf. {self.so.name} : Les prochaines étapes pour finaliser !",
+            confirm_msg.subject,
+        )
+
+        return sorted(confirm_msg.attachment_ids.mapped("name"))
+
+    def test_sale_confirmation_send_emails_fr(self):
+        self.assertEqual(
+            self.get_confirmation_email_attachments("fr_FR"),
+            ["doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
+        )
+
+    def test_sale_confirmation_send_emails_en(self):
+        self.assertEqual(
+            self.get_confirmation_email_attachments("en_US"),
+            ["doc1_en.txt", "doc_no_lang.txt"],
+        )
+
+    def test_sale_confirmation_send_emails_no_lang(self):
+        self.assertEqual(
+            self.get_confirmation_email_attachments(False),
+            ["doc1_en.txt", "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
+        )
