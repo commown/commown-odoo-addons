@@ -56,4 +56,9 @@
     </field>
   </record>
 
+  <!-- Disable "Contact Us" button in header-->
+  <record id="website.header_call_to_action" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
 </odoo>
