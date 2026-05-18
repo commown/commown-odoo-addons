@@ -1,0 +1,16 @@
+<odoo>
+
+  <record model="ir.ui.view" id="product_variant_easy_edit_view">
+    <field name="name">product.product.view.form.easy (in netinstaller module)</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_variant_easy_edit_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//sheet" position="inside">
+        <group name="netinstaller">
+          <field name="cumulated_netinstaller_feature_value_ids" />
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

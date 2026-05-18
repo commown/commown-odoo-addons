@@ -1,0 +1,17 @@
+graph {
+  rankdir="LR";
+
+  "product.template"  --  "product.attribute"          [taillabel="*",headlabel="*"]
+  "product.template"  --  "feature"                    [taillabel="*",headlabel="*"]
+
+  "product.attribute" --  "product.attribute.value"    [taillabel="1",headlabel="*"]
+  "feature"           --  "feature.value"              [taillabel="1",headlabel="*"]
+
+  subgraph sg1 {
+    "feature"           --  "product.attribute"          [taillabel="*",headlabel="*",constraint=false]
+  }
+  subgraph sg2 {
+    "feature.value"     --  "product.attribute.value"    [taillabel="*",headlabel="*",constraint=false]
+  }
+
+}
