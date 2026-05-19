@@ -379,7 +379,7 @@ msgstr "Ihre Bestellungen"
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_home_sale
 msgid "My quotations"
-msgstr "Ihre Hinterlegte Kaution(en) / Genossenschaftsanteile"
+msgstr "Ihre Angebote"
 
 #. module: commown
 #: model_terms:ir.ui.view,arch_db:commown.portal_my_home_invoice
