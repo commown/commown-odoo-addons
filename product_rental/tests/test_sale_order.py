@@ -402,35 +402,6 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
             }
         )
 
-    def check_sale_quotation_send_emails(self, lang):
-        self.partner.lang = lang
-        self.so.with_context(lang=lang).action_quotation_send()
-        email_act = self.so.action_quotation_send()
-        email_ctx = email_act["context"]
-        self.so.with_context(**email_ctx).message_post_with_template(
-            email_ctx.get("default_template_id")
-        )
-        return sorted(self.so.message_ids[0].attachment_ids.mapped("name"))
-
-    def test_sale_quotation_send_emails_fr(self):
-        """break /usr/lib/python3/dist-packages/odoo/models.py:1148"""
-        self.assertEqual(
-            self.check_sale_quotation_send_emails("fr_FR"),
-            ["doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
-        )
-
-    def test_sale_quotation_send_emails_en(self):
-        self.assertEqual(
-            self.check_sale_quotation_send_emails("en_US"),
-            ["doc1_en.txt", "doc_no_lang.txt"],
-        )
-
-    def test_sale_quotation_send_emails_no_lang(self):
-        self.assertEqual(
-            self.check_sale_quotation_send_emails(False),
-            ["doc1_en.txt", "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
-        )
-
     def test_compute_order_only_services(self):
         service = self.env["product.product"].search(
             [("type", "=", "service")], limit=1

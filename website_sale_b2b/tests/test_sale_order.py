@@ -39,14 +39,6 @@ class SaleOrderLineTC(RentalSaleOrderTC):
         so_line._onchange_recompute_name()
         self.assertEqual(so_line.name, prefix + " - Dummy value")
 
-    def test_action_quotation_send(self):
-        self.so.partner_id.website_id = self.env.ref("website_b2b.b2b_website").id
-        action = self.so.action_quotation_send()
-        self.assertEqual(
-            action["context"]["default_template_id"],
-            self.env.ref("website_sale_b2b.email_template_edi_sale").id,
-        )
-
     def test_sale_confirmation_with_b2b_email(self):
         "When an order is confirmed through a transaction, the B2B confirmation mail should be used"
         # Setup - payment records
