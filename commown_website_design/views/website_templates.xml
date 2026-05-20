@@ -69,4 +69,13 @@
     <field name="active">False</field>
   </record>
 
+  <!-- Disable terms and conditions + social media links on product -->
+  <record id="website_sale.product_custom_text" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
+  <record id="website_sale.product_share_buttons" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
 </odoo>

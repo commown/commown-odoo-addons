@@ -13,6 +13,7 @@
     "license": "AGPL-3",
     "depends": [
         "website_b2b",
+        "website_sale",
     ],
     "data": [
         "data/website_rewrite.xml",
