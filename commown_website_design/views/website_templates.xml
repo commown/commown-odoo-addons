@@ -56,6 +56,14 @@
     </field>
   </record>
 
+  <!--
+    Disable "Contact Us" form altogether.
+    (we instead use a website.rewrite towards https://commown.coop/#contact )
+  -->
+  <record id="website.contactus" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
   <!-- Disable "Contact Us" button in header-->
   <record id="website.header_call_to_action" model="ir.ui.view">
     <field name="active">False</field>

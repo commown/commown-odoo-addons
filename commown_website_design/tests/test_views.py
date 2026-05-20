@@ -35,3 +35,9 @@ class CommownWebsiteDesignTC(HttpCase):
 
         self.assertEqual(slogan_text(res_b2c.text), ["Commown pour les particuliers"])
         self.assertEqual(slogan_text(res_b2b.text), ["Commown pour les professionnels"])
+
+    def test_contact_page_to_showcase_site_redirect(self):
+        res = self.url_open("/contactus", allow_redirects=False)
+
+        self.assertTrue(res.is_redirect)
+        self.assertEqual(res.headers["Location"], "https://commown.coop/#contact")

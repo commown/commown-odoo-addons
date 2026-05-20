@@ -15,6 +15,7 @@
         "website_b2b",
     ],
     "data": [
+        "data/website_rewrite.xml",
         "views/website_templates.xml",
     ],
 }
