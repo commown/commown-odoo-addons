@@ -1139,7 +1139,6 @@ msgstr "Erstellt am:"
 #. module: commown_self_troubleshooting
 #: model:commown_self_troubleshooting.category,name:commown_self_troubleshooting.crosscall-ts-cat
 #: model:ir.ui.view,website_meta_title:commown_self_troubleshooting.crosscall-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.crosscall-screen
 msgid "Crosscall"
 msgstr "Crosscall"
 
@@ -2170,16 +2169,6 @@ msgid "Oui"
 msgstr "Ja"
 
 #. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp4-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp5-screen
-msgid "PH00"
-msgstr "PH00"
-
-#. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
 msgid ""
 "Pendant le test, tenez le téléphone comme si vous appeliez, et parlez. Vous "
@@ -2323,7 +2312,6 @@ msgstr "Reihenfolge"
 #. module: commown_self_troubleshooting
 #: model:commown_self_troubleshooting.category,name:commown_self_troubleshooting.shiftphone-ts-cat
 #: model:ir.ui.view,website_meta_title:commown_self_troubleshooting.shiftphone-screen
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.shiftphone-screen
 msgid "Shiftphone"
 msgstr "Shiftphone"
 
@@ -2398,11 +2386,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.serenity
 msgid "Sérénité"
 msgstr "Serenity (Garantierte Gelassenheit)"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.shiftphone-screen
-msgid "T3"
-msgstr "T3"
 
 #. module: commown_self_troubleshooting
 #: model:ir.model.fields,help:commown_self_troubleshooting.field_commown_self_troubleshooting_item__link_url
@@ -2807,66 +2790,6 @@ msgstr "hier <i class=\"fas fa-external-link-alt\"/>"
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.step-contract-choice
 msgid "ici pour les ordinateurs  <i class=\"fa fa-external-link-alt\"/>"
 msgstr "hier für Computer <i class=\"fa fa-external-link-alt\"/>"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.commercial
-msgid "issue-description-commercial"
-msgstr "issue-description-commercial"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.contract-termination
-msgid "issue-description-contract-termination"
-msgstr "issue-description-contract-termination"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-battery
-msgid "issue-description-fp2-battery"
-msgstr "issue-description-fp2-battery"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-camera
-msgid "issue-description-fp2-camera"
-msgstr "issue-description-fp2-camera"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp2-micro
-msgid "issue-description-fp2-micro"
-msgstr "issue-description-fp2-micro"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.fp3-display
-msgid "issue-description-fp3-display"
-msgstr "issue-description-fp3-display"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.generic-issue
-msgid "issue-description-generic-issue"
-msgstr "issue-description-generic-issue"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.gs-day
-msgid "issue-description-gs"
-msgstr "issue-description-gs"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.other
-msgid "issue-description-other"
-msgstr "issue-description-other"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.serenity
-msgid "issue-description-serenity"
-msgstr "issue-description-serenity"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.smartphone-screen
-msgid "issue-description-smartphone-screen"
-msgstr "issue-description-smartphone-screen"
-
-#. module: commown_self_troubleshooting
-#: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.theft-and-loss
-msgid "issue-description-theft-and-loss"
-msgstr "issue-description-theft-and-loss"
 
 #. module: commown_self_troubleshooting
 #: model_terms:ir.ui.view,arch_db:commown_self_troubleshooting.issue-description-fp2-camera
