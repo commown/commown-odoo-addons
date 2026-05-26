@@ -1,0 +1,81 @@
+<odoo>
+
+  <!-- Make website-specific copies of the Slogan template sub-view 1
+    (website.template_header_slogan_oe_structure_header_slogan_1),
+    to replace the base slogans when the Slogan header template is selected
+    on the websites. -->
+  <record
+        id="b2c_template_header_slogan_oe_structure_header_slogan_1"
+        model="ir.ui.view"
+    >
+    <field
+            name="name"
+        >Template Header Slogan (oe_structure_header_slogan_1) - B2C website</field>
+    <field name="type">qweb</field>
+    <field
+            name="key"
+        >website.template_header_slogan_oe_structure_header_slogan_1</field>
+    <field name="website_id" ref="website.default_website" />
+    <field name="arch" type="xml">
+      <xpath
+                expr="//*[hasclass('oe_structure')][@id='oe_structure_header_slogan_1']"
+                position="inside"
+            >
+        <section class="s_text_block" data-snippet="s_text_block" data-name="Text">
+          <div class="container">
+            <h5 class="m-0" data-name="Slogan">Commown pour les particuliers</h5>
+          </div>
+        </section>
+      </xpath>
+    </field>
+  </record>
+
+  <record
+        id="b2b_template_header_slogan_oe_structure_header_slogan_1"
+        model="ir.ui.view"
+    >
+    <field
+            name="name"
+        >Template Header Slogan (oe_structure_header_slogan_1) - B2B website</field>
+    <field name="type">qweb</field>
+    <field
+            name="key"
+        >website.template_header_slogan_oe_structure_header_slogan_1</field>
+    <field name="website_id" ref="website_b2b.b2b_website" />
+    <field name="arch" type="xml">
+      <xpath
+                expr="//*[hasclass('oe_structure')][@id='oe_structure_header_slogan_1']"
+                position="inside"
+            >
+        <section class="s_text_block" data-snippet="s_text_block" data-name="Text">
+          <div class="container">
+            <h5 class="m-0" data-name="Slogan">Commown pour les professionnels</h5>
+          </div>
+        </section>
+      </xpath>
+    </field>
+  </record>
+
+  <!--
+    Disable "Contact Us" form altogether.
+    (we instead use a website.rewrite towards https://commown.coop/#contact )
+  -->
+  <record id="website.contactus" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
+  <!-- Disable "Contact Us" button in header-->
+  <record id="website.header_call_to_action" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
+  <!-- Disable terms and conditions + social media links on product -->
+  <record id="website_sale.product_custom_text" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
+  <record id="website_sale.product_share_buttons" model="ir.ui.view">
+    <field name="active">False</field>
+  </record>
+
+</odoo>

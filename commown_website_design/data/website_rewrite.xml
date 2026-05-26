@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Permenatly redirect to the contact form on our showcase site-->
+    <record id="contactus_redirect" model="website.rewrite">
+        <field name="name">Contact Us - Redirect to showcase site</field>
+        <field name="redirect_type">301</field>
+        <field name="url_from">/contactus</field>
+        <field name="url_to">https://commown.coop/#contact</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,26 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* commown_website_design
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20260327\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-12 09:09+0000\n"
+"PO-Revision-Date: 2026-05-12 09:09+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_website_design
+#: model_terms:ir.ui.view,arch_db:commown_website_design.b2c_template_header_slogan_oe_structure_header_slogan_1
+msgid "Commown pour les particuliers"
+msgstr "Produkte für Privatkunden"
+
+#. module: commown_website_design
+#: model_terms:ir.ui.view,arch_db:commown_website_design.b2b_template_header_slogan_oe_structure_header_slogan_1
+msgid "Commown pour les professionnels"
+msgstr "Produkte für Unternehmen"
