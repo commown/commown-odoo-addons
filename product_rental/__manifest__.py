@@ -13,6 +13,7 @@
         "ir_attachment_lang",
         "project",
         "product_contract",
+        "scic",
         "website_sale",
     ],
     "external_dependencies": {},

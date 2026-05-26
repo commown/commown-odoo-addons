@@ -402,35 +402,6 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
             }
         )
 
-    def check_sale_quotation_send_emails(self, lang):
-        self.partner.lang = lang
-        self.so.with_context(lang=lang).action_quotation_send()
-        email_act = self.so.action_quotation_send()
-        email_ctx = email_act["context"]
-        self.so.with_context(**email_ctx).message_post_with_template(
-            email_ctx.get("default_template_id")
-        )
-        return sorted(self.so.message_ids[0].attachment_ids.mapped("name"))
-
-    def test_sale_quotation_send_emails_fr(self):
-        """break /usr/lib/python3/dist-packages/odoo/models.py:1148"""
-        self.assertEqual(
-            self.check_sale_quotation_send_emails("fr_FR"),
-            ["doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
-        )
-
-    def test_sale_quotation_send_emails_en(self):
-        self.assertEqual(
-            self.check_sale_quotation_send_emails("en_US"),
-            ["doc1_en.txt", "doc_no_lang.txt"],
-        )
-
-    def test_sale_quotation_send_emails_no_lang(self):
-        self.assertEqual(
-            self.check_sale_quotation_send_emails(False),
-            ["doc1_en.txt", "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
-        )
-
     def test_compute_order_only_services(self):
         service = self.env["product.product"].search(
             [("type", "=", "service")], limit=1
@@ -441,3 +412,34 @@ class SaleOrderAttachmentsTC(RentalSaleOrderTC):
 
         self.assertTrue(order_only_service.only_services)
         self.assertFalse(order_mix.only_services)
+
+    def get_confirmation_email_attachments(self, lang):
+        self.partner.lang = lang
+        self.so.with_context(lang=lang)._send_order_confirmation_mail()
+
+        # Checking the sent mail is indeed the confirmation mail template
+        confirm_msg = self.so.message_ids[0]
+        self.assertIn(
+            f"Réf. {self.so.name} : Les prochaines étapes pour finaliser !",
+            confirm_msg.subject,
+        )
+
+        return sorted(confirm_msg.attachment_ids.mapped("name"))
+
+    def test_sale_confirmation_send_emails_fr(self):
+        self.assertEqual(
+            self.get_confirmation_email_attachments("fr_FR"),
+            ["doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
+        )
+
+    def test_sale_confirmation_send_emails_en(self):
+        self.assertEqual(
+            self.get_confirmation_email_attachments("en_US"),
+            ["doc1_en.txt", "doc_no_lang.txt"],
+        )
+
+    def test_sale_confirmation_send_emails_no_lang(self):
+        self.assertEqual(
+            self.get_confirmation_email_attachments(False),
+            ["doc1_en.txt", "doc1_fr.txt", "doc2_fr.txt", "doc_no_lang.txt"],
+        )

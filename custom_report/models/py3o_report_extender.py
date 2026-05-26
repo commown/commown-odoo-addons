@@ -15,7 +15,7 @@ def py3o_extend(report_xml, localcontext):
             localcontext["docs"][0].partner_id.lang
             if localcontext.get("docs")
             else localcontext["lang"]
-        )
+        ) or "en_US"
 
         result = code_translations.get_python_translations("custom_report", lang).get(
             text, False

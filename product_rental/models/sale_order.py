@@ -55,27 +55,27 @@ class ProductRentalSaleOrder(models.Model):
                 for line in order.website_order_line
             )
 
-    def action_quotation_send(self):
-        "Add contractual documents to the quotation email"
-        self.ensure_one()
-        email_act = super().action_quotation_send()
-        order_attachments = self.env["ir.attachment"]
-        for atts in self.contractual_documents(allow_from_template=True).values():
-            order_attachments |= atts
-        if order_attachments:
-            _logger.info(
-                "Prepare sending %s with %d attachment(s): %s",
-                self.name,
-                len(order_attachments),
-                ", ".join(["'%s'" % n for n in order_attachments.mapped("name")]),
+    def _get_confirmation_template(self):
+        # Override of the sale module method
+        return self.env.ref("product_rental.mail_template_sale_confirmation")
+
+    def _send_order_confirmation_mail(self):
+        "Attach contractual documents to the posted message - they'll be sent w/ the mail after the commit"
+        super()._send_order_confirmation_mail()
+        for order in self:
+            order_attachments = sum(
+                self.contractual_documents(allow_from_template=True).values(),
+                self.env["ir.attachment"],
             )
-            ids = [
-                att.id for att in sorted(order_attachments, key=lambda att: att.name)
-            ]
-            email_act["context"].setdefault("default_attachment_ids", []).append(
-                (6, 0, ids)
-            )
-        return email_act
+
+            if order_attachments:
+                _logger.info(
+                    "Prepare sending %s with %d attachment(s): %s",
+                    self.name,
+                    len(order_attachments),
+                    ", ".join(["'%s'" % n for n in order_attachments.mapped("name")]),
+                )
+                order.message_ids[0].attachment_ids = order_attachments
 
     def assign_contract_products(self):
         "Assign main product and accessories to n contracts per sale order line"

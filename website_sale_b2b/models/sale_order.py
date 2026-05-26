@@ -85,15 +85,10 @@ class SaleOrder(models.Model):
         lead.update({"team_id": team.id, "stage_id": stage.id})
         return lead
 
-    def action_quotation_send(self):
-        result = super().action_quotation_send()
-        ref = self.env.ref
-        if result["context"][
-            "default_use_template"
-        ] and self.partner_id.website_id == ref("website_b2b.b2b_website"):
-            b2b_template = ref("website_sale_b2b.email_template_edi_sale")
-            result["context"]["default_template_id"] = b2b_template.id
-        return result
+    def _get_confirmation_template(self):
+        if self.partner_id.website_id == self.env.ref("website_b2b.b2b_website"):
+            return self.env.ref("website_sale_b2b.mail_template_sale_confirmation")
+        return super()._get_confirmation_template()
 
 
 class SaleOrderLine(models.Model):
