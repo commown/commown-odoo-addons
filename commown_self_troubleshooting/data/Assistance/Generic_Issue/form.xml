@@ -42,7 +42,10 @@
           </script>
 
           <t t-set="issue_title">Demande d'assistance</t>
-          <t t-set="issue_description_template">issue-description-generic-issue</t>
+          <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-generic-issue'"
+                    />
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">

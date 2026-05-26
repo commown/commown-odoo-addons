@@ -40,7 +40,10 @@
         <t t-set="issue_title"><t
                             t-esc="model"
                         /> - Changement d'écran et/ou vitre de protection</t>
-        <t t-set="issue_description_template">issue-description-smartphone-screen</t>
+        <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-smartphone-screen'"
+                    />
         <!-- Fin des variables à modifier -->
 
         <div class="bg-white border m-0 p-3 rounded">

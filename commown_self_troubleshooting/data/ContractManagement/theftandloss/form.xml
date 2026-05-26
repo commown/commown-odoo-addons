@@ -47,7 +47,10 @@
           </script>
 
           <t t-set="title">Commown - Vie de mes contrats - Vol ou Perte</t>
-          <t t-set="issue_description_template">issue-description-theft-and-loss</t>
+          <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-theft-and-loss'"
+                    />
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">

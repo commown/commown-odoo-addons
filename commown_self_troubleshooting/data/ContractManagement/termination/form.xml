@@ -44,7 +44,8 @@
           <t t-set="issue_title">Résiliation</t>
           <t
                         t-set="issue_description_template"
-                    >issue-description-contract-termination</t>
+                        t-value="'issue-description-contract-termination'"
+                    />
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">

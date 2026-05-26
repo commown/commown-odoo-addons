@@ -51,7 +51,7 @@
             <!-- Variables à modifier ici -->
             <t t-set="tag_names">Appareil GS Day</t>
             <t t-set="issue_title">Casque DAY - Son</t>
-            <t t-set="issue_description_template">issue-description-gs</t>
+            <t t-set="issue_description_template" t-value="'issue-description-gs'" />
             <!-- Fin des variables à modifier -->
 
             <div class="bg-white border m-0 p-3 rounded">
