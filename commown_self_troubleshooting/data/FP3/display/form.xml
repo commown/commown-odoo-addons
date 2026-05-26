@@ -125,7 +125,7 @@
 
                   <t t-call="commown_self_troubleshooting.step-manipulation-option">
                     <t t-set="step">1</t>
-                    <t t-set="screwdriver_codename">PH00</t>
+                    <t t-set="screwdriver_codename" t-value="'PH00'" />
                   </t>
 
                     <div
