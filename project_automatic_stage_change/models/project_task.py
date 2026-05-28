@@ -12,6 +12,10 @@ class ProjectTaskType(models.Model):
         "project.task.type", related="stage_id.timely_stage_dest"
     )
 
+    dest_stage_on_customer_message = fields.Many2one(
+        "project.task.type", related="project_id.dest_stage_on_customer_message"
+    )
+
     def write(self, values):
         if "stage_id" in values:
             stage = self.env["project.task.type"].browse(values["stage_id"])
