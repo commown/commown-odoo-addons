@@ -1,0 +1,17 @@
+<odoo>
+
+    <record id="move_task_to_timely_stage_dest_action" model="ir.actions.server">
+        <field name="name">Change task stage to its timely_stage_dest</field>
+        <field name="sequence">5</field>
+        <field name="model_id" ref="project.model_project_task" />
+        <field name="state">code</field>
+        <field
+            name="code"
+        ><![CDATA[
+for task in record:
+    task.write({"stage_id": task.timely_stage_dest.id})
+]]>
+        </field>
+    </record>
+
+</odoo>

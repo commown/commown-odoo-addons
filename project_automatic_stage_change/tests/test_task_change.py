@@ -71,3 +71,18 @@ class PassiveAutomaticStageChangeTC(CommonAutomaticStageChangeTC):
 
         self._set_task_stage_with_form(self.task, self.stage_default)
         self.assertFalse(self.task.timely_stage_change_datetime)
+
+    def _reset_and_check_actions(self):
+        self.env.ref(
+            "project_automatic_stage_change.passive_stage_change_automation"
+        ).last_run = False
+        self.env["base.automation"]._check()
+
+    def test_passive_change_upon_passed_date(self):
+        "Tasks should move around based on their timely stage change datetime"
+        self.task.stage_id = self.stage_5_days
+        self.task.timely_stage_change_datetime = now_plus_days_timedelta(-1)
+
+        self._reset_and_check_actions()
+
+        self.assertEqual(self.task.stage_id, self.stage_default)
