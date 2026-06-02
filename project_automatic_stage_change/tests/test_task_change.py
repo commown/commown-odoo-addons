@@ -1,7 +1,7 @@
 import datetime
 
 from odoo import Command
-from odoo.tests import Form, TransactionCase
+from odoo.tests import Form, TransactionCase, tagged
 
 
 def now_plus_days_timedelta(_days):
@@ -86,3 +86,50 @@ class PassiveAutomaticStageChangeTC(CommonAutomaticStageChangeTC):
         self._reset_and_check_actions()
 
         self.assertEqual(self.task.stage_id, self.stage_default)
+
+
+@tagged("-at_install", "post_install")
+class ActiveAutomaticStageChangeTC(CommonAutomaticStageChangeTC):
+    def test_active_change_upon_message_receiving(self):
+        "When a destination stage for message reception is set, the task should be moved accordingly"
+        portal_partner = self.env.ref("base.partner_demo_portal")
+
+        def _send_message_from_portal_partner(task):
+            task.message_post(
+                body="Dummy text",
+                author_id=portal_partner.id,
+                message_type="email",
+                subtype_xmlid="mail.mt_comment",
+            )
+
+        # Case 1: no destination stage is set
+        stage_before_moving = self.task.stage_id
+
+        self.project.dest_stage_on_customer_message = False
+        _send_message_from_portal_partner(self.task)
+
+        self.assertEqual(self.task.stage_id, stage_before_moving)
+
+        # Case 2: Moving to a stage with a set timely date
+        self.project.dest_stage_on_customer_message = self.stage_5_days
+
+        _send_message_from_portal_partner(self.task)
+        self.task.invalidate_recordset()
+
+        self.assertEqual(self.task.stage_id, self.stage_5_days)
+
+    def test_no_active_change_with_internal_user(self):
+        "The task should not move upon receiving a message from an internal user"
+        self.project.dest_stage_on_customer_message = self.stage_5_days
+
+        stage_before_moving = self.task.stage_id
+        self.assertNotEqual(stage_before_moving, self.stage_5_days)
+
+        self.task.message_post(
+            body="Dummy text",
+            author_id=self.env.ref("base.partner_demo").id,
+            message_type="email",
+            subtype_xmlid="mail.mt_comment",
+        )
+
+        self.assertEqual(self.task.stage_id, stage_before_moving)

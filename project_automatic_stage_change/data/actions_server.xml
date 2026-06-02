@@ -14,4 +14,22 @@ for task in record:
         </field>
     </record>
 
+    <record id="active_stage_change_action" model="ir.actions.server">
+        <field name="name">Change task stage upon receiving a message</field>
+        <field name="sequence">5</field>
+        <field name="model_id" ref="mail.model_mail_message" />
+        <field name="state">code</field>
+        <field
+            name="code"
+        ><![CDATA[
+if record.model == 'project.task' and record.message_type in ('email', 'comment'):
+    task = env[record.model].browse(record.res_id).sudo()
+    if task.dest_stage_on_customer_message:
+        employees = env.ref('base.group_user')
+        if employees not in record.author_id.mapped('user_ids.groups_id'):
+            task.write({'stage_id': task.dest_stage_on_customer_message.id})
+]]>
+        </field>
+    </record>
+
 </odoo>
