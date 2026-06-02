@@ -272,13 +272,17 @@ class ToCustomerPickingMixin(models.AbstractModel):
                 )
             )
 
-        view = self.env.ref("commown_devices.wizard_abstract_to_customer_form")
+        res_model = self._name + ".to.customer.wizard"
+        view = self.env["ir.ui.view"].search(
+            [("model", "=", res_model), ("type", "=", "form")],
+            limit=1,
+        ) or self.env.ref("commown_devices.wizard_abstract_to_customer_form")
 
         return {
             "type": "ir.actions.act_window",
-            "src_model": self._name,
-            "res_model": self._name + ".to.customer.wizard",
+            "res_model": res_model,
             "name": _("Send a device"),
+            "view_mode": "form",
             "views": [(view.id, "form")],
             "target": "new",
             "context": {"default_entity_id": self.id},

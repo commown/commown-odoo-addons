@@ -15,3 +15,9 @@ class CommownProjectTask(models.Model):
     delivery_tracking = fields.Boolean(
         "Delivery tracking", related="project_id.delivery_tracking"
     )
+
+    contract_date_end = fields.Date(
+        string="Contract end date",
+        related="contract_id.date_end",
+        store=True,
+    )
