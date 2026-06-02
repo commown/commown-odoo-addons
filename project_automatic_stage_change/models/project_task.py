@@ -1,3 +1,5 @@
+import datetime
+
 from odoo import fields, models
 
 
@@ -9,3 +11,17 @@ class ProjectTaskType(models.Model):
     timely_stage_dest = fields.Many2one(
         "project.task.type", related="stage_id.timely_stage_dest"
     )
+
+    def write(self, values):
+        if "stage_id" in values:
+            stage = self.env["project.task.type"].browse(values["stage_id"])
+
+            if stage.has_timely_stage_change:
+                values["timely_stage_change_datetime"] = (
+                    datetime.datetime.now()
+                    + datetime.timedelta(days=stage.timely_stage_change_days)
+                )
+            else:
+                values["timely_stage_change_datetime"] = False
+
+        return super().write(values)
