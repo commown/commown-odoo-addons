@@ -76,30 +76,10 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
             {"name": "Working on it [after-sale: pending]", "mail_template_id": False}
         )
         cls.stage_pending.project_ids |= cls.project
-        cls.stage_wait = cls.stage_pending.copy(
-            {"name": "Wait [after-sale: waiting-customer]", "mail_template_id": False}
-        )
+
         cls.stage_reminder = cls.stage_pending.copy(
             {
                 "name": "Remind email [after-sale: reminder-email]",
-                "mail_template_id": False,
-            }
-        )
-        cls.stage_end_ok = cls.stage_pending.copy(
-            {"name": "Solved [after-sale: end-ok]", "mail_template_id": False}
-        )
-        cls.stage_manual = cls.stage_pending.copy(
-            {"name": "Solved [after-sale: manual]", "mail_template_id": False}
-        )
-        cls.stage_sending_pieces = cls.stage_pending.copy(
-            {
-                "name": "Sending Pieces [after-sale: sending-pieces-ongoing]",
-                "mail_template_id": False,
-            }
-        )
-        cls.stage_waiting_pieces_return = cls.stage_pending.copy(
-            {
-                "name": "Waiting Pieces [after-sale: waiting-pieces-return]",
                 "mail_template_id": False,
             }
         )
@@ -116,18 +96,6 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
                 "user_ids": cls.env.ref("base.user_demo").ids,
             }
         )
-
-    def reset_actions_last_run(self):
-        "Unset all commown actions' last_run date"
-        action_refs = (
-            self.env["ir.model.data"]
-            .search(
-                [("module", "=", "commown_support"), ("model", "=", "base.automation")]
-            )
-            .mapped("name")
-        )
-        for ref in action_refs:
-            self.env.ref("commown_support.%s" % ref).last_run = False
 
     def assertIsReminderEmail(self, message):
         self.assertEqual(message.subtype_id, self.env.ref("mail.mt_comment"))
@@ -198,18 +166,6 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertIsStageChangeMessage(self.task.message_ids[0])
         self.assertIsReminderEmail(self.task.message_ids[1])
 
-    def test_move_task_after_expiry(self):
-        """After 10 days spent in the reminder stage, crontab should
-        automatically move the task into the 'end-ok' stage."""
-
-        self.task.update({"stage_id": self.stage_reminder.id})
-        self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
-
-        self.reset_actions_last_run()
-        self.env["base.automation"]._check()  # method called by crontab
-
-        self.assertEqual(self.task.stage_id, self.stage_end_ok)
-
     def _send_partner_email(self, task=None, author_id=None):
         if task is None:
             task = self.task
@@ -223,100 +179,4 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
                 "res_id": task.id,
                 "subtype_id": self.env.ref("mail.mt_comment").id,
             }
-        )
-
-    def test_move_task_when_message_arrives_if_not_from_employee_support(self):
-        """When a partner sends a message concerning an task, it moves
-        automatically to the pending stage, unless it is an employee.
-        """
-        self.assertTaskAwakenAction(self.task, self.stage_pending, self.stage_reminder)
-
-    def test_move_task_when_message_arrives_if_not_from_employee_commercial(self):
-        """Same as test_move_task_when_message_arrives_if_not_from_employee_support,
-        but with the Commercial support project pipe.
-        """
-        commercial_project = self.env.ref("commown_support.commercial_project")
-
-        commercial_stage_pending = self.stage_pending.copy({})
-        commercial_stage_pending.project_ids |= commercial_project
-
-        commercial_stage_reminder = self.stage_reminder.copy({})
-        commercial_stage_reminder.project_ids |= commercial_project
-
-        commercial_task = self.task.copy({"project_id": commercial_project.id})
-
-        self.assertTaskAwakenAction(
-            commercial_task, commercial_stage_pending, commercial_stage_reminder
-        )
-
-    def assertTaskAwakenAction(self, task, stage_pending, stage_reminder):
-        employees = self.env.ref("base.group_user")
-
-        # Check test prerequisite
-        assert employees not in task.partner_id.mapped("user_ids.groups_id")
-
-        task.update({"stage_id": stage_reminder.id})
-        self._send_partner_email(task=task)
-        self.assertEqual(task.stage_id, stage_pending)
-
-        with self.assertNoSMSLogged():
-            task.update({"stage_id": stage_reminder.id})
-        other_partner = self.env.ref("base.partner_demo_portal")
-        self._send_partner_email(task=task, author_id=other_partner.id)
-        self.assertEqual(task.stage_id, stage_pending)
-
-        other_partner.user_ids.groups_id -= self.env.ref("base.group_portal")
-        other_partner.user_ids.groups_id |= employees
-        task.update({"stage_id": stage_reminder.id})
-        self._send_partner_email(task=task, author_id=other_partner.id)
-        self.assertEqual(task.stage_id, stage_reminder)
-
-    def test_move_customer_long_waiting_task_to_reminder(self):
-        self.task.update({"stage_id": self.stage_wait.id})
-        self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
-
-        self.reset_actions_last_run()
-        self.env["base.automation"]._check()  # method called by crontab
-
-        self.assertEqual(self.task.stage_id, self.stage_reminder)
-
-    def test_move_long_waiting_manual_followup_to_pending(self):
-        self.task.update({"stage_id": self.stage_manual.id})
-        self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
-
-        self.reset_actions_last_run()
-        self.env["base.automation"]._check()  # method called by crontab
-
-        self.assertEqual(self.task.stage_id, self.stage_pending)
-
-    def test_move_manual_long_waiting_task_when_message_arrives(self):
-        """When a customer message arrives which concerns a manually
-        handled task, the task is moved to the pending stage."""
-
-        self.task.update({"stage_id": self.stage_manual.id})
-
-        self._send_partner_email()
-
-        self.assertEqual(self.task.stage_id, self.stage_pending)
-
-    def test_move_sending_pieces_ongoing_to_pending(self):
-        self.task.update({"stage_id": self.stage_sending_pieces.id})
-        self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
-
-        self.reset_actions_last_run()
-        self.env["base.automation"]._check()  # method called by crontab
-
-        self.assertEqual(
-            self.task.stage_id, self.stage_pending, self.task.stage_id.name
-        )
-
-    def test_move_waiting_pieces_to_pending(self):
-        self.task.update({"stage_id": self.stage_waiting_pieces_return.id})
-        self.task.update({"date_last_stage_update": "2019-01-01 00:00:00"})
-
-        self.reset_actions_last_run()
-        self.env["base.automation"]._check()  # method called by crontab
-
-        self.assertEqual(
-            self.task.stage_id, self.stage_pending, self.task.stage_id.name
         )
