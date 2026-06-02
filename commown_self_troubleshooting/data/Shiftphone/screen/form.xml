@@ -8,8 +8,8 @@
     <field name="arch" type="xml">
       <t t-name="website.self-troubleshoot-shiftphone-screen">
         <t t-call="website.self-troubleshoot-smartphone-screen">
-          <t t-set="model">Shiftphone</t>
-          <t t-set="screwdriver_codename">T3</t>
+          <t t-set="model" t-value="'Shiftphone'" />
+          <t t-set="screwdriver_codename" t-value="'T3'" />
         </t>
       </t>
     </field>

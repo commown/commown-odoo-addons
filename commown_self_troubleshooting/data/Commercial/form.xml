@@ -22,7 +22,10 @@
           </script>
 
           <t t-set="issue_title">Demande commerciale</t>
-          <t t-set="issue_description_template">issue-description-commercial</t>
+          <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-commercial'"
+                    />
 
           <div class="bg-white border m-0 p-3 rounded">
             <h1>Demandes Commerciales</h1>

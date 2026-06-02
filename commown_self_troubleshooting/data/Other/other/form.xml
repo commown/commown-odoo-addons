@@ -16,7 +16,7 @@
           </script>
 
           <t t-set="issue_title">Demande spéciale</t>
-          <t t-set="issue_description_template">issue-description-other</t>
+          <t t-set="issue_description_template" t-value="'issue-description-other'" />
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">

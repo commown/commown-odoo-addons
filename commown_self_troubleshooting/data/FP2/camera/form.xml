@@ -34,7 +34,10 @@
             <!-- Variables à modifier ici -->
             <t t-set="tag_names">Appareil FP2,FP MOD caméra</t>
             <t t-set="issue_title">FP2 - Caméra</t>
-            <t t-set="issue_description_template">issue-description-fp2-camera</t>
+            <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-fp2-camera'"
+                    />
             <!-- Fin des variables à modifier -->
 
             <div class="bg-white border m-0 p-3 rounded">
@@ -216,7 +219,7 @@
 
                     <t t-call="commown_self_troubleshooting.step-confirm-module-change">
                       <t t-set="step">4</t>
-                      <t t-set="screwdriver_codename">PH00</t>
+                      <t t-set="screwdriver_codename" t-value="'PH00'" />
                     </t>
 
                     <t t-call="commown_self_troubleshooting.step-self-solved">

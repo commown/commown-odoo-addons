@@ -32,7 +32,10 @@
           <!-- Variables à modifier ici -->
           <t t-set="tag_names">FP MOD ecran</t>
           <t t-set="issue_title">FP3 - Écran </t>
-          <t t-set="issue_description_template">issue-description-fp3-display</t>
+          <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-fp3-display'"
+                    />
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">
@@ -125,7 +128,7 @@
 
                   <t t-call="commown_self_troubleshooting.step-manipulation-option">
                     <t t-set="step">1</t>
-                    <t t-set="screwdriver_codename">PH00</t>
+                    <t t-set="screwdriver_codename" t-value="'PH00'" />
                   </t>
 
                     <div

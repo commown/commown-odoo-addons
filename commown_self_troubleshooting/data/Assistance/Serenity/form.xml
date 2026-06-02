@@ -18,7 +18,10 @@
 
           <t t-set="tag_names">Sérénité</t>
           <t t-set="issue_title">Option Sérénité - M'appeler</t>
-          <t t-set="issue_description_template">issue-description-serenity</t>
+          <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-serenity'"
+                    />
           <!-- Fin des variables à modifier -->
 
           <div class="bg-white border m-0 p-3 rounded">

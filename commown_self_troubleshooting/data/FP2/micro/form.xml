@@ -39,7 +39,10 @@
             <!-- Variables à modifier ici -->
             <t t-set="tag_names">Appareil FP2,FP MOD micro</t>
             <t t-set="issue_title">FP2 - Micro</t>
-            <t t-set="issue_description_template">issue-description-fp2-micro</t>
+            <t
+                        t-set="issue_description_template"
+                        t-value="'issue-description-fp2-micro'"
+                    />
             <t
                         t-set="stage_long_term_followup"
                         t-value="env.ref('commown_support.stage_long_term_followup').id"
@@ -297,7 +300,7 @@
 
                     <t t-call="commown_self_troubleshooting.step-confirm-module-change">
                       <t t-set="step">5</t>
-                      <t t-set="screwdriver_codename">PH00</t>
+                      <t t-set="screwdriver_codename" t-value="'PH00'" />
                     </t>
 
                     <t t-call="commown_self_troubleshooting.step-self-solved">
