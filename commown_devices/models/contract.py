@@ -3,7 +3,7 @@ import logging
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from .common import _assigned, do_new_transfer, internal_picking
+from .common import do_new_transfer, internal_picking
 
 _logger = logging.getLogger(__name__)
 
@@ -29,7 +29,10 @@ class Contract(models.Model):
     lot_nb = fields.Integer("Number of lots", compute="_compute_lot_nb", store=True)
 
     def pending_picking(self):
-        return self.move_ids.mapped("picking_id").filtered(_assigned)
+        "Return current contract pickings in the 'confirmed' or 'assigned' state"
+        return self.move_ids.picking_id.filtered(
+            lambda p: p.state in ("confirmed", "assigned")
+        )
 
     @api.depends("move_ids.move_line_ids")
     def _compute_move_line_ids(self):
@@ -47,6 +50,60 @@ class Contract(models.Model):
             "customer": "stock.stock_location_stock",
         }
         return self.env.ref(loc_ref[self.stock_ownership])
+
+    def ask_picking(
+        self,
+        origin,
+        scheduled_date,
+        products,
+        carrier_account,
+        comment,
+        picking_type,
+    ):
+        dest_location = self.partner_id.get_or_create_customer_location(
+            self.stock_ownership
+        )
+        picking = self.env["stock.picking"].create(
+            {
+                "partner_id": self.partner_id.id,
+                "move_type": "direct",
+                "picking_type_id": picking_type.id,
+                "location_id": self.send_default_location().id,
+                "location_dest_id": dest_location.id,
+                "scheduled_date": scheduled_date,
+                "origin_document_id": origin.id,
+                "origin_document_model": origin._name,
+                "note": comment,
+            }
+        )
+
+        for product in products:
+            self.env["stock.move"].create(
+                {
+                    "name": product.name,
+                    "picking_id": picking.id,
+                    "picking_type_id": picking.picking_type_id.id,
+                    "location_id": picking.location_id.id,
+                    "location_dest_id": picking.location_dest_id.id,
+                    "product_id": product.id,
+                    "product_uom_qty": 1,
+                    "product_uom": product.uom_id.id,
+                    "date": picking.scheduled_date,
+                }
+            )
+
+        picking.action_confirm()
+        picking.action_assign()
+
+        # We choose the devices with a serial ourselves, so remove the
+        # automatically assigned lots to avoid errors (keeping
+        # assigned non serial products):
+        for mol in picking.move_line_ids:
+            mol.lot_id = False
+
+        self.move_ids |= picking.move_ids
+
+        return picking
 
     def send_devices(
         self,

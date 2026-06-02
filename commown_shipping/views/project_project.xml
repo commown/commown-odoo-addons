@@ -8,6 +8,7 @@
       <xpath expr="//sheet//field[@name='user_id']/ancestor::group" position="after">
         <group string="Shipping">
           <field name="carrier_account_id" />
+          <field name="picking_type_id" />
           <field name="delivery_tracking" />
           <field
                         name="default_perform_actions_on_delivery"

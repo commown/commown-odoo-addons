@@ -290,6 +290,12 @@ class CommownDeliveryParentMixin(models.AbstractModel):
         company_dependent=True,
     )
 
+    picking_type_id = fields.Many2one(
+        "stock.picking.type",
+        string="Picking type",
+        company_dependent=True,
+    )
+
     delivery_tracking = fields.Boolean("Delivery tracking", default=False)
     default_perform_actions_on_delivery = fields.Boolean(
         "By default, perform actions on delivery", default=True
