@@ -19,13 +19,7 @@ class ProjectTask(models.Model):
 
     invoice_id = fields.Many2one("account.move", string="Invoice")
     invoice_unpaid_count = fields.Integer("Number of payment issues", default=0)
-    invoice_next_payment_date = fields.Date(
-        "Invoice next payment date",
-        help=(
-            "If set in the future, the next payment trial (if any) will occur"
-            " at this date"
-        ),
-    )
+
     slimpay_payment_label = fields.Text(
         "Slimpay payment label",
         help=(

@@ -12,26 +12,16 @@
         >record.with_delay(max_retries=1)._slimpay_payment_issue_retry_payment()</field>
   </record>
 
-  <!-- Server action that sets the invoice next payment date -->
-  <record id="set_invoice_next_payment_date_and_send_sms" model="ir.actions.server">
-    <field name="name">Set invoice next payment date</field>
+  <!-- Server action that sends a warning SMS -->
+  <record id="send_payment_warn_sms" model="ir.actions.server">
+    <field name="name">Send warning SMS for upcoming payment</field>
     <field name="model_id" ref="project.model_project_task" />
     <field name="sequence">5</field>
     <field name="state">code</field>
-    <field
-            name="code"
-        ><![CDATA[
-today = datetime.date.today()
-days = record._slimpay_payment_invoice_payment_next_date_days_delta()
-record.update({
-    'invoice_next_payment_date': today + datetime.timedelta(days=days),
-})
-record._slimpay_payment_issue_send_sms()
-]]>
-    </field>
+    <field name="code">record._slimpay_payment_issue_send_sms()</field>
   </record>
 
-  <!-- Set invoice_next_payment_date when task enters the
+  <!-- Send payment warning SMS when task enters the
        stage_warn_partner_and_wait stage -->
   <record id="set_invoice_next_date_when_entering_warn_stage" model="base.automation">
     <field
@@ -48,10 +38,7 @@ record._slimpay_payment_issue_send_sms()
             name="filter_domain"
             eval="[('stage_id', '=', ref('stage_warn_partner_and_wait'))]"
         />
-    <field
-            name="action_server_id"
-            eval="ref('set_invoice_next_payment_date_and_send_sms')"
-        />
+    <field name="action_server_id" eval="ref('send_payment_warn_sms')" />
   </record>
 
   <!-- Automatic action triggering a payment retrial when an payment issue

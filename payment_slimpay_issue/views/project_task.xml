@@ -14,7 +14,10 @@
               <group>
                 <field name="invoice_id" />
                 <field name="invoice_unpaid_count" />
-                <field name="invoice_next_payment_date" />
+                <field
+                            name="timely_stage_change_datetime"
+                            string="Invoice next payment date"
+                        />
                 <field name="slimpay_payment_label" />
                 <field name="project_id" invisible="1" />
               </group>
