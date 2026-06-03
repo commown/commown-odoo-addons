@@ -19,14 +19,11 @@
     <field name="project_ids" eval="[(4, ref('project_payment_issue'))]" />
   </record>
 
-  <record id="stage_warn_partner_and_wait" model="project.task.type">
-    <field name="sequence">3</field>
-    <field name="name">Warn partner then wait</field>
-    <field
-            name="description"
-        >When the issue is moved to this stage, the partner is immediately warned by email that the payment was rejected. The issue then stays here for a given number of days (see dedicated time-based automated action), then moves to the next stage.</field>
+  <record id="stage_issue_fixed" model="project.task.type">
+    <field name="sequence">6</field>
+    <field name="name">Fixed payment issue</field>
     <field name="project_ids" eval="[(4, ref('project_payment_issue'))]" />
-    <field name="mail_template_id" ref="mail_warn_user" />
+    <field name="fold">True</field>
   </record>
 
   <record id="stage_retry_payment_and_wait" model="project.task.type">
@@ -36,6 +33,23 @@
             name="description"
         >A payment is immediately retried when the issue is move here. The issue then stays here for a given number of days (see dedicated time-based automated action) during which the payment may be rejected again. After this period, the payment is considered OK and the issue fixed: in this case the issue will be moved to the corresponding column.</field>
     <field name="project_ids" eval="[(4, ref('project_payment_issue'))]" />
+    <field name="has_timely_stage_change">True</field>
+    <field name="timely_stage_dest" ref="stage_issue_fixed" />
+    <field name="timely_stage_change_days">8</field>
+  </record>
+
+
+  <record id="stage_warn_partner_and_wait" model="project.task.type">
+    <field name="sequence">3</field>
+    <field name="name">Warn partner then wait</field>
+    <field
+            name="description"
+        >When the issue is moved to this stage, the partner is immediately warned by email that the payment was rejected. The issue then stays here for a given number of days (see the timely_stage_change_days field value), then moves to the next stage.</field>
+    <field name="project_ids" eval="[(4, ref('project_payment_issue'))]" />
+    <field name="mail_template_id" ref="mail_warn_user" />
+    <field name="has_timely_stage_change">True</field>
+    <field name="timely_stage_dest" ref="stage_retry_payment_and_wait" />
+    <field name="timely_stage_change_days">5</field>
   </record>
 
   <record id="stage_max_trials_reached" model="project.task.type">
@@ -46,13 +60,6 @@
         >Issues end-up here once the configured number of payment retrials (2 by default, can be overriden using the "payment_slimpay_issue.max_retrials" system parameter) was reached, and stay here until manually handled.</field>
     <field name="project_ids" eval="[(4, ref('project_payment_issue'))]" />
     <field name="mail_template_id" ref="mail_max_trial" />
-  </record>
-
-  <record id="stage_issue_fixed" model="project.task.type">
-    <field name="sequence">6</field>
-    <field name="name">Fixed payment issue</field>
-    <field name="project_ids" eval="[(4, ref('project_payment_issue'))]" />
-    <field name="fold">True</field>
   </record>
 
 </odoo>

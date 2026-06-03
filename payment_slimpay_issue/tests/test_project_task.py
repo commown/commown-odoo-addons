@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from datetime import datetime, timedelta
+from datetime import timedelta
 from unittest import mock
 
 import requests
@@ -541,14 +541,13 @@ class ProjectTC(TransactionCase):
         for action in self.env["base.automation"].search([("trigger", "=", "on_time")]):
             xml_ids = list(action.get_external_id().values())
             if xml_ids and xml_ids[0].startswith(
-                "payment_slimpay_issue"
+                "project_automatic_stage_change"
             ):  # pragma: no cover
                 action.last_run = False
 
     def _simulate_wait(self, task, check_job_function=False, **timedelta_kwargs):
-        task.date_last_stage_update = datetime.utcnow() - timedelta(**timedelta_kwargs)
-        task.invoice_next_payment_date = task.invoice_next_payment_date - timedelta(
-            **timedelta_kwargs
+        task.timely_stage_change_datetime = (
+            task.timely_stage_change_datetime - timedelta(**timedelta_kwargs)
         )
         self._reset_on_time_actions_last_run()
         with trap_jobs() as trap:
