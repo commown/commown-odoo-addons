@@ -6,7 +6,16 @@
                 t-set="is_b2b"
                 t-value="env.user.website_id == env.ref('website_b2b.b2b_website')"
             />
-      <div class="alert alert-info" id="admin_docs_reminder">
+      <t t-set="partner" t-value="env.user.partner_id" />
+      <t
+                t-set="docs_already_set"
+                t-value="(partner.id_card1 or partner.id_card2) and ((is_b2b and partner.company_record) or (not is_b2b and partner.proof_of_address))"
+            />
+      <div
+                class="alert alert-info"
+                id="admin_docs_reminder"
+                t-if="not docs_already_set"
+            >
         <p>
           <a>
             Votre commande ne sera validée entièrement qu’à réception des documents nécessaires
@@ -35,7 +44,16 @@
                 t-set="is_b2b"
                 t-value="env.user.website_id == env.ref('website_b2b.b2b_website')"
             />
-      <div class="alert alert-warning" id="admin_docs_reminder">
+      <t t-set="partner" t-value="env.user.partner_id" />
+      <t
+                t-set="docs_already_set"
+                t-value="(partner.id_card1 or partner.id_card2) and ((is_b2b and partner.company_record) or (not is_b2b and partner.proof_of_address))"
+            />
+      <div
+                class="alert alert-warning"
+                id="admin_docs_reminder"
+                t-if="not docs_already_set"
+            >
         Celle-ci sera validée dès que vous aurez rajouté
         <t
                     t-if="is_b2b"
