@@ -24,4 +24,25 @@
     </xpath>
   </template>
 
+  <template id="confirmation" inherit_id="website_sale.confirmation">
+    <xpath
+            expr="//div[@id='oe_structure_website_sale_confirmation_1']"
+            position="after"
+        >
+      <t
+                t-set="is_b2b"
+                t-value="env.user.website_id == env.ref('website_b2b.b2b_website')"
+            />
+      <div class="alert alert-warning" id="admin_docs_reminder">
+        Celle-ci sera validée dès que vous aurez rajouté
+        <t
+                    t-if="is_b2b"
+                >la pièce d'identité du responsable de votre structure et un Kbis (ou équivalent)</t>
+        <t t-else="">une pièce d'identité et un justificatif de domicile</t>
+        de moins de 3 mois à votre espace client
+        (accessible via <a href="/my/account">ce lien</a>).
+      </div>
+    </xpath>
+  </template>
+
 </odoo>

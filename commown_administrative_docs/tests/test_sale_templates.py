@@ -59,3 +59,8 @@ class CommonSaleAdminDocsMixin(RentalSaleOrderMixin):
 class PaymentSaleAdminDocsTC(CommonSaleAdminDocsMixin, HttpCase):
     req_url = "/shop/payment"
     session_field = "sale_order_id"
+
+
+class ConfirmationSaleAdminDocsTC(CommonSaleAdminDocsMixin, HttpCase):
+    req_url = "/shop/confirmation"
+    session_field = "sale_last_order_id"
