@@ -1,0 +1,27 @@
+<odoo>
+
+  <template id="payment" inherit_id="website_sale.payment">
+    <xpath expr="//div[@id='oe_structure_website_sale_payment_1']" position="after">
+      <t
+                t-set="is_b2b"
+                t-value="env.user.website_id == env.ref('website_b2b.b2b_website')"
+            />
+      <div class="alert alert-info" id="admin_docs_reminder">
+        <p>
+          <b>
+            Votre commande ne sera validée entièrement qu’à réception des documents nécessaires
+            à la création de votre contrat
+            <t t-if="is_b2b">(pièce d'identité + KBIS ou équivalent)</t>
+            <t t-else="">(pièce d'identité + justificatif de domicile)</t>.
+          </b>
+        </p>
+
+        <p class="mb-0">
+            Veuillez suivre les instructions contenues dans le mail que vous allez recevoir
+            après avoir confirmé votre commande et procédé au paiement du dépôt de garantie.
+        </p>
+     </div>
+    </xpath>
+  </template>
+
+</odoo>

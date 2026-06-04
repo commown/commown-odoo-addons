@@ -25,6 +25,7 @@
         "data/mail_template.xml",
         "views/res_partner.xml",
         "views/website_portal_templates.xml",
+        "views/website_sale_templates.xml",
     ],
     "assets": {
         "web.assets_frontend": [
