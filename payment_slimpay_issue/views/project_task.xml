@@ -14,9 +14,11 @@
               <group>
                 <field name="invoice_id" />
                 <field name="invoice_unpaid_count" />
+                <field name="in_warn_and_wait_stage" invisible="1" />
                 <field
                             name="timely_stage_change_datetime"
                             string="Invoice next payment date"
+                            attrs="{'invisible': [('in_warn_and_wait_stage', '=', False)]}"
                         />
                 <field name="slimpay_payment_label" />
                 <field name="project_id" invisible="1" />

@@ -28,6 +28,19 @@ class ProjectTask(models.Model):
         ),
     )
 
+    in_warn_and_wait_stage = fields.Boolean(compute="_compute_in_warn_and_wait_stage")
+
+    def _compute_in_warn_and_wait_stage(self):
+        warn_and_wait_stage = self.env.ref(
+            "payment_slimpay_issue.stage_warn_partner_and_wait",
+            raise_if_not_found=False,
+        )
+
+        for task in self:
+            task.in_warn_and_wait_stage = (
+                task.stage_id and task.stage_id == warn_and_wait_stage
+            )
+
     @api.model
     def _slimpay_payment_invoice_payment_next_date_days_delta(self):
         """Return the number of days the next payment trial will occur

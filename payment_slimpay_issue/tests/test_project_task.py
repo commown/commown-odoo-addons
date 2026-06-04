@@ -910,3 +910,26 @@ class ProjectTC(TransactionCase):
             ("not_paid", "paid", "not_paid"),
         )
         self.assertEqual((p0.state, p1.state, p2.state), ("cancel", "posted", "cancel"))
+
+    def test_in_warn_and_wait_stage(self):
+        "This boolean is used to render the Next payment date in the form view."
+        ref = self.env.ref
+
+        payment_issue_project = ref("payment_slimpay_issue.project_payment_issue")
+        warn_and_wait_stage = ref("payment_slimpay_issue.stage_warn_partner_and_wait")
+        new_stage = ref("payment_slimpay_issue.stage_new")
+
+        task = self.env["project.task"].create(
+            {"name": "Test task", "project_id": payment_issue_project.id}
+        )
+
+        # Case 1: No stage is set
+        task.stage_id = False
+        self.assertFalse(task.in_warn_and_wait_stage)
+
+        # Case 2: A random stage is set
+        task.stage_id = new_stage
+        self.assertFalse(task.in_warn_and_wait_stage)
+
+        # Case 3: The 'Warn partner and wait' stage is set
+        task.stage_id = warn_and_wait_stage
