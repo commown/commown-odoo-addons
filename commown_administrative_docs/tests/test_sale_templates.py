@@ -1,9 +1,20 @@
+from base64 import b64encode
+from pathlib import Path
+
 from lxml import html
 
 from odoo.http import root
 from odoo.tests import HttpCase
 
 from odoo.addons.product_rental.tests.common import RentalSaleOrderMixin
+
+HERE = (Path(__file__) / "..").resolve()
+
+
+def _get_dummy_document():
+    with open(HERE / "smallest.pdf", "rb") as fobj:
+        doc = b64encode(fobj.read())
+    return doc
 
 
 class CommonSaleAdminDocsMixin(RentalSaleOrderMixin):
@@ -54,6 +65,20 @@ class CommonSaleAdminDocsMixin(RentalSaleOrderMixin):
 
         self.assertTrue(self._get_docs_reminder_el(page))
         self.assertIn("kbis", self._get_docs_desc(page).lower())
+
+    def test_docs_already_set_b2c(self):
+        doc = _get_dummy_document()
+        self.partner.write({"id_card1": doc, "proof_of_address": doc})
+
+        page = self._set_so_and_get_shop_page()
+        self.assertFalse(self._get_docs_reminder_el(page))
+
+    def test_docs_already_set_b2b(self):
+        doc = _get_dummy_document()
+        self.partner.write({"id_card1": doc, "company_record": doc})
+
+        page = self._set_so_and_get_shop_page(is_b2b=True)
+        self.assertFalse(self._get_docs_reminder_el(page))
 
 
 class PaymentSaleAdminDocsTC(CommonSaleAdminDocsMixin, HttpCase):
