@@ -167,7 +167,7 @@ class ProjectTaskActionTC(NoSMSAssertMixin, TransactionCase):
         self.assertIsReminderEmail(self.task.message_ids[1])
 
     def _send_partner_email(self, task=None, author_id=None):
-        if task is None:
+        if task is None:  # pragma: no cover
             task = self.task
         self.env["mail.message"].create(
             {
