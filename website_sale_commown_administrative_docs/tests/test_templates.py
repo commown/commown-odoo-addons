@@ -19,6 +19,8 @@ class WebsiteSaleAdminDocsTC(RentalSaleOrderTC, HttpCase):
         match page:
             case "payment":
                 session["sale_order_id"] = so.id
+            case "confirmation":
+                session["sale_last_order_id"] = so.id
             case _:  # pragma: no cover
                 raise ValueError("Incorrect page type")
 
@@ -48,3 +50,28 @@ class WebsiteSaleAdminDocsTC(RentalSaleOrderTC, HttpCase):
         self.assertTrue(page.xpath("//div[@id='admin_docs_reminder']"))
         docs_desc = "".join(page.xpath("//div[@id='admin_docs_reminder']//a/text()"))
         self.assertIn("KBIS", docs_desc)
+
+    def test_docs_reminder_in_confirmation_b2c(self):
+        self._login_and_set_sale_order(self.so, "confirmation")
+
+        req = self.url_open("/shop/confirmation", allow_redirects=False)
+        self.assertEqual(req.status_code, 200)
+
+        page = html.fromstring(req.text)
+
+        self.assertTrue(page.xpath("//div[@id='admin_docs_reminder']"))
+        docs_desc = "".join(page.xpath("//div[@id='admin_docs_reminder']/text()"))
+        self.assertIn("justificatif de domicile", docs_desc)
+
+    def test_docs_reminder_in_confirmation_b2b(self):
+        self._login_and_set_sale_order(self.so, "confirmation")
+        self.partner.website_id = self.b2b_website
+
+        req = self.url_open("/shop/confirmation", allow_redirects=False)
+        self.assertEqual(req.status_code, 200)
+
+        page = html.fromstring(req.text)
+
+        self.assertTrue(page.xpath("//div[@id='admin_docs_reminder']"))
+        docs_desc = "".join(page.xpath("//div[@id='admin_docs_reminder']/text()"))
+        self.assertIn("Kbis", docs_desc)
