@@ -42,18 +42,6 @@ class ProjectTask(models.Model):
             )
 
     @api.model
-    def _slimpay_payment_invoice_payment_next_date_days_delta(self):
-        """Return the number of days the next payment trial will occur
-        after the partner has been warned.
-        """
-        return int(
-            self.env["ir.config_parameter"].get_param(
-                "payment_slimpay_issue.payment_retry_after_days_number"
-            )
-            or 5
-        )
-
-    @api.model
     def _slimpay_payment_max_retrials(self):
         """Return the number of automatic retrials before deciding to handle
         an issue manually.
