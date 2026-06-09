@@ -1,6 +1,9 @@
 from datetime import timedelta
 
+from dateutil.relativedelta import relativedelta
+
 from odoo.exceptions import ValidationError
+from odoo.tests import Form
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
 
@@ -40,6 +43,39 @@ class ContractTC(TestContractBase):
         self.assertEqual(
             set(self.contract.mapped("contract_line_ids.recurring_next_date")),
             {init_recurring_next_date},
+        )
+
+    def test_inverse_recurring_next_date_new_date(self):
+        "Setting the recurring next date on the contract should apply it on its lines"
+        self.contract2.is_auto_pay = False
+
+        # Simulating a case where we add another contract line and set a start date
+        # which is not on the usual birthday (which can happen accidentally).
+        cline = self.contract2.contract_line_ids
+        self.env["contract.line"].create(
+            {
+                "name": "Dummy contract line",
+                "contract_id": self.contract2.id,
+                "product_id": self.product_2.id,
+                "date_start": cline.recurring_next_date + timedelta(days=-10),
+                "recurring_next_date": cline.recurring_next_date + timedelta(days=-10),
+            }
+        )
+
+        self.contract2.recurring_create_invoice()
+
+        # After creating the previous invoice, we wish to resync the contract lines
+        # on the same recurring invoice date.
+        new_recurring_next_date = self.contract2.recurring_next_date + relativedelta(
+            months=+1
+        )
+
+        with Form(self.contract2) as form_contract:
+            form_contract.recurring_next_date = new_recurring_next_date
+
+        self.assertEqual(
+            set(self.contract2.mapped("contract_line_ids.recurring_next_date")),
+            {new_recurring_next_date},
         )
 
 

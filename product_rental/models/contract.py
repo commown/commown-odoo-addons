@@ -183,16 +183,20 @@ class Contract(models.Model):
                 new_date,
             )
 
-            for cline in record.contract_line_ids:
-                if cline.state == "canceled":
-                    continue
+            contract_lines = record.contract_line_ids
+            next_invoice_field = contract_lines._fields["recurring_next_date"]
 
-                if not last_date_invoiced or cline.date_start > last_date_invoiced:
-                    cline.last_date_invoiced = False
-                    cline.recurring_next_date = max(new_date, cline.date_start)
-                elif cline.date_end is False or cline.date_end > last_date_invoiced:
-                    cline.last_date_invoiced = last_date_invoiced
-                    cline.recurring_next_date = new_date
+            with self.env.protecting([next_invoice_field], contract_lines):
+                for cline in contract_lines:
+                    if cline.state == "canceled":
+                        continue
+
+                    if not last_date_invoiced or cline.date_start > last_date_invoiced:
+                        cline.last_date_invoiced = False
+                        cline.recurring_next_date = max(new_date, cline.date_start)
+                    elif cline.date_end is False or cline.date_end > last_date_invoiced:
+                        cline.last_date_invoiced = last_date_invoiced
+                        cline.recurring_next_date = new_date
 
     @api.depends("date_start", "commitment_period_number", "commitment_period_type")
     def _compute_commitment_end_date(self):
