@@ -9,6 +9,7 @@ class ProductTemplate(models.Model):
         string="Storable configurations",
         comodel_name="product.service_storable_config",
         inverse_name="service_tmpl_id",
+        copy=True,
     )
 
     def _create_variant_ids(self):

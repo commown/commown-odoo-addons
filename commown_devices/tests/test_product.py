@@ -234,3 +234,22 @@ class ProductServiceStorableConfigTC(DeviceAsAServiceTC):
             ),
             err2.exception.args[0],
         )
+
+    def test_product_storable_config_copy(self):
+        "Storable config must be copied when duplicating a product"
+
+        service_orig = self.fp3_service_tmpl
+        create_config(
+            service_orig,
+            "primary",
+            self.fp3_storable_tmpl,
+            self.fp3_storable_color1,
+        )
+
+        self.assertTrue(service_orig.storable_config_ids)
+        self.assertTrue(service_orig.product_variant_ids.primary_storable_variant_id)
+
+        service_copy = service_orig.copy({"name": "test copy"})
+
+        self.assertTrue(service_copy.storable_config_ids)
+        self.assertTrue(service_copy.product_variant_ids.primary_storable_variant_id)
