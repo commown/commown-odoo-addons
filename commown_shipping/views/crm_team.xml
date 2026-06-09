@@ -10,11 +10,11 @@
       </xpath>
       <xpath expr="//notebook" position="inside">
         <page name="shipping" string="Shipping">
-          <group>
-            <field name="carrier_account_id" />
-            <field name="picking_type_id" />
-          </group>
-          <group attrs="{'invisible': [('delivery_tracking', '=', False)]}">
+          <group
+                        name="tracking"
+                        string="Tracking"
+                        attrs="{'invisible': [('delivery_tracking', '=', False)]}"
+                    >
             <field name="default_perform_actions_on_delivery" />
             <field name="on_delivery_email_template_id" />
           </group>

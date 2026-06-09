@@ -6,9 +6,7 @@
     <field name="inherit_id" ref="project.edit_project" />
     <field name="arch" type="xml">
       <xpath expr="//sheet//field[@name='user_id']/ancestor::group" position="after">
-        <group string="Shipping">
-          <field name="carrier_account_id" />
-          <field name="picking_type_id" />
+        <group name="tracking" string="Tracking">
           <field name="delivery_tracking" />
           <field
                         name="default_perform_actions_on_delivery"
