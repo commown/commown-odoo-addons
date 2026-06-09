@@ -1,19 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-  <record model="ir.ui.view" id="edit_project">
-    <field name="name">project.project.form</field>
-    <field name="model">project.project</field>
-    <field name="inherit_id" ref="commown_shipping.edit_project" />
+  <record model="ir.ui.view" id="crm_team_view_form">
+    <field name="name">crm.team.form</field>
+    <field name="model">crm.team</field>
+    <field name="inherit_id" ref="sales_team.crm_team_view_form" />
     <field name="arch" type="xml">
-      <xpath expr="//sheet//field[@name='user_id']/ancestor::group" position="after">
-        <group string="Devices">
-          <field name="device_tracking" />
-          <field name="show_related_move_lines" />
-        </group>
-      </xpath>
-
-      <xpath expr="//group[@name='tracking']" position="before">
+      <xpath expr="//page[@name='shipping']//group[@name='tracking']" position="before">
         <group name="shipping" string="Shipping">
           <group name="carrier" string="Carrier">
             <field name="carrier_account_id" />

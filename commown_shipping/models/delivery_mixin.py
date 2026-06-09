@@ -284,18 +284,6 @@ class CommownDeliveryParentMixin(models.AbstractModel):
     _name = "commown.delivery.parent.mixin"
     _description = "Commown shipping parent mixin"
 
-    carrier_account_id = fields.Many2one(
-        "carrier.account",
-        string="Carrier account",
-        company_dependent=True,
-    )
-
-    picking_type_id = fields.Many2one(
-        "stock.picking.type",
-        string="Picking type",
-        company_dependent=True,
-    )
-
     delivery_tracking = fields.Boolean("Delivery tracking", default=False)
     default_perform_actions_on_delivery = fields.Boolean(
         "By default, perform actions on delivery", default=True

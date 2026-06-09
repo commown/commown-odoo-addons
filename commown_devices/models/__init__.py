@@ -1,5 +1,7 @@
+from . import picking_order_parent_mixin
 from . import contract
 from . import crm_lead
+from . import crm_team
 from . import account_move_line
 from . import product
 from . import product_category
@@ -20,5 +22,6 @@ from . import wizard_to_customer_picking
 from . import wizard_link_picking_po
 from . import wizard_link_po_invoice
 from . import wizard_move_line_validation
+from . import wizard_picking_order
 from . import wizard_project_task_picking
 from . import wizard_project_task_to_employee
