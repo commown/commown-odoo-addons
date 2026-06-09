@@ -88,7 +88,11 @@ class PickingToCustomerWizard(models.AbstractModel):
             else:
                 return loc_new + loc_repack
         else:
-            return ref("stock.stock_location_stock")
+            return (
+                ref("stock.stock_location_stock")
+                + ref("commown_devices.stock_location_modules_and_accessories")
+                + ref("commown_devices.stock_repackaged_modules_and_accessories")
+            )
 
     def _compute_products_locations(self):
         return find_products_orig_location(
