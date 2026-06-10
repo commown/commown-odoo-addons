@@ -78,6 +78,19 @@ class ContractTC(TestContractBase):
             {new_recurring_next_date},
         )
 
+    def test_inverse_recurring_next_date_on_cancelled_line(self):
+        "Cancelled contract lines should not be edited by the inverse method"
+        cline = self.contract.contract_line_ids
+        cline.cancel()
+
+        self.contract.recurring_next_date = (
+            self.contract.recurring_next_date + relativedelta(months=1)
+        )
+
+        self.assertNotEqual(
+            cline.recurring_next_date, self.contract.recurring_next_date
+        )
+
 
 class ContractFromSale(RentalSaleOrderTC):
     "Test for contract methods that needs a contract from a sale order"
