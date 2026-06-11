@@ -1,6 +1,7 @@
 import logging
 
 from odoo import api, fields, models
+from odoo.tools.float_utils import float_is_zero
 
 _logger = logging.getLogger(__name__)
 
@@ -39,9 +40,12 @@ class RentalProductTemplate(models.Model):
 
     def recurrent_payment_amount_ratio(self):
         self.ensure_one()
-        return self.has_recurrent_payment and (
-            (self.list_price or 1) / self.recurrent_payment_amount
-        )
+
+        if self.has_recurrent_payment:
+            ratio = self.list_price / self.recurrent_payment_amount
+            if float_is_zero(ratio, precision_rounding=0.001):
+                ratio = 1
+            return ratio
 
     @api.onchange("is_contract")
     def onchange_is_contract(self):
