@@ -5,7 +5,7 @@
 {
     "name": "Commown devices",
     "category": "stock",
-    "version": "16.0.1.0.19",
+    "version": "16.0.1.0.20",
     "author": "Commown SCIC",
     "license": "AGPL-3",
     "website": "https://github.com/commown/commown-odoo-addons",
