@@ -56,17 +56,13 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         for ref in self.destination_refs:
             loc = self.env.ref("commown_devices.%s" % ref)
 
-            if loc != orig_location:
-                if loc.usage == "view":
-                    result |= result.search(
-                        [
-                            ("id", "child_of", loc.id),
-                            ("usage", "!=", "view"),
-                            ("id", "!=", orig_location.id),
-                        ]
-                    )
-                else:
-                    result |= loc
+            result |= result.search(
+                [
+                    ("id", "child_of", loc.id),
+                    ("usage", "!=", "view"),
+                    ("id", "!=", orig_location.id),
+                ]
+            )
 
         return result
 
