@@ -252,6 +252,14 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
                 "present_location_id": values["present_location_id"],
             }
         )
+        with self.assertRaises(UserError) as err:
+            wizard.create_picking()
+        self.assertIn(
+            "The device was not present at that location at this date.",
+            str(err.exception),
+        )
+
+        wizard.date = datetime.datetime.now()
         wizard.create_picking()
 
         self.assertEqual(

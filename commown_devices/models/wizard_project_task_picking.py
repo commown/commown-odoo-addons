@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import format_date
 
 from .common import do_new_transfer, find_products_orig_location, internal_picking
 
@@ -89,6 +90,18 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
 
         if not lot:
             raise UserError(_("Can't move device: no device set on this task!"))
+
+        quant = self.task_id.lot_id.quant_ids.filtered(
+            lambda q: q.quantity > 0 and q.in_date <= self.date
+        )
+        if not quant:
+            raise UserError(
+                _(
+                    "The device was not present at that location at this date."
+                    " Please use a date after %(date)s"
+                )
+                % {"date": format_date(self.env, quant.in_date)}
+            )
 
         new_move_ids = internal_picking(
             [lot],
