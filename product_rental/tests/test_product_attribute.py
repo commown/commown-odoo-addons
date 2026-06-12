@@ -14,7 +14,23 @@ class ProductAttributeTemplateValueTC(TransactionCase):
         self.ptav.price_extra = 10.0
         self.assertEqual(self.ptav.recurrent_payment_amount_extra, 5.0)
 
+        self.product.list_price = 0
+        self.ptav.invalidate_recordset()
+        self.assertEqual(self.ptav.recurrent_payment_amount_extra, 10.0)
+
+        self.product.has_recurrent_payment = False
+        self.ptav.invalidate_recordset()
+        self.assertFalse(self.ptav.recurrent_payment_amount_extra)
+
     def test_inverse_recurrent_payment_amount_extra(self):
         self.assertTrue(self.ptav.has_recurrent_payment)
         self.ptav.recurrent_payment_amount_extra = 13.0
         self.assertEqual(self.ptav.price_extra, 26.0)
+
+        self.product.list_price = 0
+        self.ptav.recurrent_payment_amount_extra = 11.0
+        self.assertEqual(self.ptav.price_extra, 11.0)
+
+        self.product.has_recurrent_payment = False
+        self.ptav.recurrent_payment_amount_extra = 10.0
+        self.assertEqual(self.ptav.price_extra, 11.0)

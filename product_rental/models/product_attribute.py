@@ -19,20 +19,14 @@ class ProductTemplateAttributeValue(models.Model):
 
     def _compute_recurrent_payment_amount_extra(self):
         for ptav in self:
-            if ptav.has_recurrent_payment:
-                pt = ptav.product_tmpl_id
-                ptav.recurrent_payment_amount_extra = (
-                    ptav.price_extra * pt.recurrent_payment_amount / pt.list_price
-                )
+            ratio = ptav.product_tmpl_id.recurrent_payment_amount_ratio()
+            if ratio is not None:
+                ptav.recurrent_payment_amount_extra = ptav.price_extra / ratio
             else:
                 ptav.recurrent_payment_amount_extra = False
 
     def _inverse_recurrent_payment_amount_extra(self):
         for ptav in self:
-            if ptav.has_recurrent_payment:
-                pt = ptav.product_tmpl_id
-                ptav.price_extra = (
-                    ptav.recurrent_payment_amount_extra
-                    * pt.list_price
-                    / pt.recurrent_payment_amount
-                )
+            ratio = ptav.product_tmpl_id.recurrent_payment_amount_ratio()
+            if ratio is not None:
+                ptav.price_extra = ptav.recurrent_payment_amount_extra * ratio

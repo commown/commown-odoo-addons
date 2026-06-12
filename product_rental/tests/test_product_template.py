@@ -24,3 +24,13 @@ class ProductTemplateTC(TransactionCase):
         prod.has_recurrent_payment = True
         prod.onchange_is_contract()
         self.assertTrue(prod.has_recurrent_payment)
+
+    def test_recurrent_payment_amount_ratio(self):
+        prod = self.env.ref("product_rental.prod_pc")
+        self.assertEqual(prod.recurrent_payment_amount_ratio(), 2.0)
+
+        prod.list_price = 0.0
+        self.assertEqual(prod.recurrent_payment_amount_ratio(), 1.0)
+
+        prod.has_recurrent_payment = False
+        self.assertIsNone(prod.recurrent_payment_amount_ratio())

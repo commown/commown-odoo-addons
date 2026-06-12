@@ -359,6 +359,24 @@ class SaleOrderContractGenerationTC(RentalSaleOrderTC):
         self.assertEqual(inv.amount_total, 30.0)
         self.assertEqual(inv.amount_tax, 5.0)
 
+    def test_pure_service(self):
+        pt = self.env.ref("product_rental.prod_pc")
+        pt.update({"recurrent_payment_amount": 5.0, "list_price": 0.0})
+        ptav = pt.attribute_line_ids[0].product_template_value_ids[0]
+        ptav.price_extra = 1.0
+
+        product = pt.product_variant_ids.filtered(
+            lambda p: ptav in p.product_template_attribute_value_ids
+        )
+        partner = self.env.ref("base.res_partner_3")
+        so = self.env["sale.order"].create(
+            {"partner_id": partner.id, "order_line": [self._oline(product)]}
+        )
+        so.action_confirm()
+
+        contract = self.env["contract.contract"].of_sale(so)[0]
+        self.assertEqual(contract.contract_line_ids.price_unit, 6.0)
+
 
 class SaleOrderAttachmentsTC(RentalSaleOrderTC):
     def setUp(self):
