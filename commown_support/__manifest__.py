@@ -4,7 +4,7 @@
 {
     "name": "Commown Support",
     "summary": "Features related to Commown's tech support",
-    "version": "16.0.1.0.6",
+    "version": "16.0.1.0.7",
     "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",

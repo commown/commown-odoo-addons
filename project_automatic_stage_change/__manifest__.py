@@ -4,7 +4,7 @@
 {
     "name": "Project - Automatic stage changes",
     "summary": "Allow for automatic task stage changes upon receiving a message, or after a period of time",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
