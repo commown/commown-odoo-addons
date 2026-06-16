@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-22 15:45+0000\n"
+"POT-Creation-Date: 2026-06-12 14:50+0000\n"
 "PO-Revision-Date: 2025-12-22 17:58+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -21,12 +21,22 @@ msgstr ""
 #: model:sms.template,body:commown_administrative_docs.sms_template_lead_doc_reminder
 msgid ""
 "Rappel finalisation de votre commande : Pensez à mettre vos documents en "
-"ligne svp !\n"
+"ligne svp !"
 msgstr ""
 "Rappel finalisation de votre commande : Pensez à mettre vos documents en "
-"ligne svp !\n"
+"ligne svp !"
 "--\n"
 "L'équipe Commown - contact@commown.coop"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid "(pièce d'identité + KBIS ou équivalent)"
+msgstr "(pièce d'identité + KBIS ou équivalent)"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid "(pièce d'identité + justificatif de domicile)"
+msgstr "(pièce d'identité + justificatif de domicile)"
 
 #. module: commown_administrative_docs
 #: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_layout
@@ -42,7 +52,14 @@ msgstr "<i title=\"Télécharger le document\" class=\"fa fa-download\"/>"
 #. module: commown_administrative_docs
 #: model:ir.model,name:commown_administrative_docs.model_crm_lead
 msgid "Abstract class for obect that use wizard to send device to a customer"
-msgstr "Classe abstraite pour les objets qui utilisent l'assistant d'expédition d'appareil à un client"
+msgstr ""
+"Classe abstraite pour les objets qui utilisent l'assistant d'expédition "
+"d'appareil à un client"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid "Celle-ci sera validée dès que vous aurez rajouté"
+msgstr "Celle-ci sera validée dès que vous aurez rajouté"
 
 #. module: commown_administrative_docs
 #: model:ir.model.fields,field_description:commown_administrative_docs.field_res_partner__company_record
@@ -143,6 +160,31 @@ msgid "Undo removal"
 msgstr "Annuler la suppression"
 
 #. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid ""
+"Veuillez suivre les instructions contenues dans le mail que vous allez "
+"recevoir\n"
+"            après avoir confirmé votre commande et procédé au paiement du "
+"dépôt de garantie."
+msgstr ""
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid ""
+"Votre commande ne sera validée entièrement qu’à réception des documents "
+"nécessaires\n"
+"            à la création de votre contrat"
+msgstr ""
+"Votre commande ne sera validée entièrement qu’à réception des documents "
+"nécessaires\n"
+"            à la création de votre contrat"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid "."
+msgstr "."
+
+#. module: commown_administrative_docs
 #: model:ir.actions.server,name:commown_administrative_docs.action_crm_lead_send_sms_doc_reminder
 msgid "[commown] Envoyer le SMS de relance doc"
 msgstr "[commown] Envoyer le SMS de relance doc"
@@ -151,3 +193,36 @@ msgstr "[commown] Envoyer le SMS de relance doc"
 #: model:sms.template,name:commown_administrative_docs.sms_template_lead_doc_reminder
 msgid "[commown] SMS relance doc"
 msgstr "[commown] SMS relance doc"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid "ce lien"
+msgstr "ce lien"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid ""
+"de moins de 3 mois à votre espace client\n"
+"        (accessible via"
+msgstr ""
+"de moins de 3 mois à votre espace client\n"
+"        (accessible via"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid ")."
+msgstr ")."
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid ""
+"la pièce d'identité du responsable de votre structure et un Kbis (ou "
+"équivalent)"
+msgstr ""
+"la pièce d'identité du responsable de votre structure et un Kbis (ou "
+"équivalent)"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid "une pièce d'identité et un justificatif de domicile"
+msgstr "une pièce d'identité et un justificatif de domicile"

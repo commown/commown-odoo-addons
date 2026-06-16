@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: server-tools (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-22 15:45+0000\n"
+"POT-Creation-Date: 2026-06-12 14:50+0000\n"
 "PO-Revision-Date: 2025-12-22 17:59+0100\n"
 "Last-Translator: Peter Schubert <psc@saco.info>\n"
 "Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
@@ -24,10 +24,20 @@ msgstr ""
 #: model:sms.template,body:commown_administrative_docs.sms_template_lead_doc_reminder
 msgid ""
 "Rappel finalisation de votre commande : Pensez à mettre vos documents en "
-"ligne svp !\n"
+"ligne svp !"
 msgstr ""
 "ZUR ERINNERUNG: Denken Sie daran, Ihre Dokumente hochzuladen, um Ihre "
 "Bestellung abzuschließen."
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid "(pièce d'identité + KBIS ou équivalent)"
+msgstr "(Ausweis + Handelsregisterauszug oder gleichwertiges Dokument)"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid "(pièce d'identité + justificatif de domicile)"
+msgstr "(Ausweis + Wohnsitznachweis)"
 
 #. module: commown_administrative_docs
 #: model_terms:ir.ui.view,arch_db:commown_administrative_docs.portal_layout
@@ -43,7 +53,14 @@ msgstr "<i title=\"Dokument herunterladen\" class=\"fa fa-download\"/>"
 #. module: commown_administrative_docs
 #: model:ir.model,name:commown_administrative_docs.model_crm_lead
 msgid "Abstract class for obect that use wizard to send device to a customer"
-msgstr "Abstrakte Klasse für Objekte, die den Assistenten verwenden, um Geräte an Kunden zu senden"
+msgstr ""
+"Abstrakte Klasse für Objekte, die den Assistenten verwenden, um Geräte an "
+"Kunden zu senden"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid "Celle-ci sera validée dès que vous aurez rajouté"
+msgstr "Diese wird bestätigt, sobald Sie"
 
 #. module: commown_administrative_docs
 #: model:ir.model.fields,field_description:commown_administrative_docs.field_res_partner__company_record
@@ -142,6 +159,32 @@ msgid "Undo removal"
 msgstr "Löschung rückgängig machen"
 
 #. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid ""
+"Veuillez suivre les instructions contenues dans le mail que vous allez "
+"recevoir\n"
+"            après avoir confirmé votre commande et procédé au paiement du "
+"dépôt de garantie."
+msgstr ""
+"Bitte befolgen Sie die Anweisungen in der E-Mail, die Sie erhalten, "
+"nachdem Sie Ihre Bestellung bestätigt und die Kaution bezahlt haben."
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid ""
+"Votre commande ne sera validée entièrement qu’à réception des documents "
+"nécessaires\n"
+"            à la création de votre contrat"
+msgstr ""
+"Ihre Bestellung wird erst nach Eingang der für die Erstellung \n"
+"            Ihres Vertrags erforderlichen Unterlagen"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.payment
+msgid "."
+msgstr " vollständig bestätigt."
+
+#. module: commown_administrative_docs
 #: model:ir.actions.server,name:commown_administrative_docs.action_crm_lead_send_sms_doc_reminder
 msgid "[commown] Envoyer le SMS de relance doc"
 msgstr "[commown] Senden Sie die Erinnerungs-SMS doc"
@@ -150,3 +193,36 @@ msgstr "[commown] Senden Sie die Erinnerungs-SMS doc"
 #: model:sms.template,name:commown_administrative_docs.sms_template_lead_doc_reminder
 msgid "[commown] SMS relance doc"
 msgstr "[commown] SMS Mahnung zu Dokumenten"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid "ce lien"
+msgstr "diesen Link"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid ""
+"de moins de 3 mois à votre espace client\n"
+"        (accessible via"
+msgstr ""
+"der nicht älter als 3 Monate ist, in Ihrem Kundenbereich hochgeladen haben\n"
+"        (über"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid ")."
+msgstr " zugänglich) vollständig bestätigt."
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid ""
+"la pièce d'identité du responsable de votre structure et un Kbis (ou "
+"équivalent)"
+msgstr ""
+"den Ausweis des Verantwortlichen Ihrer Einrichtung und einen "
+"Handelsregisterauszug (oder gleichwertigen Nachweis)"
+
+#. module: commown_administrative_docs
+#: model_terms:ir.ui.view,arch_db:commown_administrative_docs.confirmation
+msgid "une pièce d'identité et un justificatif de domicile"
+msgstr "einen Ausweis und einen Wohnsitznachweis"

@@ -1,0 +1,66 @@
+<odoo>
+
+  <template id="payment" inherit_id="website_sale.payment">
+    <xpath expr="//div[@id='oe_structure_website_sale_payment_1']" position="after">
+      <t
+                t-set="is_b2b"
+                t-value="env.user.website_id == env.ref('website_b2b.b2b_website')"
+            />
+      <t t-set="partner" t-value="env.user.partner_id" />
+      <t
+                t-set="docs_already_set"
+                t-value="(partner.id_card1 or partner.id_card2) and ((is_b2b and partner.company_record) or (not is_b2b and partner.proof_of_address))"
+            />
+      <div
+                class="alert alert-info"
+                id="admin_docs_reminder"
+                t-if="not docs_already_set"
+            >
+        <p>
+          <b>
+            Votre commande ne sera validée entièrement qu’à réception des documents nécessaires
+            à la création de votre contrat
+            <t t-if="is_b2b">(pièce d'identité + KBIS ou équivalent)</t>
+            <t t-else="">(pièce d'identité + justificatif de domicile)</t>.
+          </b>
+        </p>
+
+        <p class="mb-0">
+            Veuillez suivre les instructions contenues dans le mail que vous allez recevoir
+            après avoir confirmé votre commande et procédé au paiement du dépôt de garantie.
+        </p>
+     </div>
+    </xpath>
+  </template>
+
+  <template id="confirmation" inherit_id="website_sale.confirmation">
+    <xpath
+            expr="//div[@id='oe_structure_website_sale_confirmation_1']"
+            position="after"
+        >
+      <t
+                t-set="is_b2b"
+                t-value="env.user.website_id == env.ref('website_b2b.b2b_website')"
+            />
+      <t t-set="partner" t-value="env.user.partner_id" />
+      <t
+                t-set="docs_already_set"
+                t-value="(partner.id_card1 or partner.id_card2) and ((is_b2b and partner.company_record) or (not is_b2b and partner.proof_of_address))"
+            />
+      <div
+                class="alert alert-warning"
+                id="admin_docs_reminder"
+                t-if="not docs_already_set"
+            >
+        Celle-ci sera validée dès que vous aurez rajouté
+        <t
+                    t-if="is_b2b"
+                >la pièce d'identité du responsable de votre structure et un Kbis (ou équivalent)</t>
+        <t t-else="">une pièce d'identité et un justificatif de domicile</t>
+        de moins de 3 mois à votre espace client
+        (accessible via <a href="/my/account">ce lien</a>).
+      </div>
+    </xpath>
+  </template>
+
+</odoo>
