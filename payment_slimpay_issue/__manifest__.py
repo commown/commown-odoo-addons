@@ -15,6 +15,7 @@
         "contract_payment_auto",
         "commown_res_partner_sms",
         "project",
+        "project_automatic_stage_change",
         "queue_job",
     ],
     "data": [

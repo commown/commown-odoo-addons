@@ -19,13 +19,7 @@ class ProjectTask(models.Model):
 
     invoice_id = fields.Many2one("account.move", string="Invoice")
     invoice_unpaid_count = fields.Integer("Number of payment issues", default=0)
-    invoice_next_payment_date = fields.Date(
-        "Invoice next payment date",
-        help=(
-            "If set in the future, the next payment trial (if any) will occur"
-            " at this date"
-        ),
-    )
+
     slimpay_payment_label = fields.Text(
         "Slimpay payment label",
         help=(
@@ -34,17 +28,18 @@ class ProjectTask(models.Model):
         ),
     )
 
-    @api.model
-    def _slimpay_payment_invoice_payment_next_date_days_delta(self):
-        """Return the number of days the next payment trial will occur
-        after the partner has been warned.
-        """
-        return int(
-            self.env["ir.config_parameter"].get_param(
-                "payment_slimpay_issue.payment_retry_after_days_number"
-            )
-            or 5
+    in_warn_and_wait_stage = fields.Boolean(compute="_compute_in_warn_and_wait_stage")
+
+    def _compute_in_warn_and_wait_stage(self):
+        warn_and_wait_stage = self.env.ref(
+            "payment_slimpay_issue.stage_warn_partner_and_wait",
+            raise_if_not_found=False,
         )
+
+        for task in self:
+            task.in_warn_and_wait_stage = (
+                task.stage_id and task.stage_id == warn_and_wait_stage
+            )
 
     @api.model
     def _slimpay_payment_max_retrials(self):

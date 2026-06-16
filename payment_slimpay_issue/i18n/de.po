@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 13:57+0000\n"
+"POT-Creation-Date: 2026-06-12 13:58+0000\n"
 "PO-Revision-Date: 2025-12-31 15:05+0100\n"
 "Last-Translator: <florent@commown.coop>\n"
 "Language-Team: Commown\n"
@@ -60,8 +60,8 @@ msgstr ""
 "<t t-set=\"date_format\" t-value=\"object.env[&#x27;res.lang&#x27;]."
 "search([(&#x27;code&#x27;, &#x27;=&#x27;, object.partner_id.lang)])."
 "date_format\"/>\n"
-"<t t-set=\"next_date\" t-value=\"object.invoice_next_payment_date and "
-"format_date(object.invoice_next_payment_date) or None\"/>\n"
+"<t t-set=\"next_date\" t-value=\"object.timely_stage_change_datetime and "
+"format_date(object.timely_stage_change_datetime) or None\"/>\n"
 "  <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida "
 "Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
 "    <a href=\"/\" style=\"text-decoration-thickness:auto;color:rgb(124, 123, "
@@ -159,16 +159,6 @@ msgstr ""
 "</div>\n"
 
 #. module: payment_slimpay_issue
-#: model:mail.template,body_html:payment_slimpay_issue.mail_max_trial
-msgid ""
-"\n"
-"\t<p>Max trial number reached for payment issue <t t-out=\"object.name\" /> "
-"id <t t-out=\"object.id\" /></p>\n"
-"\t\n"
-"    "
-msgstr ""
-
-#. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_new
 msgid "!! NE PAS SUPPRIMER !! (besoin les automatisques)"
 msgstr ""
@@ -177,6 +167,17 @@ msgstr ""
 #: model:project.project,name:payment_slimpay_issue.project_payment_issue
 msgid "5.11 IMPAYES : Suivi auto"
 msgstr "5.11 Abgelehnte Zahlungen"
+
+#. module: payment_slimpay_issue
+#: model:mail.template,body_html:payment_slimpay_issue.mail_max_trial
+msgid ""
+"<html>\n"
+"  <body><p>Max trial number reached for payment issue <t t-out=\"object."
+"name\"></t> id <t t-out=\"object.id\"></t>.</p>\n"
+"      \n"
+"      </body>\n"
+"</html>\n"
+msgstr ""
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_retry_payment_and_wait
@@ -192,6 +193,8 @@ msgstr ""
 #: model:ir.model,name:payment_slimpay_issue.model_project_task
 msgid "Abstract class for obect that use wizard to send device to a customer"
 msgstr ""
+"Abstrakte Klasse für Objekte, die den Assistenten verwenden, um Geräte an "
+"Kunden zu senden"
 
 #. module: payment_slimpay_issue
 #. odoo-python
@@ -322,12 +325,6 @@ msgid "Identifier of the Creditor Incorrect"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,help:payment_slimpay_issue.field_project_task__invoice_next_payment_date
-msgid ""
-"If set in the future, the next payment trial (if any) will occur at this date"
-msgstr ""
-
-#. module: payment_slimpay_issue
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_issue_fixed
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_max_trials_reached
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_new
@@ -336,6 +333,11 @@ msgstr ""
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid "In Progress"
 msgstr "In Arbeit"
+
+#. module: payment_slimpay_issue
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__in_warn_and_wait_stage
+msgid "In Warn And Wait Stage"
+msgstr ""
 
 #. module: payment_slimpay_issue
 #. odoo-python
@@ -357,7 +359,7 @@ msgid "Invoice id %d: could not find a payment token!"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_next_payment_date
+#: model_terms:ir.ui.view,arch_db:payment_slimpay_issue.project_task_form_view
 msgid "Invoice next payment date"
 msgstr ""
 
@@ -401,16 +403,6 @@ msgstr ""
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_max_trials_reached
 msgid "Max payment trials reached"
-msgstr ""
-
-#. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_fixed
-msgid "Move task to fixed after waiting delay"
-msgstr ""
-
-#. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_payment_retrial
-msgid "Move to retry payment stage at invoice next payment date"
 msgstr ""
 
 #. module: payment_slimpay_issue
@@ -511,7 +503,7 @@ msgid "Retry payment when entering the dedicated stage"
 msgstr ""
 
 #. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.set_invoice_next_payment_date_and_send_sms
+#: model:ir.actions.server,name:payment_slimpay_issue.send_payment_warn_sms
 msgid "Set next payment date when entering warn partner and wait stage"
 msgstr ""
 
@@ -552,10 +544,10 @@ msgstr ""
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid ""
-"When a payment incident arrives in this column, the partner is immediately "
-"notified by e-mail that the debit has been rejected. The incident then "
-"remains in this column for a certain number of days (configurable in the "
-"dedicated automated action), then is automatically moved to the next column."
+"When the issue is moved to this stage, the partner is immediately warned "
+"by email that the payment was rejected. The issue then stays here for a "
+"given number of days (see the timely_stage_change_days field value), "
+"then moves to the next stage."
 msgstr ""
 
 #. module: payment_slimpay_issue
@@ -573,16 +565,19 @@ msgid ""
 "--\n"
 "L'équipe Commown - contact@commown.coop"
 msgstr ""
-"{{ \"Der Lastschrifteinzug Ihrer letzten Monatszahlung wurde abgelehnt => Infos per E-Mail (sehen Sie bitte auch in Ihrem Spam-Ordner nach).\" if object.invoice_unpaid_count in (0, 1) else \"ERINNERUNG: Lastschrifteinzug abgelehnt => Wir bitten Sie dringend um Kontaktaufnahme.\" }}\n"
+"{{ \"Der Lastschrifteinzug Ihrer letzten Monatszahlung wurde abgelehnt => "
+"Infos per E-Mail (sehen Sie bitte auch in Ihrem Spam-Ordner nach).\" if "
+"object.invoice_unpaid_count in (0, 1) else \"ERINNERUNG: Lastschrifteinzug "
+"abgelehnt => Wir bitten Sie dringend um Kontaktaufnahme.\" }}\n"
 "--\n"
 "Ihr Commown-Team - hallo@commown.coop"
-
-#. module: payment_slimpay_issue
-#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
-msgid "{{ object.company_id.name }}: max payment trials reached"
-msgstr ""
 
 #. module: payment_slimpay_issue
 #: model:mail.template,subject:payment_slimpay_issue.mail_warn_user
 msgid "{{ object.project_id.company_id.name }}: rejected payment"
 msgstr "{{ object.project_id.company_id.name }}: abgelehnte Zahlung"
+
+#. module: payment_slimpay_issue
+#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
+msgid "{{object.user_id.company_id.name}}: max payment trials reached"
+msgstr ""

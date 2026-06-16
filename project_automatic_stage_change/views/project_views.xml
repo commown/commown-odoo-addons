@@ -1,0 +1,62 @@
+<odoo>
+
+    <record model="ir.ui.view" id="view_task_type_form">
+        <field
+            name="name"
+        >project.task.type.form (in project_automatic_stage_change)</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit" />
+        <field name="arch" type="xml">
+          <xpath expr="//group" position="after">
+            <group string="Automatic change">
+                <field name="has_timely_stage_change" />
+                <field
+                        name="timely_stage_change_days"
+                        attrs="{'invisible': [('has_timely_stage_change', '=', False)], 'required': [('has_timely_stage_change', '=', True)]}"
+                    />
+                <field
+                        name="timely_stage_dest"
+                        attrs="{'invisible': [('has_timely_stage_change', '=', False)], 'required': [('has_timely_stage_change', '=', True)]}"
+                    />
+            </group>
+          </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_task_form">
+        <field name="name">project.task.form (in project_automatic_stage_change)</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2" />
+        <field name="arch" type="xml">
+          <xpath expr="//notebook" position="inside">
+            <page
+                    name="automatic_change"
+                    string="Automatic change"
+                    attrs="{'invisible': [('has_timely_stage_change', '=', False)]}"
+                >
+                <group>
+                    <field name="has_timely_stage_change" invisible="1" />
+                    <field name="timely_stage_change_datetime" />
+                    <field name="timely_stage_dest" />
+                </group>
+            </page>
+          </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="edit_project">
+        <field
+            name="name"
+        >project.project.form (in project_automatic_stage_change)</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="arch" type="xml">
+          <xpath expr="//group[@name='extra_settings']" position="before">
+            <group string="Automatic change">
+                <field name="dest_stage_on_customer_message" />
+            </group>
+          </xpath>
+        </field>
+    </record>
+
+</odoo>

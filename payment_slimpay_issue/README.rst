@@ -46,16 +46,16 @@ Once the module is installed, you probably want to review:
   payment issue (search "rejected payment" in odoo's mail template
   list).
 
+- The number of days a task stays in the "Warn partner then wait" stage,
+  before being moved to the "Retry payment and wait" stage.
+  (Configurable in the stage settings menu).
+
 Note that if you delete the above-mentionned products, the issue
 handling process should still work and the invoice will not be added
 the fees. The product will not be recreated on module update, as this
 behaviour is supposed to be done on purpose by the user (you).
 
 You may also want to customize following system parameters:
-
-- payment_slimpay_issue.payment_retry_after_days_number: the number of
-  days to wait before attempting a new payment when a task enters the
-  stage_warn_partner_and_wait column
 
 - payment_slimpay_issue.management_fees_after_retrial_number: the
   number of payment issues without extra management fees invoiced to

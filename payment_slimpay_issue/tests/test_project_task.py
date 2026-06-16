@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from datetime import datetime, timedelta
+from datetime import timedelta
 from unittest import mock
 
 import requests
@@ -541,14 +541,13 @@ class ProjectTC(TransactionCase):
         for action in self.env["base.automation"].search([("trigger", "=", "on_time")]):
             xml_ids = list(action.get_external_id().values())
             if xml_ids and xml_ids[0].startswith(
-                "payment_slimpay_issue"
+                "project_automatic_stage_change"
             ):  # pragma: no cover
                 action.last_run = False
 
     def _simulate_wait(self, task, check_job_function=False, **timedelta_kwargs):
-        task.date_last_stage_update = datetime.utcnow() - timedelta(**timedelta_kwargs)
-        task.invoice_next_payment_date = task.invoice_next_payment_date - timedelta(
-            **timedelta_kwargs
+        task.timely_stage_change_datetime = (
+            task.timely_stage_change_datetime - timedelta(**timedelta_kwargs)
         )
         self._reset_on_time_actions_last_run()
         with trap_jobs() as trap:
@@ -911,3 +910,26 @@ class ProjectTC(TransactionCase):
             ("not_paid", "paid", "not_paid"),
         )
         self.assertEqual((p0.state, p1.state, p2.state), ("cancel", "posted", "cancel"))
+
+    def test_in_warn_and_wait_stage(self):
+        "This boolean is used to render the Next payment date in the form view."
+        ref = self.env.ref
+
+        payment_issue_project = ref("payment_slimpay_issue.project_payment_issue")
+        warn_and_wait_stage = ref("payment_slimpay_issue.stage_warn_partner_and_wait")
+        new_stage = ref("payment_slimpay_issue.stage_new")
+
+        task = self.env["project.task"].create(
+            {"name": "Test task", "project_id": payment_issue_project.id}
+        )
+
+        # Case 1: No stage is set
+        task.stage_id = False
+        self.assertFalse(task.in_warn_and_wait_stage)
+
+        # Case 2: A random stage is set
+        task.stage_id = new_stage
+        self.assertFalse(task.in_warn_and_wait_stage)
+
+        # Case 3: The 'Warn partner and wait' stage is set
+        task.stage_id = warn_and_wait_stage

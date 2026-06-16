@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 13:57+0000\n"
+"POT-Creation-Date: 2026-06-12 13:58+0000\n"
 "PO-Revision-Date: 2025-12-31 14:59+0100\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
@@ -61,8 +61,8 @@ msgstr ""
 "<t t-set=\"date_format\" t-value=\"object.env[&#x27;res.lang&#x27;]."
 "search([(&#x27;code&#x27;, &#x27;=&#x27;, object.partner_id.lang)])."
 "date_format\"/>\n"
-"<t t-set=\"next_date\" t-value=\"object.invoice_next_payment_date and "
-"format_date(object.invoice_next_payment_date) or None\"/>\n"
+"<t t-set=\"next_date\" t-value=\"object.timely_stage_change_datetime and "
+"format_date(object.timely_stage_change_datetime) or None\"/>\n"
 "  <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, "
 "Helvetica, Verdana, Arial, sans-serif;margin:0px 0px 9px 0px;\">\n"
 "    <a href=\"/\" style=\"background-color:transparent;color:rgb(124, 123, "
@@ -166,21 +166,6 @@ msgstr ""
 "</div>\n"
 
 #. module: payment_slimpay_issue
-#: model:mail.template,body_html:payment_slimpay_issue.mail_max_trial
-msgid ""
-"\n"
-"\t<p>Max trial number reached for payment issue <t t-out=\"object.name\" /> "
-"id <t t-out=\"object.id\" /></p>\n"
-"\t\n"
-"    "
-msgstr ""
-"\n"
-"\t<p>Nombre maximum de tentative de prélèvement atteint pour l'impayé <t t-"
-"out=\"object.name\" /> id <t t-out=\"object.id\" /></p>\n"
-"\t\n"
-"    "
-
-#. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_new
 msgid "!! NE PAS SUPPRIMER !! (besoin les automatisques)"
 msgstr "!! NE PAS SUPPRIMER !! (besoin les automatisques)"
@@ -189,6 +174,17 @@ msgstr "!! NE PAS SUPPRIMER !! (besoin les automatisques)"
 #: model:project.project,name:payment_slimpay_issue.project_payment_issue
 msgid "5.11 IMPAYES : Suivi auto"
 msgstr "5.11 IMPAYES : Suivi auto"
+
+#. module: payment_slimpay_issue
+#: model:mail.template,body_html:payment_slimpay_issue.mail_max_trial
+msgid ""
+"<html>\n"
+"  <body><p>Max trial number reached for payment issue <t t-out=\"object."
+"name\"></t> id <t t-out=\"object.id\"></t>.</p>\n"
+"      \n"
+"      </body>\n"
+"</html>\n"
+msgstr ""
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_retry_payment_and_wait
@@ -345,14 +341,6 @@ msgid "Identifier of the Creditor Incorrect"
 msgstr "Identification du créancier incorrecte"
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,help:payment_slimpay_issue.field_project_task__invoice_next_payment_date
-msgid ""
-"If set in the future, the next payment trial (if any) will occur at this date"
-msgstr ""
-"Lorsque paramétré dans le futur, la prochaine tentative de prélèvement (le "
-"cas échéant) aura lieu à cette date"
-
-#. module: payment_slimpay_issue
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_issue_fixed
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_max_trials_reached
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_new
@@ -361,6 +349,11 @@ msgstr ""
 #: model:project.task.type,legend_normal:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid "In Progress"
 msgstr "En cours"
+
+#. module: payment_slimpay_issue
+#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__in_warn_and_wait_stage
+msgid "In Warn And Wait Stage"
+msgstr ""
 
 #. module: payment_slimpay_issue
 #. odoo-python
@@ -382,7 +375,7 @@ msgid "Invoice id %d: could not find a payment token!"
 msgstr "Facture Id %d : impossible de trouver un mandat de paiement !"
 
 #. module: payment_slimpay_issue
-#: model:ir.model.fields,field_description:payment_slimpay_issue.field_project_task__invoice_next_payment_date
+#: model_terms:ir.ui.view,arch_db:payment_slimpay_issue.project_task_form_view
 msgid "Invoice next payment date"
 msgstr "Date du prochain prélèvement"
 
@@ -433,16 +426,6 @@ msgstr "Nb max d'impayés Slimpay atteint"
 #: model:project.task.type,name:payment_slimpay_issue.stage_max_trials_reached
 msgid "Max payment trials reached"
 msgstr "Nb max d'impayés atteint"
-
-#. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_fixed
-msgid "Move task to fixed after waiting delay"
-msgstr "Passer l'incident de paiement dans la colonne Prélèvement validé"
-
-#. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.action_move_task_to_payment_retrial
-msgid "Move to retry payment stage at invoice next payment date"
-msgstr "Passer l'incident de paiement dans la colonne Tentative de prélèvement"
 
 #. module: payment_slimpay_issue
 #: model:project.task.type,name:payment_slimpay_issue.stage_new
@@ -563,7 +546,7 @@ msgid "Retry payment when entering the dedicated stage"
 msgstr "Re-tenter un prélèvement lors du déplacement dans la colonne dédiée"
 
 #. module: payment_slimpay_issue
-#: model:ir.actions.server,name:payment_slimpay_issue.set_invoice_next_payment_date_and_send_sms
+#: model:ir.actions.server,name:payment_slimpay_issue.send_payment_warn_sms
 msgid "Set next payment date when entering warn partner and wait stage"
 msgstr "Paramétrer la date du prochain prélèvement"
 
@@ -604,16 +587,16 @@ msgstr "Avertir le partenaire et attendre"
 #. module: payment_slimpay_issue
 #: model:project.task.type,description:payment_slimpay_issue.stage_warn_partner_and_wait
 msgid ""
-"When a payment incident arrives in this column, the partner is immediately "
-"notified by e-mail that the debit has been rejected. The incident then "
-"remains in this column for a certain number of days (configurable in the "
-"dedicated automated action), then is automatically moved to the next column."
+"When the issue is moved to this stage, the partner is immediately warned "
+"by email that the payment was rejected. The issue then stays here for a "
+"given number of days (see the timely_stage_change_days field value), "
+"then moves to the next stage."
 msgstr ""
 "Lorsqu'un incident de paiement arrive dans cette colonne,  le partenaire est "
 "immédiatement averti par courriel que le prélèvement a été rejeté. "
 "L'incident reste alors dans cette colonne un certain nombre de jours "
-"(paramétrable dans l'action automatisée dédiée), puis est automatiquement "
-"bougée dans la colonne suivante."
+"(paramétrable sur le champ 'Nb de jours avant changement passif d'étape'),"
+" puis est automatiquement bougée dans la colonne suivante."
 
 #. module: payment_slimpay_issue
 #: model:sms.template,name:payment_slimpay_issue.sms
@@ -630,17 +613,12 @@ msgid ""
 "--\n"
 "L'équipe Commown - contact@commown.coop"
 msgstr ""
-"{{ \"Le prélèvement de votre dernière mensualité a été rejeté => Infos par mail (pensez à consulter vos spams).\" if object.invoice_unpaid_count in (0, 1) else \"RAPPEL : Rejet de prélèvement de mensualité => Contactez-nous d'urgence svp.\" }}\n"
+"{{ \"Le prélèvement de votre dernière mensualité a été rejeté => Infos par "
+"mail (pensez à consulter vos spams).\" if object.invoice_unpaid_count in (0, "
+"1) else \"RAPPEL : Rejet de prélèvement de mensualité => Contactez-nous "
+"d'urgence svp.\" }}\n"
 "--\n"
 "L'équipe Commown - contact@commown.coop"
-
-#. module: payment_slimpay_issue
-#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
-msgid "{{ object.company_id.name }}: max payment trials reached"
-msgstr ""
-"{{object.user_id.company_id.name}} : nombre maximum de tentatives de "
-"prélèvement d'impayé atteint<{{object.user_id.company_id.name}} : nombre "
-"maximum de tentatives de prélèvement d'impayé atteint"
 
 #. module: payment_slimpay_issue
 #: model:mail.template,subject:payment_slimpay_issue.mail_warn_user
@@ -650,3 +628,41 @@ msgstr ""
 "invoice_unpaid_count or object.invoice_unpaid_count == 1) and 'Rejet de "
 "prélèvement %s') or 'RELANCE amiable rejet de prélèvement %s') % object."
 "invoice_id.name }}"
+
+#. module: payment_slimpay_issue
+#: model:mail.template,subject:payment_slimpay_issue.mail_max_trial
+msgid "{{object.user_id.company_id.name}}: max payment trials reached"
+msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "\t<p>Max trial number reached for payment issue <t t-out=\"object.name\" /"
+#~ "> id <t t-out=\"object.id\" /></p>\n"
+#~ "\t\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "\t<p>Nombre maximum de tentative de prélèvement atteint pour l'impayé <t "
+#~ "t-out=\"object.name\" /> id <t t-out=\"object.id\" /></p>\n"
+#~ "\t\n"
+#~ "    "
+
+#~ msgid ""
+#~ "If set in the future, the next payment trial (if any) will occur at this "
+#~ "date"
+#~ msgstr ""
+#~ "Lorsque paramétré dans le futur, la prochaine tentative de prélèvement "
+#~ "(le cas échéant) aura lieu à cette date"
+
+#~ msgid "Move task to fixed after waiting delay"
+#~ msgstr "Passer l'incident de paiement dans la colonne Prélèvement validé"
+
+#~ msgid "Move to retry payment stage at invoice next payment date"
+#~ msgstr ""
+#~ "Passer l'incident de paiement dans la colonne Tentative de prélèvement"
+
+#~ msgid "{{ object.company_id.name }}: max payment trials reached"
+#~ msgstr ""
+#~ "{{object.user_id.company_id.name}} : nombre maximum de tentatives de "
+#~ "prélèvement d'impayé atteint<{{object.user_id.company_id.name}} : nombre "
+#~ "maximum de tentatives de prélèvement d'impayé atteint"

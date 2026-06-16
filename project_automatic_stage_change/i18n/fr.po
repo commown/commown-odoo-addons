@@ -1,0 +1,121 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_invoice_merge_auto
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-12 14:08+0000\n"
+"PO-Revision-Date: 2019-07-02 09:54+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_automatic_stage_change
+#: model:ir.model,name:project_automatic_stage_change.model_project_task
+msgid "Abstract class for obect that use wizard to send device to a customer"
+msgstr ""
+"Classe abstraite pour les objets qui utilisent l'assistant d'expédition "
+"d'appareil à un client"
+
+#. module: project_automatic_stage_change
+#: model_terms:ir.ui.view,arch_db:project_automatic_stage_change.edit_project
+#: model_terms:ir.ui.view,arch_db:project_automatic_stage_change.view_task_form
+#: model_terms:ir.ui.view,arch_db:project_automatic_stage_change.view_task_type_form
+msgid "Automatic change"
+msgstr "Changement automatique"
+
+#. module: project_automatic_stage_change
+#: model:ir.actions.server,name:project_automatic_stage_change.move_task_to_timely_stage_dest_action
+msgid "Change task stage to its timely_stage_dest"
+msgstr "Déplacer une tâche à l'étape timely_stage_dest"
+
+#. module: project_automatic_stage_change
+#: model:ir.actions.server,name:project_automatic_stage_change.active_stage_change_action
+msgid "Change task stage upon message reception"
+msgstr "Déplacer une tâche après réception d'un message"
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_project__dest_stage_on_customer_message
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__dest_stage_on_customer_message
+msgid "Dest Stage On Customer Message"
+msgstr "Étape de destination après réception d'un message"
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__has_timely_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task_type__has_timely_stage_change
+msgid "Has Timely Stage Change"
+msgstr "Changement passif d'étape activé"
+
+#. module: project_automatic_stage_change
+#: model:ir.model,name:project_automatic_stage_change.model_project_project
+msgid "Project"
+msgstr "Projet"
+
+#. module: project_automatic_stage_change
+#: model:ir.model,name:project_automatic_stage_change.model_project_task_type
+msgid "Task Stage"
+msgstr "Étape de tâche"
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,help:project_automatic_stage_change.field_project_task_type__timely_stage_change_days
+msgid ""
+"This number can only be set as strictly positive, otherwise, any task moved "
+"into this stage would be moved directly to the defined destination stage."
+msgstr ""
+"Ce nombre ne peut que être défini comme positif strict, sous quoi quelconque tâche "
+"placée dans cette étape serait déplacée dans l'étape de destination définie."
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__timely_stage_change_datetime
+msgid "Timely Stage Change Datetime"
+msgstr "Date du changement passif d'étape"
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task_type__timely_stage_change_days
+msgid "Timely Stage Change Days"
+msgstr "Nb de jours avant changement passif d'étape"
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__timely_stage_dest
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task_type__timely_stage_dest
+msgid "Timely Stage Dest"
+msgstr "Étape de destination du changement passif"
+
+#. module: project_automatic_stage_change
+#. odoo-python
+#: code:addons/project_automatic_stage_change/models/project_task_type.py:0
+#, python-format
+msgid ""
+"You must set a default number of days for the passive change, as the passive "
+"change is active on this stage."
+msgstr ""
+"Vous devez définir un nombre de jours par défaut pour le changement passif, "
+"car la fonctionnalité de changement passif est activé sur cette étape."
+
+#. module: project_automatic_stage_change
+#. odoo-python
+#: code:addons/project_automatic_stage_change/models/project_task_type.py:0
+#, python-format
+msgid ""
+"You must set a destination stage for the passive change, as the passive "
+"change is active on this stage."
+msgstr ""
+"Vous devez définir une étape de destination, car le changement passif d'étape "
+"est activé sur cette étape."
+
+#. module: project_automatic_stage_change
+#. odoo-python
+#: code:addons/project_automatic_stage_change/models/project_task_type.py:0
+#, python-format
+msgid ""
+"You must set a strictly positive number of days! (or else, any task would be "
+"immediatly moved after being set in this stage)"
+msgstr ""
+"Vous devez rentrer un nombre de jours positif ! (sous quoi, toute tâche "
+"serait déplacée immédiatement après être placée dans cette étape)"

@@ -1,0 +1,110 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* project_automatic_stage_change
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20260327\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-12 14:09+0000\n"
+"PO-Revision-Date: 2026-06-12 14:09+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_automatic_stage_change
+#: model:ir.model,name:project_automatic_stage_change.model_project_task
+msgid "Abstract class for obect that use wizard to send device to a customer"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model_terms:ir.ui.view,arch_db:project_automatic_stage_change.edit_project
+#: model_terms:ir.ui.view,arch_db:project_automatic_stage_change.view_task_form
+#: model_terms:ir.ui.view,arch_db:project_automatic_stage_change.view_task_type_form
+msgid "Automatic change"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.actions.server,name:project_automatic_stage_change.move_task_to_timely_stage_dest_action
+msgid "Change task stage to its timely_stage_dest"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.actions.server,name:project_automatic_stage_change.active_stage_change_action
+msgid "Change task stage upon message reception"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_project__dest_stage_on_customer_message
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__dest_stage_on_customer_message
+msgid "Dest Stage On Customer Message"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__has_timely_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task_type__has_timely_stage_change
+msgid "Has Timely Stage Change"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model,name:project_automatic_stage_change.model_project_project
+msgid "Project"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model,name:project_automatic_stage_change.model_project_task_type
+msgid "Task Stage"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,help:project_automatic_stage_change.field_project_task_type__timely_stage_change_days
+msgid ""
+"This number can only be set as strictly positive, otherwise, any task moved "
+"into this stage would be moved directly to the defined destination stage."
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__timely_stage_change_datetime
+msgid "Timely Stage Change Datetime"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task_type__timely_stage_change_days
+msgid "Timely Stage Change Days"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task__timely_stage_dest
+#: model:ir.model.fields,field_description:project_automatic_stage_change.field_project_task_type__timely_stage_dest
+msgid "Timely Stage Dest"
+msgstr ""
+
+#. module: project_automatic_stage_change
+#. odoo-python
+#: code:addons/project_automatic_stage_change/models/project_task_type.py:0
+#, python-format
+msgid ""
+"You must set a default number of days for the passive change, as the passive"
+" change is active on this stage."
+msgstr ""
+
+#. module: project_automatic_stage_change
+#. odoo-python
+#: code:addons/project_automatic_stage_change/models/project_task_type.py:0
+#, python-format
+msgid ""
+"You must set a destination stage for the passive change, as the passive "
+"change is active on this stage."
+msgstr ""
+
+#. module: project_automatic_stage_change
+#. odoo-python
+#: code:addons/project_automatic_stage_change/models/project_task_type.py:0
+#, python-format
+msgid ""
+"You must set a strictly positive number of days! (or else, any task would be"
+" immediatly moved after being set in this stage)"
+msgstr ""
