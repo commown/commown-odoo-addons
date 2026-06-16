@@ -4,7 +4,7 @@
 {
     "name": "Commown - Handle Administrative Documents",
     "summary": "Handle download and consultation of administrative documents for portal and internal users.",
-    "version": "16.0.1.0.7",
+    "version": "16.0.1.0.8",
     "development_status": "Beta",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
