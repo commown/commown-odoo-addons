@@ -66,3 +66,6 @@ class StockProductionLotTC(BaseLotTC):
             "Lot %s not found in available stock" % self.lot.name,
             err.exception.args[0],
         )
+
+    def test_current_location_id(self):
+        self.assertEqual(self.lot.current_location_id, self.location_internal_available)
