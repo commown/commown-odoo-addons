@@ -6,6 +6,11 @@ class StockLot(models.Model):
 
     contract_id = fields.Many2one("contract.contract", string="Contract")
 
+    current_location_id = fields.Many2one(
+        "stock.location",
+        compute="_compute_current_location_id",
+    )
+
     def name_get(self):
         result = []
         for record in self:
@@ -14,6 +19,10 @@ class StockLot(models.Model):
                 name += " (%s)" % record.product_id.display_name
             result.append((record.id, name))
         return result
+
+    def _compute_current_location_id(self):
+        for lot in self:
+            lot.current_location_id = lot.current_location()
 
     def current_location(
         self,
