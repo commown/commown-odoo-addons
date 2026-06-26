@@ -259,7 +259,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             str(err.exception),
         )
 
-        wizard.date = datetime.datetime.now()
+        wizard.date = False  # defaults to now
         wizard.create_picking()
 
         self.assertEqual(

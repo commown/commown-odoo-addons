@@ -87,6 +87,8 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         if not lot:
             raise UserError(_("Can't move device: no device set on this task!"))
 
+        self.date = self.date or fields.Datetime.now()
+
         quant = self.task_id.lot_id.quant_ids.filtered(
             lambda q: q.quantity > 0 and q.in_date <= self.date
         )
@@ -112,7 +114,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         )
         do_new_transfer(
             new_move_ids.mapped("picking_id"),
-            self.date or fields.Datetime.now(),
+            self.date,
         )
         return new_move_ids
 
