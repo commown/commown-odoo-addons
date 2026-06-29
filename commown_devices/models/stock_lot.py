@@ -6,6 +6,11 @@ class StockLot(models.Model):
 
     contract_id = fields.Many2one("contract.contract", string="Contract")
 
+    important_tasks = fields.One2many(
+        "project.task",
+        compute="_compute_important_tasks",
+    )
+
     current_location_id = fields.Many2one(
         "stock.location",
         compute="_compute_current_location_id",
@@ -19,6 +24,25 @@ class StockLot(models.Model):
                 name += " (%s)" % record.product_id.display_name
             result.append((record.id, name))
         return result
+
+    def _compute_important_tasks(self):
+        customer_loc = self.env.ref("stock.stock_location_customers")
+        to_check_loc = self.env.ref("commown_devices.stock_location_devices_to_check")
+
+        def has_return(task):
+            return any(
+                (
+                    ml.location_id.parent_path.startswith(customer_loc.parent_path)
+                    and ml.location_dest_id == to_check_loc
+                )
+                for ml in task.move_line_ids
+            )
+
+        for lot in self:
+            related_tasks = self.env["project.task"].search([("lot_id", "=", lot.id)])
+            important_tasks = related_tasks.filtered("add_to_device_history")
+            important_tasks |= (related_tasks - important_tasks).filtered(has_return)
+            lot.important_tasks = important_tasks
 
     def _compute_current_location_id(self):
         for lot in self:

@@ -10,6 +10,25 @@
         <field name="current_location_id" />
       </field>
 
+      <xpath expr="//notebook/page[@name='description']" position="before">
+        <page name="history" string="Device history">
+          <field name="important_tasks">
+            <tree default_order="create_date DESC, id ASC">
+              <field name="project_id" widget="many2one_barcode" optional="show" />
+              <field name="name" optional="show" />
+              <field name="create_date" optional="show" />
+              <field
+                                name="commercial_partner_id"
+                                widget="many2one_barcode"
+                                optional="show"
+                            />
+              <field name="stage_id" optional="show" />
+              <field name="tag_ids" widget="many2many_tags" optional="show" />
+            </tree>
+          </field>
+        </page>
+      </xpath>
+
     </field>
   </record>
 
