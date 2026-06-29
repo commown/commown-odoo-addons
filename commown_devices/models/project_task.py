@@ -64,6 +64,11 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         store=False,
     )
 
+    add_to_device_history = fields.Boolean(
+        string="Add this task to device history?",
+        default=False,
+    )
+
     def _compute_storable_product_domain(self):
         domain = [("type", "=", "product")]
         if self.require_contract:

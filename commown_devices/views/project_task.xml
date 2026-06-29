@@ -15,6 +15,20 @@
           <field name="device_tracking" invisible="1" />
         </group>
       </xpath>
+
+      <xpath expr="//field[@name='partner_id']" position="after">
+        <field
+                    name="recipient_partner_id"
+                    widget="res_partner_many2one"
+                    context="{'show_address': 1}"
+                    options='{"always_reload": True}'
+                />
+      </xpath>
+
+      <field name="contract_id" position="after">
+        <field name="add_to_device_history" />
+      </field>
+
     </field>
   </record>
 
