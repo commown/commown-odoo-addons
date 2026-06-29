@@ -1,0 +1,16 @@
+<odoo>
+
+  <record id="view_lot_form" model="ir.ui.view">
+    <field name="name">stock.lot.form (in commown_devices)</field>
+    <field name="model">stock.lot</field>
+    <field name="inherit_id" ref="stock.view_production_lot_form" />
+    <field name="arch" type="xml">
+
+      <field name="ref" position="after">
+        <field name="current_location_id" />
+      </field>
+
+    </field>
+  </record>
+
+</odoo>

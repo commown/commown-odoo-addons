@@ -44,6 +44,7 @@
         "views/purchase_order.xml",
         "views/stock_picking.xml",
         "views/stock_location.xml",
+        "views/stock_lot.xml",
         "views/stock_scrap.xml",
         "views/wizard_link_picking_po.xml",
         "views/wizard_link_po_invoice.xml",
