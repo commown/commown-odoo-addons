@@ -10,6 +10,7 @@
         <group string="Devices">
           <field name="device_tracking" />
           <field name="show_related_move_lines" />
+          <field name="add_tasks_to_device_history" />
         </group>
       </xpath>
     </field>

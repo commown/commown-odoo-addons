@@ -294,3 +294,12 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         """
         match = REGEX_SO.match(self.name or "")
         return match.groups()[0] if match else "Task-%s" % self.id
+
+    @api.model_create_multi
+    def create(self, values_list):
+        "On task creation, use project's add_to_device_history as a default"
+        tasks = super().create(values_list)
+        for task, values in zip(tasks, values_list):
+            if "add_to_device_history" not in values:
+                task.add_to_device_history = task.project_id.add_tasks_to_device_history
+        return tasks
