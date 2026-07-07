@@ -1,0 +1,32 @@
+<odoo>
+
+    <template id="portal_layout_sponsoring" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('o_portal_my_details')]" position="after">
+            <t t-set="partner" t-value="user_id.partner_id.commercial_partner_id" />
+            <div class="o_portal_sponsoring mt-4" t-if="partner.sponsor_campaign_id">
+                <h4>Parrainage</h4>
+                <hr class="mt-1 mb-0" />
+                <div>Mon code de parrainage</div>
+                <div class="input-group my-1">
+                    <strong class="input-group-text" t-out="partner.sponsor_code" />
+                    <button
+                        t-att-data-clipboard-text="partner.sponsor_code"
+                        class="btn btn-outline-primary copy-to-clipboard"
+                    >
+                        <i class="fa fa-clipboard" /> Copier
+                    </button>
+                </div>
+                <div class="list-group">
+                    Une mensualité offerte pour vous et votre filleul !
+                    <br />
+                    <a
+                        href="https://forum.commown.coop/t/les-defis-de-commown-et-des-commowners/2495#p-2607-dfi-2-boule-de-neige-2"
+                        target="_blank"
+                        class="list-group-item text-center mt-2"
+                    >En savoir plus</a>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>
