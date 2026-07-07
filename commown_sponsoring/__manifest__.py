@@ -12,9 +12,11 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
+        "contract",
         "website_sale_coupon",
     ],
     "data": [
+        "data/ir_config_parameter.xml",
         "views/view_campaign.xml",
         "views/view_res_partner.xml",
     ],
