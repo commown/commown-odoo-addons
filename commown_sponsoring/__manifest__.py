@@ -20,11 +20,13 @@
         "data/base_automation.xml",
         "data/ir_config_parameter.xml",
         "data/mail_templates.xml",
+        "views/customer_portal_templates.xml",
         "views/view_campaign.xml",
         "views/view_res_partner.xml",
     ],
     "assets": {
         "web.assets_frontend": [
+            "/commown_sponsoring/static/src/js/sponsor_code_copy.esm.js",
             "/commown_sponsoring/static/src/js/website_sale_coupon.esm.js",
         ]
     },
