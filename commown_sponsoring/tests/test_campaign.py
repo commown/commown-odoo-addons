@@ -26,6 +26,26 @@ class SponsoringCampaignTC(SponsoringTC):
             campaign,
         )
 
+    def test_sponsor_code_unique_among_single_company(self):
+        "B2B sustomers should only have one sponsor campaign among their company."
+        company = self.env.ref("base.res_partner_1")
+        empl1 = self.env["res.partner"].create(
+            {"name": "Employee 1", "email": "e1@test.coop", "parent_id": company.id}
+        )
+
+        self.assertFalse((empl1 | company).sponsor_campaign_id)
+
+        empl1._create_sponsor_campaign()
+        campaign = empl1.commercial_partner_id.sponsor_campaign_id
+        self.assertTrue(campaign)
+        self.assertEqual(campaign, company.sponsor_campaign_id)
+
+        # Newcomers to the company should have access to the sponsor campaign
+        empl2 = self.env["res.partner"].create(
+            {"name": "Employee 2", "email": "e2@test.coop", "parent_id": company.id}
+        )
+        self.assertEqual(campaign, empl2.commercial_partner_id.sponsor_campaign_id)
+
     def test_sponsor_campaign_creation_upon_contract_start(self):
         "Starting a contract should trigger the creation of a sponsorship campaign"
         self.assertFalse(self.partner.sponsor_campaign_id)
