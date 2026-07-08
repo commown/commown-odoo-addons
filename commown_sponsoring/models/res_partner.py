@@ -13,6 +13,22 @@ class SponsoringResPartner(models.Model):
         string="Sponsor code", related="sponsor_campaign_id.name"
     )
 
+    def is_sponsor_code_active(self):
+        self.ensure_one()
+        active_contracts = self.env["contract.contract"].search(
+            [
+                ("commercial_partner_id", "=", self.commercial_partner_id.id),
+                ("contract_type", "=", "sale"),
+                ("date_start", "<=", fields.Date.today()),
+                "|",
+                ("date_end", ">=", fields.Date.today()),
+                "&",
+                ("date_end", "=", False),
+                ("recurring_next_date", "!=", False),
+            ]
+        )
+        return active_contracts
+
     def _create_sponsor_campaign(self):
         Campaign = self.env["coupon.campaign"]
         Coupon = self.env["coupon.coupon"]
