@@ -18,7 +18,9 @@ class SponsoringResPartner(models.Model):
         Coupon = self.env["coupon.coupon"]
 
         for partner in self:
-            # We wish to only have one sponsor campaign per customer
+            partner = partner.commercial_partner_id
+
+            # We wish to only have one sponsor campaign per customer/company
             if not partner.sponsor_campaign_id:
                 for _i in range(MAX_SPONSOR_CODE_REROLLS):
                     code = "P-" + "".join(
