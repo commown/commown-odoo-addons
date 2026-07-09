@@ -1,0 +1,37 @@
+<odoo>
+
+    <record id="action_send_sponsor_notification_mail" model="ir.actions.server">
+        <field name="name">[Commown] Send sponsoring notification mail</field>
+        <field name="model_id" ref="contract.model_contract_contract" />
+        <field name="state">code</field>
+        <field
+            name="code"
+        ><![CDATA[
+mail_tmpl = env.ref("commown_sponsoring.mail_sponsoring_notify")
+found_sponsors = {}
+for contract in records:
+    # If a sponsor code was used on the related order,
+    # notify the sponsoring partner their code was used and by whom.
+    order_coupons = contract.mapped("contract_line_ids.sale_order_line_id.order_id.used_coupon_ids")
+
+    sponsor = order_coupons.campaign_id.sponsor_partner_id
+    if sponsor:
+        found_sponsors.setdefault(sponsor, set())
+        found_sponsors[sponsor].add(contract.partner_id)
+
+for sponsor, sponsored_partners in found_sponsors.items():
+    previous_messages = sponsor.message_ids
+    for sponsored_partner in sponsored_partners:
+        if not previous_messages.filtered_domain(
+            [("body_html", "like", sponsored_partner.name)]
+        ):
+            sponsor.with_context(sponsored=sponsored_partner).message_post_with_template(
+                mail_tmpl.id,
+                message_type="comment",
+                subtype_id=env.ref("mail.mt_note").id,
+            )
+
+]]></field>
+    </record>
+
+</odoo>
