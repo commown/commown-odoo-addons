@@ -16,7 +16,7 @@ class SponsoringSaleTC(SponsoringTC):
         cls.contract_2.date_start = "2026-01-01"
 
         cls.demo_partner = cls.env.ref("base.partner_demo")
-        cls.product = cls.env.ref("product.product_product_1")
+        cls.product = cls.env.ref("product_rental.prod_fp")
         cls.so = cls.env["sale.order"].create(
             {
                 "name": "Dummy Sale Order",
@@ -73,3 +73,36 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
             so2.reserve_coupon(self.partner_2.sponsor_code)
 
         self.assertIn("code on a previous order", exc.exception.args[0])
+
+    def _trigger_sponsor_msg_action(self):
+        auto = self.env.ref(
+            "commown_sponsoring.automation_send_sponsor_notification_email"
+        )
+        auto.last_run = False
+        auto._check()
+
+    def test_sponsor_confirmation_email_to_sponsor_ok(self):
+        "Whenever a sponsor code is used, its sponsor should be notified"
+        self.so.reserve_coupon(self.partner.sponsor_code)
+        self.so.action_confirm()
+
+        new_contract = self.env["contract.contract"].of_sale(self.so)
+        new_contract.date_start = "2026-03-01"
+
+        self._trigger_sponsor_msg_action()
+        confirm_msg = self.partner.message_ids
+
+        self.assertEqual(self.partner, confirm_msg.notified_partner_ids)
+        self.assertIn(self.demo_partner.name, confirm_msg.body)
+
+    def test_sponsor_confirmation_email_to_sponsor_cancelled_early(self):
+        "If a new contract with a sponsor code is cancelled early, no notification mail should be sent"
+        self.so.reserve_coupon(self.partner.sponsor_code)
+        self.so.action_confirm()
+
+        new_contract = self.env["contract.contract"].of_sale(self.so)
+        new_contract.date_start = "2026-03-01"
+        new_contract.date_end = "2026-03-10"
+
+        self._trigger_sponsor_msg_action()
+        self.assertFalse(self.partner.message_ids)
