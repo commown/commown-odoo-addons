@@ -8,6 +8,7 @@ class SponsoringTC(TransactionCase):
         super().setUpClass()
 
         cls.partner = cls.env.ref("base.partner_demo_portal")
+        cls.partner_2 = cls.partner.copy({"name": "Test", "email": "test@commown.coop"})
 
     @classmethod
     def create_contract(cls, partner, date_start=False):

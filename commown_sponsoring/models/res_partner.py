@@ -29,6 +29,22 @@ class SponsoringResPartner(models.Model):
         )
         return active_contracts
 
+    def already_used_sponsor_code(self, current_order):
+        self.ensure_one()
+        previous_orders = self.env["sale.order"].search(
+            [
+                ("id", "!=", current_order.id),
+                (
+                    "partner_id.commercial_partner_id",
+                    "=",
+                    self.commercial_partner_id.id,
+                ),
+            ]
+        )
+        return previous_orders.filtered(
+            "used_coupon_ids.campaign_id.sponsor_partner_id"
+        )
+
     def _create_sponsor_campaign(self):
         Campaign = self.env["coupon.campaign"]
         Coupon = self.env["coupon.coupon"]
