@@ -155,7 +155,7 @@
     </xpath>
   </template>
 
-  <template id="product" inherit_id="website_sale_cart_selectable.product">
+  <template id="product_cart" inherit_id="website_sale_cart_selectable.product">
     <xpath
             expr="//t[@t-if='product.website_btn_addtocart_published']"
             position="attributes"
