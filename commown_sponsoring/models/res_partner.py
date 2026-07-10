@@ -30,6 +30,22 @@ class SponsoringResPartner(models.Model):
         )
         return active_contracts > 0
 
+    def has_already_used_sponsor_code(self, current_order):
+        "Returns whether the current partner has already used a sponsoring code on a previous sale order."
+        self.ensure_one()
+        previous_orders = self.env["sale.order"].search_count(
+            [
+                ("id", "!=", current_order.id),
+                (
+                    "partner_id.commercial_partner_id",
+                    "=",
+                    self.commercial_partner_id.id,
+                ),
+                ("used_coupon_ids.campaign_id.sponsor_partner_id", "!=", False),
+            ]
+        )
+        return previous_orders > 0
+
     def _create_sponsor_campaign(self):
         Campaign = self.env["coupon.campaign"]
         Coupon = self.env["coupon.coupon"]
