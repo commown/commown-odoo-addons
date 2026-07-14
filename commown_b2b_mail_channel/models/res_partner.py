@@ -95,7 +95,9 @@ class ResPartner(models.Model):
         result = super().write(vals)
 
         if "name" in vals:
-            self.set_support_channel_name()
+            # We can bypass permission here as this is an automatic name change when
+            # current partner name is allowed to be changed by current user.
+            self.sudo().set_support_channel_name()
 
         return result
 
