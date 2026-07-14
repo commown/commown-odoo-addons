@@ -33,6 +33,16 @@ class DeviceAssignment(models.Model):
         domain="[('type', 'in', ['contact', 'other'])]",
     )
 
+    partner_name = fields.Char(
+        related="partner_id.name",
+        store=False,
+    )
+
+    commercial_partner_id = fields.Many2one(
+        related="partner_id.commercial_partner_id",
+        store=False,
+    )
+
     assignment_date = fields.Datetime(
         required=True,
         default=fields.Datetime.now,
