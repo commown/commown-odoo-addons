@@ -1,4 +1,5 @@
-from odoo import Command
+from odoo import Command, http
+from odoo.tests import HttpCase
 
 from odoo.addons.website_sale_coupon.models.sale_order import CouponError
 
@@ -106,3 +107,66 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
 
         self._trigger_sponsor_msg_action()
         self.assertFalse(self.partner.message_ids)
+
+
+class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
+    def _get_session_sale_order(self):
+        return self.env["sale.order"].browse(
+            http.root.session_store.get(self.session.sid)["sale_order_id"]
+        )
+
+    def add_product_to_cart_as_public_user(self):
+        # Start a new order as a public user
+        self.authenticate(None, None)
+        res_add_cart = self.url_open(
+            "/shop/cart/update",
+            data={
+                "product_id": self.product.id,
+                "csrf_token": http.Request.csrf_token(self),
+            },
+        )
+        res_add_cart.raise_for_status()
+
+    def login_as_demo(self):
+        """
+        Login as the demo partner using the /web/login endpoint,
+        as it is required to complete the order
+        """
+        res_login = self.url_open(
+            "/web/login",
+            data={
+                "login": "demo",
+                "password": "demo",
+                "csrf_token": http.Request.csrf_token(self),
+            },
+        )
+        res_login.raise_for_status()
+
+    def test_login_check_ok(self):
+        "Logging in with a valid sponsor code should leave it intact"
+        self.add_product_to_cart_as_public_user()
+
+        so2 = self._get_session_sale_order()
+        so2.reserve_coupon(self.partner_2.sponsor_code)
+
+        self.login_as_demo()
+        self.assertEqual(
+            self.partner_2.sponsor_code, so2.reserved_coupons().campaign_id.name
+        )
+
+    def test_login_check_already_used_sponsor_code(self):
+        """
+        When a partner starts an order while logged out, inputs a sponsor code, then logs in,
+        if they already used a sponsor code in other orders, it should be removed.
+        """
+        # Pre-requisite: a previous order must have been completed with a sponsor code
+        self.so.reserve_coupon(self.partner.sponsor_code)
+        self.so.action_confirm()
+
+        self.add_product_to_cart_as_public_user()
+
+        so2 = self._get_session_sale_order()
+        so2.reserve_coupon(self.partner_2.sponsor_code)
+
+        self.login_as_demo()
+        self.assertFalse(so2.reserved_coupons())
