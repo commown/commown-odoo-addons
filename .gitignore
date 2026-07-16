@@ -86,3 +86,6 @@ docs/_build/
 
 # OCA rules
 !static/lib/
+
+# Commown rules
+odoo_test.conf
