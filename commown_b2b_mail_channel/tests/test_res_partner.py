@@ -1,5 +1,6 @@
 from datetime import date
 
+from odoo.exceptions import AccessError
 from odoo.tests.common import TransactionCase
 
 
@@ -104,7 +105,12 @@ class ResPartnerTC(TransactionCase):
 
         new_name = "New name"
 
-        self.company.name = new_name
+        unprivileged_user = self.env.ref("base.user_demo")
+        # Test pre-requisite: unprivileged_user has no permission to change mail channel:
+        with self.assertRaises(AccessError):
+            self.company.mail_channel_id.with_user(unprivileged_user).name = "no matter"
+
+        self.company.with_user(unprivileged_user).name = new_name
         self.assertEqual(
             self.company.mail_channel_id.name,
             "Support of company %s" % new_name,

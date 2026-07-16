@@ -4,7 +4,8 @@
     <field name="model">customer_device_manager.device_assignment</field>
     <field name="arch" type="xml">
       <kanban class="oe_device_assignment_kanban">
-        <field name="partner_id" />
+        <field name="partner_name" />
+        <field name="commercial_partner_id" />
         <field name="assignment_date" />
         <field name="assignment_notes" />
         <field name="image_128" />
@@ -33,7 +34,7 @@
                 <ul>
                   <li>
                     <i class="fa fa-laptop" title="Device name" aria-hidden="true" />
-                    <field name="device_name" />
+                    <t> </t><field name="device_name" />
                   </li>
                   <li>
                     <i
@@ -41,11 +42,15 @@
                                             title="Contract"
                                             aria-hidden="true"
                                         />
-                    <field name="contract_name" />
+                    <t> </t><field name="contract_name" />
                   </li>
                   <li>
                     <i class="fa fa-user" title="Partner" aria-hidden="true" />
-                    <field name="partner_id" />
+                    <t> </t><field name="partner_name" />
+                  </li>
+                  <li groups="base.group_user">
+                    <i class="fa fa-building" title="Company" aria-hidden="true" />
+                    <t> </t><field name="commercial_partner_id" />
                   </li>
                 </ul>
               </div>
