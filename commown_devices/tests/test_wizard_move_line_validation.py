@@ -24,7 +24,7 @@ class WizardMoveLineValidationTC(TransactionCase):
             None,
             cls.stock_location,
             cls.partner.get_or_create_customer_location(cls.contract.stock_ownership),
-            "origin",
+            False,
         )
         cls.move.update({"contract_id": cls.contract})
 
