@@ -128,6 +128,7 @@ class PickingToCustomerWizard(models.AbstractModel):
             self.lot_ids,
             products,
             send_nonserial_products_from=self._compute_send_non_serial_from(),
+            origin_document=self.entity_id,
             date=self.date,
         )
 
