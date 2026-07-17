@@ -107,6 +107,7 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
             self.lot_id,
             {},
             {},
+            origin_document=self.task_id,
             date=dtime,
             do_transfer=self.delivered_by_hand,
         )

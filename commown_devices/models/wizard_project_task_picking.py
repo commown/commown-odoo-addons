@@ -317,6 +317,7 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             self.task_id.lot_id,
             {},
             transfer_location,
+            origin_document=self.task_id,
             date=date,
             do_transfer=True,
         )
@@ -325,6 +326,7 @@ class ProjectTaskContractTransferWizard(models.TransientModel):
             self.task_id.lot_id,
             {},
             send_lots_from=transfer_location,
+            origin_document=self.task_id,
             date=date + timedelta(seconds=1),
             do_transfer=True,
         )

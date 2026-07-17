@@ -56,6 +56,9 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
             quant.location_id.location_id,
             self.env.ref("stock.stock_location_customers"),
         )
+        picking = contract.mapped("move_ids.picking_id")
+        self.assertEqual(len(picking), 1)
+        self.assertEqual(picking.origin_document(), self.task)
 
     def test_post_shipping_ok(self):
         self.assertEqual(self.task.message_attachment_count, 0)  # pre-requisite
