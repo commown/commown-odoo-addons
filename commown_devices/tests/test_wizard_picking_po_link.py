@@ -107,8 +107,7 @@ class PickingPoLinkWizardTC(LinkWizardTC):
     def test_assign_po(self):
         # Check prerequisite
         self.assertFalse(self.picking.purchase_id)
-        self.assertFalse(self.picking.origin)
-        self.assertFalse(self.picking.origin)
+        self.assertIsNone(self.picking.origin_document())
 
         wizard = (
             self.env["picking.po.link.wizard"]
@@ -126,7 +125,7 @@ class PickingPoLinkWizardTC(LinkWizardTC):
 
         # Check results
         self.assertEqual(self.picking.purchase_id, self.po)
-        self.assertEqual(self.picking.origin, self.po.name)
+        self.assertEqual(self.picking.origin_document(), self.po)
         self.assertEqual(
             self.picking.move_ids.mapped("purchase_line_id"),
             self.po.mapped("order_line"),

@@ -109,7 +109,7 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
             ],  # No nonserial products are sent so location doesn't matter
             self.present_location_id,
             self.location_dest_id,
-            self.task_id.get_name_for_origin(),
+            self.task_id,
             date=self.date,
         )
         do_new_transfer(
@@ -146,7 +146,7 @@ class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
             self.present_location_id,
             self.env["stock.location"],  # No lot are sent so location doesn't matter
             self.location_dest_id,
-            self.task_id.get_name_for_origin(),
+            self.task_id,
             date=self.date,
         )
         do_new_transfer(
@@ -255,7 +255,7 @@ class ProjectTaskOutwardPickingWizard(models.TransientModel):
             self.lot_id,
             {},
             send_lots_from=send_lots_from,
-            origin=self.task_id.get_name_for_origin(),
+            origin_document=self.task_id,
             date=self.date,
         )
 
@@ -284,7 +284,7 @@ class ProjectTaskInwardPickingWizard(models.TransientModel):
             self.lot_id,
             {},
             self.env.ref("commown_devices.stock_location_devices_to_check"),
-            origin=self.task_id.get_name_for_origin(),
+            origin_document=self.task_id,
             date=self.date,
         )
 
@@ -385,7 +385,7 @@ class ProjectTaskNoTrackingOutwardPickingWizard(models.TransientModel):
             self.env["stock.lot"],  # Lots
             {self.variant_id: 1},
             send_nonserial_products_from=self._compute_send_from(),
-            origin=self.task_id.get_name_for_origin(),
+            origin_document=self.task_id,
             date=self.date,
             do_transfer=False,
         )
@@ -408,7 +408,7 @@ class ProjectTaskNoTrackingInwardPickingWizard(models.TransientModel):
             self.env["stock.lot"],
             {self.variant_id: 1},
             self.env.ref("commown_devices.stock_location_devices_to_check"),
-            origin=self.task_id.get_name_for_origin(),
+            origin_document=self.task_id,
             date=self.date,
             do_transfer=False,
         )
