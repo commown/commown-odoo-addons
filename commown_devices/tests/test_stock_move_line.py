@@ -1,7 +1,6 @@
 from odoo.tests.common import TransactionCase
 
 from ..models.common import internal_picking
-from ..models.stock_move_line import get_origin_record
 from .common import create_lot_and_quant
 
 
@@ -30,7 +29,7 @@ class StockMoveLineTC(TransactionCase):
                 None,
                 cls.stock_location,
                 partner_loc,
-                "origin",
+                False,
             )
             move.update({"contract_id": cls.contract.id})
             return move
@@ -95,9 +94,9 @@ class StockMoveLineTC(TransactionCase):
         self.assertEqual(self.picking2.state, "done")
 
     def test_compute_origin_label(self):
-        orig = "TestOrig"
-        self.picking1.origin = orig
-        self.assertEqual(self.move_line1.origin_label, orig)
+        self.picking1.origin_document_id = self.contract.id
+        self.picking1.origin_document_model = self.contract._name
+        self.assertEqual(self.move_line1.origin_label, "Contract")
 
     def test_action_open_parent(self):
         # Check result on picking move line
@@ -142,25 +141,10 @@ class StockMoveLineTC(TransactionCase):
         res = self.move_line1.action_open_parent()
         self.assertTrue(res is None)
 
-    def test_get_origin_record(self):
-        po = self.env.ref("purchase.purchase_order_1")
-        res = get_origin_record(self.env, po.name)
-        self.assertEqual(res, po)
-
-        task = self.env.ref("project.project_1_task_1")
-        res = get_origin_record(self.env, task.get_name_for_origin())
-        self.assertEqual(res, task)
-
-        self.contract.name = "SO0001-23"
-        res = get_origin_record(self.env, "SO0001-23")
-        self.assertEqual(res, self.contract)
-
-        res = get_origin_record(self.env, "Retour de %s" % self.picking1.name)
-        self.assertEqual(res, self.picking1)
-
     def test_action_open_parent_origin(self):
         po = self.env.ref("purchase.purchase_order_1")
-        self.move_line1.picking_id.origin = po.name
+        self.move_line1.picking_id.origin_document_id = po.id
+        self.move_line1.picking_id.origin_document_model = po._name
 
         expected_result = {
             "name": "Source",
@@ -173,9 +157,8 @@ class StockMoveLineTC(TransactionCase):
         }
         self.assertEqual(self.move_line1.action_open_parent_origin(), expected_result)
 
-        self.move_line1.picking_id.origin = "Unknown orig"
-        self.assertFalse(self.move_line1.action_open_parent_origin())
+        self.move_line1.picking_id.origin_document_id = False
+        self.assertIsNone(self.move_line1.action_open_parent_origin())
 
         self.move_line1.move_id.picking_id = False
-        res = self.move_line1.action_open_parent_origin()
-        self.assertTrue(res is None)
+        self.assertIsNone(self.move_line1.action_open_parent_origin())

@@ -1,18 +1,6 @@
 from odoo import api, fields, models
 
 
-def get_origin_record(env, origin):
-    """Parse picking and scrap origin field and return the target entity"""
-    if origin.startswith("P"):
-        return env["purchase.order"].search([("name", "=", origin)])
-    if origin.startswith("Task-"):
-        return env["project.task"].browse(int(origin[5:]))
-    if origin.startswith("SO"):
-        return env["contract.contract"].search([("name", "=", origin)])
-    if origin.startswith("Retour de "):
-        return env["stock.picking"].search([("name", "=", origin[10:])])
-
-
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
@@ -45,7 +33,7 @@ class StockMoveLine(models.Model):
     @api.depends("move_id.picking_id", "move_id.scrap_ids")
     def _compute_origin_label(self):
         for rec in self:
-            rec.origin_label = rec._get_parent().origin
+            rec.origin_label = rec._get_parent().origin_document_model_name
 
     def _compute_show_validate_picking(self):
         for rec in self:
@@ -74,7 +62,7 @@ class StockMoveLine(models.Model):
         if not parent:
             return None
         else:
-            parent_origin = get_origin_record(self.env, parent[0].origin)
+            parent_origin = parent[0].origin_document()
             if parent_origin:
                 return {
                     "name": "Source",
