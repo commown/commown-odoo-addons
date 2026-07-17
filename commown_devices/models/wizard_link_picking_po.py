@@ -106,5 +106,10 @@ class POInvoiceLinkWizard(models.TransientModel):
     def action_assign_po(self):
         for link in self.link_line_ids:
             link.move_id.purchase_line_id = link.purchase_line_id
-        self.picking_id.purchase_id = self.po_id
-        self.picking_id.origin = self.po_id.name
+        self.picking_id.update(
+            {
+                "purchase_id": self.po_id.id,
+                "origin_document_id": self.po_id.id,
+                "origin_document_model": self.po_id._name,
+            }
+        )

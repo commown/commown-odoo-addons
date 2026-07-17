@@ -143,7 +143,7 @@ def internal_picking(
     send_nonserial_products_from,
     send_lots_from,
     dest_location,
-    origin,
+    origin_document,
     date=None,
 ):
     """Create picking with tracked and untracked products, if a picking is passed as an
@@ -181,7 +181,8 @@ def internal_picking(
             "location_dest_id": dest_location.id,
             "date": date,
             "date_done": date,
-            "origin": origin,
+            "origin_document_id": origin_document and origin_document.id,
+            "origin_document_model": origin_document and origin_document._name,
         }
     )
     picking.scheduled_date = date
