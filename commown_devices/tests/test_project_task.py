@@ -100,16 +100,6 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             "project.task", self.project, "project_id", user_choices=user_choices
         )
 
-    def test_get_name_for_origin(self):
-        self.task.name = ""
-        self.assertEqual(self.task.get_name_for_origin(), "Task-%s" % self.task.id)
-
-        self.task.name = "[SO91821-01] Any suffix"
-        self.assertEqual(self.task.get_name_for_origin(), "SO91821-01")
-
-        self.task.name = "Any title"
-        self.assertEqual(self.task.get_name_for_origin(), "Task-%s" % self.task.id)
-
     def test_ui_help_desk(self):
         self.project.update({"device_tracking": True, "require_contract": True})
 
@@ -624,7 +614,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.task_test_checks.contract_id.send_devices(
             self.env["stock.lot"],
             {module: 1},
-            origin=self.task_test_checks.get_name_for_origin(),
+            origin_document=self.task_test_checks,
         )
 
         self.task_test_checks.stage_id = self.ongoing_stage
@@ -633,7 +623,7 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.task_test_checks2.contract_id.send_devices(
             quant.lot_id,
             {},
-            origin=self.task_test_checks2.get_name_for_origin(),
+            origin_document=self.task_test_checks2,
         )
         self.task_test_checks2.stage_id = self.ongoing_stage
         self.assertTrue(self.task_test_checks2.stage_id == self.ongoing_stage)
