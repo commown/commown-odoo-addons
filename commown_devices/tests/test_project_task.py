@@ -507,6 +507,8 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
         self.assertTrue(
             p2.move_ids.date - p1.move_ids.date == datetime.timedelta(seconds=1)
         )
+        self.assertEqual(p1.origin_document(), self.task)
+        self.assertEqual(p2.origin_document(), self.task)
 
     def test_contract_resiliation_with_devices(self):
         diagnostic_stage = self.env.ref("commown_devices.diagnostic_stage")
