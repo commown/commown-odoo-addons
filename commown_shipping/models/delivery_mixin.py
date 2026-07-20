@@ -291,3 +291,7 @@ class CommownDeliveryParentMixin(models.AbstractModel):
     on_delivery_email_template_id = fields.Many2one(
         "mail.template", string="Default delivery email model for this entity"
     )
+    carrier_account_id = fields.Many2one(
+        "carrier.account",
+        string="Carrier account",
+    )
