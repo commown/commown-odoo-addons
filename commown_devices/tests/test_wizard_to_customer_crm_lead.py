@@ -17,6 +17,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         cls.lead.team_id.carrier_account_id = cls.env.ref(
             "commown_shipping.carrier-account-colissimo-std-account"
         )
+        cls.lead.team_id.picking_type_id = cls.env.ref("stock.picking_type_out")
 
     def test_ui(self):
         lead = self.lead
