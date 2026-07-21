@@ -4,7 +4,7 @@
 {
     "name": "Commown Discuss",
     "summary": "Allow portal users to access the backend web app to access the mail channels",
-    "version": "16.0.1.0.2",
+    "version": "16.0.1.0.3",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
