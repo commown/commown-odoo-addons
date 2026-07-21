@@ -3,8 +3,7 @@ from contextlib import contextmanager
 
 import websocket
 
-import odoo.tests
-from odoo.tests.common import ChromeBrowser, HttpCase
+from odoo.tests.common import ChromeBrowser, HttpCase, tagged
 
 from odoo.addons.commown_devices.tests.common import DeviceAsAServiceTC
 
@@ -26,7 +25,7 @@ def chrome_suppress_origin():
         ChromeBrowser._open_websocket = old_open_websocket
 
 
-@odoo.tests.tagged("post_install", "-at_install")
+@tagged("post_install", "-at_install")
 class RunTourTC(HttpCase):
     def _run_tour(self, name):
         js = "odoo.__DEBUG__.services['web_tour.tour'].run('%s')" % name

@@ -12,7 +12,7 @@
          <hr class="mt-2 mb-2" />
          <div class="list-group">
            <t t-set="action_id" t-value="env.ref('mail.action_discuss').id" />
-           <t t-foreach="user_channels" t-as="channel" t-attr-href="">
+           <t t-foreach="user_channels" t-as="channel">
              <a
                             class="list-group-item"
                             t-attf-href="/web#action=#{action_id}&amp;active_id=#{channel.id}"
