@@ -23,4 +23,9 @@
         "views/view_campaign.xml",
         "views/view_res_partner.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "/commown_sponsoring/static/src/js/website_sale_coupon.esm.js",
+        ]
+    },
 }
