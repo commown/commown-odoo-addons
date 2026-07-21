@@ -170,3 +170,15 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
 
         self.login_as_demo()
         self.assertFalse(so2.reserved_coupons())
+
+    def test_login_check_invalid_sponsor_code(self):
+        "Check if sponsor code is still valid when logging in and disable it otherwise"
+        self.add_product_to_cart_as_public_user()
+
+        so2 = self._get_session_sale_order()
+        so2.reserve_coupon(self.partner.sponsor_code)
+
+        self.contract.date_end = "2026-05-01"
+
+        self.login_as_demo()
+        self.assertFalse(so2.reserved_coupons())
