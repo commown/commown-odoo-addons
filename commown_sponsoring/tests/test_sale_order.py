@@ -1,3 +1,5 @@
+import json
+
 from odoo import Command, http
 from odoo.tests import HttpCase
 
@@ -131,7 +133,12 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
         """
         Login as the demo partner using the /web/login endpoint,
         as it is required to complete the order
+
+        Since the /commown_sponsoring/check_coupons endpoint uses session variables,
+        and using the /web/login endpoint to login does not automatically change
+        this test class' session, we need to manually set the session from the cookies.
         """
+        self.opener.cookies.clear_session_cookies()
         res_login = self.url_open(
             "/web/login",
             data={
@@ -141,6 +148,17 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
             },
         )
         res_login.raise_for_status()
+
+        # We replace the previous public session by the new demo session, using the generated cookie
+        self.session = http.root.session_store.get(self.opener.cookies["session_id"])
+
+    def _check_coupons_endpoint(self, so):
+        res = self.url_open(
+            "/commown_sponsoring/check_coupons",
+            data=json.dumps({"jsonrpc": "2.0", "method": "call"}),
+            headers={"Content-Type": "application/json"},
+        )
+        return res.json()["result"]
 
     def test_login_check_ok(self):
         "Logging in with a valid sponsor code should leave it intact"
@@ -153,6 +171,9 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
         self.assertEqual(
             self.partner_2.sponsor_code, so2.reserved_coupons().campaign_id.name
         )
+
+        res = self._check_coupons_endpoint(so2)
+        self.assertFalse(res["removed_coupon"])
 
     def test_login_check_already_used_sponsor_code(self):
         """
@@ -171,6 +192,10 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
         self.login_as_demo()
         self.assertFalse(so2.reserved_coupons())
 
+        res = self._check_coupons_endpoint(so2)
+        self.assertTrue(res["removed_coupon"])
+        self.assertIn("on a previous order", res["reason"])
+
     def test_login_check_invalid_sponsor_code(self):
         "Check if sponsor code is still valid when logging in and disable it otherwise"
         self.add_product_to_cart_as_public_user()
@@ -182,3 +207,7 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
 
         self.login_as_demo()
         self.assertFalse(so2.reserved_coupons())
+
+        res = self._check_coupons_endpoint(so2)
+        self.assertTrue(res["removed_coupon"])
+        self.assertIn("no longer active.", res["reason"])
