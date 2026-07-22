@@ -84,12 +84,10 @@
             <div class="modal-header">
               <button
                                 type="button"
-                                class="close"
-                                data-dismiss="modal"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
                                 aria-label="Close"
-                            >
-                <span aria-hidden="true">x</span>
-              </button>
+                            />
               <h4 class="modal-title">
                 <t t-esc="line.product_id.name" />
               </h4>
@@ -99,7 +97,7 @@
                             t-field="line.product_id.product_tmpl_id.website_description"
                         />
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 Fermer
               </button>
             </div>
