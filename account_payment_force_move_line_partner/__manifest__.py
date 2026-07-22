@@ -12,6 +12,9 @@
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
     "depends": [
-        "base",
+        "account",
+    ],
+    "data": [
+        "wizards/wiz_force_move_line_partner.xml",
     ],
 }
