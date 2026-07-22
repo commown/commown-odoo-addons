@@ -82,15 +82,15 @@
         <div class="modal-dialog" role="document" style="width:80%">
           <div class="modal-content">
             <div class="modal-header">
+              <h4 class="modal-title">
+                <t t-esc="line.product_id.name" />
+              </h4>
               <button
                                 type="button"
                                 class="btn-close"
                                 data-bs-dismiss="modal"
                                 aria-label="Close"
                             />
-              <h4 class="modal-title">
-                <t t-esc="line.product_id.name" />
-              </h4>
             </div>
             <div
                             class="modal-body"
