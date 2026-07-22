@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wizard_force_partner_on_move_line,access_wizard_force_partner_on_move_line,account_payment_force_move_line_partner.model_wizard_force_partner_on_move_line,account.group_account_manager,1,1,1,1

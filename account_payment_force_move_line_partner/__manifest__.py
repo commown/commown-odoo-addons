@@ -15,6 +15,7 @@
         "account",
     ],
     "data": [
+        "security/ir.model.access.csv",
         "wizards/wiz_force_move_line_partner.xml",
     ],
 }

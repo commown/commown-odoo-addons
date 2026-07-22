@@ -1,5 +1,5 @@
 from odoo import Command
-from odoo.exceptions import UserError
+from odoo.exceptions import AccessError, UserError
 from odoo.tests import TransactionCase, tagged
 
 
@@ -18,7 +18,7 @@ class ForceMoveLinePartnerTC(TransactionCase):
                 )
             coa.try_loading(company=cls.env.company, install_demo=False)
 
-        cls.partner_1 = cls.env.ref("base.partner_demo")
+        cls.partner_1 = cls.env.ref("base.partner_demo_portal")
         cls.partner_2 = cls.partner_1.copy({"email": "test@test.coop"})
 
         cls.account = cls.env["account.account"].create(
@@ -51,16 +51,16 @@ class ForceMoveLinePartnerTC(TransactionCase):
             {"partner_id": cls.partner_1.id, "move_id": cls.move.id}
         )
 
-    def _force_partner_wizard(self, move, target_partner):
-        return (
-            self.env["wizard.force.partner.on.move.line"]
-            .with_context(default_move_id=move.id)
-            .create(
-                {
-                    "line_to_change_id": move.line_ids[0].id,
-                    "new_partner_id": target_partner.id,
-                }
-            )
+    def _force_partner_wizard(self, move, target_partner, user=None):
+        ForcePartnerWiz = self.env["wizard.force.partner.on.move.line"].with_user(
+            user or self.env.user
+        )
+
+        return ForcePartnerWiz.with_context(default_move_id=move.id).create(
+            {
+                "line_to_change_id": move.line_ids[0].id,
+                "new_partner_id": target_partner.id,
+            }
         )
 
     def test_wizard_ok(self):
@@ -79,3 +79,20 @@ class ForceMoveLinePartnerTC(TransactionCase):
         self.assertEqual(
             self.move.mapped("line_ids.partner_id"), (self.partner_1 | self.partner_2)
         )
+
+    def test_wizard_model_access(self):
+        "Only members of the 'Invoicing / Manager' group should be able to use the software"
+        demo_user = self.env.ref("base.user_demo")
+        inv_manager_group = self.env.ref("account.group_account_manager")
+
+        # Case 1: User is an invoicing manager
+        demo_user.groups_id += inv_manager_group
+
+        wiz_ok = self._force_partner_wizard(self.move, self.partner_2, user=demo_user)
+        self.assertTrue(wiz_ok)
+
+        # Case 2: User is not an invoicing manager
+        demo_user.groups_id -= inv_manager_group
+
+        with self.assertRaises(AccessError):
+            _ = self._force_partner_wizard(self.move, self.partner_2, user=demo_user)
