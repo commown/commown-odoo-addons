@@ -10,6 +10,15 @@
                     <field name="line_to_change_id" />
                     <field name="new_partner_id" />
                 </group>
+                <footer>
+                    <button
+                        name="execute"
+                        string="Change partner"
+                        class="btn-primary"
+                        type="object"
+                    />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
             </form>
         </field>
     </record>

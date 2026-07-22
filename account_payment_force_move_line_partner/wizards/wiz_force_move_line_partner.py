@@ -13,3 +13,12 @@ class WizardForcePartnerOnMoveLine(models.TransientModel):
     )
 
     new_partner_id = fields.Many2one(comodel_name="res.partner", required=True)
+
+    def execute(self):
+        self.ensure_one()
+        self.env.cr.execute(
+            "UPDATE account_move_line SET partner_id = %s WHERE id = %s",
+            (self.new_partner_id.id, self.line_to_change_id.id),
+        )
+
+        return {"type": "ir.actions.client", "tag": "reload"}
