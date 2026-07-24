@@ -1,0 +1,125 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * disable_odoo_online
+#
+# Translators:
+# Rudolf Schnapka <rs@techno-flex.de>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: server-tools (9.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-24 13:53+0000\n"
+"PO-Revision-Date: 2020-05-15 00:19+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
+"Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
+"language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
+
+#. module: account_payment_force_move_line_partner
+#. odoo-python
+#: code:addons/account_payment_force_move_line_partner/wizards/wiz_force_move_line_partner.py:0
+#, python-format
+msgid ""
+"\n"
+"                    Partner changed on move line '%(line_name)s' :\n"
+"                    <ul>\n"
+"                        <li>%(init_partner_name)s &#8594; "
+"%(new_partner_name)s</li>\n"
+"                    </ul>\n"
+"                "
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#. odoo-python
+#: code:addons/account_payment_force_move_line_partner/models/account_move_line.py:0
+#, python-format
+msgid "(Account #%s) "
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#: model_terms:ir.ui.view,arch_db:account_payment_force_move_line_partner.view_force_move_line_partner_wizard
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. module: account_payment_force_move_line_partner
+#: model_terms:ir.ui.view,arch_db:account_payment_force_move_line_partner.view_force_move_line_partner_wizard
+msgid "Change partner"
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__create_uid
+msgid "Created by"
+msgstr "Erstellt von"
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__create_date
+msgid "Created on"
+msgstr "Erstellt am:"
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: account_payment_force_move_line_partner
+#: model_terms:ir.ui.view,arch_db:account_payment_force_move_line_partner.view_force_move_line_partner_wizard
+msgid "Force partner on a move line"
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model,name:account_payment_force_move_line_partner.model_wizard_force_partner_on_move_line
+msgid "Force-write a differing partner on a move line through SQL"
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model,name:account_payment_force_move_line_partner.model_account_move_line
+msgid "Journal Item"
+msgstr "Journalposten"
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line____last_update
+msgid "Last Modified on"
+msgstr "Zuletzt geändert am"
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert von"
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__line_to_change_id
+msgid "Line To Change"
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__move_id
+msgid "Move"
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.model.fields,field_description:account_payment_force_move_line_partner.field_wizard_force_partner_on_move_line__new_partner_id
+msgid "New Partner"
+msgstr ""
+
+#. module: account_payment_force_move_line_partner
+#: model:ir.actions.act_window,name:account_payment_force_move_line_partner.action_force_move_line_partner_wizard
+msgid "[COMPTA] Partenaire : frais rejet slimpay"
+msgstr ""
+
+#~ msgid "Account"
+#~ msgstr "Konto"
