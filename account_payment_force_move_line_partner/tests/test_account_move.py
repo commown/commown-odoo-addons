@@ -51,6 +51,17 @@ class ForceMoveLinePartnerTC(TransactionCase):
             {"partner_id": cls.partner_1.id, "move_id": cls.move.id}
         )
 
+    def test_name_get(self):
+        move_line = self.move.line_ids[0]
+
+        self.assertNotIn(move_line.account_id.code, move_line.display_name)
+
+        move_line.invalidate_recordset(["display_name"])
+        self.assertIn(
+            move_line.account_id.code,
+            move_line.with_context(in_force_aml_partner_wizard=True).display_name,
+        )
+
     def _force_partner_wizard(self, move, target_partner, user=None):
         ForcePartnerWiz = self.env["wizard.force.partner.on.move.line"].with_user(
             user or self.env.user

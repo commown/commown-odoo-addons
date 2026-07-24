@@ -7,7 +7,10 @@
             <form string="Force partner on a move line">
                 <group>
                     <field name="move_id" invisible="1" />
-                    <field name="line_to_change_id" />
+                    <field
+                        name="line_to_change_id"
+                        context="{'in_force_aml_partner_wizard': True}"
+                    />
                     <field name="new_partner_id" />
                 </group>
                 <footer>
