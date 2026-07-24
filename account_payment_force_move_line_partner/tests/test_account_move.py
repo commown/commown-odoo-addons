@@ -80,6 +80,15 @@ class ForceMoveLinePartnerTC(TransactionCase):
             self.move.mapped("line_ids.partner_id"), (self.partner_1 | self.partner_2)
         )
 
+        # Checking the last note's content to get the change notification
+        notif_message = self.move.message_ids.filtered(
+            lambda m: m.subtype_id == self.env.ref("mail.mt_note")
+        )[0]
+
+        self.assertIn("Partner changed", notif_message.body)
+        self.assertIn(self.partner_1.display_name, notif_message.body)
+        self.assertIn(self.partner_2.display_name, notif_message.body)
+
     def test_wizard_model_access(self):
         "Only members of the 'Invoicing / Manager' group should be able to use the software"
         demo_user = self.env.ref("base.user_demo")
