@@ -44,11 +44,12 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         to the partner of the new token.
         """
 
+        all_tokens = obsolete_tokens | new_token
         contracts = self.env["contract.contract"].search(
             [
                 "|",
-                ("partner_id.payment_token_id", "in", obsolete_tokens.ids),
-                ("payment_token_id", "in", obsolete_tokens.ids),
+                ("partner_id.payment_token_id", "in", all_tokens.ids),
+                ("payment_token_id", "in", all_tokens.ids),
                 "|",
                 ("date_end", ">=", date.today()),
                 "&",
