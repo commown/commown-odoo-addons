@@ -130,10 +130,13 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         # Configure payment providre with invoice merge prefs setting,
         # preset the new partner's payment preferences and trigger
         # obsolescence
+        partner = self.new_worker(
+            self.company_s1, name="s1_w3", **_payment_prefs(1, "monthly", "2017-03-03")
+        )
         with freeze_time("2018-05-01"):
             new_token = self._trigger_obsolescence(
                 "set_partner_invoice_merge_prefs",
-                **_payment_prefs(1, "monthly", "2017-03-03"),
+                partner=partner,
             )
 
         # Check the results: payment prefs of the new signee must be untouched
