@@ -256,7 +256,7 @@ class CommownTrackDeliveryMixin(models.AbstractModel):
 
     def _delivery_tracking_colissimo_status(self):
         self.ensure_one()
-        account = self._delivery_tracking_parent().shipping_account_id
+        account = self._delivery_tracking_parent().carrier_account_id
         resp = colissimo_status_request(
             account.account, account.password, self.expedition_ref
         )
