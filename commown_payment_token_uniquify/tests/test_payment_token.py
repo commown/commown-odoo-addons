@@ -36,6 +36,7 @@ class PaymentTokenTC(ContractRelatedPaymentTokenUniquifyTC):
         new_inv_partner = new_token.partner_id.mapped("child_ids")
         self.assertEqual(new_inv_partner.type, "invoice")
         self.assertEqual(new_inv_partner.payment_token_id, new_token)
+        self.assertEqual(new_inv_partner.name, old_inv_partner.name)
 
         self.assertFalse(old_inv_partner.active)
         self.assertTrue(new_inv_partner.active)
