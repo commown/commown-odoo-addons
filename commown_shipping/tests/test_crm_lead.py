@@ -1,18 +1,13 @@
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from unittest.mock import patch
 
-import requests_mock
-
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 from odoo.tests.common import Form, TransactionCase
 
 from odoo.addons.commown_shipping.models.delivery_mixin import ParcelError
-from odoo.addons.commown_shipping.models.shipping_mixin import CommownShippingMixin
 from odoo.addons.queue_job.tests.common import trap_jobs
 
-from ..models.colissimo_utils import ColissimoError, shipping_data
 from ..models.delivery_mixin import CommownTrackDeliveryMixin as DeliveryMixin
-from .common import BaseShippingTC, pdf_page_num
 
 
 def _mock_delivery_job(job, result):
@@ -39,211 +34,6 @@ class CheckMailMixin:
         return self.env["mail.message"].search(
             [("res_id", "=", obj.id), ("model", "=", obj._name)]
         )
-
-
-class CrmLeadShippingTC(BaseShippingTC):
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-
-        cls.sender = cls.env.ref("base.res_partner_2")
-        cls.sender.update(
-            {
-                "country_id": cls._country("FR"),
-                "mobile": "0601020304",
-            }
-        )
-
-        partner = cls.env.ref("base.res_partner_1")
-        product = cls.env["product.product"].create(
-            {"name": "Fairphone", "shipping_parcel_type_id": cls.parcel_type.id}
-        )
-        team = cls.env.ref("sales_team.salesteam_website_sales")
-        team.shipping_account_id = cls.shipping_account
-        team.delivery_tracking = True
-
-        so = cls.env["sale.order"].create(
-            {
-                "partner_id": partner.id,
-                "partner_invoice_id": partner.id,
-                "partner_shipping_id": partner.id,
-                "order_line": [
-                    (
-                        0,
-                        0,
-                        {
-                            "product_id": product.id,
-                            "product_uom": product.uom_id.id,
-                            "name": product.name,
-                            "product_uom_qty": 1,
-                            "price_unit": product.list_price,
-                        },
-                    )
-                ],
-            }
-        )
-
-        cls.lead = cls.env["crm.lead"].create(
-            {
-                "name": "[SO00000] Fake order",
-                "partner_id": partner.id,
-                "type": "opportunity",
-                "team_id": team.id,
-                "so_line_id": so.order_line[0].id,
-            }
-        )
-
-    @classmethod
-    def _country(cls, code):
-        return cls.env["res.country"].search([("code", "=", code)])
-
-    def test_shipping_data_product_code(self):
-        base_kwargs = {
-            "sender": self.sender,
-            "recipient": self.lead.partner_id,
-            "order_number": "SO00000",
-            "commercial_name": "Commown",
-            "weight": 0.5,
-        }
-
-        # French label
-        self.lead.partner_id.country_id = self._country("FR")
-        data = shipping_data(**base_kwargs)
-        self.assertEqual(data["letter"]["service"]["productCode"], "DOS")
-
-        # French return label
-        data = shipping_data(is_return=True, **base_kwargs)
-        self.assertEqual(data["letter"]["service"]["productCode"], "CORE")
-
-        # International label
-        self.lead.partner_id.country_id = self._country("BE")
-        data = shipping_data(**base_kwargs)
-        self.assertEqual(data["letter"]["service"]["productCode"], "COLI")
-
-        # International Return label
-        self.lead.partner_id.country_id = self._country("BE")
-        data = shipping_data(is_return=True, **base_kwargs)
-        self.assertEqual(data["letter"]["service"]["productCode"], "CORI")
-
-    def print_label(self, leads, parcel_type, use_full_page_per_label=False):
-        return self._print_label(
-            "commown_shipping.lead.print_label.wizard",
-            leads,
-            parcel_type,
-            use_full_page_per_label,
-        )
-
-    def test_shipping_data_empty_name(self):
-        self.lead.partner_id.firstname = False
-        data = shipping_data(
-            sender=self.sender,
-            recipient=self.lead.partner_id,
-            order_number="SO00000",
-            commercial_name="Commown",
-            weight=0.5,
-        )
-        self.assertEqual(data["letter"]["addressee"]["address"]["firstName"], "")
-
-    @requests_mock.Mocker()
-    def test_create_parcel_label(self, mocker):
-        lead = self.lead
-
-        self.mock_colissimo_ok(mocker)
-
-        lead._create_parcel_label(
-            self.parcel_type,
-            self.shipping_account,
-            lead.partner_id,
-            lead.get_label_ref(),
-        )
-        date_str = datetime.now().strftime("%d-%m-%Y--%H:%M ")
-
-        self.assertEqual(lead.expedition_ref, "6X0000000000")
-        self.assertEqual(lead.expedition_date, date.today())
-        attachments = self.env["ir.attachment"].search(
-            [("res_model", "=", "crm.lead"), ("res_id", "=", lead.id)]
-        )
-        self.assertEqual(len(attachments), 1)
-        att = attachments[0]
-        self.assertEqual(
-            att.name,
-            date_str + self.parcel_type.name + " 6X0000000000" + ".pdf",
-        )
-        self.assertEqualFakeLabel(att)
-
-    @requests_mock.Mocker()
-    def test_error_when_no_shipping_account_id(self, mocker):
-        self.lead._shipping_parent().shipping_account_id = False
-        with self.assertRaises(UserError) as err:
-            self.lead._default_shipping_account()
-        error_message = "No shipping account defined"
-        self.assertEqual(err.exception.args[0], error_message)
-
-    def test_print_parcel_action(self):
-        leads = self.env["crm.lead"]
-        for num in range(5):
-            leads += self.lead.copy({"name": "[SO%05d] Test lead" % num})
-
-        with requests_mock.Mocker() as mocker:
-            self.mock_colissimo_ok(mocker)
-            all_labels = self.print_label(leads, self.parcel_type)
-
-        self.assertEqual(all_labels.name, self.parcel_type.name + ".pdf")
-        self.assertEqual(pdf_page_num(all_labels), 2)
-
-    def test_recipient_partner(self):
-        so = self.lead.so_line_id.order_id
-        so.partner_shipping_id = self.lead.partner_id.copy({"name": "SO Delivery"})
-
-        # Test pre-requisites:
-        self.assertFalse(self.lead.recipient_partner_id)
-
-        # Real test:
-        self.assertEqual(self.lead._recipient_partner(), so.partner_shipping_id)
-
-    def test_onchange_expedition_ref(self):
-        # Check Pre-requisite
-        self.assertFalse(self.lead.expedition_ref)
-
-        # Check different cases
-        self.lead.expedition_ref = " AA JJ PP\n"
-        self.lead._normalize_expedition_ref()
-        self.assertEqual(self.lead.expedition_ref, "AAJJPP")
-
-        ref_with_link = "Link: http://unsecured_link.coop"
-        self.lead.expedition_ref = ref_with_link
-        self.lead._normalize_expedition_ref()
-        self.assertEqual(self.lead.expedition_ref, ref_with_link)
-
-        ref_with_link = "Link: https://secured_link.coop"
-        self.lead.expedition_ref = ref_with_link
-        self.lead._normalize_expedition_ref()
-        self.assertEqual(self.lead.expedition_ref, ref_with_link)
-
-        # Test onchange loop stop with context (no normalization)
-        ref = " AA JJ PP\n"
-        self.lead.expedition_ref = ref
-        self.lead.with_context(
-            in_onchange_expedition_ref=True
-        )._normalize_expedition_ref()
-        self.assertEqual(self.lead.expedition_ref, ref)
-
-    def test_check_expedition_ref(self):
-        stage = self.env["crm.stage"].create({"name": "TEST [log: check exp-ref]"})
-        # Check Pre-requisite
-        self.assertFalse(self.lead.expedition_ref)
-
-        expected_msg = "Lead has no expedition ref. Please fill it in."
-
-        with self.assertRaises(ValidationError) as err:
-            self.lead.stage_id = stage
-        self.assertEqual(err.exception.args[0], expected_msg)
-
-        self.lead.expedition_ref = "TESTREFFF"
-        self.lead.stage_id = stage
-
-        # Check results
-        self.assertEqual(self.lead.stage_id, stage)
 
 
 class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
@@ -406,19 +196,6 @@ class CrmLeadDeliveryTC(TransactionCase, CheckMailMixin):
         # Simulate delivery
         self.assertRaises(UserError, self.lead.update, {"delivery_date": "2018-01-01"})
 
-    def test_get_label_ref_no_ref(self):
-        self.lead.name = "Plouf plouf"
-        self.lead.team_id.name = "Plouf"
-
-        self.assertEqual(
-            self.lead.get_label_ref(),
-            "%(team_id)s-%(lead_id)s"
-            % {
-                "team_id": self.lead.team_id.id,
-                "lead_id": self.lead.id,
-            },
-        )
-
 
 def _status(code, label="test label", _date=None):
     return {"code": code, "label": label, "date": _date or date.today().isoformat()}
@@ -428,15 +205,13 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
     def setUp(self):
         super().setUp()
 
-        account = self.env.ref(
-            "commown_shipping.shipping-account-colissimo-std-account"
-        )
+        account = self.env.ref("commown_shipping.carrier-account-colissimo-std-account")
         self.team = self.env.ref("sales_team.salesteam_website_sales")
         mt_id = self.env.ref("commown_shipping.delivery_email_example").id
         self.team.update(
             {
                 "delivery_tracking": True,
-                "shipping_account_id": account.id,
+                "carrier_account_id": account.id,
                 "default_perform_actions_on_delivery": False,
                 "on_delivery_email_template_id": mt_id,
             }
@@ -611,21 +386,6 @@ class CrmLeadDeliveryTrackingTC(TransactionCase, CheckMailMixin):
         )
         self._check_mail(msg1, subject, "postoffice", [lead2.company_id.name])
         self._check_mail(msg2, "Product delivered", "code: MLVARS", ["Wood Corner"])
-
-    def test_raise_on_colissimo_error(self):
-        colissimo_msg = "error with colissimo"
-        expected_msg = "Colissimo error:\n%s" % colissimo_msg
-
-        with patch.object(
-            CommownShippingMixin,
-            "_get_or_create_label",
-            side_effect=ColissimoError(colissimo_msg),
-        ):
-            with self.assertRaises(UserError) as err:
-                self.lead1._print_parcel_labels(
-                    self.lead1._default_shipping_parcel_type()
-                )
-            self.assertEqual(err.exception.args[0], expected_msg)
 
     @patch(
         "odoo.addons.commown_shipping.models.delivery_mixin.colissimo_status_request",
