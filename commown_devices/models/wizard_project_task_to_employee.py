@@ -1,4 +1,4 @@
-from odoo import _, api, fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -27,20 +27,9 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         default=True,
     )
 
-    shipping_account_id = fields.Many2one(
-        related="task_id.project_id.shipping_account_id",
+    carrier_account_id = fields.Many2one(
+        related="task_id.project_id.carrier_account_id",
     )
-
-    parcel_type = fields.Many2one(
-        "commown.parcel.type",
-        string="Generate a shipping label",
-        help="Set this if you want to generate a shipping label at the same time",
-    )
-
-    @api.onchange("delivered_by_hand")
-    def onchange_reset_shipping_data_if_delivered_by_hand(self):
-        if self.delivered_by_hand:
-            self.parcel_type = False
 
     def _domain_lot_id(self):
         loc_avail = self.env.ref("commown_devices.stock_location_available_for_rent")
@@ -118,8 +107,5 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
                 "contract_id": contract.id,
             }
         )
-
-        if self.parcel_type:
-            self.task_id._print_parcel_labels(self.parcel_type)
 
         return contract
