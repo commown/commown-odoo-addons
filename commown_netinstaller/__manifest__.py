@@ -16,7 +16,9 @@
         "security/ir.model.access.csv",
         "views/netinstaller_feature.xml",
         "views/netinstaller_feature_value.xml",
+        "views/netinstaller_post_install_script.xml",
         "views/product_views.xml",
+        "views/res_partner.xml",
     ],
     "demo": [
         "demo/product_attributes.xml",
