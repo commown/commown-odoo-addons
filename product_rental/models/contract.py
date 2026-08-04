@@ -85,6 +85,12 @@ class Contract(models.Model):
 
     recurring_next_date = fields.Date(inverse="_inverse_recurring_next_date")
 
+    main_rental_product = fields.Many2one(
+        comodel_name="product.template",
+        compute="_compute_main_rental_product",
+        store=True,
+    )
+
     def _convert_contract_lines(self, contract):
         """On each contract line, add the relation to the contract template
         line which generated it.
@@ -365,3 +371,32 @@ class Contract(models.Model):
                 }
             )
         return services
+
+    def _compute_main_rental_product(self):
+        for contract in self:
+            clines = contract.get_main_rental_line(_raise=False)
+            if not clines or len(clines) != 1:
+                contract.main_rental_product = False
+            else:
+                variant = clines.sale_order_line_id.product_id
+                variant_attr_vals_ids = variant.product_template_attribute_value_ids.product_attribute_value_id.ids
+
+                service = variant.product_tmpl_id
+
+                storable_configs = service.storable_config_ids.filtered(
+                    lambda config: (
+                        config.storable_type == "primary"
+                        and (
+                            not config.attribute_value_ids
+                            or all(
+                                [
+                                    val_id in variant_attr_vals_ids
+                                    for val_id in config.attribute_value_ids.ids
+                                ]
+                            )
+                        )
+                    )
+                )
+                storable_tmpl = storable_configs.mapped("storable_tmpl_id")
+
+                contract.main_rental_product = storable_tmpl and storable_tmpl[0]
