@@ -10,6 +10,7 @@
                 position="attributes"
             >
                 <attribute name="limit">2000</attribute>
+                <attribute name="enable_counters">0</attribute>
             </xpath>
         </field>
     </record>
