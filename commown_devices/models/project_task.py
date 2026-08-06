@@ -122,18 +122,16 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
             domain.append(("id", "in", lots.ids or [0]))
 
         else:
+            ref = self.env.ref
             qdom = [
                 ("quantity", ">", 0),
-                "|",
                 (
                     "location_id",
                     "child_of",
-                    self.env.ref("commown_devices.stock_location_devices_to_check").id,
-                ),
-                (
-                    "location_id",
-                    "child_of",
-                    self.env.ref("commown_devices.stock_location_new_devices").id,
+                    [
+                        ref("commown_devices.stock_location_devices_to_check").id,
+                        ref("commown_devices.stock_location_new_devices").id,
+                    ],
                 ),
             ]
             if product:  # optimize the request a bit
