@@ -129,6 +129,7 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
                     "location_id",
                     "child_of",
                     [
+                        ref("commown_devices.stock_location_repackaged_devices").id,
                         ref("commown_devices.stock_location_devices_to_check").id,
                         ref("commown_devices.stock_location_new_devices").id,
                     ],
