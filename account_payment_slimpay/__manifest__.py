@@ -20,6 +20,7 @@
         "payment",
         "partner_firstname",
         "base_phone",
+        "queue_job",
     ],
     "data": [
         "views/payment_views.xml",
