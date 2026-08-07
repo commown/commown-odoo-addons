@@ -1,4 +1,6 @@
-from odoo import _, api, fields, models
+import json
+
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -26,21 +28,6 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         help="Unset if the device must be sent by post",
         default=True,
     )
-
-    shipping_account_id = fields.Many2one(
-        related="task_id.project_id.shipping_account_id",
-    )
-
-    parcel_type = fields.Many2one(
-        "commown.parcel.type",
-        string="Generate a shipping label",
-        help="Set this if you want to generate a shipping label at the same time",
-    )
-
-    @api.onchange("delivered_by_hand")
-    def onchange_reset_shipping_data_if_delivered_by_hand(self):
-        if self.delivered_by_hand:
-            self.parcel_type = False
 
     def _domain_lot_id(self):
         loc_avail = self.env.ref("commown_devices.stock_location_available_for_rent")
@@ -103,10 +90,20 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
         # important here, so its simpler to do it at the given date:
         dtime = self.date or fields.Datetime.now()
         contract.date_start = dtime.date()
-        contract.send_devices(
+
+        ctx = {"default_partner_id": self.task_id._recipient_partner()}
+        if not self.delivered_by_hand:
+            ctx["default_carrier_required"] = True
+            if carrier_account := self.task_id.project_id.carrier_account_id:
+                ctx["default_carrier_domain"] = json.dumps(
+                    [("carrier_account_id", "=", carrier_account.id)]
+                )
+
+        contract.with_context(**ctx).send_devices(
             self.lot_id,
             {},
             {},
+            origin_document=self.task_id,
             date=dtime,
             do_transfer=self.delivered_by_hand,
         )
@@ -118,8 +115,5 @@ class ProjectTaskDeviceToEmployeeWizard(models.TransientModel):
                 "contract_id": contract.id,
             }
         )
-
-        if self.parcel_type:
-            self.task_id._print_parcel_labels(self.parcel_type)
 
         return contract

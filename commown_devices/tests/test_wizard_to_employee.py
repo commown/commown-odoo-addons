@@ -2,21 +2,32 @@ import requests_mock
 
 from odoo.exceptions import UserError
 from odoo.fields import Command
+from odoo.tests.common import TransactionCase, tagged
 
-from odoo.addons.commown_shipping.tests.common import BaseShippingTC
+from odoo.addons.commown_shipping.tests.common import mock_colissimo_ok
 
 from .common import BaseWizardToEmployeeMixin, create_lot_and_quant
 
 
-class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
+@tagged("post_install", "-at_install")
+class WizardToEmployeeTC(BaseWizardToEmployeeMixin, TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
 
+        cls.package_type = cls.env["stock.package.type"].create(
+            {
+                "name": "Medium parcel",
+                "weight_uom_name": "kg",
+                "base_weight": 1,
+                "package_carrier_type": "laposte_fr",
+            }
+        )
+
         cls.task.project_id.update(
             {
                 "delivery_tracking": True,
-                "shipping_account_id": cls.shipping_account.id,
+                "carrier_account_id": cls.carrier_account.id,
             }
         )
 
@@ -35,8 +46,6 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("lot_id", self.lot.id)
-        kwargs.setdefault("shipping_account_id", self.shipping_account.id)
-        kwargs.setdefault("parcel_type", self.parcel_type.id)
         return super().get_wizard(**kwargs)
 
     def test_delivered_by_hand_ok(self):
@@ -58,17 +67,38 @@ class WizardToEmployeeTC(BaseWizardToEmployeeMixin, BaseShippingTC):
         )
 
     def test_post_shipping_ok(self):
-        self.assertEqual(self.task.message_attachment_count, 0)  # pre-requisite
+        self.env.ref("stock.picking_type_internal").print_label = True
+        self.lot.product_id.weight = 0.8
+        self.env.company.country_id = self.env.ref("base.fr").id
+
+        self.get_wizard().execute()
+
+        self.assertTrue(self.task.move_line_ids)
+        picking = self.task.move_line_ids.picking_id
+        self.assertEqual(picking.message_attachment_count, 0)  # prerequisite
+        self.assertTrue(picking.carrier_required)
+        self.assertFalse(picking.carrier_id)
+        self.assertEqual(picking.partner_id, self.task.partner_id)
+        self.assertEqual(
+            picking.carrier_domain,
+            '[["carrier_account_id", "=", %d]]' % self.carrier_account.id,
+        )
+
+        picking.carrier_id = self.carrier.id
+        picking._put_in_pack(self.task.move_line_ids)
 
         with requests_mock.Mocker() as mocker:
-            self.mock_colissimo_ok(mocker)
-            self.get_wizard().execute()
+            mock_colissimo_ok(mocker)
+            picking.action_generate_label()
+
+        picking._compute_message_attachment_count()
+        self.assertEqual(picking.message_attachment_count, 1)
 
         atts = self.env["ir.attachment"].search(
-            [("res_id", "=", self.task.id), ("res_model", "=", self.task._name)]
+            [("res_id", "=", picking.id), ("res_model", "=", picking._name)]
         )
         self.assertEqual(atts.mapped("mimetype"), ["application/pdf"])
-        self.assertEqual(self.task.expedition_ref, "6X0000000000")
+        self.assertEqual(picking.carrier_tracking_ref, "6X0000000000")
 
     def test_lot_domain(self):
         wizard = self.get_wizard()

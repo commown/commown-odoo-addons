@@ -143,7 +143,7 @@ def internal_picking(
     send_nonserial_products_from,
     send_lots_from,
     dest_location,
-    origin,
+    origin_document,
     date=None,
 ):
     """Create picking with tracked and untracked products, if a picking is passed as an
@@ -181,7 +181,8 @@ def internal_picking(
             "location_dest_id": dest_location.id,
             "date": date,
             "date_done": date,
-            "origin": origin,
+            "origin_document_id": origin_document and origin_document.id,
+            "origin_document_model": origin_document and origin_document._name,
         }
     )
     picking.scheduled_date = date
@@ -271,13 +272,17 @@ class ToCustomerPickingMixin(models.AbstractModel):
                 )
             )
 
-        view = self.env.ref("commown_devices.wizard_abstract_to_customer_form")
+        res_model = self._name + ".to.customer.wizard"
+        view = self.env["ir.ui.view"].search(
+            [("model", "=", res_model), ("type", "=", "form")],
+            limit=1,
+        ) or self.env.ref("commown_devices.wizard_abstract_to_customer_form")
 
         return {
             "type": "ir.actions.act_window",
-            "src_model": self._name,
-            "res_model": self._name + ".to.customer.wizard",
+            "res_model": res_model,
             "name": _("Send a device"),
+            "view_mode": "form",
             "views": [(view.id, "form")],
             "target": "new",
             "context": {"default_entity_id": self.id},

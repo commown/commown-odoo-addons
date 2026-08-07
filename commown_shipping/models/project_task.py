@@ -16,6 +16,8 @@ class CommownProjectTask(models.Model):
         "Delivery tracking", related="project_id.delivery_tracking"
     )
 
-    def _attachment_from_label(self, name, meta_data, label_data):
-        self.initialize_expedition_data(meta_data["labelResponse"]["parcelNumber"])
-        return super()._attachment_from_label(name, meta_data, label_data)
+    contract_date_end = fields.Date(
+        string="Contract end date",
+        related="contract_id.date_end",
+        store=True,
+    )

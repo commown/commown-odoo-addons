@@ -97,6 +97,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
             }
         )
         team = cls.env.ref("sales_team.salesteam_website_sales")
+        team.picking_type_id = cls.env.ref("stock.picking_type_out")
 
         cls.service_product = cls._create_rental_product(
             name="Fairphone as a Service",
@@ -309,13 +310,16 @@ class BaseWizardToEmployeeMixin:
         cls.task = cls.env["project.task"].create(
             {"name": "test", "project_id": project.id, "partner_id": partner.id}
         )
+        cls.carrier_account = cls.env.ref(
+            "commown_shipping.carrier-account-colissimo-std-account"
+        )
+        cls.carrier = cls.env.ref("delivery_roulier_laposte_fr.delivery_carrier_DOS")
+        cls.carrier.carrier_account_id = cls.carrier_account
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("task_id", self.task.id)
         kwargs.setdefault("delivered_by_hand", False)
-        wizard = self.env["project.task.to.employee.wizard"].create(kwargs)
-        wizard.onchange_reset_shipping_data_if_delivered_by_hand()
-        return wizard
+        return self.env["project.task.to.employee.wizard"].create(kwargs)
 
 
 class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
@@ -342,14 +346,6 @@ class BaseToCustomerPickingWizardTC(DeviceAsAServiceTC):
                 "tracking": "none",
             }
         )
-        cls.loc_new_untracked = cls.env.ref(
-            "commown_devices.stock_location_modules_and_accessories"
-        )
-        cls.adjust_stock_notracking(
-            cls.usbc_cable.product_variant_id, cls.loc_new_untracked
-        )
-        # We don't ajdust stock of protective screen because lack of stock case is
-        # tested
         cls.attribute_usbc = cls.env["product.attribute"].create(
             {"name": "Send Cable ?", "create_variant": "always"}
         )
