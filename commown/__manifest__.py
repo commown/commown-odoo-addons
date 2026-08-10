@@ -33,6 +33,7 @@
         "commown_payment_token_uniquify",
         "commown_partner_property_accounts",
         "commown_partner_set_invoice_recipient",
+        "commown_product_catalog_tweaks",
         "contract_payment_auto_disable_payment_retry",
         "partner_firstname_portal",
         "product_rental",
