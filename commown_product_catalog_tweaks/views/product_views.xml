@@ -1,0 +1,18 @@
+<odoo>
+
+    <record id="product_view_search_catalog" model="ir.ui.view">
+        <field name="name">product.view.search.catalog (Commown tweaks)</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product_catalog.product_view_search_catalog" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//searchpanel/field[@name='product_template_attribute_value_ids']"
+                position="attributes"
+            >
+                <attribute name="limit">2000</attribute>
+                <attribute name="enable_counters">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
