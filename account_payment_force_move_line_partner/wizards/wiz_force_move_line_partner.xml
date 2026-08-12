@@ -11,7 +11,10 @@
                         name="line_to_change_id"
                         context="{'in_force_aml_partner_wizard': True}"
                     />
-                    <field name="new_partner_id" />
+                    <field
+                        name="new_partner_id"
+                        context="{'in_force_aml_partner_wizard': True}"
+                    />
                 </group>
                 <footer>
                     <button
