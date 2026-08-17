@@ -1,0 +1,24 @@
+<odoo>
+
+  <record model="ir.ui.view" id="contract_contract_customer_form_view">
+    <field name="name">Contract customer form</field>
+    <field name="model">contract.contract</field>
+    <field name="inherit_id" ref="contract.contract_contract_customer_form_view" />
+    <field name="arch" type="xml">
+
+      <xpath expr="//notebook" position="inside">
+        <page name="netinstaller" string="Netinstaller">
+          <field name="netinstaller_feature_value_change_ids">
+            <tree>
+              <field name="date" />
+              <field name="feature_value_id" />
+            </tree>
+          </field>
+        </page>
+      </xpath>
+
+    </field>
+
+  </record>
+
+</odoo>

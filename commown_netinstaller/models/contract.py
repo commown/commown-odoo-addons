@@ -1,8 +1,14 @@
-from odoo import models
+from odoo import fields, models
 
 
 class Contract(models.Model):
     _inherit = "contract.contract"
+
+    netinstaller_feature_value_change_ids = fields.One2many(
+        string="Netinstaller feature value changes",
+        comodel_name="commown_netinstaller.feature.value.contractual_change",
+        inverse_name="contract_id",
+    )
 
     def netinstaller_specs(self):
         self.ensure_one()
