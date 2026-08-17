@@ -1,0 +1,12 @@
+<odoo>
+
+  <record
+        id="default_post_install_script"
+        model="commown_netinstaller.post_install_script"
+    >
+    <field name="git_clone_url">https://gitlab.com/commown/grantees/install</field>
+    <field name="git_branch_name">main</field>
+    <field name="cmd">./commownScript.sh -u</field>
+  </record>
+
+</odoo>

@@ -1,0 +1,12 @@
+<odoo>
+
+  <record
+        id="custom_post_install_script"
+        model="commown_netinstaller.post_install_script"
+    >
+    <field name="git_clone_url">https://git.commown.coop/myscript</field>
+    <field name="git_branch_name">main</field>
+    <field name="cmd">./launch.sh</field>
+  </record>
+
+</odoo>
