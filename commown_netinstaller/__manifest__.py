@@ -11,5 +11,14 @@
     "author": "Commown SCIC",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
-    "depends": ["base"],
+    "depends": ["product_rental", "stock"],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/netinstaller_feature.xml",
+        "views/netinstaller_feature_value.xml",
+    ],
+    "demo": [
+        "demo/product_attributes.xml",
+        "demo/netinstaller_features.xml",
+    ],
 }

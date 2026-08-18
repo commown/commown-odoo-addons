@@ -1,0 +1,31 @@
+<odoo>
+
+  <record id="motherboard-model" model="commown_netinstaller.feature">
+    <field name="name">MODEL</field>
+    <field name="converter">str</field>
+  </record>
+
+  <record id="ram" model="commown_netinstaller.feature">
+    <field name="name">RAM</field>
+    <field name="converter">int</field>
+    <field name="product_attribute_ids" eval="[(4, ref('memory'))]" />
+  </record>
+
+  <record id="nv" model="commown_netinstaller.feature.value">
+    <field name="value">NV4XMB,ME,MZ</field>
+    <field name="feature_id" ref="motherboard-model" />
+  </record>
+
+  <record id="ram-8" model="commown_netinstaller.feature.value">
+    <field name="value">8</field>
+    <field name="feature_id" ref="ram" />
+    <field name="product_attribute_value_ids" eval="[(4, ref('memory-8go'))]" />
+  </record>
+
+  <record id="ram-16" model="commown_netinstaller.feature.value">
+    <field name="value">16</field>
+    <field name="feature_id" ref="ram" />
+    <field name="product_attribute_value_ids" eval="[(4, ref('memory-16go'))]" />
+  </record>
+
+</odoo>
