@@ -1,0 +1,56 @@
+<odoo>
+
+  <record model="ir.ui.view" id="product_normal_form_view">
+    <field
+            name="name"
+        >product.product normal form view (in commown_netinstaller)</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_normal_form_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//notebook" position="inside">
+        <page name="netinstaller" string="Netinstaller">
+          <group name="cumulated_values" string="Cumulated feature values">
+            <field
+                            name="cumulated_netinstaller_feature_value_ids"
+                            colspan="2"
+                            nolabel="1"
+                        />
+          </group>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="product_variant_easy_edit_view">
+    <field name="name">product.product.view.form.easy (in netinstaller module)</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_variant_easy_edit_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//sheet" position="inside">
+        <group name="netinstaller">
+          <field
+                        name="cumulated_netinstaller_feature_value_ids"
+                        colspan="2"
+                        nolabel="1"
+                    />
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="product_template_only_form_view">
+    <field name="name">product.template.product.website.form</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_only_form_view" />
+    <field name="arch" type="xml">
+      <xpath expr="//notebook" position="inside">
+        <page name="netinstaller" string="Netinstaller">
+          <group name="main">
+            <field name="netinstaller_feature_value_ids" widget="many2many_tags" />
+          </group>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
