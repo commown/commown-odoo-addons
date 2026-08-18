@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class NetinstallerFeature(models.Model):
@@ -42,3 +43,21 @@ class NetinstallerFeature(models.Model):
     def typed_value(self, value):
         self.ensure_one()
         return self._CONVERTERS[self.converter](value)
+
+    @api.constrains("converter")
+    def _check_converter_compatible_with_values(self):
+        "Any assigned converter should be compatible with current values"
+        for feature in self:
+            incompatible_values = []
+            for feat_value in feature.feature_value_ids:
+                try:
+                    feat_value.typed_value()
+                except ValueError:
+                    incompatible_values.append(feat_value.value)
+            if incompatible_values:
+                raise UserError(
+                    _(
+                        "The new converter method is incompatible with the following values: '%s'",
+                        "', '".join(incompatible_values),
+                    )
+                )

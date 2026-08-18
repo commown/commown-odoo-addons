@@ -1,3 +1,4 @@
+from odoo.exceptions import UserError
 from odoo.tests import TransactionCase
 
 from .common import NetinstallMixin
@@ -19,3 +20,17 @@ class NetinstallerFeatureTC(TransactionCase, NetinstallMixin):
 
         feature.converter = "int"
         self.assertEqual(feature_value.typed_value(), 8)
+
+    def test_feature_value_incompatible_with_converter(self):
+        "It shouldn't be possible to assign a value incompatible with a converter"
+        with self.assertRaises(UserError) as exc:
+            self.lref("ram-8").value = "error"
+        self.assertIn("current convertion method ('int')", exc.exception.args[0])
+
+    def test_feature_converter_incompatible_with_current_values(self):
+        "A feature's convertion method cannot be changed if current values are incompatible"
+        with self.assertRaises(UserError) as exc:
+            self.lref("motherboard-model").converter = "int"
+        self.assertIn(
+            f"following values: '{self.lref('nv').value}'", exc.exception.args[0]
+        )

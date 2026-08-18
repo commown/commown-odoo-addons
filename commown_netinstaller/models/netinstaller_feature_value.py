@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 
 class NetInstallerFeatureValue(models.Model):
@@ -36,3 +37,16 @@ class NetInstallerFeatureValue(models.Model):
     def typed_value(self):
         self.ensure_one()
         return self.feature_id.typed_value(self.value)
+
+    @api.constrains("value")
+    def _check_value_compatible_with_converter(self):
+        for value in self:
+            try:
+                value.typed_value()
+            except ValueError as exc:
+                raise UserError(
+                    _(
+                        "This value is incompatible with the current convertion method ('%s')",
+                        value.feature_id.converter,
+                    )
+                ) from exc
