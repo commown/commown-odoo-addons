@@ -61,3 +61,15 @@ class NetinstallerFeature(models.Model):
                         "', '".join(incompatible_values),
                     )
                 )
+
+    @api.onchange("product_attribute_ids")
+    def onchange_product_attribute_ids(self):
+        for feat in self:
+            product_attrs = feat.product_attribute_ids._origin
+
+            for value in feat.feature_value_ids:
+                value.product_attribute_value_ids = (
+                    value.product_attribute_value_ids.filtered(
+                        lambda p_attr_val: p_attr_val.attribute_id in product_attrs
+                    )
+                )

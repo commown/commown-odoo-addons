@@ -27,6 +27,8 @@ class NetInstallerFeatureValue(models.Model):
         column2="feature_value_id",
     )
 
+    product_attr_val_domain = fields.Binary(compute="_compute_product_attr_val_domain")
+
     def name_get(self):
         result = []
         for record in self:
@@ -50,3 +52,9 @@ class NetInstallerFeatureValue(models.Model):
                         value.feature_id.converter,
                     )
                 ) from exc
+
+    @api.depends("feature_id.product_attribute_ids")
+    def _compute_product_attr_val_domain(self):
+        for val in self:
+            attributes = val.feature_id.product_attribute_ids
+            val.product_attr_val_domain = [("attribute_id", "in", attributes.ids)]
