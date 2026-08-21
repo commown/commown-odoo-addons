@@ -11,4 +11,19 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="view_campaign_search">
+        <field name="name">coupon.campaign.search (in commown_sponsoring)</field>
+        <field name="model">coupon.campaign</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sponsor_partner_ids" />
+                <filter
+                    string="Sponsorship campaigns"
+                    name="sponsorship_campaigns"
+                    domain="[('sponsor_partner_ids', '!=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
 </odoo>
