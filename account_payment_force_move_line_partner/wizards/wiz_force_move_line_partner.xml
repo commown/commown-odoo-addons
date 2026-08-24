@@ -1,0 +1,41 @@
+<odoo>
+
+    <record id="view_force_move_line_partner_wizard" model="ir.ui.view">
+        <field name="name">wizard.force.partner.on.move.line.form</field>
+        <field name="model">wizard.force.partner.on.move.line</field>
+        <field name="arch" type="xml">
+            <form string="Force partner on a move line">
+                <group>
+                    <field name="move_id" invisible="1" />
+                    <field
+                        name="line_to_change_id"
+                        context="{'in_force_aml_partner_wizard': True}"
+                    />
+                    <field
+                        name="new_partner_id"
+                        context="{'in_force_aml_partner_wizard': True}"
+                    />
+                </group>
+                <footer>
+                    <button
+                        name="execute"
+                        string="Change partner"
+                        class="btn-primary"
+                        type="object"
+                    />
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_force_move_line_partner_wizard" model="ir.actions.act_window">
+        <field name="name">[COMPTA] Partenaire : frais rejet slimpay</field>
+        <field name="res_model">wizard.force.partner.on.move.line</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+        <field name="context">{"default_move_id": active_id}</field>
+        <field name="binding_model_id" ref="account.model_account_move" />
+    </record>
+
+</odoo>
