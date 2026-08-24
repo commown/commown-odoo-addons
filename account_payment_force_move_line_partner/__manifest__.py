@@ -4,7 +4,7 @@
 {
     "name": "Account payment - Force move line partner",
     "summary": "Wizard to force a different partner on an account move line related to an account payment",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
