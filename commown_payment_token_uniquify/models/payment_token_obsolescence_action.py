@@ -34,7 +34,7 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         """
         children = obsolete_tokens.mapped("partner_id.child_ids")
         for p_inv in children.filtered(lambda p: p.type == "invoice"):
-            p_inv.copy({"parent_id": new_token.partner_id.id})
+            p_inv.copy({"parent_id": new_token.partner_id.id}).name = p_inv.name
             p_inv.active = False
             break
 
@@ -44,11 +44,12 @@ class PaymentTokenUniquifyObsolescenceAction(models.Model):
         to the partner of the new token.
         """
 
+        all_tokens = obsolete_tokens | new_token
         contracts = self.env["contract.contract"].search(
             [
                 "|",
-                ("partner_id.payment_token_id", "in", obsolete_tokens.ids),
-                ("payment_token_id", "in", obsolete_tokens.ids),
+                ("partner_id.payment_token_id", "in", all_tokens.ids),
+                ("payment_token_id", "in", all_tokens.ids),
                 "|",
                 ("date_end", ">=", date.today()),
                 "&",

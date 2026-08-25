@@ -63,7 +63,7 @@ class PaymentTokenUniquifyTC(TransactionCase):
             partner.payment_token_id = token.id
         return token
 
-    def _trigger_obsolescence(self, *action_refs, **new_partner_kwargs):
+    def _trigger_obsolescence(self, *action_refs, partner=None):
         """Trigger the tested code: a partner of the company creates a new token
 
         A payment provider is used that is first configured to trigger
@@ -74,11 +74,11 @@ class PaymentTokenUniquifyTC(TransactionCase):
         for action_ref in action_refs:
             provider.obsolescence_action_ids |= self.env.ref(action_ref)
 
-        new_partner_kwargs.setdefault("name", "s1_w3")
-        company_s1_w3 = self.new_worker(self.company_s1, **new_partner_kwargs)
+        if partner is None:
+            partner = self.new_worker(self.company_s1, name="s1_w3")
         cm = self._check_obsolete_token_action_job()
         with cm:
-            new_token = self.new_payment_token(company_s1_w3, provider)
+            new_token = self.new_payment_token(partner, provider)
             cm.gen.send(new_token)
         return new_token
 
