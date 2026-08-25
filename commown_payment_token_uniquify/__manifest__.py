@@ -4,7 +4,7 @@
 {
     "name": "Commown payment token uniquify customization",
     "summary": "Add more payment_token_uniquify obsolescence actions to automatically reattribute invoices and contracts.",
-    "version": "16.0.1.0.2",
+    "version": "16.0.1.0.3",
     "development_status": "Alpha",
     "category": "Accounting/Payment",
     "website": "https://github.com/commown/commown-odoo-addons",
