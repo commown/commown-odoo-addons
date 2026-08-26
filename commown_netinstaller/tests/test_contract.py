@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from odoo import Command
 
 from .common import NetinstallerContractBasedTC
@@ -46,3 +48,19 @@ class NetinstallerContractTC(NetinstallerContractBasedTC):
                 ],
             },
         )
+
+    def test_contract_netinstaller_specs_contractual_changes(self):
+        change_date = self.contract.date_start + timedelta(days=15)
+        self.env["commown_netinstaller.feature.value.contractual_change"].create(
+            {
+                "contract_id": self.contract.id,
+                "date": change_date,
+                "feature_value_id": self.lref("ram-16").id,
+            }
+        )
+
+        date_before = self.contract.date_start + timedelta(days=14)
+        self.assertEqual(self.contract.netinstaller_specs(date_before)["RAM"], 8)
+
+        date_after = self.contract.date_start + timedelta(days=15)
+        self.assertEqual(self.contract.netinstaller_specs(date_after)["RAM"], 16)
