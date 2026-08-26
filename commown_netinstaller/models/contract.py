@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class Contract(models.Model):
@@ -9,6 +9,18 @@ class Contract(models.Model):
         comodel_name="commown_netinstaller.feature.value.contractual_change",
         inverse_name="contract_id",
     )
+
+    netinstaller_consolidated_feature_value_ids = fields.One2many(
+        string="Netinstaller consolidated feature values (today)",
+        comodel_name="commown_netinstaller.feature.value",
+        compute="_compute_netinstaller_consolidated_feature_value_ids",
+    )
+
+    @api.depends("netinstaller_feature_value_change_ids")
+    def _compute_netinstaller_consolidated_feature_value_ids(self):
+        self.netinstaller_consolidated_feature_value_ids = (
+            self._netinstaller_feature_values()
+        )
 
     def _netinstaller_feature_values(self, date=None):
         self.ensure_one()

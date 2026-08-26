@@ -8,12 +8,24 @@
 
       <xpath expr="//notebook" position="inside">
         <page name="netinstaller" string="Netinstaller">
-          <field name="netinstaller_feature_value_change_ids">
-            <tree>
-              <field name="date" />
-              <field name="feature_value_id" />
-            </tree>
-          </field>
+          <group
+                        name="consolidated_feature_values"
+                        string="Consolidated feature values"
+                    >
+            <field
+                            name="netinstaller_consolidated_feature_value_ids"
+                            nolabel="1"
+                            colspan="2"
+                        />
+          </group>
+          <group name="contractual_changes" string="Contractual feature changes">
+            <field name="netinstaller_feature_value_change_ids" nolabel="1" colspan="2">
+              <tree default_order="date" editable="bottom">
+                <field name="date" />
+                <field name="feature_value_id" />
+              </tree>
+            </field>
+          </group>
         </page>
       </xpath>
 
