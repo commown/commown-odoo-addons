@@ -9,9 +9,21 @@ from .common import NetinstallerContractBasedTC
 class NetinstallerContractTC(NetinstallerContractBasedTC):
     "Contract-related unit tests"
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.netinstaller_user = cls.env.ref("base.user_demo").copy(
+            {"name": "netinstaller user"}
+        )
+        cls.netinstaller_user.groups_id |= cls.lref("group_netinstaller_user")
+
+    def specs_as_netinstaller_user(self):
+        "Get contract specs as a user who is in the netinstaller user group"
+        return self.contract.with_user(self.netinstaller_user).netinstaller_specs()
+
     def test_contract_netinstaller_specs_default(self):
         self.assertEqual(
-            self.contract.netinstaller_specs(),
+            self.specs_as_netinstaller_user(),
             {
                 "RAM": 8,
                 "MODEL": "NV4XMB,ME,MZ",
@@ -36,7 +48,7 @@ class NetinstallerContractTC(NetinstallerContractBasedTC):
         )
 
         self.assertEqual(
-            self.contract.netinstaller_specs(),
+            self.specs_as_netinstaller_user(),
             {
                 "RAM": 8,
                 "MODEL": "NV4XMB,ME,MZ",
@@ -114,12 +126,12 @@ class NetinstallerContractTC(NetinstallerContractBasedTC):
 
         partner.netinstaller_encryption_method = "luks"
         self.assertEqual(
-            self.contract.netinstaller_specs().get("encryption"),
+            self.specs_as_netinstaller_user().get("encryption"),
             {"method": "luks"},
         )
 
         partner.netinstaller_encryption_master_key_url = "https://key.priv/mykey"
         self.assertEqual(
-            self.contract.netinstaller_specs().get("encryption"),
+            self.specs_as_netinstaller_user().get("encryption"),
             {"method": "luks", "master_key_url": "https://key.priv/mykey"},
         )
