@@ -34,6 +34,19 @@
                         nolabel="1"
                         attrs="{'invisible': [('is_company', '=', False), ('parent_id', '!=', False)]}"
                     />
+          <group
+                        name="encryption"
+                        string="Encryption"
+                        attrs="{'invisible': [('is_company', '=', False), ('parent_id', '!=', False)]}"
+                    >
+            <field name="netinstaller_encryption_method" />
+            <field
+                            name="netinstaller_encryption_master_key_url"
+                            widget="url"
+                            attrs="{'invisible': [('netinstaller_encryption_method', '=', False)]}"
+                        />
+          </group>
+
         </page>
 
       </xpath>

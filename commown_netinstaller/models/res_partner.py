@@ -14,6 +14,17 @@ class ResPartner(models.Model):
         string="Netinstaller post install scripts",
     )
 
+    netinstaller_encryption_method = fields.Selection(
+        [("luks", "LUKS")],
+        string="Encryption method (if any)",
+        required=False,
+    )
+
+    netinstaller_encryption_master_key_url = fields.Char(
+        string="Master key URL",
+        help="If this company uses a LUKS master key (Linux only), paste its Passbolt URL here",
+    )
+
     def netinstaller_post_install_scripts(self):
         self.ensure_one()
         scripts = self.env["commown_netinstaller.post_install_script"]
