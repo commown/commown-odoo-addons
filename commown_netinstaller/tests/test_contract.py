@@ -12,10 +12,15 @@ class NetinstallerContractTC(NetinstallerContractBasedTC):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.netinstaller_user = cls.env.ref("base.user_demo").copy(
-            {"name": "netinstaller user"}
-        )
+        cls.netinstaller_user = cls.env.ref("base.demo_user0")
         cls.netinstaller_user.groups_id |= cls.lref("group_netinstaller_user")
+
+        # Check test prerequisite
+        assert cls.env.ref("base.group_user") not in cls.netinstaller_user.groups_id
+
+        # Unpublish the product to check the read permissions at the same time
+        product = cls.contract.get_main_rental_line().sale_order_line_id.product_id
+        product.product_tmpl_id.website_published = False
 
     def specs_as_netinstaller_user(self):
         "Get contract specs as a user who is in the netinstaller user group"

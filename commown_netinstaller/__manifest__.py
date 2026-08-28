@@ -15,6 +15,7 @@
     "data": [
         "security/groups.xml",
         "security/ir.model.access.csv",
+        "security/rules.xml",
         "data/netinstaller_post_install_script.xml",
         "views/contract.xml",
         "views/netinstaller_feature.xml",
