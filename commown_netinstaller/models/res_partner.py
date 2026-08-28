@@ -25,6 +25,15 @@ class ResPartner(models.Model):
         help="If this company uses a LUKS master key (Linux only), paste its Passbolt URL here",
     )
 
+    netinstaller_fields_readonly = fields.Boolean(
+        compute="_compute_netinstaller_fields_readonly",
+    )
+
+    def _compute_netinstaller_fields_readonly(self):
+        self.netinstaller_fields_readonly = not self.env.user.has_group(
+            "commown_netinstaller.group_netinstaller_customer_change_manager"
+        )
+
     def netinstaller_post_install_scripts(self):
         self.ensure_one()
         scripts = self.env["commown_netinstaller.post_install_script"]
