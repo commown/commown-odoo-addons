@@ -131,17 +131,18 @@ class RentalFeesDefinition(models.Model):
         copy=True,
     )
 
-    # Computed on computation's state change
-    last_non_draft_computation_date = fields.Date(default=False)
-
     def write(self, vals):
         "Deny changing an important field (like partner_id or product_template_id)"
 
         important_fields_updated = bool(
             set(vals) & {"partner_id", "product_template_id"}
         )
+        comp_model = self.env["rental_fees.computation"]
+
         for record in self:
-            if record.last_non_draft_computation_date and important_fields_updated:
+            if important_fields_updated and comp_model.search_count(
+                [("fees_definition_ids", "=", record.id), ("state", "=", "done")]
+            ):
                 raise ValidationError(
                     _(
                         "Some non-draft computations use this fees definition."
