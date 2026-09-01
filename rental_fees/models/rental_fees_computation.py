@@ -606,11 +606,6 @@ class RentalFeesComputation(models.Model):
         self.fees = sum(self.detail_ids.mapped("fees"))
 
         self.state = "done"
-        for fees_def in self.fees_definition_ids:
-            fees_def.last_non_draft_computation_date = max(
-                self.until_date,
-                fees_def.last_non_draft_computation_date or self.until_date,
-            )
 
     def _run_for_fees_def(self, fees_def):
         scrapped_devices = fees_def.scrapped_devices(self.until_date)
