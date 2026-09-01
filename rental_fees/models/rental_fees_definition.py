@@ -31,7 +31,7 @@ class RentalFeesDefinition(models.Model):
         string="Supplier",
         help="The supplier concerned by this fees definition",
         required=True,
-        domain=[("supplier", "=", True)],
+        domain=[("supplier_rank", ">", 0)],
     )
 
     model_invoice_id = fields.Many2one(
