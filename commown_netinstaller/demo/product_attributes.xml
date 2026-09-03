@@ -1,0 +1,24 @@
+<odoo>
+
+  <record id="memory" model="product.attribute">
+    <field name="name">Memory</field>
+    <field name="display_type">select</field>
+    <field name="visibility">visible</field>
+  </record>
+
+  <record id="memory-8go" model="product.attribute.value">
+    <field name="name">8 Go</field>
+    <field name="attribute_id" ref="memory" />
+  </record>
+
+  <record id="memory-16go" model="product.attribute.value">
+    <field name="name">16 Go</field>
+    <field name="attribute_id" ref="memory" />
+  </record>
+
+  <record id="memory-24go" model="product.attribute.value">
+    <field name="name">24 Go</field>
+    <field name="attribute_id" ref="memory" />
+  </record>
+
+</odoo>

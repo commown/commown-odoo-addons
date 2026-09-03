@@ -1,0 +1,62 @@
+<odoo>
+
+  <record id="view_feature_value_tree" model="ir.ui.view">
+    <field name="name">view_feature_value_tree</field>
+    <field name="model">commown_netinstaller.feature.value</field>
+    <field name="arch" type="xml">
+      <tree default_order="feature_id">
+        <field name="feature_id" />
+        <field name="value" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_feature_value_form" model="ir.ui.view">
+    <field name="name">view_feature_value_form</field>
+    <field name="model">commown_netinstaller.feature.value</field>
+    <field name="arch" type="xml">
+      <form string="Netinstaller feature value">
+        <sheet>
+          <group name="main">
+            <field name="feature_id" invisible="1" />
+            <field name="value" />
+            <field name="product_attr_val_domain" invisible="1" />
+            <field name="product_attribute_value_ids" domain="product_attr_val_domain">
+              <tree>
+                <field name="attribute_id" />
+                <field name="name" />
+              </tree>
+            </field>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_netinstaller_feature_value_search" model="ir.ui.view">
+    <field name="name">netinstaller.feature.value.search</field>
+    <field name="model">commown_netinstaller.feature.value</field>
+    <field name="arch" type="xml">
+      <search string="Search Netinstaller feature values">
+        <field name="feature_id" string="Feature" />
+        <field name="value" string="Value" />
+      </search>
+    </field>
+  </record>
+
+  <menuitem
+        id="menu_netinstaller_settings"
+        name="Netinstaller"
+        sequence="85"
+        parent="sale.menu_sale_config"
+    />
+
+  <menuitem
+        id="menu_netinstaller_features_action"
+        action="commown_netinstaller.features_action"
+        parent="menu_netinstaller_settings"
+        groups="sales_team.group_sale_manager"
+        sequence="10"
+    />
+
+</odoo>

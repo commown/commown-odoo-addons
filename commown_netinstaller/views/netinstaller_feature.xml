@@ -1,0 +1,57 @@
+<odoo>
+
+  <record id="view_feature_tree" model="ir.ui.view">
+    <field name="name">view_feature_tree</field>
+    <field name="model">commown_netinstaller.feature</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" />
+        <field name="converter" />
+        <field name="product_attribute_ids" widget="many2many_tags" />
+        <field name="feature_value_ids" readonly="1" widget="many2many_tags" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_feature_form" model="ir.ui.view">
+    <field name="name">view_feature_form</field>
+    <field name="model">commown_netinstaller.feature</field>
+    <field name="arch" type="xml">
+      <form string="Netinstaller feature">
+        <sheet>
+          <div class="oe_title">
+            <h1>
+              <field name="name" class="oe_inline" />
+            </h1>
+          </div>
+          <group name="main">
+            <field name="converter" />
+          </group>
+          <group name="attributes">
+            <field name="product_attribute_ids">
+              <tree>
+                <field name="name" />
+              </tree>
+            </field>
+          </group>
+          <group name="values">
+            <field name="feature_value_ids" context="{'default_feature_id': id}">
+              <tree>
+                <field name="value" />
+                <field name="product_attribute_value_ids" widget="many2many_tags" />
+              </tree>
+            </field>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="features_action" model="ir.actions.act_window">
+    <field name="name">Netinstaller features</field>
+    <field name="res_model">commown_netinstaller.feature</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{}</field>
+  </record>
+
+</odoo>
