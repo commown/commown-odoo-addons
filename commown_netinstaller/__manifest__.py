@@ -4,7 +4,7 @@
 {
     "name": "Commown netinstaller gateway",
     "summary": "Netinstaller api module",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
