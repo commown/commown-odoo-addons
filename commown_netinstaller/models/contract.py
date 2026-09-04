@@ -72,4 +72,12 @@ class Contract(models.Model):
             for script in self.partner_id.netinstaller_post_install_scripts()
         ]
 
+        # Encryption:
+        partner = self.commercial_partner_id
+        if partner.netinstaller_encryption_method:
+            result["encryption"] = {"method": partner.netinstaller_encryption_method}
+            master_key_url = partner.netinstaller_encryption_master_key_url
+            if master_key_url:
+                result["encryption"]["master_key_url"] = master_key_url
+
         return result

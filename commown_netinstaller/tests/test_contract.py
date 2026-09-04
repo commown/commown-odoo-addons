@@ -108,3 +108,18 @@ class NetinstallerContractTC(NetinstallerContractBasedTC):
             self.lref("ram-16"),
             self.contract.netinstaller_consolidated_feature_value_ids,
         )
+
+    def test_encryption(self):
+        partner = self.contract.commercial_partner_id
+
+        partner.netinstaller_encryption_method = "luks"
+        self.assertEqual(
+            self.contract.netinstaller_specs().get("encryption"),
+            {"method": "luks"},
+        )
+
+        partner.netinstaller_encryption_master_key_url = "https://key.priv/mykey"
+        self.assertEqual(
+            self.contract.netinstaller_specs().get("encryption"),
+            {"method": "luks", "master_key_url": "https://key.priv/mykey"},
+        )
