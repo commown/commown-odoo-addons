@@ -28,6 +28,12 @@ class Contract(models.Model):
 
     lot_nb = fields.Integer("Number of lots", compute="_compute_lot_nb", store=True)
 
+    main_rental_product = fields.Many2one(
+        comodel_name="product.product",
+        compute="_compute_main_rental_product",
+        store=True,
+    )
+
     def pending_picking(self):
         return self.move_ids.mapped("picking_id").filtered(_assigned)
 
@@ -180,3 +186,14 @@ class Contract(models.Model):
                         picking.action_set_date_done_to_scheduled()
 
                     break
+
+    @api.depends("contract_line_ids")
+    def _compute_main_rental_product(self):
+        "We get the storable product matching the rental service product."
+        for contract in self:
+            clines = contract.get_main_rental_line(_raise=False)
+            if not clines or len(clines) != 1:
+                contract.main_rental_product = False
+            else:
+                service = clines.sale_order_line_id.product_id
+                contract.main_rental_product = service.primary_storable_variant_id
