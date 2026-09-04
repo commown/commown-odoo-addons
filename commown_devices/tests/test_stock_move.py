@@ -31,7 +31,7 @@ class StockMoveTC(TransactionCase):
             None,
             orig_location or self.stock_location,
             destination,
-            "origin",
+            False,
         )
         moves.update({"contract_id": contract or self.contract.id})
         return moves

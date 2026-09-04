@@ -17,7 +17,8 @@
         "commown_lead_risk_analysis",
         "product_rental",
         "purchase",
-        "stock",
+        "stock_picking_origin_document",
+        "stock_scrap_origin_document",
     ],
     "data": [
         "data/action_crm_lead.xml",
