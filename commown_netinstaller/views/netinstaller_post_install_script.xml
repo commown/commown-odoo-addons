@@ -23,7 +23,7 @@
         id="menu_netinstaller_post_install_scripts_action"
         action="commown_netinstaller.post_install_scripts_action"
         parent="menu_netinstaller_settings"
-        groups="stock.group_stock_manager"
+        groups="group_netinstaller_customer_change_manager"
         sequence="20"
     />
 

@@ -8,6 +8,7 @@
       <xpath expr="//notebook" position="inside">
 
         <page name="netinstaller" string="Netinstaller">
+          <field name="netinstaller_fields_readonly" invisible="1" />
           <p
                         attrs="{'invisible': ['|', ('is_company', '=', True), ('parent_id', '=', False)]}"
                     >
@@ -23,7 +24,10 @@
                         name="post_install_scripts"
                         attrs="{'invisible': [('is_company', '=', False), ('parent_id', '!=', False)]}"
                     >
-            <field name="netinstaller_exec_default_script" />
+            <field
+                            name="netinstaller_exec_default_script"
+                            attrs="{'readonly': [('netinstaller_fields_readonly', '=', True)]}"
+                        />
           </group>
           <separator
                         string="Custom post-install scripts"
@@ -32,18 +36,21 @@
           <field
                         name="netinstaller_scripts"
                         nolabel="1"
-                        attrs="{'invisible': [('is_company', '=', False), ('parent_id', '!=', False)]}"
+                        attrs="{'invisible': [('is_company', '=', False), ('parent_id', '!=', False)], 'readonly': [('netinstaller_fields_readonly', '=', True)]}"
                     />
           <group
                         name="encryption"
                         string="Encryption"
                         attrs="{'invisible': [('is_company', '=', False), ('parent_id', '!=', False)]}"
                     >
-            <field name="netinstaller_encryption_method" />
+            <field
+                            name="netinstaller_encryption_method"
+                            attrs="{'readonly': [('netinstaller_fields_readonly', '=', True)]}"
+                        />
             <field
                             name="netinstaller_encryption_master_key_url"
                             widget="url"
-                            attrs="{'invisible': [('netinstaller_encryption_method', '=', False)]}"
+                            attrs="{'invisible': [('netinstaller_encryption_method', '=', False)], 'readonly': [('netinstaller_fields_readonly', '=', True)]}"
                         />
           </group>
 
