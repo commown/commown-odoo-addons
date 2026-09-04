@@ -45,10 +45,11 @@ class ProductProduct(models.Model):
         domain='[("type", "=", "product")]',
     )
 
-    def _set_storable_variants(self, template_configs=None):
+    def _set_storable_variants(self, default_template_configs=None):
         for rec in self:
-            if template_configs is None:
-                template_configs = rec.product_tmpl_id.storable_config_ids
+            template_configs = (
+                default_template_configs or rec.product_tmpl_id.storable_config_ids
+            )
             # Select applicable product service configs: those which attribute values
             # all match current product attribute values
             configs = template_configs.filtered(
