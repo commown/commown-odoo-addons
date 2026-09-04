@@ -319,12 +319,8 @@ class Contract(models.Model):
             ".property_contract_template_id"
         )
 
-        clines = self.env["contract.line"].search(
-            [
-                ("contract_id", "=", self.id),
-                (cline_to_property_ct, "!=", False),
-                ("contract_template_line_id.name", "like", CONTRACT_PROD_MARKER),
-            ]
+        clines = self.contract_line_ids.filtered(cline_to_property_ct).filtered(
+            lambda cl: CONTRACT_PROD_MARKER in cl.contract_template_line_id.name
         )
 
         if _raise and len(clines) != 1:
