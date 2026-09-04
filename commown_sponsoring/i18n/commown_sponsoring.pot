@@ -1,0 +1,185 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* commown_sponsoring
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20260327\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-21 12:30+0000\n"
+"PO-Revision-Date: 2026-08-21 12:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_sponsoring
+#. odoo-python
+#: code:addons/commown_sponsoring/models/sale_order.py:0
+#, python-format
+msgid "%s in this order."
+msgstr ""
+
+#. module: commown_sponsoring
+#. odoo-python
+#: code:addons/commown_sponsoring/models/sale_order.py:0
+#, python-format
+msgid "%s on a previous order."
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:mail.template,body_html:commown_sponsoring.mail_sponsoring_notify
+msgid ""
+"<div>\n"
+"  <p>Bonjour <t t-out=\"object.firstname\"></t>,</p>\n"
+"  <br>\n"
+"  <p>\n"
+"    Nous vous informons que votre code de parrainage a été utilisé\n"
+"    pour une nouvelle location par <t t-out=\"ctx['sponsored'].name\"></t> !\n"
+"  </p>\n"
+"  <p>Vous bénéficierez d'une réduction sur votre prochaine facture de contrat :)</p>\n"
+"  <br>\n"
+"  <p>Belle journée !</p>\n"
+"  <br>\n"
+"  <p>L'équipe Commown.</p>\n"
+"</div>\n"
+"    "
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.portal_layout_sponsoring
+msgid "<i class=\"fa fa-clipboard\"/> Copier"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.model,name:commown_sponsoring.model_coupon_campaign
+msgid "A coupon campaign that describes the coupon benefits"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:mail.template,subject:commown_sponsoring.mail_sponsoring_notify
+msgid "Commown : votre code de parrainage a été utilisé !"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:mail.template,name:commown_sponsoring.mail_sponsoring_notify
+msgid "Commown Sponsoring : Notification de parrainage"
+msgstr ""
+
+#. module: commown_sponsoring
+#. odoo-python
+#: code:addons/commown_sponsoring/models/res_partner.py:0
+#, python-format
+msgid ""
+"Congratulations, you will benefit from a free monthly installment, as you "
+"are being sponsored by %s! (This discount won't apply on the initial deposit"
+" or the first installment: it will be applied on the second monthly "
+"installment.)"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.model,name:commown_sponsoring.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.model,name:commown_sponsoring.model_contract_contract
+msgid "Contract"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.portal_layout_sponsoring
+msgid "En savoir plus"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.portal_layout_sponsoring
+msgid "Mon code de parrainage"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.portal_layout_sponsoring
+msgid "Parrainage"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.model,name:commown_sponsoring.model_sale_order
+msgid "Sales Order"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.model.fields,field_description:commown_sponsoring.field_res_partner__sponsor_campaign_id
+#: model:ir.model.fields,field_description:commown_sponsoring.field_res_users__sponsor_campaign_id
+msgid "Sponsor Campaign"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.model.fields,field_description:commown_sponsoring.field_coupon_campaign__sponsor_partner_id
+#: model:ir.model.fields,field_description:commown_sponsoring.field_coupon_campaign__sponsor_partner_ids
+msgid "Sponsor Partner"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.model.fields,field_description:commown_sponsoring.field_res_partner__sponsor_code
+#: model:ir.model.fields,field_description:commown_sponsoring.field_res_users__sponsor_code
+msgid "Sponsor code"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.view_campaign_search
+msgid "Sponsorship campaigns"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.view_partner_form
+msgid "The company sponsor campaign is available on"
+msgstr ""
+
+#. module: commown_sponsoring
+#. odoo-python
+#: code:addons/commown_sponsoring/models/sale_order.py:0
+#, python-format
+msgid "This sponsoring code is currently inactive."
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.portal_layout_sponsoring
+msgid ""
+"Une mensualité offerte pour vous et votre filleul !\n"
+"                    <br/>"
+msgstr ""
+
+#. module: commown_sponsoring
+#. odoo-python
+#: code:addons/commown_sponsoring/controllers/main.py:0
+#, python-format
+msgid "We removed the reserved sponsorship code, as it is no longer active."
+msgstr ""
+
+#. module: commown_sponsoring
+#. odoo-python
+#: code:addons/commown_sponsoring/controllers/main.py:0
+#, python-format
+msgid ""
+"We removed the reserved sponsorship code, as you already used another one on"
+" a previous order."
+msgstr ""
+
+#. module: commown_sponsoring
+#. odoo-python
+#: code:addons/commown_sponsoring/models/sale_order.py:0
+#, python-format
+msgid "You have already used a sponsoring code"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model:ir.actions.server,name:commown_sponsoring.action_send_sponsor_notification_mail
+msgid "[Commown] Send sponsorship notification email"
+msgstr ""
+
+#. module: commown_sponsoring
+#: model_terms:ir.ui.view,arch_db:commown_sponsoring.view_partner_form
+msgid "the parent company"
+msgstr ""

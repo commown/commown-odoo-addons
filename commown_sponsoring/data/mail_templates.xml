@@ -1,0 +1,27 @@
+<odoo noupdate="1">
+
+  <record id="mail_sponsoring_notify" model="mail.template">
+    <field name="name">Commown Sponsoring : Notification de parrainage</field>
+    <field name="model_id" ref="base.model_res_partner" />
+    <field name="email_from">contact@commown.coop</field>
+    <field name="partner_to">{{ object.id }}</field>
+    <field name="lang">{{object.lang}}</field>
+    <field name="subject">Commown : votre code de parrainage a été utilisé !</field>
+    <field name="body_html" type="html">
+<div>
+  <p>Bonjour <t t-out="object.firstname" />,</p>
+  <br />
+  <p>
+    Nous vous informons que votre code de parrainage a été utilisé
+    pour une nouvelle location par <t t-out="ctx['sponsored'].name" /> !
+  </p>
+  <p>Vous bénéficierez d'une réduction sur votre prochaine facture de contrat :)</p>
+  <br />
+  <p>Belle journée !</p>
+  <br />
+  <p>L'équipe Commown.</p>
+</div>
+    </field>
+  </record>
+
+</odoo>
