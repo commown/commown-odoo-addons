@@ -1,0 +1,377 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mrp_usability
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-30 05:57+0000\n"
+"PO-Revision-Date: 2026-09-04 18:45+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 2.3\n"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_product_product__cumulated_netinstaller_feature_value_ids
+msgid "All netinstaller feature values applying to this product"
+msgstr "Valeurs des caractéristiques Netinstaller qui s'appliquent à ce produit"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__cmd
+msgid "Cmd"
+msgstr "Commande"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.contract_contract_customer_form_view
+msgid "Consolidated feature values"
+msgstr "Valeurs consolidées des caractéristiques"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_contract_contract
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__contract_id
+msgid "Contract"
+msgstr "Contrat"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.contract_contract_customer_form_view
+msgid "Contractual feature changes"
+msgstr "Modifications contractuelles des caractéristiques"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__converter
+msgid "Converter"
+msgstr "Convertisseur"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__create_uid
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__create_uid
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__create_uid
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__create_date
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__create_date
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__create_date
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.product_normal_form_view
+msgid "Cumulated feature values"
+msgstr "Valeurs cumulées des caractéristiques"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_partner_form
+msgid "Custom Netinstaller post-install scripts can be handled on"
+msgstr "Les scripts de post-installation personnalisée peuvent être traités dans"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_partner_form
+msgid "Custom post-install scripts"
+msgstr "Scripts de post-installation personnalisée"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__date
+msgid "Date"
+msgstr "Date"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_commown_netinstaller_post_install_script
+msgid "Describe a script to be be executed to finalize an OS install"
+msgstr "Décrit un script à exécuter pour finaliser une installation d'OS"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_commown_netinstaller_feature
+msgid "Describe an hardware/ software feature needed to prepare the device"
+msgstr "Décrit une caractéristique matérielle/ logicielle requise pour préparer un appareil"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__display_name
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__display_name
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__display_name
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_partner_form
+msgid "Encryption"
+msgstr "Chiffrement"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_partner__netinstaller_encryption_method
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_users__netinstaller_encryption_method
+msgid "Encryption method (if any)"
+msgstr "Méthode de chiffrement (le cas échéant)"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_partner__netinstaller_exec_default_script
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_users__netinstaller_exec_default_script
+msgid "Execute default netinstaller post-install script?"
+msgstr "Exécuter le script post-installation par défaut ?"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__feature_id
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_netinstaller_feature_value_search
+msgid "Feature"
+msgstr "Caractéristique"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__feature_value_id
+msgid "Feature Value"
+msgstr "Valeur de caractéristique"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__feature_value_ids
+msgid "Feature values"
+msgstr "Valeurs de caractéristiques"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__git_branch_name
+msgid "Git Branch Name"
+msgstr "Branche Git"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__git_clone_url
+msgid "Git Clone Url"
+msgstr "URL du dépôt Git"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__id
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__id
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__id
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_netinstaller
+#: model:ir.model.constraint,message:commown_netinstaller.constraint_commown_netinstaller_feature_value_feature_value_uniq
+msgid "Identical values for a given feature"
+msgstr "Valeurs identiques pour une même caractéristique"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,help:commown_netinstaller.field_res_partner__netinstaller_encryption_master_key_url
+#: model:ir.model.fields,help:commown_netinstaller.field_res_users__netinstaller_encryption_master_key_url
+msgid ""
+"If this company uses a LUKS master key (Linux only), paste its Passbolt URL "
+"here"
+msgstr "Si l'entreprise utilise une clé LUKS maîtresse (spécifique Linux), coller sur URL Passbolt ici"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields.selection,name:commown_netinstaller.selection__commown_netinstaller_feature__converter__int
+msgid "Integer"
+msgstr "Entier"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields.selection,name:commown_netinstaller.selection__res_partner__netinstaller_encryption_method__luks
+msgid "LUKS"
+msgstr "LUKS"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature____last_update
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value____last_update
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change____last_update
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script____last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__write_uid
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__write_uid
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__write_uid
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__write_date
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__write_date
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value_contractual_change__write_date
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_post_install_script__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_partner__netinstaller_encryption_master_key_url
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_users__netinstaller_encryption_master_key_url
+msgid "Master key URL"
+msgstr "URL de la clé maîtresse"
+
+#. module: commown_netinstaller
+#. odoo-python
+#: code:addons/commown_netinstaller/models/netinstaller_feature_value_change.py:0
+#, python-format
+msgid "More than one value change for %(feat)s at %(date)s."
+msgstr "Plus d'un seul changement de %(feat)s le %(date)s."
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,help:commown_netinstaller.field_commown_netinstaller_feature__converter
+msgid ""
+"Name of the function to convert a string representation of a value of this "
+"feature into a typed value"
+msgstr "Fonction de conversion de la représentation d'une valeur vers sa valeur typée"
+
+#. module: commown_netinstaller
+#: model:ir.ui.menu,name:commown_netinstaller.menu_netinstaller_settings
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.contract_contract_customer_form_view
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.product_normal_form_view
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.product_template_only_form_view
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_partner_form
+msgid "Netinstaller"
+msgstr "Netinstaller"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_partner__netinstaller_fields_readonly
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_users__netinstaller_fields_readonly
+msgid "Netinstaller Fields Readonly"
+msgstr "Attributs Netinstaller en lecture seule"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_contract_contract__netinstaller_consolidated_feature_value_ids
+msgid "Netinstaller consolidated feature values (today)"
+msgstr "Caractéristiques Netinstaller consolidées (à aujourd'hui)"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_feature_form
+msgid "Netinstaller feature"
+msgstr "Caractéristique Netinstaller"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_feature_value_form
+msgid "Netinstaller feature value"
+msgstr "Valeur de caractéristique Netinstaller"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_contract_contract__netinstaller_feature_value_change_ids
+msgid "Netinstaller feature value changes"
+msgstr "Modification de la valeur d'une caractéristique"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_product_product__netinstaller_feature_value_ids
+#: model:ir.model.fields,field_description:commown_netinstaller.field_product_template__netinstaller_feature_value_ids
+msgid "Netinstaller feature values"
+msgstr "Valeurs de caractéristiques Netinstaller"
+
+#. module: commown_netinstaller
+#: model:ir.actions.act_window,name:commown_netinstaller.features_action
+#: model:ir.ui.menu,name:commown_netinstaller.menu_netinstaller_features_action
+msgid "Netinstaller features"
+msgstr "Caractéristiques Netinstaller"
+
+#. module: commown_netinstaller
+#: model:ir.actions.act_window,name:commown_netinstaller.post_install_scripts_action
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_partner__netinstaller_scripts
+#: model:ir.model.fields,field_description:commown_netinstaller.field_res_users__netinstaller_scripts
+#: model:ir.ui.menu,name:commown_netinstaller.menu_netinstaller_post_install_scripts_action
+msgid "Netinstaller post install scripts"
+msgstr "Script post-installation Netinstaller"
+
+#. module: commown_netinstaller
+#: model:res.groups,name:commown_netinstaller.group_netinstaller_customer_change_manager
+msgid "Netinstaller: customer change managers"
+msgstr "Netinstaller : gestionnaires clients"
+
+#. module: commown_netinstaller
+#: model:res.groups,name:commown_netinstaller.group_netinstaller_feature_manager
+msgid "Netinstaller: feature managers"
+msgstr "Netinstaller : gestionnaires des caractéristiques"
+
+#. module: commown_netinstaller
+#: model:res.groups,name:commown_netinstaller.group_netinstaller_user
+msgid "Netinstaller: users"
+msgstr "Netinstaller : utilisateurs"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_product_template
+msgid "Product"
+msgstr "Article"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__product_attr_val_domain
+msgid "Product Attr Val Domain"
+msgstr "Domaine pour les valeurs de caractéristiques produits"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_product_product
+msgid "Product Variant"
+msgstr "Article"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__product_attribute_value_ids
+msgid "Product attribute values"
+msgstr "Valeurs de caractéristiques produits"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature__product_attribute_ids
+msgid "Product attributes"
+msgstr "Caractéristiques produits"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_commown_netinstaller_feature_value_contractual_change
+msgid "Represents a change of a feature value at a date on a contract"
+msgstr "Représente une modification de valeur de caractéristique Netinstaller à une date donnée sur un contrat donné"
+
+#. module: commown_netinstaller
+#: model:ir.model,name:commown_netinstaller.model_commown_netinstaller_feature_value
+msgid "Represents a possible value of a netinstaller feature"
+msgstr "Représente une valeur possible d'une caractéristique Netinstaller"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_netinstaller_feature_value_search
+msgid "Search Netinstaller feature values"
+msgstr "Recherche de valeurs de caractéristiques Netinstaller"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields.selection,name:commown_netinstaller.selection__commown_netinstaller_feature__converter__str
+msgid "String"
+msgstr "Chaîne de caractères"
+
+#. module: commown_netinstaller
+#: model:ir.model.constraint,message:commown_netinstaller.constraint_commown_netinstaller_feature_name_uniq
+msgid "The feature name must be unique"
+msgstr "Les noms de caractéristiques doivent être uniques"
+
+#. module: commown_netinstaller
+#. odoo-python
+#: code:addons/commown_netinstaller/models/netinstaller_feature.py:0
+#, python-format
+msgid ""
+"The new converter method is incompatible with the following values: '%s'"
+msgstr "La nouvelle méthode de conversion est incompatible avec les valeurs suivantes : '%s'"
+
+#. module: commown_netinstaller
+#. odoo-python
+#: code:addons/commown_netinstaller/models/netinstaller_feature_value.py:0
+#, python-format
+msgid "This value is incompatible with the current convertion method ('%s')"
+msgstr "Cette valeur est incompatible avec la méthode de conversion actuelle ('%s')"
+
+#. module: commown_netinstaller
+#: model:ir.model.fields,field_description:commown_netinstaller.field_commown_netinstaller_feature_value__value
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_netinstaller_feature_value_search
+msgid "Value"
+msgstr "Valeur"
+
+#. module: commown_netinstaller
+#: model_terms:ir.ui.view,arch_db:commown_netinstaller.view_partner_form
+msgid "the parent company"
+msgstr "l'entreprise parente"

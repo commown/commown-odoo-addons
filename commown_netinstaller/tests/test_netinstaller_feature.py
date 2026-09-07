@@ -1,10 +1,69 @@
-from odoo.exceptions import UserError
+from odoo.exceptions import AccessError, UserError
 from odoo.tests import Form, TransactionCase
 
 from .common import NetinstallMixin
 
 
 class NetinstallerFeatureTC(TransactionCase, NetinstallMixin):
+    "Tests related to the netinstaller feature and feature value models"
+
+    def test_perm_user(self):
+        """Users must belong to the netinstaller user group to read netinstaller features
+        and feature values.
+        """
+
+        user = self.env.ref("base.user_demo")
+        f_user_model = self.env["commown_netinstaller.feature"].with_user(user)
+        fv_user_model = self.env["commown_netinstaller.feature.value"].with_user(user)
+
+        with self.assertRaises(AccessError):
+            f_user_model.search_count([])
+
+        with self.assertRaises(AccessError):
+            fv_user_model.search_count([])
+
+        user.groups_id |= self.lref("group_netinstaller_user")
+        self.assertTrue(f_user_model.search_count([]))
+        self.assertTrue(fv_user_model.search_count([]))
+
+    def test_perm_manager(self):
+        """Users must belong to the netinstaller manager group to modify
+        netinstaller features and feature values.
+        """
+        user = self.env.ref("base.user_demo")
+        user.groups_id |= self.lref("group_netinstaller_user")
+
+        with self.assertRaises(AccessError):
+            self.lref("ram").with_user(user).name = "dummy"
+
+        with self.assertRaises(AccessError):
+            self.lref("ram-8").with_user(user).value = 12
+
+        user.groups_id |= self.lref("group_netinstaller_feature_manager")
+
+        # Test update
+        self.lref("ram").with_user(user).name = "dummy"
+        self.assertEqual(self.lref("ram").name, "dummy")
+
+        self.lref("ram-8").with_user(user).value = "12"
+        self.assertEqual(self.lref("ram-8").value, "12")
+
+        # Test remove
+        self.lref("nv").with_user(user).unlink()
+        self.lref("motherboard-model").with_user(user).unlink()
+
+        # Test create
+        feature = (
+            self.env["commown_netinstaller.feature"]
+            .with_user(user)
+            .create(
+                {"name": "myfeat", "converter": "str"},
+            )
+        )
+        self.env["commown_netinstaller.feature.value"].with_user(user).create(
+            {"value": "no-matter", "feature_id": feature.id},
+        )
+
     def test_feature_value_display_name(self):
         "A feature value's display name should show its feature name and its value"
         self.assertEqual(self.lref("ram-8").display_name, "RAM = 8")
