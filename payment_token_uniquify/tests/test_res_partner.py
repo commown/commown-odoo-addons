@@ -29,3 +29,10 @@ class PartnerTC(PaymentTokenUniquifyTC):
         t22 = self.new_payment_token(self.company_s2_w1)
         self.assertEqual(self.company_s2_w1.get_obsolete_tokens(t22), t21)
         self.assertEqual(self.company_s2_w1.get_obsolete_tokens(t22), t21)
+
+        # New token signed by parent company of a company
+        # (For CAE strctures)
+        company_worker = self.new_worker(self.company)
+        parent_company_token = self.new_payment_token(company_worker)
+
+        self.assertFalse(company_worker.get_obsolete_tokens(parent_company_token))

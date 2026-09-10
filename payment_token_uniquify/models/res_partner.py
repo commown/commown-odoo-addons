@@ -11,7 +11,11 @@ class ResPartner(models.Model):
 
         return self.env["payment.token"].search(
             [
-                ("partner_id", "child_of", self.commercial_partner_id.id),
+                (
+                    "partner_id.commercial_partner_id",
+                    "=",
+                    self.commercial_partner_id.id,
+                ),
                 ("id", "!=", newer_token.id),
             ]
         )
