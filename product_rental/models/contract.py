@@ -320,7 +320,7 @@ class Contract(models.Model):
         )
 
         clines = self.contract_line_ids.filtered(cline_to_property_ct).filtered(
-            lambda cl: CONTRACT_PROD_MARKER in cl.contract_template_line_id.name
+            lambda cl: CONTRACT_PROD_MARKER in (cl.contract_template_line_id.name or "")
         )
 
         if _raise and len(clines) != 1:
