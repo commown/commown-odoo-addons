@@ -1,0 +1,44 @@
+<odoo>
+
+  <record model="ir.ui.view" id="view_picking_form">
+    <field name="name">stock.picking form (commown_shipping module)</field>
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="stock.view_picking_form" />
+    <field name="arch" type="xml">
+
+      <field name="carrier_id" position="before">
+        <field name="carrier_domain" invisible="1" />
+        <field name="carrier_tracking_ref" invisible="1" />
+        <field name="carrier_required" />
+      </field>
+
+      <field name="carrier_id" position="attributes">
+        <attribute
+                    name="attrs"
+                >{"required": [("carrier_required", "=", True)]}</attribute>
+        <attribute name="domain">carrier_domain</attribute>
+      </field>
+
+      <button name="do_print_picking" position="after">
+        <button
+                    name="action_generate_label"
+                    string="Generate shipping label"
+                    groups="stock.group_stock_user"
+                    type="object"
+                    attrs="{'invisible': ['|', ('state', '!=', 'assigned'), ('carrier_tracking_ref', '!=', False)]}"
+                    data-hotkey="é"
+                />
+      </button>
+
+      <button name="do_print_picking" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </button>
+
+      <button name="action_open_label_type" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </button>
+
+    </field>
+  </record>
+
+</odoo>

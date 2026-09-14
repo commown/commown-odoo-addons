@@ -4,12 +4,37 @@
   <record model="ir.ui.view" id="edit_project">
     <field name="name">project.project.form</field>
     <field name="model">project.project</field>
-    <field name="inherit_id" ref="commown_contractual_issue.edit_project" />
+    <field name="inherit_id" ref="commown_shipping.edit_project" />
     <field name="arch" type="xml">
       <xpath expr="//sheet//field[@name='user_id']/ancestor::group" position="after">
         <group string="Devices">
           <field name="device_tracking" />
           <field name="show_related_move_lines" />
+        </group>
+      </xpath>
+
+      <xpath expr="//group[@name='tracking']" position="before">
+        <group name="shipping" string="Shipping">
+          <group name="carrier" string="Carrier">
+            <field name="carrier_account_id" />
+            <field name="picking_type_id" />
+          </group>
+          <group name="os" string="OS">
+            <field name="picking_os_required" />
+          </group>
+          <group name="locations" string="Picking locations">
+            <field name="picking_orig" />
+            <field name="picking_dest_contract_partner" />
+            <field
+                            name="picking_dest"
+                            attrs="{'invisible': [('picking_dest_contract_partner', '=', True)]}"
+                        />
+            <field name="picking_return_to" />
+          </group>
+          <group name="picking_scheduling" string="Picking scheduling">
+            <field name="picking_scheduled_in_days" />
+            <field name="picking_scheduled_forced_hour" />
+          </group>
         </group>
       </xpath>
     </field>

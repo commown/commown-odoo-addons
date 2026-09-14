@@ -1,0 +1,35 @@
+<odoo>
+
+  <record model="ir.ui.view" id="crm_team_view_form">
+    <field name="name">crm.team.form</field>
+    <field name="model">crm.team</field>
+    <field name="inherit_id" ref="sales_team.crm_team_view_form" />
+    <field name="arch" type="xml">
+      <xpath expr="//page[@name='shipping']//group[@name='tracking']" position="before">
+        <group name="shipping" string="Shipping">
+          <group name="carrier" string="Carrier">
+            <field name="carrier_account_id" />
+            <field name="picking_type_id" />
+          </group>
+          <group name="os" string="OS">
+            <field name="picking_os_required" />
+          </group>
+          <group name="locations" string="Picking locations">
+            <field name="picking_orig" />
+            <field name="picking_dest_contract_partner" />
+            <field
+                            name="picking_dest"
+                            attrs="{'invisible': [('picking_dest_contract_partner', '=', True)]}"
+                        />
+            <field name="picking_return_to" />
+          </group>
+          <group name="picking_scheduling" string="Picking scheduling">
+            <field name="picking_scheduled_in_days" />
+            <field name="picking_scheduled_forced_hour" />
+          </group>
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

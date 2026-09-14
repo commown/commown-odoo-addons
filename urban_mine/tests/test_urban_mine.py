@@ -1,9 +1,12 @@
-from base64 import b64decode
 from pathlib import Path
-from unittest import mock
+
+import lxml.etree
+import requests_mock
 
 from odoo.exceptions import UserError
 from odoo.tests.common import TransactionCase, tagged
+
+from odoo.addons.commown_shipping.tests.common import mock_colissimo_ok
 
 HERE = (Path(__file__) / "..").resolve()
 
@@ -49,15 +52,6 @@ class TestRegistration(TransactionCase):
                 "country_id": cls.env.ref("base.fr").id,
                 "supplier_rank": 1,
                 "from_urban_mine": True,
-            }
-        )
-        cls.env["commown.parcel.type"].create(
-            {
-                "name": "test parcel",
-                "technical_name": "return-0,75-ins300",
-                "weight": 0.75,
-                "insurance_value": 300,
-                "is_return": True,
             }
         )
 
@@ -118,25 +112,31 @@ class TestRegistration(TransactionCase):
         self.assertEqual(po.state, "purchase")
 
     def test_task_ok_payment(self):
+        ref = self.env.ref
+
         task = self.get_tasks(self.partner.id)
         task.storable_product_id = self.fp3.id
+        task.project_id.company_id = ref("l10n_fr.demo_company_fr")
+        task.company_id = ref("l10n_fr.demo_company_fr")
+        task.company_id.partner_id.is_company = True
 
-        fake_meta_data = {"labelResponse": {"parcelNumber": "8R0000000000"}}
-        with open(HERE / "fake_label.pdf", "rb") as fobj:
-            fake_label_data = fobj.read()
+        with requests_mock.Mocker() as mocker:
+            mock_colissimo_ok(mocker)
+            task.update({"stage_id": ref("urban_mine.stage2")})
 
-        with mock.patch(
-            "odoo.addons.commown_shipping.models.parcel.ship",
-            return_value=(fake_meta_data, fake_label_data),
-        ) as mocked_ship:
-            task.update({"stage_id": self.env.ref("urban_mine.stage2")})
-
-        # Check a return label was created:
+        # Check :
+        # - the web service was called with the right parameters
+        # - a return label was created and attached to the task
         # - the expedition reference is set on the task
-        # - the `is_return` arg of the ship function call was `True`
-        self.assertEqual(mocked_ship.call_count, 1)
-        self.assertIs(mocked_ship.call_args[1]["is_return"], True)
-        # A message attached to the task was sent, with the PDF attached
+        req = lxml.etree.fromstring(mocker.request_history[0].text.encode("utf-8"))
+        std_account = ref("commown_shipping.carrier-account-colissimo-std-account")
+        product = ref("urban_mine.product")
+
+        self.assertEqual(req.xpath("//contractNumber/text()"), [std_account.account])
+        self.assertEqual(req.xpath("//weight/text()"), [str(product.weight)])
+        self.assertEqual(req.xpath("//sender//zipCode/text()"), ["67000"])
+        self.assertEqual(req.xpath("//addressee//zipCode/text()"), ["35043"])
+
         self.assertTrue(task.message_ids)
         last_note_msg = self.get_last_note_message(task)
         self.assertIn("Accusé Réception", last_note_msg.subject)
@@ -144,17 +144,16 @@ class TestRegistration(TransactionCase):
         attachment = last_note_msg.attachment_ids
         self.assertEqual(len(attachment), 1)
         self.assertEqual(attachment.mimetype, "application/pdf")
-        self.assertEqual(b64decode(last_note_msg.attachment_ids.datas), fake_label_data)
 
         # Next step: registration is validated
         # The invoice and coupon code must be sent by email
 
         # Use a fake auto-invoice report to avoid installing its dependencies
-        report = self.env.ref("urban_mine.report_autoinvoice")
+        report = ref("urban_mine.report_autoinvoice")
         report.py3o_template_fallback = "tests/fake_report.odt"
 
         # Launch test
-        task.update({"stage_id": self.env.ref("urban_mine.stage4")})
+        task.update({"stage_id": ref("urban_mine.stage4")})
 
         # Check results
         invoice = self.env["account.move"].search(
@@ -164,15 +163,15 @@ class TestRegistration(TransactionCase):
         self.assertEqual(invoice.state, "posted")
         self.assertEqual(
             invoice.invoice_payment_term_id,
-            self.env.ref("account.account_payment_term_15days"),
+            ref("account.account_payment_term_15days"),
         )
         self.assertEqual(
-            self.env.ref("urban_mine.product").product_variant_id,
+            ref("urban_mine.product").product_variant_id,
             invoice.mapped("line_ids.product_id"),
         )
         self.assertEqual(
             invoice.amount_untaxed,
-            self.env.ref("urban_mine.product").standard_price,
+            ref("urban_mine.product").standard_price,
         )
         self.assertEqual(
             invoice.line_ids.mapped("analytic_tag_ids.name"),
@@ -197,6 +196,6 @@ class TestRegistration(TransactionCase):
         self.assertEqual(po.invoice_ids, invoice)
         self.assertEqual(
             po.picking_type_id,
-            self.env.ref("urban_mine.picking_type_receive_to_diagnose"),
+            ref("urban_mine.picking_type_receive_to_diagnose"),
         )
         self.assertEqual(invoice.invoice_origin, po.name)

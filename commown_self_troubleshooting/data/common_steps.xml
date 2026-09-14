@@ -235,11 +235,11 @@
       <t t-set="partner" t-value="env.user.partner_id" />
       <t
             t-set="delivery"
-            t-value="partner.colissimo_delivery_data(raise_on_error=False)"
+            t-value="env['stock.picking']._laposte_fr_convert_address(partner)"
         />
       <t
             t-set="_countries"
-            t-value="env['res.country'].search([('code', 'in', ('FR', 'BE', delivery['countryCode']))])"
+            t-value="env['res.country'].search([('code', 'in', ('FR', 'BE', delivery['country']))])"
         />
       <t t-set="countries" t-value="[(c.code, c.name) for c in _countries]" />
       <div
@@ -273,7 +273,7 @@
                         name="name"
                         id="name"
                         required="required"
-                        t-att-value="delivery['firstName'] + ' ' + delivery['lastName']"
+                        t-att-value="delivery['firstName'] + ' ' + delivery['name']"
                         data-required-error="Saisissez un nom pour la livraison."
                     />
             <div class="help-block with-errors" />
@@ -290,7 +290,7 @@
                         id="street"
                         maxlength="35"
                         required="required"
-                        t-att-value="delivery.get('line1') or delivery.get('line2', '')"
+                        t-att-value="delivery.get('street1') or delivery.get('street2', '')"
                         data-required-error="Saisissez le numéro et nom de la rue pour la livraison."
                     />
             <div class="help-block with-errors" />
@@ -306,7 +306,7 @@
                         name="street2"
                         id="street2"
                         maxlength="35"
-                        t-att-value="delivery.get('line2', '') if delivery.get('line1') else ''"
+                        t-att-value="delivery.get('street2', '') if delivery.get('street1') else ''"
                     />
             <div class="help-block with-errors" />
           </div>
@@ -322,7 +322,7 @@
                             name="zipcode"
                             id="zipcode"
                             required="required"
-                            t-att-value="delivery['zipCode']"
+                            t-att-value="delivery['zip']"
                             data-required-error="Saisissez un code postal pour la livraison."
                         />
               <div class="help-block with-errors" />
@@ -356,7 +356,7 @@
                         >
                 <t t-foreach="countries" t-as="c">
                   <option
-                                    t-att-selected="1 if c[0]==delivery['countryCode'] else None"
+                                    t-att-selected="1 if c[0]==delivery['country'] else None"
                                     t-att-value="c[1]"
                                 >
                     <t t-esc="c[1]" />
@@ -379,7 +379,7 @@
                             id="phone"
                             type="tel"
                             required="required"
-                            t-att-value="delivery.get('phoneNumber') or delivery.get('mobileNumber', '')"
+                            t-att-value="delivery.get('phone', '')"
                             data-required-error="Saisissez un numéro de téléphone pour la livraison."
                         />
               <div class="help-block with-errors" />

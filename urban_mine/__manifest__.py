@@ -22,7 +22,6 @@
     "data": [
         "data/mail_templates.xml",
         "data/model.xml",
-        "data/parcel_type.xml",
         "data/picking.xml",
         "data/product.xml",
         "data/project.xml",

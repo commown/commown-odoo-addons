@@ -10,21 +10,18 @@ from .common import _force_picking_date
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
-    contract_ids = fields.Many2many(
+    contract_id = fields.Many2one(
         "contract.contract",
         string="Contract",
-        compute="_compute_contract_ids",
-        store=False,
+        compute="_compute_contract_id",
+        store=True,
     )
 
     @api.depends("move_ids.contract_id")
-    def _compute_contract_ids(self):
-        """Cannot be done with a related because odoo cannot deal with it
-
-        See https://github.com/odoo/odoo/blob/12.0/odoo/fields.py#L571
-        """
+    def _compute_contract_id(self):
         for record in self:
-            record.contract_ids = self.move_ids.mapped("contract_id")
+            if record.move_ids:
+                record.contract_id = record.move_ids.mapped("contract_id")
 
     def action_set_date_done_to_scheduled(self):
         for rec in self:

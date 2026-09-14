@@ -1,11 +1,7 @@
-import re
-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 from .common import ToCustomerPickingMixin, _assigned
-
-REGEX_SO = re.compile(r"^\[(SO[0-9]+-[0-9]+)\].*$")
 
 CHECK_CONTRACT_QUANT_NB_STAGE_XML_IDS = [
     "commown_devices.diagnostic_stage",
@@ -80,7 +76,7 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         for rec in self:
             if rec.contract_id:
                 rec.move_line_ids = rec.contract_id.move_line_ids.filtered(
-                    lambda ml: ml.origin_label == rec.get_name_for_origin()
+                    lambda ml: ml.picking_id and ml.picking_id.origin_document() == rec
                 )
             else:
                 rec.move_line_ids = False
@@ -212,7 +208,7 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         ).filtered(
             lambda task: not any(
                 [
-                    picking["origin"] == task.get_name_for_origin()
+                    picking.origin_document() == task
                     and picking.state == "assigned"
                     and "/%d/" % self.env.ref("stock.stock_location_customers").id
                     in picking.location_dest_id.parent_path
@@ -244,7 +240,8 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
         ctx = {
             "default_product_id": self.lot_id.product_id.id,
             "default_lot_id": self.lot_id.id,
-            "default_origin": self.get_name_for_origin(),
+            "default_origin_document_id": self.id,
+            "default_origin_document_model": self._name,
             "default_contract_id": self.contract_id.id,
         }
 
@@ -278,13 +275,3 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
             "target": "new",
             "context": {"default_task_id": self.id},
         }
-
-    def get_name_for_origin(self):
-        """Return an origin for the picking(s) current task is related to:
-
-        - "SOxxxx-xx" if current task is the task used to send the
-          initial device of a contract
-        - "Task-<id>" otherwise
-        """
-        match = REGEX_SO.match(self.name or "")
-        return match.groups()[0] if match else "Task-%s" % self.id
