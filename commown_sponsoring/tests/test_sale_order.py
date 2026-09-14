@@ -1,5 +1,6 @@
 import json
 
+from freezegun import freeze_time
 from lxml import html
 
 from odoo import Command, http
@@ -21,6 +22,7 @@ class SponsoringSaleTC(SponsoringTC):
         cls.contract_2.date_start = "2026-01-01"
 
         cls.demo_partner = cls.env.ref("base.partner_demo")
+        cls.partner_2 = cls.partner.copy({"email": "test@test.com"})
         cls.product = cls.env.ref("product_rental.prod_fp")
         cls.so = cls.env["sale.order"].create(
             {
@@ -38,6 +40,7 @@ class SponsoringSaleTC(SponsoringTC):
                 ],
             }
         )
+        cls.so_2 = cls.so.copy({"partner_id": cls.partner_2.id})
 
 
 class SponsoringSaleOrderTC(SponsoringSaleTC):
@@ -82,49 +85,70 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
 
         self.assertIn("code on a previous order", exc.exception.args[0])
 
-    def _trigger_sponsor_msg_action(self):
-        auto = self.env.ref(
-            "commown_sponsoring.automation_send_sponsor_notification_email"
+    def _trigger_sponsor_msg_cron(self, lastcall=False):
+        cron = self.env.ref(
+            "commown_sponsoring.cron_send_sponsorship_notification_mail"
         )
-        auto.last_run = False
-        auto._check()
+        if lastcall:
+            cron.lastcall = lastcall
+        cron.method_direct_trigger()
 
     def _get_contract_names_from_mail(self, message):
         doc = html.fromstring(message.body)
         return doc.xpath("//li/text()")
 
-    def test_sponsor_confirmation_email_to_sponsor_ok(self):
+    def test_sponsor_confirmation_email_ok_one_person(self):
         "Whenever a sponsor code is used, its sponsor should be notified"
         self._reserve_coupon_and_confirm(self.so)
+        self._reserve_coupon_and_confirm(self.so_2)
 
-        new_contract = self.env["contract.contract"].of_sale(self.so)
-        new_contract.date_start = "2026-03-01"
+        c1 = self.env["contract.contract"].of_sale(self.so)
+        c2 = self.env["contract.contract"].of_sale(self.so_2)
 
-        self._trigger_sponsor_msg_action()
+        c1.date_start = "2026-03-01"
+        c2.date_start = "2026-03-02"
+
+        with freeze_time("2026-03-15 14:00:00"):
+            self._trigger_sponsor_msg_cron()
+        self.assertFalse(self.partner.message_ids)
+
+        with freeze_time("2026-03-16 14:00:00"):
+            self._trigger_sponsor_msg_cron()
         confirm_msg = self.partner.message_ids
 
         self.assertEqual(self.partner, confirm_msg.notified_partner_ids)
-        self.assertEqual(
-            new_contract.name, self._get_contract_names_from_mail(confirm_msg)
-        )
+        self.assertEqual([c1.name], self._get_contract_names_from_mail(confirm_msg))
 
-    def test_sponsor_confirmation_email_only_one_mail(self):
-        "When multiple contracts are created upon confirmation of an order, only send one sponsor confirm mail"
-        self.so.order_line.product_uom_qty = 2
+        with freeze_time("2026-03-17 14:00:00"):
+            self._trigger_sponsor_msg_cron()
+
+        confirm_msg_2 = self.partner.message_ids - confirm_msg
+
+        self.assertEqual(self.partner, confirm_msg_2.notified_partner_ids)
+        self.assertEqual([c2.name], self._get_contract_names_from_mail(confirm_msg_2))
+
+    def test_sponsor_confirmation_email_ok_multiple_people(self):
+        "Whenever a sponsor code is used, its sponsor should be notified"
         self._reserve_coupon_and_confirm(self.so)
+        self._reserve_coupon_and_confirm(self.so_2)
 
-        c1, c2 = self.env["contract.contract"].of_sale(self.so)
-        (c1 | c2).date_start = "2026-03-01"
+        c1 = self.env["contract.contract"].of_sale(self.so)
+        c2 = self.env["contract.contract"].of_sale(self.so_2)
 
-        self._trigger_sponsor_msg_action()
+        c1.date_start = "2026-03-01"
+        c2.date_start = "2026-03-01"
+
+        self.env["contract.contract"].invalidate_model()
+        self._trigger_sponsor_msg_cron()
         confirm_msg = self.partner.message_ids
 
         self.assertEqual(len(confirm_msg), 1)
+        self.assertEqual(self.partner, confirm_msg.notified_partner_ids)
         self.assertEqual(
             [c1.name, c2.name], self._get_contract_names_from_mail(confirm_msg)
         )
 
-    def test_sponsor_confirmation_email_to_sponsor_cancelled_early(self):
+    def test_sponsor_confirmation_email_cancelled_early(self):
         "If a new contract with a sponsor code is cancelled early, no notification mail should be sent"
         self._reserve_coupon_and_confirm(self.so)
 
@@ -132,7 +156,7 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
         new_contract.date_start = "2026-03-01"
         new_contract.date_end = "2026-03-10"
 
-        self._trigger_sponsor_msg_action()
+        self._trigger_sponsor_msg_cron()
         self.assertFalse(self.partner.message_ids)
 
 

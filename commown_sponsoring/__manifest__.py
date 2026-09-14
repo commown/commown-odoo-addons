@@ -16,8 +16,7 @@
         "website_sale_coupon",
     ],
     "data": [
-        "data/actions_server.xml",
-        "data/base_automation.xml",
+        "data/ir_cron.xml",
         "data/ir_config_parameter.xml",
         "data/mail_templates.xml",
         "views/customer_portal_templates.xml",
