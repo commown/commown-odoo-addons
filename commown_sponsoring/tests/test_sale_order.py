@@ -62,10 +62,13 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
             self.so.reserve_coupon(self.partner_2.sponsor_code)
         self.assertIn("code in this order", exc.exception.args[0])
 
+    def _reserve_coupon_and_confirm(self, so):
+        so.reserve_coupon(self.partner.sponsor_code)
+        so.action_confirm()
+
     def test_used_sponsor_code_usage_limit(self):
         "A customer who already used a sponsoring code cannot use another"
-        self.so.reserve_coupon(self.partner.sponsor_code)
-        self.so.action_confirm()
+        self._reserve_coupon_and_confirm(self.so)
         so2 = self.env["sale.order"].create(
             {
                 "name": "Dummy Sale Order",
@@ -92,8 +95,7 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
 
     def test_sponsor_confirmation_email_to_sponsor_ok(self):
         "Whenever a sponsor code is used, its sponsor should be notified"
-        self.so.reserve_coupon(self.partner.sponsor_code)
-        self.so.action_confirm()
+        self._reserve_coupon_and_confirm(self.so)
 
         new_contract = self.env["contract.contract"].of_sale(self.so)
         new_contract.date_start = "2026-03-01"
@@ -108,10 +110,9 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
 
     def test_sponsor_confirmation_email_only_one_mail(self):
         "When multiple contracts are created upon confirmation of an order, only send one sponsor confirm mail"
-        self.so.reserve_coupon(self.partner.sponsor_code)
         self.so.order_line.product_uom_qty = 2
+        self._reserve_coupon_and_confirm(self.so)
 
-        self.so.action_confirm()
         c1, c2 = self.env["contract.contract"].of_sale(self.so)
         (c1 | c2).date_start = "2026-03-01"
 
@@ -125,8 +126,7 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
 
     def test_sponsor_confirmation_email_to_sponsor_cancelled_early(self):
         "If a new contract with a sponsor code is cancelled early, no notification mail should be sent"
-        self.so.reserve_coupon(self.partner.sponsor_code)
-        self.so.action_confirm()
+        self._reserve_coupon_and_confirm(self.so)
 
         new_contract = self.env["contract.contract"].of_sale(self.so)
         new_contract.date_start = "2026-03-01"
