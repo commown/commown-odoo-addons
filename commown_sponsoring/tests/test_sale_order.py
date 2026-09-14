@@ -34,6 +34,10 @@ class SponsoringSaleTC(SponsoringTC):
             }
         )
 
+    def _reserve_coupon_and_confirm(self, so):
+        so.reserve_coupon(self.partner.sponsor_code)
+        so.action_confirm()
+
 
 class SponsoringSaleOrderTC(SponsoringSaleTC):
     def test_use_sponsor_code_ok(self):
@@ -59,8 +63,7 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
 
     def test_used_sponsor_code_usage_limit(self):
         "A customer who already used a sponsoring code cannot use another"
-        self.so.reserve_coupon(self.partner.sponsor_code)
-        self.so.action_confirm()
+        self._reserve_coupon_and_confirm(self.so)
         so2 = self.env["sale.order"].create(
             {
                 "name": "Dummy Sale Order",
