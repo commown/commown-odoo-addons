@@ -1,5 +1,7 @@
 import json
 
+from lxml import html
+
 from odoo import Command, http
 from odoo.tests import HttpCase
 
@@ -84,6 +86,10 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
         auto.last_run = False
         auto._check()
 
+    def _get_contract_names_from_mail(self, message):
+        doc = html.fromstring(message.body)
+        return doc.xpath("//li/text()")
+
     def test_sponsor_confirmation_email_to_sponsor_ok(self):
         "Whenever a sponsor code is used, its sponsor should be notified"
         self.so.reserve_coupon(self.partner.sponsor_code)
@@ -96,7 +102,9 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
         confirm_msg = self.partner.message_ids
 
         self.assertEqual(self.partner, confirm_msg.notified_partner_ids)
-        self.assertIn(self.demo_partner.name, confirm_msg.body)
+        self.assertEqual(
+            new_contract.name, self._get_contract_names_from_mail(confirm_msg)
+        )
 
     def test_sponsor_confirmation_email_only_one_mail(self):
         "When multiple contracts are created upon confirmation of an order, only send one sponsor confirm mail"
@@ -111,7 +119,9 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
         confirm_msg = self.partner.message_ids
 
         self.assertEqual(len(confirm_msg), 1)
-        self.assertIn(self.demo_partner.name, confirm_msg.body)
+        self.assertEqual(
+            [c1.name, c2.name], self._get_contract_names_from_mail(confirm_msg)
+        )
 
     def test_sponsor_confirmation_email_to_sponsor_cancelled_early(self):
         "If a new contract with a sponsor code is cancelled early, no notification mail should be sent"

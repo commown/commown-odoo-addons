@@ -8,16 +8,26 @@
     <field name="lang">{{object.lang}}</field>
     <field name="subject">Commown : votre code de parrainage a été utilisé !</field>
     <field name="body_html" type="html">
+<t t-set="nb_contracts" t-value="len(ctx['sponsored'])" />
+<t t-set="plural" t-value="nb_contracts > 1" />
 <div>
   <p>Bonjour <t t-out="object.firstname" />,</p>
   <br />
   <p>
-    Nous vous informons que votre code de parrainage a été utilisé
-    pour une nouvelle location par <t t-out="ctx['sponsored'].name" /> !
+    Nous vous informons que votre code de parrainage a été utilisé pour <b><t
+                            t-if="plural"
+                        >les <t t-out="nb_contracts" /> nouveaux contrats suivants</t><t
+                            t-else=""
+                        >le nouveau contrat suivant</t></b> :
   </p>
-  <p>Vous bénéficierez d'une réduction sur votre prochaine facture de contrat :)</p>
+  <ul>
+    <li t-foreach="ctx['sponsored']" t-as="contract" t-out="contract.name" />
+  </ul>
+  <p>
+    Vous bénéficierez d'une réduction pour chacune de ces locations sur vos prochaines mensualités.
+  </p>
   <br />
-  <p>Belle journée !</p>
+  <p>Bonne journée !</p>
   <br />
   <p>L'équipe Commown.</p>
 </div>

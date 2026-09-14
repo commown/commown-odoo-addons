@@ -16,20 +16,15 @@ for contract in records:
 
     sponsor = order_coupons.campaign_id.sponsor_partner_id
     if sponsor:
-        found_sponsors.setdefault(sponsor, set())
-        found_sponsors[sponsor].add(contract.partner_id)
+        found_sponsors.setdefault(sponsor, env['contract.contract'])
+        found_sponsors[sponsor].add(contract)
 
-for sponsor, sponsored_partners in found_sponsors.items():
-    previous_messages = sponsor.message_ids
-    for sponsored_partner in sponsored_partners:
-        if not previous_messages.filtered_domain(
-            [("body_html", "like", sponsored_partner.name)]
-        ):
-            sponsor.with_context(sponsored=sponsored_partner).message_post_with_template(
-                mail_tmpl.id,
-                message_type="comment",
-                subtype_id=env.ref("mail.mt_note").id,
-            )
+for sponsor, contracts in found_sponsors.items():
+    sponsor.with_context(sponsored=contracts).message_post_with_template(
+        mail_tmpl.id,
+        message_type="comment",
+        subtype_id=self.env.ref("mail.mt_note").id,
+    )
 
 ]]></field>
     </record>
