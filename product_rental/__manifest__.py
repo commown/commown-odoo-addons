@@ -18,6 +18,7 @@
     ],
     "external_dependencies": {},
     "data": [
+        "data/ir_config_parameter.xml",
         "data/mail_templates.xml",
         "data/project.xml",
         "views/contract.xml",
