@@ -22,6 +22,33 @@ class NetinstallerContractTC(NetinstallerContractBasedTC):
         product = cls.contract.get_main_rental_line().sale_order_line_id.product_id
         product.product_tmpl_id.website_published = False
 
+    def test_contract_without_main_rental_line(self):
+        "Older contracts without a main rental line shouldn't crash upon accessing them"
+        contract = self.env["contract.contract"].create(
+            {
+                "name": "Dummy old contract",
+                "partner_id": self.partner.id,
+                "date_start": "2018-01-01",
+                "contract_line_ids": [Command.create({"name": "Dummy cline"})],
+            }
+        )
+        self.assertFalse(contract.netinstaller_consolidated_feature_value_ids)
+
+        # Assigning netinstaller values through changes
+        contract.write(
+            {
+                "netinstaller_feature_value_change_ids": [
+                    Command.create({"feature_value_id": self.lref("ram-16").id}),
+                    Command.create({"feature_value_id": self.lref("nv").id}),
+                ]
+            }
+        )
+
+        self.assertEqual(
+            contract.netinstaller_consolidated_feature_value_ids,
+            (self.lref("ram-16") | self.lref("nv")),
+        )
+
     def specs_as_netinstaller_user(self):
         "Get contract specs as a user who is in the netinstaller user group"
         return self.contract.with_user(self.netinstaller_user).netinstaller_specs()
