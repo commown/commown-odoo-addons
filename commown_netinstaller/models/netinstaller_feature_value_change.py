@@ -22,17 +22,22 @@ class NetInstallerFeatureValueContractualChange(models.Model):
     def _check_contract_date_feature(self):
         # Should not have more than one change of a given feature at a given date
         model = self.env["commown_netinstaller.feature.value.contractual_change"]
-        domain = [
-            ("id", "!=", self.id),
-            ("contract_id", "=", self.contract_id.id),
-            ("date", "=", self.date),
-            ("feature_value_id.feature_id", "=", self.feature_value_id.feature_id.id),
-        ]
-        if model.search_count(domain) > 0:
-            ctx = {
-                "feat": self.feature_value_id.feature_id.name,
-                "date": fields.Date.to_string(self.date),
-            }
-            raise ValidationError(
-                _("More than one value change for %(feat)s at %(date)s." % ctx)
-            )
+        for change in self:
+            domain = [
+                ("id", "!=", change.id),
+                ("contract_id", "=", change.contract_id.id),
+                ("date", "=", change.date),
+                (
+                    "feature_value_id.feature_id",
+                    "=",
+                    change.feature_value_id.feature_id.id,
+                ),
+            ]
+            if model.search_count(domain) > 0:
+                ctx = {
+                    "feat": change.feature_value_id.feature_id.name,
+                    "date": fields.Date.to_string(change.date),
+                }
+                raise ValidationError(
+                    _("More than one value change for %(feat)s at %(date)s." % ctx)
+                )
