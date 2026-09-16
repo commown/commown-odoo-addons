@@ -7,6 +7,7 @@ import requests_mock
 from requests.exceptions import HTTPError
 from requests_mock.exceptions import NoMockAddress
 
+from odoo import Command
 from odoo.fields import Date
 from odoo.tools import mute_logger
 
@@ -169,6 +170,20 @@ class DiscountCooperativeCampaignTC(CooperativeCampaignTC):
                 exc=Exception("Test failure: service should not be called"),
             )
             self._set_contract_date_end(date_end, check_job=False)
+
+    def test_contract_end_discount_without_campaign(self):
+        "If the discount line has no related coupon campaign, ending the contract shouldn't raise an error"
+        self.contract.contract_line_ids.write(
+            {
+                "date_start": "2026-01-01",
+                "specific_discount_line_ids": [
+                    Command.create({"name": "Dummy discount", "amount_value": 10.0})
+                ],
+            }
+        )
+
+        self.contract.date_end = Date.today()
+        self.assertEqual(self.contract.date_end, Date.today())
 
     def test_bypass_coop_campaigns(self):
         "Don't call optin WS when bypass_coop_campaigns is in the context"
