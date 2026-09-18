@@ -48,21 +48,17 @@ class SponsorCouponController(main.WebsiteSaleCouponController):
         order = request.website.sale_get_order()
         err_msg = _("We removed the reserved sponsorship code")
 
-        if f"{order.id}-existing_orders" in request.session:
-            res.update(
-                {
-                    "removed_coupon": request.session.pop(
-                        f"{order.id}-existing_orders"
-                    ),
-                    "reason": _("%s, as you already passed an order.", err_msg),
-                }
-            )
-        elif f"{order.id}-invalid_coupon" in request.session:
-            res.update(
-                {
-                    "removed_coupon": request.session.pop(f"{order.id}-invalid_coupon"),
-                    "reason": _("%s, as it is no longer active.", err_msg),
-                }
-            )
+        possible_errors = {
+            f"{order.id}-existing_orders": _(
+                "%s, as you already passed an order.", err_msg
+            ),
+            f"{order.id}-invalid_coupon": _("%s, as it is no longer active.", err_msg),
+        }
+
+        for key in request.session.keys():
+            if key in possible_errors:
+                coupon = request.session.pop(key)
+                res.update({"removed_coupon": coupon, "reason": possible_errors[key]})
+                break
 
         return res
