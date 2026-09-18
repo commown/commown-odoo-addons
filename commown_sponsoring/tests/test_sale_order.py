@@ -69,9 +69,12 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
             self.so.reserve_coupon(self.partner_2.sponsor_code)
         self.assertIn("code in this order", exc.exception.args[0])
 
-    def test_used_sponsor_code_usage_limit(self):
-        "A customer who already used a sponsoring code cannot use another"
+    def test_sponsorship_customer_already_passed_orders(self):
+        "A customer who already passed an order cannot use a sponsorship code"
         self._reserve_coupon_and_confirm(self.so)
+        contract = self.env["contract.contract"].of_sale(self.so)
+        contract.date_start = "2026-03-01"
+
         so2 = self.env["sale.order"].create(
             {
                 "name": "Dummy Sale Order",
@@ -83,7 +86,7 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
         with self.assertRaises(CouponError) as exc:
             so2.reserve_coupon(self.partner_2.sponsor_code)
 
-        self.assertIn("code on a previous order", exc.exception.args[0])
+        self.assertIn("already passed an order", exc.exception.args[0])
 
     def _trigger_sponsor_msg_cron(self, lastcall=False):
         cron = self.env.ref(
@@ -227,13 +230,15 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
         res = self._check_coupons_endpoint(so2)
         self.assertFalse(res["removed_coupon"])
 
-    def test_login_check_already_used_sponsor_code(self):
+    def test_login_check_already_has_rental_contract(self):
         """
         When a partner starts an order while logged out, inputs a sponsor code, then logs in,
-        if they already used a sponsor code in other orders, it should be removed.
+        if they already have had another order, it should be removed.
         """
         # Pre-requisite: a previous order must have been completed with a sponsor code
         self._reserve_coupon_and_confirm(self.so)
+        contract = self.env["contract.contract"].of_sale(self.so)
+        contract.date_start = "2026-03-01"
 
         self.add_product_to_cart_as_public_user()
 
@@ -245,7 +250,7 @@ class SponsoringWebsiteSaleTC(SponsoringSaleTC, HttpCase):
 
         res = self._check_coupons_endpoint(so2)
         self.assertTrue(res["removed_coupon"])
-        self.assertIn("on a previous order", res["reason"])
+        self.assertIn("already passed an order", res["reason"])
 
     def test_login_check_invalid_sponsor_code(self):
         "Check if sponsor code is still valid when logging in and disable it otherwise"

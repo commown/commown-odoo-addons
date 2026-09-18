@@ -19,9 +19,9 @@ class SponsorWebsiteController(Home):
 
             # We check if the customer has already used a sponsor code previously
             partner = request.env.user.partner_id
-            if partner.has_already_used_sponsor_code(order):
+            if partner.has_already_passed_orders():
                 unlink_code = True
-                request.session[f"{order.id}-cancelled_coupon"] = code
+                request.session[f"{order.id}-existing_orders"] = code
 
             # Check if the reserved sponsor code is still valid (ie. related partner still has active contracts)
             sponsor_partner = reserved_sponsor_coupon.campaign_id.sponsor_partner_id
@@ -47,15 +47,14 @@ class SponsorCouponController(main.WebsiteSaleCouponController):
         res = {"removed_coupon": None}
         order = request.website.sale_get_order()
 
-        if f"{order.id}-cancelled_coupon" in request.session:
+        if f"{order.id}-existing_orders" in request.session:
             res.update(
                 {
                     "removed_coupon": request.session.pop(
-                        f"{order.id}-cancelled_coupon"
+                        f"{order.id}-existing_orders"
                     ),
                     "reason": _(
-                        "We removed the reserved sponsorship code, as you "
-                        "already used another one on a previous order."
+                        "We removed the reserved sponsorship code, as you already passed an order."
                     ),
                 }
             )
