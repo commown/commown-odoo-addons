@@ -29,12 +29,15 @@ class Contract(models.Model):
             date = fields.Date.context_today(self)
 
         # Feature values:
+        value_by_feature = {}
 
         # - from product
-        product = self.get_main_rental_line().sale_order_line_id.product_id
-        value_by_feature = {
-            v.feature_id: v for v in product.cumulated_netinstaller_feature_value_ids
-        }
+        product = self.get_main_rental_line(_raise=False).sale_order_line_id.product_id
+        if len(product) == 1:
+            value_by_feature = {
+                v.feature_id: v
+                for v in product.cumulated_netinstaller_feature_value_ids
+            }
 
         # - from contractual changes
         changes = {}
