@@ -7,7 +7,6 @@ class SponsoringSaleOrder(models.Model):
     _inherit = "sale.order"
 
     def reserve_coupon(self, code):
-        err_msg = _("You have already used a sponsoring code")
         sponsor_campaign = (
             self.env["coupon.campaign"]
             .sudo()
@@ -28,9 +27,15 @@ class SponsoringSaleOrder(models.Model):
             # If the customer already has used another sponsoring code,
             # either in this or another order, we refuse the coupon.
             if self.reserved_coupons().mapped("campaign_id.sponsor_partner_id"):
-                raise CouponError(_("%s in this order.", err_msg))
+                raise CouponError(
+                    _("You have already used a sponsoring code in this order.")
+                )
 
-            if self.partner_id.has_already_used_sponsor_code(self):
-                raise CouponError(_("%s on a previous order.", err_msg))
+            if self.partner_id.has_already_passed_orders():
+                raise CouponError(
+                    _(
+                        "You cannot use a sponsorship code, as you already passed an order."
+                    )
+                )
 
         return super().reserve_coupon(code)

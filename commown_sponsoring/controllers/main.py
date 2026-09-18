@@ -19,9 +19,9 @@ class SponsorWebsiteController(Home):
 
             # We check if the customer has already used a sponsor code previously
             partner = request.env.user.partner_id
-            if partner.has_already_used_sponsor_code(order):
+            if partner.has_already_passed_orders():
                 unlink_code = True
-                request.session[f"{order.id}-cancelled_coupon"] = code
+                request.session[f"{order.id}-existing_orders"] = code
 
             # Check if the reserved sponsor code is still valid (ie. related partner still has active contracts)
             sponsor_partner = reserved_sponsor_coupon.campaign_id.sponsor_partner_id
@@ -46,27 +46,19 @@ class SponsorCouponController(main.WebsiteSaleCouponController):
         "Checking if a coupon was placed in the session values"
         res = {"removed_coupon": None}
         order = request.website.sale_get_order()
+        err_msg = _("We removed the reserved sponsorship code")
 
-        if f"{order.id}-cancelled_coupon" in request.session:
-            res.update(
-                {
-                    "removed_coupon": request.session.pop(
-                        f"{order.id}-cancelled_coupon"
-                    ),
-                    "reason": _(
-                        "We removed the reserved sponsorship code, as you "
-                        "already used another one on a previous order."
-                    ),
-                }
-            )
-        elif f"{order.id}-invalid_coupon" in request.session:
-            res.update(
-                {
-                    "removed_coupon": request.session.pop(f"{order.id}-invalid_coupon"),
-                    "reason": _(
-                        "We removed the reserved sponsorship code, as it is no longer active."
-                    ),
-                }
-            )
+        possible_errors = {
+            f"{order.id}-existing_orders": _(
+                "%s, as you already passed an order.", err_msg
+            ),
+            f"{order.id}-invalid_coupon": _("%s, as it is no longer active.", err_msg),
+        }
+
+        for key in request.session.keys():
+            if key in possible_errors:
+                coupon = request.session.pop(key)
+                res.update({"removed_coupon": coupon, "reason": possible_errors[key]})
+                break
 
         return res
