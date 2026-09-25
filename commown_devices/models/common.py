@@ -172,6 +172,13 @@ def internal_picking(
     date = date or fields.Datetime.now()
 
     picking_type = env.ref("stock.picking_type_internal")
+    if picking_type.reservation_method != "manual":
+        raise UserError(
+            _(
+                "The internal picking type '%s' is not set up with manual reservations",
+                picking_type.display_name,
+            )
+        )
 
     picking_orig_location = first_common_location(products_locations + lots_locations)
     picking = env["stock.picking"].create(

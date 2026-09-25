@@ -80,6 +80,7 @@ class DeviceAsAServiceTC(RentalSaleOrderTC):
     def setUpClass(cls):
         super().setUpClass()
 
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
         partner = cls.env.ref("base.partner_demo_portal")
         tax = cls.get_default_tax()
         contract_tmpl = cls._create_rental_contract_tmpl(
@@ -309,6 +310,7 @@ class BaseWizardToEmployeeMixin:
         cls.task = cls.env["project.task"].create(
             {"name": "test", "project_id": project.id, "partner_id": partner.id}
         )
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
 
     def get_wizard(self, **kwargs):
         kwargs.setdefault("task_id", self.task.id)

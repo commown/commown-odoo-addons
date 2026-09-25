@@ -12,6 +12,8 @@ class WizardMoveLineValidationTC(TransactionCase):
         cls.contract = cls.env["contract.contract"].create(
             {"name": "Contract", "partner_id": cls.partner.id}
         )
+
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
         cls.stock_location = cls.env.ref("stock.stock_location_stock")
         product = cls.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}
