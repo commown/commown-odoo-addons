@@ -33,6 +33,7 @@ class StockPickingTC(TransactionCase):
                 "partner_id": 1,
             }
         )
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
 
     def create_picking(self, lot, date):
         moves = internal_picking(
@@ -45,6 +46,19 @@ class StockPickingTC(TransactionCase):
             date,
         )
         return moves.mapped("picking_id")
+
+    def test_internal_picking_type_manual_required(self):
+        """
+        The picking type used in the internal_picking method needs to be manual
+        (this is to ensure the correct order of confirmation/reservation, to avoid an arbitrary lot reservation)
+        """
+        self.env.ref("stock.picking_type_internal").reservation_method = "at_confirm"
+
+        lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)
+        with self.assertRaises(UserError) as exc:
+            self.create_picking(lot, "2026-01-01")
+
+        self.assertIn("not set up with manual reservations", exc.exception.args[0])
 
     def test_compute_contract_ids(self):
         lot = create_lot_and_quant(self.env, "lot", self.product, self.orig_location)

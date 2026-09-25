@@ -13,6 +13,8 @@ class StockMoveTC(TransactionCase):
         cls.contract = cls.env["contract.contract"].create(
             {"name": "Contract", "partner_id": cls.partner.id}
         )
+
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
         parent_loc = cls.env.ref("commown_devices.stock_location_available_for_rent")
         cls.stock_location = cls.env["stock.location"].create(
             {"name": "Test Loc", "usage": "internal", "location_id": parent_loc.id}

@@ -10,6 +10,8 @@ class StockMoveLineTC(TransactionCase):
     def setUpClass(cls):
         super().setUpClass()
         partner = cls.env.ref("base.partner_demo_portal")
+
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
         cls.contract = cls.env["contract.contract"].create(
             {"name": "Contract", "partner_id": partner.id}
         )
