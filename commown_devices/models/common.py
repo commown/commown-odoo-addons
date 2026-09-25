@@ -3,6 +3,7 @@ from functools import partial
 
 from odoo import _, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import float_compare
 
 
 def _assigned(picking):
@@ -191,26 +192,54 @@ def internal_picking(
 
     assert picking.move_ids
     picking.with_context(dont_merge_moves=True).action_confirm()
-    picking.action_assign()
-    assert picking.state == "assigned", (
-        "Cannot assign any device: state keeps: %r" % picking.state
-    )
 
     new_moves = env["stock.move"]
 
     for lot, move in moves_by_lots.items():
+        available_qty = move._get_available_quantity(move.location_id, lot_id=lot)
+        taken_qty = move._update_reserved_quantity(
+            1.0, available_qty, move.location_id, lot_id=lot
+        )
+        pr = lot.product_id.uom_id.rounding
+        if float_compare(taken_qty, 1.0, precision_rounding=pr):  # pragma: no cover
+            ctx = {
+                "device": lot.display_name,
+                "loc": move.location_id.display_name,
+            }
+            msg = _("We were not able to reserve %(device)s from %(loc)s") % ctx
+            raise UserError(msg)
+
         line = move.move_line_ids
         line.ensure_one()
-        line.update(
-            {"lot_id": lot.id, "qty_done": 1.0, "location_id": located_lots[lot]["loc"]}
-        )
+        line.update({"qty_done": 1.0})
         new_moves |= move
 
     for product, move in moves_by_products.items():
+        needed_qty = located_products[product]["qty"]
+        available_qty = move._get_available_quantity(move.location_id)
+        taken_qty = move._update_reserved_quantity(
+            needed_qty, available_qty, move.location_id
+        )
+        pr = product.uom_id.rounding
+        if float_compare(
+            taken_qty, needed_qty, precision_rounding=pr
+        ):  # pragma: no cover
+            ctx = {
+                "device": lot.display_name,
+                "loc": move.location_id.display_name,
+            }
+            msg = _("We were not able to reserve %(device)s from %(loc)s") % ctx
+            raise UserError(msg)
+
         line = move.move_line_ids
         line.ensure_one()
         line.update({"qty_done": located_products[product]["qty"]})
         new_moves |= move
+
+    picking.action_assign()
+    assert picking.state == "assigned", (
+        "Cannot assign any device: state keeps: %r" % picking.state
+    )
 
     return new_moves
 
