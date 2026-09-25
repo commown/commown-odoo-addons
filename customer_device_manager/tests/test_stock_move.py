@@ -28,6 +28,8 @@ class StockMoveTC(TransactionCase):
         cls.stock_location = cls.env["stock.location"].create(
             {"name": "MyLoc", "usage": "internal", "location_id": cls.loc_for_rent.id}
         )
+        # internal_picking requires a manual reservation method
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
 
         product = cls.env["product.product"].create(
             {"name": "Test product", "type": "product", "tracking": "serial"}

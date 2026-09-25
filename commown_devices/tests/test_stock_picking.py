@@ -33,6 +33,7 @@ class StockPickingTC(TransactionCase):
                 "partner_id": 1,
             }
         )
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
 
     def create_picking(self, lot, date):
         moves = internal_picking(

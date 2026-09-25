@@ -7,6 +7,11 @@ from ..models.common import do_new_transfer, internal_picking
 class ResPartnerLocationTC(HttpCase):
     "Class related to partner methods implemented in present module"
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env.ref("stock.picking_type_internal").reservation_method = "manual"
+
     def test_customer_location_individual(self):
         employee = self.env.ref("base.user_demo")
         individual = self.env.ref("base.partner_demo_portal")
