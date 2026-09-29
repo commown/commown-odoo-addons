@@ -34,6 +34,22 @@ class SponsoringResPartner(models.Model):
         )
         return active_contracts > 0
 
+    def has_already_passed_orders(self):
+        "Returns whether the current partner already has passed an order by checking sale contracts"
+        self.ensure_one()
+        rental_contracts = self.env["contract.contract"].search_count(
+            [
+                ("contract_type", "=", "sale"),
+                ("date_start", "!=", False),
+                (
+                    "partner_id.commercial_partner_id",
+                    "=",
+                    self.commercial_partner_id.id,
+                ),
+            ]
+        )
+        return rental_contracts > 0
+
     def _create_sponsor_campaign(self):
         Campaign = self.env["coupon.campaign"]
         Coupon = self.env["coupon.coupon"]
