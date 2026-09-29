@@ -12,6 +12,9 @@ class SponsoringSaleTC(SponsoringTC):
         cls.contract = cls.create_contract(cls.partner)
         cls.contract.date_start = "2026-01-01"
 
+        cls.contract_2 = cls.create_contract(cls.partner_2)
+        cls.contract_2.date_start = "2026-01-01"
+
         cls.demo_partner = cls.env.ref("base.partner_demo")
         cls.product = cls.env.ref("product.product_product_1")
         cls.so = cls.env["sale.order"].create(
@@ -30,6 +33,10 @@ class SponsoringSaleTC(SponsoringTC):
                 ],
             }
         )
+
+    def _reserve_coupon_and_confirm(self, so):
+        so.reserve_coupon(self.partner.sponsor_code)
+        so.action_confirm()
 
 
 class SponsoringSaleOrderTC(SponsoringSaleTC):
@@ -53,3 +60,22 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
         with self.assertRaises(CouponError) as exc:
             self.so.reserve_coupon(self.partner_2.sponsor_code)
         self.assertIn("code in this order", exc.exception.args[0])
+
+    def test_sponsorship_customer_already_passed_orders(self):
+        "A customer who already passed an order cannot use a sponsorship code"
+        self._reserve_coupon_and_confirm(self.so)
+        contract = self.env["contract.contract"].of_sale(self.so)
+        contract.date_start = "2026-03-01"
+
+        so2 = self.env["sale.order"].create(
+            {
+                "name": "Dummy Sale Order",
+                "partner_id": self.demo_partner.id,
+                "date_order": "2026-06-01",
+            }
+        )
+
+        with self.assertRaises(CouponError) as exc:
+            so2.reserve_coupon(self.partner_2.sponsor_code)
+
+        self.assertIn("already passed an order", exc.exception.args[0])

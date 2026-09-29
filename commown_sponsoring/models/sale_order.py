@@ -31,4 +31,11 @@ class SponsoringSaleOrder(models.Model):
                     _("You have already used a sponsoring code in this order.")
                 )
 
+            if self.partner_id.has_already_passed_orders():
+                raise CouponError(
+                    _(
+                        "You cannot use a sponsorship code, as you already passed an order."
+                    )
+                )
+
         return super().reserve_coupon(code)
