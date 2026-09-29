@@ -45,3 +45,11 @@ class SponsoringSaleOrderTC(SponsoringSaleTC):
             self.so.reserve_coupon(self.partner.sponsor_code)
 
         self.assertIn("code is currently inactive", exc.exception.args[0])
+
+    def test_reserved_sponsor_code_usage_limit(self):
+        "A customer who already reserved a sponsoring code cannot use another"
+        self.so.reserve_coupon(self.partner.sponsor_code)
+
+        with self.assertRaises(CouponError) as exc:
+            self.so.reserve_coupon(self.partner_2.sponsor_code)
+        self.assertIn("code in this order", exc.exception.args[0])

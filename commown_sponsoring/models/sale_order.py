@@ -24,4 +24,11 @@ class SponsoringSaleOrder(models.Model):
             if not sponsor_partner.is_sponsor_code_active():
                 raise CouponError(_("This sponsoring code is currently inactive."))
 
+            # If the customer already has used another sponsoring code,
+            # either in this or another order, we refuse the coupon.
+            if self.reserved_coupons().mapped("campaign_id.sponsor_partner"):
+                raise CouponError(
+                    _("You have already used a sponsoring code in this order.")
+                )
+
         return super().reserve_coupon(code)
