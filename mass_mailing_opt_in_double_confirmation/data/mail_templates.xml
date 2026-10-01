@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <record id="newsletter_opt_in_confirming_email" model="mail.template">
+    <field name="name">Confirmation d'inscription à la newsletter</field>
+    <field name="email_from">Commown &lt;contact@commown.coop&gt;</field>
+    <field name="reply_to">contact@commown.coop</field>
+    <field name="subject">Veuillez confirmer votre inscription à la newsletter!</field>
+    <field name="partner_to">{{ object.partner_id.id }}</field>
+    <field name="model_id" ref="mass_mailing.model_mailing_contact" />
+    <field name="auto_delete" eval="True" />
+    <field name="lang">{{ object.partner_id.lang }}</field>
+    <field
+            name="body_html"
+        ><![CDATA[
+TODO
+<button href="<t t-out="self.get_base_url()"/>/mass_mailing/confirm_subscription" />
+]]></field>
+  </record>
+
+  <record id="newsletter_opt_in_welcome_email" model="mail.template">
+    <field name="name">Confirmation d'inscription à la newsletter</field>
+    <field name="email_from">Commown &lt;contact@commown.coop&gt;</field>
+    <field name="reply_to">contact@commown.coop</field>
+    <field name="subject">Merci de votre inscription à la newsletter !</field>
+    <field name="partner_to">{{ object.partner_id.id }}</field>
+    <field name="model_id" ref="mass_mailing.model_mailing_contact" />
+    <field name="auto_delete" eval="True" />
+    <field name="lang">{{ object.partner_id.lang }}</field>
+    <field name="body_html"><![CDATA[
+TODO
+]]></field>
+  </record>
+
+
+</odoo>
