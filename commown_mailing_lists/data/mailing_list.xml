@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="mailing_list_generic" model="mailing.list">
+        <field name="name">Newsletter Commown - Générique</field>
+        <field name="partner_mandatory">True</field>
+    </record>
+
+    <record id="mailing_list_customers" model="mailing.list">
+        <field name="name">Newsletter Commown - Client·es</field>
+        <field name="partner_mandatory">True</field>
+    </record>
+
+</odoo>
