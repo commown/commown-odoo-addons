@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <template id="second_opt_in_email" name="Newsletter subscription - Second opt-in">
+    <p>Hello,</p>
+    <p>
+      We've received your subscription request to our mailing list!
+      To confirm your subscription, we just need you to click on the following link :
+    </p>
+    <p>
+      <a
+                class="btn btn-primary"
+                t-attf-href="/newsletter/confirm_subscription?sign={{sign}}"
+            >Confirm your mailing list subscription</a>
+    </p>
+    Have a nice day !
+    <t t-out="env.company.name" />
+  </template>
+
+</odoo>
