@@ -1,0 +1,8 @@
+<odoo noupdate="1">
+
+    <record id="rental_withdrawal_period_days" model="ir.config_parameter">
+        <field name="key">product_rental.rental_withdrawal_period_days</field>
+        <field name="value">15</field>
+    </record>
+
+</odoo>
