@@ -11,5 +11,8 @@
     "author": "Commown SCIC",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
-    "depends": ["base"],
+    "depends": ["mass_mailing", "website"],
+    "data": [
+        "data/mail_view_templates.xml",
+    ],
 }
