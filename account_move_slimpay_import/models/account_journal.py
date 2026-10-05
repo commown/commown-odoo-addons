@@ -29,7 +29,7 @@ class AccountJournal(models.Model):
 
         account = self.env.ref("account_move_slimpay_import.slimpay_bank_account")
         data = self.env["account.move.line"].read_group(
-            [("account_id", "=", account.id)],
+            [("account_id", "=", account.id), ("move_id.date", "<=", parser.move_date)],
             ["balance:sum"],
             [],
             lazy=False,
