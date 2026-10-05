@@ -97,7 +97,10 @@
               <field name="contract_name" />
               <field
                                 name="partner_id"
-                                context="{'form_view_ref': 'customer_team_manager.view_customer_user_form'}"
+                                context="{
+                                    'form_view_ref': 'customer_team_manager.view_customer_user_form',
+                                    'tree_view_ref': 'customer_team_manager.view_customer_user_tree'
+                                }"
                                 attrs="{'readonly': [('device_location', '=', 'at_commown')]}"
                             />
               <field name="device_location" />
