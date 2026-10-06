@@ -1,0 +1,28 @@
+<odoo>
+
+    <record model="ir.ui.view" id="view_partner_form">
+        <field name="name">res.partner.form (in commown_sponsoring)</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <group name="misc" position="inside">
+                <field
+                    name="sponsor_campaign_id"
+                    attrs="{'invisible': [('is_company', '=', False), ('parent_id', '!=', False)]}"
+                />
+                <span
+                    colspan="2"
+                    attrs="{'invisible': ['|', ('is_company', '=', True), ('parent_id', '=', False)]}"
+                >
+                    <p>The company sponsor campaign is available on <button
+                            name="open_commercial_entity"
+                            type="object"
+                            string="the parent company"
+                            class="oe_link"
+                        /></p>
+                </span>
+            </group>
+        </field>
+    </record>
+
+</odoo>
