@@ -4,7 +4,7 @@
 {
     "name": "Stock swap origin document",
     "summary": "Adds an origin document reference to stock scraps",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Inventory/Inventory",
     "website": "https://github.com/commown/commown-odoo-addons",

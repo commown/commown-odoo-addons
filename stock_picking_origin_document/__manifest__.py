@@ -4,7 +4,7 @@
 {
     "name": "Stock picking origin document",
     "summary": "Adds an origin document reference to stock pickings",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Inventory/Delivery",
     "website": "https://github.com/commown/commown-odoo-addons",
