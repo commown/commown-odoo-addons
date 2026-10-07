@@ -6,9 +6,6 @@ from ..models.common import normalize_phone
 
 
 class CommonFunctionsTC(TransactionCase):
-    def setUp(self):
-        super(TransactionCase, self).setUp()
-
     def test_normalize_phone(self):
         self.assertEqual(
             normalize_phone("06 23 23.23.23", "FR", number_format="national"),

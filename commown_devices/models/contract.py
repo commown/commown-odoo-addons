@@ -60,7 +60,7 @@ class Contract(models.Model):
         products,
         send_nonserial_products_from=None,
         send_lots_from=None,
-        origin=None,
+        origin_document=None,
         date=None,
         do_transfer=False,
     ):
@@ -85,15 +85,15 @@ class Contract(models.Model):
             send_nonserial_products_from = default_stock
         if send_lots_from is None:
             send_lots_from = default_stock
-        if origin is None:
-            origin = self.name
+        if origin_document is None:
+            origin_document = self
         return self._create_picking(
             lots,
             products,
             send_nonserial_products_from,
             send_lots_from,
             dest_location,
-            origin=origin,
+            origin_document=origin_document,
             date=date,
             do_transfer=do_transfer,
         )
@@ -103,7 +103,7 @@ class Contract(models.Model):
         lots,
         products,
         dest_location,
-        origin=None,
+        origin_document=None,
         date=False,
         do_transfer=False,
     ):
@@ -112,8 +112,8 @@ class Contract(models.Model):
         If `do_transfer` is True (default: False), execute the picking
         at the previous date.
         """
-        if origin is None:
-            origin = self.name
+        if origin_document is None:
+            origin_document = self
 
         location = self.partner_id.get_or_create_customer_location(self.stock_ownership)
 
@@ -123,7 +123,7 @@ class Contract(models.Model):
             location,
             location,
             dest_location,
-            origin=origin,
+            origin_document=origin_document,
             date=date,
             do_transfer=do_transfer,
         )
@@ -135,7 +135,7 @@ class Contract(models.Model):
         send_products_from,
         send_lots_from,
         dest_location,
-        origin,
+        origin_document,
         date=None,
         do_transfer=False,
     ):
@@ -146,7 +146,7 @@ class Contract(models.Model):
             send_products_from,
             send_lots_from,
             dest_location,
-            origin,
+            origin_document,
             date=date,
         )
         self.move_ids |= new_moves

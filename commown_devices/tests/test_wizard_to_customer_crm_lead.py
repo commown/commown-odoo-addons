@@ -162,6 +162,7 @@ class WizardCrmLeadPickingTC(BaseToCustomerPickingWizardTC):
         self.assertEqual(picking.state, "assigned")
         self.assertEqual(picking.move_type, "direct")
         self.assertEqual(picking.location_id, loc_new)
+        self.assertEqual(picking.origin_document(), lead)
 
         moves = picking.move_ids
         self.assertEqual(len(moves), 3)
