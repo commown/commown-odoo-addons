@@ -1,5 +1,9 @@
+import logging
+
 from odoo import _, api, fields, models
 from odoo.exceptions import AccessError, ValidationError
+
+_logger = logging.getLogger(__name__)
 
 
 class ResPartner(models.Model):
@@ -273,6 +277,8 @@ class ResPartner(models.Model):
             user.groups_id -= role_model.search([]).sudo().mapped("groups")
             if user.has_group("base.group_portal"):
                 user.groups_id |= self.customer_roles.mapped("groups")
+            else:
+                _logger.warning(r"/!!!!!\Coucou, je passe par ici /!!!!!\ ")
 
     def _check_import_perms(self, values):
         "Enforce security for customer admin before using sudo on imports"
