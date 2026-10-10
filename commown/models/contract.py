@@ -13,6 +13,14 @@ class Contract(models.Model):
             result.append((record.id, name))
         return result
 
+    def _pay_invoice(self, invoice):
+        """
+        Add Slimpay specific context key `slimpay_async_http`
+        before standard payment, to use jobs for Slimpay's http calls
+        """
+        self = self.with_context(slimpay_async_http=True)
+        return super()._pay_invoice(invoice)
+
     def amount(self):
         """Compute the sum of contract line price that have no formula or a
         formula marked with '[DE]' (for 'commitment duration' in french).
