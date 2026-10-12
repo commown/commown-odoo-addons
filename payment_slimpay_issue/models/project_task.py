@@ -409,10 +409,9 @@ class ProjectTask(models.Model):
         task.invoice_unpaid_count += 1
 
         _logger.info('Unreconciling invoice "%s"', invoice.name)
-        aml_ids = [p["aml_id"] for p in invoice._get_all_reconciled_invoice_partials()]
+        payments = invoice._get_reconciled_payments()
         invoice.line_ids.remove_move_reconcile()
 
-        payments = self.env["account.move.line"].browse(aml_ids).mapped("payment_id")
         _logger.info('Invoice payments "%s"', payments.ids)
         for payment in payments:
             _logger.info('Canceling payment "%s"', payment.id)
