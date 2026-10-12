@@ -408,13 +408,9 @@ class ProjectTask(models.Model):
 
         task.invoice_unpaid_count += 1
 
-        _logger.info('Unreconciling invoice "%s"', invoice.name)
-        payments = invoice._get_reconciled_payments()
-        invoice.line_ids.remove_move_reconcile()
-
-        _logger.info('Invoice payments "%s"', payments.ids)
-        for payment in payments:
-            _logger.info('Canceling payment "%s"', payment.id)
+        for payment in invoice._get_reconciled_payments():
+            _logger.info('Canceling invoice %s payment "%s"', invoice.name, payment.id)
+            payment.action_draft()
             payment.action_cancel()
 
         rejected_amount = float(issue_doc["rejectAmount"])
