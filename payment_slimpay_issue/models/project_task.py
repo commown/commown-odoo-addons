@@ -282,7 +282,6 @@ class ProjectTask(models.Model):
             invoice.amount_total,
         )
 
-        invoice.button_cancel()
         invoice.button_draft()
 
         invoice.update(
