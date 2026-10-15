@@ -60,3 +60,36 @@ class DoubleOptInTC(DoubleOptInCommon):
 
         self.assertConfirmPageTitle(res, "Your subscription has failed...")
         self.assertIn("values were invalid", res.text)
+
+    def test_encryption_key_disabled(self):
+        "Double opt-in should be disabled if no key is set"
+        self.env["ir.config_parameter"].search(
+            [("key", "=", "mass_mailing_double_opt_in.cryptographic_key")]
+        ).unlink()
+
+        req_res = self._send_subscription_request("dummy@mail.com")
+        self.assertJsonResultMessage(req_res, "NOK", "not correctly set-up")
+
+        confirm_res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(confirm_res, "Your subscription has failed...")
+        self.assertIn("not correctly set-up", confirm_res.text)
+
+    def test_encryption_key_invalid_key(self):
+        "Double opt-in should be disabled if the key is not a valid Fernet key"
+        self.env["ir.config_parameter"].set_param(
+            "mass_mailing_double_opt_in.cryptographic_key",
+            "invalid-encryption-key",
+        )
+
+        req_res = self._send_subscription_request("dummy@mail.com")
+        self.assertJsonResultMessage(req_res, "NOK", "not correctly set-up")
+
+        confirm_res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(confirm_res, "Your subscription has failed...")
+        self.assertIn("not correctly set-up", confirm_res.text)
