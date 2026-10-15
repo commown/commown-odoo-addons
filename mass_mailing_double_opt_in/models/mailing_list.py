@@ -13,6 +13,12 @@ class DoubleOptInMailingList(models.Model):
                 "msg": _("The provided mailing list does not exist."),
             }
 
+        if not self.env.user.has_group("mass_mailing_double_opt_in.double_optin_user"):
+            return {
+                "result": "NOK",
+                "msg": _("You do not have access to this endpoint"),
+            }
+
         # Validate email
         email_normalized = email_normalize(email)
         if not email_normalized:

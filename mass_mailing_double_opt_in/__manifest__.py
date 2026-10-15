@@ -14,5 +14,7 @@
     "depends": ["mass_mailing", "website"],
     "data": [
         "data/mail_view_templates.xml",
+        "security/res_groups.xml",
+        "security/ir.model.access.csv",
     ],
 }
