@@ -1,3 +1,5 @@
+from cryptography.fernet import Fernet, InvalidToken
+
 from odoo import _, http
 from odoo.http import Controller, request
 from odoo.tools import email_normalize
@@ -41,8 +43,20 @@ class MassMailingDoubleOptInController(Controller):
                 "result": "NOK",
                 "msg": _("You're already subscribed to the newsletter."),
             }
+        key = (
+            env["ir.config_parameter"]
+            .sudo()
+            .get_param("mass_mailing_double_opt_in.cryptographic_key")
+        )
+        if not key:
+            return {
+                "result": "NOK",
+                "msg": _("Double opt-in subscription is not correctly set-up."),
+            }
 
-        sign = f"{email_normalized}|{list_id}"
+        f = Fernet(key.encode("utf-8"))
+
+        sign = f.encrypt(f"{email_normalized}|{list_id}".encode())
 
         rendered_body = env["ir.qweb"]._render(
             "mass_mailing_double_opt_in.second_opt_in_email",
@@ -71,13 +85,26 @@ class MassMailingDoubleOptInController(Controller):
         env = request.env
         err_msg = _("The provided confirmation values were invalid.")
 
+        key = (
+            env["ir.config_parameter"]
+            .sudo()
+            .get_param("mass_mailing_double_opt_in.cryptographic_key")
+        )
+        if not key:
+            values = {
+                "err_msg": _("Double opt-in subscription is not correctly set-up.")
+            }
+            return request.render("mass_mailing_double_opt_in.confirm", values)
+        f = Fernet(key.encode("utf-8"))
+
         try:
+            sign = f.decrypt(sign.encode("utf-8")).decode("utf-8")
             email, list_id = sign.split("|")
 
             # Fetch mailing list, raising a Value Error if invalid
             list_id = int(list_id)
             mail_list = env["mailing.list"].browse(list_id).exists().ensure_one()
-        except ValueError:
+        except (ValueError, InvalidToken):
             values = {"err_msg": err_msg}
             return request.render("mass_mailing_double_opt_in.confirm", values)
 

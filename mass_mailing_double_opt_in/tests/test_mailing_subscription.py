@@ -1,5 +1,6 @@
 import json
 
+from cryptography.fernet import Fernet
 from lxml import html
 
 from odoo import Command, http
@@ -13,6 +14,12 @@ class MassMailingDoubleOptInTC(HttpCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.mailing_list = cls.env.ref("mass_mailing.mailing_list_1")
+
+        key = Fernet.generate_key()
+        cls.env["ir.config_parameter"].set_param(
+            "mass_mailing_double_opt_in.cryptographic_key",
+            key.decode("utf-8"),
+        )
 
         portal_group = cls.env.ref("base.group_portal")
         double_opt_in_group = cls.env.ref(
@@ -154,3 +161,20 @@ class MassMailingDoubleOptInTC(HttpCase):
 
         self.assertConfirmPageTitle(res, "Your subscription has failed...")
         self.assertIn("values were invalid", res.text)
+
+    def test_encryption_key_disabled(self):
+        self.env["ir.config_parameter"].search(
+            [("key", "=", "mass_mailing_double_opt_in.cryptographic_key")]
+        ).unlink()
+
+        request_res = self._send_subscription_request("dummy@mail.com")
+        json_res = request_res.json()["result"]
+        self.assertEqual("NOK", json_res["result"])
+        self.assertIn("is not correctly set-up", json_res["msg"])
+
+        confirm_res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(confirm_res, "Your subscription has failed...")
+        self.assertIn("not correctly set-up", confirm_res.text)
