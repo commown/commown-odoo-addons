@@ -1,3 +1,5 @@
+from cryptography.fernet import Fernet
+
 from . import common
 
 
@@ -42,6 +44,25 @@ class DoubleOptInTC(common.DoubleOptInCommon):
 
         self.assertJsonResultMessage(res, "NOK", "not have access to this endpoint")
 
+    def test_subscription_request_nok_disabled_encryption_key(self):
+        "Double opt-in should be disabled if no key is set"
+        self.env["ir.config_parameter"].search(
+            [("key", "=", "mass_mailing_double_opt_in.cryptographic_key")]
+        ).unlink()
+
+        req_res = self._send_subscription_request("dummy@mail.com")
+        self.assertJsonResultMessage(req_res, "NOK", "not correctly set-up")
+
+    def test_subscription_request_nok_invalid_encryption_key(self):
+        "Double opt-in should be disabled if the key is not a valid Fernet key"
+        self.env["ir.config_parameter"].set_param(
+            "mass_mailing_double_opt_in.cryptographic_key",
+            "invalid-encryption-key",
+        )
+
+        req_res = self._send_subscription_request("dummy@mail.com")
+        self.assertJsonResultMessage(req_res, "NOK", "not correctly set-up")
+
 
 class DoubleOptInControllerTC(common.DoubleOptInControllerCommon):
     def _get_subscriptions_for_list(self, email, list_id=None):
@@ -82,8 +103,14 @@ class DoubleOptInControllerTC(common.DoubleOptInControllerCommon):
         if not list_id:
             list_id = self.mailing_list.id
 
+        key = self.env["ir.config_parameter"].get_param(
+            "mass_mailing_double_opt_in.cryptographic_key"
+        )
+        f = Fernet(key.encode())
+
         sign = f"{email}|{list_id}"
-        return f"/newsletter/confirm_subscription?sign={sign}"
+        encrypted_sign = f.encrypt(sign.encode()).decode()
+        return f"/newsletter/confirm_subscription?sign={encrypted_sign}"
 
     def test_subscription_confirmation_nok_already_confirmed(self):
         email = "test@test.coop"
@@ -108,3 +135,30 @@ class DoubleOptInControllerTC(common.DoubleOptInControllerCommon):
 
         self.assertConfirmPageTitle(res, "Your subscription has failed...")
         self.assertIn("values were invalid", res.text)
+
+    def test_subscription_confirmation_nok_disabled_encryption_key(self):
+        "Double opt-in should be disabled if no key is set"
+        self.env["ir.config_parameter"].search(
+            [("key", "=", "mass_mailing_double_opt_in.cryptographic_key")]
+        ).unlink()
+
+        confirm_res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(confirm_res, "Your subscription has failed...")
+        self.assertIn("not correctly set-up", confirm_res.text)
+
+    def test_subscription_confirmation_nok_invalid_encryption_key(self):
+        "Double opt-in should be disabled if the key is not a valid Fernet key"
+        self.env["ir.config_parameter"].set_param(
+            "mass_mailing_double_opt_in.cryptographic_key",
+            "invalid-encryption-key",
+        )
+
+        confirm_res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(confirm_res, "Your subscription has failed...")
+        self.assertIn("not correctly set-up", confirm_res.text)
