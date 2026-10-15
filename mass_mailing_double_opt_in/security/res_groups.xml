@@ -1,0 +1,8 @@
+<odoo>
+
+    <record model="res.groups" id="double_optin_user">
+        <field name="name">Double Opt-in User</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+
+</odoo>
