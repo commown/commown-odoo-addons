@@ -1,5 +1,6 @@
 from lxml import html
 
+from odoo import Command
 from odoo.tests import TransactionCase
 
 
@@ -14,11 +15,26 @@ class DoubleOptInCommon(TransactionCase):
         super().setUpClass()
         cls.mailing_list = cls.env.ref("mass_mailing.mailing_list_1")
 
-    def _send_subscription_request(self, email, mail_list=None):
+        portal_group = cls.env.ref("base.group_portal")
+        double_opt_in_group = cls.env.ref(
+            "mass_mailing_double_opt_in.double_optin_user"
+        )
+
+        cls.opt_in_user = cls.env["res.users"].create(
+            {
+                "name": "Double Opt-in User",
+                "login": "double@opt.in",
+                "groups_id": [Command.set(portal_group.ids + double_opt_in_group.ids)],
+            }
+        )
+
+    def _send_subscription_request(self, email, mail_list=None, user=None):
         if not mail_list:
             mail_list = self.mailing_list
+        if not user:
+            user = self.opt_in_user
 
-        res = mail_list.request_newsletter_subscription(email)
+        res = mail_list.with_user(user).request_newsletter_subscription(email)
         return res
 
     def assertJsonResultMessage(self, res, expected_code, expected_msg_snippet):
