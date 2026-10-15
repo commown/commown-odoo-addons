@@ -1,0 +1,178 @@
+# Translation of Odoo Server.
+msgid ""
+msgstr ""
+"Project-Id-Version: server-tools (9.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-30 16:09+0000\n"
+"PO-Revision-Date: 2020-05-15 00:19+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
+"Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
+"language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid "<b>Debug error message</b>"
+msgstr "<b>Debug-Fehlermeldung</b>"
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/models/mailing_list.py:0
+#, python-format
+msgid "Confirm your newsletter subscription"
+msgstr "Bitte bestätigen Sie Ihre Anmeldung"
+
+#. module: mass_mailing_double_opt_in
+#: model:res.groups,name:mass_mailing_double_opt_in.double_optin_user
+msgid "Double Opt-in User"
+msgstr ""
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/controllers/main.py:0
+#: code:addons/mass_mailing_double_opt_in/models/mailing_list.py:0
+#, python-format
+msgid "Double opt-in subscription is not correctly set-up."
+msgstr "Die Zwei-Faktor-Authentifizierung ist nicht korrekt konfiguriert."
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.second_opt_in_email
+msgid "Have a nice day !"
+msgstr "Mit freundlichen Grüßen,"
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.second_opt_in_email
+msgid "Hello,"
+msgstr "Guten Tag,"
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.second_opt_in_email
+msgid "I confirm my subscription"
+msgstr "Ich bestätige meine Anmeldung"
+
+#. module: mass_mailing_double_opt_in
+#: model:ir.model.fields,field_description:mass_mailing_double_opt_in.field_mailing_contact__ip_addr
+msgid "IP Address used for subscription"
+msgstr ""
+
+#. module: mass_mailing_double_opt_in
+#: model:ir.model,name:mass_mailing_double_opt_in.model_mailing_contact
+msgid "Mailing Contact"
+msgstr ""
+
+#. module: mass_mailing_double_opt_in
+#: model:ir.model,name:mass_mailing_double_opt_in.model_mailing_list
+msgid "Mailing List"
+msgstr ""
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid "Subscription already completed"
+msgstr ""
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid "Subscription failed"
+msgstr "Ihre Anmeldung ist nicht erfolgreich verlaufen"
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/controllers/main.py:0
+#, python-format
+msgid "The provided confirmation values were invalid."
+msgstr "Die angegebenen Bestätigungswerte waren ungültig."
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/models/mailing_list.py:0
+#, python-format
+msgid "The provided email address is invalid."
+msgstr "Die angegebene E-Mail-Adresse ist ungültig."
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/models/mailing_list.py:0
+#, python-format
+msgid "The provided mailing list does not exist."
+msgstr "Die Mailingliste existiert nicht."
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.second_opt_in_email
+msgid ""
+"We've received your subscription request to our mailing list.\n"
+"      To confirm your subscription, please click on the following link :"
+msgstr ""
+"wir haben Ihre Anmeldung für unseren Newsletter erhalten.\n"
+"      Um Ihre Anmeldung zu bestätigen, klicken Sie bitte auf den folgenden "
+"Link:"
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/models/mailing_list.py:0
+#, python-format
+msgid "You do not have access to this endpoint"
+msgstr "Sie haben keinen Zugriff auf diesen Zugangspunkt."
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/models/mailing_list.py:0
+#, python-format
+msgid "You will receive a mail shortly to confirm your subscription!"
+msgstr "Sie erhalten in Kürze eine E-Mail zur Bestätigung Ihrer Anmeldung!"
+
+#. module: mass_mailing_double_opt_in
+#. odoo-python
+#: code:addons/mass_mailing_double_opt_in/models/mailing_list.py:0
+#, python-format
+msgid "You're already subscribed to the newsletter."
+msgstr "Sie sind bereits für diesen Newsletter angemeldet."
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid ""
+"You've already confirmed your subscription to our newsletter, and will\n"
+"                  receive our latest news on your mail address"
+msgstr ""
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid "You've just subscribed to the newsletter of"
+msgstr "Sie haben sich für den Newsletter von"
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid "Your subscription has been completed!"
+msgstr "Ihre Anmeldung ist erfolgreich abgeschlossen!"
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid "Your subscription has failed..."
+msgstr "Ihre Anmeldung ist nicht erfolgreich verlaufen..."
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid ""
+"Your subscription to our newsletter has failed, we invite you to try again."
+msgstr ""
+"Ihre Anmeldung für den Commown-Newsletter ist nicht erfolgreich verlaufen. "
+"Bitte versuchen Sie es erneut."
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid "Your subscription was confirmed!"
+msgstr "Ihre Anmeldung ist erfolgreich abgeschlossen!"
+
+#. module: mass_mailing_double_opt_in
+#: model_terms:ir.ui.view,arch_db:mass_mailing_double_opt_in.confirm
+msgid ""
+"and we thank you for this.\n"
+"                  You will now receive our latest news on your mail address"
+msgstr ""
+"angemeldet – vielen Dank dafür.\n"
+"                  In Kürze erhalten Sie unsere neuesten Nachrichten an Ihre "
+"E-Mail-Adresse"
