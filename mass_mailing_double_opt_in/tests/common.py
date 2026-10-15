@@ -2,7 +2,7 @@ import json
 
 from lxml import html
 
-from odoo import Command
+from odoo import Command, http
 from odoo.tests import HttpCase
 
 
@@ -69,3 +69,18 @@ class DoubleOptInCommon(HttpCase):
 
         self.assertEqual(expected_code, res_json["result"])
         self.assertIn(expected_msg_snippet, res_json["msg"])
+
+    def _open_confirmation_request(self, link):
+        # This is used to display the debug error in the rendered page.
+        self.authenticate(None, None)
+        self.session.debug = "1"
+        http.root.session_store.save(self.session)
+
+        res = self.url_open(link)
+        res.raise_for_status()
+
+        return res
+
+    def assertConfirmPageTitle(self, res, title):
+        page = html.fromstring(res.text)
+        self.assertIn(title, "".join(page.xpath("//h2/text()")))

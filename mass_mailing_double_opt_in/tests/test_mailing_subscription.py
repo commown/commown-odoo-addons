@@ -16,6 +16,19 @@ class DoubleOptInTC(DoubleOptInCommon):
         confirm_link = _get_optin_confirm_link(confirm_mail)
         self.assertIn("/newsletter/confirm_subscription", confirm_link)
 
+        confirm_res = self._open_confirmation_request(confirm_link)
+        self.assertConfirmPageTitle(
+            confirm_res, "Your subscription has been completed!"
+        )
+
+        subscription = self.env["mailing.contact.subscription"].search(
+            [
+                ("contact_id.email", "=", email),
+                ("list_id", "=", self.mailing_list.id),
+            ]
+        )
+        self.assertTrue(subscription)
+
     def test_subscription_request_nok_invalid_email(self):
         res = self._send_subscription_request("invalid")
         self.assertJsonResultMessage(res, "NOK", "email address is invalid")
@@ -39,3 +52,11 @@ class DoubleOptInTC(DoubleOptInCommon):
             "dummy@mail.com", login="admin", password="admin"
         )
         self.assertJsonResultMessage(res, "NOK", "not have access to this endpoint")
+
+    def test_subscription_confirmation_nok_invalid_token(self):
+        res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(res, "Your subscription has failed...")
+        self.assertIn("values were invalid", res.text)
