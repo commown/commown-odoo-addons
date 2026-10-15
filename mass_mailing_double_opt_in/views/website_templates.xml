@@ -1,0 +1,38 @@
+<odoo>
+
+  <template id="confirm">
+    <t t-if="not err_msg" t-set="additional_title">Your subscription was confirmed!</t>
+    <t t-else="" t-set="additional_title">Subscription failed</t>
+
+    <t t-call="website.layout">
+      <div id="wrap">
+        <div class="container py-2">
+          <div class="row">
+            <div class="col-12 col-xl">
+              <t t-if="err_msg">
+                <h2>
+                  Your subscription has failed...
+                </h2>
+
+                <div t-if="debug" class="alert alert-warning">
+                  <t t-out="err_msg" />
+                </div>
+                <p>
+                  Your subscription to our newsletter has failed, we invite you to try again.
+                </p>
+              </t>
+              <t t-else="">
+                <h2>Your subscription has been completed!</h2>
+                <p>
+                  Thank you for subscribing to our newsletter.
+                  You will receive our latest news at <b t-out="email" />.
+                </p>
+              </t>
+            </div>
+          </div>
+        </div>
+      </div>
+    </t>
+  </template>
+
+</odoo>

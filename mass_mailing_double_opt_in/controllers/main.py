@@ -63,3 +63,27 @@ class MassMailingDoubleOptInController(Controller):
             "result": "OK",
             "msg": _("You will receive a mail shortly to confirm your subscription!"),
         }
+
+    @http.route(
+        "/newsletter/confirm_subscription", type="http", auth="public", website="True"
+    )
+    def confirm_newsletter_subscription(self, sign=""):
+        env = request.env
+        err_msg = _("The provided confirmation values were invalid.")
+
+        try:
+            email, list_id = sign.split("|")
+
+            # Fetch mailing list, raising a Value Error if invalid
+            list_id = int(list_id)
+            mail_list = env["mailing.list"].browse(list_id).exists().ensure_one()
+        except ValueError:
+            values = {"err_msg": err_msg}
+            return request.render("mass_mailing_double_opt_in.confirm", values)
+
+        env["mailing.contact"].sudo().with_context(
+            default_list_ids=mail_list.ids
+        ).create({"email": email})
+
+        values = {"email": email}
+        return request.render("mass_mailing_double_opt_in.confirm", values)

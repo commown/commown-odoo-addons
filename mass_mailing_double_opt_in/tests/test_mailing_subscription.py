@@ -2,7 +2,7 @@ import json
 
 from lxml import html
 
-from odoo import Command
+from odoo import Command, http
 from odoo.tests import HttpCase
 
 TIMEOUT = 10000  # for debugging purposes
@@ -66,6 +66,21 @@ class MassMailingDoubleOptInTC(HttpCase):
         page = html.fromstring(mail.body_html)
         return page.xpath("//a/@href")[0]
 
+    def _open_confirmation_request(self, link):
+        # This is used to display the debug error in the rendered page.
+        session = self.authenticate(None, None)
+        session.debug = "1"
+        http.root.session_store.save(self.session)
+
+        res = self.url_open(link)
+        res.raise_for_status()
+
+        return res
+
+    def assertConfirmPageTitle(self, res, title):
+        page = html.fromstring(res.text)
+        self.assertIn(title, "".join(page.xpath("//h2/text()")))
+
     def test_double_opt_in_subscription_ok(self):
         "Following a double opt-in subscription from start to finish"
         email = "dummy@mail.com"
@@ -82,6 +97,19 @@ class MassMailingDoubleOptInTC(HttpCase):
 
         confirm_link = self._get_optin_confirm_link(confirm_mail)
         self.assertIn("/newsletter/confirm_subscription", confirm_link)
+
+        confirm_res = self._open_confirmation_request(confirm_link)
+        self.assertConfirmPageTitle(
+            confirm_res, "Your subscription has been completed!"
+        )
+
+        subscription = self.env["mailing.contact.subscription"].search(
+            [
+                ("contact_id.email", "=", email),
+                ("list_id", "=", self.mailing_list.id),
+            ]
+        )
+        self.assertTrue(subscription)
 
     def test_subscription_request_nok_invalid_email(self):
         res = self._send_subscription_request("invalid")
@@ -118,3 +146,11 @@ class MassMailingDoubleOptInTC(HttpCase):
 
         self.assertEqual("NOK", json_res["result"])
         self.assertIn("not have access to this endpoint", json_res["msg"])
+
+    def test_subscription_confirmation_nok_invalid_token(self):
+        res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(res, "Your subscription has failed...")
+        self.assertIn("values were invalid", res.text)
