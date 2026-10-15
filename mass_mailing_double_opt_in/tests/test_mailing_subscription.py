@@ -32,3 +32,10 @@ class DoubleOptInTC(DoubleOptInCommon):
 
         res = self._send_subscription_request(email)
         self.assertJsonResultMessage(res, "NOK", "already subscribed")
+
+    def test_subscription_request_nok_invalid_opt_in_user(self):
+        "Only the dedicated opt-in user can perform a subscription request"
+        res = self._send_subscription_request(
+            "dummy@mail.com", login="admin", password="admin"
+        )
+        self.assertJsonResultMessage(res, "NOK", "not have access to this endpoint")

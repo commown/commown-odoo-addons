@@ -4,9 +4,15 @@ from odoo.tools import email_normalize
 
 
 class MassMailingDoubleOptInController(Controller):
-    @http.route("/newsletter/request_subscription", type="json", auth="public")
+    @http.route("/newsletter/request_subscription", type="json", auth="user")
     def request_newsletter_subscription(self, email, list_id):
         env = request.env
+
+        if not env.user.has_group("mass_mailing_double_opt_in.double_optin_user"):
+            return {
+                "result": "NOK",
+                "msg": _("You do not have access to this endpoint"),
+            }
 
         # Validate email
         email_normalized = email_normalize(email)

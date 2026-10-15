@@ -2,6 +2,7 @@ import json
 
 from lxml import html
 
+from odoo import Command
 from odoo.tests import HttpCase
 
 
@@ -16,9 +17,33 @@ class DoubleOptInCommon(HttpCase):
         super().setUpClass()
         cls.mailing_list = cls.env.ref("mass_mailing.mailing_list_1")
 
-    def _send_subscription_request(self, email, mail_list_id=None):
+        portal_group = cls.env.ref("base.group_portal")
+        double_opt_in_group = cls.env.ref(
+            "mass_mailing_double_opt_in.double_optin_user"
+        )
+
+        cls.password = "dummy_password"
+
+        cls.opt_in_user = cls.env["res.users"].create(
+            {
+                "name": "Double Opt-in User",
+                "login": "double@opt.in",
+                "password": cls.password,
+                "groups_id": [Command.set(portal_group.ids + double_opt_in_group.ids)],
+            }
+        )
+
+    def _send_subscription_request(
+        self, email, mail_list_id=None, login=None, password=None
+    ):
         if not mail_list_id:
             mail_list_id = self.mailing_list.id
+        if not login:
+            login = self.opt_in_user.login
+        if not password:
+            password = self.password
+
+        self.authenticate(login, password)
 
         payload = {
             "jsonrpc": "2.0",
@@ -34,6 +59,7 @@ class DoubleOptInCommon(HttpCase):
             headers={"Content-Type": "application/json"},
             data=json.dumps(payload),
         )
+        self.logout()
 
         self.assertFalse(res.json().get("error", False))
         return res
@@ -42,4 +68,4 @@ class DoubleOptInCommon(HttpCase):
         res_json = res.json()["result"]
 
         self.assertEqual(expected_code, res_json["result"])
-        self.assertEqual(expected_msg_snippet, res_json["msg"])
+        self.assertIn(expected_msg_snippet, res_json["msg"])
