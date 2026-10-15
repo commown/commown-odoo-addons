@@ -41,3 +41,46 @@ class DoubleOptInTC(common.DoubleOptInCommon):
         res = self._send_subscription_request("dummy@mail.com", user=admin_user)
 
         self.assertJsonResultMessage(res, "NOK", "not have access to this endpoint")
+
+
+class DoubleOptInControllerTC(common.DoubleOptInControllerCommon):
+    def _get_subscriptions_for_list(self, email, list_id=None):
+        if not list_id:
+            list_id = self.mailing_list.id
+
+        return self.env["mailing.contact.subscription"].search(
+            [
+                ("contact_id.email", "=", email),
+                ("list_id", "=", self.mailing_list.id),
+            ]
+        )
+
+    def test_double_opt_in_subscription_ok(self):
+        "Following a double opt-in subscription from start to finish"
+        email = "dummy@mail.com"
+
+        # First opt-in
+        req_res = self._send_subscription_request(email)
+        self.assertJsonResultMessage(req_res, "OK", "will receive a mail")
+
+        confirm_mail = self.env["mail.mail"].search([("email_to", "=", email)])
+        self.assertTrue(confirm_mail)
+
+        confirm_link = common._get_optin_confirm_link(confirm_mail)
+        self.assertIn("/newsletter/confirm_subscription", confirm_link)
+
+        confirm_res = self._open_confirmation_request(confirm_link)
+        self.assertConfirmPageTitle(
+            confirm_res, "Your subscription has been completed!"
+        )
+
+        subscription = self._get_subscriptions_for_list(email)
+        self.assertTrue(subscription)
+
+    def test_subscription_confirmation_nok_invalid_token(self):
+        res = self._open_confirmation_request(
+            "/newsletter/confirm_subscription?sign=dummy"
+        )
+
+        self.assertConfirmPageTitle(res, "Your subscription has failed...")
+        self.assertIn("values were invalid", res.text)
