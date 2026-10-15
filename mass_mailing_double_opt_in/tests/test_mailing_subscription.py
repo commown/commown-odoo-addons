@@ -2,6 +2,7 @@ import json
 
 from lxml import html
 
+from odoo import Command
 from odoo.tests import HttpCase
 
 TIMEOUT = 10000  # for debugging purposes
@@ -13,10 +14,34 @@ class MassMailingDoubleOptInTC(HttpCase):
         super().setUpClass()
         cls.mailing_list = cls.env.ref("mass_mailing.mailing_list_1")
 
-    def _send_subscription_request(self, email, mail_list_id=None):
+        portal_group = cls.env.ref("base.group_portal")
+        double_opt_in_group = cls.env.ref(
+            "mass_mailing_double_opt_in.double_optin_user"
+        )
+
+        cls.password = "dummy_password"
+
+        cls.opt_in_user = cls.env["res.users"].create(
+            {
+                "name": "Double Opt-in User",
+                "login": "double@opt.in",
+                "password": cls.password,
+                "groups_id": [Command.set(portal_group.ids + double_opt_in_group.ids)],
+            }
+        )
+
+    def _send_subscription_request(
+        self, email, mail_list_id=None, login=None, password=None
+    ):
         if not mail_list_id:
             mail_list_id = self.mailing_list.id
 
+        if not login:
+            login = self.opt_in_user.login
+        if not password:
+            password = self.password
+
+        self.authenticate(login, password)
         payload = {
             "jsonrpc": "2.0",
             "method": "call",
@@ -32,6 +57,7 @@ class MassMailingDoubleOptInTC(HttpCase):
             data=json.dumps(payload),
             timeout=TIMEOUT,
         )
+        self.logout()
 
         self.assertFalse(res.json().get("error", False))
         return res
@@ -82,3 +108,13 @@ class MassMailingDoubleOptInTC(HttpCase):
         json_res = res.json()["result"]
         self.assertEqual("NOK", json_res["result"])
         self.assertIn("already subscribed", json_res["msg"])
+
+    def test_subscription_request_nok_invalid_opt_in_user(self):
+        "Only the dedicated opt-in user can perform a subscription request"
+        res = self._send_subscription_request(
+            "dummy@mail.com", login="admin", password="admin"
+        )
+        json_res = res.json()["result"]
+
+        self.assertEqual("NOK", json_res["result"])
+        self.assertIn("not have access to this endpoint", json_res["msg"])
