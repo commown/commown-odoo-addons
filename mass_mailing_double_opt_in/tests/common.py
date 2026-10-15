@@ -1,3 +1,4 @@
+from cryptography.fernet import Fernet
 from lxml import html
 
 from odoo import Command, http
@@ -23,6 +24,12 @@ class DoubleOptInCommon(TransactionCase):
                 "login": "double@opt.in",
                 "groups_id": [Command.set(opt_in_group.ids)],
             }
+        )
+
+        key = Fernet.generate_key()
+        cls.env["ir.config_parameter"].set_param(
+            "mass_mailing_double_opt_in.cryptographic_key",
+            key.decode("utf-8"),
         )
 
     def _send_subscription_request(self, email, mail_list=None, user=None):

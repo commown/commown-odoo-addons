@@ -1,9 +1,29 @@
-from odoo import _, models
+from cryptography.fernet import Fernet
+
+from odoo import _, api, models
 from odoo.tools import email_normalize
 
 
 class DoubleOptInMailingList(models.Model):
     _inherit = "mailing.list"
+
+    @api.model
+    def _sudo_get_double_opt_in_encrypt_key(self):
+        fernet_err_msg = _("Double opt-in subscription is not correctly set-up.")
+        key = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param("mass_mailing_double_opt_in.cryptographic_key")
+        )
+        if not key:
+            raise ValueError(fernet_err_msg)
+
+        try:
+            f = Fernet(key.encode("utf-8"))
+        except ValueError as exc:
+            raise ValueError(fernet_err_msg) from exc
+
+        return f
 
     @api.model
     def _send_newsletter_confirm_email(self, email_to, subject, msg_body):
@@ -63,7 +83,13 @@ class DoubleOptInMailingList(models.Model):
                 "mass_mailing_double_opt_in.already_subscribed_email"
             )
         else:
-            sign = f"{email_normalized}|{self.id}".encode()
+            # Encryption initialization
+            try:
+                f = self._sudo_get_double_opt_in_encrypt_key()
+            except ValueError as exc:
+                return {"result": "NOK", "msg": exc.args[0]}
+
+            sign = f.encrypt(f"{email_normalized}|{self.id}".encode())
 
             # Render mail content
             subject = _("Confirm your newsletter subscription")

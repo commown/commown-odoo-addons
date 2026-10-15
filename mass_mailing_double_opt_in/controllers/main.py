@@ -1,4 +1,6 @@
-from odoo import http
+from cryptography.fernet import InvalidToken
+
+from odoo import _, http
 from odoo.http import Controller, request
 
 
@@ -10,13 +12,21 @@ class DoubleOptInController(Controller):
         env = request.env
         res_tmpl_id = "mass_mailing_double_opt_in.confirm"
 
+        # Encryption initialization
         try:
+            f = env["mailing.list"]._sudo_get_double_opt_in_encrypt_key()
+        except ValueError as exc:
+            return request.render(res_tmpl_id, {"err_msg": exc.args[0]})
+
+        # Signature validation
+        try:
+            sign = f.decrypt(sign.encode("utf-8")).decode("utf-8")
             email, list_id = sign.split("|")
 
             # Fetch mailing list, raising a Value Error if invalid
             list_id = int(list_id)
             mail_list = env["mailing.list"].browse(list_id).exists().ensure_one()
-        except ValueError:
+        except (ValueError, InvalidToken):
             values_err_msg = _("The provided confirmation values were invalid.")
             return request.render(res_tmpl_id, {"err_msg": values_err_msg})
 
