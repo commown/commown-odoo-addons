@@ -83,3 +83,31 @@ class AssetMassRemoveTC(TransactionCase):
 
         created_entries = self.env["account.move"].search(action["domain"])
         self.assertEqual(created_entries.line_ids.asset_id, self.assets)
+
+    def test_mass_asset_remove_error(self):
+        "Any assets which cannot be removed shouldn't stop the removal of other assets"
+        asset_1, asset_2 = self.assets
+        dline = self.env["account.asset.line"].search(
+            [
+                ("asset_id", "=", asset_2.id),
+                ("type", "=", "depreciate"),
+                ("move_check", "=", False),
+            ],
+            order="line_date asc",
+            limit=1,
+        )
+        dline.create_move()
+
+        wiz = self._asset_remove_wizard("2026-10-15")
+        res_action = wiz.mass_remove()
+        action = wiz.with_context(**res_action["context"]).view_asset_moves()
+
+        self.assertEqual(asset_1.state, "removed")
+        self.assertEqual(asset_2.state, "open")
+        self.assertIn(
+            f"Error while removing asset '{asset_2.name}'",
+            wiz.notes,
+        )
+
+        created_entries = self.env["account.move"].search(action["domain"])
+        self.assertEqual(created_entries.line_ids.asset_id, asset_1)
