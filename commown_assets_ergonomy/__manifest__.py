@@ -15,5 +15,7 @@
     "data": [
         "data/account_journal.xml",
         "data/account.xml",
+        "security/ir.model.access.csv",
+        "wizards/account_asset_mass_remove.xml",
     ],
 }

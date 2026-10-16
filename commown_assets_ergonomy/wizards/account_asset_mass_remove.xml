@@ -1,0 +1,35 @@
+<odoo>
+
+    <record id="view_account_asset_mass_remove_wizard" model="ir.ui.view">
+        <field name="name">account.asset.mass.remove.form</field>
+        <field name="model">account.asset.mass.remove</field>
+        <field name="arch" type="xml">
+            <form>
+            <group>
+                <field name="date_remove" />
+            </group>
+            <footer>
+                <button
+                        string="Mass remove"
+                        name="mass_remove"
+                        class="btn-primary"
+                        type="object"
+                    />
+                <button string="Cancel" class="btn-default" special="cancel" />
+            </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_asset_mass_remove" model="ir.actions.act_window">
+        <field name="name">[Commown] Sortir en masse</field>
+        <field name="res_model">account.asset.mass.remove</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+        <field
+            name="binding_model_id"
+            ref="account_asset_management.model_account_asset"
+        />
+    </record>
+
+</odoo>
