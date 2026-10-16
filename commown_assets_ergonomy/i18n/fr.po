@@ -1,0 +1,124 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* commown_assets_ergonomy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 12:31+0000\n"
+"PO-Revision-Date: 2019-07-02 09:54+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commown_assets_ergonomy
+#. odoo-python
+#: code:addons/commown_assets_ergonomy/wizards/account_asset_mass_remove.py:0
+#, python-format
+msgid ""
+"\n"
+"Error while removing asset '{ref}': {exception}"
+msgstr ""
+
+#. module: commown_assets_ergonomy
+#: model_terms:ir.ui.view,arch_db:commown_assets_ergonomy.view_account_asset_mass_remove_wizard
+#: model_terms:ir.ui.view,arch_db:commown_assets_ergonomy.view_account_asset_mass_remove_wizard_results
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: commown_assets_ergonomy
+#. odoo-python
+#: code:addons/commown_assets_ergonomy/wizards/account_asset_mass_remove.py:0
+#, python-format
+msgid "Created Journal Entries for Removed Assets"
+msgstr ""
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__date_remove
+msgid "Date Remove"
+msgstr "Date de sortie"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__id
+msgid "ID"
+msgstr "ID"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove____last_update
+msgid "Last Modified on"
+msgstr "Dernière Modification le"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model,name:commown_assets_ergonomy.model_account_asset_mass_remove
+msgid "Mass Asset Removal Wizard"
+msgstr ""
+
+#. module: commown_assets_ergonomy
+#. odoo-python
+#: code:addons/commown_assets_ergonomy/wizards/account_asset_mass_remove.py:0
+#, python-format
+msgid "Mass Asset Removal result"
+msgstr "Résultat de la sortie d'immobilisation en masse"
+
+#. module: commown_assets_ergonomy
+#. odoo-python
+#: code:addons/commown_assets_ergonomy/wizards/account_asset_mass_remove.py:0
+#: model_terms:ir.ui.view,arch_db:commown_assets_ergonomy.view_account_asset_mass_remove_wizard_results
+#, python-format
+msgid "Mass Asset Removal results"
+msgstr "Résultats de la sortie d'immobilisation en masse"
+
+#. module: commown_assets_ergonomy
+#: model_terms:ir.ui.view,arch_db:commown_assets_ergonomy.view_account_asset_mass_remove_wizard
+msgid "Mass remove"
+msgstr "Sortie en masse"
+
+#. module: commown_assets_ergonomy
+#: model:ir.model.fields,field_description:commown_assets_ergonomy.field_account_asset_mass_remove__notes
+msgid "Notes"
+msgstr "Notes"
+
+#. module: commown_assets_ergonomy
+#: model_terms:ir.ui.view,arch_db:commown_assets_ergonomy.view_account_asset_mass_remove_wizard_results
+msgid "Results :"
+msgstr "Résultats :"
+
+#. module: commown_assets_ergonomy
+#: model_terms:ir.ui.view,arch_db:commown_assets_ergonomy.view_account_asset_mass_remove_wizard_results
+msgid "View Asset Moves"
+msgstr "Pièces d'amortissement créées"
+
+#. module: commown_assets_ergonomy
+#: model:ir.actions.act_window,name:commown_assets_ergonomy.action_account_asset_mass_remove
+msgid "[Commown] Sortir en masse"
+msgstr "[Commown] Sortir en masse"
