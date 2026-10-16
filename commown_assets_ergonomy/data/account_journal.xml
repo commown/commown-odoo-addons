@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="various_operations_journal" model="account.journal">
+        <field name="name">Opérations diverses</field>
+        <field name="code">OD</field>
+        <field name="type">general</field>
+    </record>
+
+</odoo>
