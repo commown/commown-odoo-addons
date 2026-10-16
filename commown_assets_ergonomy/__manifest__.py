@@ -11,7 +11,7 @@
     "author": "Commown SCIC",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
-    "depends": ["account"],
+    "depends": ["account_asset_management"],
     "data": [
         "data/account_journal.xml",
         "data/account.xml",
