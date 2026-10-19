@@ -65,6 +65,7 @@ class DoubleOptInCommon(HttpCase):
             "/newsletter/request_subscription",
             headers={"Content-Type": "application/json"},
             data=json.dumps(payload),
+            timeout=1000,
         )
         self.logout()
 
