@@ -1,4 +1,5 @@
-from odoo import models
+from odoo import _, models
+from odoo.tools import email_normalize
 
 
 class CommownMailingList(models.Model):
@@ -30,3 +31,20 @@ class CommownMailingList(models.Model):
                 "list_customers_id": list_customers.id,
             },
         )
+
+    def request_newsletter_subscription(self, email):
+        list_generic = self.env.ref("commown_mass_mailing.newsletter_generic")
+
+        if self == list_generic:
+            list_customers = self.env.ref("commown_mass_mailing.newsletter_customers")
+            email_normalized = email_normalize(email)
+            existing_contact = self.env["mailing.contact"].search_count(
+                [("list_ids", "=", list_customers.id), ("email", "=", email_normalized)]
+            )
+            if existing_contact:
+                return {
+                    "result": "NOK",
+                    "msg": _("You're already subscribed to the customer newsletter!"),
+                }
+
+        return super().request_newsletter_subscription(email)
