@@ -1,0 +1,15 @@
+<odoo noupdate="1">
+
+    <record id="newsletter_generic" model="mailing.list">
+        <field name="name">Newsletter - Générique</field>
+    </record>
+
+    <record id="newsletter_customers" model="mailing.list">
+        <field name="name">Newsletter - Client·es</field>
+        <field name="dynamic">True</field>
+        <field
+            name="sync_domain"
+        >[("sale_order_ids.state", "=", "sale"), ("is_blacklisted", "=", False), ("lang", "like", "fr_")]</field>
+    </record>
+
+</odoo>
