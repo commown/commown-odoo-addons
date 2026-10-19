@@ -1,5 +1,7 @@
 from odoo.tests import TransactionCase
 
+from odoo.addons.mass_mailing_double_opt_in.tests import common
+
 
 class CommownMailingListCommon(TransactionCase):
     @classmethod
@@ -61,3 +63,41 @@ class CommownMailingListTC(CommownMailingListCommon):
         contact_1.invalidate_recordset()
         self.assertIn(contact_1, self.list_customers.contact_ids)
         self.assertNotIn(contact_1, self.list_generic.contact_ids)
+
+
+class CommownMailingListControllerTC(
+    common.DoubleOptInCommon, CommownMailingListCommon
+):
+    def test_double_opt_in_generic_ok(self):
+        # Sending the request for the generic list
+        res = self._send_subscription_request(
+            self.partner_1.email, mail_list=self.list_generic
+        )
+
+        self.assertJsonResultMessage(res, "OK", "will receive a mail")
+
+    def test_double_opt_in_nok_already_customer(self):
+        "Customers should not be able to subscribe to the generic newsletter"
+        # Initialize partner_1 as a customer
+        self._create_and_confirm_sale(self.partner_1)
+        self.list_customers.action_sync()
+
+        # Check pre-requisites
+        self.assertTrue(
+            self.env["mailing.contact"].search_count(
+                [
+                    ("email", "=", self.partner_1.email),
+                    ("list_ids", "=", self.list_customers.id),
+                ]
+            )
+        )
+
+        # Sending the request for the generic list
+        res = self._send_subscription_request(
+            self.partner_1.email, mail_list=self.list_generic
+        )
+        self.assertJsonResultMessage(res, "NOK", "subscribed to the customer")
+
+        self.assertFalse(
+            self.env["mail.mail"].search([("email_to", "=", self.partner_1.email)])
+        )
