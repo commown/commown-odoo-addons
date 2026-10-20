@@ -4,7 +4,7 @@
 {
     "name": "Assets ergonomy features for Commown",
     "summary": "Adding several helpers and QOL features surrounding assets",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Accounting & Finance",
     "website": "https://github.com/commown/commown-odoo-addons",
