@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="various_expenses_account" model="account.account">
+        <field name="code">65800000</field>
+        <field name="name">Charges diverses de gestion courante</field>
+        <field name="account_type">expense</field>
+    </record>
+
+</odoo>

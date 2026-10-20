@@ -1,0 +1,56 @@
+<odoo>
+
+    <record id="view_account_asset_mass_remove_wizard" model="ir.ui.view">
+        <field name="name">account.asset.mass.remove.form</field>
+        <field name="model">account.asset.mass.remove</field>
+        <field name="arch" type="xml">
+            <form>
+            <group>
+                <field name="date_remove" />
+            </group>
+            <footer>
+                <button
+                        string="Mass remove"
+                        name="mass_remove"
+                        class="btn-primary"
+                        type="object"
+                    />
+                <button string="Cancel" class="btn-default" special="cancel" />
+            </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_asset_mass_remove_wizard_results" model="ir.ui.view">
+        <field name="name">account.asset.mass.remove.form.results</field>
+        <field name="model">account.asset.mass.remove</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <form string="Mass Asset Removal results">
+                <separator colspan="4" string="Results :" />
+                <field name="notes" colspan="4" nolabel="1" width="850" height="400" />
+                <footer>
+                    <button
+                        string="View Asset Moves"
+                        name="view_asset_moves"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_asset_mass_remove" model="ir.actions.act_window">
+        <field name="name">[Commown] Sortir en masse</field>
+        <field name="res_model">account.asset.mass.remove</field>
+        <field name="target">new</field>
+        <field name="view_mode">form</field>
+        <field
+            name="binding_model_id"
+            ref="account_asset_management.model_account_asset"
+        />
+    </record>
+
+</odoo>
