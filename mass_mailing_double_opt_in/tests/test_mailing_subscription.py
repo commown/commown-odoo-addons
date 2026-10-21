@@ -28,6 +28,7 @@ class DoubleOptInTC(DoubleOptInCommon):
             ]
         )
         self.assertTrue(subscription)
+        self.assertEqual(subscription.contact_id.ip_addr, "127.0.0.1")
 
     def test_subscription_request_nok_invalid_email(self):
         res = self._send_subscription_request("invalid")
