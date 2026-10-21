@@ -97,6 +97,7 @@ class DoubleOptInControllerTC(common.DoubleOptInControllerCommon):
 
         subscription = self._get_subscriptions_for_list(email)
         self.assertTrue(subscription)
+        self.assertEqual(subscription.contact_id.ip_addr, "127.0.0.1")
 
     def _generate_confirm_link(self, email, list_id=None):
         "Utility to bypass the request procedure"
