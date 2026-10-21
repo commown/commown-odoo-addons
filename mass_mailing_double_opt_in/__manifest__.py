@@ -16,6 +16,7 @@
         "data/mail_templates.xml",
         "security/res_groups.xml",
         "security/ir.model.access.csv",
+        "views/mailing_contact.xml",
         "views/website_templates.xml",
     ],
 }
