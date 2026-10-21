@@ -54,7 +54,7 @@ class DoubleOptInController(Controller):
 
         # Creating the mailing contact
         ContactSudo.with_context(default_list_ids=mail_list.ids).create(
-            {"email": email}
+            {"email": email, "ip_addr": request.httprequest.remote_addr}
         )
 
         return request.render(res_tmpl_id, {"email": email})
