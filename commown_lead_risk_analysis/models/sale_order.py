@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
         stage = self.choose_stage("crm.stage", team, "team_id")
         lead = self.env["crm.lead"].create(
             {
-                "name": " ".join([prefix, so_line.product_id.display_name]),
+                "name": " ".join([prefix, so_line.product_id.name]),
                 "partner_id": self.partner_id.id,
                 "type": "opportunity",
                 "team_id": team.id,

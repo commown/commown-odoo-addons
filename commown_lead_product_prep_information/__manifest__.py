@@ -11,5 +11,8 @@
     "author": "Commown SCIC",
     "maintainers": ["fcayre", "Honeyxilia"],
     "license": "AGPL-3",
-    "depends": ["base"],
+    "depends": ["commown_lead_risk_analysis"],
+    "data": [
+        "views/crm_lead.xml",
+    ],
 }
