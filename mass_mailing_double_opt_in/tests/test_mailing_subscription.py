@@ -1,35 +1,7 @@
-from .common import DoubleOptInCommon, _get_optin_confirm_link
+from . import common
 
 
-class DoubleOptInTC(DoubleOptInCommon):
-    def test_double_opt_in_subscription_ok(self):
-        "Following a double opt-in subscription from start to finish"
-        email = "dummy@mail.com"
-
-        # First opt-in
-        req_res = self._send_subscription_request(email)
-        self.assertJsonResultMessage(req_res, "OK", "will receive a mail")
-
-        confirm_mail = self.env["mail.mail"].search([("email_to", "=", email)])
-        self.assertTrue(confirm_mail)
-
-        confirm_link = _get_optin_confirm_link(confirm_mail)
-        self.assertIn("/newsletter/confirm_subscription", confirm_link)
-
-        confirm_res = self._open_confirmation_request(confirm_link)
-        self.assertConfirmPageTitle(
-            confirm_res, "Your subscription has been completed!"
-        )
-
-        subscription = self.env["mailing.contact.subscription"].search(
-            [
-                ("contact_id.email", "=", email),
-                ("list_id", "=", self.mailing_list.id),
-            ]
-        )
-        self.assertTrue(subscription)
-        self.assertEqual(subscription.contact_id.ip_addr, "127.0.0.1")
-
+class DoubleOptInTC(common.DoubleOptInCommon):
     def test_subscription_request_nok_invalid_email(self):
         res = self._send_subscription_request("invalid")
         self.assertJsonResultMessage(res, "NOK", "email address is invalid")
@@ -54,6 +26,36 @@ class DoubleOptInTC(DoubleOptInCommon):
         admin_user = self.env.ref("base.user_admin")
         res = self._send_subscription_request("dummy@mail.com", user=admin_user)
         self.assertJsonResultMessage(res, "NOK", "not have access to this endpoint")
+
+
+class DoubleOptInControllerTC(common.DoubleOptInControllerCommon):
+    def test_double_opt_in_subscription_ok(self):
+        "Following a double opt-in subscription from start to finish"
+        email = "dummy@mail.com"
+
+        # First opt-in
+        req_res = self._send_subscription_request(email)
+        self.assertJsonResultMessage(req_res, "OK", "will receive a mail")
+
+        confirm_mail = self.env["mail.mail"].search([("email_to", "=", email)])
+        self.assertTrue(confirm_mail)
+
+        confirm_link = common._get_optin_confirm_link(confirm_mail)
+        self.assertIn("/newsletter/confirm_subscription", confirm_link)
+
+        confirm_res = self._open_confirmation_request(confirm_link)
+        self.assertConfirmPageTitle(
+            confirm_res, "Your subscription has been completed!"
+        )
+
+        subscription = self.env["mailing.contact.subscription"].search(
+            [
+                ("contact_id.email", "=", email),
+                ("list_id", "=", self.mailing_list.id),
+            ]
+        )
+        self.assertTrue(subscription)
+        self.assertEqual(subscription.contact_id.ip_addr, "127.0.0.1")
 
     def test_subscription_confirmation_nok_invalid_token(self):
         res = self._open_confirmation_request(

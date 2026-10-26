@@ -2,7 +2,7 @@ from cryptography.fernet import Fernet
 from lxml import html
 
 from odoo import Command, http
-from odoo.tests import HttpCase
+from odoo.tests import HttpCase, TransactionCase
 
 
 def _get_optin_confirm_link(mail):
@@ -10,7 +10,7 @@ def _get_optin_confirm_link(mail):
     return page.xpath("//a/@href")[0]
 
 
-class DoubleOptInCommon(HttpCase):
+class DoubleOptInCommon(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -49,6 +49,8 @@ class DoubleOptInCommon(HttpCase):
         self.assertEqual(expected_code, res["result"])
         self.assertIn(expected_msg_snippet, res["msg"])
 
+
+class DoubleOptInControllerCommon(DoubleOptInCommon, HttpCase):
     def _open_confirmation_request(self, link):
         # This is used to display the debug error in the rendered page.
         self.authenticate(None, None)
