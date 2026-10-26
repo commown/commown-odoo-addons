@@ -1,5 +1,3 @@
-import json
-
 from cryptography.fernet import Fernet
 from lxml import html
 
@@ -23,13 +21,10 @@ class DoubleOptInCommon(HttpCase):
             "mass_mailing_double_opt_in.double_optin_user"
         )
 
-        cls.password = "dummy_password"
-
         cls.opt_in_user = cls.env["res.users"].create(
             {
                 "name": "Double Opt-in User",
                 "login": "double@opt.in",
-                "password": cls.password,
                 "groups_id": [Command.set(portal_group.ids + double_opt_in_group.ids)],
             }
         )
@@ -40,42 +35,19 @@ class DoubleOptInCommon(HttpCase):
             key.decode("utf-8"),
         )
 
-    def _send_subscription_request(
-        self, email, mail_list_id=None, login=None, password=None
-    ):
-        if not mail_list_id:
-            mail_list_id = self.mailing_list.id
-        if not login:
-            login = self.opt_in_user.login
-        if not password:
-            password = self.password
+    def _send_subscription_request(self, email, mail_list=None, user=None):
+        if not mail_list:
+            mail_list = self.mailing_list
+        if not user:
+            user = self.opt_in_user
 
-        self.authenticate(login, password)
+        res = mail_list.with_user(user).request_newsletter_subscription(email)
 
-        payload = {
-            "jsonrpc": "2.0",
-            "method": "call",
-            "params": {
-                "email": email,
-                "list_id": mail_list_id,
-            },
-        }
-
-        res = self.url_open(
-            "/newsletter/request_subscription",
-            headers={"Content-Type": "application/json"},
-            data=json.dumps(payload),
-        )
-        self.logout()
-
-        self.assertFalse(res.json().get("error", False))
         return res
 
     def assertJsonResultMessage(self, res, expected_code, expected_msg_snippet):
-        res_json = res.json()["result"]
-
-        self.assertEqual(expected_code, res_json["result"])
-        self.assertIn(expected_msg_snippet, res_json["msg"])
+        self.assertEqual(expected_code, res["result"])
+        self.assertIn(expected_msg_snippet, res["msg"])
 
     def _open_confirmation_request(self, link):
         # This is used to display the debug error in the rendered page.

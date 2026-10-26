@@ -35,7 +35,9 @@ class DoubleOptInTC(DoubleOptInCommon):
         self.assertJsonResultMessage(res, "NOK", "email address is invalid")
 
     def test_subscription_request_nok_invalid_list(self):
-        res = self._send_subscription_request("dummy@mail.com", mail_list_id=-1)
+        res = self._send_subscription_request(
+            "dummy@mail.com", mail_list=self.env["mailing.list"].browse(-1)
+        )
         self.assertJsonResultMessage(res, "NOK", "list does not exist")
 
     def test_subscription_request_nok_already_subscribed(self):
@@ -49,9 +51,8 @@ class DoubleOptInTC(DoubleOptInCommon):
 
     def test_subscription_request_nok_invalid_opt_in_user(self):
         "Only the dedicated opt-in user can perform a subscription request"
-        res = self._send_subscription_request(
-            "dummy@mail.com", login="admin", password="admin"
-        )
+        admin_user = self.env.ref("base.user_admin")
+        res = self._send_subscription_request("dummy@mail.com", user=admin_user)
         self.assertJsonResultMessage(res, "NOK", "not have access to this endpoint")
 
     def test_subscription_confirmation_nok_invalid_token(self):
