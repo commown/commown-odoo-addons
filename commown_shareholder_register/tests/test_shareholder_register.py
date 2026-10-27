@@ -12,9 +12,17 @@ class TestShareholderRegister(TestShareholderRegisterTC):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.partner_1.is_company = True
+        cls.partner_11 = cls.env["res.partner"].create(
+            {"name": "Partner 11", "parent_id": cls.partner_1.id}
+        )
+        cls.partner_12 = cls.env["res.partner"].create(
+            {"name": "Partner 12", "parent_id": cls.partner_1.id}
+        )
+
         cls.account_move_lines = cls.env["account.move.line"]
-        cls._add_shares(cls.partner_1, cls.account_porteur, (2018, 3, 12), 2000)
-        cls._add_shares(cls.partner_1, cls.account_porteur, (2018, 8, 12), -2000)
+        cls._add_shares(cls.partner_11, cls.account_porteur, (2018, 3, 12), 2000)
+        cls._add_shares(cls.partner_12, cls.account_porteur, (2018, 8, 12), -2000)
         cls._add_shares(cls.partner_2, cls.account_beneficiaire, (2018, 3, 12), 100)
         cls._add_shares(cls.partner_2, cls.account_soutien, (2018, 3, 12), 200)
         cls._add_shares(cls.partner_2, cls.account_porteur, (2018, 3, 12), 20)

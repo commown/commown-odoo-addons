@@ -1,4 +1,5 @@
 import base64
+from collections import defaultdict
 
 from odoo import _, fields, models
 
@@ -67,8 +68,19 @@ class ShareholderRegister(models.TransientModel):
             lazy=False,
         )
 
-        partners = _by_id(self.env, data, "partner_id", "res.partner")
         accounts = _by_id(self.env, data, "account_id", "account.account")
+
+        # Aggregate shares by **commercial** partners:
+        # - compute commercial partners at once for performance
+        _partners = self.env["res.partner"].browse(i["partner_id"][0] for i in data)
+        _commercial_partners = _partners.mapped("commercial_partner_id")
+        partners = {p.id: p.commercial_partner_id for p in _partners}
+        # - sum balances by (account, commercial partner)
+        balances = defaultdict(float)
+        for item in data:
+            account = accounts[item["account_id"][0]]
+            partner = partners[item["partner_id"][0]]
+            balances[(account, partner)] += item["balance"]
 
         result = {
             "warnings": [],
@@ -79,13 +91,10 @@ class ShareholderRegister(models.TransientModel):
             },
         }
 
-        for item in data:
-            account = accounts[item["account_id"][0]]
-            partner = partners[item["partner_id"][0]]
-
+        for (account, partner), balance in balances.items():
             cat = by_account[account]
 
-            if -item["balance"] >= cat.min_share_number * nominal_share_amount:
+            if -balance >= cat.min_share_number * nominal_share_amount:
                 partner_data = result["partners"].setdefault(
                     partner,
                     {
@@ -95,17 +104,17 @@ class ShareholderRegister(models.TransientModel):
                         "phone": partner.mobile or partner.phone or "",
                     },
                 )
-                partner_data["total"] -= item["balance"]
+                partner_data["total"] -= balance
                 if partner_data["college"].rank < cat.college_id.rank:
                     partner_data["college"] = cat.college_id
 
-                result["total"]["balance"] -= item["balance"]
+                result["total"]["balance"] -= balance
 
-            elif item["balance"] > 0:
+            elif balance > 0:
                 result["warnings"].append(
                     _("The partner %s has a negative share number") % partner.name
                 )
-            elif item["balance"] < 0:
+            elif balance < 0:
                 result["warnings"].append(
                     _(
                         "The partner %(part_name)s has not enough shares for college"
