@@ -119,6 +119,21 @@ class ProjectTaskInvolvedDevicePickingWizard(models.TransientModel):
         return new_move_ids
 
 
+class ProjectTaskRestrictedInvolcedDevicePickingWizard(models.TransientModel):
+    _name = "project.task.restricted.involved_device_picking.wizard"
+    _inherit = "project.task.involved_device_picking.wizard"
+    _description = (
+        "Create a picking of the device attached to a task (with location restrictions)"
+    )
+
+    # Removed "Repackaged devices" location
+    destination_refs = (
+        "stock_location_outsourced_repair",
+        "stock_location_devices_to_check",
+        "stock_location_repairer",
+    )
+
+
 class ProjectTaskInvolvedNonserialProductPickingWizard(models.TransientModel):
     _name = "project.task.involved_nonserial_product_picking.wizard"
     _inherit = "project.task.involved_device_picking.wizard"

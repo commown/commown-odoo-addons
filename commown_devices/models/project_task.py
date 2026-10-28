@@ -293,5 +293,9 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
                     )
                 )
 
+            res["res_model"] = "project.task.restricted.involved_device_picking.wizard"
+            res["view_id"] = self.env.ref(
+                "commown_devices.wizard_project_task_device_picking_form"
+            ).id
             res["name"] = _("Move involved product (restricted)")
         return res
