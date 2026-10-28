@@ -275,3 +275,27 @@ class ProjectTask(ToCustomerPickingMixin, models.Model):
             "target": "new",
             "context": {"default_task_id": self.id},
         }
+
+    def action_restricted_move_involved_product(self):
+        res = self.action_move_involved_product()
+        if self.storable_product_id.tracking == "serial":
+            # Check origin location
+            customers_loc = self.env.ref("stock.stock_location_customers")
+            current_loc = self.lot_id.quant_ids.filtered(
+                lambda q: q.quantity > 0
+            ).location_id
+            if current_loc in customers_loc.child_ids:
+                raise UserError(
+                    _(
+                        "You cannot move the involved device (%s), "
+                        "as it is currently located at one of our customers.",
+                        self.lot_id.display_name,
+                    )
+                )
+
+            res["res_model"] = "project.task.restricted.involved_device_picking.wizard"
+            res["view_id"] = self.env.ref(
+                "commown_devices.wizard_project_task_device_picking_form"
+            ).id
+            res["name"] = _("Move involved product (restricted)")
+        return res

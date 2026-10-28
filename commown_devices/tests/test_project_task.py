@@ -382,6 +382,68 @@ class ProjectTaskPickingTC(DeviceAsAServiceTC):
             "This action should not be used in resiliation project",
         )
 
+    def test_wizard_restricted_involved_device_locations(self):
+        "Child locations of 'Repackaged devices' should not be proposed in the restricted wizard"
+        receive_loc = self.env.ref("commown_devices.stock_location_devices_to_check")
+        lot = self.adjust_stock(None, serial="lot", location=receive_loc)
+        self.task.lot_id = lot
+        self.task.storable_product_id = lot.product_id
+
+        repackaged_loc = self.env.ref(
+            "commown_devices.stock_location_repackaged_devices"
+        )
+        dest_location = self.env["stock.location"].create(
+            {
+                "name": "Dummy Repackaged Device Location",
+                "usage": "internal",
+                "location_id": repackaged_loc.id,
+            }
+        )
+
+        # Regular involved device wizard
+        _, unrestricted_possible_values = self.prepare_ui(
+            "project.task.involved_device_picking.wizard", self.task, "task_id"
+        )
+        self.assertIn(dest_location, unrestricted_possible_values["location_dest_id"])
+
+        # Restricted involved device wizard
+        _, restricted_possible_values = self.prepare_ui(
+            "project.task.restricted.involved_device_picking.wizard",
+            self.task,
+            "task_id",
+        )
+        self.assertNotIn(dest_location, restricted_possible_values["location_dest_id"])
+
+    def test_action_restricted_involved_device_ok_serial(self):
+        receive_loc = self.env.ref("commown_devices.stock_location_devices_to_check")
+        lot = self.adjust_stock(None, serial="lot", location=receive_loc)
+
+        self.task.lot_id = lot
+        self.task.storable_product_id = lot.product_id
+
+        self.assertEqual(
+            self.task.action_restricted_move_involved_product().get("res_model"),
+            "project.task.restricted.involved_device_picking.wizard",
+        )
+
+    def test_action_restricted_involved_device_nok_device_at_customer(self):
+        self.task.contract_id = self.c1
+        self.task.lot_id = self.task.contract_id.lot_ids[0]
+        self.task.storable_product_id = self.task.lot_id.product_id
+
+        with self.assertRaises(UserError) as exc:
+            self.task.action_restricted_move_involved_product()
+
+        self.assertIn("at one of our customers", exc.exception.args[0])
+
+    def test_action_restricted_involved_device_ok_nonserial(self):
+        self.task.storable_product_id = self.nontracked_product.product_variant_id
+
+        self.assertEqual(
+            self.task.action_restricted_move_involved_product().get("res_model"),
+            "project.task.involved_nonserial_product_picking.wizard",
+        )
+
     def test_wizard_outward_with_task_only(self):
         values, possible_values = self.prepare_ui(
             "project.task.outward.picking.wizard", self.task, "task_id"
