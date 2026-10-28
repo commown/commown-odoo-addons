@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-22 15:48+0000\n"
+"POT-Creation-Date: 2026-10-28 15:17+0000\n"
 "PO-Revision-Date: 2025-12-22 17:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -211,6 +211,15 @@ msgid "Create a picking of the device attached to a task"
 msgstr "Faire une expédition de l'appareil lié à une tâche"
 
 #. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_restricted_involved_device_picking_wizard
+msgid ""
+"Create a picking of the device attached to a task (with location "
+"restrictions)"
+msgstr ""
+"Faire un transfert de l'appareil lié à une tâche (avec des "
+"restrictions d'emplacement)"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_involved_nonserial_product_picking_wizard
 msgid "Create a picking of the nonserial product attached to a task"
 msgstr "Faire une expédition d'un module ou accéssoire lié à une tache"
@@ -250,6 +259,7 @@ msgstr "project.task.notracking.outward.picking.wizard"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__create_uid
 msgid "Created by"
@@ -270,6 +280,7 @@ msgstr "Créé par"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__create_date
 msgid "Created on"
@@ -293,6 +304,7 @@ msgstr "Ce service n'a pas d'image !"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__date
 msgid "Date"
@@ -314,6 +326,7 @@ msgstr "Grade par défaut"
 #: model:ir.model.fields,help:commown_devices.field_project_task_notracking_inward_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_notracking_outward_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_outward_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_restricted_involved_device_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_to_customer_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_to_employee_wizard__date
 msgid "Defaults to now - To be set only to force a date"
@@ -353,6 +366,7 @@ msgstr "Décrit quel produit stockable est associé à un service"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__location_dest_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__location_dest_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__location_dest_id
 msgid "Destination"
 msgstr "Destination"
 
@@ -404,6 +418,7 @@ msgstr "Appareils"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__display_name
 msgid "Display Name"
@@ -481,6 +496,7 @@ msgstr "Confier l'appareil à un.e employé.e"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__id
 msgid "ID"
@@ -559,6 +575,7 @@ msgstr "Écriture comptable"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard____last_update
 msgid "Last Modified on"
@@ -579,6 +596,7 @@ msgstr "Dernière Modification le"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__write_uid
 msgid "Last Updated by"
@@ -599,6 +617,7 @@ msgstr "Dernière mise à jour par"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__write_date
 msgid "Last Updated on"
@@ -701,6 +720,13 @@ msgstr "Déplacer le module/accessoire"
 #, python-format
 msgid "Move involved product"
 msgstr "Transférer les produits concernés"
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
+#, python-format
+msgid "Move involved product (restricted)"
+msgstr "Transferer les produits concerné (mode restreint)"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__move_line_id
@@ -822,6 +848,7 @@ msgstr "Lien ligne d'achat/ligne de facturation"
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__present_location_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__present_location_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__present_location_id
 msgid "Present location of the product"
 msgstr "Localisation actuelle"
 
@@ -1089,6 +1116,7 @@ msgstr "Configurations de produits stockable"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__entity_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__task_id
 msgid "Task"
@@ -1226,6 +1254,17 @@ msgstr "project.task.contract_transfer.wizard"
 
 #. module: commown_devices
 #. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
+#, python-format
+msgid ""
+"You cannot move the involved device (%s), as it is currently located at one "
+"of our customers."
+msgstr ""
+"Vous ne pouvez pas déplacer l'appareil concerné (%s), car il est "
+"actuellement chez un client ou une cliente."
+
+#. module: commown_devices
+#. odoo-python
 #: code:addons/commown_devices/models/wizard_to_customer_picking.py:0
 #, python-format
 msgid "You have to select a lot for each tracked product"
@@ -1281,6 +1320,11 @@ msgstr "[commown] Lier l'expédition à un achat"
 #: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_picking
 msgid "[commown] REPAIR: Move involved product"
 msgstr "[Commown] RÉPARATION : transférer l'appareil concerné"
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_restricted_picking
+msgid "[commown] REPAIR: Move involved product (restricted mode)"
+msgstr "[Commown] RÉPARATION : transférer l'appareil concerné (mode restreint)"
 
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_add_services_storable_products
