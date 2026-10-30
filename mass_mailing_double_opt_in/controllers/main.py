@@ -22,6 +22,17 @@ class DoubleOptInController(Controller):
 
         ContactSudo = env["mailing.contact"].sudo()
 
+        # Checking if the email is already subscribed
+        existing_contacts = ContactSudo.search_count(
+            [
+                ("email", "=", email),
+                ("list_ids", "=", list_id),
+            ],
+        )
+        if existing_contacts:
+            render_ctx = {"already_subscribed": True, "email": email}
+            return request.render(res_tmpl_id, render_ctx)
+
         # Creating the mailing contact
         ContactSudo.with_context(default_list_ids=mail_list.ids).create(
             {"email": email}
