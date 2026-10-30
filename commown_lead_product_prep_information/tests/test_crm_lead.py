@@ -1,3 +1,5 @@
+from lxml import html
+
 from odoo.addons.product_rental.tests.common import RentalSaleOrderTC
 
 
@@ -5,6 +7,9 @@ class LeadProductInformationTC(RentalSaleOrderTC):
     def test_lead_without_associated_product(self):
         lead = self.env["crm.lead"].create({"name": "Dummy lead"})
         self.assertFalse(lead.product_info)
+
+        title = html.fromstring(lead.product_info_with_title).text
+        self.assertEqual(title, lead.name)
 
     def test_lead_product_information_fields(self):
         tmpl_pc = self.env.ref("product_rental.prod_pc")
@@ -33,7 +38,15 @@ class LeadProductInformationTC(RentalSaleOrderTC):
         lead = self.env["crm.lead"].search([("so_line_id", "=", so.order_line.id)])
         self.assertNotIn(cpu_i5.name, lead.name)
 
+        # Check product_info
         self.assertIn(
             f"<b>{cpu_i5.attribute_id.name}</b>: {cpu_i5.name}",
             lead.product_info,
+        )
+
+        # Check product_info_with_title
+        self.assertIn(lead.name, lead.product_info_with_title)
+        self.assertIn(
+            f"<b>{cpu_i5.attribute_id.name}</b>: {cpu_i5.name}",
+            lead.product_info_with_title,
         )
