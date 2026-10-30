@@ -10,11 +10,20 @@
         <div class="container">
           <div class="row col-12 text-center">
             <h2 id="newsletter_confirm_title" class="py-2">
-              <t t-if="success">Your subscription has been completed!</t>
+              <t t-if="already_subscribed">
+                Subscription already completed
+              </t>
+              <t t-elif="success">Your subscription has been completed!</t>
               <t t-else="">Your subscription has failed...</t>
             </h2>
             <div class="py-4">
-              <t t-if="success">
+              <t t-if="already_subscribed">
+                <p id="newsletter_already_subbed_text">
+                  You've already confirmed your subscription to our newsletter, and will
+                  receive our latest news on your mail address <b t-out="email" />.
+                </p>
+              </t>
+              <t t-elif="success">
                 <p id="newsletter_confirm_success_text">
                   You've just subscribed to the newsletter of <t
                                         t-out="env.company.name"

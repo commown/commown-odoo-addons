@@ -77,6 +77,30 @@ class DoubleOptInControllerTC(common.DoubleOptInControllerCommon):
         subscription = self._get_subscriptions_for_list(email)
         self.assertTrue(subscription)
 
+    def _generate_confirm_link(self, email, list_id=None):
+        "Utility to bypass the request procedure"
+        if not list_id:
+            list_id = self.mailing_list.id
+
+        sign = f"{email}|{list_id}"
+        return f"/newsletter/confirm_subscription?sign={sign}"
+
+    def test_subscription_confirmation_nok_already_confirmed(self):
+        email = "test@test.coop"
+        confirm_link = self._generate_confirm_link(email)
+
+        confirm_res_1 = self._open_confirmation_request(confirm_link)
+        self.assertConfirmPageTitle(
+            confirm_res_1, "Your subscription has been completed!"
+        )
+        self.assertEqual(1, len(self._get_subscriptions_for_list(email)))
+
+        # Trying to confirm the subscription again
+        confirm_res_2 = self._open_confirmation_request(confirm_link)
+        self.assertConfirmPageTitle(confirm_res_2, "Subscription already completed")
+
+        self.assertEqual(1, len(self._get_subscriptions_for_list(email)))
+
     def test_subscription_confirmation_nok_invalid_token(self):
         res = self._open_confirmation_request(
             "/newsletter/confirm_subscription?sign=dummy"
