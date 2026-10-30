@@ -1,0 +1,58 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * commown_mass_mailing
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: server-tools (9.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-30 16:11+0000\n"
+"PO-Revision-Date: 2020-05-15 00:19+0000\n"
+"Last-Translator: Peter Schubert <psc@saco.info>\n"
+"Language-Team: German (http://www.transifex.com/oca/OCA-server-tools-9-0/"
+"language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.10\n"
+
+#. module: commown_mass_mailing
+#: model_terms:ir.ui.view,arch_db:commown_mass_mailing.newsletter_confirm
+msgid "En attendant, n'hésitez pas à parcourir le"
+msgstr "Bis dahin können Sie gerne im"
+
+#. module: commown_mass_mailing
+#: model:ir.model,name:commown_mass_mailing.model_mailing_list
+msgid "Mailing List"
+msgstr ""
+
+#. module: commown_mass_mailing
+#. odoo-python
+#: code:addons/commown_mass_mailing/models/mailing_list.py:0
+#, python-format
+msgid "You're already subscribed to the customer newsletter!"
+msgstr "Sie haben den Kunden-Newsletter bereits abonniert!"
+
+#. module: commown_mass_mailing
+#: model_terms:ir.ui.view,arch_db:commown_mass_mailing.newsletter_confirm
+msgid "blog"
+msgstr "Blog"
+
+#. module: commown_mass_mailing
+#: model_terms:ir.ui.view,arch_db:commown_mass_mailing.newsletter_confirm
+msgid "forum"
+msgstr "Forum"
+
+#. module: commown_mass_mailing
+#: model_terms:ir.ui.view,arch_db:commown_mass_mailing.newsletter_confirm
+msgid "ou à consulter le"
+msgstr "oder im"
+
+#. module: commown_mass_mailing
+#: model_terms:ir.ui.view,arch_db:commown_mass_mailing.newsletter_confirm
+msgid "pour ne louper aucune information sur la vie de la coopérative."
+msgstr ""
+"stöbern, um keine Informationen über das Geschehen in der Genossenschaft zu "
+"verpassen."
