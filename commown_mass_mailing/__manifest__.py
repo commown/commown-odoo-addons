@@ -14,5 +14,6 @@
     "depends": ["mass_mailing_double_opt_in", "mass_mailing_list_dynamic", "sale"],
     "data": [
         "data/mailing_lists.xml",
+        "views/website_templates.xml",
     ],
 }
