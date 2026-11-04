@@ -27,6 +27,7 @@ class AccountAssetMassRemove(models.TransientModel):
                 .with_context(active_id=asset.id)
                 .create(
                     {
+                        "date_remove": self.date_remove,
                         "force_date": self.date_remove,
                         "posting_regime": "residual_value",
                         "account_residual_value_id": account.id,
