@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+  <template id="second_opt_in_email" name="Newsletter subscription - Second opt-in">
+    <p>Hello,</p>
+    <p>
+      We've received your subscription request to our mailing list.
+      To confirm your subscription, please click on the following link :
+    </p>
+    <p class="margin: 16px;">
+      <a
+                class="btn btn-primary"
+                style="padding:5px 10px; color:#FFFFFF; text-decoration:none; background-color:#875A7B; border:1px solid #875A7B; border-radius:3px"
+                t-attf-href="/newsletter/confirm_subscription?sign={{sign}}"
+                target="_blank"
+            >I confirm my subscription</a>
+    </p>
+    Have a nice day !
+    <t t-out="env.company.name" />
+  </template>
+
+</odoo>
