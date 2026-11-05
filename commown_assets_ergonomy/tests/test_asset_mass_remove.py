@@ -79,6 +79,10 @@ class AssetMassRemoveTC(TransactionCase):
         action = wiz.mass_remove()
 
         self.assertEqual({"removed"}, set(self.assets.mapped("state")))
+        self.assertEqual(
+            {"2026-10-15"},
+            {asset.date_remove.strftime("%Y-%m-%d") for asset in self.assets},
+        )
 
         created_entries = self.env["account.move"].search(action["domain"])
 
@@ -106,7 +110,11 @@ class AssetMassRemoveTC(TransactionCase):
         action = wiz.with_context(**res_action["context"]).view_asset_moves()
 
         self.assertEqual(asset_1.state, "removed")
+        self.assertEqual("2026-10-15", asset_1.date_remove.strftime("%Y-%m-%d"))
+
         self.assertEqual(asset_2.state, "open")
+        self.assertFalse(asset_2.date_remove)
+
         self.assertIn(
             f"Error while removing asset '{asset_2.name}'",
             wiz.notes,
