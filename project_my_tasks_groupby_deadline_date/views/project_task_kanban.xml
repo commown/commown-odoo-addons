@@ -1,0 +1,16 @@
+<odoo>
+
+    <record id="view_task_kanban_inherit_my_task" model="ir.ui.view">
+        <field
+            name="name"
+        >project.task.kanban.inherit.my.task (in project_my_tasks_groupby_deadline_date)</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban_inherit_my_task" />
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="default_group_by">date_deadline</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
