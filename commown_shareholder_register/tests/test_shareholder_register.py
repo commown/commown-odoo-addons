@@ -21,6 +21,9 @@ class TestShareholderRegister(TestShareholderRegisterTC):
         )
 
         cls.account_move_lines = cls.env["account.move.line"]
+        cls._add_shares(cls.partner_11, cls.account_porteur, (2018, 1, 5), 200)
+        cls.account_move_lines.mapped("move_id").button_draft()
+
         cls._add_shares(cls.partner_11, cls.account_porteur, (2018, 3, 12), 2000)
         cls._add_shares(cls.partner_12, cls.account_porteur, (2018, 8, 12), -2000)
         cls._add_shares(cls.partner_2, cls.account_beneficiaire, (2018, 3, 12), 100)
