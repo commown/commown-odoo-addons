@@ -102,7 +102,6 @@ class TestShareholderRegisterTC(TransactionCase):
         )
         move = cls.env["account.move"].create(
             {
-                "name": "Test Account Move",
                 "journal_id": journal.id,
                 "date": date(*date_tuple),
             }
@@ -130,3 +129,5 @@ class TestShareholderRegisterTC(TransactionCase):
                 },
             ]
         )
+
+        move.action_post()
