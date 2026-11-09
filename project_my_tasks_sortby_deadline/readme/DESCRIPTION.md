@@ -1,0 +1,1 @@
+By default, sort tasks on the My Tasks view by Deadline dates rather than only by priority
