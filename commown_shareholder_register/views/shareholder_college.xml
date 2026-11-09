@@ -7,7 +7,7 @@
       <tree editable="bottom">
         <field name="name" />
         <field name="rank" />
-        <field name="category_ids" />
+        <field name="category_ids" widget="many2many_tags" />
       </tree>
     </field>
   </record>
