@@ -62,6 +62,7 @@ class ShareholderRegister(models.TransientModel):
                 ("partner_id", "!=", False),
                 ("date", "<=", self.date),
                 ("partner_id.active", "=", True),
+                ("move_id.state", "=", "posted"),
             ],
             ["account_id", "partner_id", "balance:sum"],
             ["account_id", "partner_id"],
