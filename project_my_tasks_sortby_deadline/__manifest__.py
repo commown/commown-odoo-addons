@@ -4,7 +4,7 @@
 {
     "name": "Project - Deadline sort on 'My Tasks' view",
     "summary": "By default, sort tasks on the My Tasks view by Deadline dates rather than only by priority",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.0.1",
     "development_status": "Alpha",
     "category": "Uncategorized",
     "website": "https://github.com/commown/commown-odoo-addons",
