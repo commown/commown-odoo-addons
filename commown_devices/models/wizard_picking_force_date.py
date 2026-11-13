@@ -1,5 +1,7 @@
 from odoo import api, fields, models
 
+from .common import _force_picking_date
+
 
 class ForcePickingDateWizardLine(models.TransientModel):
     _name = "force.picking.date.wizard.line"
@@ -27,6 +29,15 @@ class ForcePickingDateWizardLine(models.TransientModel):
             move_line = line.get_lot_move_line()
             line.orig_location = move_line.location_id
             line.dest_location = move_line.location_dest_id
+
+    ## Editable fields
+    new_date = fields.Datetime(required=True)
+    is_date_different = fields.Boolean(compute="_compute_is_date_different")
+
+    @api.depends("new_date")
+    def _compute_is_date_different(self):
+        for line in self:
+            line.is_date_different = line.new_date != line.picking_id.date_done
 
 
 class ForcePickingDateWizard(models.TransientModel):
@@ -66,3 +77,12 @@ class ForcePickingDateWizard(models.TransientModel):
                 }
             )
         return rec
+
+    def execute(self):
+        pickings_to_edit = self.wizard_line_ids.filtered("is_date_different")
+        for line in pickings_to_edit:
+            self.env.cr.execute(
+                "UPDATE stock_picking SET scheduled_date = %s WHERE id = %s",
+                (str(line.new_date), line.picking_id.id),
+            )
+            _force_picking_date(line.picking_id, line.new_date)
