@@ -1,0 +1,43 @@
+<odoo>
+
+  <record id="force_picking_date_wizard_form" model="ir.ui.view">
+    <field name="name">force.picking.date.wizard.form</field>
+    <field name="model">force.picking.date.wizard</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="concerned_lot" />
+          <field name="is_history_coherent" />
+        </group>
+        <separator string="Device pickings" />
+        <field name="wizard_line_ids" type="xml" nolabel="1">
+          <tree
+                        editable="top"
+                        create="0"
+                        delete="0"
+                        default_order="new_date"
+                        decoration-bf="is_date_different"
+                    >
+            <field name="is_date_different" invisible="1" />
+            <field name="picking_id" />
+            <field name="orig_location" />
+            <field name="dest_location" />
+            <field name="new_date" />
+          </tree>
+        </field>
+        <footer>
+          <button
+                        name="execute"
+                        string="Change picking dates"
+                        class="btn-primary"
+                        type="object"
+                    />
+
+          <button string="Cancel" class="btn-default" special="cancel" />
+        </footer>
+
+      </form>
+    </field>
+  </record>
+
+</odoo>

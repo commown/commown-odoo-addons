@@ -14,6 +14,7 @@ from . import test_stock_move
 from . import test_stock_move_line
 from . import test_stock_scrap
 from . import test_wizard_move_line_validation
+from . import test_wizard_picking_force_date
 from . import test_wizard_po_invoice_link
 from . import test_wizard_picking_po_link
 from . import test_wizard_to_customer_crm_lead
