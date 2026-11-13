@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
 
 from .common import _force_picking_date
 
@@ -74,7 +75,33 @@ class ForcePickingDateWizard(models.TransientModel):
             )
         return rec
 
+    is_history_coherent = fields.Boolean(
+        "Coherent history", compute="_compute_is_history_coherent"
+    )
+
+    @api.depends("wizard_line_ids.new_date")
+    def _compute_is_history_coherent(self):
+        coherent = True
+        prev_loc = self.env["stock.location"]
+        wizard_history = self.wizard_line_ids.sorted(lambda l: l.new_date)
+
+        for line in wizard_history:
+            if prev_loc and prev_loc != line.orig_location:
+                coherent = False
+                break
+            prev_loc = line.dest_location
+
+        self.is_history_coherent = coherent
+
     def execute(self):
+        if not self.is_history_coherent:
+            raise UserError(
+                _(
+                    "The described device history is incoherent -"
+                    " please fix it before applying the changes."
+                )
+            )
+
         for line in self.wizard_line_ids.filtered("is_date_different"):
             self.env.cr.execute(
                 "UPDATE stock_picking SET scheduled_date = %s WHERE id = %s",
