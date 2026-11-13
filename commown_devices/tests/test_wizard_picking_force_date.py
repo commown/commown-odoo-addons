@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from odoo.exceptions import UserError
+
 from ..models.common import do_new_transfer, internal_picking
 from .common import BaseLotTC
 from .test_common import create_stock_location
@@ -60,9 +62,12 @@ class WizardForcePickingDateTC(BaseLotTC):
     def test_wizard_ok(self):
         # Using the wizard to fix the tracked lot history
         self._generate_force_picking_date_wiz(self.picking_2)
+        self.assertFalse(self.wizard.is_history_coherent)
 
         new_date = self.base_date + timedelta(days=5)
         self._set_date_on_wiz_line(self.picking_2, new_date)
+        self.assertTrue(self.wizard.is_history_coherent)
+
         self.wizard.execute()
 
         self.picking_2.invalidate_recordset()
@@ -72,3 +77,13 @@ class WizardForcePickingDateTC(BaseLotTC):
         pick_moves = self.picking_2.move_ids
         self.assertEqual(pick_moves.date, new_date)
         self.assertEqual(pick_moves.move_line_ids.date, new_date)
+
+    def test_wizard_ko_incoherent_history(self):
+        # Trying to confirm changes for an incoherent history should raise an error
+        self._generate_force_picking_date_wiz(self.picking_2)
+        self.assertFalse(self.wizard.is_history_coherent)
+
+        with self.assertRaises(UserError) as exc:
+            self.wizard.execute()
+
+        self.assertIn("device history is incoherent", exc.exception.args[0])

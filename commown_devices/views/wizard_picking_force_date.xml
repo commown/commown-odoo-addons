@@ -7,6 +7,7 @@
       <form>
         <group>
           <field name="concerned_lot" />
+          <field name="is_history_coherent" />
         </group>
         <separator string="Device pickings" />
         <field name="wizard_line_ids" type="xml" nolabel="1">
