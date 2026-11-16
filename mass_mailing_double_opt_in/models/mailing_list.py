@@ -44,14 +44,27 @@ class DoubleOptInMailingList(models.Model):
                 "msg": _("The provided email address is invalid."),
             }
 
-        sign = f"{email_normalized}|{self.id}".encode()
-
-        # Render mail content
-        subject = _("Confirm your newsletter subscription")
-        message_body = self.env["ir.qweb"]._render(
-            "mass_mailing_double_opt_in.second_opt_in_email",
-            {"sign": sign},
+        # Checking existing contacts on the list
+        existing_contacts = self.env["mailing.contact"].search_count(
+            [
+                ("email", "=", email_normalized),
+                ("list_ids", "=", self.id),
+            ]
         )
+        if existing_contacts > 0:
+            subject = _("Subscription already completed")
+            message_body = self.env["ir.qweb"]._render(
+                "mass_mailing_double_opt_in.already_subscribed_email"
+            )
+        else:
+            sign = f"{email_normalized}|{self.id}".encode()
+
+            # Render mail content
+            subject = _("Confirm your newsletter subscription")
+            message_body = self.env["ir.qweb"]._render(
+                "mass_mailing_double_opt_in.second_opt_in_email",
+                {"sign": sign},
+            )
 
         self._send_newsletter_confirm_email(email_normalized, subject, message_body)
 

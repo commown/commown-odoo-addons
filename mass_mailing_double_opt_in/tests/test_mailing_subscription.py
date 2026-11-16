@@ -15,6 +15,20 @@ class DoubleOptInTC(common.DoubleOptInCommon):
         confirm_link = common._get_optin_confirm_link(confirm_mail)
         self.assertIn("/newsletter/confirm_subscription", confirm_link)
 
+    def test_subscription_request_nok_already_subscribed(self):
+        email = "dummy@mail.com"
+        self.env["mailing.contact"].sudo().with_context(
+            default_list_ids=self.mailing_list.ids
+        ).create({"email": email})
+
+        res = self._send_subscription_request(email)
+        self.assertJsonResultMessage(res, "OK", "will receive a mail")
+
+        confirm_mail = self.env["mail.mail"].search([("email_to", "=", email)])
+        self.assertTrue(confirm_mail)
+        self.assertEqual(confirm_mail.subject, "Subscription already completed")
+        self.assertFalse(common._get_optin_confirm_link(confirm_mail))
+
     def test_subscription_request_nok_invalid_email(self):
         res = self._send_subscription_request("invalid")
         self.assertJsonResultMessage(res, "NOK", "email address is invalid")

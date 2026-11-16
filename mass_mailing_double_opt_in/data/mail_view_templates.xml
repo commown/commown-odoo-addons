@@ -19,4 +19,17 @@
     <t t-out="env.company.name" />
   </template>
 
+  <template
+        id="already_subscribed_email"
+        name="Newsletter subscription - Already subscribed"
+    >
+    <p>Hello,</p>
+    <p>
+      You've already subscribed to this mailing list,
+      and will receive our latest news on this mail address.
+    </p>
+    Have a nice day !
+    <t t-out="env.company.name" />
+  </template>
+
 </odoo>
