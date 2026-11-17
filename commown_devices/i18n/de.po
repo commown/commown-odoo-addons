@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-22 15:48+0000\n"
+"POT-Creation-Date: 2026-10-28 15:17+0000\n"
 "PO-Revision-Date: 2025-12-22 14:36+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #. module: commown_devices
 #. odoo-python
-#: code:addons/commown_devices/models/common.py:81
+#: code:addons/commown_devices/models/common.py:0
 #, python-format
 msgid "%(loc)s: %(products)s"
 msgstr "%(loc)s: %(products)s"
@@ -204,6 +204,13 @@ msgid "Create a picking of the device attached to a task"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model,name:commown_devices.model_project_task_restricted_involved_device_picking_wizard
+msgid ""
+"Create a picking of the device attached to a task (with location "
+"restrictions)"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_involved_nonserial_product_picking_wizard
 msgid "Create a picking of the nonserial product attached to a task"
 msgstr ""
@@ -243,6 +250,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__create_uid
 msgid "Created by"
@@ -263,6 +271,7 @@ msgstr "Erstellt von"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__create_date
 msgid "Created on"
@@ -286,6 +295,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__date
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__date
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__date
 msgid "Date"
@@ -307,6 +317,7 @@ msgstr ""
 #: model:ir.model.fields,help:commown_devices.field_project_task_notracking_inward_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_notracking_outward_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_outward_picking_wizard__date
+#: model:ir.model.fields,help:commown_devices.field_project_task_restricted_involved_device_picking_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_to_customer_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_to_employee_wizard__date
 msgid "Defaults to now - To be set only to force a date"
@@ -345,6 +356,7 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__location_dest_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__location_dest_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__location_dest_id
 msgid "Destination"
 msgstr ""
 
@@ -396,6 +408,7 @@ msgstr "Geräte"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__display_name
 msgid "Display Name"
@@ -466,6 +479,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__id
 msgid "ID"
@@ -540,6 +554,7 @@ msgstr "Journalposten"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard____last_update
 msgid "Last Modified on"
@@ -560,6 +575,7 @@ msgstr "Zuletzt geändert am"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__write_uid
 msgid "Last Updated by"
@@ -684,6 +700,13 @@ msgid "Move involved product"
 msgstr ""
 
 #. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
+#, python-format
+msgid "Move involved product (restricted)"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__move_line_id
 msgid "Move line id"
 msgstr ""
@@ -803,6 +826,7 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_device_picking_wizard__present_location_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_involved_nonserial_product_picking_wizard__present_location_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__present_location_id
 msgid "Present location of the product"
 msgstr ""
 
@@ -1069,6 +1093,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_inward_picking_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_notracking_outward_picking_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__task_id
+#: model:ir.model.fields,field_description:commown_devices.field_project_task_restricted_involved_device_picking_wizard__task_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_customer_wizard__entity_id
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__task_id
 msgid "Task"
@@ -1197,6 +1222,15 @@ msgstr ""
 
 #. module: commown_devices
 #. odoo-python
+#: code:addons/commown_devices/models/project_task.py:0
+#, python-format
+msgid ""
+"You cannot move the involved device (%s), as it is currently located at one "
+"of our customers."
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
 #: code:addons/commown_devices/models/wizard_to_customer_picking.py:0
 #, python-format
 msgid "You have to select a lot for each tracked product"
@@ -1250,6 +1284,11 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_picking
 msgid "[commown] REPAIR: Move involved product"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_restricted_picking
+msgid "[commown] REPAIR: Move involved product (restricted mode)"
 msgstr ""
 
 #. module: commown_devices
