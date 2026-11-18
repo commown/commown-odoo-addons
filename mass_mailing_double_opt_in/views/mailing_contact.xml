@@ -1,0 +1,17 @@
+<odoo>
+
+    <record id="mailing_contact_view_form" model="ir.ui.view">
+        <field name="name">mailing.contact.form (in mass_mailing_double_opt_in)</field>
+        <field name="model">mailing.contact</field>
+        <field name="inherit_id" ref="mass_mailing.mailing_contact_view_form" />
+        <field name="arch" type="xml">
+            <field name="create_date" position="after">
+                <field
+                    name="ip_addr"
+                    attrs="{'invisible': [('ip_addr', '=', False)]}"
+                />
+            </field>
+        </field>
+    </record>
+
+</odoo>

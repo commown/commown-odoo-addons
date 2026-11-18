@@ -1,0 +1,17 @@
+<odoo>
+
+    <template id="newsletter_confirm" inherit_id="mass_mailing_double_opt_in.confirm">
+        <xpath expr="//p[@id='newsletter_confirm_success_text']" position="after">
+            <p>
+                En attendant, n'hésitez pas à parcourir le <a
+                    href="https://commown.coop/blog"
+                    target="_blank"
+                >blog</a> ou à consulter le <a
+                    href="https://forum.commown.coop/"
+                    target="_blank"
+                >forum</a> pour ne louper aucune information sur la vie de la coopérative.
+            </p>
+        </xpath>
+    </template>
+
+</odoo>
