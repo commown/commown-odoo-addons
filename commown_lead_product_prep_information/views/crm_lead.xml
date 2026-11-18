@@ -1,0 +1,41 @@
+<odoo>
+
+  <record id="view_crm_lead_form" model="ir.ui.view">
+    <field name="name">crm.lead.form (in commown_lead_product_prep_information)</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_lead_view_form" />
+    <field name="arch" type="xml">
+      <xpath expr="//div[hasclass('oe_title')]" position="after">
+        <field
+                    name="product_info"
+                    attrs="{'invisible': [('product_info', '=', False)]}"
+                />
+      </xpath>
+    </field>
+  </record>
+
+  <record id="crm_case_tree_view_oppor" model="ir.ui.view">
+    <field
+            name="name"
+        >crm.lead.tree.opportunity (in commown_lead_product_prep_information)</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
+    <field name="arch" type="xml">
+      <field name="name" position="attributes">
+        <attribute name="optional">show</attribute>
+      </field>
+      <field name="name" position="after">
+        <field name="product_info_with_title" optional="hide" />
+      </field>
+    </field>
+  </record>
+
+  <template id="product_prep_summary">
+    <ul>
+      <li t-foreach="lead.so_line_id.product_template_attribute_value_ids" t-as="value">
+        <b t-out="value.attribute_id.name" />: <t t-out="value.name" />
+      </li>
+    </ul>
+  </template>
+
+</odoo>
