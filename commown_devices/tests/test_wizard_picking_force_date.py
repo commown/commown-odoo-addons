@@ -66,7 +66,7 @@ class WizardForcePickingDateTC(BaseLotTC):
 
         wiz_line.to_delete = to_delete
 
-    def test_wizard_ok(self):
+    def test_wizard_ok_same_destination(self):
         # Using the wizard to fix the tracked lot history
         self._generate_force_picking_date_wiz(self.picking_2)
         self.assertFalse(self.wizard.is_history_coherent)
@@ -84,6 +84,29 @@ class WizardForcePickingDateTC(BaseLotTC):
         pick_moves = self.picking_2.move_ids
         self.assertEqual(pick_moves.date, new_date)
         self.assertEqual(pick_moves.move_line_ids.date, new_date)
+
+    def test_wizard_ok_new_destination(self):
+        # Same as above, but the modification leads to a new destination location
+        self._generate_force_picking_date_wiz(self.picking_1)
+        self.assertFalse(self.wizard.is_history_coherent)
+
+        # Putting picking 3 behind picking 1, so the new order is B -> C -> A -> B
+        # with B as the new destination.
+        new_date = self.base_date - timedelta(days=1)
+        self._set_date_on_wiz_line(self.picking_3, new_date)
+        self.assertTrue(self.wizard.is_history_coherent)
+
+        self.wizard.execute()
+        self.picking_1.invalidate_recordset()
+        self.assertEqual(self.picking_3.date_done, new_date)
+
+        lot_quant = self.env["stock.quant"].search(
+            [
+                ("lot_id", "=", self.lot.id),
+                ("quantity", "=", 1.0),
+            ]
+        )
+        self.assertEqual(lot_quant.location_id, self.loc_b)
 
     def test_wizard_ok_deleted_picking(self):
         "Deleting a picking should remove it and its move lines, while maintaing a good history"

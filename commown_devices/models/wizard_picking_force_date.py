@@ -130,3 +130,16 @@ class ForcePickingDateWizard(models.TransientModel):
                 (str(line.new_date), line.picking_id.id),
             )
             _force_picking_date(line.picking_id, line.new_date)
+
+        # Quantities management
+        lot_quant = self.env["stock.quant"].search(
+            [
+                ("lot_id", "=", self.concerned_lot.id),
+                ("quantity", ">", 0),
+            ]
+        )
+
+        last_location = self.wizard_line_ids.sorted("new_date")[-1].dest_location
+
+        if lot_quant.location_id != last_location:
+            lot_quant.location_id = last_location
