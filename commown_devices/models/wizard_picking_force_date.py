@@ -81,6 +81,36 @@ class ForcePickingDateWizard(models.TransientModel):
             )
         return rec
 
+    @api.constrains("concerned_lot")
+    def _check_concerned_lot_reservation_status(self):
+        for wiz in self:
+            quants = self.env["stock.quant"].search(
+                [
+                    ("lot_id", "=", wiz.concerned_lot.id),
+                    ("reserved_quantity", ">", 0),
+                ]
+            )
+            if quants:
+                pickings = (
+                    self.env["stock.move.line"]
+                    .search(
+                        [
+                            ("lot_id", "=", wiz.concerned_lot.id),
+                            ("state", "not in", ("cancel", "done")),
+                        ]
+                    )
+                    .mapped("move_id.picking_id")
+                )
+                raise UserError(
+                    _(
+                        "The device lot %(lot_name)s is currently reserved by"
+                        "the following picking(s): %(picking_names)s. Please "
+                        "cancel or confirm these before modifying the device history.",
+                        lot_name=self.concerned_lot.name,
+                        picking_names=", ".join(pickings.mapped("name")),
+                    )
+                )
+
     is_history_coherent = fields.Boolean(
         "Coherent history", compute="_compute_is_history_coherent"
     )
@@ -111,6 +141,7 @@ class ForcePickingDateWizard(models.TransientModel):
                     " please fix it before applying the changes."
                 )
             )
+        self._check_concerned_lot_reservation_status()
 
         def sql_delete(obj):
             query = "DELETE FROM %s WHERE id IN %%s" % obj._table

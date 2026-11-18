@@ -134,3 +134,31 @@ class WizardForcePickingDateTC(BaseLotTC):
             self.wizard.execute()
 
         self.assertIn("device history is incoherent", exc.exception.args[0])
+
+    def test_wizard_ko_reserved_lot_at_creation(self):
+        "Device history modification is forbidden if the device is currently reserved."
+        picking = internal_picking(
+            self.lot, {}, self.env["stock.location"], self.loc_a, self.loc_b, False
+        ).picking_id
+
+        with self.assertRaises(UserError) as exc:
+            self._generate_force_picking_date_wiz(self.picking_2)
+
+        self.assertIn(f"following picking(s): {picking.name}", exc.exception.args[0])
+
+    def test_wizard_ko_reserved_lot_at_execute(self):
+        "If a picking is created after opening a wizard, forbid executing the wizard"
+        self._generate_force_picking_date_wiz(self.picking_2)
+
+        new_date = self.base_date + timedelta(days=5)
+        self._set_date_on_wiz_line(self.picking_2, new_date)
+        self.assertTrue(self.wizard.is_history_coherent)
+
+        picking = internal_picking(
+            self.lot, {}, self.env["stock.location"], self.loc_a, self.loc_b, False
+        ).picking_id
+
+        with self.assertRaises(UserError) as exc:
+            self.wizard.execute()
+
+        self.assertIn(f"following picking(s): {picking.name}", exc.exception.args[0])
