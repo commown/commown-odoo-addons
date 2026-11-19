@@ -59,6 +59,13 @@ class WizardForcePickingDateTC(BaseLotTC):
 
         wiz_line.new_date = new_date
 
+    def _set_to_delete_on_wiz_line(self, picking, to_delete):
+        wiz_line = self.wizard.wizard_line_ids.filtered(
+            lambda l: l.picking_id == picking
+        )
+
+        wiz_line.to_delete = to_delete
+
     def test_wizard_ok(self):
         # Using the wizard to fix the tracked lot history
         self._generate_force_picking_date_wiz(self.picking_2)
@@ -77,6 +84,23 @@ class WizardForcePickingDateTC(BaseLotTC):
         pick_moves = self.picking_2.move_ids
         self.assertEqual(pick_moves.date, new_date)
         self.assertEqual(pick_moves.move_line_ids.date, new_date)
+
+    def test_wizard_ok_deleted_picking(self):
+        "Deleting a picking should remove it and its move lines, while maintaing a good history"
+        self._generate_force_picking_date_wiz(self.picking_1)
+        self.assertFalse(self.wizard.is_history_coherent)
+
+        # In this exemple, we will delete Picking 1,
+        # with the final intended track being: B -> C -> A
+        move_p1 = self.picking_1.move_ids
+
+        self._set_to_delete_on_wiz_line(self.picking_1, True)
+        self.assertTrue(self.wizard.is_history_coherent)
+
+        self.wizard.execute()
+
+        self.assertFalse(self.picking_1.exists())
+        self.assertFalse(move_p1.exists())
 
     def test_wizard_ko_incoherent_history(self):
         # Trying to confirm changes for an incoherent history should raise an error

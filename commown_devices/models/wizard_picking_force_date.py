@@ -40,6 +40,8 @@ class ForcePickingDateWizardLine(models.TransientModel):
         for line in self:
             line.is_date_different = line.new_date != line.picking_id.date_done
 
+    to_delete = fields.Boolean("Delete picking")
+
 
 class ForcePickingDateWizard(models.TransientModel):
     _name = "force.picking.date.wizard"
@@ -83,11 +85,15 @@ class ForcePickingDateWizard(models.TransientModel):
         "Coherent history", compute="_compute_is_history_coherent"
     )
 
-    @api.depends("wizard_line_ids.new_date")
+    @api.depends("wizard_line_ids.new_date", "wizard_line_ids.to_delete")
     def _compute_is_history_coherent(self):
         coherent = True
         prev_loc = self.env["stock.location"]
-        wizard_history = self.wizard_line_ids.sorted(lambda l: l.new_date)
+
+        lines_to_delete = self.wizard_line_ids.filtered("to_delete")
+        wizard_history = (self.wizard_line_ids - lines_to_delete).sorted(
+            lambda l: l.new_date
+        )
 
         for line in wizard_history:
             if prev_loc and prev_loc != line.orig_location:
@@ -105,6 +111,17 @@ class ForcePickingDateWizard(models.TransientModel):
                     " please fix it before applying the changes."
                 )
             )
+
+        def sql_delete(obj):
+            query = "DELETE FROM %s WHERE id IN %%s" % obj._table
+            self.env.cr.execute(query, (tuple(obj.ids),))
+
+        pickings_to_delete = self.wizard_line_ids.filtered("to_delete")
+        if pickings_to_delete:
+            sql_delete(pickings_to_delete.picking_id.move_line_ids)
+            sql_delete(pickings_to_delete.picking_id.move_ids)
+            sql_delete(pickings_to_delete.picking_id)
+            pickings_to_delete.unlink()
 
         pickings_to_edit = self.wizard_line_ids.filtered("is_date_different")
         for line in pickings_to_edit:
