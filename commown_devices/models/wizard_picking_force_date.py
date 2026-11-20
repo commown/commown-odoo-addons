@@ -32,6 +32,14 @@ class ForcePickingDateWizardLine(models.TransientModel):
             line.dest_location = move_line.location_dest_id
 
     ## Editable fields
+    is_editable = fields.Boolean(compute="_compute_is_editable")
+
+    @api.depends("picking_id")
+    def _compute_is_editable(self):
+        for line in self:
+            lot = line.picking_id.move_line_ids.lot_id
+            line.is_editable = len(lot) == 1
+
     new_date = fields.Datetime(required=True)
     is_date_different = fields.Boolean(compute="_compute_is_date_different")
 
@@ -41,6 +49,12 @@ class ForcePickingDateWizardLine(models.TransientModel):
             line.is_date_different = line.new_date != line.picking_id.date_done
 
     to_delete = fields.Boolean("Delete picking")
+
+    @api.constrains("new_date", "to_delete")
+    def _check_editable_fields(self):
+        for line in self:
+            if not line.is_editable and (line.is_date_different or line.to_delete):
+                raise UserError(_("This picking cannot be edited."))
 
 
 class ForcePickingDateWizard(models.TransientModel):
@@ -59,6 +73,14 @@ class ForcePickingDateWizard(models.TransientModel):
         if active_id:
             picking = self.env["stock.picking"].browse(active_id)
             lot = picking.move_line_ids.lot_id
+
+            if len(lot) > 1:
+                raise UserError(
+                    _(
+                        "This picking has several lots associated with it. Please "
+                        "open this wizard on a picking with a single tracked device"
+                    )
+                )
 
             all_picks = (
                 self.env["stock.move.line"]

@@ -162,3 +162,37 @@ class WizardForcePickingDateTC(BaseLotTC):
             self.wizard.execute()
 
         self.assertIn(f"following picking(s): {picking.name}", exc.exception.args[0])
+
+    def test_wizard_ko_picking_with_several_lots(self):
+        dummy_lot = self.env["stock.lot"].create(
+            {
+                "name": "dummy-lot",
+                "product_id": self.product.id,
+            }
+        )
+        self.env["stock.quant"].create(
+            {
+                "product_id": dummy_lot.product_id.id,
+                "lot_id": dummy_lot.id,
+                "location_id": self.loc_a.id,
+                "quantity": 1,
+            }
+        )
+
+        picking_4 = self._create_and_validate_picking(
+            (self.lot | dummy_lot),
+            self.loc_a,
+            self.loc_b,
+            self.base_date + timedelta(days=30),
+        )
+
+        with self.assertRaises(UserError) as exc_create:
+            self._generate_force_picking_date_wiz(picking_4)
+
+        self.assertIn("several lots associated", exc_create.exception.args[0])
+
+        self._generate_force_picking_date_wiz(self.picking_1)
+        with self.assertRaises(UserError) as exc_edit:
+            self._set_date_on_wiz_line(picking_4, self.base_date)
+
+        self.assertIn("picking cannot be edited", exc_edit.exception.args[0])

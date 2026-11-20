@@ -17,13 +17,21 @@
                         delete="0"
                         default_order="new_date"
                         decoration-bf="to_delete or is_date_different"
+                        decoration-it="not is_editable"
                     >
+            <field name="is_editable" invisible="1" />
             <field name="is_date_different" invisible="1" />
             <field name="picking_id" />
             <field name="orig_location" />
             <field name="dest_location" />
-            <field name="new_date" attrs="{'readonly': [('to_delete', '=', True)]}" />
-            <field name="to_delete" />
+            <field
+                            name="new_date"
+                            attrs="{'readonly': ['|', ('is_editable', '=', False), ('to_delete', '=', True)]}"
+                        />
+            <field
+                            name="to_delete"
+                            attrs="{'readonly': [('is_editable', '=', False)]}"
+                        />
           </tree>
         </field>
         <footer>
