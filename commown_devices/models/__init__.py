@@ -20,5 +20,6 @@ from . import wizard_to_customer_picking
 from . import wizard_link_picking_po
 from . import wizard_link_po_invoice
 from . import wizard_move_line_validation
+from . import wizard_picking_force_date
 from . import wizard_project_task_picking
 from . import wizard_project_task_to_employee

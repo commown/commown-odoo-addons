@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0-20260327\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-19 12:10+0000\n"
-"PO-Revision-Date: 2026-11-19 12:10+0000\n"
+"POT-Creation-Date: 2026-11-20 10:49+0000\n"
+"PO-Revision-Date: 2026-11-20 10:49+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -96,6 +96,7 @@ msgid "Can't move device: no device set on this task!"
 msgstr ""
 
 #. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.force_picking_date_wizard_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_abstract_to_customer_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_move_line_validation_form
 #: model_terms:ir.ui.view,arch_db:commown_devices.wizard_picking_po_link_form
@@ -124,6 +125,11 @@ msgid "Cannot find given device. Is it really available?"
 msgstr ""
 
 #. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.force_picking_date_wizard_form
+msgid "Change picking dates"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_type__check_picking_assigned
 msgid "Check picking assigned when entering stage?"
 msgstr ""
@@ -134,6 +140,16 @@ msgid ""
 "Check that there are no more open tickets - Support and/or Transfer and/or "
 "Breakage-Loss-Theft (as it doesn't make sense if the contract is terminated,"
 " or to help with end-of-contract billing if applicable ;)\n"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__is_history_coherent
+msgid "Coherent history"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__concerned_lot
+msgid "Concerned Lot"
 msgstr ""
 
 #. module: commown_devices
@@ -219,6 +235,8 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__create_uid
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__create_uid
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__create_uid
@@ -240,6 +258,8 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__create_date
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__create_date
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__create_date
@@ -303,6 +323,11 @@ msgstr ""
 #: model:ir.model.fields,help:commown_devices.field_project_task_to_customer_wizard__date
 #: model:ir.model.fields,help:commown_devices.field_project_task_to_employee_wizard__date
 msgid "Defaults to now - To be set only to force a date"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__to_delete
+msgid "Delete picking"
 msgstr ""
 
 #. module: commown_devices
@@ -370,6 +395,11 @@ msgid "Device is already in a scrap location"
 msgstr ""
 
 #. module: commown_devices
+#: model_terms:ir.ui.view,arch_db:commown_devices.force_picking_date_wizard_form
+msgid "Device pickings"
+msgstr ""
+
+#. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
 #: model_terms:ir.ui.view,arch_db:commown_devices.edit_project
 msgid "Devices"
@@ -377,6 +407,8 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__display_name
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__display_name
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__display_name
@@ -437,6 +469,11 @@ msgid ""
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__orig_location
+msgid "From"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_to_employee_wizard__parcel_type
 msgid "Generate a shipping label"
 msgstr ""
@@ -448,6 +485,8 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__id
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__id
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__id
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__id
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__id
@@ -512,6 +551,16 @@ msgid "Is Contract In"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__is_date_different
+msgid "Is Date Different"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__is_editable
+msgid "Is Editable"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_product_service_storable_config__storable_type
 msgid "Is storable primary or secondary"
 msgstr ""
@@ -523,6 +572,8 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard____last_update
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line____last_update
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard____last_update
@@ -544,6 +595,8 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__write_uid
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__write_uid
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__write_uid
@@ -565,6 +618,8 @@ msgstr ""
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_crm_lead_to_customer_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__write_date
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_move_line_validation_wizard__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_move_po_link_line__write_date
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__write_date
@@ -631,6 +686,11 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__lot_ids
 msgid "Lots"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__main_rental_product
+msgid "Main Rental Product"
 msgstr ""
 
 #. module: commown_devices
@@ -710,6 +770,11 @@ msgid "Move to purchase_line link"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__new_date
+msgid "New Date"
+msgstr ""
+
+#. module: commown_devices
 #. odoo-python
 #: code:addons/commown_devices/models/common.py:0
 #, python-format
@@ -766,6 +831,7 @@ msgid "Owner of the location if not internal"
 msgstr ""
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__picking_id
 #: model:ir.model.fields,field_description:commown_devices.field_picking_po_link_wizard__picking_id
 msgid "Picking"
 msgstr ""
@@ -1098,6 +1164,41 @@ msgstr ""
 
 #. module: commown_devices
 #. odoo-python
+#: code:addons/commown_devices/models/wizard_picking_force_date.py:0
+#, python-format
+msgid ""
+"The described device history is incoherent - please fix it before applying "
+"the changes."
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_picking_force_date.py:0
+#, python-format
+msgid ""
+"The device lot %(lot_name)s is currently reserved bythe following "
+"picking(s): %(picking_names)s. Please cancel or confirm these before "
+"modifying the device history."
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:0
+#, python-format
+msgid ""
+"The device was not present at that location at this date. Please use a date "
+"after %(date)s"
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "The internal picking type '%s' is not set up with manual reservations"
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
 #: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid ""
@@ -1120,6 +1221,27 @@ msgstr ""
 #: code:addons/commown_devices/models/wizard_project_task_picking.py:0
 #, python-format
 msgid "This action should not be used in resiliation project"
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_picking_force_date.py:0
+#, python-format
+msgid "This picking cannot be edited."
+msgstr ""
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/wizard_picking_force_date.py:0
+#, python-format
+msgid ""
+"This picking has several lots associated with it. Please open this wizard on"
+" a picking with a single tracked device"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__dest_location
+msgid "To"
 msgstr ""
 
 #. module: commown_devices
@@ -1185,6 +1307,24 @@ msgid "Variant"
 msgstr ""
 
 #. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "We were not able to reserve %(device)s from %(loc)s"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard__wizard_line_ids
+msgid "Wizard Line"
+msgstr ""
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_to_employee_wizard
 msgid "Wizard to give a device to an employee"
 msgstr ""
@@ -1218,6 +1358,11 @@ msgstr ""
 #: code:addons/commown_devices/models/wizard_to_customer_picking.py:0
 #, python-format
 msgid "You have to select a lot for each tracked product"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.actions.act_window,name:commown_devices.action_force_change_picking_date
+msgid "[LOG] Force change date of picking and related moves"
 msgstr ""
 
 #. module: commown_devices
@@ -1266,13 +1411,13 @@ msgid "[commown] Link Picking to Po"
 msgstr ""
 
 #. module: commown_devices
-#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_picking
-msgid "[commown] REPAIR: Move involved product"
+#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_restricted_picking
+msgid "[commown] Pre-diag: Move device to \"Devices to check/ diagnose\""
 msgstr ""
 
 #. module: commown_devices
-#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_restricted_picking
-msgid "[commown] Pre-diag: Move device to \"Devices to check/ diagnose\""
+#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_picking
+msgid "[commown] REPAIR: Move involved product"
 msgstr ""
 
 #. module: commown_devices
@@ -1303,6 +1448,16 @@ msgstr ""
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_scrap_task_device
 msgid "[commown] Scrap involved device"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_force_picking_date_wizard
+msgid "force.picking.date.wizard"
+msgstr ""
+
+#. module: commown_devices
+#: model:ir.model,name:commown_devices.model_force_picking_date_wizard_line
+msgid "force.picking.date.wizard.line"
 msgstr ""
 
 #. module: commown_devices

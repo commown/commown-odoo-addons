@@ -1,0 +1,198 @@
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+
+from .common import _force_picking_date
+
+
+class ForcePickingDateWizardLine(models.TransientModel):
+    _name = "force.picking.date.wizard.line"
+
+    wizard_id = fields.Many2one("force.picking.date.wizard")
+
+    ## Readonly fields
+    picking_id = fields.Many2one("stock.picking", required=True)
+
+    orig_location = fields.Many2one(
+        "stock.location", string="From", compute="_compute_locations"
+    )
+    dest_location = fields.Many2one(
+        "stock.location", string="To", compute="_compute_locations"
+    )
+
+    def get_lot_move_line(self):
+        return self.picking_id.move_line_ids.filtered_domain(
+            [("lot_id", "=", self.wizard_id.concerned_lot.id)]
+        )
+
+    @api.depends("picking_id")
+    def _compute_locations(self):
+        for line in self:
+            move_line = line.get_lot_move_line()
+            line.orig_location = move_line.location_id
+            line.dest_location = move_line.location_dest_id
+
+    ## Editable fields
+    is_editable = fields.Boolean(compute="_compute_is_editable")
+
+    @api.depends("picking_id")
+    def _compute_is_editable(self):
+        for line in self:
+            lot = line.picking_id.move_line_ids.lot_id
+            line.is_editable = len(lot) == 1
+
+    new_date = fields.Datetime(required=True)
+    is_date_different = fields.Boolean(compute="_compute_is_date_different")
+
+    @api.depends("new_date")
+    def _compute_is_date_different(self):
+        for line in self:
+            line.is_date_different = line.new_date != line.picking_id.date_done
+
+    to_delete = fields.Boolean("Delete picking")
+
+    @api.constrains("new_date", "to_delete")
+    def _check_editable_fields(self):
+        for line in self:
+            if not line.is_editable and (line.is_date_different or line.to_delete):
+                raise UserError(_("This picking cannot be edited."))
+
+
+class ForcePickingDateWizard(models.TransientModel):
+    _name = "force.picking.date.wizard"
+
+    wizard_line_ids = fields.One2many(
+        "force.picking.date.wizard.line", inverse_name="wizard_id"
+    )
+
+    concerned_lot = fields.Many2one("stock.lot", required=True, readonly=True)
+
+    @api.model
+    def default_get(self, fields):
+        rec = super().default_get(fields)
+        active_id = self.env.context.get("active_id", False)
+        if active_id:
+            picking = self.env["stock.picking"].browse(active_id)
+            lot = picking.move_line_ids.lot_id
+
+            if len(lot) > 1:
+                raise UserError(
+                    _(
+                        "This picking has several lots associated with it. Please "
+                        "open this wizard on a picking with a single tracked device"
+                    )
+                )
+
+            all_picks = (
+                self.env["stock.move.line"]
+                .search(
+                    [
+                        ("lot_id", "=", lot.id),
+                        ("state", "=", "done"),
+                    ]
+                )
+                .mapped("move_id.picking_id")
+            )
+            rec.update(
+                {
+                    "concerned_lot": lot.id,
+                    "wizard_line_ids": [
+                        (0, 0, {"picking_id": pick.id, "new_date": pick.date_done})
+                        for pick in all_picks
+                    ],
+                }
+            )
+        return rec
+
+    @api.constrains("concerned_lot")
+    def _check_concerned_lot_reservation_status(self):
+        for wiz in self:
+            quants = self.env["stock.quant"].search(
+                [
+                    ("lot_id", "=", wiz.concerned_lot.id),
+                    ("reserved_quantity", ">", 0),
+                ]
+            )
+            if quants:
+                pickings = (
+                    self.env["stock.move.line"]
+                    .search(
+                        [
+                            ("lot_id", "=", wiz.concerned_lot.id),
+                            ("state", "not in", ("cancel", "done")),
+                        ]
+                    )
+                    .mapped("move_id.picking_id")
+                )
+                raise UserError(
+                    _(
+                        "The device lot %(lot_name)s is currently reserved by"
+                        "the following picking(s): %(picking_names)s. Please "
+                        "cancel or confirm these before modifying the device history.",
+                        lot_name=self.concerned_lot.name,
+                        picking_names=", ".join(pickings.mapped("name")),
+                    )
+                )
+
+    is_history_coherent = fields.Boolean(
+        "Coherent history", compute="_compute_is_history_coherent"
+    )
+
+    @api.depends("wizard_line_ids.new_date", "wizard_line_ids.to_delete")
+    def _compute_is_history_coherent(self):
+        coherent = True
+        prev_loc = self.env["stock.location"]
+
+        lines_to_delete = self.wizard_line_ids.filtered("to_delete")
+        wizard_history = (self.wizard_line_ids - lines_to_delete).sorted(
+            lambda l: l.new_date
+        )
+
+        for line in wizard_history:
+            if prev_loc and prev_loc != line.orig_location:
+                coherent = False
+                break
+            prev_loc = line.dest_location
+
+        self.is_history_coherent = coherent
+
+    def execute(self):
+        if not self.is_history_coherent:
+            raise UserError(
+                _(
+                    "The described device history is incoherent -"
+                    " please fix it before applying the changes."
+                )
+            )
+        self._check_concerned_lot_reservation_status()
+
+        def sql_delete(obj):
+            query = "DELETE FROM %s WHERE id IN %%s" % obj._table
+            self.env.cr.execute(query, (tuple(obj.ids),))
+
+        pickings_to_delete = self.wizard_line_ids.filtered("to_delete")
+        if pickings_to_delete:
+            sql_delete(pickings_to_delete.picking_id.move_line_ids)
+            sql_delete(pickings_to_delete.picking_id.move_ids)
+            sql_delete(pickings_to_delete.picking_id)
+            pickings_to_delete.unlink()
+
+        pickings_to_edit = self.wizard_line_ids.filtered("is_date_different")
+        for line in pickings_to_edit:
+            self.env.cr.execute(
+                "UPDATE stock_picking SET scheduled_date = %s WHERE id = %s",
+                (str(line.new_date), line.picking_id.id),
+            )
+            _force_picking_date(line.picking_id, line.new_date)
+
+        # Quantities management
+        lot_quant = self.env["stock.quant"].search(
+            [
+                ("lot_id", "=", self.concerned_lot.id),
+                ("quantity", ">", 0),
+            ]
+        )
+
+        last_location = self.wizard_line_ids.sorted("new_date")[-1].dest_location
+
+        if lot_quant.location_id != last_location:
+            lot_quant.location_id = last_location
