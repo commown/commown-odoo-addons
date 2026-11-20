@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 10:39+0000\n"
+"POT-Creation-Date: 2026-11-20 10:49+0000\n"
 "PO-Revision-Date: 2025-12-22 17:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -50,8 +50,16 @@ msgid ""
 msgstr ""
 "<html>\n"
 "  <body>\n"
-"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a <t t-out=\"object.env.context.get(&#x27;late_pickings&#x27;)\"></t> transferts en retard.</p>\n"
-"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Rendez vous sur <a href=\"https://shop.commown.coop/web?debug#action=694&amp;active_id=5&amp;model=stock.picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" style=\"text-decoration:none;background-color:transparent;color:rgb(124, 123, 173);\">cette page</a> pour les traiter.<br/></p>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Il y a <t t-"
+"out=\"object.env.context.get(&#x27;late_pickings&#x27;)\"></t> transferts en "
+"retard.</p>\n"
+"    <p style=\"margin:0px 0 1rem 0;font-size:13px;font-family:&quot;Lucida "
+"Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Rendez vous sur <a "
+"href=\"https://shop.commown.coop/web?debug#action=694&amp;active_id=5&amp;"
+"model=stock.picking&amp;view_type=list&amp;menu_id=430\" target=\"_blank\" "
+"style=\"text-decoration:none;background-color:transparent;color:rgb(124, "
+"123, 173);\">cette page</a> pour les traiter.<br/></p>\n"
 "  </body>\n"
 "</html>\n"
 
@@ -232,8 +240,8 @@ msgid ""
 "Create a picking of the device attached to a task (with location "
 "restrictions)"
 msgstr ""
-"Faire un transfert de l'appareil lié à une tâche (avec des "
-"restrictions d'emplacement)"
+"Faire un transfert de l'appareil lié à une tâche (avec des restrictions "
+"d'emplacement)"
 
 #. module: commown_devices
 #: model:ir.model,name:commown_devices.model_project_task_involved_nonserial_product_picking_wizard
@@ -728,6 +736,11 @@ msgid "Lots"
 msgstr "Appareils suivis"
 
 #. module: commown_devices
+#: model:ir.model.fields,field_description:commown_devices.field_contract_contract__main_rental_product
+msgid "Main Rental Product"
+msgstr "Produit principal de location"
+
+#. module: commown_devices
 #: model:ir.model,name:commown_devices.model_base_partner_merge_automatic_wizard
 msgid "Merge Partner Wizard"
 msgstr "Utilitaire de fusion de partenaires"
@@ -751,7 +764,9 @@ msgstr "Plus d'un contrat sur les appareils du mouvement %s"
 msgid ""
 "More than one primary variant configured for %(product)s with attributes "
 "%(attrs)s"
-msgstr "Plus d'une variante primaire configurée pour %(product)s avec les attributs %(attrs)s"
+msgstr ""
+"Plus d'une variante primaire configurée pour %(product)s avec les attributs "
+"%(attrs)s"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_contract_contract__move_line_ids
@@ -1225,6 +1240,26 @@ msgstr ""
 
 #. module: commown_devices
 #. odoo-python
+#: code:addons/commown_devices/models/wizard_project_task_picking.py:0
+#, python-format
+msgid ""
+"The device was not present at that location at this date. Please use a date "
+"after %(date)s"
+msgstr ""
+"L'appareil n'était pas présent à cet emplacement à cette date. Merci "
+"d'utiliser une date ultérieure à %(date)s"
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "The internal picking type '%s' is not set up with manual reservations"
+msgstr ""
+"Le type de transfert interne '%s' n'est pas configuré avec des réservations "
+"manuelles"
+
+#. module: commown_devices
+#. odoo-python
 #: code:addons/commown_devices/models/project_task.py:0
 #, python-format
 msgid ""
@@ -1326,7 +1361,9 @@ msgstr "Suivi des appareils ?"
 #. module: commown_devices
 #: model:ir.model.fields,help:commown_devices.field_stock_move_line__origin_label
 msgid "Used by commown_devices to retrieve a move line's origin resource"
-msgstr "Utilisé par commown_devices pour retrouver le document d'origine d'une ligne de mouvement"
+msgstr ""
+"Utilisé par commown_devices pour retrouver le document d'origine d'une ligne "
+"de mouvement"
 
 #. module: commown_devices
 #: model_terms:ir.ui.view,arch_db:commown_devices.contract_contract_customer_form_view
@@ -1339,6 +1376,13 @@ msgstr "Valider"
 #: model:ir.model.fields,field_description:commown_devices.field_project_task_outward_picking_wizard__variant_id
 msgid "Variant"
 msgstr "Variante"
+
+#. module: commown_devices
+#. odoo-python
+#: code:addons/commown_devices/models/common.py:0
+#, python-format
+msgid "We were not able to reserve %(device)s from %(loc)s"
+msgstr "Nous n'avons pas pu réserver %(device)s depuis %(loc)s"
 
 #. module: commown_devices
 #: model:ir.model.fields,field_description:commown_devices.field_force_picking_date_wizard_line__wizard_id
@@ -1440,14 +1484,14 @@ msgid "[commown] Link Picking to Po"
 msgstr "[commown] Lier l'expédition à un achat"
 
 #. module: commown_devices
-#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_picking
-msgid "[commown] REPAIR: Move involved product"
-msgstr "[Commown] RÉPARATION : transférer l'appareil concerné"
-
-#. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_restricted_picking
 msgid "[commown] Pre-diag: Move device to \"Devices to check/ diagnose\""
 msgstr "[commown] Pré-diag: transférer l'appareil vers A RECO/A REPA"
+
+#. module: commown_devices
+#: model:ir.actions.server,name:commown_devices.action_wizard_project_task_involved_product_picking
+msgid "[commown] REPAIR: Move involved product"
+msgstr "[Commown] RÉPARATION : transférer l'appareil concerné"
 
 #. module: commown_devices
 #: model:ir.actions.server,name:commown_devices.action_add_services_storable_products
@@ -1505,35 +1549,23 @@ msgstr ""
 msgid "or"
 msgstr "ou"
 
-#. module: commown_devices
-#: model:ir.model.fields,field_description:commown_devices.field_stock_move_line__origin
-msgid "origin"
-msgstr "origine"
+#~ msgid "origin"
+#~ msgstr "origine"
 
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_contract_transfer_wizard
-msgid "project.task.contract_transfer.wizard"
-msgstr "project.task.contract_transfer.wizard"
+#~ msgid "project.task.contract_transfer.wizard"
+#~ msgstr "project.task.contract_transfer.wizard"
 
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_inward_picking_wizard
-msgid "project.task.inward.picking.wizard"
-msgstr "project.task.inward.picking.wizard"
+#~ msgid "project.task.inward.picking.wizard"
+#~ msgstr "project.task.inward.picking.wizard"
 
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_notracking_inward_picking_wizard
-msgid "project.task.notracking.inward.picking.wizard"
-msgstr "project.task.notracking.inward.picking.wizard"
+#~ msgid "project.task.notracking.inward.picking.wizard"
+#~ msgstr "project.task.notracking.inward.picking.wizard"
 
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_notracking_outward_picking_wizard
-msgid "project.task.notracking.outward.picking.wizard"
-msgstr "project.task.notracking.outward.picking.wizard"
+#~ msgid "project.task.notracking.outward.picking.wizard"
+#~ msgstr "project.task.notracking.outward.picking.wizard"
 
-#. module: commown_devices
-#: model:ir.model,name:commown_devices.model_project_task_outward_picking_wizard
-msgid "project.task.outward.picking.wizard"
-msgstr "project.task.outward.picking.wizard"
+#~ msgid "project.task.outward.picking.wizard"
+#~ msgstr "project.task.outward.picking.wizard"
 
 #~ msgid "Create a picking from a lead"
 #~ msgstr "Créer un transfert depuis une opportunité"
