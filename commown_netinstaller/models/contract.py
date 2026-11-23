@@ -18,9 +18,10 @@ class Contract(models.Model):
 
     @api.depends("netinstaller_feature_value_change_ids")
     def _compute_netinstaller_consolidated_feature_value_ids(self):
-        self.netinstaller_consolidated_feature_value_ids = (
-            self._netinstaller_feature_values()
-        )
+        for record in self:
+            record.netinstaller_consolidated_feature_value_ids = (
+                record._netinstaller_feature_values()
+            )
 
     def _netinstaller_feature_values(self, date=None):
         self.ensure_one()
