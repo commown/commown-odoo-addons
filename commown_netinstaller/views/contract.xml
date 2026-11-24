@@ -23,6 +23,7 @@
               <tree default_order="date" editable="bottom">
                 <field name="date" />
                 <field name="feature_value_id" />
+                <field name="note" />
               </tree>
             </field>
           </group>
