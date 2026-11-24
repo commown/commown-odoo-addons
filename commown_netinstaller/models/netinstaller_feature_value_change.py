@@ -18,6 +18,8 @@ class NetInstallerFeatureValueContractualChange(models.Model):
         required=True,
     )
 
+    note = fields.Char(help="You can add a note to explain the change")
+
     @api.constrains("contract_id", "date", "feature_value_id")
     def _check_contract_date_feature(self):
         # Should not have more than one change of a given feature at a given date
